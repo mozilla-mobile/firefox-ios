@@ -137,11 +137,6 @@ struct DownloadLiveActivity: Widget {
         }
     }
     private func lockScreenView (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
-        let bytesCompleted = liveDownload.state.totalBytesDownloaded
-        let bytesExpected = liveDownload.state.totalBytesExpected
-        let mbCompleted = ByteCountFormatter.string(fromByteCount: bytesCompleted, countStyle: .file)
-        let mbExpected = ByteCountFormatter.string(fromByteCount: bytesExpected, countStyle: .file)
-        let subtitle = String(format: .LiveActivity.Downloads.FileProgressText, mbCompleted, mbExpected)
         let totalCompletion = liveDownload.state.completedDownloads == liveDownload.state.downloads.count
         return ZStack {
             Rectangle()
@@ -157,18 +152,7 @@ struct DownloadLiveActivity: Widget {
                         .scaledToFit()
                         .frame(width: UX.LockScreen.iconSize, height: UX.LockScreen.iconSize)
                 }
-                VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
-                    Text(liveDownload.state.downloads.count == 1 ?
-                         String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
-                            String(format: .LiveActivity.Downloads.FileCountText,
-                                   String(liveDownload.state.downloads.count)))
-                        .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
-                        .foregroundColor(UX.LockScreen.labelColor)
-                    Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
-                        .opacity(0.8)
-                        .foregroundColor(UX.LockScreen.labelColor)
-                        .contentTransition(.identity)
-                }
+                lockScreenTexts(liveDownload: liveDownload)
                 Spacer()
                 ZStack {
                     Circle()
