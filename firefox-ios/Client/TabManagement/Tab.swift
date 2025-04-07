@@ -324,11 +324,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
            internalUrl.isAboutHomeURL {
             return true
         }
-        // TODO: Find a new home for this FXIOS-8527
-        // A computed variable should not be making view level changes
-        ensureMainThread {
-            self.setZoomLevelforDomain()
-        }
         return false
     }
 
@@ -441,6 +436,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var profile: Profile
+    var zoomPageManager: ZoomPageManager
 
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
     /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
@@ -489,6 +485,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
+        self.zoomPageManager = ZoomPageManager(windowUUID: windowUUID)
         super.init()
         self.isPrivate = isPrivate
 
@@ -772,55 +769,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         reload()
     }
 
-    @objc
-    func zoomIn() {
-        switch pageZoom {
-        case 0.75:
-            pageZoom = 0.9
-        case 0.9:
-            pageZoom = 1.0
-        case 1.0:
-            pageZoom = 1.10
-        case 1.10:
-            pageZoom = 1.25
-        case 2.0:
-            return
-        default:
-            pageZoom += 0.25
-        }
-    }
-
-    @objc
-    func zoomOut() {
-        switch pageZoom {
-        case 0.5:
-            return
-        case 0.9:
-            pageZoom = 0.75
-        case 1.0:
-            pageZoom = 0.9
-        case 1.10:
-            pageZoom = 1.0
-        case 1.25:
-            pageZoom = 1.10
-        default:
-            pageZoom -= 0.25
-        }
-    }
-
-    func resetZoom() {
-        pageZoom = 1.0
-    }
-
-    func setZoomLevelforDomain() {
-        if let host = url?.host,
-           let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) {
-            pageZoom = domainZoomLevel.zoomLevel
-        } else {
-            resetZoom()
-        }
-    }
-
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
@@ -937,6 +885,28 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
 
         return .none
+    }
+
+    // MARK: - Zoom
+
+    @objc
+    func zoomIn() {
+        let newValue = zoomPageManager.zoomIn(value: pageZoom)
+        pageZoom = newValue
+    }
+
+    @objc
+    func zoomOut() {
+        let newValue = zoomPageManager.zoomOut(value: pageZoom)
+        pageZoom = newValue
+    }
+
+    func resetZoom() {
+        pageZoom = 1.0
+    }
+
+    func setZoomLevelforDomain() {
+        pageZoom = zoomPageManager.setZoomLevelforDomain(for: url?.host)
     }
 
     // MARK: - ThemeApplicable
