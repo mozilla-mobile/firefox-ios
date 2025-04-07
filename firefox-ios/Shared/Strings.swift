@@ -2984,6 +2984,12 @@ extension String {
                 value: "Share",
                 comment: "Action button for sharing downloaded files in the Downloads panel.")
         }
+
+        public static let TabTraySelectorAccessibilityHint = MZLocalizedString(
+            key: "TabTraySelectorAccessibilityHint.v139",
+            tableName: "TabsTray",
+            value: "%1$@ of %2$@",
+            comment: "Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total.")
     }
 }
 
@@ -7019,11 +7025,6 @@ extension String {
         tableName: nil,
         value: "Tabs %1$@ to %2$@ of %3$@",
         comment: "Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total.")
-    public static let TabTraySelectorAccessibilityHint = MZLocalizedString(
-        key: "TabTraySelectorAccessibilityHint.v139",
-        tableName: nil,
-        value: "%1$@ of %2$@",
-        comment: "Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total.")
     public static let TabTrayClosingTabAccessibilityMessage =  MZLocalizedString(
         key: "Closing tab",
         tableName: nil,

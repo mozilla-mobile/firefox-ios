@@ -45,7 +45,7 @@ final class TabTraySelectorCell: UICollectionViewCell,
         label.text = title
         label.font = selected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
         label.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(position)"
-        label.accessibilityHint = String(format: .TabTraySelectorAccessibilityHint,
+        label.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
                                          NSNumber(value: position + 1),
                                          NSNumber(value: total + 1))
         applyTheme(theme: theme ?? LightTheme())
