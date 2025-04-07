@@ -26,6 +26,7 @@ final class TabTraySelectorCell: UICollectionViewCell,
         label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.accessibilityTraits = .button
 
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding.top),
