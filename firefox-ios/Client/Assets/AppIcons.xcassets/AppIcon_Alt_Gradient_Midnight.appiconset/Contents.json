@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "midnight-light.png",
+      "filename" : "midnight-light-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "midnight-dark.png",
+      "filename" : "midnight-dark-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
