@@ -377,6 +377,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
+            webView?.isOpaque = !nightMode
             webView?.evaluateJavascriptInCustomContentWorld(
                 NightModeHelper.jsCallbackBuilder(nightMode),
                 in: .world(name: NightModeHelper.name())
@@ -546,6 +547,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             if #available(iOS 16.4, *) {
                 webView.isInspectable = true
             }
+
+            updateWebContentTheme()
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -943,6 +946,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
         webView?.applyTheme(theme: theme)
+        updateWebContentTheme()
+    }
+
+    /// Configures the web view's background to prevent a white flash during initial load in night mode.
+    /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
+    func updateWebContentTheme() {
+        webView?.backgroundColor =  backgroundColor
+        webView?.scrollView.backgroundColor = backgroundColor
+        webView?.isOpaque = !nightMode
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 
