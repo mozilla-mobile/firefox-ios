@@ -23,14 +23,10 @@ final class TabTraySelectorView: UIView,
                                  UICollectionViewDelegateFlowLayout,
                                  UICollectionViewDataSource,
                                  UIScrollViewDelegate,
-                                 Themeable {
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
-
+                                 ThemeApplicable {
     weak var delegate: TabTraySelectorDelegate?
 
-    private let windowUUID: WindowUUID
+    private var theme: Theme
     private var selectedIndex: Int
 
     var items: [String] = [] {
@@ -62,13 +58,9 @@ final class TabTraySelectorView: UIView,
 
     // MARK: - Init
     init(selectedIndex: Int,
-         windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         theme: Theme) {
         self.selectedIndex = selectedIndex
-        self.windowUUID = windowUUID
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
+        self.theme = theme
         super.init(frame: .zero)
         setup()
     }
@@ -88,7 +80,7 @@ final class TabTraySelectorView: UIView,
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
 
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     override func layoutSubviews() {
@@ -153,9 +145,8 @@ final class TabTraySelectorView: UIView,
     }
 
     // MARK: - Themeable
-
-    func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+    func applyTheme(theme: Theme) {
+        self.theme = theme
         collectionView.backgroundColor = theme.colors.layer1
         backgroundColor = theme.colors.layer1
     }
