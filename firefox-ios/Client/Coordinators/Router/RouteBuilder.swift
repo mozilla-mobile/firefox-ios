@@ -70,12 +70,7 @@ final class RouteBuilder: FeatureFlaggable {
                 )
 
             case .openUrl:
-                // If we have a URL query, then make sure to check its a webpage
-                if urlQuery == nil || urlQuery?.isWebPage() ?? false {
-                    return .search(url: urlQuery, isPrivate: isPrivate)
-                } else {
-                    return nil
-                }
+                return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
                 return .searchQuery(query: urlScanner.value(query: "text") ?? "", isPrivate: isPrivate)
