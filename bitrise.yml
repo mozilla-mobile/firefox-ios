@@ -17,11 +17,11 @@ pipelines:
         run_firefox_ui_tests:
             depends_on:
             - firefox_configure_build
-            parallel: 6
-        focus_ui_test:
-            depends_on:
-            - focus_configure_build
-            parallel: 1
+            parallel: 4
+        #focus_ui_test:
+        #    depends_on:
+        #    - focus_configure_build
+        #    parallel: 1
 
 workflows:
   firefox_accessibility_test:
@@ -161,7 +161,7 @@ workflows:
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 6
+        - shard_count: 4
         - destination: $BITRISE_DESTINATION
         is_always_run: true
     - save-spm-cache@1.3.1:
