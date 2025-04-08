@@ -26,6 +26,7 @@ final class TabTraySelectorCell: UICollectionViewCell,
         label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.accessibilityTraits = [.button]
 
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding.top),
@@ -39,10 +40,14 @@ final class TabTraySelectorCell: UICollectionViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(title: String, selected: Bool, theme: Theme?) {
+    func configure(title: String, selected: Bool, theme: Theme?, position: Int, total: Int) {
         isSelected = selected
         label.text = title
         label.font = selected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
+        label.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(position)"
+        label.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                                         NSNumber(value: position + 1),
+                                         NSNumber(value: total + 1))
         applyTheme(theme: theme ?? LightTheme())
     }
 

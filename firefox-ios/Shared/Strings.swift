@@ -2984,6 +2984,12 @@ extension String {
                 value: "Share",
                 comment: "Action button for sharing downloaded files in the Downloads panel.")
         }
+
+        public static let TabTraySelectorAccessibilityHint = MZLocalizedString(
+            key: "TabTraySelectorAccessibilityHint.v139",
+            tableName: "TabsTray",
+            value: "%1$@ of %2$@",
+            comment: "Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total.")
     }
 }
 
