@@ -14,15 +14,7 @@ Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: async (enabled) => {
-    const nightMode = await import("./DarkReader.js");
-    nightMode.setEnabled(enabled);
-  },
+  value: setEnabled,
 });
 
-// const style = document.createElement("style");
-// style.innerHTML = `body { background-color: green !important; }`;
-// document.head.appendChild(style);
-
-setEnabled(true);
 webkit.messageHandlers.NightMode.postMessage({ state: "ready" });

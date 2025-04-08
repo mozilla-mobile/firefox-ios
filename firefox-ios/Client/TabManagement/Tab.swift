@@ -548,8 +548,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 webView.isInspectable = true
             }
 
-            updateWebContentTheme()
-
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
             webView.scrollView.layer.masksToBounds = false
@@ -946,14 +944,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
         webView?.applyTheme(theme: theme)
-        updateWebContentTheme()
-    }
-
-    /// Configures the web view's background to prevent a white flash during initial load in night mode.
-    /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
-    func updateWebContentTheme() {
-        webView?.backgroundColor =  backgroundColor
-        webView?.scrollView.backgroundColor = backgroundColor
+        /// Configures the web view's background to prevent a white flash during initial load in night mode.
+        /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
+        webView?.backgroundColor =  theme.colors.layer1
+        webView?.scrollView.backgroundColor = theme.colors.layer1
         webView?.isOpaque = !nightMode
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
