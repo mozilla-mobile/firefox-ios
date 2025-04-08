@@ -132,7 +132,7 @@ class BrowserViewControllerTests: XCTestCase {
         XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 1)
     }
 
-    func testHandlePDF_callsEnqueueDocumentOnTab() throws {
+    func testHandlePDF_callsEnqueueDocumentOnTab() {
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         let response = URLResponse()
@@ -149,12 +149,6 @@ class BrowserViewControllerTests: XCTestCase {
         subject.navigationHandler = browserCoordinator
         trackForMemoryLeaks(subject)
         return subject
-    }
-
-    private func setupNimbusPDFRefactorTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
-            return PdfRefactorFeature(enabled: isEnabled)
-        }
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {

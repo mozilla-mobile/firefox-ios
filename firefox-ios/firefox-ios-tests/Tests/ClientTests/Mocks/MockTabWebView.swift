@@ -89,8 +89,6 @@ final class MockTabWebView: TabWebView {
     }
 }
 
-// MARK: - TODO: create follow up tickets
-// https://mozilla-hub.atlassian.net/browse/FXIOS-9675?searchObjectId=451929&searchContainerId=10194&searchContentType=issue&searchSessionId=b8c1cfd9-a076-4281-8fb7-6728a36f8f00
 class MockTab: Tab {
     var enqueueDocumentCalled = 0
 
