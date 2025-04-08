@@ -11,6 +11,24 @@ public enum ReaderModeFontType: String {
     case sansSerif = "sans-serif"
     case sansSerifBold = "sans-serif-bold"
 
+    public var fontFamily: String {
+        switch self {
+        case .serif, .serifBold:
+            return "serif"
+        case .sansSerif, .sansSerifBold:
+            return "sans-serif"
+        }
+    }
+
+    public var fontWeight: String {
+        switch self {
+        case .serifBold, .sansSerifBold:
+            return "bold"
+        default:
+            return "normal"
+        }
+    }
+
     public init(type: String) {
         let font = ReaderModeFontType(rawValue: type)
         let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
@@ -33,8 +51,8 @@ public enum ReaderModeFontType: String {
 
     public func attributes() -> [String: String] {
         [
-            "fontType": rawValue.contains("serif") ? "serif" : "sans-serif",
-            "fontWeight": rawValue.contains("bold") ? "bold" : "normal"
+            "fontType": fontFamily,
+            "fontWeight": fontWeight
         ]
     }
 }
