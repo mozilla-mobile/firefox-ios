@@ -12,7 +12,10 @@ public struct AddressToolbarConfiguration {
     /// Navigation actions of the address toolbar
     let navigationActions: [ToolbarElement]
 
-    /// Page actions of the address toolbar
+    /// Leading page actions of the address toolbar
+    let leadingPageActions: [ToolbarElement]
+
+    /// Trailing page actions of the address toolbar
     let pageActions: [ToolbarElement]
 
     /// Browser actions of the address toolbar
@@ -30,6 +33,7 @@ public struct AddressToolbarConfiguration {
     // can therefor not be used outside of the ToolbarKit
     public init(locationViewConfiguration: LocationViewConfiguration,
                 navigationActions: [ToolbarElement],
+                leadingPageActions: [ToolbarElement],
                 pageActions: [ToolbarElement],
                 browserActions: [ToolbarElement],
                 borderPosition: AddressToolbarBorderPosition?,
@@ -37,6 +41,7 @@ public struct AddressToolbarConfiguration {
                 shouldAnimate: Bool) {
         self.locationViewConfiguration = locationViewConfiguration
         self.navigationActions = navigationActions
+        self.leadingPageActions = leadingPageActions
         self.pageActions = pageActions
         self.browserActions = browserActions
         self.borderPosition = borderPosition

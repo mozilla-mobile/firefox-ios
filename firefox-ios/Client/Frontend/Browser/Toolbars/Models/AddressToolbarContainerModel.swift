@@ -7,6 +7,7 @@ import Shared
 
 final class AddressToolbarContainerModel: Equatable {
     let navigationActions: [ToolbarElement]
+    let leadingPageActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
 
@@ -83,6 +84,7 @@ final class AddressToolbarContainerModel: Equatable {
         return AddressToolbarConfiguration(
             locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
+            leadingPageActions: leadingPageActions,
             pageActions: pageActions,
             browserActions: browserActions,
             borderPosition: borderPosition,
@@ -95,6 +97,9 @@ final class AddressToolbarContainerModel: Equatable {
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          isShowingTopTabs: state.isShowingTopTabs,
                                                                          windowUUID: windowUUID)
+        self.leadingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.leadingPageActions,
+                                                                          isShowingTopTabs: state.isShowingTopTabs,
+                                                                          windowUUID: windowUUID)
         self.pageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.pageActions,
                                                                    isShowingTopTabs: state.isShowingTopTabs,
                                                                    windowUUID: windowUUID)

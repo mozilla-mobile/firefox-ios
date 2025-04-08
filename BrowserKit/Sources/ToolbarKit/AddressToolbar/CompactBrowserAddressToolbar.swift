@@ -10,6 +10,7 @@ public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
         let compactConfig = AddressToolbarConfiguration(
             locationViewConfiguration: config.locationViewConfiguration,
             navigationActions: config.navigationActions,
+            leadingPageActions: config.leadingPageActions,
             pageActions: config.pageActions,
             browserActions: [],
             borderPosition: config.borderPosition,

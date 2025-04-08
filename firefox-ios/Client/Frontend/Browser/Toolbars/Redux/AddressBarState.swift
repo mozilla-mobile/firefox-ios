@@ -9,7 +9,7 @@ import ToolbarKit
 struct AddressBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var navigationActions: [ToolbarActionConfiguration]
-    var locationActions: [ToolbarActionConfiguration]
+    var leadingPageActions: [ToolbarActionConfiguration]
     var pageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
     var borderPosition: AddressToolbarBorderPosition?
@@ -85,7 +85,7 @@ struct AddressBarState: StateType, Equatable {
         self.init(
             windowUUID: windowUUID,
             navigationActions: [],
-            locationActions: [],
+            leadingPageActions: [],
             pageActions: [],
             browserActions: [],
             borderPosition: nil,
@@ -107,7 +107,7 @@ struct AddressBarState: StateType, Equatable {
 
     init(windowUUID: WindowUUID,
          navigationActions: [ToolbarActionConfiguration],
-         locationActions: [ToolbarActionConfiguration],
+         leadingPageActions: [ToolbarActionConfiguration],
          pageActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
          borderPosition: AddressToolbarBorderPosition?,
@@ -126,7 +126,7 @@ struct AddressBarState: StateType, Equatable {
          alternativeSearchEngine: SearchEngineModel?) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
-        self.locationActions = locationActions
+        self.leadingPageActions = leadingPageActions
         self.pageActions = pageActions
         self.browserActions = browserActions
         self.borderPosition = borderPosition
@@ -233,7 +233,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: [ToolbarActionConfiguration](),
-            locationActions: [ToolbarActionConfiguration](),
+            leadingPageActions: [ToolbarActionConfiguration](),
             pageActions: [ToolbarActionConfiguration](),
             browserActions: [ToolbarActionConfiguration](),
             borderPosition: borderPosition,
@@ -259,7 +259,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
@@ -287,7 +287,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: state.isEditing,
@@ -316,7 +316,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -346,9 +346,9 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            locationActions: locationActions(action: toolbarAction,
-                                             addressBarState: state,
-                                             isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: state.isEditing,
@@ -379,9 +379,9 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            locationActions: locationActions(action: toolbarAction,
-                                             addressBarState: state,
-                                             isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
             pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -409,9 +409,9 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            locationActions: locationActions(action: toolbarAction,
-                                             addressBarState: state,
-                                             isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
             pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
@@ -439,9 +439,9 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            locationActions: locationActions(action: toolbarAction,
-                                             addressBarState: state,
-                                             isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
             pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
@@ -467,7 +467,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: toolbarAction.addressBorderPosition,
@@ -495,7 +495,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            locationActions: locationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
@@ -528,7 +528,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            locationActions: locationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
@@ -568,7 +568,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-            locationActions: locationActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: false,
@@ -599,7 +599,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            locationActions: locationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
@@ -626,7 +626,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -652,7 +652,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
@@ -681,7 +681,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
@@ -710,7 +710,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
@@ -739,7 +739,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -765,7 +765,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -793,7 +793,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -819,7 +819,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -843,7 +843,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            locationActions: state.locationActions,
+            leadingPageActions: state.leadingPageActions,
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -904,7 +904,7 @@ struct AddressBarState: StateType, Equatable {
         return actions
     }
 
-    private static func locationActions(
+    private static func leadingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
         isEditing: Bool = false

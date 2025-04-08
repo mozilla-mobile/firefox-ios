@@ -41,13 +41,14 @@ public class BrowserAddressToolbar: UIView,
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
-
-    private lazy var locationActionStack: UIStackView = .build()
     private lazy var locationContainer: UIView = .build()
 
     private lazy var locationView: LocationView = .build()
     private lazy var locationDividerView: UIView = .build()
 
+    private lazy var leadingPageActionStack: UIStackView = .build { view in
+        view.spacing = UX.actionSpacing
+    }
     private lazy var pageActionStack: UIStackView = .build { view in
         view.spacing = UX.actionSpacing
     }
@@ -153,6 +154,7 @@ public class BrowserAddressToolbar: UIView,
         addSubview(toolbarTopBorderView)
         addSubview(toolbarBottomBorderView)
 
+        locationContainer.addSubview(leadingPageActionStack)
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(pageActionStack)
@@ -174,7 +176,10 @@ public class BrowserAddressToolbar: UIView,
         dividerWidthConstraint = locationDividerView.widthAnchor.constraint(equalToConstant: 0)
         dividerWidthConstraint?.isActive = true
 
-        [navigationActionStack, pageActionStack, browserActionStack].forEach(setZeroWidthConstraint)
+        [navigationActionStack,
+         leadingPageActionStack,
+         pageActionStack,
+         browserActionStack].forEach(setZeroWidthConstraint)
 
         toolbarTopBorderHeightConstraint = toolbarTopBorderView.heightAnchor.constraint(equalToConstant: 0)
         toolbarBottomBorderHeightConstraint = toolbarBottomBorderView.heightAnchor.constraint(equalToConstant: 0)
@@ -214,7 +219,11 @@ public class BrowserAddressToolbar: UIView,
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
 
-            locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
+            leadingPageActionStack.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
+            leadingPageActionStack.topAnchor.constraint(equalTo: locationContainer.topAnchor),
+            leadingPageActionStack.trailingAnchor.constraint(equalTo: locationView.leadingAnchor),
+            leadingPageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
+
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
             locationView.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
             locationView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
@@ -270,6 +279,7 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
 
         // Page actions
+        updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
         updateActionStack(stackView: pageActionStack, toolbarElements: config.pageActions)
 
         updateActionSpacing(uxConfig: config.uxConfiguration)
@@ -279,6 +289,7 @@ public class BrowserAddressToolbar: UIView,
     private func updateToolbarLayout(animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
+                     leadingPageActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
