@@ -41,6 +41,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
+    public static let ReaderModeProfileKeyStyle = "readermode.style"
 
     // Only set if we get an actual response, no assumptions, nil otherwise
     public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"
@@ -94,6 +95,11 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+    }
+
+    public struct RemoteSettings {
+        public static let lastRemoteSettingsServiceSyncTimestamp =
+        "LastRemoteSettingsServiceSyncTimestamp"
     }
 
     public struct Sync {

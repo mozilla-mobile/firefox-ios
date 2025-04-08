@@ -150,8 +150,25 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
-        guard let url = elementInfo.linkURL else { return }
-        completionHandler(contextMenuConfiguration(for: url, webView: webView))
+        guard let url = elementInfo.linkURL,
+              let currentTab = tabManager.selectedTab,
+              let contextHelper = currentTab.getContentScript(
+                name: ContextMenuHelper.name()
+              ) as? ContextMenuHelper,
+              let elements = contextHelper.elements
+        else { return }
+        completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
+        ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
+    }
+
+    func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
+        guard let currentTab = tabManager.selectedTab,
+              let contextHelper = currentTab.getContentScript(
+                name: ContextMenuHelper.name()
+              ) as? ContextMenuHelper,
+              let elements = contextHelper.elements
+        else { return }
+        ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
     }
 
     func webView(_ webView: WKWebView,
@@ -169,20 +186,21 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     // MARK: - Helpers
-    private func contextMenuConfiguration(for url: URL, webView: WKWebView) -> UIContextMenuConfiguration {
+    private func contextMenuConfiguration(for url: URL,
+                                          webView: WKWebView,
+                                          elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
-                                          actionProvider: contextMenuActionProvider(for: url, webView: webView))
+                                          actionProvider: contextMenuActionProvider(for: url,
+                                                                                    webView: webView,
+                                                                                    elements: elements))
     }
 
-    private func contextMenuActionProvider(for url: URL, webView: WKWebView) -> UIContextMenuActionProvider {
+    private func contextMenuActionProvider(for url: URL,
+                                           webView: WKWebView,
+                                           elements: ContextMenuHelper.Elements) -> UIContextMenuActionProvider {
         return { [self] (suggested) -> UIMenu? in
-            guard let currentTab = tabManager.selectedTab,
-                  let contextHelper = currentTab.getContentScript(
-                    name: ContextMenuHelper.name()
-                  ) as? ContextMenuHelper,
-                  let elements = contextHelper.elements
-            else { return nil }
+            guard let currentTab = tabManager.selectedTab else { return nil }
 
             let isPrivate = currentTab.isPrivate
 
@@ -300,7 +318,7 @@ extension BrowserViewController: WKUIDelegate {
                        image: URL?,
                        currentTab: Tab,
                        webView: WKWebView) -> [UIAction] {
-        let actionBuilder = ActionProviderBuilder()
+        let actionBuilder = WebContextMenuActionsProvider(menuType: image != nil ? .image : .web)
         let isJavascriptScheme = (url.scheme?.caseInsensitiveCompare("javascript") == .orderedSame)
 
         if !isPrivate && !isJavascriptScheme {

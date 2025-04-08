@@ -724,7 +724,11 @@ open class BrowserProfile: Profile {
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
-            return try RemoteSettingsService(storageDir: path, config: config)
+            let service = try RemoteSettingsService(storageDir: path, config: config)
+            #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+            serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
+            #endif
+            return service
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,
@@ -732,6 +736,8 @@ open class BrowserProfile: Profile {
             return nil
         }
     }()
+
+    private var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?
 
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {

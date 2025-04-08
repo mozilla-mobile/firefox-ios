@@ -11,8 +11,6 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         static let horizontalMargin: CGFloat = 15
         static let verticalMargin: CGFloat = 10
         static let labelsSpacing: CGFloat = 3
-        static let negativeLabelsSpacing: CGFloat = -5
-        static let minimumHeight: CGFloat = 44
         static let learnMoreInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     }
 
@@ -87,8 +85,7 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
             learnMoreButton.topAnchor.constraint(equalTo: labelsStackView.bottomAnchor, constant: UX.labelsSpacing),
             learnMoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
             bottomConstraint,
-            learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
-            learnMoreButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.minimumHeight)
+            learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin)
         ])
     }
 

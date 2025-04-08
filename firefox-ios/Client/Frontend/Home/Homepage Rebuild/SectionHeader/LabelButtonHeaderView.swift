@@ -102,7 +102,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     func configure(
-        state: SectionHeaderState,
+        state: SectionHeaderConfiguration,
         moreButtonAction: ((UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme

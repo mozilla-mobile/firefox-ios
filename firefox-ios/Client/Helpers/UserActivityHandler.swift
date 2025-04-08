@@ -10,6 +10,7 @@ import MobileCoreServices
 import WebKit
 import SiteImageView
 import Common
+import WebEngine
 
 let browsingActivityType = "org.mozilla.ios.firefox.browsing"
 

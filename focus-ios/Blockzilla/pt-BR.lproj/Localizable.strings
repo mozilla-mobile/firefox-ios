@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Saiba mais";
 
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"About.missionLabel" = "O %@ é produzido pela Mozilla. Nossa missão é promover uma Internet saudável e aberta.";
+"About.missionLabel" = "O %@ é produzido pela Mozilla. Nossa missão é promover uma internet saudável e aberta.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Pesquisar e navegar direto no aplicativo";
@@ -257,7 +257,7 @@
 "Safari.instructionsContentBlockers" = "Tocar em Safari e selecionar Bloqueadores de conteúdo";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Safari.instructionsEnable" = "Ativar o %@";
+"Safari.instructionsEnable" = "Ative o %@";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsExtentions" = "Selecione Safari, depois selecione Extensões";
@@ -392,7 +392,7 @@
 "Settings.setAsDefaultBrowser" = "Definir como navegador padrão";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for set as default browser option. */
-"Settings.setAsDefaultBrowserDescription" = "Abra links de sites, emails e mensagens automaticamente no %@.";
+"Settings.setAsDefaultBrowserDescription" = "Abrir links de sites, emails e mensagens automaticamente no %@.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Tema do sistema";
@@ -422,7 +422,7 @@
 "Settings.toggleCrashReports" = "Enviar relatórios de falhas automaticamente";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "Utilizar Face ID para desbloquear o aplicativo";
+"Settings.toggleFaceID" = "Usar Face ID para desbloquear o aplicativo";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "O Face ID pode desbloquear o %@ se uma URL já estiver aberta no aplicativo";
@@ -440,7 +440,7 @@
 "Settings.toggleStudies" = "Estudos";
 
 /* Label for toggle on settings screen */
-"Settings.toggleTouchID" = "Utilizar Touch ID para desbloquear o aplicativo";
+"Settings.toggleTouchID" = "Usar Touch ID para desbloquear o aplicativo";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "O Touch ID pode desbloquear o %@ se uma URL já estiver aberta no aplicativo";

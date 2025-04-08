@@ -134,7 +134,7 @@
 "Error.tryAgainButton" = "Încearcă din nou";
 
 /* Button label used for cancelling to open another app from Focus */
-"ExternalAppLink.cancelTitle" = "Renunță";
+"ExternalAppLink.cancelTitle" = "Anulează";
 
 /* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ vrea să deschidă o altă aplicaţie";
@@ -146,7 +146,7 @@
 "externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Renunță";
+"ExternalLink.cancelButton" = "Anulează";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Trimite e-mail";
@@ -204,6 +204,9 @@
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blocarea altor elementele de urmărire de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Anulează";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ va trimite ce tastezi în bara de adresă la motorul de căutare.";
@@ -315,6 +318,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Partajează pagina cu…";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Anulează";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adaugă";

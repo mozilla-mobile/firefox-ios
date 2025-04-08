@@ -5,29 +5,27 @@
 import Common
 
 protocol WKWebServerUtil {
-    func setUpWebServer()
+    func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration)
     func stopWebServer()
 }
 
 class DefaultWKWebServerUtil: WKWebServerUtil {
-    // TODO: FXIOS-11373 Handle Reader mode in WebEngine
-    //    private var readerModeHander: ReaderModeHandlersProtocol
+    private var readerModeHander: WKReaderModeHandlersProtocol
     private var webServer: WKEngineWebServerProtocol
     private let logger: Logger
 
     init(webServer: WKEngineWebServerProtocol = WKEngineWebServer.shared,
+         readerModeHander: WKReaderModeHandlersProtocol = WKReaderModeHandlers(),
          logger: Logger = DefaultLogger.shared) {
-        // TODO: FXIOS-11373 Handle Reader mode in WebEngine
-        //        readerModeHander: ReaderModeHandlersProtocol = ReaderModeHandlers()
         self.webServer = webServer
+        self.readerModeHander = readerModeHander
         self.logger = logger
     }
 
-    func setUpWebServer() {
+    func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration) {
         guard !webServer.isRunning else { return }
 
-        // TODO: FXIOS-11373 Handle Reader mode in WebEngine
-        //        readerModeHander.register(webServer, profile: profile)
+        readerModeHander.register(webServer, readerModeConfiguration: readerModeConfiguration)
 
         if AppConstants.isRunningTest {
             webServer.addTestHandler()
