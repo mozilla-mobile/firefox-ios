@@ -159,9 +159,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         context.containerView.addSubview(backgroundView)
         context.containerView.addSubview(bvcSnapshot)
         context.containerView.addSubview(tabSnapshot)
-        print(finalFrame)
-        print(destinationController.view.frame)
-        print("hi")
+
         destinationController.view.frame = finalFrame
         destinationController.view.setNeedsLayout()
         destinationController.view.layoutIfNeeded()
@@ -285,9 +283,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
                 tabCell = cell
                 tabSnapshot.frame = cv.convert(cell.frame, to: view)
-                print(tabSnapshot.frame)
-                print(toVCSnapshot.frame)
-                print("hi")
                 toVCSnapshot.frame = tabSnapshot.frame
 
                 tabSnapshot.setNeedsLayout()
