@@ -260,7 +260,6 @@
 		21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */; };
 		217641B82D651DB900597B6F /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217641B72D651DB900597B6F /* MIMEType.swift */; };
 		2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A69F291454B5002EC290 /* ReaderModeThemeButton.swift */; };
-		2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A6A129145506002EC290 /* ReaderModeFontSizeLabel.swift */; };
 		2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */; };
 		217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AEF75284666D4004EED37 /* IntroViewModelTests.swift */; };
 		219588942D6E519F00B8715E /* AutofillPasswordSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219588932D6E519F00B8715E /* AutofillPasswordSetting.swift */; };
@@ -1775,6 +1774,7 @@
 		E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
 		E1516A3E2A7BC07E007819A4 /* ReliabilityGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */; };
+		E1549A632D9D268B00895330 /* ReaderModeSettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
@@ -1909,7 +1909,6 @@
 		E633E37A1C2204BE001FFF6C /* LoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */; };
 		E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */; };
 		E63ED8E11BFD25580097D08E /* PasswordManagerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63ED8E01BFD25580097D08E /* PasswordManagerListViewController.swift */; };
-		E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */; };
 		E650755C1E37F747006961AC /* Swizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = E650755B1E37F747006961AC /* Swizzling.m */; };
 		E65075B11E37F7AB006961AC /* FSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E65075821E37F7AB006961AC /* FSUtils.m */; };
 		E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075C11E37F956006961AC /* ExtensionUtils.swift */; };
@@ -2016,7 +2015,6 @@
 		F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F637D6722D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift */; };
 		F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F639D90D2D8A326C007EDC60 /* TabAnimation.swift */; };
 		F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */; };
-		F80DF73F27034F6400E4C37D /* LegacyDynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */; };
 		F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80DF7402703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift */; };
 		F80DF74B270CB9CA00E4C37D /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
 		F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8324A062649A188007E4BFA /* AuthenticationServices.framework */; };
@@ -2802,7 +2800,6 @@
 		21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewModelTests.swift; sourceTree = "<group>"; };
 		217641B72D651DB900597B6F /* MIMEType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMEType.swift; sourceTree = "<group>"; };
 		2178A69F291454B5002EC290 /* ReaderModeThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeThemeButton.swift; sourceTree = "<group>"; };
-		2178A6A129145506002EC290 /* ReaderModeFontSizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontSizeLabel.swift; sourceTree = "<group>"; };
 		2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontSizeButton.swift; sourceTree = "<group>"; };
 		217AEF75284666D4004EED37 /* IntroViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModelTests.swift; sourceTree = "<group>"; };
 		2194437EA9B44A00EDC037FA /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/FindInPage.strings"; sourceTree = "<group>"; };
@@ -9961,6 +9958,7 @@
 		E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarStateTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
 		E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReliabilityGrade.swift; sourceTree = "<group>"; };
+		E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSettingsButton.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
@@ -10122,7 +10120,6 @@
 		E633E3791C2204BE001FFF6C /* LoginManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginManagerTests.swift; sourceTree = "<group>"; };
 		E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginDetailTableViewCell.swift; sourceTree = "<group>"; };
 		E63ED8E01BFD25580097D08E /* PasswordManagerListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordManagerListViewController.swift; sourceTree = "<group>"; };
-		E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LegacyDynamicFontHelper.swift; path = Helpers/LegacyDynamicFontHelper.swift; sourceTree = "<group>"; };
 		E650755A1E37F747006961AC /* Swizzling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Swizzling.h; sourceTree = "<group>"; };
 		E650755B1E37F747006961AC /* Swizzling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Swizzling.m; sourceTree = "<group>"; };
 		E65075811E37F7AB006961AC /* FSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSUtils.h; sourceTree = "<group>"; };
@@ -10931,8 +10928,8 @@
 				E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */,
 				E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */,
 				8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */,
+				E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */,
 				2178A69F291454B5002EC290 /* ReaderModeThemeButton.swift */,
-				2178A6A129145506002EC290 /* ReaderModeFontSizeLabel.swift */,
 				2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */,
 				21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */,
 			);
@@ -11409,7 +11406,6 @@
 				D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */,
 				96A5F73729928B3700234E5F /* GeneralizedImageFetcher.swift */,
 				8A7A26E429D4C0A800EA76F1 /* IntroScreenManager.swift */,
-				E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */,
 				DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */,
 				E1463D012981DA190074E16E /* NotificationManager.swift */,
 				E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */,
@@ -17140,7 +17136,6 @@
 				C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */,
 				F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */,
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
-				F80DF73F27034F6400E4C37D /* LegacyDynamicFontHelper.swift in Sources */,
 				6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */,
 				1D1933742AF2C8C8005089C9 /* EventQueue.swift in Sources */,
 				C87DF962267246730097E707 /* photon-colors.swift in Sources */,
@@ -17408,6 +17403,7 @@
 				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
 				E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				E1549A632D9D268B00895330 /* ReaderModeSettingsButton.swift in Sources */,
 				AB4FB4D52C89FAFD005EF0CC /* BlockedTrackersTableController.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
@@ -17859,7 +17855,6 @@
 				8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
-				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
 				8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */,
 				8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */,
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
@@ -17928,7 +17923,6 @@
 				F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */,
 				8A5D1CA62A30D6BD005AD35C /* NewTabPageSetting.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
-				2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */,
 				8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */,
 				8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */,
 				96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */,
