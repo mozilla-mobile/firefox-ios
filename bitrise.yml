@@ -8,9 +8,9 @@ pipelines:
         firefox_configure_build:
             depends_on:
             - determine_apps_affected
-        focus_configure_build:
-            depends_on:
-            - determine_apps_affected
+        #focus_configure_build:
+        #    depends_on:
+        #    - determine_apps_affected
         klar_configure_build:
             depends_on:
             - determine_apps_affected
