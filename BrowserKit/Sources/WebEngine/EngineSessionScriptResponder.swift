@@ -10,12 +10,12 @@ class EngineSessionScriptResponder: ContentScriptDelegate {
         switch event {
         case .requestJavascriptCommand(let method, let scope):
             session?.callJavascriptMethod(method, scope: scope)
-        case .fieldFocusChanged(_):
-            break
         case .trackedAdsFoundOnPage(let provider, let urls):
             session?.telemetryProxy?.handleTelemetry(event: .trackAdsFoundOnPage(providerName: provider, adUrls: urls))
         case .trackedAdsClickedOnPage(let provider):
             session?.telemetryProxy?.handleTelemetry(event: .trackAdsClickedOnPage(providerName: provider))
+        default:
+            break
         }
     }
 }
