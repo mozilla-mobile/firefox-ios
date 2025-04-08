@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Do chòraichean";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Teirmichean a’ chleachdaidh";
+
 /* Label on About screen */
 "About.safariBullet1" = "Bac tracaichean airson barrachd prìobhaideachd";
 
@@ -214,6 +217,12 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Nas fheàrr na dìreach gun urra";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "Aithris na prìobhaideachd";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Tha suim aig Firefox dhan phrìobhaideachd agad. Leugh barrachd ann an %@ againn.";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Rèitich na roghainnean is cuir romhad dè na leigeas tu ris, a bheag no a mhòr.";
 
@@ -222,6 +231,24 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Thoir prìobhaideachd a’ bhrabhsaidh gu ìre nas àirde.";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Thoir aonta is lean air adhart";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Deiseil";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Teirmichean a’ chleachdaidh aig Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "Luath. Prìobhaideach. Gun dad a’ briseadh a-steach ort.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "Ma leanas tu air adhart, bidh tu ag aontachadh ri %@.";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "Fàilte gu %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Fàilte gu Firefox %@!";
@@ -274,8 +301,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Bac tracaichean susbainte";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Air an dòigh seo, is urrainn dha Mozilla tuairmse a dhèanamh air co mheud neach-cleachdaidh gnìomhach a th’ ann.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping a’ chleachdaidh làitheil";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Dorcha";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "’S urrainn dhuinn diagnosachd a dhèanamh air a’ bhrabhsair seo mar seo ’s duilgheadasan a chur ceart.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "Cuiridh %@ na sgrìobhas tu ann am bàr an t-seòlaidh gun einnsan-luirg agad.";
@@ -381,6 +417,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Sòisealta";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Cuir aithisgean tuislidh gu fèin-obrachail";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Cleachd Face ID airson a’ ghlas a thoirt far na h-aplacaid";

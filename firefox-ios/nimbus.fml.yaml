@@ -15,7 +15,6 @@ channels:
 include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
-  - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
@@ -30,19 +29,18 @@ include:
   - nimbus-features/gleanServerKnobs.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
-  - nimbus-features/jsAlertRefactor.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
+  - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/nightModeFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
-  - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
-  - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/rustKeychainRefactor.yaml
+  - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml

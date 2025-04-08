@@ -18,6 +18,7 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         label.font = FXFontStyles.Bold.title3.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .left
+        label.accessibilityTraits.insert(.button)
     }
 
     // MARK: - Initializers
@@ -37,7 +38,6 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
 
     func configure(text: String, theme: Theme) {
         itemTitle.text = text
-
         applyTheme(theme: theme)
     }
 

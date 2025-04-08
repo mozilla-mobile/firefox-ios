@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "twilight-light.png",
+      "filename" : "twilight-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "twilight-dark.png",
+      "filename" : "twilight-dark.pdf",
       "idiom" : "universal"
     }
   ],

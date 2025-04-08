@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/205598003",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/205598003/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/205598003/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.31",
-    "id": 205598003,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/209350967",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/209350967/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/209350967/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.32",
+    "id": 209350967,
     "author": {
         "login": "maggie-atkinson",
         "id": 175737951,
@@ -25,16 +25,16 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84MQS0z",
-    "tag_name": "v1.31",
+    "node_id": "RE_kwDOI1CID84MenE3",
+    "tag_name": "v1.32",
     "target_commitish": "main",
-    "name": "v1.31",
+    "name": "v1.32",
     "draft": false,
     "prerelease": false,
-    "created_at": "2025-03-13T14:14:31Z",
-    "published_at": "2025-03-13T14:16:56Z",
+    "created_at": "2025-03-31T13:56:21Z",
+    "published_at": "2025-03-31T13:58:38Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.31",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.31",
-    "body": "# Changelog\r\n## [1.31]\r\n\r\n### Added\r\n\r\n- PDF\r\n    - readerViewMedium.pdf\r\n    - shieldCheckmarkFillSmall.pdf\r\n    - shieldSlashFillSmall.pdf\r\n- SVG\r\n    - reader-view-20.svg\r\n    - shield-checkmark-fill-16.svg\r\n    - shield-slash-fill-16.svg\r\n- XML\r\n    - ic_reader_view_20.xml\r\n    - ic_shield_checkmark_fill_16.xml\r\n    - ic_shield_slash_fill_16.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.32",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.32",
+    "body": "# Changelog\r\n## [1.32]\r\n\r\n### Added\r\n\r\n- PDF\r\n    - sortLarge.pdf\r\n- SVG\r\n    - sort-24.svg\r\n- XML\r\n    - ic_sort_24.xml"
 }

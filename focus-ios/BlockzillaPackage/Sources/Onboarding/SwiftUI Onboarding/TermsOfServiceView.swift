@@ -52,6 +52,8 @@ struct TermsOfServiceView: View {
         .sheet(item: $viewModel.privacyPolicyURL) { url in
             PrivacyPolicyView(
                 doneButtonText: viewModel.tosConfig.doneButton,
+                errorMessage: viewModel.tosConfig.errorMessage,
+                retryButtonText: viewModel.tosConfig.retryButtonText,
                 url: url
             )
         }
@@ -117,6 +119,8 @@ public struct TermsOfServiceConfig {
     let privacyLinkText: String
     let buttonText: String
     let doneButton: String
+    let errorMessage: String
+    let retryButtonText: String
     
     public init(
         title: String,
@@ -126,7 +130,9 @@ public struct TermsOfServiceConfig {
         termsLinkText: String,
         privacyLinkText: String,
         buttonText: String,
-        doneButton: String
+        doneButton: String,
+        errorMessage: String,
+        retryButtonText: String
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -136,6 +142,8 @@ public struct TermsOfServiceConfig {
         self.privacyLinkText = privacyLinkText
         self.buttonText = buttonText
         self.doneButton = doneButton
+        self.errorMessage = errorMessage
+        self.retryButtonText = retryButtonText
     }
 }
 

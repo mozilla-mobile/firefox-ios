@@ -16,7 +16,6 @@ class HomepageHeaderViewModel {
     private let tabManager: TabManager
     var onTapAction: ((UIButton) -> Void)?
     var showiPadSetup = false
-    var showPrivateModeToggle = false
     var theme: Theme
 
     init(profile: Profile, theme: Theme, tabManager: TabManager) {
@@ -73,15 +72,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension HomepageHeaderViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let headerCell = cell as? LegacyHomepageHeaderCell else { return UICollectionViewCell() }
-        headerCell.configure(
-            with: HomepageHeaderCellViewModel(
-                isPrivate: false,
-                showiPadSetup: showiPadSetup,
-                showPrivateModeToggle: showPrivateModeToggle,
-                action: { [weak self] in
-                    self?.tabManager.switchPrivacyMode()
-                })
-        )
+        headerCell.configure(with: HomepageHeaderCellViewModel(showiPadSetup: showiPadSetup))
         headerCell.applyTheme(theme: theme)
         return headerCell
     }

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "northernlights-light.png",
+      "filename" : "northernlights-light-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "northernlights-dark.png",
+      "filename" : "northernlights-dark-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

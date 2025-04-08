@@ -37,8 +37,6 @@ class HistoryTests: BaseTestCase {
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample-places.db"
 
-    let clearRecentHistoryOptions = ["The Last Hour", "Today", "Today and Yesterday", "Everything"]
-
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
@@ -307,7 +305,10 @@ class HistoryTests: BaseTestCase {
                 app.tables.cells.staticTexts[bookOfMozilla["label"]!]
             ]
         )
-        XCTAssertEqual(userState.numTabs, 1)
+        // userState.numTabs does not work on iOS 15
+        if #available(iOS 16, *) {
+            XCTAssertEqual(userState.numTabs, 1)
+        }
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
@@ -318,7 +319,7 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
+            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
         mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         // userState.numTabs does not work on iOS 15
@@ -352,14 +353,14 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
+            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
         XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].isHittable)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         if isTablet {
             XCTAssertTrue(app.segmentedControls.buttons["Private"].isSelected)
         } else {
-            XCTAssertTrue(app.segmentedControls["navBarTabTray"].buttons["privateModeLarge"].isSelected)
+            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         }
         mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         XCTAssertEqual(userState.numTabs, 1)
@@ -381,11 +382,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
-        if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -469,11 +466,7 @@ class HistoryTests: BaseTestCase {
     private func closeFirstTabByX() {
         waitForTabsButton()
         navigator.goto(TabTray)
-        if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
     }
 
     private func closeKeyboard() {
@@ -488,39 +481,52 @@ class HistoryTests: BaseTestCase {
         // Visit a page to create a recent history entry.
         navigateToPage()
         navigator.performAction(Action.ClearRecentHistory)
-        // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Today").
+        // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours").
         // Older data will not be removed
-        tapOnClearRecentHistoryOption(optionSelected: "Today")
+        tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours")
         for entry in oldHistoryEntries {
             mozWaitForElementToExist(app.tables.cells.staticTexts[entry])
         }
-        mozWaitForElementToNotExist(app.staticTexts["Today"])
-        mozWaitForElementToExist(app.staticTexts["Last month"])
+        mozWaitForElementToNotExist(app.staticTexts["Last 24 Hours"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
 
-        // Begin Test for Today and Yesterday
+        // Begin Test for Last 7 Days
         // Visit a page to create a recent history entry.
         navigateToPage()
         navigator.performAction(Action.ClearRecentHistory)
         // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
         // Older data will not be removed
-        tapOnClearRecentHistoryOption(optionSelected: "Today and Yesterday")
+        tapOnClearRecentHistoryOption(optionSelected: "Last 7 Days")
         for entry in oldHistoryEntries {
             XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
         }
-        mozWaitForElementToNotExist(app.staticTexts["Today"])
-        mozWaitForElementToExist(app.staticTexts["Last month"])
+        mozWaitForElementToNotExist(app.staticTexts["Last 7 Days"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
 
-        // Begin Test for Everything
+        // Begin Test for Last 4 Weeks
+        // Visit a page to create a recent history entry.
+        navigateToPage()
+        navigator.performAction(Action.ClearRecentHistory)
+        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
+        // Older data will not be removed
+        tapOnClearRecentHistoryOption(optionSelected: "Last 4 Weeks")
+        for entry in oldHistoryEntries {
+            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+        }
+        mozWaitForElementToNotExist(app.staticTexts["Last 4 Weeks"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
+
+        // Begin Test for All Time
         // Visit a page to create a recent history entry.
         navigateToPage()
         navigator.performAction(Action.ClearRecentHistory)
         // Tapping everything removes both current data and older data.
-        tapOnClearRecentHistoryOption(optionSelected: "Everything")
+        tapOnClearRecentHistoryOption(optionSelected: "All Time")
         for entry in oldHistoryEntries {
             mozWaitForElementToNotExist(app.tables.cells.staticTexts[entry])
         }
-        mozWaitForElementToNotExist(app.staticTexts["Today"])
-        mozWaitForElementToNotExist(app.staticTexts["Last month"])
+        mozWaitForElementToNotExist(app.staticTexts["All Time"])
+        mozWaitForElementToNotExist(app.staticTexts["Older"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306890

@@ -257,11 +257,7 @@ class AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         // Choose to update an address
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update field
         tapEdit()
         // Enter a valid date for Country and press save
@@ -417,25 +413,39 @@ class AddressesTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         validatePrivacyOptions()
+        navigator.goto(AutofillPasswordSettings)
+        validateAutofillPasswordOptions()
         // While in landscape mode check for the options
         XCUIDevice.shared.orientation = .landscapeLeft
-        validatePrivacyOptions()
+        validateAutofillPasswordOptions()
         XCUIDevice.shared.orientation = .portrait
         // While in dark mode check for the options
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(NewTabScreen)
+        sleep(1)
+        navigator.nowAt(AutofillPasswordSettings)
+        navigator.goto(SettingsScreen)
+        app.buttons["Done"].waitAndTap()
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(3)
         switchThemeToDarkOrLight(theme: "Dark")
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        validatePrivacyOptions()
+        navigator.goto(AutofillPasswordSettings)
+        validateAutofillPasswordOptions()
         // While in light mode check for the options
+        navigator.nowAt(AutofillPasswordSettings)
+        navigator.goto(SettingsScreen)
         app.buttons["Done"].waitAndTap()
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(3)
         switchThemeToDarkOrLight(theme: "Light")
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        validatePrivacyOptions()
+        navigator.goto(AutofillPasswordSettings)
+        validateAutofillPasswordOptions()
+        navigator.nowAt(AutofillPasswordSettings)
+        navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
-        navigator.goto(BrowserTab)
+        navigator.goto(NewTabScreen)
         // Go to a webpage, and select night mode on and off, check options
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
@@ -553,11 +563,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func reachEditAndRemoveAddress() {
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update the all addresses fields
         tapEdit()
         // Remove address
@@ -568,11 +574,7 @@ class AddressesTests: BaseTestCase {
 
     private func updateFieldsWithWithoutState(updateCountry: Bool, isPostalCode: Bool) {
         // Choose to update an address
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update the all addresses fields
         tapEdit()
         updateAddress(updateCountry: updateCountry, isPostalCode: isPostalCode)
@@ -599,12 +601,18 @@ class AddressesTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(AddressesSettings)
         let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
-        mozWaitForElementToExist(app.navigationBars[addresses.title])
+        sleep(4)
+        if !app.navigationBars[addresses.title].exists {
+            navigator.goto(AddressesSettings)
+        }
+        mozWaitElementHittable(element: app.navigationBars[addresses.title], timeout: TIMEOUT)
         app.buttons[addresses.addAddress].waitAndTap()
         mozWaitForElementToExist(app.navigationBars[addresses.addAddress])
-        if !app.staticTexts["Name"].exists {
-            app.buttons["Close"].waitAndTap()
-            app.buttons[addresses.addAddress].waitAndTap()
+        var attempts = 3
+        while !app.staticTexts["Name"].exists && attempts > 0 {
+            app.buttons["Close"].tapIfExists()
+            app.buttons[addresses.addAddress].tapIfExists()
+            attempts -= 1
         }
         mozWaitForElementToExist(app.staticTexts["Name"])
     }
@@ -638,11 +646,7 @@ class AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         // Choose to update an address
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update field
         tapEdit()
         app.staticTexts[field].waitAndTap()
@@ -660,11 +664,7 @@ class AddressesTests: BaseTestCase {
         if isInfoDisplayed {
             XCTAssertTrue(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is not displayed")
         }
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update field
         tapEdit()
         app.staticTexts[field].waitAndTap()
@@ -679,11 +679,7 @@ class AddressesTests: BaseTestCase {
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         XCTAssertFalse(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is displayed")
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         tapEdit()
         app.staticTexts[field].waitAndTap()
         app.typeText(newValue)
@@ -698,35 +694,39 @@ class AddressesTests: BaseTestCase {
     }
 
     private func typeName(name: String, updateText: Bool = false) {
+        let nameField = app.staticTexts["Name"]
         app.staticTexts["Name"].waitAndTap()
         if updateText {
             clearText()
         }
-        app.typeText(name)
+        retryTypingText(element: nameField, textField: name)
     }
 
     private func typeOrganization(organization: String, updateText: Bool = false) {
-        app.staticTexts["Organization"].waitAndTap()
+        let organizationField = app.staticTexts["Organization"]
+        organizationField.waitAndTap()
         if updateText {
             clearText()
         }
-        app.typeText(organization)
+        retryTypingText(element: organizationField, textField: organization)
     }
 
     private func typeStreetAddress(street: String, updateText: Bool = false) {
-        app.staticTexts["Street Address"].waitAndTap()
+        let addressField = app.staticTexts["Street Address"]
+        addressField.waitAndTap()
         if updateText {
             clearText()
         }
-        app.typeText(street)
+        retryTypingText(element: addressField, textField: street)
     }
 
     private func typeCity(city: String, updateText: Bool = false) {
-        app.staticTexts["City"].waitAndTap()
+        let cityField = app.staticTexts["City"]
+        cityField.waitAndTap()
         if updateText {
             clearText()
         }
-        app.typeText(city)
+        retryTypingText(element: cityField, textField: city)
     }
 
     private func selectCountry(country: String) {
@@ -736,36 +736,51 @@ class AddressesTests: BaseTestCase {
 
     private func typeZIP(zip: String, updateText: Bool = false, isPostalCode: Bool = false) {
         if isPostalCode {
-            scrollToElement(app.staticTexts["Postal Code"])
-            app.staticTexts["Postal Code"].waitAndTap()
+            let postalCodeField = app.staticTexts["Postal Code"]
+            scrollToElement(postalCodeField)
+            postalCodeField.waitAndTap()
+            if updateText {
+                clearText()
+            }
+            retryTypingText(element: postalCodeField, textField: zip)
         } else {
-            scrollToElement(app.staticTexts["ZIP Code"])
-            app.staticTexts["ZIP Code"].waitAndTap()
+            let zipCodeField = app.staticTexts["ZIP Code"]
+            scrollToElement(zipCodeField)
+            zipCodeField.waitAndTap()
+            if updateText {
+                clearText()
+            }
+            retryTypingText(element: zipCodeField, textField: zip)
         }
-        if updateText {
-            clearText()
-        }
-        app.typeText(zip)
     }
 
     private func typePhone(phone: String, updateText: Bool = false) {
-        if app.buttons["Done"].isHittable {
-            app.buttons["Done"].waitAndTap()
-        }
-        app.staticTexts["Phone"].tapOnApp()
+        let phoneField = app.staticTexts["Phone"]
+        phoneField.waitAndTap()
         if updateText {
             clearText(isPhoneNumber: true)
         }
-        app.typeText(phone)
+        retryTypingText(element: phoneField, textField: phone)
     }
 
     private func typeEmail(email: String, updateText: Bool = false) {
-        scrollToElement(app.staticTexts["Email"])
-        app.staticTexts["Email"].waitAndTap()
+        let emailField = app.staticTexts["Email"]
+        scrollToElement(emailField)
+        emailField.waitAndTap()
         if updateText {
             clearText()
         }
-        app.typeText(email)
+        retryTypingText(element: emailField, textField: email)
+    }
+
+    private func retryTypingText(element: XCUIElement, textField: String) {
+        var nrOfTaps = 5
+        sleep(3)
+        while !element.isVisible() && nrOfTaps > 0 {
+            element.tapIfExists()
+            nrOfTaps -= 1
+        }
+        app.typeText(textField)
     }
 
     private func tapSave(withRetry: Bool = false) {

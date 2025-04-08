@@ -33,8 +33,7 @@ class ActivityStreamTest: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
-        // Comment out so that the sponsors shortcuts are shown after the homepage redesign. (FXIOS-11668)
-        // launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
+        launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
     }
     override func tearDown() {
@@ -105,11 +104,7 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
-        if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -201,11 +196,14 @@ class ActivityStreamTest: BaseTestCase {
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        let numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
+        var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         if iPad() {
             navigator.goto(TabTray)
+            numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
+            waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
+        } else {
+            waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
         }
-        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 

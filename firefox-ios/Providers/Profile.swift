@@ -724,7 +724,11 @@ open class BrowserProfile: Profile {
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
-            return try RemoteSettingsService(storageDir: path, config: config)
+            let service = try RemoteSettingsService(storageDir: path, config: config)
+            #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+            serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
+            #endif
+            return service
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,
@@ -732,6 +736,8 @@ open class BrowserProfile: Profile {
             return nil
         }
     }()
+
+    private var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?
 
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {
@@ -761,7 +767,6 @@ open class BrowserProfile: Profile {
     }()
 
     private func remoteSettingsAppContext() -> RemoteSettingsContext {
-        let encoder = JSONEncoder()
         let appInfo = BrowserKitInformation.shared
         let uiDevice = UIDevice.current
         let formFactor = switch uiDevice.userInterfaceIdiom {
@@ -769,33 +774,15 @@ open class BrowserProfile: Profile {
         case .mac: "desktop"
         default: "phone"
         }
-        var customTargetingAttributes: String?
-        let customTargetingAttributesData = try? encoder.encode([
-                "form_factor": formFactor,
-                "country": Locale.current.regionCode,
-        ])
-        if let data = customTargetingAttributesData {
-            customTargetingAttributes = String(
-                decoding: data,
-                as: UTF8.self)
-        }
         return RemoteSettingsContext(
-            appName: "Firefox iOS",
-            appId: AppInfo.bundleIdentifier,
             channel: appInfo.buildChannel?.rawValue ?? "release",
             appVersion: AppInfo.appVersion,
-            appBuild: AppInfo.buildNumber,
-            architecture: nil,
-            deviceManufacturer: "Apple",
-            deviceModel: DeviceInfo.deviceModel(),
+            appId: AppInfo.bundleIdentifier,
             locale: Locale.current.identifier,
             os: "iOS",
             osVersion: uiDevice.systemVersion,
-            androidSdkVersion: nil,
-            debugTag: nil,
-            installationDate: nil,
-            homeDirectory: nil,
-            customTargetingAttributes: customTargetingAttributes)
+            formFactor: formFactor,
+            country: Locale.current.regionCode)
     }
 
     func hasAccount() -> Bool {

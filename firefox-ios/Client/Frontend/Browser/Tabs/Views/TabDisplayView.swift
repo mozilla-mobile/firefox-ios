@@ -27,7 +27,49 @@ class TabDisplayView: UIView,
     private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
 
-    private var dataSource: TabDisplayDiffableDataSource?
+    lazy var dataSource =
+    TabDisplayDiffableDataSource(
+        collectionView: collectionView,
+        cellProvider: { [weak self] (collectionView, indexPath, sectionItem) ->
+            UICollectionViewCell in
+            guard let self else { return UICollectionViewCell() }
+
+            switch sectionItem {
+            case .inactiveTab(let inactiveTab):
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: InactiveTabsCell.cellIdentifier,
+                    for: indexPath
+                ) as? InactiveTabsCell
+                else { return UICollectionViewCell() }
+
+                cell.configure(with: inactiveTab)
+                if let theme = theme {
+                    cell.applyTheme(theme: theme)
+                }
+                return cell
+
+            case .tab(let tab):
+                if isTabTrayUIExperimentsEnabled {
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: ExperimentTabCell.cellIdentifier,
+                        for: indexPath
+                    ) as? ExperimentTabCell else { return UICollectionViewCell() }
+
+                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    return cell
+                } else {
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: TabCell.cellIdentifier,
+                        for: indexPath
+                    ) as? TabCell else { return UICollectionViewCell() }
+
+                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    return cell
+                }
+            }
+        })
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -35,7 +77,7 @@ class TabDisplayView: UIView,
     }
 
     var shouldHideInactiveTabs: Bool {
-        guard !tabsState.isPrivateMode else { return true }
+        guard !tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled else { return true }
         return tabsState.inactiveTabs.isEmpty
     }
 
@@ -120,7 +162,7 @@ class TabDisplayView: UIView,
 
         tabsState = state
 
-        dataSource?.updateSnapshot(state: tabsState)
+        dataSource.updateSnapshot(state: tabsState)
 
         if let scrollState = state.scrollState {
             scrollToTab(scrollState)
@@ -149,50 +191,7 @@ class TabDisplayView: UIView,
 
     private func configureDataSource() {
         // swiftlint:disable line_length
-        dataSource = TabDisplayDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, sectionItem) ->
-            UICollectionViewCell in
-            // swiftlint:enable line_length
-            guard let self else { return UICollectionViewCell() }
-
-            switch sectionItem {
-            case .inactiveTab(let inactiveTab):
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: InactiveTabsCell.cellIdentifier,
-                    for: indexPath
-                ) as? InactiveTabsCell
-                else { return UICollectionViewCell() }
-
-                cell.configure(with: inactiveTab)
-                if let theme = theme {
-                    cell.applyTheme(theme: theme)
-                }
-                return cell
-
-            case .tab(let tab):
-                if isTabTrayUIExperimentsEnabled {
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: ExperimentTabCell.cellIdentifier,
-                        for: indexPath
-                    ) as? ExperimentTabCell else { return UICollectionViewCell() }
-
-                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
-                    return cell
-                } else {
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: TabCell.cellIdentifier,
-                        for: indexPath
-                    ) as? TabCell else { return UICollectionViewCell() }
-
-                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
-                    return cell
-                }
-            }
-        }
-
-        // swiftlint:disable line_length
-        dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+        dataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             // swiftlint:enable line_length
             let reusableView = UICollectionReusableView()
             let section = self?.getSection(for: indexPath.section)
@@ -282,8 +281,8 @@ class TabDisplayView: UIView,
     }
 
     private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
+        let snapshot = dataSource.snapshot()
         guard
-            let snapshot = dataSource?.snapshot(),
             sectionIndex >= 0,
             sectionIndex < snapshot.sectionIdentifiers.count
         else { return TabDisplayViewSection.tabs }
@@ -301,7 +300,7 @@ class TabDisplayView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
+        if let selectedItem = dataSource.itemIdentifier(for: indexPath) {
             switch selectedItem {
             case .inactiveTab(let inactiveTabsModel):
                 inactiveTabsTelemetry.tabOpened()
@@ -345,11 +344,13 @@ class TabDisplayView: UIView,
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(for tabUUID: TabUUID) {
-        let action = TabPanelViewAction(panelType: panelType,
-                                        tabUUID: tabUUID,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeTab)
-        store.dispatch(action)
+        if !isDragging {
+            let action = TabPanelViewAction(panelType: panelType,
+                                            tabUUID: tabUUID,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.closeTab)
+            store.dispatch(action)
+        }
     }
 
     // MARK: - SwipeAnimatorDelegate

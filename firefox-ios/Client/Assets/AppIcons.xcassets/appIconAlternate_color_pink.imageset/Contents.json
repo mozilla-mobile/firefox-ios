@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pink-light.png",
+      "filename" : "pink-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "pink-dark.png",
+      "filename" : "pink-dark.pdf",
       "idiom" : "universal"
     }
   ],

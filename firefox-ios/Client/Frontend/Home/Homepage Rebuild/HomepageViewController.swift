@@ -116,11 +116,7 @@ final class HomepageViewController: UIViewController,
             .TopSitesUpdated,
             .DefaultSearchEngineUpdated,
             .BookmarksUpdated,
-            .RustPlacesOpened,
-            .TabDataUpdated,
-            .TabsTrayDidClose,
-            .TabsTrayDidSelectHomeTab,
-            .TopTabsTabClosed
+            .RustPlacesOpened
         ])
 
         subscribeToRedux()
@@ -166,6 +162,12 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillAppear
+            )
+        )
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -420,10 +422,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(headerState: state) { [weak self] in
-                self?.toggleHomepageMode()
-            }
-
+            headerCell.configure(headerState: state)
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
@@ -661,16 +660,6 @@ final class HomepageViewController: UIViewController,
         if section.canHandleLongPress {
             navigateToContextMenu(for: section, and: item, sourceView: sourceView)
         }
-    }
-
-    // MARK: Dispatch Actions
-    private func toggleHomepageMode() {
-        store.dispatch(
-            HeaderAction(
-                windowUUID: windowUUID,
-                actionType: HeaderActionType.toggleHomepageMode
-            )
-        )
     }
 
     private func navigateToHomepageSettings() {
@@ -931,9 +920,6 @@ final class HomepageViewController: UIViewController,
             )
         case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
             dispatchActionToFetchTopSites()
-            dispatchActionToFetchTabs()
-
-        case .TabDataUpdated, .TabsTrayDidClose, .TabsTrayDidSelectHomeTab, .TopTabsTabClosed:
             dispatchActionToFetchTabs()
         default: break
         }

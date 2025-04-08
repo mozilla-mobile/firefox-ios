@@ -70,9 +70,6 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .jsAlertRefactor:
-            return checkJSAlertRefactor(from: nimbus)
-
         case .loginAutofill:
             return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
 
@@ -93,9 +90,6 @@ final class NimbusFeatureFlagLayer {
 
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
-
-        case .passwordGenerator:
-            return checkPasswordGeneratorFeature(from: nimbus)
 
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
@@ -132,6 +126,9 @@ final class NimbusFeatureFlagLayer {
 
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
+
+        case .tabAnimation:
+            return checkTabAnimationFeature(from: nimbus)
 
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
@@ -242,6 +239,11 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.animationFeature
+    }
+
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.enabled
@@ -344,12 +346,6 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkJSAlertRefactor(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.jsAlertRefactor.value()
-
-        return config.enabled
-    }
-
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shopping2023.value()
 
@@ -360,10 +356,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.productAds
-    }
-
-    private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.passwordGeneratorFeature.value().enabled
     }
 
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {

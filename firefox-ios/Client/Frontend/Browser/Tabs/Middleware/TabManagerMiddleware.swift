@@ -15,6 +15,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
+    private let toastTelemetry: ToastTelemetry
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -23,10 +24,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         bookmarksSaver: BookmarksSaver? = nil) {
+         bookmarksSaver: BookmarksSaver? = nil,
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
+    ) {
         self.profile = profile
         self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
+        self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -112,6 +116,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         case TabTrayActionType.closePrivateTabsSettingToggled:
             preserveTabs(uuid: action.windowUUID)
+
+        // FXIOS-11740 - This is relate to homepage actions, so if we want to break up this middleware
+        // then this action should go to the homepage specific middleware.
+        case TabTrayActionType.dismissTabTray, TabTrayActionType.modalSwipedToClose, TabTrayActionType.doneButtonTapped:
+            dispatchRecentlyAccessedTabs(action: action)
         default:
             break
         }
@@ -457,6 +466,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
+        toastTelemetry.undoClosedSingleTab()
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
               tabManager.backupCloseTab != nil
@@ -530,6 +540,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     private func undoCloseAllTabs(uuid: WindowUUID) {
+        toastTelemetry.undoClosedAllTabs()
         let tabManager = tabManager(for: uuid)
         tabManager.undoCloseAllTabs()
 
@@ -912,11 +923,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     // MARK: - Homepage Related Actions
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
-        case HeaderActionType.toggleHomepageMode:
-            tabManager(for: action.windowUUID).switchPrivacyMode()
-        case HomepageActionType.initialize,
+        case HomepageActionType.viewWillAppear,
             JumpBackInActionType.fetchLocalTabs,
-            TabTrayActionType.dismissTabTray:
+            TopTabsActionType.didTapNewTab,
+            TopTabsActionType.didTapCloseTab:
             dispatchRecentlyAccessedTabs(action: action)
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
@@ -1048,12 +1058,20 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
     private func dispatchRecentlyAccessedTabs(action: Action) {
-        store.dispatch(
-            TabManagerAction(
-                recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
-                windowUUID: action.windowUUID,
-                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+        // TODO: FXIOS-10919 - Consider testing better with Tasks here
+        // and modifying how we fetch recentlyAccessedNormalTabs since
+        // it doesn't retrieve the proper tabs without this task block
+        // See more details on issue here [FXIOS-5149] [FXIOS-11644]
+        Task { @MainActor in
+            // [FXIOS-5149] Recent tabs need to be accessed from .main thread
+            let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
+            store.dispatch(
+                TabManagerAction(
+                    recentTabs: recentTabs,
+                    windowUUID: action.windowUUID,
+                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+                )
             )
-        )
+        }
     }
 }

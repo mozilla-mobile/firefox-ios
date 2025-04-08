@@ -2,8 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import GCDWebServers
+import Shared
+import WebEngine
 
 protocol ReaderModeHandlersProtocol {
     func register(_ webServer: WebServerProtocol, profile: Profile)
@@ -12,7 +15,7 @@ protocol ReaderModeHandlersProtocol {
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
 
-    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming
@@ -99,7 +102,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         var readerModeStyle = style
         // We have this page in our cache, so we can display it. Just grab the correct style from the
         // profile and then generate HTML from the Readability results.
-        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+        if let dict = profile.prefs.dictionaryForKey(PrefsKeys.ReaderModeProfileKeyStyle),
            let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
             readerModeStyle = style
         } else {

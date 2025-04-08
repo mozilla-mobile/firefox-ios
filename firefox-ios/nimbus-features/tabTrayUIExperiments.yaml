@@ -9,11 +9,18 @@ features:
           If true, enables the tab tray UI experiments.
         type: Boolean
         default: false
+      animation-feature:
+        description: >
+          If true, enables the tab tray animation feature, that occurs when the tab tray opens and closes.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
+          animation-feature: false
       - channel: developer
         value:
-          enabled: true
+          enabled: false
+          animation-feature: false
 

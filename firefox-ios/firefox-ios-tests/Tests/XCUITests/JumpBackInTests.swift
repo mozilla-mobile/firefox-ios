@@ -132,11 +132,10 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(TabTray)
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
-            app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
-            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
-            app.cells["Example Domain"].buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
+        app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
@@ -163,19 +162,19 @@ class JumpBackInTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
-        // After homepage redesign, "Jump back in" is no longer visible (FXIOS-11644)
-        // mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        //        app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
-        //        // The context menu opens, having the correct options
-        //        let ContextMenuTable = app.tables["Context Menu"]
-        //        waitForElementsToExist(
-        //            [
-        //                ContextMenuTable,
-        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
-        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
-        //            ]
-        //        )
+
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
+        app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
+        // The context menu opens, having the correct options
+        let ContextMenuTable = app.tables["Context Menu"]
+        waitForElementsToExist(
+            [
+                ContextMenuTable,
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+            ]
+        )
     }
 }

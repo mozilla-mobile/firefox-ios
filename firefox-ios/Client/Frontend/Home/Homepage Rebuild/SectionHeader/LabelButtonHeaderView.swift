@@ -31,6 +31,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         label.font = FXFontStyles.Bold.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private(set) lazy var moreButton: ActionButton = .build { button in
@@ -101,7 +102,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     func configure(
-        state: SectionHeaderState,
+        state: SectionHeaderConfiguration,
         moreButtonAction: ((UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme

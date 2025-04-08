@@ -5,6 +5,8 @@
 import XCTest
 import WebKit
 import Common
+import Shared
+
 @testable import Client
 
 final class TabScrollControllerTests: XCTestCase {
@@ -32,6 +34,33 @@ final class TabScrollControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    func testIsAbleToScrollTrue_ForIpadWhenAutoHideSettingIsEnabled() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+        mockProfile.prefs.setBool(true,
+                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
+
+        XCTAssertTrue(subject.isAbleToScroll)
+    }
+
+    func testIsAbleToScrollTrue_ForIpadWhenAutoHideSettingIsDisabled() {
+        let subject = createSubject(deviceType: .pad)
+        setupTabScroll(with: subject)
+        mockProfile.prefs.setBool(false,
+                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
+
+        XCTAssertFalse(subject.isAbleToScroll)
+    }
+
+    func testIsAbleToScrollTrue_WhenDeviceisIphone() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+        mockProfile.prefs.setBool(false,
+                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
+
+        XCTAssertTrue(subject.isAbleToScroll)
+    }
+
     func testHandlePan_ScrollingUp() {
         let subject = createSubject()
         setupTabScroll(with: subject)
@@ -39,7 +68,7 @@ final class TabScrollControllerTests: XCTestCase {
         mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
         subject.handlePan(mockGesture)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.collapsed)
+        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.collapsed)
     }
 
     func testHandlePan_ScrollingDown() {
@@ -49,7 +78,7 @@ final class TabScrollControllerTests: XCTestCase {
         mockGesture.gestureTranslation = CGPoint(x: 0, y: -100)
         subject.handlePan(mockGesture)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.visible)
     }
 
     func testShowToolbar_AfterHidingWithScroll() {
@@ -62,7 +91,7 @@ final class TabScrollControllerTests: XCTestCase {
 
         // Force call to showToolbars like clicking on top bar area
         subject.showToolbars(animated: true)
-        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.visible)
         XCTAssertEqual(subject.header?.alpha, 1)
     }
 
@@ -75,7 +104,7 @@ final class TabScrollControllerTests: XCTestCase {
         subject.handlePan(mockGesture)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.visible)
         XCTAssertEqual(subject.header?.alpha, 1)
     }
 
@@ -88,7 +117,7 @@ final class TabScrollControllerTests: XCTestCase {
         subject.handlePan(mockGesture)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.collapsed)
+        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.collapsed)
     }
 
     func testDidSetTab_addsPullRefreshViewToScrollView() {
@@ -133,7 +162,7 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertNotNil(pullRefresh)
     }
 
-    private func setupTabScroll(with subject: TabScrollingController) {
+    private func setupTabScroll(with subject: TabScrollController) {
         tab.createWebview(configuration: .init())
         tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
@@ -142,8 +171,9 @@ final class TabScrollControllerTests: XCTestCase {
         subject.header = header
     }
 
-    private func createSubject() -> TabScrollingController {
-        let subject = TabScrollingController(windowUUID: .XCTestDefaultUUID)
+    private func createSubject(deviceType: UIUserInterfaceIdiom = .phone) -> TabScrollController {
+        let subject = TabScrollController(windowUUID: .XCTestDefaultUUID,
+                                          deviceType: deviceType)
         trackForMemoryLeaks(subject)
         return subject
     }

@@ -51,7 +51,6 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
             let engineIdentifier = engine.identifier
 
             for iconRecord in iconRecords {
-                // TODO: [FXIOS-11605] Client-side filtering of multiple icon records [?]. TBD.
                 let iconIdentifiers = iconRecord.engineIdentifiers
                 var matchFound = false
 
@@ -94,8 +93,11 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
         guard let client else { return nil }
         do {
             let data = try client.getAttachment(record: iconRecord.backingRecord)
-            if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
+            let mimeType = iconRecord.mimeType ?? ""
+            if mimeType.hasPrefix("image/svg") {
                 return SVG(data: data)?.rasterize()
+            } else if mimeType.hasPrefix("application/pdf") {
+                return UIImage.imageFromPDF(data: data, minimumSize: CGSize(width: 64.0, height: 64.0))
             } else {
                 return UIImage(data: data)
             }

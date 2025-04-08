@@ -177,10 +177,6 @@ class RemoteTabsPanel: UIViewController,
         handleOpenSelectedURL(url)
     }
 
-    func remotePanel(didSelectURL url: URL, visitType: VisitType) {
-        handleOpenSelectedURL(url)
-    }
-
     private func handleOpenSelectedURL(_ url: URL) {
         let action = RemoteTabsPanelAction(url: url,
                                            windowUUID: windowUUID,
