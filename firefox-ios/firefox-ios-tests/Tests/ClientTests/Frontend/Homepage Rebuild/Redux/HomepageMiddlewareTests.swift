@@ -48,7 +48,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.type, "customize_homepage")
+        XCTAssertEqual(savedExtras.type, "customize_homepage_button")
         XCTAssertEqual(savedExtras.section, "customize_homepage")
     }
 
