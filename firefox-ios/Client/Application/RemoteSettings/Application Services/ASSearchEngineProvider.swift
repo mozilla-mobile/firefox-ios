@@ -38,6 +38,22 @@ final class ASSearchEngineProvider: SearchEngineProvider {
         // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
         // Eventually that class will be removed once we switch fully to consolidated search.
 
+        DispatchQueue.global().async { [weak self] in
+            self?.fetchUnorderedEnginesAndApplyOrdering(
+                customEngines: customEngines,
+                engineOrderingPrefs: engineOrderingPrefs,
+                prefsMigrator: prefsMigrator,
+                completion: completion
+            )
+        }
+    }
+
+    // MARK: - Private Utilities
+
+    private func fetchUnorderedEnginesAndApplyOrdering(customEngines: [OpenSearchEngine],
+                                                       engineOrderingPrefs: SearchEnginePrefs,
+                                                       prefsMigrator: SearchEnginePreferencesMigrator,
+                                                       completion: @escaping SearchEngineCompletion) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
         let prefsVersion = preferencesVersion
 
@@ -82,8 +98,6 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
     }
-
-    // MARK: - Private Utilities
 
     private func getUnorderedBundledEnginesFor(locale: Locale,
                                                possibleLanguageIdentifier: [String],
