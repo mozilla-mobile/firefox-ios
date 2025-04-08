@@ -116,6 +116,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         case TabTrayActionType.closePrivateTabsSettingToggled:
             preserveTabs(uuid: action.windowUUID)
+
+        // FXIOS-11740 - This is relate to homepage actions, so if we want to break up this middleware
+        // then this action should go to the homepage specific middleware.
+        case TabTrayActionType.dismissTabTray, TabTrayActionType.modalSwipedToClose, TabTrayActionType.doneButtonTapped:
+            dispatchRecentlyAccessedTabs(action: action)
         default:
             break
         }
@@ -918,11 +923,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     // MARK: - Homepage Related Actions
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
-        case HeaderActionType.toggleHomepageMode:
-            tabManager(for: action.windowUUID).switchPrivacyMode()
         case HomepageActionType.viewWillAppear,
             JumpBackInActionType.fetchLocalTabs,
-            TabTrayActionType.dismissTabTray,
             TopTabsActionType.didTapNewTab,
             TopTabsActionType.didTapCloseTab:
             dispatchRecentlyAccessedTabs(action: action)

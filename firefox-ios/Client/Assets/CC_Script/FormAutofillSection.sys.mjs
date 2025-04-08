@@ -246,14 +246,31 @@ export class FormAutofillSection {
         // allows for fields that might commonly appear twice such as a verification
         // email field, an invisible field that appears next to the user-visible field,
         // and simple cases where a page error where a field name is reused twice.
-        let isDuplicate = candidateSection.fieldDetails.find(
+        let dupIndex = candidateSection.fieldDetails.findIndex(
           f => f.fieldName == cur.fieldName && f.isVisible && cur.isVisible
         );
+        let isDuplicate = dupIndex != -1;
 
         if (isDuplicate) {
           const [last] = candidateSection.fieldDetails.slice(-1);
           if (last.fieldName == cur.fieldName) {
             isDuplicate = false;
+          } else if (
+            lazy.FormAutofillUtils.getCategoryFromFieldName(cur.fieldName) ==
+            "name"
+          ) {
+            // If the duplicate field is in the "name" category (e.g., family-name, given-name),
+            // we check whether all fields starting from the first duplicate also belong to the
+            // name category. If they do, we don't consider the field a duplicate, since name
+            // fields often appear in groups like family-name + given-name.
+            isDuplicate = !candidateSection.fieldDetails
+              .slice(dupIndex)
+              .every(
+                f =>
+                  lazy.FormAutofillUtils.getCategoryFromFieldName(
+                    f.fieldName
+                  ) === "name"
+              );
           }
         }
 
@@ -453,7 +470,10 @@ export class FormAutofillAddressSection extends FormAutofillSection {
     const country = lazy.FormAutofillUtils.identifyCountryCode(
       record.country || record["country-name"]
     );
-    if (!lazy.FormAutofill.isAutofillAddressesAvailableInCountry(country)) {
+    if (
+      country &&
+      !lazy.FormAutofill.isAutofillAddressesAvailableInCountry(country)
+    ) {
       // We don't want to save data in the wrong fields due to not having proper
       // heuristic regexes in countries we don't yet support.
       this.log.warn(
@@ -651,20 +671,19 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
       reauth = false;
     }
     let string;
-    let errorMessage;
+    let errorResult = 0;
     try {
       string = await lazy.OSKeyStore.decrypt(cipherText, reauth);
-      errorMessage = "NO_ERROR";
     } catch (e) {
+      errorResult = e.result;
       if (e.result != Cr.NS_ERROR_ABORT) {
         throw e;
       }
       this.log.warn("User canceled encryption login");
-      errorMessage = e.result;
     } finally {
       Glean.creditcard.osKeystoreDecrypt.record({
-        isDecryptSuccess: errorMessage === "NO_ERROR",
-        errorMessage,
+        isDecryptSuccess: errorResult === 0,
+        errorResult,
         trigger: "autofill",
       });
     }

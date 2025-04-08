@@ -41,6 +41,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
+    public static let ReaderModeProfileKeyStyle = "readermode.style"
 
     // Only set if we get an actual response, no assumptions, nil otherwise
     public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"
@@ -94,6 +95,11 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+    }
+
+    public struct RemoteSettings {
+        public static let lastRemoteSettingsServiceSyncTimestamp =
+        "LastRemoteSettingsServiceSyncTimestamp"
     }
 
     public struct Sync {
@@ -229,6 +235,7 @@ public protocol Prefs {
     func setObject(_ value: Any?, forKey defaultName: String)
     func stringForKey(_ defaultName: String) -> String?
     func objectForKey<T: Any>(_ defaultName: String) -> T?
+    func hasObjectForKey(_ defaultName: String) -> Bool
     func boolForKey(_ defaultName: String) -> Bool?
     func intForKey(_ defaultName: String) -> Int32?
     func timestampForKey(_ defaultName: String) -> Timestamp?
@@ -306,6 +313,10 @@ open class MockProfilePrefs: Prefs {
 
     open func objectForKey<T: Any>(_ defaultName: String) -> T? {
         return things[name(defaultName)] as? T
+    }
+
+    open func hasObjectForKey(_ defaultName: String) -> Bool {
+        return (things[name(defaultName)] != nil)
     }
 
     open func timestampForKey(_ defaultName: String) -> Timestamp? {

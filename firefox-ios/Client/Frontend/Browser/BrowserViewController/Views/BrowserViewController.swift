@@ -135,7 +135,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
-    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
@@ -172,7 +172,7 @@ class BrowserViewController: UIViewController,
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
     }
 
-    private(set) lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
+    private(set) lazy var scrollController = TabScrollController(windowUUID: windowUUID)
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -251,10 +251,6 @@ class BrowserViewController: UIViewController,
 
     var isNICErrorPageEnabled: Bool {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
-    }
-
-    var isJSAlertRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
     }
 
     var isPDFRefactorEnabled: Bool {
@@ -1088,10 +1084,6 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
-        if !isJSAlertRefactorEnabled {
-            showQueuedAlertIfAvailable()
-        }
-
         prepareURLOnboardingContextualHint()
 
         if !isDeeplinkOptimizationRefactorEnabled {
@@ -1141,12 +1133,8 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
         ])
 
-        if isJSAlertRefactorEnabled {
-            // This will be documented with FXIOS-10952
-            checkForJSAlerts()
-        } else {
-            showQueuedAlertIfAvailable()
-        }
+        // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
+        checkForJSAlerts()
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
     }
@@ -1156,7 +1144,7 @@ class BrowserViewController: UIViewController,
 
         if presentedViewController == nil {
             // We can show the alert, let's show it
-            guard let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() else { return }
+            guard let nextAlert = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() else { return }
             let alertController = nextAlert.alertController()
             alertController.delegate = self
             present(alertController, animated: true)
@@ -2964,7 +2952,9 @@ class BrowserViewController: UIViewController,
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
                 tab.readabilityResult = nil
-                webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
+                webView.evaluateJavascriptInDefaultContentWorld(
+                    "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
+                )
             }
 
             // Update Fakespot sidebar if necessary
@@ -4122,7 +4112,7 @@ extension BrowserViewController: TabManagerDelegate {
            previousTab != nil && previousTab?.isPrivate != selectedTab.isPrivate {
             privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
         }
-        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
+        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.readerModeCache = readerModeCache
 
         scrollController.tab = selectedTab
@@ -4449,16 +4439,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 }
 
+// MARK: JSPromptAlertControllerDelegate
+
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
-        showQueuedAlertIfAvailable()
-    }
-}
-
-// MARK: NewJSPromptAlertControllerDelegate
-
-extension BrowserViewController: NewJSPromptAlertControllerDelegate {
-    func newPromptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)

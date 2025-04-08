@@ -72,8 +72,17 @@ final class WKEngineTests: XCTestCase {
                        line: UInt = #line) -> WKEngine {
         let subject = WKEngine(userScriptManager: userScriptManager,
                                webServerUtil: webServerUtil,
-                               sourceTimerFactory: sourceTimerFactory)
+                               sourceTimerFactory: sourceTimerFactory,
+                               engineDependencies: engineDependencies)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private var engineDependencies: EngineDependencies {
+        let readerModeConfiguration = ReaderModeConfiguration(loadingText: "loadingText",
+                                                              loadingFailedText: "loadingFailedText",
+                                                              loadOriginalText: "loadOriginalText",
+                                                              readerModeErrorText: "readerModeErrorText")
+        return EngineDependencies(readerModeConfiguration: readerModeConfiguration)
     }
 }

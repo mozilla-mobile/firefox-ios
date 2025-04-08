@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 /// Top site UI class, used in the homepage top site section
-struct TopSiteConfiguration: Hashable, Equatable {
+struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, CustomDebugStringConvertible {
     var site: Site
     var title: String
 
@@ -55,6 +55,14 @@ struct TopSiteConfiguration: Hashable, Equatable {
 
     var isGoogleURL: Bool {
         return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
+    }
+
+    public var debugDescription: String {
+        return "TopSiteConfiguration (\(site))"
+    }
+
+    public var description: String {
+        return debugDescription
     }
 
     init(site: Site) {
