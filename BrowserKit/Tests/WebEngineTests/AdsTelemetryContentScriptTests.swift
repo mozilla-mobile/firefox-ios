@@ -98,4 +98,3 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
         return subject
     }
 }
-

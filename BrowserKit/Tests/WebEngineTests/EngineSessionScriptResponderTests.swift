@@ -33,7 +33,7 @@ class EngineSessionScriptResponderTests: XCTestCase {
     func testContentScriptDidSendEventRespondsToTrackAdsClickedOnPage() throws {
         let provider = "mockprovider"
         let subject = createSubject()
-        
+
         subject.contentScriptDidSendEvent(.trackedAdsClickedOnPage(provider: provider))
 
         let event = try XCTUnwrap(session.mockTelemetryProxy.lastTelemetryEvent)

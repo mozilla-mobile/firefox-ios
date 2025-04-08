@@ -23,9 +23,9 @@ final class FocusContentScriptTests: XCTestCase {
 
     func testUserContentControllerGivenEmptyDataDoesNotCallContentScriptDelegate() {
         let subject = createSubject()
-        
+
         subject.userContentController(didReceiveMessage: [:])
-        
+
         XCTAssertEqual(contentScriptDelegate.contentScriptDidSendEventCalled, 0)
         XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
