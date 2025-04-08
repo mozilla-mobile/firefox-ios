@@ -35,10 +35,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                            engineOrderingPrefs: SearchEnginePrefs,
                            prefsMigrator: SearchEnginePreferencesMigrator,
                            completion: @escaping SearchEngineCompletion) {
-        // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
-        // Eventually that class will be removed once we switch fully to consolidated search.
-
         DispatchQueue.global().async { [weak self] in
+            // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
+            // Eventually that class will be removed once we switch fully to consolidated search.
             self?.fetchUnorderedEnginesAndApplyOrdering(
                 customEngines: customEngines,
                 engineOrderingPrefs: engineOrderingPrefs,
