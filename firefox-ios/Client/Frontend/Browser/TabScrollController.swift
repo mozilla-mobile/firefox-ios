@@ -51,7 +51,9 @@ class TabScrollController: NSObject,
         }
     }
 
+    // Top toolbar
     weak var header: BaseAlphaStackView?
+    // Bottom toolbar UI containers
     weak var overKeyboardContainer: BaseAlphaStackView?
     weak var bottomContainer: BaseAlphaStackView?
 
@@ -73,14 +75,14 @@ class TabScrollController: NSObject,
     private let logger: Logger
 
     private var toolbarsShowing: Bool {
-        let bottomShowing = overKeyboardContainerOffset == 0 && bottomContainerOffset == 0
-        return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
+        return toolbarState == .visible
     }
 
     private var isZoomedOut = false
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
+    // Top Toolbar constraints
     private var headerTopOffset: CGFloat = 0 {
         didSet {
             headerTopConstraint?.update(offset: headerTopOffset)
@@ -88,6 +90,7 @@ class TabScrollController: NSObject,
         }
     }
 
+    // Bottom toolbar constraints
     private var overKeyboardContainerOffset: CGFloat = 0 {
         didSet {
             overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
@@ -221,11 +224,7 @@ class TabScrollController: NSObject,
             let translation = gesture.translation(in: containerView)
             let delta = lastPanTranslation - translation.y
 
-            if delta > 0 {
-                scrollDirection = .down
-            } else if delta < 0 {
-                scrollDirection = .up
-            }
+            setScrollDirection(delta)
 
             lastPanTranslation = translation.y
             if checkRubberbandingForDelta(delta) && isAbleToScroll {
@@ -237,6 +236,20 @@ class TabScrollController: NSObject,
                 }
                 updateToolbarState()
             }
+        }
+    }
+
+    /// Updates the current scroll direction based on the scroll delta.
+    ///
+    /// - Parameter delta: The change in vertical scroll position.
+    /// This is the inverse of the user's drag gesture. For example:
+    /// - If the user drags **up**, the content moves **down** (delta > 0), so the scroll direction is `.down`.
+    /// - If the user drags **down**, the content moves **up** (delta < 0), so the scroll direction is `.up`.
+    private func setScrollDirection(_ delta: CGFloat) {
+        if delta > 0 {
+            scrollDirection = .down
+        } else if delta < 0 {
+            scrollDirection = .up
         }
     }
 
@@ -647,21 +660,32 @@ extension TabScrollController: UIScrollViewDelegate {
 
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
-        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
-            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
-            lastContentOffsetY = scrollView.contentOffset.y
-            store.dispatch(
-                GeneralBrowserMiddlewareAction(
-                    scrollOffset: scrollView.contentOffset,
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
-        }
+        sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
 
         guard isAnimatingToolbar else { return }
 
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
             setOffset(y: contentOffsetBeforeAnimation.y + topScrollHeight, for: scrollView)
             contentOffsetBeforeAnimation.y = 0
+        }
+    }
+
+    // Send action to show new toolbar border which is only visible on scroll, due to a design choice.
+    
+    /// Sends a scroll action to update the toolbar border visibility based on scroll position changes.
+    ///
+    /// This function detects when the scroll view crosses the vertical `y = 0` threshold —
+    /// either from scrolling into the top of the content or pulling past the top (overscroll).
+    /// - Parameter contentOffset: The current vertical scroll offset of the scroll view.
+    private func sendActionToShowToolbarBorder(contentOffset: CGPoint) {
+        if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && contentOffset.y > 0) {
+            lastContentOffsetY = contentOffset.y
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
     }
 
