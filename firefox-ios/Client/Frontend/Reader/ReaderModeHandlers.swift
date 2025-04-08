@@ -123,7 +123,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             font-src http://localhost:*;
             script-src 'unsafe-inline' http://localhost:*;
         """
-        response.setValue(scp, forAdditionalHeader: "Content-Security-Policy")
+        response.setValue(csp, forAdditionalHeader: "Content-Security-Policy")
         return response
     }
 
