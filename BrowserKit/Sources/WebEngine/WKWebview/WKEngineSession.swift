@@ -277,8 +277,9 @@ class WKEngineSession: NSObject,
 
     private func addContentScripts() {
         scriptResponder.session = self
+        let searchProviders = delegate?.adsSearchProviderModels() ?? []
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: scriptResponder,
-                                                                        searchProviderModels: delegate?.adsSearchProviderModels() ?? []),
+                                                                        searchProviderModels: searchProviders),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
         contentScriptManager.addContentScript(FocusContentScript(delegate: scriptResponder),

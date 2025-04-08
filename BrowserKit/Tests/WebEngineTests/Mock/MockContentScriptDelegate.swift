@@ -4,11 +4,11 @@
 
 @testable import WebEngine
 
-class MockEngineSessionScriptResponder: EngineSessionScriptResponder {
+class MockContentScriptDelegate: ContentScriptDelegate {
     var contentScriptDidSendEventCalled = 0
     var lastContentScriptEvent: ScriptEvent?
 
-    override func contentScriptDidSendEvent(_ event: ScriptEvent) {
+    func contentScriptDidSendEvent(_ event: ScriptEvent) {
         contentScriptDidSendEventCalled += 1
         lastContentScriptEvent = event
     }
