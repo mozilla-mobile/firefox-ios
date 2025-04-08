@@ -42,17 +42,19 @@ public class BrowserAddressToolbar: UIView,
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
-    private lazy var locationContainer: UIView = .build()
 
+    private lazy var locationContainer: UIView = .build()
     private lazy var locationView: LocationView = .build()
     private lazy var locationDividerView: UIView = .build()
 
     private lazy var leadingPageActionStack: UIStackView = .build { view in
         view.spacing = UX.actionSpacing
     }
+
     private lazy var pageActionStack: UIStackView = .build { view in
         view.spacing = UX.actionSpacing
     }
+
     private lazy var browserActionStack: UIStackView = .build()
     private lazy var toolbarTopBorderView: UIView = .build()
     private lazy var toolbarBottomBorderView: UIView = .build()
