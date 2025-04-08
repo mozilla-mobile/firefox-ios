@@ -239,6 +239,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
+        tab.cancelDocumentDownload()
+
         backupCloseTab = BackupCloseTab(
             tab: tab,
             restorePosition: index,

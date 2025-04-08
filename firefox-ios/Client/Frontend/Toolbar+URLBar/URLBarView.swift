@@ -58,6 +58,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarPresentCFR(at sourceView: UIView)
 }
 
+// MARK: - TODO rename it `OverlayMode`
 protocol URLBarViewProtocol {
     var inOverlayMode: Bool { get }
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)

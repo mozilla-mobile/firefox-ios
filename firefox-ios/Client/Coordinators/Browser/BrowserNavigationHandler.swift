@@ -122,8 +122,4 @@ extension BrowserNavigationHandler {
     func show(settings: Route.SettingsSection) {
         show(settings: settings, onDismiss: nil)
     }
-
-    func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        removeDocumentLoading(completion: completion)
-    }
 }

@@ -4066,7 +4066,7 @@ extension BrowserViewController: TabManagerDelegate {
             if selectedTab.isDownloadingDocument() {
                 navigationHandler?.showDocumentLoading()
             } else {
-                navigationHandler?.removeDocumentLoading()
+                navigationHandler?.removeDocumentLoading(completion: nil)
             }
         }
 

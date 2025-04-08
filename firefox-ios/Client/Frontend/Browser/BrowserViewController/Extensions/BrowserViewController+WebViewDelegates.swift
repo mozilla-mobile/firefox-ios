@@ -762,8 +762,7 @@ extension BrowserViewController: WKNavigationDelegate {
         navigationHandler?.showDocumentLoading()
         scrollController.showToolbars(animated: false)
 
-        let cookieStore = tab.webView?.configuration.websiteDataStore.httpCookieStore
-        cookieStore?.getAllCookies { [weak tab, weak self] cookies in
+        tab.getSessionCookies { [weak tab, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
                 filename: response.suggestedFilename,
                 request: request,
@@ -783,7 +782,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                    context: nil)
             }
             tempPDF.onDownloadError = { error in
-                self?.navigationHandler?.removeDocumentLoading()
+                self?.navigationHandler?.removeDocumentLoading(completion: nil)
                 guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }
@@ -1038,7 +1037,7 @@ extension BrowserViewController: WKNavigationDelegate {
         webviewTelemetry.stop()
         if isPDFRefactorEnabled {
             scrollController.configureRefreshControl()
-            navigationHandler?.removeDocumentLoading()
+            navigationHandler?.removeDocumentLoading(completion: nil)
         }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {

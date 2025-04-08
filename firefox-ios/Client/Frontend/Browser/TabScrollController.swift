@@ -12,9 +12,9 @@ protocol ScrollToHideToolbar: AnyObject {
 }
 
 class TabScrollController: NSObject,
-                              SearchBarLocationProvider,
-                              ScrollToHideToolbar,
-                              Themeable {
+                           SearchBarLocationProvider,
+                           ScrollToHideToolbar,
+                           Themeable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2

@@ -380,6 +380,36 @@ class TabTests: XCTestCase {
         XCTAssertEqual(subject.url, request.url)
     }
 
+    func testPauseDocumentDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument()
+
+        subject.enqueueDocument(document)
+        subject.pauseDocumentDownload()
+
+        XCTAssertEqual(document.pauseDownloadCalled, 1)
+    }
+
+    func testResumeDocumentDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument()
+
+        subject.enqueueDocument(document)
+        subject.resumeDocumentDownload()
+
+        XCTAssertEqual(document.resumeDownloadCalled, 1)
+    }
+
+    func testCancelDocumentDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument()
+
+        subject.enqueueDocument(document)
+        subject.cancelDocumentDownload()
+
+        XCTAssertEqual(document.cancelDownloadCalled, 1)
+    }
+
     private func createSubject() -> Tab {
         let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
         trackForMemoryLeaks(subject)
