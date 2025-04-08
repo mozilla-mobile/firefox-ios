@@ -603,10 +603,12 @@ context_menu:
         type: string
         description: |
           The type of option selected.
+          Options are listed in the OptionExtra enumeration.
       origin:
         type: string
         description: |
           The type of context menu the option was selected from.
+          Options are listed in the OriginExtra enumeration.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
     data_reviews:
@@ -626,6 +628,7 @@ context_menu:
         type: string
         description: |
           The type of context menu the option was selected from.
+          Options are listed in the OriginExtra enumeration.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
     data_reviews:
@@ -645,6 +648,7 @@ context_menu:
         type: string
         description: |
           The type of context menu the option was selected from.
+          Options are listed in the OriginExtra enumeration.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
     data_reviews:
