@@ -16,7 +16,7 @@ struct HomepageTelemetry {
         case bookmarkShowAll = "bookmarks_show_all_button"
         case story = "story"
         case storyDiscoverMore = "stories_discover_more"
-        case customizeHomepage = "customize_homepage"
+        case customizeHomepage = "customize_homepage_button"
 
         var sectionName: String {
             switch self {
