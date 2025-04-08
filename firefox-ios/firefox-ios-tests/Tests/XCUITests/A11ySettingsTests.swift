@@ -5,7 +5,7 @@
 import Testing
 
 class A11ySettingsTests: BaseTestCase {
-    func testSettingMenuPageAudit() throws {
+    func testSettingsMenuPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Settings Screen") { _ in
@@ -23,7 +23,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingMainMenuAccessibilityLabels() {
+    func testSettingsMainMenuAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Settings Main Menu") { _ in
@@ -61,7 +61,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingAccessibilityLabels() {
+    func testSettingsAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Settings Main Menu") { _ in
@@ -97,7 +97,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingMainMenuExtendedAccessibilityLabels() {
+    func testSettingsMainMenuExtendedAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Extended Settings Main Menu") { _ in
@@ -136,7 +136,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingSyncAndSaveDataPageAudit() throws {
+    func testSettingsSyncAndSaveDataPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Sync and Save Data Settings Screen") { _ in
@@ -155,7 +155,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingSyncAndSaveDataAccessibilityLabels() {
+    func testSettingsSyncAndSaveDataAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Sync and Save Data Settings Main Menu") { _ in
@@ -195,7 +195,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingBrowsingPageAudit() throws {
+    func testSettingsBrowsingPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Browsing Settings") { _ in
@@ -243,7 +243,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingBrowsingAccessibilityLabels() {
+    func testSettingsBrowsingAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Browsing Settings") { _ in
@@ -337,7 +337,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingSearchPageAudit() throws {
+    func testSettingsSearchPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
 
         XCTContext
@@ -387,7 +387,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingSearchAccessibilityLabels() {
+    func testSettingsSearchAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Search Settings Menu") { _ in
@@ -486,7 +486,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingNewTabPageAudit() throws {
+    func testSettingsNewTabPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the New Tab Settings") { _ in
@@ -505,7 +505,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingNewTabAccessibilityLabels() {
+    func testSettingsNewTabAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the New Tab Settings Menu") { _ in
@@ -537,7 +537,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingHomePagePageAudit() throws {
+    func testSettingsHomePagePageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Homepage Settings") { _ in
@@ -584,7 +584,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingHomePageAccessibilityLabels() {
+    func testSettingsHomePageAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Homepage Settings Menu") { _ in
@@ -675,7 +675,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingThemePageAudit() throws {
+    func testSettingsThemePageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Theme Settings") { _ in
@@ -722,7 +722,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingThemeAccessibilityLabels() {
+    func testSettingsThemeAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
 
         XCTContext
@@ -820,7 +820,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingToolbarPageAudit() throws {
+    func testSettingsToolbarPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Toolbar Settings") { _ in
@@ -839,7 +839,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingToolbarAccessibilityLabels() {
+    func testSettingsToolbarAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the Settings Screen") { _ in
@@ -876,7 +876,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingAppIconPageAudit() throws {
+    func testSettingsAppIconPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -899,7 +899,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingAppIconAccessibilityLabels() {
+    func testSettingsAppIconAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
 
         XCTContext
@@ -940,7 +940,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingSiriShortcutPageAudit() throws {
+    func testSettingsSiriShortcutPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "When I open the Siri Shortcuts Settings") { _ in
@@ -959,7 +959,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testSettingSiriShortcutAccessibilityLabels() {
+    func testSettingsSiriShortcutAccessibilityLabels() {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
 
         XCTContext
@@ -994,7 +994,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     // Privacy Section
-    func testAutofillsAndPasswordPageAudit() throws {
+    func testSettingsAutofillsAndPasswordPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1015,7 +1015,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testAutofillsAndPasswordAccessibilityReport() throws {
+    func testSettingsAutofillsAndPasswordAccessibilityReport() throws {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1049,7 +1049,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testDataManagementPageAudit() throws {
+    func testSettingsDataManagementPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1084,7 +1084,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testTrackingProtectionPageAudit() throws {
+    func testSettingsTrackingProtectionPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1105,7 +1105,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testTrackingProtectionAccessibilityReport() throws {
+    func testSettingsTrackingProtectionAccessibilityReport() throws {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1145,7 +1145,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testNotificationsPageAudit() throws {
+    func testSettingsNotificationsPageAudit() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1166,7 +1166,7 @@ class A11ySettingsTests: BaseTestCase {
             }
     }
 
-    func testNotificationsAccessibilityReport() throws {
+    func testSettingsNotificationsAccessibilityReport() throws {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
