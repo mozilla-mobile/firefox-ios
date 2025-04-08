@@ -88,11 +88,11 @@ final class RouteBuilder: FeatureFlaggable {
 
             case .widgetSmallQuickLinkOpenUrl:
                 // Widget Quick links - small - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
+                return getWidgetRoute(urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .widgetMediumQuickLinkOpenUrl:
                 // Widget Quick Actions - medium - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
+                return getWidgetRoute(urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
@@ -219,6 +219,11 @@ final class RouteBuilder: FeatureFlaggable {
         case .qrCode:
             return .action(action: .showQRCode)
         }
+    }
+
+    private func getWidgetRoute(urlQuery: URL?, isPrivate: Bool) -> Route? {
+        let isCustomLink = prefs?.stringForKey(NewTabAccessors.NewTabPrefKey) == NewTabPage.homePage.rawValue
+        return .search(url: urlQuery, isPrivate: isPrivate, options: isCustomLink ? [] : [.focusLocationField])
     }
 
     // MARK: - Telemetry
