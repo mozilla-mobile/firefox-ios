@@ -6,10 +6,11 @@ import UIKit
 import Common
 
 /// Simple address toolbar implementation.
-/// +-------------+------------+----------------------------------------+----------+
-/// | navigation  | indicators | [ location ]     url       [ page    ] | browser  |
-/// |   actions   |            | [ actions  ]               [ actions ] | actions  |
-/// +-------------+------------+----------------------------------------+----------+
+/// +-------------+--------------------------------------------------------+----------+
+/// | navigation  | [ leading ]     indicators      url       [ trailing ] | browser  |
+/// | actions     | [ page    ]                               [ page     ] | browser  |
+/// |             | [ actions ]                               [ actions  ] | actions  |
+/// +-------------+--------------------------------------------------------+----------+
 public class BrowserAddressToolbar: UIView,
                                     Notifiable,
                                     AddressToolbar,
