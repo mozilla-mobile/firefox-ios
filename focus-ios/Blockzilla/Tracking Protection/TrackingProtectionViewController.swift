@@ -134,7 +134,7 @@ class TrackingProtectionViewController: UIViewController {
                 let cell = SwitchTableViewCell(item: blockOtherItem, reuseIdentifier: "SwitchTableViewCell")
                 cell.valueChanged.sink { [unowned self] isOn in
                     if isOn {
-                        let alertController = createAlertControllerToShowContentBlockingWarning(cell: cell)
+                        let alertController = self.createAlertControllerToShowContentBlockingWarning(cell: cell)
                         self.present(alertController, animated: true, completion: nil)
                     } else {
                         self.blockOtherItem.settingsValue = isOn
