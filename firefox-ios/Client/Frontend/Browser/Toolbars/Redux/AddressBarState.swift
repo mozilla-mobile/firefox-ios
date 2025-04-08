@@ -877,15 +877,11 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+        let isEditingBaseLayout = isEditing && layout != .version1
 
-        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
-
-        guard !isEditing else {
-            if layout != .version1 {
-                // back caret when in edit mode
-                actions.append(cancelEditAction)
-            }
+        guard !isEditingBaseLayout else {
+            // back caret when in edit mode
+            actions.append(cancelEditAction)
             return actions
         }
 
