@@ -438,6 +438,7 @@ struct AccessibilityIdentifiers {
         static let doneButton = "doneButtonTabTray"
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
+        static let selectorCell = "selectorCell"
         static let syncDataButton = "syncDataButton"
         static let learnMoreButton = "learnMoreButton"
         static let collectionView = "TabDisplayView.collectionView"
