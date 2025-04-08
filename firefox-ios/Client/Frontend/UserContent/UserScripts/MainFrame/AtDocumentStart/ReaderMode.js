@@ -5,11 +5,11 @@
 
 "use strict";
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
+import {setStyle} from "./ReaderModeStyles.js";
 
 const DEBUG = false;
 
 var readabilityResult = null;
-var currentStyle = null;
 
 const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
 
@@ -101,38 +101,6 @@ function checkReadability() {
 // can simply return the results we already have.
 function readerize() {
   return readabilityResult;
-}
-
-// TODO: The following code only makes sense in about:reader context. It may be a good idea to move
-// it out of this file and into for example a Reader.js.
-
-function setStyle(style) {
-  // Configure the theme (light, dark)
-  if (currentStyle && currentStyle.theme) {
-    document.body.classList.remove(currentStyle.theme);
-  }
-  if (style && style.theme) {
-    document.body.classList.add(style.theme);
-  }
-
-  // Configure the font size (1-5)
-  if (currentStyle && currentStyle.fontSize) {
-    document.body.classList.remove("font-size" + currentStyle.fontSize);
-  }
-  if (style && style.fontSize) {
-    document.body.classList.add("font-size" + style.fontSize);
-  }
-
-  // Configure the font type
-  if (currentStyle && currentStyle.fontType) {
-    document.body.classList.remove(currentStyle.fontType);
-  }
-  if (style && style.fontType) {
-    document.body.classList.add(style.fontType);
-  }
-
-  // Remember the style
-  currentStyle = style;
 }
 
 function updateImageMargins() {
