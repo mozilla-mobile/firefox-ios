@@ -313,12 +313,7 @@ public class BrowserAddressToolbar: UIView,
     private func updateSpacing(uxConfig: AddressToolbarUXConfiguration,
                                leading: CGFloat,
                                trailing: CGFloat) {
-        if uxConfig.isNavigationActionsInsideLocationView {
-            leadingNavigationActionStackConstraint?.constant = leading
-            leadingLocationContainerConstraint?.constant = trailing
-        } else {
-            leadingNavigationActionStackConstraint?.constant = leading
-        }
+        leadingNavigationActionStackConstraint?.constant = leading
         trailingBrowserActionStackConstraint?.constant = -trailing
     }
 
@@ -392,9 +387,7 @@ public class BrowserAddressToolbar: UIView,
         // Navigation action spacing
         let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
         let isRegular = traitCollection.horizontalSizeClass == .regular
-        if !uxConfig.isNavigationActionsInsideLocationView {
-            leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
-        }
+        leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
 
         // Page action spacing
         let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty
