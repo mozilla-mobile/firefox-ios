@@ -69,6 +69,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.isAccessibilityElement = false
+        view.accessibilityElementsHidden = true
     }
 
     private lazy var titleText: UILabel = .build { label in
