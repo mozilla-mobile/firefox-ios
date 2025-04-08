@@ -50,4 +50,10 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
                                didReceive message: WKScriptMessage) {
         userContentControllerCalled += 1
     }
+
+    /// Helper method to call an injected content script `userContentController` method.
+    func callScriptUserContentController(script: String, message: Any) {
+        guard let contentScript = scripts[script] else { return }
+        contentScript.userContentController(didReceiveMessage: message)
+    }
 }

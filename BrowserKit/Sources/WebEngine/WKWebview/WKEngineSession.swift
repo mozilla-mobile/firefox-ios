@@ -26,8 +26,8 @@ class WKEngineSession: NSObject,
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
     var fullscreenDelegate: FullscreenDelegate?
-    lazy var scriptResponder = EngineSessionScriptResponder(session: self)
 
+    private var scriptResponder: EngineSessionScriptResponder
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var metadataFetcher: MetadataFetcherHelper
@@ -47,6 +47,7 @@ class WKEngineSession: NSObject,
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
+          scriptResponder: EngineSessionScriptResponder = EngineSessionScriptResponder(),
           metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
           navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
           uiHandler: WKUIHandler = DefaultUIHandler()) {
@@ -64,6 +65,8 @@ class WKEngineSession: NSObject,
         self.metadataFetcher = metadataFetcher
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
+        self.scriptResponder = scriptResponder
+        self.telemetryProxy = telemetryProxy
         super.init()
 
         self.metadataFetcher.delegate = self
@@ -273,8 +276,9 @@ class WKEngineSession: NSObject,
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        contentScriptManager.addContentScript(AdsTelemetryContentScript(searchProviderModels: delegate?.adsSearchProviderModels() ?? [],
-                                                                        delegate: scriptResponder),
+        scriptResponder.session = self
+        contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: scriptResponder,
+                                                                        searchProviderModels: delegate?.adsSearchProviderModels() ?? []),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
         contentScriptManager.addContentScript(FocusContentScript(delegate: scriptResponder),

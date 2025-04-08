@@ -63,8 +63,8 @@ class AdsTelemetryContentScript: WKContentScript {
     private weak var delegate: ContentScriptDelegate?
     private let searchProviderModels: [EngineSearchProviderModel]
 
-    init(searchProviderModels: [EngineSearchProviderModel],
-         delegate: ContentScriptDelegate?,
+    init(delegate: ContentScriptDelegate?,
+         searchProviderModels: [EngineSearchProviderModel] = [],
          logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         self.delegate = delegate

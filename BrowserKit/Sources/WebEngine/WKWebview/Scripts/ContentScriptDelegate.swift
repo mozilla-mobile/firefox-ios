@@ -7,8 +7,8 @@ protocol ContentScriptDelegate: AnyObject {
     func contentScriptDidSendEvent(_ event: ScriptEvent)
 }
 
-/// An Event triggered from an inject script into a `WKWebView`
-enum ScriptEvent {
+/// An Event triggered from an injected script into a `WKWebView`
+enum ScriptEvent: Equatable {
     case requestJavascriptCommand(command: String, scope: String?)
     case fieldFocusChanged(Bool)
     case trackedAdsFoundOnPage(provider: String, urls: [String])

@@ -15,6 +15,7 @@ final class WKEngineSessionTests: XCTestCase {
     private var engineSessionDelegate: MockEngineSessionDelegate!
     private var metadataFetcher: MockMetadataFetcherHelper!
     private var fullscreenDelegate: MockFullscreenDelegate!
+    private var scriptResponder: MockEngineSessionScriptResponder!
 
     override func setUp() {
         super.setUp()
@@ -25,6 +26,7 @@ final class WKEngineSessionTests: XCTestCase {
         engineSessionDelegate = MockEngineSessionDelegate()
         metadataFetcher = MockMetadataFetcherHelper()
         fullscreenDelegate = MockFullscreenDelegate()
+        scriptResponder = MockEngineSessionScriptResponder()
     }
 
     override func tearDown() {
@@ -36,6 +38,7 @@ final class WKEngineSessionTests: XCTestCase {
         engineSessionDelegate = nil
         metadataFetcher = nil
         fullscreenDelegate = nil
+        scriptResponder = nil
     }
 
     // MARK: Load URL
@@ -554,9 +557,10 @@ final class WKEngineSessionTests: XCTestCase {
     func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
         _ = createSubject()
 
-        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], FocusContentScript.name())
     }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
@@ -630,6 +634,7 @@ final class WKEngineSessionTests: XCTestCase {
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
                                             contentScriptManager: contentScriptManager,
+                                            scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
                                             uiHandler: uiHandler) else {
             return nil
