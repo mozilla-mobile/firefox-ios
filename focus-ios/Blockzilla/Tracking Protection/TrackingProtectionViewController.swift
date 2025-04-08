@@ -181,6 +181,38 @@ class TrackingProtectionViewController: UIViewController {
         )
     ]
 
+    private func createAlertController(cell: SwitchTableViewCell) -> UIAlertController {
+        let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { [unowned self] _ in
+            // TODO: Make sure to reset the toggle
+            cell.isOn = false
+            self.blockOtherItem.settingsValue = false
+            self.updateTelemetry(self.blockOtherItem.settingsKey, false)
+            GleanMetrics
+                .TrackingProtection
+                .trackerSettingChanged
+                .record(.init(
+                    isEnabled: false,
+                    sourceOfChange: self.sourceOfChange,
+                    trackerChanged: self.blockOtherItem.settingsKey.trackerChanged
+                ))
+        })
+        alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherYes, style: .destructive) { [unowned self] _ in
+            self.blockOtherItem.settingsValue = true
+            self.updateTelemetry(self.blockOtherItem.settingsKey, true)
+            GleanMetrics
+                .TrackingProtection
+                .trackerSettingChanged
+                .record(.init(
+                    isEnabled: true,
+                    sourceOfChange: self.sourceOfChange,
+                    trackerChanged: self.blockOtherItem.settingsKey.trackerChanged
+                ))
+        })
+
+        return alertController
+    }
+
     lazy var statsSectionItems = [
         SectionItem(
             configureCell: { [unowned self] _, _ in
