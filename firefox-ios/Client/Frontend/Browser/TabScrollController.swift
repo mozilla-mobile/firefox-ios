@@ -398,13 +398,18 @@ private extension TabScrollController {
         return tab?.loading ?? true
     }
 
-    func isBouncingAtBottom() -> Bool {
+    /// Returns true if scroll has reach the bottom
+    ///
+    /// 1. If the content is scrollable (taller than the view).
+    ///
+    /// 2. The user has scrolled to (or beyond) the bottom.
+    func scrollReachBottom() -> Bool {
         guard let scrollView = scrollView else { return false }
 
-        let yOffsetCheck = contentOffset.y > (contentSize.height - scrollView.frame.size.height)
-        let heightCheck = contentSize.height > scrollView.frame.size.height
-
-        return yOffsetCheck && heightCheck
+        let contentIsScrollable = contentSize.height > scrollViewHeight
+        let isMaxContentOffset = contentOffset.y > (contentSize.height - scrollViewHeight)
+        
+        return isMaxContentOffset && contentIsScrollable
     }
 
     func shouldAllowScroll(with topIsRubberbanding: Bool,
@@ -619,7 +624,7 @@ extension TabScrollController: UIScrollViewDelegate {
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
+        guard let tab, !tabIsLoading(), !scrollReachBottom(), isAbleToScroll  else { return }
 
         tab.shouldScrollToTop = false
 
