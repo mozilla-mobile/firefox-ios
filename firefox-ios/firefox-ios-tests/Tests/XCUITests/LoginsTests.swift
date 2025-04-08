@@ -329,6 +329,38 @@ class LoginTest: BaseTestCase {
         validateSearchSavedLoginsByUrlOrUsername(searchText: "test")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2798597
+    // Smoketest
+    func testVerifyUpdatedPasswordIsSaved() {
+        saveLogin(givenUrl: testLoginPage)
+        openLoginsSettings()
+        // There is a Saved Password toggle option (enabled)
+        XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
+                       "1",
+                       "Save passwords toggle in not enabled by default")
+        navigator.goto(NewTabScreen)
+        navigator.openURL(testLoginPage)
+        waitUntilPageLoad()
+        app.secureTextFields.firstMatch.waitAndTap()
+        app.secureTextFields.firstMatch.press(forDuration: 1.5)
+        app.staticTexts["Select All"].tap()
+        app.secureTextFields.firstMatch.typeText("password")
+        app.buttons["submit"].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.staticTexts["Update password?"],
+                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton],
+                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton]
+            ]
+        )
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton].waitAndTap()
+        openLoginsSettings()
+        app.tables["Login List"].cells.element(boundBy: 2).waitAndTap()
+        app.tables.cells["Password"].waitAndTap()
+        app.staticTexts["Reveal"].waitAndTap()
+        mozWaitForElementToExist(app.tables.cells.elementContainingText("password"))
+    }
+
     private func validateSearchSavedLoginsByUrlOrUsername(searchText: String) {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
