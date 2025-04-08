@@ -53,7 +53,10 @@ final class AddressToolbarContainer: UIView,
     }
 
     private var toolbar: BrowserAddressToolbar {
-        guard model?.toolbarLayoutStyle == .version1 else { return regularToolbar }
+        guard model?.toolbarLayoutStyle != .version1 else {
+            return regularToolbar
+        }
+
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
@@ -227,6 +230,11 @@ final class AddressToolbarContainer: UIView,
                 isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                 animated: newModel.shouldAnimate)
 
+            // For the experiment we are using the regular toolbar only, which by default is not displayed
+            let shouldDisplayExperimentalToolbar = newModel.toolbarLayoutStyle == .version1 &&
+                                                    compactToolbar.superview != nil &&
+                                                    regularToolbar.superview == nil
+
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
             // otherwise we needlessly add/remove toolbars from the view hierarchy,
@@ -238,7 +246,7 @@ final class AddressToolbarContainer: UIView,
             // All functionality that depends on the new model should come after this
             self.model = newModel
 
-            if newModel.toolbarLayoutStyle == .baseline, shouldSwitchToolbars {
+            if shouldSwitchToolbars || (newModel.toolbarLayoutStyle == .baseline && shouldDisplayExperimentalToolbar) {
                 switchToolbars()
                 guard model?.shouldSelectSearchTerm == false, model?.isEditing == true else { return }
                 store.dispatch(
