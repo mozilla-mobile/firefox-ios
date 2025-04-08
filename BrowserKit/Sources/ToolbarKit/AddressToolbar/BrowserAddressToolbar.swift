@@ -47,9 +47,7 @@ public class BrowserAddressToolbar: UIView,
     private lazy var locationView: LocationView = .build()
     private lazy var locationDividerView: UIView = .build()
 
-    private lazy var leadingPageActionStack: UIStackView = .build { view in
-        view.spacing = UX.actionSpacing
-    }
+    private lazy var leadingPageActionStack: UIStackView = .build()
 
     private lazy var pageActionStack: UIStackView = .build { view in
         view.spacing = UX.actionSpacing
