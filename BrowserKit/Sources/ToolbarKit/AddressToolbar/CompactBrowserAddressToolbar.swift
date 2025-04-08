@@ -11,7 +11,7 @@ public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
             locationViewConfiguration: config.locationViewConfiguration,
             navigationActions: config.navigationActions,
             leadingPageActions: config.leadingPageActions,
-            pageActions: config.pageActions,
+            trailingPageActions: config.trailingPageActions,
             browserActions: [],
             borderPosition: config.borderPosition,
             uxConfiguration: config.uxConfiguration,

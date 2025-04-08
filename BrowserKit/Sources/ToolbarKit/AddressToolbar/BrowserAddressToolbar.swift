@@ -280,7 +280,7 @@ public class BrowserAddressToolbar: UIView,
 
         // Page actions
         updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
-        updateActionStack(stackView: pageActionStack, toolbarElements: config.pageActions)
+        updateActionStack(stackView: pageActionStack, toolbarElements: config.trailingPageActions)
 
         updateActionSpacing(uxConfig: config.uxConfiguration)
         updateToolbarLayout(animated: animated)
