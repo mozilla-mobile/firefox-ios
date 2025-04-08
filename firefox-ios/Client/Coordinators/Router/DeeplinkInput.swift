@@ -34,6 +34,29 @@ enum DeeplinkInput {
                 return false
             }
         }
+
+        // If we have a URL query, then make sure to check its a webpage
+        // for certain cases since some cases don't need to be handled.
+        func isValidURL(
+            urlQuery: URL?
+        ) -> Bool {
+            switch self {
+            case .openText,
+                    .openUrl, .sharesheet,
+                    .widgetTabsLargeOpenUrl, .widgetTabsMediumOpenUrl,
+                    .widgetMediumTopSitesOpenUrl,
+                    .widgetSmallQuickLinkOpenUrl, .widgetMediumQuickLinkOpenUrl,
+                    .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
+                guard urlQuery == nil || urlQuery?
+                    .isWebPage() ?? false else {
+                    return false
+                }
+                return true
+            case .deepLink, .fxaSignIn, .glean,
+                    .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
+                return true
+            }
+        }
     }
 
     /// An enumeration of possible paths for deep links.

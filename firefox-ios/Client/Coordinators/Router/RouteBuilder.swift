@@ -34,6 +34,7 @@ final class RouteBuilder: FeatureFlaggable {
 
         if let host = parseURLHost(url) {
             let urlQuery = urlScanner.fullURLQueryItem()?.asURL
+            guard host.isValidURL(urlQuery: urlQuery) else { return nil }
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
             let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? isPrivate
@@ -101,6 +102,7 @@ final class RouteBuilder: FeatureFlaggable {
                     return .searchQuery(query: searchText, isPrivate: isPrivate)
                 } else {
                     let url = UIPasteboard.general.url
+                    guard host.isValidURL(urlQuery: url) else { return nil }
                     return .search(url: url, isPrivate: isPrivate)
                 }
 

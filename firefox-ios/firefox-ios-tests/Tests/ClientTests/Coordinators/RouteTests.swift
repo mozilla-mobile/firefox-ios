@@ -22,6 +22,15 @@ class RouteTests: XCTestCase {
         )
     }
 
+    func testSearchRouteWithJS_shouldReturnFalse() {
+        let subject = createSubject()
+        let url = URL(string: "javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testSearchRouteWithEncodedUrl() {
         let subject = createSubject()
         let url = URL(string: "firefox://open-url?url=http%3A%2F%2Fgoogle.com%3Fa%3D1%26b%3D2%26c%3Dfoo%2520bar")!
@@ -177,6 +186,15 @@ class RouteTests: XCTestCase {
                                                                  query: expectedQuery)))
     }
 
+    func test_makeRoute_forFXASignIn_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://fxa-signin?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testInvalidScheme() {
         let subject = createSubject()
         let url = URL(string: "focus://deep-link?url=/settings/newTab")!
@@ -222,6 +240,16 @@ class RouteTests: XCTestCase {
         XCTAssertNil(route)
     }
 
+    func test_makeRoute_forDeepLinks_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://deep-link?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
+    // MARK: Widgets
     func testWidgetMediumTopSitesOpenUrl() {
         let subject = createSubject()
         let url = URL(string: "firefox://widget-medium-topsites-open-url?url=https://google.com")!
@@ -229,6 +257,15 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), isPrivate: false))
+    }
+
+    func test_makeRoute_forMediumTopSitesWidget_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://widget-medium-topsites-open-url?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
     }
 
     func testWidgetSmallQuicklinkOpenUrlWithPrivateFlag() {
@@ -243,6 +280,15 @@ class RouteTests: XCTestCase {
         )
     }
 
+    func test_makeRoute_forSmallQuickLinkWidget_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://widget-small-quicklink-open-url?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testWidgetMediumQuicklinkOpenUrlWithoutPrivateFlag() {
         let subject = createSubject()
         let url = URL(string: "firefox://widget-medium-quicklink-open-url?url=https://google.com")!
@@ -255,6 +301,15 @@ class RouteTests: XCTestCase {
         )
     }
 
+    func test_makeRoute_forMediumQuickLinkWidget_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://widget-medium-quicklink-open-url?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testWidgetSmallQuicklinkOpenCopied() {
         let subject = createSubject()
         UIPasteboard.general.string = "test search text"
@@ -263,6 +318,16 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         XCTAssertEqual(route, .searchQuery(query: "test search text", isPrivate: false))
+    }
+
+    func test_makeRoute_forSmallQuickLinkOpenCopedWidget_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        UIPasteboard.general.string = "javascript://https://google.com%2Fsearch?q=foo"
+        let url = URL(string: "firefox://widget-small-quicklink-open-copied")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
     }
 
     func testWidgetSmallQuicklinkOpenCopiedWithUrl() {
@@ -275,6 +340,16 @@ class RouteTests: XCTestCase {
         XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), isPrivate: false))
     }
 
+    func test_makeRoute_forSmallQuickLinkWithURLWidgetOpenCopied_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        UIPasteboard.general.url = URL(string: "javascript://https://google.com%2Fsearch?q=foo")
+        let url = URL(string: "firefox://widget-small-quicklink-open-copied")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testWidgetSmallQuicklinkClosePrivateTabs() {
         let subject = createSubject()
         let url = URL(string: "firefox://widget-small-quicklink-close-private-tabs")!
@@ -284,9 +359,18 @@ class RouteTests: XCTestCase {
         XCTAssertEqual(route, .action(action: .closePrivateTabs))
     }
 
+    func test_makeRoute_forMediumQuickLinkCloseWidget_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://widget-small-quicklink-close-private-tabs?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertEqual(route, .action(action: .closePrivateTabs))
+    }
+
     func testWidgetMediumQuicklinkClosePrivateTabs() {
         let subject = createSubject()
-        let url = URL(string: "firefox://widget-medium-quicklink-close-private-tabs")!
+        let url = URL(string: "firefox://widget-medium-quicklink-close-private-tabs?url=javascript://https://google.com%2Fsearch?q=foo")!
 
         let route = subject.makeRoute(url: url)
 
@@ -347,6 +431,15 @@ class RouteTests: XCTestCase {
         XCTAssertEqual(route, .searchQuery(query: "google", isPrivate: false))
     }
 
+    func test_makeRoute_forOpenText_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://open-text?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
+    }
+
     func testShareSheetRouteUrlOnly() {
         let testURL = URL(string: "https://www.google.com")!
         let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)")!
@@ -384,6 +477,15 @@ class RouteTests: XCTestCase {
         let expectedShareType = ShareType.site(url: testURL)
         let expectedShareMessage = ShareMessage(message: testTitle, subtitle: testSubtitle)
         XCTAssertEqual(route, .sharesheet(shareType: expectedShareType, shareMessage: expectedShareMessage))
+    }
+
+    func test_makeRoute_forShareSheet_withJS_doesntOpenRoute() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://share-sheet?url=javascript://https://google.com%2Fsearch?q=foo")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertNil(route)
     }
 
     // MARK: - AppAction
