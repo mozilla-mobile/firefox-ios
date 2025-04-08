@@ -54,9 +54,11 @@ final class AddressToolbarContainer: UIView,
 
     private var toolbar: BrowserAddressToolbar {
         guard model?.toolbarLayoutStyle != .version1 else {
+            print("WT ### regularToolbar \(Unmanaged.passUnretained(regularToolbar).toOpaque())")
             return regularToolbar
         }
 
+        print("WT ### toolbar \(Unmanaged.passUnretained(shouldDisplayCompact ? compactToolbar : regularToolbar).toOpaque())")
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
