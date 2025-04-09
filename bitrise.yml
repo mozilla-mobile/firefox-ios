@@ -239,7 +239,7 @@ workflows:
     - decision_to_run_UI_Tests
     - firefox_pull_and_unzip_dependencies
     steps:
-    - script@1.2.1
+    - script@1.2.1:
         title: Installer older iOS runtime
         inputs:
         - content: |-
