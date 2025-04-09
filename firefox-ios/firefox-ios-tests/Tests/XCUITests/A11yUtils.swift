@@ -25,6 +25,7 @@ class A11yUtils: XCTestCase {
             let hasA11yLabel = !(element.accessibilityLabel?.isEmpty ?? true)
             let hasLabel = !(element.label.isEmpty) // Checks visible UI label
 
+            guard element.exists else { continue }
             if !hasA11yLabel && !hasLabel && !element.identifier.isEmpty {
                 missingLabels.append(A11yUtils.MissingAccessibilityElement(
                     elementType: elementType,
@@ -32,6 +33,31 @@ class A11yUtils: XCTestCase {
                     screen: screenName
                 ))
             }
+        }
+    }
+
+    public static func checkButtonLabels(
+        in element: XCUIElement,
+        screenName: String,
+        missingLabels: inout [MissingAccessibilityElement]
+    ) {
+        // If the element is a button, check its labels.
+        if element.elementType == .button {
+            let hasA11yLabel = !(element.accessibilityLabel?.isEmpty ?? true)
+            let hasLabel = !(element.label.isEmpty)
+            if !hasA11yLabel && !hasLabel && !element.identifier.isEmpty {
+                missingLabels.append(MissingAccessibilityElement(
+                    elementType: "Button",
+                    identifier: element.identifier,
+                    screen: screenName
+                ))
+            }
+        }
+
+        // Recursively check all children of the current element.
+        let children = element.children(matching: .any).allElementsBoundByIndex
+        for child in children where child.exists {
+            checkButtonLabels(in: child, screenName: screenName, missingLabels: &missingLabels)
         }
     }
 
