@@ -57,6 +57,7 @@ workflows:
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
+
     - xcode-test-without-building@0:
         timeout: 1200
         inputs:
@@ -64,6 +65,8 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
+        is_always_run: true
+        continue_on_fail: true
     
     - script@1:
         title: Collect All Accessibility Report Files
