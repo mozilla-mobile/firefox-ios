@@ -65,6 +65,15 @@ workflows:
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
     
+    - script@1:
+    title: Collect All Accessibility Report Files
+    inputs:
+      - content: |
+          mkdir -p "$BITRISE_DEPLOY_DIR"
+          find /tmp -name "AccessibilityReport_*.txt" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+          find /tmp -name "AccessibilityReport_*.csv" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+
+    
     - deploy-to-bitrise-io@2.9.2: {}
   firefox_configure_build:
     before_run:
