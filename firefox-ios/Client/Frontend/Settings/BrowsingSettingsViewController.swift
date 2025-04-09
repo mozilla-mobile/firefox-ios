@@ -49,7 +49,8 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                                            children: generalSettings))
         }
 
-        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+            && !featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
             let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                                   titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
             settings.append(
