@@ -5,6 +5,7 @@
 import MappaMundi
 import XCTest
 import Shared
+import Common
 
 let testPageBase = "http://www.example.com"
 let loremIpsumURL = "\(testPageBase)"
