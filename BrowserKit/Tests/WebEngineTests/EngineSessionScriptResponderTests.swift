@@ -19,14 +19,6 @@ class EngineSessionScriptResponderTests: XCTestCase {
         super.tearDown()
     }
 
-    func testContentScriptDidSendEventRespondsToJavaScriptCommand() {
-        let subject = createSubject()
-
-        subject.contentScriptDidSendEvent(.requestJavascriptCommand(command: "", scope: nil))
-
-        XCTAssertEqual(session.callJavascriptMethodCalled, 1)
-    }
-
     func testContentScriptDidSendEventRespondsToTrackAdsClickedOnPage() throws {
         let provider = "mockprovider"
         let subject = createSubject()
