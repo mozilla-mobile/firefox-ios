@@ -198,10 +198,12 @@ public class BrowserAddressToolbar: UIView,
     }
 
     override public func becomeFirstResponder() -> Bool {
+        super.becomeFirstResponder()
         return locationView.becomeFirstResponder()
     }
 
     override public func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
         return locationView.resignFirstResponder()
     }
 
