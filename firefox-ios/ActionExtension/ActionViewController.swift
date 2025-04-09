@@ -78,7 +78,7 @@ class ActionViewController: UIViewController, ShareControllerDelegate {
     func getValidExtensionContext() -> NSExtensionContext? {
         extensionContext
     }
-    
+
     /// Hides the popup UI when an alert is presented.
     func hidePopupWhenShowingAlert() {
         embedController?.navigationController.view.alpha = 0

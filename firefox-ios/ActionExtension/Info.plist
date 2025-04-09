@@ -4,6 +4,8 @@
 <dict>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
+    <key>CFBundleDisplayName</key>
+    <string>Open in Firefox</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>CFBundleDisplayName</key>
