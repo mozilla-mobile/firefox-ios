@@ -1,4 +1,4 @@
-# The configuration for the sentFromFirefoxFeature feature
+# The configuration for the appIconSelection feature
 features:
   app-icon-selection-feature:
     description: >
@@ -8,11 +8,4 @@ features:
         description: >
           Controls whether users see the setting to customize their app icon in Settings.
         type: Boolean
-        default: false
-    defaults:
-      - channel: beta
-        value:
-          enabled: false
-      - channel: developer
-        value:
-          enabled: true
+        default: true
