@@ -82,8 +82,22 @@ class A11yUtils: XCTestCase {
     }
 
     // Saves the given report content to a file and returns the file path.
-    public static func saveReportToFile(report: String, fileName: String) -> URL {
+    /*public static func saveReportToFile(report: String, fileName: String) -> URL {
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+
+        do {
+            try report.write(to: fileURL, atomically: true, encoding: .utf8)
+            print("📄 Report saved to: \(fileURL.path)")
+        } catch {
+            print("❌ Failed to save report: \(error)")
+        }
+
+        return fileURL
+    }*/
+    public static func saveReportToFile(report: String, fileName: String) -> URL {
+        // Intenta usar BITRISE_DEPLOY_DIR si está presente (solo en CI)
+        let deployDir = ProcessInfo.processInfo.environment["BITRISE_DEPLOY_DIR"] ?? NSTemporaryDirectory()
+        let fileURL = URL(fileURLWithPath: deployDir).appendingPathComponent(fileName)
 
         do {
             try report.write(to: fileURL, atomically: true, encoding: .utf8)
