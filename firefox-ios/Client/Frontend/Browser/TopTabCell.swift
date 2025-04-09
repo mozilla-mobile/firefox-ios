@@ -57,7 +57,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
     let favicon: FaviconImageView = .build { _ in }
 
     let closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalPadding,
                                                                       leading: UX.tabTitlePadding,
                                                                       bottom: UX.verticalPadding,
@@ -87,7 +86,14 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                                                 self.titleText.text ?? "")
         closeButton.showsLargeContentViewer = true
         closeButton.largeContentTitle = .TopSitesRemoveButtonLargeContentTitle
-        closeButton.largeContentImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
+
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: tab.windowUUID)
+        if let toolbarState, toolbarState.toolbarLayout == .version1 {
+            closeButton.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Medium.cross), for: [])
+        } else {
+            closeButton.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
+        }
+
         closeButton.scalesLargeContentImage = true
 
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
