@@ -52,6 +52,9 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
 
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
+
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
 
@@ -85,6 +88,9 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
+
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
 
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
@@ -233,6 +239,12 @@ workflows:
     - decision_to_run_UI_Tests
     - firefox_pull_and_unzip_dependencies
     steps:
+    - script@1.2.1
+        title: Installer older iOS runtime
+        inputs:
+        - content: |-
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
     - xcode-test-without-building@0.4.0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
@@ -784,7 +796,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-16.3.x
         machine_type_id: g2.mac.large
   L10nBuild:
     steps:
@@ -879,7 +891,7 @@ workflows:
       the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-16.3.x
         machine_type_id: g2.mac.large
   L10nScreenshotsTests:
     steps:
@@ -924,7 +936,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-16.3.x
         machine_type_id: g2.mac.large
   SPM_Deploy_Prod_Beta:
     before_run:
@@ -1566,7 +1578,7 @@ workflows:
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test "$TARGET_ARCHIVE" \
-                --xcode-version=16.2 \
+                --xcode-version=16.3 \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
@@ -1724,6 +1736,10 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
+
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
+
             #xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.2.1:
@@ -1793,6 +1809,10 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
+
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
+
             ls ./Users/vagrant/git/focus-ios/focus-ios-tests/XCUITest/
             ls ./Users/vagrant/git/DerivedData/Build/Products
             cp -r ./Users/vagrant/git/focus-ios/focus-ios-tests/XCUITest/* .
@@ -1824,6 +1844,10 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
+
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
+
             ls ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/
             cp -r ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/* .
             mv ./Users/vagrant/git/* .
@@ -1852,6 +1876,10 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
+
+            brew install xcodes
+            xcodes runtimes install "iOS 18.2"
+
             ls ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/
             cp -r ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/* .
             mv ./Users/vagrant/git/* .
@@ -2253,5 +2281,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-16.2.x
+    stack: osx-xcode-16.3.x
     machine_type_id: g2.mac.large
