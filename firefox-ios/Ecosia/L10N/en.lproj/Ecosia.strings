@@ -12,7 +12,6 @@
 "Invert website colors" = "Invert website colors";
 "Keep up to date with the latest news from our projects and more" = "Keep up to date with the latest news from our projects and more";
 "Learn more" = "Learn more";
-"Make Ecosia your default browser" = "Make Ecosia your default browser";
 "Moderate" = "Moderate";
 "See all" = "See all";
 "My searches" = "My searches";
@@ -67,6 +66,7 @@
 "Homepage"= "Homepage";
 "Show on homepage" = "Show on homepage";
 "Top Sites" = "Top Sites";
+"Not now" = "Not now";
 
 // Impact
 "A friend accepted your invitation and each of you will help plant 1 tree!" = "A friend has accepted your invite! You have each helped plant 1 extra tree.";
@@ -150,7 +150,6 @@
 "You're shown exactly how much we earn and invest in trees and climate action." = "You're shown exactly how much we earn and invest in trees and climate action.";
 "Total income" = "Total income";
 "Trees financed" = "Trees financed";
-"Open settings" = "Go to settings";
 "Maybe later" = "Maybe later";
 "Open all links automatically with Ecosia" = "Open all links automatically with Ecosia";
 "Be climate active every day while browsing" = "Be climate active every day while browsing";
@@ -214,27 +213,22 @@
 "We’ve added 1Password to Ecosia to help you to manage your passwords securely." = "We’ve added 1Password to Ecosia to help you to manage your passwords securely.";
 "Got it" = "Got it";
 
-// APN Consent
-"Keep up with Ecosia" = "Keep up with Ecosia";
-"Turn on push notifications" = "Turn on push notifications";
-"Discover the trees we plant and the impact they’re having" = "Discover the trees we plant and the impact they’re having";
-"Get tips on how to help build a greener future" = "Get tips on how to help build a greener future";
-"Receive updates on our tree-planting projects around the world" = "Receive updates on our tree-planting projects around the world";
-"Get tips on how to be climate active every day" = "Get tips on how to be climate active every day";
-"Allow push notifications" = "Allow push notifications";
-"Not now" = "Not now";
-
 // Newsletter
 "Be the first to know" = "Be the first to know";
 "Subscribe to our monthly newsletter for updates on your climate impact." = "Subscribe to our monthly newsletter for updates on your climate impact.";
 "Sign up" = "Sign up";
 
 // Default Browser
+"Open settings" = "Open settings";
+"Set as default in Settings" = "Set as default in Settings";
+"Open all links with Ecosia to plant more trees" = "Open all links with Ecosia to plant more trees";
+"Grow your impact with your web searches" = "Grow your impact with your web searches";
 "Safely open links from other apps (eg. mails, websites and messages) in Ecosia, turning every tap into action for the planet." = "Safely open links from other apps (eg. mails, websites and messages) in Ecosia, turning every tap into action for the planet.";
 "People who set Ecosia as their default browser plant %@ per year." = "People who set Ecosia as their default browser plant %@ per year.";
 "If all mobile users set Ecosia as their default browser, we could plant an extra %@ annually." = "If all mobile users set Ecosia as their default browser, we could plant an extra %@ annually.";
 "Did you know?" = "Did you know?";
 "6 more trees" = "6 more trees";
 "2 million trees" = "2 million trees";
+"Make Ecosia your default browser" = "Make Ecosia your default browser";
 "Set Ecosia as default" = "Set Ecosia as default";
 "Make all your browsing green" = "Make all your browsing green";

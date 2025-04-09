@@ -206,7 +206,7 @@ final class DefaultBrowser: UIViewController, Themeable {
         let cta = EcosiaPrimaryButton(windowUUID: windowUUID)
         cta.contentEdgeInsets = .init(top: 0, left: 16, bottom: 0, right: 16)
         cta.translatesAutoresizingMaskIntoConstraints = false
-        cta.setTitle(.localized(.openSettings), for: .normal)
+        cta.setTitle(.localized(.defaultBrowserPromptExperimentButtonControl), for: .normal)
         cta.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         cta.titleLabel?.adjustsFontForContentSizeCategory = true
         cta.layer.cornerRadius = 25
