@@ -12,7 +12,6 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofillEdit
-    case appIconSelection
     case appearanceMenu
     case bookmarksRefactor
     case bottomSearchBar
@@ -65,8 +64,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appIconSelection,
-                .appearanceMenu,
+        case    .appearanceMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
@@ -121,8 +119,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
-        case .appIconSelection,
-                .appearanceMenu,
+        case .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .accountSettingsRedux,

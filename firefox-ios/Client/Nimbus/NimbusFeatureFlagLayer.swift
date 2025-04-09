@@ -16,9 +16,6 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
-        case .appIconSelection:
-            return checkAppIconSelectionSetting(from: nimbus)
-
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -388,11 +385,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
-    }
-
-    private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.appIconSelectionFeature.value()
-        return config.enabled
     }
 
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
