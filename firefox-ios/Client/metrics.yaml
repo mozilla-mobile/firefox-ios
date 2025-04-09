@@ -2731,7 +2731,7 @@ homepage:
        description: |
         The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.TappedItemType`.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/11526
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25297
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/25297
     notification_emails:
