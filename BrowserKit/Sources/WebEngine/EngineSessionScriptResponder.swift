@@ -8,8 +8,6 @@ class EngineSessionScriptResponder: ContentScriptDelegate {
 
     func contentScriptDidSendEvent(_ event: ScriptEvent) {
         switch event {
-        case .requestJavascriptCommand(let method, let scope):
-            session?.callJavascriptMethod(method, scope: scope)
         case .trackedAdsFoundOnPage(let provider, let urls):
             session?.telemetryProxy?.handleTelemetry(event: .trackAdsFoundOnPage(providerName: provider, adUrls: urls))
         case .trackedAdsClickedOnPage(let provider):

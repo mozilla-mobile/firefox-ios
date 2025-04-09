@@ -8,7 +8,6 @@ protocol ContentScriptDelegate: AnyObject {
 
 /// An Event triggered from an injected script into a `WKWebView`
 enum ScriptEvent: Equatable {
-    case requestJavascriptCommand(command: String, scope: String?)
     case fieldFocusChanged(Bool)
     case trackedAdsFoundOnPage(provider: String, urls: [String])
     case trackedAdsClickedOnPage(provider: String)

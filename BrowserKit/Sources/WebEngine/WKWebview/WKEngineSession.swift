@@ -12,9 +12,17 @@ protocol SessionHandler: AnyObject {
     func received(error: NSError, forURL url: URL)
 }
 
+protocol WKJavascriptInterface: AnyObject {
+    /// Calls a javascript method.
+    /// - Parameter method: The method signature to be called in javascript world.
+    /// - Parameter scope: An optional string defining the scope in which the method should be called.
+    func callJavascriptMethod(_ method: String, scope: String?)
+}
+
 class WKEngineSession: NSObject,
                        EngineSession,
                        WKEngineWebViewDelegate,
+                       WKJavascriptInterface,
                        MetadataFetcherDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate? {
@@ -245,14 +253,6 @@ class WKEngineSession: NSObject,
         webView.setValue(newZoom, forKey: zoomKey)
     }
 
-    func callJavascriptMethod(_ method: String, scope: String?) {
-        guard let scope else {
-            webView.evaluateJavascriptInDefaultContentWorld(method)
-            return
-        }
-        webView.evaluateJavaScript(method, in: nil, in: .world(name: scope), completionHandler: nil)
-    }
-
     // MARK: - SessionHandler
 
     func commitURLChange() {
@@ -271,6 +271,16 @@ class WKEngineSession: NSObject,
     func received(error: NSError, forURL url: URL) {
         telemetryProxy?.handleTelemetry(event: .showErrorPage(errorCode: error.code))
         delegate?.onErrorPageRequest(error: error)
+    }
+
+    // MARK: - WKJavascriptInterface
+
+    func callJavascriptMethod(_ method: String, scope: String?) {
+        guard let scope else {
+            webView.evaluateJavascriptInDefaultContentWorld(method)
+            return
+        }
+        webView.evaluateJavaScript(method, in: nil, in: .world(name: scope), completionHandler: nil)
     }
 
     // MARK: - Content scripts

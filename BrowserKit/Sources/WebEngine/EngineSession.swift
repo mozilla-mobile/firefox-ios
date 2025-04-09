@@ -12,8 +12,8 @@ public protocol EngineSession: NSObject {
     /// Proxy object for handling telemetry events.
     var telemetryProxy: EngineTelemetryProxy? { get set }
 
-    // Whether the engine session is currently being rendered
-    var isActive: Bool {get set}
+    /// Whether the engine session is currently being rendered
+    var isActive: Bool { get set }
 
     /// The engine received a request to load a URL.
     /// - Parameter browserURL: The BrowserURL that is requested to load
@@ -69,11 +69,6 @@ public protocol EngineSession: NSObject {
 
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
-
-    /// Call a javascript method in the session's scripts
-    /// - Parameter method: The method signature to be called in javascript world.
-    /// - Parameter scope: An optional string defining the scope in which the method should be called.
-    func callJavascriptMethod(_ method: String, scope: String?)
 }
 
 public extension EngineSession {
