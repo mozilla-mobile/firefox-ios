@@ -10,7 +10,13 @@ final class NimbusSearchBarLayer {
         let layout = nimbus.features.toolbarRefactorFeature.value().layout
         switch layout {
         // Set the address bar to the bottom for new users enrolled in `version1` toolbar experiment.
-        case .version1: return .bottom
+        case .version1:
+            if UIDevice.current.userInterfaceIdiom != .pad {
+                return .bottom
+            } else {
+                let isAtBottom = nimbus.features.search.value().awesomeBar.position.isBottom
+                return isAtBottom ? .bottom : .top
+            }
         default:
             let isAtBottom = nimbus.features.search.value().awesomeBar.position.isBottom
             return isAtBottom ? .bottom : .top
