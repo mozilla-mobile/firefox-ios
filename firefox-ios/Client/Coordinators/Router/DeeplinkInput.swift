@@ -35,8 +35,13 @@ enum DeeplinkInput {
             }
         }
 
-        // If we have a URL query, then make sure to check its a webpage
-        // for certain cases since some cases don't need to be handled.
+        /// Checks if we have a valid URL and returns false if we received an invalid URL.
+        /// Some cases don't need to be handled, so we return true directly.
+        /// For specific cases, if we don't have a URL query, then we return true.
+        /// If we have a URL query, then make sure to check it's a webpage.
+        ///
+        /// - Parameter urlQuery: the URL that will be used to route
+        /// - Returns: true if we don't need need to handle the case, the urlQuery is null, or if the URL is a valid webPage
         func isValidURL(
             urlQuery: URL?
         ) -> Bool {
@@ -47,11 +52,7 @@ enum DeeplinkInput {
                     .widgetMediumTopSitesOpenUrl,
                     .widgetSmallQuickLinkOpenUrl, .widgetMediumQuickLinkOpenUrl,
                     .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
-                guard urlQuery == nil || urlQuery?
-                    .isWebPage() ?? false else {
-                    return false
-                }
-                return true
+                return urlQuery?.isWebPage() ?? true
             case .deepLink, .fxaSignIn, .glean,
                     .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
                 return true
