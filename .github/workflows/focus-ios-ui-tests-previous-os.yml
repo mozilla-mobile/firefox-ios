@@ -6,7 +6,7 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 16.2
+    xcode_version: 16.3
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
