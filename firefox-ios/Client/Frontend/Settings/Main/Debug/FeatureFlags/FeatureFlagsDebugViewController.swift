@@ -81,6 +81,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .loginsVerificationEnabled,
+                    titleText: format(string: "Enable Logins Verification"),
+                    statusText: format(string: "Toggle to enable logins verification")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .trackingProtectionRefactor,
                     titleText: format(string: "Enable New Tracking Protection"),
                     statusText: format(string: "Toggle to use the new tracking protection")
