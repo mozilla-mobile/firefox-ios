@@ -13,8 +13,6 @@ protocol ReaderModeHandlersProtocol {
 }
 
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
-    static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
-
     static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
@@ -114,8 +112,11 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             initialStyle: readerModeStyle
         ),
               let response = GCDWebServerDataResponse(html: html) else { return nil }
-        // Apply a Content Security Policy that disallows everything except images from
-        // anywhere and fonts and css from our internal server
+        // Apply a Content Security Policy that disallows everything except:
+        // - images from anywhere
+        // - styles including inline styles from our internal server
+        // - scripts including inline scripts from our internal server
+        // - fonts our internal server
         let csp = """
             default-src 'none';
             img-src *;
