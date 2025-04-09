@@ -73,13 +73,19 @@ workflows:
         is_always_run: true
         inputs:
         - content: |
+            echo "🔍 Search reports inside the device sandbox..."
+
             mkdir -p "$BITRISE_DEPLOY_DIR"
-            find /tmp -name "AccessibilityReport_*.txt" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
-            find /tmp -name "AccessibilityReport_*.csv" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+
+            find ~/Library/Developer/CoreSimulator/Devices -type f -name "AccessibilityReport*.txt" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+            find ~/Library/Developer/CoreSimulator/Devices -type f -name "AccessibilityReport*.csv" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+
+            echo "📦 Filed copied to $BITRISE_DEPLOY_DIR:"
+            ls -lh "$BITRISE_DEPLOY_DIR"
     
     - deploy-to-bitrise-io@2.9.2:
         is_always_run: true
-        
+
   firefox_configure_build:
     before_run:
     - 0_detect_standalone_build
