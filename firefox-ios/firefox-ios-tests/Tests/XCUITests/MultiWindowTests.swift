@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import XCTest
 
 class MultiWindowTests: IpadOnlyTestCase {
     let dotMenu = springboard.buttons["top-affordance:org.mozilla.ios.Fennec"]
