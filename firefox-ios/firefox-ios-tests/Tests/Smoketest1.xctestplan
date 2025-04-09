@@ -307,7 +307,8 @@
         "WhatsNewTest",
         "ZoomingTests\/testSwitchingZoomedTabs()",
         "ZoomingTests\/testSwitchingZoomedTabsLandscape()",
-        "ZoomingTests\/testZoomForceCloseFirefox()"
+        "ZoomingTests\/testZoomForceCloseFirefox()",
+        "ZoomingTests\/testZoomingActionsLandscape()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
