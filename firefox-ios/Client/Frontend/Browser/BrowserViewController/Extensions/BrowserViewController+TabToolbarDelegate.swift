@@ -321,7 +321,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
                     self.updateTabCountUsingTabManager(self.tabManager)
-                    self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+
+                    if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+                        || UIDevice.current.userInterfaceIdiom == .pad {
+                        self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+                    }
                 }
             }
         }.items
