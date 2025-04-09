@@ -83,7 +83,6 @@ class A11yUtils: XCTestCase {
 
     // Saves the given report content to a file and returns the file path.
     public static func saveReportToFile(report: String, fileName: String) -> URL {
-
         let deployDir = ProcessInfo.processInfo.environment["BITRISE_DEPLOY_DIR"] ?? NSTemporaryDirectory()
         let fileURL = URL(fileURLWithPath: deployDir).appendingPathComponent(fileName)
 
