@@ -8,6 +8,8 @@ import Common
 final class TabTraySelectorCell: UICollectionViewCell,
                                  ReusableCell,
                                  ThemeApplicable {
+    /// `isSelected` property doesn't seem to be retained when we move to background so saving it here as well
+    private var isCellSelected = false
     private let label = UILabel()
     private let padding = UIEdgeInsets(
         top: TabTraySelectorUX.cellVerticalPadding,
@@ -39,7 +41,12 @@ final class TabTraySelectorCell: UICollectionViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
+<<<<<<< HEAD
     func configure(title: String, selected: Bool, theme: Theme?) {
+=======
+    func configure(title: String, selected: Bool, theme: Theme?, position: Int, total: Int) {
+        isCellSelected = selected
+>>>>>>> 79229fd3c (Refactor FXIOS-11844 [Tab tray UI experiment] Fix tab selector view isSelected when moving to background (#25893))
         isSelected = selected
         label.text = title
         label.font = selected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
@@ -50,6 +57,6 @@ final class TabTraySelectorCell: UICollectionViewCell,
 
     func applyTheme(theme: Theme) {
         label.textColor = theme.colors.textPrimary
-        contentView.backgroundColor = isSelected ? theme.colors.layer4 : .clear
+        contentView.backgroundColor = isCellSelected ? theme.colors.layer4 : .clear
     }
 }
