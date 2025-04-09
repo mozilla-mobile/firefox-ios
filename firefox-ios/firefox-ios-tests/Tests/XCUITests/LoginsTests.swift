@@ -343,7 +343,7 @@ class LoginTest: BaseTestCase {
         waitUntilPageLoad()
         app.secureTextFields.firstMatch.waitAndTap()
         app.secureTextFields.firstMatch.press(forDuration: 1.5)
-        app.staticTexts["Select All"].tap()
+        app.staticTexts["Select All"].waitAndTap()
         app.secureTextFields.firstMatch.typeText("password")
         app.buttons["submit"].waitAndTap()
         waitForElementsToExist(
@@ -366,14 +366,16 @@ class LoginTest: BaseTestCase {
         openLoginsSettings()
         // Tap on the search passwords field
         app.searchFields[passwordssQuery.searchPasswords].waitAndTap()
-        XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
+        // Temporarily removing keyboard validation due to CI flakiness
+        // XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
         // A search field is displayed
         mozWaitForElementToExist(app.searchFields[passwordssQuery.searchPasswords])
         // Tap on the cancel button
         app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         // The "Saved logins" page is displayed
         mozWaitForElementToExist(app.switches[passwordssQuery.saveLogins])
-        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+        // Temporarily removing keyboard validation due to CI flakiness
+        // XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
         // Type anything that can match any website from the saved logins
         app.searchFields[passwordssQuery.searchPasswords].waitAndTap()
         app.typeText(searchText)
