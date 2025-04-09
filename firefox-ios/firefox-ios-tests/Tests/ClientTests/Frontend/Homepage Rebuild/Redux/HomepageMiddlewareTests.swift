@@ -26,6 +26,24 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
+    func test_viewWillAppearAction_sendsTelemetryData() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.viewWillAppear
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
     func test_tapOnCustomizeHomepageAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = NavigationBrowserAction(
