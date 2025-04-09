@@ -208,8 +208,7 @@ struct DownloadLiveActivity: Widget {
         .frame(width: UX.LockScreen.circleRadius, height: UX.LockScreen.circleRadius)
     }
 
-    private func leadingExpandedRegion
-    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    private func leadingExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
       DynamicIslandExpandedRegion(.leading) {
         ZStack {
@@ -228,8 +227,7 @@ struct DownloadLiveActivity: Widget {
                              trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
       }
     }
-    private func centerExpandedRegion
-    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    private func centerExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
       DynamicIslandExpandedRegion(.center) {
           Text(liveDownload.state.downloads.count == 1 ?
@@ -266,8 +264,7 @@ struct DownloadLiveActivity: Widget {
         }
       }
     }
-    private func trailingExpandedRegion
-    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    private func trailingExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
       let circleProgressPercentage = min(
         liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
