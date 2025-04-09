@@ -8,6 +8,8 @@ import Common
 final class TabTraySelectorCell: UICollectionViewCell,
                                  ReusableCell,
                                  ThemeApplicable {
+    /// `isSelected` property doesn't seem to be retained when we move to background so saving it here as well
+    private var isCellSelected = false
     private let label = UILabel()
     private let padding = UIEdgeInsets(
         top: TabTraySelectorUX.cellVerticalPadding,
@@ -41,6 +43,7 @@ final class TabTraySelectorCell: UICollectionViewCell,
     }
 
     func configure(title: String, selected: Bool, theme: Theme?, position: Int, total: Int) {
+        isCellSelected = selected
         isSelected = selected
         label.text = title
         label.font = selected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
@@ -55,6 +58,6 @@ final class TabTraySelectorCell: UICollectionViewCell,
 
     func applyTheme(theme: Theme) {
         label.textColor = theme.colors.textPrimary
-        contentView.backgroundColor = isSelected ? theme.colors.layer4 : .clear
+        contentView.backgroundColor = isCellSelected ? theme.colors.layer4 : .clear
     }
 }
