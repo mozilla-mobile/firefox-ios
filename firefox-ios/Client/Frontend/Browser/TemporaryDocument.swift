@@ -214,6 +214,19 @@ class DefaultTemporaryDocument: NSObject,
         }
     }
 
+    private func shouldRetainTempFile() -> Bool {
+        // Retain the PDF so when the tab gets restored it still has the PDFs from the previous session
+        if isPDFRefactorEnabled {
+            return mimeType == MIMEType.PDF
+        }
+        return false
+    }
+
+    deinit {
+        guard !shouldRetainTempFile(), let localFileURL else { return }
+        try? FileManager.default.removeItem(at: localFileURL)
+    }
+
     // MARK: - URLSessionDownloadDelegate
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
