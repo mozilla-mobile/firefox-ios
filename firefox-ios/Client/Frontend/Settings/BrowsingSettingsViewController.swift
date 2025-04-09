@@ -36,7 +36,25 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
+<<<<<<< HEAD
         if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
+=======
+        // Setting only available for iPad
+        if let profile, UIDevice.current.userInterfaceIdiom == .pad {
+            var generalSettings = [Setting]()
+            let toolbarHide = BoolSetting(prefs: profile.prefs,
+                                          theme: themeManager.getCurrentTheme(for: windowUUID),
+                                          prefKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide,
+                                          defaultValue: true,
+                                          titleText: .Settings.General.ScrollToHideTabAndAddressBar.Title)
+            generalSettings.append(toolbarHide)
+            settings.append(SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
+                                           children: generalSettings))
+        }
+
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+            && !featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+>>>>>>> 3972bb929 (Refactor FXIOS-11766 [Tab tray UI experiment] Check experiment is disabled to see the inactive tab setting (#25855))
             let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                                   titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
             settings.append(
