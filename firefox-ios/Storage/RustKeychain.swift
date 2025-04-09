@@ -77,6 +77,11 @@ open class RustKeychain {
         logErrorFromStatus(status, errMsg: "Failed to remove key \(key)")
     }
 
+    public func removeLoginsKeysForDebugMenuItem() {
+        removeObject(key: loginsKeyIdentifier)
+        removeObject(key: loginsCanaryKeyIdentifier)
+    }
+
     public func removeAllKeys() {
         var keychainQueryDictionary: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                                       kSecAttrService as String: serviceName]
