@@ -110,7 +110,7 @@ class A11yUtils: XCTestCase {
     }
 
     // Generates the report and attaches it to the XCUITest results.
-    public static func generateAndAttachReport(missingLabels: [MissingAccessibilityElement]) {
+    public static func generateAndAttachReport(missingLabels: [MissingAccessibilityElement], testName: String) {
         XCTContext.runActivity(named: "Accessibility Report") { activity in
             if missingLabels.isEmpty {
                 activity.add(XCTAttachment(string: "✅ All elements have accessibility labels 🎉"))
@@ -119,13 +119,13 @@ class A11yUtils: XCTestCase {
                 let reportCSV = generateCSVReport(missingLabels: missingLabels)
 
                 // Save to files
-                let txtFilePath = saveReportToFile(report: reportText, fileName: "AccessibilityReport.txt")
+                let txtFilePath = saveReportToFile(report: reportText, fileName: "AccessibilityReport_\(testName).txt")
                 // Attach reports to Xcode test results
                 let txtAttachment = XCTAttachment(contentsOfFile: txtFilePath)
                 txtAttachment.lifetime = .keepAlways
                 activity.add(txtAttachment)
 
-                let csvFilePath = saveReportToFile(report: reportCSV, fileName: "AccessibilityReport.csv")
+                let csvFilePath = saveReportToFile(report: reportCSV, fileName: "AccessibilityReport_\(testName).csv")
                 let csvAttachment = XCTAttachment(contentsOfFile: csvFilePath)
                 csvAttachment.lifetime = .keepAlways
                 activity.add(csvAttachment)

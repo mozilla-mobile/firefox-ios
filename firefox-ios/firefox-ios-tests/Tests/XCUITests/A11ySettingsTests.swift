@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Testing
+import XCTest
 
 class A11ySettingsTests: BaseTestCase {
     func testSettingsMenuPageAudit() throws {
@@ -24,6 +24,8 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsMainMenuAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
+
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Settings Main Menu") { _ in
@@ -57,11 +59,12 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
     func testSettingsAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Settings Main Menu") { _ in
@@ -93,11 +96,12 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
     func testSettingsMainMenuExtendedAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Extended Settings Main Menu") { _ in
@@ -132,7 +136,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -156,6 +160,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsSyncAndSaveDataAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Sync and Save Data Settings Main Menu") { _ in
@@ -191,7 +196,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -244,6 +249,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsBrowsingAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Browsing Settings") { _ in
@@ -333,7 +339,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -388,6 +394,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsSearchAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Search Settings Menu") { _ in
@@ -482,7 +489,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -506,6 +513,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsNewTabAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the New Tab Settings Menu") { _ in
@@ -533,7 +541,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -585,6 +593,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsHomePageAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "When I open the Homepage Settings Menu") { _ in
@@ -671,7 +680,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -723,6 +732,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsThemeAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
 
         XCTContext
@@ -816,7 +826,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -840,6 +850,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsToolbarAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the Settings Screen") { _ in
@@ -872,7 +883,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -900,6 +911,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsAppIconAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
 
         XCTContext
@@ -936,7 +948,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -960,6 +972,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsSiriShortcutAccessibilityLabels() {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
 
         XCTContext
@@ -989,7 +1002,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -1016,6 +1029,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsAutofillsAndPasswordAccessibilityReport() throws {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1045,7 +1059,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -1106,6 +1120,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsTrackingProtectionAccessibilityReport() throws {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1141,7 +1156,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 
@@ -1167,6 +1182,7 @@ class A11ySettingsTests: BaseTestCase {
     }
 
     func testSettingsNotificationsAccessibilityReport() throws {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         XCTContext
             .runActivity(named: "Given I open the setting screen") { _ in
@@ -1202,7 +1218,7 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
             }
     }
 }
