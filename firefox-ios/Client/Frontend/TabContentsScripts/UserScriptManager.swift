@@ -50,17 +50,6 @@ class UserScriptManager: FeatureFlaggable {
                 compiledUserScripts[name] = userScript
             }
 
-            // Autofill scripts
-            let autofillName = "Autofill\(name)"
-            if let source = UserScriptManager.getScriptSource(autofillName) {
-                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInDefaultContentWorld(
-                    source: wrappedSource,
-                    injectionTime: injectionTime,
-                    forMainFrameOnly: mainFrameOnly)
-                compiledUserScripts[autofillName] = userScript
-            }
-
             // NightMode scripts
             let nightModeName = "NightMode\(name)"
             if let source = UserScriptManager.getScriptSource(nightModeName) {
@@ -71,6 +60,17 @@ class UserScriptManager: FeatureFlaggable {
                     forMainFrameOnly: mainFrameOnly,
                     in: .world(name: NightModeHelper.name()))
                 compiledUserScripts[nightModeName] = userScript
+            }
+
+            // Autofill scripts
+            let autofillName = "Autofill\(name)"
+            if let source = UserScriptManager.getScriptSource(autofillName) {
+                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+                let userScript = WKUserScript.createInDefaultContentWorld(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly)
+                compiledUserScripts[autofillName] = userScript
             }
 
             let webcompatName = "Webcompat\(name)"

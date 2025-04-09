@@ -101,6 +101,7 @@ firefox-ios/Client/Assets/MainFrameAtDocumentStart.js
 firefox-ios/Client/Assets/MainFrameAtDocumentEnd.js
 firefox-ios/Client/Assets/AutofillAllFramesAtDocumentStart.js
 firefox-ios/Client/Assets/NightModeMainFrameAtDocumentEnd.js
+firefox-ios/Client/Assets/NightModeAllFramesAtDocumentStart.js
 firefox-ios/Client/Assets/WebcompatAllFramesAtDocumentStart.js
 firefox-ios/Client/Assets/addressFormLayout.js
 firefox-ios/Client/Assets/AddressFormManager.js
