@@ -38,6 +38,6 @@ class A11yHomePageTests: BaseTestCase {
         )
 
         // Generate Report
-        A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+        A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName, generateCsv: false)
     }
 }

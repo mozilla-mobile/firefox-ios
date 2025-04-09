@@ -59,7 +59,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -96,7 +98,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -136,7 +140,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -196,7 +202,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -339,7 +347,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -489,7 +499,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -541,7 +553,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -680,7 +694,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -826,7 +842,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -883,7 +901,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -948,7 +968,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -1002,7 +1024,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -1059,7 +1083,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -1156,7 +1182,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 
@@ -1218,7 +1246,9 @@ class A11ySettingsTests: BaseTestCase {
         XCTContext
             .runActivity(named: "Then I generate the Accessibility report") { _ in
                 // Generate Report
-                A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+                A11yUtils.generateAndAttachReport(missingLabels: missingLabels,
+                                                  testName: sanitizedTestName,
+                                                  generateCsv: false)
             }
     }
 }

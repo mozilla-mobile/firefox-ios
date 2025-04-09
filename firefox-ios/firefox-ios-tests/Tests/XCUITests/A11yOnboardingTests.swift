@@ -173,6 +173,6 @@ class A11yOnboardingTests: BaseTestCase {
         mozWaitForElementToExist(topSites)
 
         // Generate Report
-        A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName)
+        A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName, generateCsv: false)
     }
 }
