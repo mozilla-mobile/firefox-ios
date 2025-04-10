@@ -297,7 +297,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             cv.alpha = 0.5
 
             tabSnapshot.frame = webView.convert(webView.bounds, to: browserVC.view)
-            toVCSnapshot.frame = tabSnapshot.convert(tabSnapshot.bounds, to: view)
             print("✨Tab snapshot frame✨")
             print(tabSnapshot.frame)
             tabSnapshot.layer.cornerRadius = 0
