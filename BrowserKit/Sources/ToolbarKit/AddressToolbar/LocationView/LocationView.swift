@@ -348,7 +348,7 @@ final class LocationView: UIView,
             iconContainerStackView.addArrangedSubview(searchEngineContentView)
         }
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
-        iconContainerStackViewLeadingConstraint?.constant = isURLTextFieldCentered ? 0.0 : UX.horizontalSpace
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 

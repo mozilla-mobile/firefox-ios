@@ -29,7 +29,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.navigationActions, [])
-        XCTAssertEqual(initialState.pageActions, [])
+        XCTAssertEqual(initialState.trailingPageActions, [])
         XCTAssertEqual(initialState.browserActions, [])
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
@@ -62,7 +62,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions, [])
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.borderPosition, .top)
@@ -116,7 +116,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
@@ -135,11 +135,11 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 3)
-        XCTAssertEqual(newState.pageActions[0].actionType, .readerMode)
-        XCTAssertEqual(newState.pageActions[0].iconName, StandardImageIdentifiers.Large.readerView)
-        XCTAssertEqual(newState.pageActions[1].actionType, .share)
-        XCTAssertEqual(newState.pageActions[2].actionType, .reload)
+        XCTAssertEqual(newState.trailingPageActions.count, 3)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Large.readerView)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .share)
+        XCTAssertEqual(newState.trailingPageActions[2].actionType, .reload)
     }
 
     func test_websiteLoadingStateDidChangeAction_returnsExpectedState() {
@@ -158,9 +158,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertEqual(newState.pageActions[1].actionType, .stopLoading)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .stopLoading)
     }
 
     func test_urlDidChangeAction_withNavigationToolbar_returnsExpectedState() {
@@ -172,9 +172,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
 
         XCTAssertEqual(newState.browserActions.count, 0)
     }
@@ -188,9 +188,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
 
         XCTAssertEqual(newState.browserActions.count, 3)
         XCTAssertEqual(newState.browserActions[0].actionType, .newTab)
@@ -263,7 +263,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -291,7 +291,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -359,7 +359,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 1)
         XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
@@ -388,7 +388,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 1)
         XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, nil)
@@ -418,7 +418,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 1)
         XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, nil)
@@ -489,9 +489,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
 
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
 
         XCTAssertEqual(newState.browserActions.count, 0)
 
@@ -522,7 +522,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 1)
         XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
@@ -566,7 +566,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
 
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.isEmptySearch)
@@ -586,7 +586,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
 
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
@@ -607,7 +607,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
