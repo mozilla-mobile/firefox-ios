@@ -18,7 +18,8 @@ public class BrowserAddressToolbar: UIView,
                                     LocationViewDelegate,
                                     UIDragInteractionDelegate {
     private enum UX {
-        static let verticalEdgeSpace: CGFloat = 8
+        static let topEdgeSpace: CGFloat = 8
+        static let bottomEdgeSpace: CGFloat = 4
         static let horizontalSpace: CGFloat = 8
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
@@ -203,9 +204,9 @@ public class BrowserAddressToolbar: UIView,
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
-                                                      constant: UX.verticalEdgeSpace),
+                                                      constant: UX.topEdgeSpace),
             toolbarContainerView.bottomAnchor.constraint(equalTo: toolbarBottomBorderView.bottomAnchor,
-                                                         constant: -UX.verticalEdgeSpace),
+                                                         constant: -UX.bottomEdgeSpace),
             toolbarContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 
             toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
