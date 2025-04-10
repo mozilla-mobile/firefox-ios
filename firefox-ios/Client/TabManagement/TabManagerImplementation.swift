@@ -968,6 +968,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
+            tab.setZoomLevelforDomain()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
