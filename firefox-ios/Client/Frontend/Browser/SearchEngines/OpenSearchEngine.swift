@@ -36,7 +36,13 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     private let suggestTemplate: String?
     private let searchTermComponent = "{searchTerms}"
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
-    private let googleEngineID = "google-b-1-m"
+    private let googleEngineID = {
+        if SearchEngineFlagManager.isSECEnabled {
+            return "google"
+        } else {
+            return "google-b-1-m"
+        }
+    }()
 
     var headerSearchTitle: String {
         guard engineID != googleEngineID else {
