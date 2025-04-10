@@ -7408,7 +7408,12 @@ extension String {
                 tableName: "LiveActivity",
                 value: "Downloading “%@”",
                 comment: "Displayed during a download in Live Activity or Dynamic Island. %@ is the name of the file being downloaded (e.g. Downloading “MyFile.pdf”).")
-           public static let FileProgressText = MZLocalizedString(
+            public static let FileCountText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileCountText.v138",
+                tableName: "LiveActivity",
+                value: "Downloading Files: %@",
+                comment: "Displayed during a download in Live Activity or Dynamic Island. %@ is the number of files (e.g. Downloading Files: 2).")
+            public static let FileProgressText = MZLocalizedString(
                 key: "LiveActivity.Downloads.FileProgressText.v138",
                 tableName: "LiveActivity",
                 value: "%1$@ of %2$@",
@@ -7450,32 +7455,6 @@ extension String {
     /// For more detailed information on how to use this struct, please see
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     struct OldStrings {
-        struct v133 {
-            public static let Tools = MZLocalizedString(
-                key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132",
-                tableName: "MainMenu",
-                value: "Tools",
-                comment: "On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu.")
-            public static let Save = MZLocalizedString(
-                key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v132",
-                tableName: "MainMenu",
-                value: "Save",
-                comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
-        }
-        struct v134 {
-            public struct RestoreTabs {
-                public static let Title = MZLocalizedString(
-                    key: "Alerts.RestoreTabs.Title.v109.v2",
-                    tableName: "Alerts",
-                    value: "%@ crashed. Restore your tabs?",
-                    comment: "The title of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. %@ is the name of the app (e.g. Firefox).")
-                public static let Message = MZLocalizedString(
-                    key: "Alerts.RestoreTabs.Message.v109",
-                    tableName: "Alerts",
-                    value: "Sorry about that. Restore tabs to pick up where you left off.",
-                    comment: "The body of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed.")
-            }
-        }
         struct v135 {
             public static let LearnMore = MZLocalizedString(
                 key: "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135",
