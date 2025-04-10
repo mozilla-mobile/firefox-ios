@@ -173,7 +173,7 @@ class TabManagerTests: XCTestCase {
 
         subject.selectTab(tabs[1], previous: tab)
 
-        XCTAssertEqual(document.pauseResumeDownloadCalled, 1)
+        XCTAssertEqual(document.pauseDownloadCalled, 1)
     }
 
     // MARK: - Restore tabs
