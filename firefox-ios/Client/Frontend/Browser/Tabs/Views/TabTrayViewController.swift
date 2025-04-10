@@ -107,7 +107,24 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
+<<<<<<< HEAD
         // Temporary offset of numbers to account for the different order in the experiment
+=======
+        let selectedIndex = experimentConvertSelectedIndex()
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex,
+                                           theme: themeManager.getCurrentTheme(for: windowUUID))
+        selector.delegate = self
+        selector.items = [TabTrayPanelType.privateTabs.label,
+                          TabTrayPanelType.tabs.label,
+                          TabTrayPanelType.syncedTabs.label]
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
+    }()
+
+    private func experimentConvertSelectedIndex() -> Int {
+        // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
+>>>>>>> 6339bac36 (Bugfix FXIOS-11854 [Tab tray UI experiment] Selector view theming (#25864))
         // Order can be updated in TabTrayPanelType once the experiment is done
         var selectedIndex = 0
         switch tabTrayState.selectedPanel {
