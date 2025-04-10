@@ -78,17 +78,18 @@ workflows:
 
             echo "Analyzing test results from: $BITRISE_XCRESULT_PATH"
           
-            OUTPUT_DIR="$BITRISE_DEPLOY_DIR/xcparse-test-summaries"
+            OUTPUT_DIR="$BITRISE_DEPLOY_DIR/xcparse-output"
             mkdir -p "$OUTPUT_DIR"
 
-            xcparse tests "$BITRISE_XCRESULT_PATH" --output "$OUTPUT_DIR"
+            xcparse convert "$BITRISE_XCRESULT_PATH" --output "$OUTPUT_DIR" --output-format json
+
+            SUMMARY_JSON="$OUTPUT_DIR/TestSummary.json"
 
             echo "Search for failed tests..."
-            FAILED_COUNT=$(grep -r '"status" : "Failure"' "$OUTPUT_DIR" | wc -l)
+            FAILED_COUNT=$(grep -o '"testStatus" : "Failure"' "$SUMMARY_JSON" | wc -l)
 
             echo "Total number of failures: $FAILED_COUNT"
 
-            # Save the value
             envman add --key ACCESSIBILITY_FAILED_TEST_COUNT --value "$FAILED_COUNT"
     
     - script@1.2.1:
