@@ -95,7 +95,7 @@ workflows:
             find ~/Library/Developer/CoreSimulator/Devices -type f -name "AccessibilityReport*.txt" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
             find ~/Library/Developer/CoreSimulator/Devices -type f -name "AccessibilityReport*.csv" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
 
-            echo "📦 Filed copied to $BITRISE_DEPLOY_DIR:"
+            echo "Files copied to $BITRISE_DEPLOY_DIR:"
             ls -lh "$BITRISE_DEPLOY_DIR"
     
     - deploy-to-bitrise-io@2.9.2:
@@ -116,7 +116,7 @@ workflows:
             Task | ${BITRISE_BUILD_URL}
             Number of A11y Failures | ${ACCESSIBILITY_FAILED_TEST_COUNT}
             Failures Report | ${BITRISE_BUILD_URL}
-            Accessibility Report | ${BITRISE_BUILD_URL}?tab=artifacts
+            Accessibility Reports | ${BITRISE_BUILD_URL}?tab=artifacts
         - buttons: |
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
