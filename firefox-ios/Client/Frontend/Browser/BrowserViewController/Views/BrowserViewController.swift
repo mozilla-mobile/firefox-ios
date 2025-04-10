@@ -1537,7 +1537,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(documentLoadingView)
         NSLayoutConstraint.activate([
             documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
             documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
         ])
@@ -1549,14 +1549,13 @@ class BrowserViewController: UIViewController,
         self.documentLoadingView = documentLoadingView
     }
 
-    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
+    func removeDocumentLoadingView() {
         guard let documentLoadingView else { return }
         UIView.animate(withDuration: 0.3) {
             documentLoadingView.alpha = 0.0
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
-            completion?()
         }
     }
 
@@ -2018,7 +2017,10 @@ class BrowserViewController: UIViewController,
                 setupMiddleButtonStatus(isLoading: false)
             }
         case .loading:
-            guard let loading = change?[.newKey] as? Bool else { break }
+            guard var loading = change?[.newKey] as? Bool else { break }
+            if isPDFRefactorEnabled, let doc = tab.temporaryDocument {
+                loading = doc.isDownloading
+            }
             setupMiddleButtonStatus(isLoading: loading)
 
             if isToolbarRefactorEnabled {

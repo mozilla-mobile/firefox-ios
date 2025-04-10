@@ -51,6 +51,9 @@ class MockBrowserViewController: BrowserViewController {
     var lastVisitType: VisitType?
     var isPrivate = false
 
+    var showDocumentLoadingViewCalled = 0
+    var removeDocumentLoadingViewCalled = 0
+
     var mockContentContainer = MockContentContainer()
 
     override var contentContainer: ContentContainer {
@@ -139,6 +142,14 @@ class MockBrowserViewController: BrowserViewController {
         didSelectURLCalled = true
         lastOpenedURL = url
         lastVisitType = visitType
+    }
+
+    override func showDocumentLoadingView() {
+        showDocumentLoadingViewCalled += 1
+    }
+
+    override func removeDocumentLoadingView() {
+        removeDocumentLoadingViewCalled += 1
     }
 }
 

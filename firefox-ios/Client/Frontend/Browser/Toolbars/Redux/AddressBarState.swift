@@ -315,8 +315,12 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
             trailingPageActions: trailingPageActions(action: toolbarAction,
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
@@ -932,15 +936,26 @@ struct AddressBarState: StateType, Equatable {
             shareAction.hasCustomColor = true
         }
 
+        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
+        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
+
         if !isShowingNavigationToolbar {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
             }
 
             if !isHomepage, layout == .version1 {
+                var shareAction = shareAction
+                shareAction.isEnabled = isLoading == false
+                shareAction.iconName = StandardImageIdentifiers.Medium.share
+                shareAction.hasCustomColor = true
                 actions.append(shareAction)
             }
         } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
+            var shareAction = shareAction
+            shareAction.isEnabled = isLoading == false
+            shareAction.hasCustomColor = true
+            shareAction.iconName = StandardImageIdentifiers.Medium.share
             actions.append(shareAction)
         }
 
@@ -997,12 +1012,14 @@ struct AddressBarState: StateType, Equatable {
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
-        if layout == .baseline {
-			actions.append(shareAction)
-        }
-
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
+
+        if layout == .baseline {
+            var shareAction = shareAction
+            shareAction.isEnabled = isLoading == false
+            actions.append(shareAction)
+        }
 
         if isLoading == true {
             var stopLoadingAction = stopLoadingAction

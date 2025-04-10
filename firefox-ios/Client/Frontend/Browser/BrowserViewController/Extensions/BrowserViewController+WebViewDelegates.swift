@@ -793,7 +793,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.allow)
                     return
                 }
-                handlePDFResponse(webView, tab: tab, response: response, request: request)
+                handlePDFResponse(tab: tab, response: response, request: request)
                 decisionHandler(.cancel)
                 return
             }
@@ -811,15 +811,13 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    func handlePDFResponse(_ webView: WKWebView,
-                           tab: Tab,
+    func handlePDFResponse(tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
         navigationHandler?.showDocumentLoading()
         scrollController.showToolbars(animated: false)
 
-        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
-        cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
+        tab.getSessionCookies { [weak tab, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
                 filename: response.suggestedFilename,
                 request: request,
@@ -828,26 +826,26 @@ extension BrowserViewController: WKNavigationDelegate {
             )
             tempPDF.onDownloadProgressUpdate = { progress in
                 self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
-                                   of: webView,
+                                   of: tab?.webView,
                                    change: [.newKey: progress],
                                    context: nil)
             }
             tempPDF.onDownloadStarted = {
                 self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
-                                   of: webView,
+                                   of: tab?.webView,
                                    change: [.newKey: true],
                                    context: nil)
             }
             tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
-                guard let error, let webView else { return }
+                guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }
             tab?.enqueueDocument(tempPDF)
             if let url = request.url {
                 self?.observeValue(
                     forKeyPath: KVOConstants.URL.rawValue,
-                    of: webView,
+                    of: tab?.webView,
                     change: [.newKey: url],
                     context: nil
                 )
