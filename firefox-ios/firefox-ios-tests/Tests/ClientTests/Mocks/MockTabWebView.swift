@@ -88,3 +88,16 @@ final class MockTabWebView: TabWebView {
         }
     }
 }
+
+class MockTab: Tab {
+    var enqueueDocumentCalled = 0
+
+    override func getSessionCookies(_ completion: @escaping ([HTTPCookie]) -> Void) {
+        completion([])
+    }
+
+    override func enqueueDocument(_ document: any TemporaryDocument) {
+        enqueueDocumentCalled += 1
+        super.enqueueDocument(document)
+    }
+}

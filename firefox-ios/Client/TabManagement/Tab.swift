@@ -434,7 +434,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
-    /// The dictionary containing as key the location for a document and its corresponding source URL.
+    /// The dictionary containing as key the file location for a document and its corresponding source online URL.
     private var downloadedTemporaryDocs = [URL: URL]()
 
     private var isPDFRefactorEnabled: Bool {
@@ -974,6 +974,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // MARK: - Temporary Document handling - PDF Refactor
 
+    /// Retrieves the session cookies attached to the current `WKWebView` managed by the `Tab`
+    func getSessionCookies(_ completion: @escaping ([HTTPCookie]) -> Void) {
+        webView?.configuration.websiteDataStore.httpCookieStore.getAllCookies(completion)
+    }
+
     /// Returns true if the download was cancelled.
     ///
     /// `forceReload` forces the reload of the page when a document is downloading.
@@ -1000,7 +1005,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         guard !docsURL.isEmpty else { return }
         DispatchQueue.global(qos: .background).async {
             docsURL.forEach { url in
-                try? FileManager.default.removeItem(at: url.value)
+                try? FileManager.default.removeItem(at: url.key)
             }
         }
     }
@@ -1021,8 +1026,16 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    func pauseResumeDocumentDownload() {
-        temporaryDocument?.pauseResumeDownload()
+    func pauseDocumentDownload() {
+        temporaryDocument?.pauseDownload()
+    }
+
+    func resumeDocumentDownload() {
+        temporaryDocument?.resumeDownload()
+    }
+
+    func cancelDocumentDownload() {
+        temporaryDocument?.cancelDownload()
     }
 
     func isDownloadingDocument() -> Bool {
