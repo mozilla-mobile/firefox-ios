@@ -134,7 +134,7 @@ class TrackingProtectionViewController: UIViewController {
                 let cell = SwitchTableViewCell(item: blockOtherItem, reuseIdentifier: "SwitchTableViewCell")
                 cell.valueChanged.sink { [unowned self] isOn in
                     if isOn {
-                        let alertController = self.createAlertControllerToShowContentBlockingWarning(cell: cell)
+                        let alertController = self.createAlertControllerForCell(cell: cell)
                         self.present(alertController, animated: true, completion: nil)
                     } else {
                         self.blockOtherItem.settingsValue = isOn
@@ -155,7 +155,7 @@ class TrackingProtectionViewController: UIViewController {
         )
     ]
 
-    private func createAlertControllerToShowContentBlockingWarning(cell: SwitchTableViewCell) -> UIAlertController {
+    private func createAlertControllerForCell(cell: SwitchTableViewCell) -> UIAlertController {
         let alertController = UIAlertController(title: nil, message: UIConstants.strings.settingsBlockOtherMessage, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: UIConstants.strings.settingsBlockOtherNo, style: .default) { [unowned self] _ in
             // TODO: Make sure to reset the toggle
