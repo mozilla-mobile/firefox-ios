@@ -199,11 +199,6 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: contextualViewProvider, windowUUID: tabManager.windowUUID)
     }()
 
-    private(set) lazy var shoppingContextHintVC: ContextualHintViewController = {
-        let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience, with: profile)
-        return ContextualHintViewController(with: shoppingViewProvider, windowUUID: tabManager.windowUUID)
-    }()
-
     private(set) lazy var dataClearanceContextHintVC: ContextualHintViewController = {
         let dataClearanceViewProvider = ContextualHintViewProvider(
             forHintType: .dataClearance,
@@ -655,13 +650,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func dismissModalsIfStartAtHome() {
-        guard tabManager.startAtHomeCheck() else { return }
-        let action = FakespotAction(isOpen: false,
-                                    windowUUID: windowUUID,
-                                    actionType: FakespotActionType.setAppearanceTo)
-        store.dispatch(action)
-
-        guard presentedViewController != nil else { return }
+        guard tabManager.startAtHomeCheck(), presentedViewController != nil else { return }
         dismissVC()
     }
 
@@ -697,17 +686,6 @@ class BrowserViewController: UIViewController,
 
     func newState(state: BrowserViewControllerState) {
         browserViewControllerState = state
-
-        // opens or close sidebar/bottom sheet to match the saved state
-        if state.fakespotState.isOpen {
-            guard let productURL = isToolbarRefactorEnabled ?
-                store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.addressToolbar.url :
-                legacyUrlBar?.currentURL
-            else { return }
-            handleFakespotFlow(productURL: productURL)
-        } else if !state.fakespotState.isOpen {
-            dismissFakespotIfNeeded()
-        }
 
         if state.reloadWebView {
             updateContentInHomePanel(state.browserViewType)
@@ -1242,34 +1220,12 @@ class BrowserViewController: UIViewController,
 
         dismissVisibleMenus()
 
-        var fakespotNeedsUpdate = false
-        if !isToolbarRefactorEnabled, legacyUrlBar?.currentURL != nil {
-            fakespotNeedsUpdate = contentStackView.isSidebarVisible != FakespotUtils().shouldDisplayInSidebar(
-                viewSize: size
-            )
-            if let fakespotState = browserViewControllerState?.fakespotState {
-                fakespotNeedsUpdate = fakespotNeedsUpdate && fakespotState.isOpen
-            }
-
-            if fakespotNeedsUpdate {
-                dismissFakespotIfNeeded(animated: false)
-            }
-        }
-
         coordinator.animate(alongsideTransition: { [self] context in
             scrollController.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = displayedPopoverController {
                 updateDisplayedPopoverProperties?()
                 present(popover, animated: true, completion: nil)
-            }
-
-            let productURL = isToolbarRefactorEnabled ?
-                store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.addressToolbar.url :
-                legacyUrlBar?.currentURL
-
-            if let productURL, fakespotNeedsUpdate {
-                handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
             self.scrollController.traitCollectionDidChange()
@@ -2263,7 +2219,6 @@ class BrowserViewController: UIViewController,
         }
 
         legacyUrlBar?.currentURL = tab.url?.displayURL
-        legacyUrlBar?.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
     }
@@ -3006,11 +2961,6 @@ class BrowserViewController: UIViewController,
                 )
             }
 
-            // Update Fakespot sidebar if necessary
-            if webViewStatus == .url {
-                updateFakespot(tab: tab)
-            }
-
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
@@ -3042,69 +2992,6 @@ class BrowserViewController: UIViewController,
                     }
                 }
             }
-        }
-    }
-
-    internal func updateFakespot(tab: Tab, isReload: Bool = false) {
-        guard let webView = tab.webView,
-              let url = webView.url
-        else {
-            // We're on homepage or a blank tab
-            let action = FakespotAction(isOpen: false,
-                                        windowUUID: windowUUID,
-                                        actionType: FakespotActionType.setAppearanceTo)
-            store.dispatch(action)
-            return
-        }
-
-        let action = FakespotAction(tabUUID: tab.tabUUID,
-                                    windowUUID: windowUUID,
-                                    actionType: FakespotActionType.tabDidChange)
-        store.dispatch(action)
-        let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
-        let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
-        let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-
-        guard product.product != nil, !tab.isPrivate else {
-            let action = FakespotAction(isOpen: false,
-                                        windowUUID: windowUUID,
-                                        actionType: FakespotActionType.setAppearanceTo)
-            store.dispatch(action)
-            // Quick fix: make sure to sidebar is hidden when opened from deep-link
-            // Relates to FXIOS-7844
-            contentStackView.hideSidebar(self)
-            return
-        }
-
-        if isReload, let productId = product.product?.id {
-            let action = FakespotAction(tabUUID: tab.tabUUID,
-                                        productId: productId,
-                                        windowUUID: windowUUID,
-                                        actionType: FakespotActionType.tabDidReload)
-            store.dispatch(action)
-        }
-
-        // Do not update Fakespot when we are not on a selected tab
-        guard tabManager.selectedTab == tab else { return }
-
-        if contentStackView.isSidebarVisible {
-            // Sidebar is visible, update content
-            navigationHandler?.updateFakespotSidebar(productURL: url,
-                                                     sidebarContainer: contentStackView,
-                                                     parentViewController: self)
-        } else if FakespotUtils().shouldDisplayInSidebar(),
-                  let fakespotState = browserViewControllerState?.fakespotState,
-                  fakespotState.isOpen {
-            // Sidebar should be displayed and Fakespot is open, display Fakespot
-            handleFakespotFlow(productURL: url)
-        } else if let fakespotState = browserViewControllerState?.fakespotState,
-                  fakespotState.sidebarOpenForiPadLandscape,
-                  UIDevice.current.userInterfaceIdiom == .pad {
-            // Sidebar should be displayed, display Fakespot
-            let action = FakespotAction(isOpen: true,
-                                        windowUUID: windowUUID,
-                                        actionType: FakespotActionType.setAppearanceTo)
-            store.dispatch(action)
         }
     }
 
@@ -4191,9 +4078,6 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        // Update Fakespot sidebar if necessary
-        updateFakespot(tab: selectedTab)
-
         updateTabCountUsingTabManager(tabManager)
 
         bottomContentStackView.removeAllArrangedViews()
@@ -4592,7 +4476,6 @@ extension BrowserViewController {
         trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
         creditCardInitialSetupTelemetry()
-        FakespotUtils().addSettingTelemetry()
     }
 
     func trackAccessibility() {

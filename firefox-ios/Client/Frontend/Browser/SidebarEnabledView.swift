@@ -7,7 +7,6 @@ import UIKit
 protocol SidebarEnabledViewProtocol: UIView {
     func showSidebar(_ viewController: UIViewController, parentViewController: UIViewController)
     func hideSidebar(_ parentViewController: UIViewController)
-    func updateSidebar(_ viewModel: FakespotViewModel, parentViewController: UIViewController)
 }
 
 class SidebarEnabledView: BaseAlphaStackView, SidebarEnabledViewProtocol {
@@ -46,23 +45,5 @@ class SidebarEnabledView: BaseAlphaStackView, SidebarEnabledViewProtocol {
     }
 
     func hideSidebar(_ parentViewController: UIViewController) {
-        guard isSidebarVisible,
-              let fakespotViewController = parentViewController.children.first(where: { $0 is FakespotViewController })
-        else { return }
-
-        fakespotViewController.willMove(toParent: nil)
-        fakespotViewController.removeFromParent()
-        removeArrangedSubview(fakespotViewController.view)
-        fakespotViewController.view.removeFromSuperview()
-    }
-
-    func updateSidebar(_ viewModel: FakespotViewModel, parentViewController: UIViewController) {
-        guard isSidebarVisible,
-              let fakespotViewController = parentViewController.children.first(where: {
-                  $0 is FakespotViewController
-              }) as? FakespotViewController
-        else { return }
-
-        fakespotViewController.update(viewModel: viewModel)
     }
 }

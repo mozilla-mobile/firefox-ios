@@ -158,10 +158,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
         let useStagingContileAPI = CoreFlaggableFeature(withID: .useStagingContileAPI,
                                                         enabledFor: [.developer])
-        let useStagingFakespotAPI = CoreFlaggableFeature(withID: .useStagingFakespotAPI,
-                                                         enabledFor: [])
 
         coreFeatures[.useStagingContileAPI] = useStagingContileAPI
-        coreFeatures[.useStagingFakespotAPI] = useStagingFakespotAPI
     }
 }

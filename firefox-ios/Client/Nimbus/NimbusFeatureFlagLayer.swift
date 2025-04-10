@@ -46,20 +46,11 @@ final class NimbusFeatureFlagLayer {
                 .historyHighlights:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .fakespotFeature:
-            return checkFakespotFeature(from: nimbus)
-
-        case .fakespotProductAds:
-            return checkFakespotProductAds(from: nimbus)
-
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
-
-        case .fakespotBackInStock:
-            return checkProductBackInStockFakespotFeature(from: nimbus)
 
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
@@ -351,26 +342,8 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shopping2023.value()
-
-        return config.status
-    }
-
-    private func checkFakespotProductAds(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shopping2023.value()
-
-        return config.productAds
-    }
-
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.pdfRefactorFeature.value().enabled
-    }
-
-    private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shopping2023.value()
-
-        return config.backInStockReporting
     }
 
     private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {

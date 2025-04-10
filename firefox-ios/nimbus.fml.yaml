@@ -21,7 +21,6 @@ include:
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
-  - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
