@@ -935,7 +935,7 @@ struct AddressBarState: StateType, Equatable {
             shareAction.iconName = StandardImageIdentifiers.Medium.share
             shareAction.hasCustomColor = true
         }
-        
+
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
