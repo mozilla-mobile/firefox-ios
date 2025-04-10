@@ -22,6 +22,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     /// Prior to Search Consolidation, we sent the engineID from our engine XML
     /// documents. Post-consolidation we send the engineID + suffix (if available)
     var telemetryID: String {
+        guard !isCustomEngine else { return "custom" }
         if SearchEngineFlagManager.isSECEnabled {
             if let suffix = telemetrySuffix, !suffix.isEmpty {
                 return engineID + "-" + suffix
