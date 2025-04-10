@@ -19,7 +19,8 @@ public class BrowserAddressToolbar: UIView,
                                     UIDragInteractionDelegate {
     private enum UX {
         static let topEdgeSpace: CGFloat = 8
-        static let bottomEdgeSpace: CGFloat = 4
+        static let bottomPositionBottomEdgeSpace: CGFloat = 4
+        static let topPositionBottomEdgeSpace: CGFloat = 8
         static let horizontalSpace: CGFloat = 8
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
@@ -61,6 +62,7 @@ public class BrowserAddressToolbar: UIView,
     private var leadingBrowserActionConstraint: NSLayoutConstraint?
     private var leadingLocationContainerConstraint: NSLayoutConstraint?
     private var dividerWidthConstraint: NSLayoutConstraint?
+    private var toolbarBottomConstraint: NSLayoutConstraint?
     private var toolbarTopBorderHeightConstraint: NSLayoutConstraint?
     private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
@@ -104,6 +106,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     public func configure(config: AddressToolbarConfiguration,
+                          toolbarPosition: AddressToolbarPosition,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
@@ -112,7 +115,7 @@ public class BrowserAddressToolbar: UIView,
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousConfiguration = config
-        configureUX(config: config.uxConfiguration)
+        configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
@@ -133,9 +136,12 @@ public class BrowserAddressToolbar: UIView,
         droppableUrl = config.locationViewConfiguration.droppableUrl
     }
 
-    private func configureUX(config: AddressToolbarUXConfiguration) {
+    private func configureUX(config: AddressToolbarUXConfiguration,
+                             toolbarPosition: AddressToolbarPosition) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
+        toolbarBottomConstraint?.constant = toolbarPosition == .bottom ?
+        -UX.bottomPositionBottomEdgeSpace : -UX.topPositionBottomEdgeSpace
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -201,12 +207,17 @@ public class BrowserAddressToolbar: UIView,
         locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
         locationContainerHeightConstraint?.isActive = true
 
+        toolbarBottomConstraint = toolbarContainerView.bottomAnchor.constraint(
+            equalTo: toolbarBottomBorderView.bottomAnchor,
+            constant: -UX.topPositionBottomEdgeSpace
+        )
+        toolbarBottomConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
                                                       constant: UX.topEdgeSpace),
-            toolbarContainerView.bottomAnchor.constraint(equalTo: toolbarBottomBorderView.bottomAnchor,
-                                                         constant: -UX.bottomEdgeSpace),
+
             toolbarContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 
             toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
