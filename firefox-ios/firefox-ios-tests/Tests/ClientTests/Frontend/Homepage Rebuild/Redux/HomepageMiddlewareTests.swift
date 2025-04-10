@@ -31,18 +31,129 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = NavigationBrowserAction(
             navigationDestination: NavigationDestination(.settings(.homePage)),
             windowUUID: .XCTestDefaultUUID,
-            actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
+            actionType: NavigationBrowserActionType.tapOnCustomizeHomepageButton
         )
 
         subject.homepageProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? CounterMetricType)
-        let expectedMetricType = type(of: GleanMetrics.FirefoxHomePage.customizeHomepageButton)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.type, "customize_homepage_button")
+        XCTAssertEqual(savedExtras.section, "customize_homepage")
+    }
+
+    func test_tapOnBookmarksShowMoreButtonAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.link),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.type, "bookmarks_show_all_button")
+        XCTAssertEqual(savedExtras.section, "bookmarks")
+    }
+
+    func test_tapOnJumpBackInShowAllButtonAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.tabTray(.tabs)),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.type, "jump_back_in_show_all_button")
+        XCTAssertEqual(savedExtras.section, "jump_back_in")
+    }
+
+    func test_tapOnJumpBackInSyncedShowAllButtonAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.tabTray(.syncedTabs)),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.type, "synced_show_all_button")
+        XCTAssertEqual(savedExtras.section, "jump_back_in")
+    }
+
+    func test_didSelectItemAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.didSelectItem
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.type, "top_site")
+        XCTAssertEqual(savedExtras.section, "top_sites")
     }
 
     // MARK: - Helpers
