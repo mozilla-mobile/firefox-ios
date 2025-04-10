@@ -107,7 +107,19 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
-        // Temporary offset of numbers to account for the different order in the experiment
+        let selectedIndex = experimentConvertSelectedIndex()
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex, windowUUID: windowUUID)
+        selector.delegate = self
+        selector.items = [TabTrayPanelType.privateTabs.label,
+                          TabTrayPanelType.tabs.label,
+                          TabTrayPanelType.syncedTabs.label]
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
+    }()
+
+    private func experimentConvertSelectedIndex() -> Int {
+        // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
         // Order can be updated in TabTrayPanelType once the experiment is done
         var selectedIndex = 0
         switch tabTrayState.selectedPanel {
@@ -118,16 +130,8 @@ class TabTrayViewController: UIViewController,
         case .syncedTabs:
             selectedIndex = 2
         }
-
-        let selector = TabTraySelectorView(selectedIndex: selectedIndex, windowUUID: windowUUID)
-        selector.delegate = self
-        selector.items = [TabTrayPanelType.privateTabs.label,
-                          TabTrayPanelType.tabs.label,
-                          TabTrayPanelType.syncedTabs.label]
-
-        didSelectSection(panelType: tabTrayState.selectedPanel)
-        return selector
-    }()
+        return selectedIndex
+    }
 
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
@@ -477,6 +481,7 @@ class TabTrayViewController: UIViewController,
         var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+            experimentSegmentControl.scrollToItem(at: experimentConvertSelectedIndex(), animated: false)
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
