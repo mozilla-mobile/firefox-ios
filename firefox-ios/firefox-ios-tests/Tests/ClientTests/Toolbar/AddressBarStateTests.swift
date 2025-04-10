@@ -30,6 +30,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.navigationActions, [])
         XCTAssertEqual(initialState.trailingPageActions, [])
+        XCTAssertEqual(initialState.leadingPageActions, [])
         XCTAssertEqual(initialState.browserActions, [])
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
@@ -158,10 +159,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertFalse(newState.pageActions[0].isEnabled)
-        XCTAssertEqual(newState.pageActions[1].actionType, .stopLoading)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertFalse(newState.trailingPageActions[0].isEnabled)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .stopLoading)
         XCTAssertEqual(newState.navigationActions.count, 0)
     }
 
@@ -181,10 +182,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertTrue(newState.pageActions[0].isEnabled)
-        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertTrue(newState.trailingPageActions[0].isEnabled)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
         XCTAssertEqual(newState.navigationActions.count, 0)
     }
 
@@ -207,17 +208,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertFalse(newState.pageActions[0].isEnabled)
-        XCTAssertEqual(newState.pageActions[1].actionType, .stopLoading)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
+        XCTAssertFalse(newState.trailingPageActions[0].isEnabled)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .stopLoading)
 
         XCTAssertEqual(newState.navigationActions.count, 2)
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
-        XCTAssertEqual(newState.trailingPageActions.count, 2)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .share)
-        XCTAssertEqual(newState.trailingPageActions[1].actionType, .stopLoading)
     }
 
     func test_urlDidChangeAction_withNavigationToolbar_returnsExpectedState() {
