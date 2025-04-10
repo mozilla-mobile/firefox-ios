@@ -68,7 +68,25 @@ workflows:
             - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
             - maximum_test_repetitions: 2
     
-    - script@1:
+    - script@1.2.1:
+    title: Count failed tests
+    is_always_run: true
+    inputs:
+      - content: |
+          echo "Analyzing test results..."
+          
+          # Path to the generated xcresult 
+          RESULT_PATH="$BITRISE_XCRESULT_PATH"
+          
+          # Extract the results in a json format
+          xcrun xcresulttool get --path "$RESULT_PATH" --format json > result.json
+
+          # Extract the number of failed tests
+          FAILED_COUNT=$(jq '[.actions[].actionResult.tests?.summary?.failureCount] | add // 0' result.json)
+
+          envman add --key FAILED_COUNT --value "$FAILED_COUNT"
+    
+    - script@1.2.1:
         title: Collect All Accessibility Report Files
         is_always_run: true
         inputs:
@@ -99,10 +117,9 @@ workflows:
         - timestamp: 'no'
         - fields: |
             Task | ${BITRISE_BUILD_URL}
-            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
-            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
-            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
-            Branch | ${BITRISE_GIT_BRANCH}
+            Number of A11y Failures | ${FAILED_COUNT}
+            Failures Report | ${BITRISE_BUILD_URL}
+            A11y Missing Labels Report | "${BITRISE_BUILD_URL}?tab=artifacts"
         - buttons: |
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
