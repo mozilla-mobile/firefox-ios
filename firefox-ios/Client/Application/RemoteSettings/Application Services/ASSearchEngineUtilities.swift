@@ -39,7 +39,6 @@ struct ASSearchEngineUtilities {
 
             let value: String
             if $0.value == "{partnerCode}" {
-                // TODO: [FXIOS-11583] Special-case Bing and other overrides here
                 value = engine.partnerCode
             } else {
                 value = $0.value ?? ""
