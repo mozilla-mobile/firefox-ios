@@ -10,7 +10,7 @@ enum ToolbarLayoutStyle: String {
     /// share button is displayed in the address toolbar.
     case version1
 
-    static func style(from type: ToolbarLayoutType?) -> ToolbarLayoutStyle? {
+    static func style(from type: ToolbarLayoutType?) -> ToolbarLayoutStyle {
         guard let type else { return .baseline }
         switch type {
         case .baseline: return .baseline

@@ -216,6 +216,7 @@ final class AddressToolbarContainer: UIView,
 
         compactToolbar.configure(
             config: newModel.addressToolbarConfig,
+            toolbarPosition: toolbarState.toolbarPosition,
             toolbarDelegate: self,
             leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
                                                        toolbarLayoutStyle: newModel.toolbarLayoutStyle),
@@ -224,6 +225,7 @@ final class AddressToolbarContainer: UIView,
             animated: newModel.shouldAnimate)
         regularToolbar.configure(
             config: newModel.addressToolbarConfig,
+            toolbarPosition: toolbarState.toolbarPosition,
             toolbarDelegate: self,
             leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
                                                        toolbarLayoutStyle: newModel.toolbarLayoutStyle),
