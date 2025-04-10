@@ -108,7 +108,8 @@ class TabTrayViewController: UIViewController,
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
-        let selector = TabTraySelectorView(selectedIndex: selectedIndex, windowUUID: windowUUID)
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex,
+                                           theme: themeManager.getCurrentTheme(for: windowUUID))
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
                           TabTrayPanelType.tabs.label,
