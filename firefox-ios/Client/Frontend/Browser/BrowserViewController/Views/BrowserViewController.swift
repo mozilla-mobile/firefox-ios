@@ -4244,7 +4244,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             if isToolbarRefactorEnabled {
-               updateToolbarTabCount(count)
+                updateToolbarTabCount(count)
             } else if !isToolbarRefactorEnabled, let legacyUrlBar {
                 toolbar.updateTabCount(count, animated: animated)
                 legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)
