@@ -318,9 +318,9 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
             trailingPageActions: trailingPageActions(action: toolbarAction,
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
@@ -897,9 +897,6 @@ struct AddressBarState: StateType, Equatable {
             return actions
         }
 
-        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
-
         if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
             let canGoBack = action.canGoBack ?? toolbarState.canGoBack
@@ -938,6 +935,9 @@ struct AddressBarState: StateType, Equatable {
             shareAction.iconName = StandardImageIdentifiers.Medium.share
             shareAction.hasCustomColor = true
         }
+        
+        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
+        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if !isShowingNavigationToolbar {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
