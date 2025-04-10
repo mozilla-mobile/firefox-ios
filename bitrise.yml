@@ -17,7 +17,7 @@ pipelines:
         run_firefox_ui_tests:
             depends_on:
             - firefox_configure_build
-            parallel: 6
+            parallel: 5
         focus_ui_test:
             depends_on:
             - focus_configure_build
@@ -161,7 +161,7 @@ workflows:
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 6
+        - shard_count: 5
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX 

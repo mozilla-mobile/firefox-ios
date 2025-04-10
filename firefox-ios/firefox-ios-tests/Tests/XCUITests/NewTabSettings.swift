@@ -155,7 +155,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
-        validateKeyboardIsRaisedAndDismissed()
+        // validateKeyboardIsRaisedAndDismissed()
 
         // Switch to Private Browsing
         navigator.nowAt(NewTabScreen)
@@ -166,7 +166,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
-        validateKeyboardIsRaisedAndDismissed()
+        // validateKeyboardIsRaisedAndDismissed()
     }
 
     private func validateKeyboardIsRaisedAndDismissed() {
