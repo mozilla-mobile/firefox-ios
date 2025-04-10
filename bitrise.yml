@@ -73,18 +73,23 @@ workflows:
         is_always_run: true
         inputs:
         - content: |
-            echo "Analyzing test results..."
-          
-             # Path to the generated xcresult 
-            RESULT_PATH="$BITRISE_XCRESULT_PATH"
-          
-             # Extract the results in a json format
-             xcrun xcresulttool get --path "$RESULT_PATH" --format json > result.json
+            echo "Install xcparse..."
+            brew install chargepoint/xcparse/xcparse
 
-             # Extract the number of failed tests
-              FAILED_COUNT=$(jq '[.actions[].actionResult.tests?.summary?.failureCount] | add // 0' result.json)
+            echo "Analyzing test results from: $BITRISE_XCRESULT_PATH"
+          
+            OUTPUT_DIR="$BITRISE_DEPLOY_DIR/xcparse-test-summaries"
+            mkdir -p "$OUTPUT_DIR"
 
-              envman add --key FAILED_COUNT --value "$FAILED_COUNT"
+            xcparse tests "$BITRISE_XCRESULT_PATH" --output "$OUTPUT_DIR"
+
+            echo "Search for failed tests..."
+            FAILED_COUNT=$(grep -r '"status" : "Failure"' "$OUTPUT_DIR" | wc -l)
+
+            echo "Total number of failures: $FAILED_COUNT"
+
+            # Save the value
+            envman add --key ACCESSIBILITY_FAILED_TEST_COUNT --value "$FAILED_COUNT"
     
     - script@1.2.1:
         title: Collect All Accessibility Report Files
@@ -117,9 +122,9 @@ workflows:
         - timestamp: 'no'
         - fields: |
             Task | ${BITRISE_BUILD_URL}
-            Number of A11y Failures | ${FAILED_COUNT}
+            Number of A11y Failures | ${ACCESSIBILITY_FAILED_TEST_COUNT}
             Failures Report | ${BITRISE_BUILD_URL}
-            A11y Missing Labels Report | "${BITRISE_BUILD_URL}?tab=artifacts"
+            A11y Missing Labels Report | ${BITRISE_BUILD_URL}?tab=artifacts
         - buttons: |
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
