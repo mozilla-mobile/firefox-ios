@@ -1537,14 +1537,13 @@ class BrowserViewController: UIViewController,
         self.documentLoadingView = documentLoadingView
     }
 
-    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
+    func removeDocumentLoadingView() {
         guard let documentLoadingView else { return }
         UIView.animate(withDuration: 0.3) {
             documentLoadingView.alpha = 0.0
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
-            completion?()
         }
     }
 
@@ -4066,7 +4065,7 @@ extension BrowserViewController: TabManagerDelegate {
             if selectedTab.isDownloadingDocument() {
                 navigationHandler?.showDocumentLoading()
             } else {
-                navigationHandler?.removeDocumentLoading(completion: nil)
+                navigationHandler?.removeDocumentLoading()
             }
         }
 

@@ -782,7 +782,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                    context: nil)
             }
             tempPDF.onDownloadError = { error in
-                self?.navigationHandler?.removeDocumentLoading(completion: nil)
+                self?.navigationHandler?.removeDocumentLoading()
                 guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }
@@ -1037,7 +1037,7 @@ extension BrowserViewController: WKNavigationDelegate {
         webviewTelemetry.stop()
         if isPDFRefactorEnabled {
             scrollController.configureRefreshControl()
-            navigationHandler?.removeDocumentLoading(completion: nil)
+            navigationHandler?.removeDocumentLoading()
         }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {

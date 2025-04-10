@@ -167,7 +167,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showDocumentLoadingCalled += 1
     }
 
-    func removeDocumentLoading(completion: (() -> Void)?) {
+    func removeDocumentLoading() {
         removeDocumentLoadingCalled += 1
     }
 }

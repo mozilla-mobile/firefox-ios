@@ -113,9 +113,11 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
 
+    /// Shows the Document loading view on screen
     func showDocumentLoading()
 
-    func removeDocumentLoading(completion: (() -> Void)?)
+    /// Removes the Document loading view from screen
+    func removeDocumentLoading()
 }
 
 extension BrowserNavigationHandler {
