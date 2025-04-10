@@ -156,7 +156,10 @@ extension BrowserViewController: WKUIDelegate {
                 name: ContextMenuHelper.name()
               ) as? ContextMenuHelper,
               let elements = contextHelper.elements
-        else { return }
+        else {
+            completionHandler(nil)
+            return
+        }
         completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
         ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
     }
@@ -217,8 +220,6 @@ extension BrowserViewController: WKUIDelegate {
 
     private func contextMenuPreviewProvider(for url: URL, webView: WKWebView) -> UIContextMenuContentPreviewProvider? {
         let provider: UIContextMenuContentPreviewProvider = {
-            guard self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
-
             let previewViewController = UIViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)

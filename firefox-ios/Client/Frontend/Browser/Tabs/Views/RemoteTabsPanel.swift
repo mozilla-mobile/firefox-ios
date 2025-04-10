@@ -21,7 +21,8 @@ class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
-                       StoreSubscriber {
+                       StoreSubscriber,
+                       FeatureFlaggable {
     typealias SubscriberStateType = RemoteTabsPanelState
 
     // MARK: - Properties
@@ -34,6 +35,12 @@ class RemoteTabsPanel: UIViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
+    private lazy var statusBarBackground: UIView = .build()
 
     // MARK: - Initializer
 
@@ -97,12 +104,28 @@ class RemoteTabsPanel: UIViewController,
         view.addSubview(tableViewController.view)
         tableViewController.didMove(toParent: self)
 
-        NSLayoutConstraint.activate([
-            tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
+        if isTabTrayUIExperimentsEnabled {
+            view.addSubview(statusBarBackground)
+
+            NSLayoutConstraint.activate([
+                tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+                statusBarBackground.topAnchor.constraint(equalTo: view.topAnchor),
+                statusBarBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                statusBarBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                statusBarBackground.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+                tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            ])
+        }
     }
 
     func applyTheme() {
@@ -110,6 +133,7 @@ class RemoteTabsPanel: UIViewController,
         view.backgroundColor = theme.colors.layer4
         tableViewController.tableView.backgroundColor =  theme.colors.layer3
         tableViewController.tableView.separatorColor = theme.colors.borderPrimary
+        statusBarBackground.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Redux

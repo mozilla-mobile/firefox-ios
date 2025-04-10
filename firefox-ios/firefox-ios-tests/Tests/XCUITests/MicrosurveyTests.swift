@@ -90,6 +90,6 @@ final class MicrosurveyTests: BaseTestCase {
 
     private func generateTriggerForMicrosurvey() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(urlExample)
+        navigator.openURL(path(forTestPage: url_2["url"]!))
     }
 }

@@ -13,8 +13,27 @@ final class HomepageMiddleware {
 
     lazy var homepageProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case NavigationBrowserActionType.tapOnCustomizeHomepage:
-            self.homepageTelemetry.sendTapOnCustomizeHomepageTelemetry()
+        case NavigationBrowserActionType.tapOnCustomizeHomepageButton:
+            self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .customizeHomepage)
+
+        case NavigationBrowserActionType.tapOnBookmarksShowMoreButton:
+            self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .bookmarkShowAll)
+
+        case NavigationBrowserActionType.tapOnJumpBackInShowAllButton:
+            guard case let .tabTray(panelType) = (action as? NavigationBrowserAction)?
+                .navigationDestination.destination
+            else { return }
+
+            self.homepageTelemetry.sendItemTappedTelemetryEvent(
+                for: panelType == .syncedTabs ? .jumpBackInSyncedTabShowAll : .jumpBackInTabShowAll
+            )
+
+        case HomepageActionType.didSelectItem:
+            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
+                return
+            }
+            self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
+
         default:
             break
         }

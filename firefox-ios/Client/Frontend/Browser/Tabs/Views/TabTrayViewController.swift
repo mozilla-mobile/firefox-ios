@@ -403,6 +403,9 @@ class TabTrayViewController: UIViewController,
         if isTabTrayUIExperimentsEnabled {
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+            // Out of simplicity for the experiment, turn off a11y for the old segmented control
+            segmentedControl.isAccessibilityElement = false
+            segmentedControl.isHidden = true
 
             containerView.addSubview(experimentSegmentControl)
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
