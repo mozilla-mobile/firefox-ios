@@ -2,31 +2,34 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import GCDWebServers
 
-protocol ReaderModeHandlersProtocol {
-    func register(_ webServer: WebServerProtocol, profile: Profile)
+protocol WKReaderModeHandlersProtocol {
+    func register(_ webServer: WKEngineWebServerProtocol,
+                  readerModeConfiguration: ReaderModeConfiguration)
 }
 
-struct ReaderModeHandlers: ReaderModeHandlersProtocol {
-<<<<<<< HEAD
-    static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
+public struct ReaderModeConfiguration {
+    var loadingText: String
+    var loadingFailedText: String
+    var loadOriginalText: String
+    var readerModeErrorText: String
+    var cachedReaderModeStyle: [String: Any]?
+}
 
-    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
-=======
-    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
->>>>>>> c71facfa9 (Add FXIOS-11791 [Dark Reader] Use dark reader to handle reader mode theming (#25882))
+struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
+    private var readerModeCache: ReaderModeCache = DiskReaderModeCache()
 
-    func register(_ webServer: WebServerProtocol, profile: Profile) {
-        // Temporary hacky casting to allow for gradual movement to protocol oriented programming
-        guard let webServer = webServer as? WebServer else { return }
-        ensureMainThread {
-            ReaderModeHandlers.register(webServer, profile: profile)
+    func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
+        // TODO: FXIOS-11373 - This queue could be injected to add unit tests here
+        DispatchQueue.main.ensureMainThread {
+            register(webServer: webServer, readerModeConfiguration: readerModeConfiguration)
         }
     }
 
-    static func register(_ webServer: WebServer, profile: Profile) {
+    private func register(webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
         // Register our fonts and css, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
@@ -37,6 +40,8 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
         // the readerized content.
+
+        // TODO: FXIOS-11373 - Do we want to keep the concrete type GCDWebServerRequest? For tests purpose
         webServer.registerHandlerForMethod(
             "GET",
             module: "reader-mode",
@@ -61,9 +66,12 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                 if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
-                        guard let response = generateHtmlFor(readabilityResult: readabilityResult,
-                                                             style: readerModeStyle,
-                                                             profile: profile) else { return nil }
+                        guard let response = generateHtmlFor(
+                            readabilityResult: readabilityResult,
+                            style: readerModeStyle,
+                            readerModeConfiguration: readerModeConfiguration)
+                        else { return nil }
+
                         return response
                     } catch {
                         // This page has not been converted to reader mode yet. This happens when you for example add an
@@ -73,7 +81,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                         // What we do is simply queue the page in the ReadabilityService and then show our loading
                         // screen, which will periodically call page-exists to see if the readerized content has
                         // become available.
-                        ReadabilityService().process(url, cache: readerModeCache, with: profile)
+                       WKReadabilityService().process(url, cache: readerModeCache)
                         if let readerViewLoadingPath = Bundle.main.path(
                             forResource: "ReaderViewLoading",
                             ofType: "html"
@@ -83,7 +91,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                                     contentsOfFile: readerViewLoadingPath,
                                     encoding: String.Encoding.utf8.rawValue
                                 )
-                                replaceOccurrencesIn(readerViewLoading: readerViewLoading, url: url)
+                                replaceOccurrencesIn(readerViewLoading: readerViewLoading,
+                                                     url: url,
+                                                     readerModeConfiguration: readerModeConfiguration)
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }
@@ -92,19 +102,19 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                 }
             }
 
-            let errorString: String = .ReaderModeHandlerError
-            return GCDWebServerDataResponse(html: errorString) // TODO Needs a proper error page
+            let errorString: String = readerModeConfiguration.readerModeErrorText
+            return GCDWebServerDataResponse(html: errorString)
         }
     }
 
-    private static func generateHtmlFor(readabilityResult: ReadabilityResult,
-                                        style: ReaderModeStyle,
-                                        profile: Profile) -> GCDWebServerDataResponse? {
+    private func generateHtmlFor(readabilityResult: ReadabilityResult,
+                                 style: ReaderModeStyle,
+                                 readerModeConfiguration: ReaderModeConfiguration) -> GCDWebServerDataResponse? {
         var readerModeStyle = style
         // We have this page in our cache, so we can display it. Just grab the correct style from the
         // profile and then generate HTML from the Readability results.
-        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-           let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
+        if let cachedReaderModeStyle = readerModeConfiguration.cachedReaderModeStyle,
+           let style = ReaderModeStyle(windowUUID: nil, dict: cachedReaderModeStyle) {
             readerModeStyle = style
         } else {
             readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
@@ -131,7 +141,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         return response
     }
 
-    private static func replaceOccurrencesIn(readerViewLoading: NSMutableString, url: URL) {
+    private func replaceOccurrencesIn(readerViewLoading: NSMutableString,
+                                      url: URL,
+                                      readerModeConfiguration: ReaderModeConfiguration) {
         readerViewLoading.replaceOccurrences(
             of: "%ORIGINAL-URL%",
             with: url.absoluteString,
@@ -139,17 +151,17 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             range: NSRange(location: 0, length: readerViewLoading.length))
         readerViewLoading.replaceOccurrences(
             of: "%LOADING-TEXT%",
-            with: .ReaderModeHandlerLoadingContent,
+            with: readerModeConfiguration.loadingText,
             options: .literal,
             range: NSRange(location: 0, length: readerViewLoading.length))
         readerViewLoading.replaceOccurrences(
             of: "%LOADING-FAILED-TEXT%",
-            with: .ReaderModeHandlerPageCantDisplay,
+            with: readerModeConfiguration.loadingFailedText,
             options: .literal,
             range: NSRange(location: 0, length: readerViewLoading.length))
         readerViewLoading.replaceOccurrences(
             of: "%LOAD-ORIGINAL-TEXT%",
-            with: .ReaderModeHandlerLoadOriginalPage,
+            with: readerModeConfiguration.loadOriginalText,
             options: .literal,
             range: NSRange(location: 0, length: readerViewLoading.length))
     }
