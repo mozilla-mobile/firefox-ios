@@ -116,7 +116,7 @@ final class TabTraySelectorView: UIView,
         }
         cell.configure(title: items[indexPath.item],
                        selected: indexPath.item == selectedIndex,
-                       theme: themeManager.getCurrentTheme(for: windowUUID),
+                       theme: theme,
                        position: indexPath.item,
                        total: indexPath.count)
         return cell
