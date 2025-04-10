@@ -11,17 +11,10 @@ protocol ScrollToHideToolbar: AnyObject {
     var isScrollToHideToolbarEnabled: Bool { get }
 }
 
-<<<<<<< HEAD
 class TabScrollingController: NSObject,
                               SearchBarLocationProvider,
                               ScrollToHideToolbar,
                               Themeable {
-=======
-class TabScrollController: NSObject,
-                           SearchBarLocationProvider,
-                           ScrollToHideToolbar,
-                           Themeable {
->>>>>>> 719b33498 (Bugfix [PDF Refactor] FXIOS Disable share button for toolbar when loading website (#25887))
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
