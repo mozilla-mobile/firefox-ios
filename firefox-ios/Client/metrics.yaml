@@ -4467,6 +4467,51 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+tabs_panel:
+  new_tab_button_tapped:
+    type: event
+    description: | 
+      User taps the button to open a new tab.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The tab mode you are in when you press the new tab 
+          button (normal or private).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - 
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_mode_selected:
+    type: event
+    description: | 
+      User changes the tab tray mode with the segmented control
+    extra_keys:
+      fromMode:
+        type: string
+        description: |
+          The tab mode you had selected previously 
+          (normal, private, or sync).
+      toMode:
+        type: string
+        description: |
+          The tab mode you are moving to (normal, private, or sync).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - 
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
 # Toasts
 toasts.close_single_tab:
   undo_tapped:
