@@ -56,10 +56,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.clipsToBounds = true
         tabSnapshot.contentMode = .scaleAspectFill
-        tabSnapshot.frame = webView.frame
+        tabSnapshot.frame = webView.convert(webView.bounds, to: bvc.view)
 
         // Allow the UI to render to make the snapshotting code more performant
-
         DispatchQueue.main.async { [self] in
             runPresentationAnimation(
                 context: context,
@@ -296,6 +295,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             cv.transform = .init(scaleX: 1.2, y: 1.2)
             cv.alpha = 0.5
 
+            // SOPHIE - Fix for webview frame presentation
             tabSnapshot.frame = webView.convert(webView.bounds, to: browserVC.view)
             print("✨Tab snapshot frame✨")
             print(tabSnapshot.frame)
