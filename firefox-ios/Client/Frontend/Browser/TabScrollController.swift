@@ -28,7 +28,6 @@ class TabScrollController: NSObject,
     enum ToolbarState {
         case collapsed
         case visible
-        case animating
     }
 
     weak var tab: Tab? {
@@ -67,7 +66,7 @@ class TabScrollController: NSObject,
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
-    private var toolbarState: ToolbarState = .visible
+    var toolbarState: ToolbarState = .visible
     let deviceType: UIUserInterfaceIdiom
 
     private let windowUUID: WindowUUID
@@ -264,7 +263,7 @@ class TabScrollController: NSObject,
     }
 
     func hideToolbars(animated: Bool, isFindInPageMode: Bool = false) {
-        guard toolbarState != .collapsed || isFindInPageMode else { return }
+        guard toolbarState != .collapsed else { return }
         toolbarState = .collapsed
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * hideDurationRation)
@@ -438,8 +437,12 @@ private extension TabScrollController {
     ///
     /// - Returns: `true` if the scroll delta is allowed without rubberbanding; otherwise, `false`.
     func checkRubberbanding() -> Bool {
-        return !((scrollDirection == .up && isBottomRubberbanding && hasScrollableContent) ||
-                isTopRubberbanding)
+        // Check top rubberbanding
+        guard scrollDirection == .up else {
+            return isBottomRubberbanding && hasScrollableContent
+        }
+
+        return isTopRubberbanding
     }
 
     /// Updates the state of the toolbar based on the scroll positions of various UI components.
@@ -465,8 +468,6 @@ private extension TabScrollController {
             setToolbarState(state: .collapsed)
         } else if toolbarsShowing {
             setToolbarState(state: .visible)
-        } else {
-            setToolbarState(state: .animating)
         }
     }
 
@@ -639,16 +640,17 @@ extension TabScrollController: UIScrollViewDelegate {
         guard let tab,
               !tabIsLoading(),
               !scrollReachBottom(),
+              !tab.isFindInPageMode,
               isAbleToScroll  else { return }
 
         tab.shouldScrollToTop = false
 
         // Change toolbar status if scrolling will continue decelerate == true
         // scrolling will stops decelerate == false but we are still animating
-        if decelerate || (toolbarState == .animating && !decelerate) {
-            if scrollDirection == .up, !tab.isFindInPageMode {
+        if decelerate || !isAnimatingToolbar {
+            if scrollDirection == .up {
                 showToolbars(animated: true)
-            } else if scrollDirection == .down {
+            } else {
                 hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
             }
         }
