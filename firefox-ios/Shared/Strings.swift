@@ -207,6 +207,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Clear",
                 comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
+            public static let RemoveFromShortcutsTitle = MZLocalizedString(
+                key: "Bookmarks.Menu.RemoveFromShortcutsTitle.v139",
+                tableName: "Bookmarks",
+                value: "Remove from Shortcuts",
+                comment: "The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button")
         }
 
         public struct EmptyState {
@@ -2712,6 +2717,12 @@ extension String {
                 value: "Share",
                 comment: "Action button for sharing downloaded files in the Downloads panel.")
         }
+
+        public static let TabTraySelectorAccessibilityHint = MZLocalizedString(
+            key: "TabTraySelectorAccessibilityHint.v139",
+            tableName: "TabsTray",
+            value: "%1$@ of %2$@",
+            comment: "Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total.")
     }
 }
 
@@ -3565,20 +3576,6 @@ extension String {
         tableName: nil,
         value: "When opening %@",
         comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name.")
-}
-
-// MARK: - Link Previews
-extension String {
-    public static let SettingsShowLinkPreviewsTitle = MZLocalizedString(
-        key: "Settings.ShowLinkPreviews.Title",
-        tableName: nil,
-        value: "Show Link Previews",
-        comment: "Title of setting to enable link previews when long-pressing links.")
-    public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
-        key: "Settings.ShowLinkPreviews.StatusV2",
-        tableName: nil,
-        value: "When long-pressing links",
-        comment: "Description displayed under the ”Show Link Previews” option")
 }
 
 // MARK: - Block Opening External Apps
@@ -7555,6 +7552,16 @@ extension String {
                 tableName: nil,
                 value: "Last month",
                 comment: "This label is meant to signify the section containing a group of items from the past thirty days.")
+            public static let SettingsShowLinkPreviewsTitle = MZLocalizedString(
+                key: "Settings.ShowLinkPreviews.Title",
+                tableName: nil,
+                value: "Show Link Previews",
+                comment: "Title of setting to enable link previews when long-pressing links.")
+            public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
+                key: "Settings.ShowLinkPreviews.StatusV2",
+                tableName: nil,
+                value: "When long-pressing links",
+                comment: "Description displayed under the ”Show Link Previews” option")
         }
     }
 }

@@ -32,25 +32,45 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
     func fetchSearchEngines(locale: String,
                             region: String,
                             completion: @escaping ((RefinedSearchConfig?, Error?) -> Void)) {
-         do {
-             try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
-             if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
+        do {
+            try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
+            if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
 
-             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
-             // TODO: What happens if the locale or region changes during app runtime?
-             let env = SearchUserEnvironment(locale: locale,
-                                             region: region,
-                                             updateChannel: SearchUpdateChannel.release,
-                                             distributionId: "",    // Confirmed with AS: leave empty, no distr on iOS
-                                             experiment: "",        // Confirmed with AS: leave empty
-                                             appName: .firefoxIos,
-                                             version: AppInfo.appVersion,
-                                             deviceType: deviceType)
+            let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
+            // TODO: What happens if the locale or region changes during app runtime?
+            let env = SearchUserEnvironment(locale: locale,
+                                            region: region,
+                                            updateChannel: SearchUpdateChannel.release,
+                                            distributionId: "",    // Confirmed with AS: leave empty, no distr on iOS
+                                            experiment: "",        // Confirmed with AS: leave empty
+                                            appName: .firefoxIos,
+                                            version: AppInfo.appVersion,
+                                            deviceType: deviceType)
 
-             let filtered = try engineSelector.filterEngineConfiguration(userEnvironment: env)
-             completion(filtered, nil)
-         } catch {
-             completion(nil, error)
-         }
+            var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)
+
+            // We want to be sure that our default engines list is always sorted with the default in position 0
+            // This is important in the case of new installs, for example, where the user does not have any
+            // search engine ordering preferences saved. Generally the `engines` should already be sorted this
+            // way but this code should be very fast on this small collection so we ensure the sort order here.
+            searchResultsConfig.sortDefaultEngineToIndex0()
+
+            completion(searchResultsConfig, nil)
+        } catch {
+            completion(nil, error)
+        }
+    }
+}
+
+extension RefinedSearchConfig {
+    /// Ensures that the default engine is always at position 0 in the engines list.
+    /// Per AS team we should not rely on the provided sort order of `engines`.
+    mutating func sortDefaultEngineToIndex0() {
+        guard let defaultEngineID = appDefaultEngineId,
+              let idx = engines.firstIndex(where: { $0.identifier == defaultEngineID }),
+              idx != 0 else { return }
+        let engine = engines[idx]
+        engines.remove(at: idx)
+        engines.insert(engine, at: 0)
     }
 }

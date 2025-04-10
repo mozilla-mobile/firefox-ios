@@ -443,11 +443,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        // The Tab Tray uses a "SimpleToast", so the urlString will go unused
-        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
+        if !isTabTrayUIExperimentsEnabled {
+            // The Tab Tray uses a "SimpleToast", so the urlString will go unused
+            let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
+                                                       windowUUID: uuid,
+                                                       actionType: TabPanelMiddlewareActionType.showToast)
+            store.dispatch(toastAction)
+        }
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .add,
@@ -699,10 +701,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
-        let toastAction = TabPanelMiddlewareAction(toastType: .copyURL,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
+
+        if !isTabTrayUIExperimentsEnabled {
+            let toastAction = TabPanelMiddlewareAction(toastType: .copyURL,
+                                                       windowUUID: uuid,
+                                                       actionType: TabPanelMiddlewareActionType.showToast)
+            store.dispatch(toastAction)
+        }
     }
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
@@ -923,8 +928,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     // MARK: - Homepage Related Actions
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
-        case HeaderActionType.toggleHomepageMode:
-            tabManager(for: action.windowUUID).switchPrivacyMode()
         case HomepageActionType.viewWillAppear,
             JumpBackInActionType.fetchLocalTabs,
             TopTabsActionType.didTapNewTab,

@@ -21,6 +21,7 @@ struct TermsOfServiceView: View {
                 Image.background
                     .resizable()
                     .edgesIgnoringSafeArea(.all)
+                    .accessibilityHidden(true)
 
                 VStack {
                     Spacer(minLength: geometry.size.height * 0.06)
@@ -28,7 +29,10 @@ struct TermsOfServiceView: View {
                     VStack(spacing: OnboardingConstants.Spacing.vertical) {
                         logoView
                         TextStyle.title(Text(viewModel.tosConfig.title))
+                            .accessibilityIdentifier(AccessibilityIdentifiers.TermsOfService.title)
+                            .accessibilityAddTraits(.isHeader)
                         TextStyle.subtitle(Text(viewModel.tosConfig.subtitle))
+                            .accessibilityIdentifier(AccessibilityIdentifiers.TermsOfService.subtitle)
                     }
                     
                     Spacer(minLength: OnboardingConstants.Spacing.standard)
@@ -36,17 +40,21 @@ struct TermsOfServiceView: View {
                     VStack(spacing: OnboardingConstants.Spacing.standard * 2) {
                         VStack(alignment: .center, spacing: OnboardingConstants.Spacing.standard) {
                             termsView
+                                .accessibilityIdentifier(AccessibilityIdentifiers.TermsOfService.termsOfServiceAgreement)
                             privacyView
+                                .accessibilityIdentifier(AccessibilityIdentifiers.TermsOfService.privacyNoticeAgreement)
                         }
                         
                         Button(action: { viewModel.send(.onAcceptAndContinueTapped) }) {
                             Text(viewModel.tosConfig.buttonText)
                         }
                         .buttonStyle(PrimaryButtonStyle())
+                        .accessibilityIdentifier(AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
                     }
                 }
                 .padding(.horizontal, OnboardingConstants.Spacing.contentPadding)
-                .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? geometry.safeAreaInsets.bottom : OnboardingConstants.Spacing.standard * 2)
+                .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ?
+                             geometry.safeAreaInsets.bottom : OnboardingConstants.Spacing.standard * 2)
             }
         }
         .sheet(item: $viewModel.privacyPolicyURL) { url in
@@ -69,6 +77,7 @@ struct TermsOfServiceView: View {
                 width: OnboardingConstants.Layout.logoSize.width,
                 height: OnboardingConstants.Layout.logoSize.height
             )
+            .accessibilityHidden(true)
     }
     
     private var termsView: some View {

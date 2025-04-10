@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 protocol TabTraySelectorDelegate: AnyObject {
-    func didSelectSection(section: Int)
+    func didSelectSection(panelType: TabTrayPanelType)
 }
 
 // MARK: - UX Constants
@@ -31,7 +31,7 @@ final class TabTraySelectorView: UIView,
     weak var delegate: TabTraySelectorDelegate?
 
     private let windowUUID: WindowUUID
-    private var selectedIndex = 1
+    private var selectedIndex: Int
 
     var items: [String] = [] {
         didSet {
@@ -61,9 +61,11 @@ final class TabTraySelectorView: UIView,
     }()
 
     // MARK: - Init
-    init(windowUUID: WindowUUID,
+    init(selectedIndex: Int,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
+        self.selectedIndex = selectedIndex
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -122,7 +124,9 @@ final class TabTraySelectorView: UIView,
         }
         cell.configure(title: items[indexPath.item],
                        selected: indexPath.item == selectedIndex,
-                       theme: themeManager.getCurrentTheme(for: windowUUID))
+                       theme: themeManager.getCurrentTheme(for: windowUUID),
+                       position: indexPath.item,
+                       total: indexPath.count)
         return cell
     }
 
@@ -131,31 +135,24 @@ final class TabTraySelectorView: UIView,
         selectNewSection(newIndex: indexPath.item)
     }
 
-    // MARK: - Scroll Snap
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate { snapToNearestItem() }
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        snapToNearestItem()
-    }
-
-    private func snapToNearestItem() {
-        let center = convert(CGPoint(x: bounds.midX, y: bounds.midY), to: collectionView)
-        if let indexPath = collectionView.indexPathForItem(at: center) {
-            selectNewSection(newIndex: indexPath.item)
-        }
-    }
-
     func selectNewSection(newIndex: Int) {
         guard selectedIndex != newIndex else { return }
         selectedIndex = newIndex
         collectionView.reloadData()
         scrollToItem(at: selectedIndex, animated: true)
-        delegate?.didSelectSection(section: newIndex)
+
+        var panelType: TabTrayPanelType = .tabs
+        if selectedIndex == 0 {
+            panelType = .privateTabs
+        } else if selectedIndex == 1 {
+            panelType = .tabs
+        } else if selectedIndex == 2 {
+            panelType = .syncedTabs
+        }
+        delegate?.didSelectSection(panelType: panelType)
     }
 
-    // MARK: - Theamable
+    // MARK: - Themeable
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)

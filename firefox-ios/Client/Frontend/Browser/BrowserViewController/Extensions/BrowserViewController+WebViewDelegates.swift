@@ -150,8 +150,28 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
-        guard let url = elementInfo.linkURL else { return }
-        completionHandler(contextMenuConfiguration(for: url, webView: webView))
+        guard let url = elementInfo.linkURL,
+              let currentTab = tabManager.selectedTab,
+              let contextHelper = currentTab.getContentScript(
+                name: ContextMenuHelper.name()
+              ) as? ContextMenuHelper,
+              let elements = contextHelper.elements
+        else {
+            completionHandler(nil)
+            return
+        }
+        completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
+        ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
+    }
+
+    func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
+        guard let currentTab = tabManager.selectedTab,
+              let contextHelper = currentTab.getContentScript(
+                name: ContextMenuHelper.name()
+              ) as? ContextMenuHelper,
+              let elements = contextHelper.elements
+        else { return }
+        ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
     }
 
     func webView(_ webView: WKWebView,
@@ -169,20 +189,21 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     // MARK: - Helpers
-    private func contextMenuConfiguration(for url: URL, webView: WKWebView) -> UIContextMenuConfiguration {
+    private func contextMenuConfiguration(for url: URL,
+                                          webView: WKWebView,
+                                          elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
-                                          actionProvider: contextMenuActionProvider(for: url, webView: webView))
+                                          actionProvider: contextMenuActionProvider(for: url,
+                                                                                    webView: webView,
+                                                                                    elements: elements))
     }
 
-    private func contextMenuActionProvider(for url: URL, webView: WKWebView) -> UIContextMenuActionProvider {
+    private func contextMenuActionProvider(for url: URL,
+                                           webView: WKWebView,
+                                           elements: ContextMenuHelper.Elements) -> UIContextMenuActionProvider {
         return { [self] (suggested) -> UIMenu? in
-            guard let currentTab = tabManager.selectedTab,
-                  let contextHelper = currentTab.getContentScript(
-                    name: ContextMenuHelper.name()
-                  ) as? ContextMenuHelper,
-                  let elements = contextHelper.elements
-            else { return nil }
+            guard let currentTab = tabManager.selectedTab else { return nil }
 
             let isPrivate = currentTab.isPrivate
 
@@ -199,8 +220,6 @@ extension BrowserViewController: WKUIDelegate {
 
     private func contextMenuPreviewProvider(for url: URL, webView: WKWebView) -> UIContextMenuContentPreviewProvider? {
         let provider: UIContextMenuContentPreviewProvider = {
-            guard self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
-
             let previewViewController = UIViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
@@ -300,7 +319,7 @@ extension BrowserViewController: WKUIDelegate {
                        image: URL?,
                        currentTab: Tab,
                        webView: WKWebView) -> [UIAction] {
-        let actionBuilder = ActionProviderBuilder()
+        let actionBuilder = WebContextMenuActionsProvider(menuType: image != nil ? .image : .web)
         let isJavascriptScheme = (url.scheme?.caseInsensitiveCompare("javascript") == .orderedSame)
 
         if !isPrivate && !isJavascriptScheme {
@@ -720,7 +739,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.allow)
                     return
                 }
-                handlePDFResponse(webView, tab: tab, response: response, request: request)
+                handlePDFResponse(tab: tab, response: response, request: request)
                 decisionHandler(.cancel)
                 return
             }
@@ -738,15 +757,13 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    func handlePDFResponse(_ webView: WKWebView,
-                           tab: Tab,
+    func handlePDFResponse(tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
         navigationHandler?.showDocumentLoading()
         scrollController.showToolbars(animated: false)
 
-        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
-        cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
+        tab.getSessionCookies { [weak tab, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
                 filename: response.suggestedFilename,
                 request: request,
@@ -755,26 +772,26 @@ extension BrowserViewController: WKNavigationDelegate {
             )
             tempPDF.onDownloadProgressUpdate = { progress in
                 self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
-                                   of: webView,
+                                   of: tab?.webView,
                                    change: [.newKey: progress],
                                    context: nil)
             }
             tempPDF.onDownloadStarted = {
                 self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
-                                   of: webView,
+                                   of: tab?.webView,
                                    change: [.newKey: true],
                                    context: nil)
             }
             tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
-                guard let error, let webView else { return }
+                guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }
             tab?.enqueueDocument(tempPDF)
             if let url = request.url {
                 self?.observeValue(
                     forKeyPath: KVOConstants.URL.rawValue,
-                    of: webView,
+                    of: tab?.webView,
                     change: [.newKey: url],
                     context: nil
                 )

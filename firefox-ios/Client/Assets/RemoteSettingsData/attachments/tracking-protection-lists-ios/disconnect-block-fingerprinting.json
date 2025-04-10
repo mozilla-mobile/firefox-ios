@@ -1,7 +1,6 @@
 [
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?00px\\.net","load-type":["third-party"],"unless-domain":["*adx.space"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?7a75ebcbd7\\.com","load-type":["third-party"],"unless-domain":["*bemob.com"]}},
-{"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?a-mo\\.net","load-type":["third-party"],"unless-domain":["*adaptmx.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?aamapiv2\\.com","load-type":["third-party"],"unless-domain":["*auditedmedia.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?acint\\.net","load-type":["third-party"],"unless-domain":["*acint.net"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?ad-maven\\.com","load-type":["third-party"],"unless-domain":["*ad-maven.com"]}},

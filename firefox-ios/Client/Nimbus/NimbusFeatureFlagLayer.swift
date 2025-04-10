@@ -16,9 +16,6 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
-        case .appIconSelection:
-            return checkAppIconSelectionSetting(from: nimbus)
-
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -91,9 +88,6 @@ final class NimbusFeatureFlagLayer {
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
-        case .passwordGenerator:
-            return checkPasswordGeneratorFeature(from: nimbus)
-
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
@@ -130,11 +124,17 @@ final class NimbusFeatureFlagLayer {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
+        case .tabAnimation:
+            return checkTabAnimationFeature(from: nimbus)
+
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
 
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
+
+        case .toolbarSwipingTabs:
+            return checkToolbarSwipingTabsFeature(from: nimbus)
 
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
@@ -239,6 +239,11 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.animationFeature
+    }
+
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.enabled
@@ -262,6 +267,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.oneTapNewTab
+    }
+
+    private func checkToolbarSwipingTabsFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.swipingTabs
     }
 
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
@@ -353,10 +363,6 @@ final class NimbusFeatureFlagLayer {
         return config.productAds
     }
 
-    private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.passwordGeneratorFeature.value().enabled
-    }
-
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.pdfRefactorFeature.value().enabled
     }
@@ -379,11 +385,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
-    }
-
-    private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.appIconSelectionFeature.value()
-        return config.enabled
     }
 
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {

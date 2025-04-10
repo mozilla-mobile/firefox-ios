@@ -19,6 +19,10 @@ protocol LibraryPanelContextMenu {
 }
 
 extension LibraryPanelContextMenu {
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        return nil
+    }
+
     func presentContextMenu(for indexPath: IndexPath) {
         guard let site = getSiteDetails(for: indexPath) else { return }
 

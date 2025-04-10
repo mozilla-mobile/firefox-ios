@@ -30,7 +30,6 @@ public struct PrefsKeys {
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
-    public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let ShowClipboardBar = "showClipboardBar"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
@@ -41,6 +40,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
+    public static let ReaderModeProfileKeyStyle = "readermode.style"
 
     // Only set if we get an actual response, no assumptions, nil otherwise
     public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"
@@ -94,6 +94,11 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+    }
+
+    public struct RemoteSettings {
+        public static let lastRemoteSettingsServiceSyncTimestamp =
+        "LastRemoteSettingsServiceSyncTimestamp"
     }
 
     public struct Sync {

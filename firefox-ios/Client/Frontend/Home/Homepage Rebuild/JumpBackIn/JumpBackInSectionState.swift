@@ -14,7 +14,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     let mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderState(
+    let sectionHeaderState = SectionHeaderConfiguration(
         title: .FirefoxHomeJumpBackInSectionTitle,
         a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
         isButtonHidden: false,

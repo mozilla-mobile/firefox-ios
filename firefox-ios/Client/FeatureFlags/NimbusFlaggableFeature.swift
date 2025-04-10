@@ -12,7 +12,6 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofillEdit
-    case appIconSelection
     case appearanceMenu
     case bookmarksRefactor
     case bottomSearchBar
@@ -38,7 +37,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case nightMode
-    case passwordGenerator
     case pdfRefactor
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
@@ -52,9 +50,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case unifiedAds
     case unifiedSearch
+    case tabAnimation
     case tabTrayUIExperiments
     case toolbarRefactor
     case toolbarOneTapNewTab
+    case toolbarSwipingTabs
     case toolbarNavigationHint
     case tosFeature
     case trackingProtectionRefactor
@@ -64,8 +64,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appIconSelection,
-                .appearanceMenu,
+        case    .appearanceMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
@@ -76,10 +75,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
+                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
-                .passwordGenerator,
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .unifiedAds,
@@ -120,8 +119,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
-        case .appIconSelection,
-                .appearanceMenu,
+        case .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .accountSettingsRedux,
@@ -141,7 +139,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .nightMode,
-                .passwordGenerator,
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
@@ -156,9 +153,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .unifiedAds,
                 .unifiedSearch,
+                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
+                .toolbarSwipingTabs,
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,

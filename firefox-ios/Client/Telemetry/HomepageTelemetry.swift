@@ -6,15 +6,47 @@ import Foundation
 import Glean
 
 struct HomepageTelemetry {
-    private let gleanWrapper: GleanWrapper
+    enum TappedItemType: String {
+        case topSite = "top_site"
+        case jumpBackInTab = "jump_back_in_tab"
+        case jumpBackInSyncedTab = "jump_back_in_synced_tab"
+        case jumpBackInTabShowAll = "jump_back_in_show_all_button"
+        case jumpBackInSyncedTabShowAll = "synced_show_all_button"
+        case bookmark = "bookmark"
+        case bookmarkShowAll = "bookmarks_show_all_button"
+        case story = "story"
+        case storyDiscoverMore = "stories_discover_more"
+        case customizeHomepage = "customize_homepage_button"
 
+        var sectionName: String {
+            switch self {
+            case .topSite:
+                return "top_sites"
+            case .jumpBackInTab, .jumpBackInSyncedTab, .jumpBackInTabShowAll, .jumpBackInSyncedTabShowAll:
+                return "jump_back_in"
+            case .bookmark, .bookmarkShowAll:
+                return "bookmarks"
+            case .story, .storyDiscoverMore:
+                return "stories"
+            case .customizeHomepage:
+                return "customize_homepage"
+            }
+        }
+    }
+
+    private let gleanWrapper: GleanWrapper
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
 
-    func sendMaskToggleTappedTelemetry(enteringPrivateMode: Bool) {
-        let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
-        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: isPrivateModeExtra)
+    // MARK: - General
+    func sendHomepageImpressionEvent() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.viewed)
+    }
+
+    func sendItemTappedTelemetryEvent(for itemType: TappedItemType) {
+        let itemNameExtra = GleanMetrics.Homepage.ItemTappedExtra(section: itemType.sectionName, type: itemType.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemTapped, extras: itemNameExtra)
     }
 
     // MARK: - Top Sites
@@ -58,10 +90,5 @@ struct HomepageTelemetry {
 
     func sendOpenInPrivateTabEventForPocket() {
         gleanWrapper.recordEvent(for: GleanMetrics.Pocket.openInPrivateTab)
-    }
-
-    // MARK: - Customize Homepage
-    func sendTapOnCustomizeHomepageTelemetry() {
-        gleanWrapper.incrementCounter(for: GleanMetrics.FirefoxHomePage.customizeHomepageButton)
     }
 }

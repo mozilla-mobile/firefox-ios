@@ -16,7 +16,7 @@ class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
-    private var tabTrayViewController: TabTrayViewController?
+    var tabTrayViewController: TabTrayViewController?
     private let profile: Profile
     private let tabManager: TabManager
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
@@ -28,7 +28,7 @@ class TabTrayCoordinator: BaseCoordinator,
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
-        initializeTabTrayViewController(selectedTab: tabTraySection)
+        initializeTabTrayViewController(panelType: tabTraySection)
     }
 
     func dismissChildTabTrayPanels() {
@@ -37,8 +37,8 @@ class TabTrayCoordinator: BaseCoordinator,
         childVCs.forEach { ($0 as? TabDisplayPanelViewController)?.removeTabPanel() }
     }
 
-    private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
-        let tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
+    private func initializeTabTrayViewController(panelType: TabTrayPanelType) {
+        let tabTrayViewController = TabTrayViewController(panelType: panelType, windowUUID: tabManager.windowUUID)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.delegate = self

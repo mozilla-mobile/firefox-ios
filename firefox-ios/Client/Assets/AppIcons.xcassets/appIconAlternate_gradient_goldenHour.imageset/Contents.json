@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "goldenhour-light.png",
+      "filename" : "goldenhour-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "goldenhour-dark.png",
+      "filename" : "goldenhour-dark.pdf",
       "idiom" : "universal"
     }
   ],

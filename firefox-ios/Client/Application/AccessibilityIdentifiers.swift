@@ -182,7 +182,6 @@ struct AccessibilityIdentifiers {
 
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
-            static let privateModeToggleButton = "FirefoxHomepage.OtherButtons.PrivateModeToggle"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
             static let closeButton = "FirefoxHomepage.closeButton"
         }
@@ -439,6 +438,7 @@ struct AccessibilityIdentifiers {
         static let doneButton = "doneButtonTabTray"
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
+        static let selectorCell = "selectorCell"
         static let syncDataButton = "syncDataButton"
         static let learnMoreButton = "learnMoreButton"
         static let collectionView = "TabDisplayView.collectionView"
@@ -629,6 +629,20 @@ struct AccessibilityIdentifiers {
 
         struct Logins {
             static let title = "Logins"
+
+            struct Passwords {
+                static let saveLogins = "saveLogins"
+                static let showLoginsInAppMenu = "showLoginsInAppMenu"
+                static let searchPasswords = "Search passwords"
+                static let emptyList = "No passwords found"
+                static let addButton = "Add"
+
+                struct AddLogin {
+                    static let saveButton = "Save"
+                    static let cancelButton = "Cancel"
+                    static let addCredential = "Add Credential"
+                }
+            }
         }
 
         struct CreditCards {
@@ -910,6 +924,20 @@ struct AccessibilityIdentifiers {
         static let notNowButton = "SaveLoginPrompt.dontSaveButton"
         static let updateButton = "UpdateLoginPrompt.updateButton"
         static let dontUpdateButton = "UpdateLoginPrompt.dontUpdateButton"
+    }
+
+    struct ReaderMode {
+        static let sansSerifFontButton = "ReaderMode.sansSerifFontButton"
+        static let serifFontButton = "ReaderMode.serifFontButton"
+        static let smallerFontSizeButton = "ReaderMode.smallerFontSizeButton"
+        static let biggerFontSizeButton = "ReaderMode.biggerFontSizeButton"
+        static let resetFontSizeButton = "ReaderMode.resetFontSizeButton"
+        static let lightThemeButton = "ReaderMode.lightThemeButton"
+        static let sepiaThemeButton = "ReaderMode.sepiaThemeButton"
+        static let darkThemeButton = "ReaderMode.darkThemeButton"
+        static let lighterBrightnessButton = "ReaderMode.lighterBrightnessButton"
+        static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
+        static let brightnessSlider = "ReaderMode.brightnessSlider"
     }
 }
 // swiftlint:enable line_length

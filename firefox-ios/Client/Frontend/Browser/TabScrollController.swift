@@ -12,9 +12,9 @@ protocol ScrollToHideToolbar: AnyObject {
 }
 
 class TabScrollController: NSObject,
-                              SearchBarLocationProvider,
-                              ScrollToHideToolbar,
-                              Themeable {
+                           SearchBarLocationProvider,
+                           ScrollToHideToolbar,
+                           Themeable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -67,7 +67,7 @@ class TabScrollController: NSObject,
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
-    private let deviceType: DeviceTypeProvider
+    let deviceType: UIUserInterfaceIdiom
 
     private let windowUUID: WindowUUID
     private let logger: Logger
@@ -140,7 +140,7 @@ class TabScrollController: NSObject,
 
     // Settings option to avoid hiding Tab and Address bar on iPad
     var isScrollToHideToolbarEnabled: Bool {
-        guard deviceType.userInterfaceIdiom == .pad,
+        guard deviceType == .pad,
               let prefs = tab?.profile.prefs else { return true }
 
         return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide) ?? true
@@ -164,7 +164,7 @@ class TabScrollController: NSObject,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         deviceType: DeviceTypeProvider = UIDevice.current) {
+         deviceType: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter

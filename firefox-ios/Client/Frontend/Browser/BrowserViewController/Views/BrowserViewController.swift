@@ -106,6 +106,7 @@ class BrowserViewController: UIViewController,
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
+    var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
     var currentMiddleButtonState: MiddleButtonState?
     var passBookHelper: OpenPassBookHelper?
@@ -135,7 +136,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
-    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
@@ -166,6 +167,9 @@ class BrowserViewController: UIViewController,
 
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
+
+    // A view for displaying a preview of the web page.
+    private lazy var webPagePreview: TabWebViewPreview = .build()
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
@@ -239,6 +243,10 @@ class BrowserViewController: UIViewController,
 
     var isOneTapNewTabEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+    }
+
+    var isSwipingTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
     }
 
     var isToolbarNavigationHintEnabled: Bool {
@@ -424,13 +432,15 @@ class BrowserViewController: UIViewController,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
               (!isToolbarRefactorEnabled && legacyUrlBar != nil) || isToolbarRefactorEnabled
         else { return }
-
         let searchBarView: TopBottomInterchangeable = urlBarView
         let newPositionIsBottom = newSearchBarPosition == .bottom
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
-
+        if isSwipingTabsEnabled {
+            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
+            addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
+        }
         if let readerModeBar = readerModeBar {
             readerModeBar.removeFromParent()
             readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
@@ -800,6 +810,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentStackView.backgroundColor = theme.colors.layer1
+        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -1010,10 +1021,22 @@ class BrowserViewController: UIViewController,
         )
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+
+        guard isSwipingTabsEnabled else { return }
+        addressBarPanGestureHandler = AddressBarPanGestureHandler(
+            contentContainer: contentContainer,
+            addressBarContainer: isBottomSearchBar ? overKeyboardContainer : header,
+            webPagePreview: webPagePreview,
+            tabManager: tabManager,
+            windowUUID: windowUUID,
+            screenshotHelper: screenshotHelper
+        )
+        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
     }
 
     func addSubviews() {
         view.addSubviews(contentStackView)
+        view.addSubview(webPagePreview)
 
         contentStackView.addArrangedSubview(contentContainer)
 
@@ -1279,6 +1302,25 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Constraints
 
+    private var contentStackViewBottomConstraint: NSLayoutConstraint?
+
+    private func updateContentStackViewBottomConstraint() {
+        guard isSwipingTabsEnabled else {
+            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            contentStackViewBottomConstraint?.isActive = true
+            return
+        }
+        contentStackViewBottomConstraint?.isActive = false
+        if isBottomSearchBar {
+            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        } else {
+            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(
+                equalTo: overKeyboardContainer.topAnchor
+            )
+        }
+        contentStackViewBottomConstraint?.isActive = true
+    }
+
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1290,8 +1332,17 @@ class BrowserViewController: UIViewController,
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
         ])
+
+        if isSwipingTabsEnabled {
+            NSLayoutConstraint.activate([
+                webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
+            ])
+        }
+        updateContentStackViewBottomConstraint()
 
         updateHeaderConstraints()
     }
@@ -1355,6 +1406,7 @@ class BrowserViewController: UIViewController,
             adjustBottomSearchBarForKeyboard()
         }
 
+        updateContentStackViewBottomConstraint()
         super.updateViewConstraints()
     }
 
@@ -1525,7 +1577,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(documentLoadingView)
         NSLayoutConstraint.activate([
             documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
             documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
         ])
@@ -1537,14 +1589,13 @@ class BrowserViewController: UIViewController,
         self.documentLoadingView = documentLoadingView
     }
 
-    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
+    func removeDocumentLoadingView() {
         guard let documentLoadingView else { return }
         UIView.animate(withDuration: 0.3) {
             documentLoadingView.alpha = 0.0
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
-            completion?()
         }
     }
 
@@ -2006,7 +2057,10 @@ class BrowserViewController: UIViewController,
                 setupMiddleButtonStatus(isLoading: false)
             }
         case .loading:
-            guard let loading = change?[.newKey] as? Bool else { break }
+            guard var loading = change?[.newKey] as? Bool else { break }
+            if isPDFRefactorEnabled, let doc = tab.temporaryDocument {
+                loading = doc.isDownloading
+            }
             setupMiddleButtonStatus(isLoading: loading)
 
             if isToolbarRefactorEnabled {
@@ -2949,7 +3003,9 @@ class BrowserViewController: UIViewController,
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
                 tab.readabilityResult = nil
-                webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
+                webView.evaluateJavascriptInDefaultContentWorld(
+                    "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
+                )
             }
 
             // Update Fakespot sidebar if necessary
@@ -4107,7 +4163,7 @@ extension BrowserViewController: TabManagerDelegate {
            previousTab != nil && previousTab?.isPrivate != selectedTab.isPrivate {
             privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
         }
-        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
+        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.readerModeCache = readerModeCache
 
         scrollController.tab = selectedTab
@@ -4162,7 +4218,10 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
             if isToolbarRefactorEnabled {
-                addressToolbarContainer.updateProgressBar(progress: selectedTab.estimatedProgress)
+                // We want to show the progress update only when swiping between tabs feature is not enabled.
+                if !isSwipingTabsEnabled {
+                    addressToolbarContainer.updateProgressBar(progress: selectedTab.estimatedProgress)
+                }
             } else {
                 legacyUrlBar?.updateProgressBar(Float(selectedTab.estimatedProgress))
             }
@@ -4279,7 +4338,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             if isToolbarRefactorEnabled {
-               updateToolbarTabCount(count)
+                updateToolbarTabCount(count)
             } else if !isToolbarRefactorEnabled, let legacyUrlBar {
                 toolbar.updateTabCount(count, animated: animated)
                 legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)

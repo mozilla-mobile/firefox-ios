@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "goldenhour-light.png",
+      "filename" : "goldenhour-light-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "goldenhour-dark.png",
+      "filename" : "goldenhour-dark-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

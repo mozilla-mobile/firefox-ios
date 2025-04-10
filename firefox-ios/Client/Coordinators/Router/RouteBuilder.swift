@@ -34,6 +34,7 @@ final class RouteBuilder: FeatureFlaggable {
 
         if let host = parseURLHost(url) {
             let urlQuery = urlScanner.fullURLQueryItem()?.asURL
+            guard host.isValidURL(urlQuery: urlQuery) else { return nil }
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
             let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? isPrivate
@@ -69,12 +70,7 @@ final class RouteBuilder: FeatureFlaggable {
                 )
 
             case .openUrl:
-                // If we have a URL query, then make sure to check its a webpage
-                if urlQuery == nil || urlQuery?.isWebPage() ?? false {
-                    return .search(url: urlQuery, isPrivate: isPrivate)
-                } else {
-                    return nil
-                }
+                return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
                 return .searchQuery(query: urlScanner.value(query: "text") ?? "", isPrivate: isPrivate)
@@ -88,11 +84,11 @@ final class RouteBuilder: FeatureFlaggable {
 
             case .widgetSmallQuickLinkOpenUrl:
                 // Widget Quick links - small - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
+                return getWidgetRoute(urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .widgetMediumQuickLinkOpenUrl:
                 // Widget Quick Actions - medium - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
+                return getWidgetRoute(urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
@@ -101,6 +97,7 @@ final class RouteBuilder: FeatureFlaggable {
                     return .searchQuery(query: searchText, isPrivate: isPrivate)
                 } else {
                     let url = UIPasteboard.general.url
+                    guard host.isValidURL(urlQuery: url) else { return nil }
                     return .search(url: url, isPrivate: isPrivate)
                 }
 
@@ -219,6 +216,11 @@ final class RouteBuilder: FeatureFlaggable {
         case .qrCode:
             return .action(action: .showQRCode)
         }
+    }
+
+    private func getWidgetRoute(urlQuery: URL?, isPrivate: Bool) -> Route? {
+        let isCustomLink = prefs?.stringForKey(NewTabAccessors.NewTabPrefKey) == NewTabPage.homePage.rawValue
+        return .search(url: urlQuery, isPrivate: isPrivate, options: isCustomLink ? [] : [.focusLocationField])
     }
 
     // MARK: - Telemetry

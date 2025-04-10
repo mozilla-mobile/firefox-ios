@@ -35,9 +35,24 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                            engineOrderingPrefs: SearchEnginePrefs,
                            prefsMigrator: SearchEnginePreferencesMigrator,
                            completion: @escaping SearchEngineCompletion) {
-        // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
-        // Eventually that class will be removed once we switch fully to consolidated search.
+        DispatchQueue.global().async { [weak self] in
+            // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
+            // Eventually that class will be removed once we switch fully to consolidated search.
+            self?.fetchUnorderedEnginesAndApplyOrdering(
+                customEngines: customEngines,
+                engineOrderingPrefs: engineOrderingPrefs,
+                prefsMigrator: prefsMigrator,
+                completion: completion
+            )
+        }
+    }
 
+    // MARK: - Private Utilities
+
+    private func fetchUnorderedEnginesAndApplyOrdering(customEngines: [OpenSearchEngine],
+                                                       engineOrderingPrefs: SearchEnginePrefs,
+                                                       prefsMigrator: SearchEnginePreferencesMigrator,
+                                                       completion: @escaping SearchEngineCompletion) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
         let prefsVersion = preferencesVersion
 
@@ -52,7 +67,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
             guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
                   !orderedEngineNames.isEmpty else {
-                // We haven't persisted the engine order, so return whatever order we got from disk.
+                // We haven't persisted the engine order, so use the default engine ordering.
+                // For AS-based engines we are guaranteed the preferred default to be at index 0
+                // (this happens in `fetchSearchEngines()`).
                 ensureMainThread { completion(finalEngineOrderingPrefs, unorderedEngines) }
                 return
             }
@@ -80,8 +97,6 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
     }
-
-    // MARK: - Private Utilities
 
     private func getUnorderedBundledEnginesFor(locale: Locale,
                                                possibleLanguageIdentifier: [String],

@@ -422,10 +422,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(headerState: state) { [weak self] in
-                self?.toggleHomepageMode()
-            }
-
+            headerCell.configure(headerState: state)
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
@@ -485,7 +482,9 @@ final class HomepageViewController: UIViewController,
                     self?.navigateToTabTray(with: .syncedTabs)
                 },
                 onOpenSyncedTabAction: { [weak self] url in
-                    self?.navigateToNewTab(with: url)
+                    guard let self else { return }
+                    self.navigateToNewTab(with: url)
+                    self.sendTappedItemAction(item: item)
                 }
             )
             prepareSyncedTabContextualHint(onCell: syncedTabCell)
@@ -665,22 +664,12 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    // MARK: Dispatch Actions
-    private func toggleHomepageMode() {
-        store.dispatch(
-            HeaderAction(
-                windowUUID: windowUUID,
-                actionType: HeaderActionType.toggleHomepageMode
-            )
-        )
-    }
-
     private func navigateToHomepageSettings() {
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
-                actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
+                actionType: NavigationBrowserActionType.tapOnCustomizeHomepageButton
             )
         )
     }
@@ -789,6 +778,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
+        dispatchDidSelectCardItemAction(with: item)
         switch item {
         case .topSite(let state, _):
             let destination = NavigationDestination(
@@ -803,7 +793,6 @@ final class HomepageViewController: UIViewController,
                 tileType: state.getTelemetrySiteType,
                 urlString: state.site.url
             )
-
         case .jumpBackIn(let config):
             store.dispatch(
                 JumpBackInAction(
@@ -838,6 +827,24 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item
+    /// is handled differently due to how tapping is handled for the cell. See `onOpenSyncedTabAction` in this file.
+    private func dispatchDidSelectCardItemAction(with item: HomepageItem) {
+        if case .jumpBackInSyncedTab = item { return }
+        sendTappedItemAction(item: item)
+    }
+
+    private func sendTappedItemAction(item: HomepageItem) {
+        let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryTappedItemType)
+        store.dispatch(
+            HomepageAction(
+                telemetryExtras: telemetryExtras,
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.didSelectItem
+            )
+        )
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)
