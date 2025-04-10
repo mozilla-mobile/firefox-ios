@@ -59,14 +59,13 @@ workflows:
             ls /Users/vagrant/git/DerivedData
 
     - xcode-test-without-building@0:
-        is_always_run: true
         continue_on_fail: true
         timeout: 1200
         inputs:
-            - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
-            - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-            - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
-            - maximum_test_repetitions: 2
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
+        - maximum_test_repetitions: 2
     
     - script@1.2.1:
         title: Count failed tests
