@@ -1577,7 +1577,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(documentLoadingView)
         NSLayoutConstraint.activate([
             documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
             documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
         ])
