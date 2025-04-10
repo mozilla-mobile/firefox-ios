@@ -23,11 +23,10 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     /// documents. Post-consolidation we send the engineID + suffix (if available)
     var telemetryID: String {
         if SearchEngineFlagManager.isSECEnabled {
-            switch (engineID, telemetrySuffix) {
-            case (let engineID, nil):
-                return engineID
-            case (let engineID, .some(let suffix)):
+            if let suffix = telemetrySuffix, !suffix.isEmpty {
                 return engineID + "-" + suffix
+            } else {
+                return engineID
             }
         } else {
             return engineID
