@@ -73,21 +73,12 @@ workflows:
         is_always_run: true
         inputs:
         - content: |
-            echo "Install xcparse..."
-            brew install chargepoint/xcparse/xcparse
-
             echo "Analyzing test results from: $BITRISE_XCRESULT_PATH"
-          
-            OUTPUT_DIR="$BITRISE_DEPLOY_DIR/xcparse-output"
-            mkdir -p "$OUTPUT_DIR"
-
-            xcparse convert "$BITRISE_XCRESULT_PATH" --output "$OUTPUT_DIR" --output-format json
-
-            SUMMARY_JSON="$OUTPUT_DIR/TestSummary.json"
+            xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json > result.json --legacy
 
             echo "Search for failed tests..."
-            FAILED_COUNT=$(grep -o '"testStatus" : "Failure"' "$SUMMARY_JSON" | wc -l)
-
+            FAILED_COUNT=$(jq -r '.metrics.testsFailedCount._value' result.json)
+          
             echo "Total number of failures: $FAILED_COUNT"
 
             envman add --key ACCESSIBILITY_FAILED_TEST_COUNT --value "$FAILED_COUNT"
@@ -125,7 +116,7 @@ workflows:
             Task | ${BITRISE_BUILD_URL}
             Number of A11y Failures | ${ACCESSIBILITY_FAILED_TEST_COUNT}
             Failures Report | ${BITRISE_BUILD_URL}
-            A11y Missing Labels Report | ${BITRISE_BUILD_URL}?tab=artifacts
+            Accessibility Report | ${BITRISE_BUILD_URL}?tab=artifacts
         - buttons: |
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
