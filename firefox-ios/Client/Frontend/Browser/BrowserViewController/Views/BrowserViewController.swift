@@ -162,9 +162,6 @@ class BrowserViewController: UIViewController,
         stackview.isClearBackground = true
     }
 
-    // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
-    private(set) lazy var contentStackView: SidebarEnabledView = .build()
-
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
 
@@ -787,7 +784,7 @@ class BrowserViewController: UIViewController,
 
         // Update theme of already existing views
         let theme = currentTheme()
-        contentStackView.backgroundColor = theme.colors.layer1
+        contentContainer.backgroundColor = theme.colors.layer1
         if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
@@ -1013,10 +1010,8 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        view.addSubviews(contentStackView)
+        view.addSubviews(contentContainer)
         view.addSubview(webPagePreview)
-
-        contentStackView.addArrangedSubview(contentContainer)
 
         view.addSubview(topTouchArea)
 
@@ -1262,15 +1257,15 @@ class BrowserViewController: UIViewController,
 
     private func updateContentStackViewBottomConstraint() {
         guard isSwipingTabsEnabled else {
-            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             contentStackViewBottomConstraint?.isActive = true
             return
         }
         contentStackViewBottomConstraint?.isActive = false
         if isBottomSearchBar {
-            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         } else {
-            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(
+            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(
                 equalTo: overKeyboardContainer.topAnchor
             )
         }
@@ -1285,9 +1280,9 @@ class BrowserViewController: UIViewController,
         }
 
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
         if isSwipingTabsEnabled {
@@ -3242,10 +3237,10 @@ class BrowserViewController: UIViewController,
             view.bringSubviewToFront(privateModeDimmingView)
 
             NSLayoutConstraint.activate([
-                privateModeDimmingView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
-                privateModeDimmingView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                privateModeDimmingView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
-                privateModeDimmingView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor)
+                privateModeDimmingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+                privateModeDimmingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+                privateModeDimmingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+                privateModeDimmingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
             ])
         }
     }
