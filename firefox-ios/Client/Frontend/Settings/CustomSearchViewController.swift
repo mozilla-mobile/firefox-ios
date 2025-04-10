@@ -111,6 +111,7 @@ class CustomSearchViewController: SettingsTableViewController {
         // identifier since our search engine prefs store ID instead of the engine name
         let engine = OpenSearchEngine(engineID: OpenSearchEngine.generateCustomEngineID(),
                                       shortName: name,
+                                      telemetrySuffix: nil,
                                       image: image,
                                       searchTemplate: template,
                                       suggestTemplate: nil,

@@ -99,7 +99,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // the event in the startup sequence.
 
         let defaultEngine = profile.searchEnginesManager.defaultEngine
-        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
         // Set the date that the app was last used as default browser
         if let timestamp = profile.prefs.timestampForKey(PrefsKeys.LastOpenedAsDefaultBrowser) {
@@ -214,7 +214,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         // Record default search engine setting
         let defaultEngine = profile.searchEnginesManager.defaultEngine
-        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
+
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "custom")
 
         // Record the open tab count
         let windowManager: WindowManager = AppContainer.shared.resolve()

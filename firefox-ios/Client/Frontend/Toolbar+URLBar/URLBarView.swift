@@ -254,7 +254,7 @@ class URLBarView: UIView,
     }
 
     func searchEnginesDidUpdate() {
-        let engineID = profile.searchEnginesManager.defaultEngine?.engineID ?? "custom"
+        let engineID = profile.searchEnginesManager.defaultEngine?.telemetryID ?? "custom"
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .change,
