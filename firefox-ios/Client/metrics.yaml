@@ -4451,11 +4451,11 @@ tabs_panel:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
       - https://github.com/mozilla-mobile/firefox-ios/issues/6886
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/26011
       - https://github.com/mozilla-mobile/firefox-ios/issues/6886
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -4481,7 +4481,6 @@ tabs_panel:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/26011
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:

@@ -904,18 +904,6 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .tap, .privateBrowsingButton, _, let extras):
-            if let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? String {
-                let isPrivateExtra = GleanMetrics.Preferences.PrivateBrowsingButtonTappedExtra(isPrivate: isPrivate)
-                GleanMetrics.Preferences.privateBrowsingButtonTapped.record(isPrivateExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
 
         // MARK: - QR Codes
         case (.action, .scan, .qrCodeText, _, _),
@@ -929,8 +917,6 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.close[privateOrNormal.rawValue].add()
         case (.action, .closeAll, .tab, let privateOrNormal?, _):
             GleanMetrics.Tabs.closeAll[privateOrNormal.rawValue].add()
-        case (.action, .tap, .addNewTabButton, _, _):
-            GleanMetrics.Tabs.newTabPressed.add()
         case (.action, .tap, .tab, _, _):
             GleanMetrics.Tabs.clickTab.record()
         case (.action, .open, .tabTray, _, _):

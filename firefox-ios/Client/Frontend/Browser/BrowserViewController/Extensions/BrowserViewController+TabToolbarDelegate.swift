@@ -204,8 +204,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showLibrary(panel: .bookmarks)
     }
 
-    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+    func tabToolbarDidPressAddNewTab(
+        _ tabToolbar: TabToolbarProtocol,
+        tabsPanelTelemetry: TabsPanelTelemetry,
+        button: UIButton
+    ) {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        tabsPanelTelemetry.newTabButtonTapped(mode: TabsPanelTelemetry.Mode.mode(isPrivate: isPrivate))
         tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
         focusLocationTextField(forTab: tabManager.selectedTab)
         overlayManager.openNewTab(url: nil,

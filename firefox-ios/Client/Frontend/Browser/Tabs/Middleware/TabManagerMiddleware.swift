@@ -16,6 +16,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
+    private let tabsPanelTelemetry: TabsPanelTelemetry
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -31,6 +32,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
+        self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -112,7 +114,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         case TabTrayActionType.changePanel:
             guard let panelType = action.panelType else { return }
-            changePanel(panelType, uuid: action.windowUUID)
+            changePanel(panelType, appState: state, uuid: action.windowUUID)
 
         case TabTrayActionType.closePrivateTabsSettingToggled:
             preserveTabs(uuid: action.windowUUID)
@@ -714,8 +716,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
     }
 
-    private func changePanel(_ panel: TabTrayPanelType, uuid: WindowUUID) {
-        self.trackPanelChange(panel)
+    private func changePanel(_ panel: TabTrayPanelType, appState: AppState, uuid: WindowUUID) {
+        guard let tabsState = appState.screenState(TabTrayState.self, for: .tabsTray, window: uuid) else {
+            return
+        }
+        self.trackPanelChange(toPanel: panel, fromPanel: tabsState.selectedPanel)
         let isPrivate = panel == TabTrayPanelType.privateTabs
         let tabState = self.getTabsDisplayModel(for: isPrivate, uuid: uuid)
         if panel != .syncedTabs {
@@ -726,27 +731,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         }
     }
 
-    private func trackPanelChange(_ panel: TabTrayPanelType) {
-        switch panel {
-        case .tabs:
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .privateBrowsingButton,
-                extras: ["is-private": false.description])
-        case .privateTabs:
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .privateBrowsingButton,
-                extras: ["is-private": true.description])
-        case .syncedTabs:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .libraryPanel,
-                                         value: .syncPanel,
-                                         extras: nil)
-        }
+    private func trackPanelChange(toPanel: TabTrayPanelType, fromPanel: TabTrayPanelType) {
+        tabsPanelTelemetry.tabModeSelected(fromMode: fromPanel.modeForTelemetry, toMode: toPanel.modeForTelemetry)
     }
 
     // MARK: - Main menu actions
