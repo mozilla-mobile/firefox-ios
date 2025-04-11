@@ -41,11 +41,16 @@ public protocol EngineSession: NSObject {
     @available(iOS 16.0, *)
     func showFindInPage(withSearchText searchText: String?)
 
-    /// Navigates to the specified index in the history of this session. The current index of
-    /// this session's history  will be updated but the items within it will be unchanged.
-    /// Invalid index values are ignored.
+    /// Navigates to the specified history item
+    /// SessionBackForwardListItem
     /// - Parameter index: index the index of the session's history to navigate to
-    func goToHistory(index: Int)
+    func goToHistory(item: EngineSessionBackForwardListItem)
+
+    func currentHistoryItem() -> (EngineSessionBackForwardListItem)?
+
+    func getBackListItems() -> [EngineSessionBackForwardListItem]
+
+    func getForwardListItems() -> [EngineSessionBackForwardListItem]
 
     /// Restore a saved state; only data that is saved (history, scroll position, zoom, and form data)
     /// will be restored.
