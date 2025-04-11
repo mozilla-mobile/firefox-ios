@@ -23,7 +23,7 @@ class TabTrayAction: Action {
     }
 }
 
-enum  TabTrayActionType: ActionType {
+enum TabTrayActionType: ActionType {
     case tabTrayDidLoad
     case changePanel
 
