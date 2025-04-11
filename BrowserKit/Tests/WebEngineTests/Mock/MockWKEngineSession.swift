@@ -14,7 +14,7 @@ class MockWKEngineSession: WKEngineSession {
 
     init() {
         super.init(userScriptManager: MockWKUserScriptManager(),
-                   telemetryProxy: mockTelemetryProxy,
+                   dependencies: DefaultTestDependencies().sessionDependencies,
                    configurationProvider: MockWKEngineConfigurationProvider(),
                    webViewProvider: webviewProvider,
                    contentScriptManager: MockWKContentScriptManager())!
