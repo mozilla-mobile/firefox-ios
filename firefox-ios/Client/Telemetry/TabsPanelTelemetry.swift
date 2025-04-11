@@ -12,11 +12,7 @@ struct TabsPanelTelemetry {
         case `private`
         case sync
 
-        static func mode(isPrivate: Bool) -> Mode {
-            return isPrivate ? .private : .normal
-        }
-
-        func hasNewTabButton() -> Bool {
+        var hasNewTabButton: Bool {
             switch self {
             case .normal, .private:
                 return true
@@ -35,7 +31,7 @@ struct TabsPanelTelemetry {
     }
 
     func newTabButtonTapped(mode: Mode) {
-        guard mode.hasNewTabButton() else {
+        guard mode.hasNewTabButton else {
             logger.log("Mode is not of expected mode types for new button", level: .debug, category: .tabs)
             return
         }

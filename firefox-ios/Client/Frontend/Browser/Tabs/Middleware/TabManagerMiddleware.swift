@@ -718,9 +718,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     private func changePanel(_ panel: TabTrayPanelType, appState: AppState, uuid: WindowUUID) {
-        guard let tabsState = appState.screenState(TabTrayState.self, for: .tabsTray, window: uuid) else {
-            return
-        }
         tabsPanelTelemetry.tabModeSelected(mode: panel.modeForTelemetry)
         let isPrivate = panel == TabTrayPanelType.privateTabs
         let tabState = self.getTabsDisplayModel(for: isPrivate, uuid: uuid)
