@@ -41,11 +41,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidPressAddNewTab(
-        _ tabToolbar: TabToolbarProtocol,
-        tabsPanelTelemetry: TabsPanelTelemetry,
-        button: UIButton
-    )
+    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 enum MiddleButtonState {
@@ -240,9 +236,9 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didClickAddNewTab() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(
             toolbar,
-            tabsPanelTelemetry: tabsPanelTelemetry,
             button: toolbar.addNewTabButton
         )
     }

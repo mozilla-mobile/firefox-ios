@@ -7,18 +7,22 @@ import Glean
 import Common
 
 struct TabsPanelTelemetry {
-    struct Mode: OptionSet {
-        let rawValue: Int
-
-        static let `private` = Mode(rawValue: 1 << 0)
-        static let normal = Mode(rawValue: 1 << 1)
-        static let sync = Mode(rawValue: 1 << 2)
-
-        static let newButtonModes: Mode = [.private, .normal]
-        static let allModes: Mode = [.private, .normal, .sync]
+    enum Mode: String {
+        case normal
+        case `private`
+        case sync
 
         static func mode(isPrivate: Bool) -> Mode {
             return isPrivate ? .private : .normal
+        }
+
+        func hasNewTabButton() -> Bool {
+            switch self {
+            case .normal, .private:
+                return true
+            default:
+                return false
+            }
         }
     }
 
@@ -31,15 +35,17 @@ struct TabsPanelTelemetry {
     }
 
     func newTabButtonTapped(mode: Mode) {
-        guard Mode.newButtonModes.contains(mode) else {
+        guard mode.hasNewTabButton() else {
             logger.log("Mode is not of expected mode types for new button", level: .fatal, category: .tabs)
             return
         }
 
-        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.newTabButtonTapped)
+        let extras = GleanMetrics.TabsPanel.NewTabButtonTappedExtra(mode: mode.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.newTabButtonTapped, extras: extras)
     }
 
     func tabModeSelected(fromMode: Mode, toMode: Mode) {
-        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected)
+        let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(frommode: fromMode.rawValue, tomode: toMode.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected, extras: extras)
     }
 }
