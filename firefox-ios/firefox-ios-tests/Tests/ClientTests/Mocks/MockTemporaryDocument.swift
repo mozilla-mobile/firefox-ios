@@ -16,13 +16,18 @@ class MockTemporaryDocument: TemporaryDocument {
     var downloadCalled = 0
     var downloadAsyncCalled = 0
     var cancelDownloadCalled = 0
-    var pauseResumeDownloadCalled = 0
+    var pauseDownloadCalled = 0
+    var resumeDownloadCalled = 0
     var request: URLRequest?
 
     init(withFileURL fileURL: URL,
          request: URLRequest? = nil) {
         self.fileURL = fileURL
         self.request = request
+    }
+
+    init() {
+        fileURL = URL(fileURLWithPath: "test")
     }
 
     func canDownload(request: URLRequest) -> Bool {
@@ -43,7 +48,11 @@ class MockTemporaryDocument: TemporaryDocument {
         cancelDownloadCalled += 1
     }
 
-    func pauseResumeDownload() {
-        pauseResumeDownloadCalled += 1
+    func pauseDownload() {
+        pauseDownloadCalled += 1
+    }
+
+    func resumeDownload() {
+        resumeDownloadCalled += 1
     }
 }

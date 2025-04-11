@@ -1009,8 +1009,8 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.showDocumentLoadingView()
     }
 
-    func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        browserViewController.removeDocumentLoadingView(completion: completion)
+    func removeDocumentLoading() {
+        browserViewController.removeDocumentLoadingView()
     }
 
     // MARK: Microsurvey

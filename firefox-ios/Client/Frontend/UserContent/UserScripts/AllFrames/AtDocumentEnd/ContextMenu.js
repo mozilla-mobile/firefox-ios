@@ -7,7 +7,7 @@
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
-window.__firefox__.includeOnce("ContextMenu", function() {
+
   function sendMessage(evt) {
     var target = evt.target;
 
@@ -40,6 +40,5 @@ window.__firefox__.includeOnce("ContextMenu", function() {
     }
   }
 
-  window.addEventListener("touchstart", sendMessage, true);
-  window.addEventListener("mousedown", sendMessage, true);
-});
+  window.addEventListener("touchstart", sendMessage);
+  window.addEventListener("mousedown", sendMessage);

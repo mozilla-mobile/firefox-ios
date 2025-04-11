@@ -40,6 +40,10 @@ struct HomepageTelemetry {
     }
 
     // MARK: - General
+    func sendHomepageImpressionEvent() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.viewed)
+    }
+
     func sendItemTappedTelemetryEvent(for itemType: TappedItemType) {
         let itemNameExtra = GleanMetrics.Homepage.ItemTappedExtra(section: itemType.sectionName, type: itemType.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemTapped, extras: itemNameExtra)

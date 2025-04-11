@@ -489,8 +489,14 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = false
                 navigationToolbarContainer.applyTheme(theme: currentTheme())
                 updateTabCountUsingTabManager(self.tabManager)
+                if isSwipingTabsEnabled {
+                    addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                }
             } else {
                 navigationToolbarContainer.isHidden = true
+                if isSwipingTabsEnabled {
+                    addressBarPanGestureHandler?.disablePanGestureRecognizer()
+                }
             }
             updateToolbarStateTraitCollectionIfNecessary(newCollection)
         } else {
@@ -785,7 +791,10 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
+        if isSwipingTabsEnabled {
+            webPagePreview.applyTheme(theme: theme)
+            view.backgroundColor = theme.colors.layer1
+        }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -1528,7 +1537,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(documentLoadingView)
         NSLayoutConstraint.activate([
             documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
             documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
         ])
@@ -1540,14 +1549,13 @@ class BrowserViewController: UIViewController,
         self.documentLoadingView = documentLoadingView
     }
 
-    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
+    func removeDocumentLoadingView() {
         guard let documentLoadingView else { return }
         UIView.animate(withDuration: 0.3) {
             documentLoadingView.alpha = 0.0
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
-            completion?()
         }
     }
 
@@ -2009,7 +2017,10 @@ class BrowserViewController: UIViewController,
                 setupMiddleButtonStatus(isLoading: false)
             }
         case .loading:
-            guard let loading = change?[.newKey] as? Bool else { break }
+            guard var loading = change?[.newKey] as? Bool else { break }
+            if isPDFRefactorEnabled, let doc = tab.temporaryDocument {
+                loading = doc.isDownloading
+            }
             setupMiddleButtonStatus(isLoading: loading)
 
             if isToolbarRefactorEnabled {
@@ -3465,7 +3476,9 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-
+        if isSwipingTabsEnabled {
+            addressBarPanGestureHandler?.disablePanGestureRecognizer()
+        }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.screenChanged,
@@ -3483,6 +3496,9 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        if isSwipingTabsEnabled {
+            addressBarPanGestureHandler?.enablePanGestureRecognizer()
+        }
         if searchSessionState == .active {
             // This delegate method may be called even if the user isn't
             // currently searching, but we only want to update the search

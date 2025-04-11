@@ -239,6 +239,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
+        tab.cancelDocumentDownload()
+
         backupCloseTab = BackupCloseTab(
             tab: tab,
             restorePosition: index,
@@ -895,7 +897,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
         if isPDFRefactorEnabled {
-            previous?.pauseResumeDocumentDownload()
+            previous?.pauseDocumentDownload()
         }
 
         guard let tab = tab,
@@ -946,7 +948,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         store.dispatch(action)
 
         if isPDFRefactorEnabled {
-            tab.pauseResumeDocumentDownload()
+            tab.resumeDocumentDownload()
         }
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
@@ -966,6 +968,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
+            tab.setZoomLevelforDomain()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
