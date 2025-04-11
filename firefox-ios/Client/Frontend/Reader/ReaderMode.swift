@@ -56,6 +56,24 @@ enum ReaderModeFontType: String {
     case sansSerif = "sans-serif"
     case sansSerifBold = "sans-serif-bold"
 
+    public var fontFamily: String {
+        switch self {
+        case .serif, .serifBold:
+            return "serif"
+        case .sansSerif, .sansSerifBold:
+            return "sans-serif"
+        }
+    }
+
+    public var fontWeight: String {
+        switch self {
+        case .serifBold, .sansSerifBold:
+            return "bold"
+        default:
+            return "normal"
+        }
+    }
+
     init(type: String) {
         let font = ReaderModeFontType(rawValue: type)
         let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
@@ -74,6 +92,13 @@ enum ReaderModeFontType: String {
 
     func isSameFamily(_ font: ReaderModeFontType) -> Bool {
         return FontFamily.families.contains(where: { $0.contains(font) && $0.contains(self) })
+    }
+
+    public func attributes() -> [String: String] {
+        [
+            "fontType": fontFamily,
+            "fontWeight": fontWeight
+        ]
     }
 }
 
@@ -151,7 +176,13 @@ struct ReaderModeStyle {
 
     /// Encode the style to a dictionary that can be stored in the profile
     func encodeAsDictionary() -> [String: Any] {
-        return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
+        let fontAttributes = fontType.attributes()
+        return [
+            "theme": theme.rawValue,
+            "fontType": fontAttributes["fontType"] ?? "",
+            "fontWeight": fontAttributes["fontWeight"] ?? "",
+            "fontSize": fontSize.rawValue
+        ]
     }
 
     init(windowUUID: WindowUUID?,

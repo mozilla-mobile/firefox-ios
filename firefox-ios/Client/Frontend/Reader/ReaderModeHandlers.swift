@@ -10,13 +10,7 @@ protocol ReaderModeHandlersProtocol {
 }
 
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
-<<<<<<< HEAD
-    static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
-
     static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
-=======
-    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
->>>>>>> c71facfa9 (Add FXIOS-11791 [Dark Reader] Use dark reader to handle reader mode theming (#25882))
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming
