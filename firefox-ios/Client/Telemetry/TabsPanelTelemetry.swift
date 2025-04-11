@@ -36,7 +36,7 @@ struct TabsPanelTelemetry {
 
     func newTabButtonTapped(mode: Mode) {
         guard mode.hasNewTabButton() else {
-            logger.log("Mode is not of expected mode types for new button", level: .fatal, category: .tabs)
+            logger.log("Mode is not of expected mode types for new button", level: .debug, category: .tabs)
             return
         }
 
@@ -44,8 +44,8 @@ struct TabsPanelTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.newTabButtonTapped, extras: extras)
     }
 
-    func tabModeSelected(fromMode: Mode, toMode: Mode) {
-        let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(frommode: fromMode.rawValue, tomode: toMode.rawValue)
+    func tabModeSelected(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected, extras: extras)
     }
 }

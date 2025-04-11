@@ -4468,12 +4468,7 @@ tabs_panel:
       User changes the tab tray mode with the segmented control in the
       tabs panel.
     extra_keys:
-      fromMode:
-        type: string
-        description: |
-          The tab mode the user had selected previously (normal, private, or
-          sync).
-      toMode:
+      mode:
         type: string
         description: |
           The tab mode the user is switching to (normal, private, or sync).
