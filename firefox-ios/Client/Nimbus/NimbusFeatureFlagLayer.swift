@@ -147,9 +147,6 @@ final class NimbusFeatureFlagLayer {
 
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
-
-        case .zoomFeature:
-            return checkZoomFeature(from: nimbus)
         }
     }
 
@@ -399,12 +396,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.downloadLiveActivitiesFeature.value().enabled
-    }
-
-    private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.zoomFeature.value()
-
-        return config.status
     }
 
     private func checkFirefoxSuggestFeature(from nimbus: FxNimbus) -> Bool {
