@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import XCTest
 
 class AddressesTests: BaseTestCase {
     let addressSavedTxt = "Address Saved"

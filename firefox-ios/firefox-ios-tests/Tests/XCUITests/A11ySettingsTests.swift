@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Testing
+import XCTest
 
 class A11ySettingsTests: BaseTestCase {
     func testSettingsMenuPageAudit() throws {

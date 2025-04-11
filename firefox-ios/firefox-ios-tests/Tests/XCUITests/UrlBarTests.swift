@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import XCTest
 
 class UrlBarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306888

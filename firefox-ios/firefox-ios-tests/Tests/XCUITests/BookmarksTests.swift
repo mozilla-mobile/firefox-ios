@@ -168,10 +168,10 @@ class BookmarksTests: BaseTestCase {
         if shouldSkipTest {
             throw XCTSkip("No longer possible to add manually a page as bookmarked")
         }
-        addNewBookmark()
-        // Verify that clicking on bookmark opens the website
-        app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+//        addNewBookmark()
+//        // Verify that clicking on bookmark opens the website
+//        app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
+//        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306914
@@ -211,20 +211,20 @@ class BookmarksTests: BaseTestCase {
         if shouldSkipTest {
             throw XCTSkip("No longer possible to add manually a separator")
         }
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.AddNewSeparator)
-        app.buttons["Done"].waitAndTap()
-        // There is one item plus the default Desktop Bookmarks folder
-        checkItemsInBookmarksList(items: 2)
-
-        // Remove it
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.RemoveItemMobileBookmarks)
-        mozWaitForElementToExist(app.buttons["Delete"])
-        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
+//        navigator.goto(LibraryPanel_Bookmarks)
+//        navigator.nowAt(MobileBookmarks)
+//        navigator.performAction(Action.AddNewSeparator)
+//        app.buttons["Done"].waitAndTap()
+//        // There is one item plus the default Desktop Bookmarks folder
+//        checkItemsInBookmarksList(items: 2)
+//
+//        // Remove it
+//        navigator.nowAt(MobileBookmarks)
+//        navigator.performAction(Action.RemoveItemMobileBookmarks)
+//        mozWaitForElementToExist(app.buttons["Delete"])
+//        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
+//        // Verify that there are only 1 cell (desktop bookmark folder)
+//        checkItemsInBookmarksList(items: 1)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306916
@@ -233,12 +233,12 @@ class BookmarksTests: BaseTestCase {
         if shouldSkipTest {
             throw XCTSkip("No longer possible to add manually a page as bookmarked")
         }
-        addNewBookmark()
-        // Remove by swiping
-        app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons["Delete"].waitAndTap()
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
+//        addNewBookmark()
+//        // Remove by swiping
+//        app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
+//        app.buttons["Delete"].waitAndTap()
+//        // Verify that there are only 1 cell (desktop bookmark folder)
+//        checkItemsInBookmarksList(items: 1)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
@@ -247,13 +247,13 @@ class BookmarksTests: BaseTestCase {
         if shouldSkipTest {
             throw XCTSkip("No longer possible to add manually a page as bookmarked")
         }
-        addNewBookmark()
-        // Remove by long press and select option from context menu
-        app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements["Remove Bookmark"].waitAndTap()
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
+//        addNewBookmark()
+//        // Remove by long press and select option from context menu
+//        app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
+//        mozWaitForElementToExist(app.tables["Context Menu"])
+//        app.tables.otherElements["Remove Bookmark"].waitAndTap()
+//        // Verify that there are only 1 cell (desktop bookmark folder)
+//        checkItemsInBookmarksList(items: 1)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306908
@@ -338,18 +338,18 @@ class BookmarksTests: BaseTestCase {
         if shouldSkipTest {
             throw XCTSkip("Desktop folder is no longer available")
         }
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_Bookmarks)
-        // There is only one folder at the root of the bookmarks
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
-
-        // There is only three folders inside the desktop bookmarks
-        app.tables["Bookmarks List"].cells.firstMatch.waitAndTap()
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
+//        // Verify that there are only 1 cell (desktop bookmark folder)
+//        navigator.nowAt(NewTabScreen)
+//        waitForTabsButton()
+//        navigator.goto(LibraryPanel_Bookmarks)
+//        // There is only one folder at the root of the bookmarks
+//        mozWaitForElementToExist(app.tables["Bookmarks List"])
+//        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
+//
+//        // There is only three folders inside the desktop bookmarks
+//        app.tables["Bookmarks List"].cells.firstMatch.waitAndTap()
+//        mozWaitForElementToExist(app.tables["Bookmarks List"])
+//        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306911

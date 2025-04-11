@@ -28,7 +28,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: macos-15
     env:
-      XCODE: '16.2'
+      XCODE: '16.3'
     steps:
       - name: Switch to Xcode ${{env.XCODE}}
         uses: maxim-lobanov/setup-xcode@v1
