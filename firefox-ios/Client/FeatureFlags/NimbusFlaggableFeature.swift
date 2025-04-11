@@ -55,7 +55,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case trackingProtectionRefactor
     case useRustKeychain
-    case zoomFeature
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -153,8 +152,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
-                .useRustKeychain,
-                .zoomFeature:
+                .useRustKeychain:
             return nil
         }
     }
