@@ -25,13 +25,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-<<<<<<< HEAD
-         bookmarksSaver: BookmarksSaver? = nil) {
-=======
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
->>>>>>> a3d3e3ba8 (Add undo toast telemetry (#25569))
         self.profile = profile
         self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
