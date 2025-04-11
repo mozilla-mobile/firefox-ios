@@ -42,8 +42,8 @@ public protocol EngineSession: NSObject {
     func showFindInPage(withSearchText searchText: String?)
 
     /// Navigates to the specified history item
-    /// SessionBackForwardListItem
-    /// - Parameter index: index the index of the session's history to navigate to
+    /// - Parameter item: EngineSessionBackForwardListItem in the back forward list that
+    /// you would like to navigate to.
     func goToHistory(item: EngineSessionBackForwardListItem)
 
     func currentHistoryItem() -> (EngineSessionBackForwardListItem)?
