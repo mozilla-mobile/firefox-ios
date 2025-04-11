@@ -23,7 +23,7 @@ public struct ReaderModeConfiguration {
         loadingFailedText: String,
         loadOriginalText: String,
         readerModeErrorText: String,
-        cachedReaderModeStyle: [String : Any]? = nil
+        cachedReaderModeStyle: [String: Any]? = nil
     ) {
         self.loadingText = loadingText
         self.loadingFailedText = loadingFailedText

@@ -23,7 +23,7 @@ public protocol SchemeHandler: WKURLSchemeHandler {
 public class WKInternalSchemeHandler: NSObject, SchemeHandler {
     public let scheme = "internal"
 
-    public override init() {}
+    override public init() {}
 
     static func response(forUrl url: URL) -> URLResponse {
         return URLResponse(url: url, mimeType: "text/html", expectedContentLength: -1, textEncodingName: "utf-8")
