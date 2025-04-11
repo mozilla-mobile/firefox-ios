@@ -202,7 +202,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         cv.transform = .init(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
-        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.825) {
+        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
             cv.transform = .identity
             cv.alpha = 1
             if let frame = cellFrame {
