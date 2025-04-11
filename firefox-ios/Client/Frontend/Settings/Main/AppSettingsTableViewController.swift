@@ -330,9 +330,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        // FXIOS-11645 For enrolled users whose devices support alternate app icons, add the App Icon setting
-        if featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
-           UIApplication.shared.supportsAlternateIcons {
+        // For users whose devices support alternate app icons, add the App Icon setting
+        if UIApplication.shared.supportsAlternateIcons {
             generalSettings.append(
                 AppIconSetting(
                     theme: themeManager.getCurrentTheme(for: windowUUID),
