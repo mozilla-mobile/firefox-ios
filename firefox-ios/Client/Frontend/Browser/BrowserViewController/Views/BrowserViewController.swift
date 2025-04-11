@@ -1045,7 +1045,7 @@ class BrowserViewController: UIViewController,
 
     func addSubviews() {
         view.addSubviews(contentStackView)
-        view.addSubview(webPagePreview)
+        if isSwipingTabsEnabled { contentStackView.addSubview(webPagePreview) }
 
         contentStackView.addArrangedSubview(contentContainer)
 
