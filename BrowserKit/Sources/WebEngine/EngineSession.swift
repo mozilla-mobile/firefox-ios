@@ -45,7 +45,7 @@ public protocol EngineSession: NSObject {
     /// - Parameter item: EngineSessionBackForwardListItem in the back forward list that
     /// you would like to navigate to.
     func goToHistory(item: EngineSessionBackForwardListItem)
-    
+
     /// Returns the current EngineSessionBackForwardListItem
     func currentHistoryItem() -> (EngineSessionBackForwardListItem)?
 
