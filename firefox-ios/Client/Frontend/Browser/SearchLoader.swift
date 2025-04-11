@@ -92,25 +92,18 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                 guard let self = self else { return }
 
                 var queries = [bookmarks]
-                let historyHighlightsEnabled = self.featureFlags.isFeatureEnabled(
-                    .searchHighlights,
-                    checking: .buildOnly
-                )
-                if !historyHighlightsEnabled {
-                    let group = DispatchGroup()
-                    group.enter()
-                    // Lets only add the history query if history highlights are not enabled
-                    self.getHistoryAsSites(matchingSearchQuery: self.query, limit: 100) { history in
-                        queries.append(history)
-                        group.leave()
-                    }
-                    _ = group.wait(timeout: .distantFuture)
+                let group = DispatchGroup()
+                group.enter()
+                // Lets only add the history query if history highlights are not enabled
+                self.getHistoryAsSites(matchingSearchQuery: self.query, limit: 100) { history in
+                    queries.append(history)
+                    group.leave()
                 }
+                _ = group.wait(timeout: .distantFuture)
 
                 DispatchQueue.main.async {
                     self.updateUIWithBookmarksAsSitesResults(queries: queries,
                                                              timerid: timerid,
-                                                             historyHighlightsEnabled: historyHighlightsEnabled,
                                                              oldValue: oldValue)
                 }
             }
@@ -119,19 +112,13 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
 
     private func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
                                                      timerid: TimerId,
-                                                     historyHighlightsEnabled: Bool,
                                                      oldValue: String) {
         let results = queries
         defer {
             GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
         }
 
-        let bookmarksSites = results[safe: 0] ?? []
-        var combinedSites = bookmarksSites
-        if !historyHighlightsEnabled {
-            let historySites = results[safe: 1] ?? []
-            combinedSites += historySites
-        }
+        let combinedSites = (results[safe: 0] ?? []) + (results[safe: 1] ?? [])
 
         // Load the data in the table view.
         load(ArrayCursor(data: combinedSites))

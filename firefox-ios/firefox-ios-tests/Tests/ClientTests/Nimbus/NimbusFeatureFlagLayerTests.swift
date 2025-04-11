@@ -24,7 +24,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
@@ -46,7 +45,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
-//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
@@ -92,7 +90,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.pocket))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }
@@ -116,7 +113,6 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }

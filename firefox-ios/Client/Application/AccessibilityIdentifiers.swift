@@ -188,14 +188,12 @@ struct AccessibilityIdentifiers {
         struct MoreButtons {
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let historyHighlights = "historyHighlightsSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
         }
 
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
             static let bookmarks = "bookmarksTitle"
-            static let historyHighlights = "historyHightlightsTitle"
             static let pocket = "pocketTitle"
             static let topSites = "topSitesTitle"
         }
@@ -207,10 +205,6 @@ struct AccessibilityIdentifiers {
         struct Pocket {
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
-        }
-
-        struct HistoryHighlights {
-            static let itemCell = "HistoryHighlightsCell"
         }
 
         struct JumpBackIn {

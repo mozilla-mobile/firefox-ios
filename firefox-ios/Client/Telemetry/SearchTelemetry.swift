@@ -156,7 +156,6 @@ class SearchTelemetry {
     var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     var visibleSuggestions = [String]()
     var visibleFirefoxSuggestions = [RustFirefoxSuggestion]()
-    var visibleSearchHighlights = [HighlightItem]()
     var visibleData = [Site]()
 
     var searchQuery = ""

@@ -15,8 +15,6 @@ import enum MozillaAppServices.FrecencyThresholdOption
 import enum MozillaAppServices.PlacesApiError
 import enum MozillaAppServices.PlacesConnectionError
 import enum MozillaAppServices.VisitType
-import struct MozillaAppServices.HistoryHighlight
-import struct MozillaAppServices.HistoryHighlightWeights
 import struct MozillaAppServices.HistoryMetadata
 import struct MozillaAppServices.HistoryMetadataKey
 import struct MozillaAppServices.HistoryMetadataObservation
@@ -528,15 +526,6 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     public func getHistoryMetadataSince(since: Int64) -> Deferred<Maybe<[HistoryMetadata]>> {
         return withReader { connection in
             return try connection.getHistoryMetadataSince(since: since)
-        }
-    }
-
-    public func getHighlights(
-        weights: HistoryHighlightWeights,
-        limit: Int32
-    ) -> Deferred<Maybe<[HistoryHighlight]>> {
-        return withReader { connection in
-            return try connection.getHighlights(weights: weights, limit: limit)
         }
     }
 

@@ -1009,14 +1009,6 @@ extension String {
 extension String {
     /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
-        public struct Common {
-            public static let PagesCount = MZLocalizedString(
-                key: "FirefoxHomepage.Common.PagesCount.v112",
-                tableName: nil,
-                value: "Pages: %d",
-                comment: "Label showing how many pages there is in a search group. %d represents a number")
-        }
-
         public struct CustomizeHomepage {
             public static let ButtonTitle = MZLocalizedString(
                 key: "FirefoxHome.CustomizeHomeButton.Title",
@@ -1139,19 +1131,6 @@ extension String {
         }
 
         public struct RecentlySaved { }
-
-        public struct HistoryHighlights {
-            public static let Title = MZLocalizedString(
-                key: "ActivityStream.RecentHistory.Title",
-                tableName: nil,
-                value: "Recently Visited",
-                comment: "Section title label for recently visited websites")
-            public static let Remove = MZLocalizedString(
-                key: "FirefoxHome.RecentHistory.Remove",
-                tableName: nil,
-                value: "Remove",
-                comment: "When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item.")
-        }
 
         public struct Shortcuts {
             public static let Sponsored = MZLocalizedString(
@@ -2152,11 +2131,6 @@ extension String {
                     tableName: nil,
                     value: "Jump Back In",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off")
-                public static let RecentlyVisited = MZLocalizedString(
-                    key: "Settings.Home.Option.RecentlyVisited",
-                    tableName: nil,
-                    value: "Recently Visited",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off")
                 public static let RecentlySaved = MZLocalizedString(
                     key: "Settings.Home.Option.RecentlySaved",
                     tableName: nil,
@@ -7779,6 +7753,14 @@ extension String {
                 tableName: nil,
                 value: "When long-pressing links",
                 comment: "Description displayed under the ”Show Link Previews” option")
+        }
+
+        struct v139 {
+            public static let PagesCount = MZLocalizedString(
+                key: "FirefoxHomepage.Common.PagesCount.v112",
+                tableName: nil,
+                value: "Pages: %d",
+                comment: "Label showing how many pages there is in a search group. %d represents a number")
         }
     }
 }
