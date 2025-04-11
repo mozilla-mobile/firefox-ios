@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 /// Abstraction on top of `WKWebViewConfiguration` and the `WKUserContentController`
-protocol WKEngineConfiguration {
+public protocol WKEngineConfiguration {
     func addUserScript(_ userScript: WKUserScript)
     func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String)
     func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String)

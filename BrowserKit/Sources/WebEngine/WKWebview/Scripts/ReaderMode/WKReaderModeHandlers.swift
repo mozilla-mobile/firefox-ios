@@ -17,6 +17,20 @@ public struct ReaderModeConfiguration {
     var loadOriginalText: String
     var readerModeErrorText: String
     var cachedReaderModeStyle: [String: Any]?
+
+    public init(
+        loadingText: String,
+        loadingFailedText: String,
+        loadOriginalText: String,
+        readerModeErrorText: String,
+        cachedReaderModeStyle: [String : Any]? = nil
+    ) {
+        self.loadingText = loadingText
+        self.loadingFailedText = loadingFailedText
+        self.loadOriginalText = loadOriginalText
+        self.readerModeErrorText = readerModeErrorText
+        self.cachedReaderModeStyle = cachedReaderModeStyle
+    }
 }
 
 struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
