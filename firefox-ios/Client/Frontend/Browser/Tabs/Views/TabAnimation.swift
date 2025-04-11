@@ -39,8 +39,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        guard let selectedTab = bvc.tabManager.selectedTab,
-              let webView = selectedTab.webView
+        guard let selectedTab = bvc.tabManager.selectedTab
         else {
             logger.log("Attempted to present the tab tray without having a selected tab",
                        level: .warning,
@@ -52,13 +51,20 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let finalFrame = context.finalFrame(for: destinationController)
 
         // Tab snapshot animates from web view container on BVC to the cell frame
-        let tabSnapshot = UIImageView(image: selectedTab.screenshot ?? .init())
+        var tempScreenshot = UIImage()
+        if selectedTab.screenshot == nil {
+            // When we first open a tab we do not have a screenshot before this animation runs
+            // We can fix this to run in a sequence where the tab has a snapshot by the time we get here
+            // if we roll out the .tabTrayUIExperiments fully
+            let contentView = bvc.contentContainer.contentView
+            tempScreenshot = contentView?.screenshot(quality: UIConstants.ActiveScreenshotQuality) ?? UIImage()
+        }
+        let tabSnapshot = UIImageView(image: selectedTab.screenshot ?? tempScreenshot)
         tabSnapshot.layer.cornerCurve = .continuous
         tabSnapshot.clipsToBounds = true
         tabSnapshot.contentMode = .scaleAspectFill
-        tabSnapshot.frame = webView.frame
-
-        // Allow the UI to render to make the snapshotting code more performant
+        let contentContainer = bvc.contentContainer
+        tabSnapshot.frame = contentContainer.convert(contentContainer.bounds, to: bvc.view)
 
         DispatchQueue.main.async { [self] in
             runPresentationAnimation(
@@ -231,8 +237,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         selectedTab: Tab
     ) {
         guard let panel = currentPanel as? ThemedNavigationController,
-              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController,
-              let webView = selectedTab.webView
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else {
             context.completeTransition(true)
             return
@@ -296,7 +301,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             cv.transform = .init(scaleX: 1.2, y: 1.2)
             cv.alpha = 0.5
 
-            tabSnapshot.frame = webView.convert(webView.bounds, to: browserVC.view)
+            let contentContainer = browserVC.contentContainer
+            tabSnapshot.frame = contentContainer.convert(contentContainer.bounds, to: browserVC.view)
             tabSnapshot.layer.cornerRadius = 0
             toVCSnapshot.frame = finalFrame
             toVCSnapshot.layer.cornerRadius = 0
