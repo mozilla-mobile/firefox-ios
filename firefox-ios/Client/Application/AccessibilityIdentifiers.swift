@@ -429,7 +429,6 @@ struct AccessibilityIdentifiers {
 
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
-                static let recentVisited = "Recently Visited"
                 static let wallpaper = "WallpaperSettings"
             }
         }
