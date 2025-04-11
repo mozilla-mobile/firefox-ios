@@ -17219,6 +17219,7 @@
 			files = (
 				8C3536AF2D9ED78700D0DB81 /* HelpView.swift in Sources */,
 				8C3536AA2D9ED64B00D0DB81 /* InstructionsView.swift in Sources */,
+				8CA4C9972DA80A4800F6D931 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
 				8C3536B62D9ED82100D0DB81 /* DevicePickerTableViewCell.swift in Sources */,
 				8C3536AC2D9ED66400D0DB81 /* SendToDeviceHelper.swift in Sources */,
 				8C3536B52D9ED7FE00D0DB81 /* AppEvent.swift in Sources */,
@@ -27304,7 +27305,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -27380,7 +27381,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -27457,7 +27458,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -27533,7 +27534,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -27609,12 +27610,20 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = FirefoxBeta;
+		};
+		8CA4C9962DA8099100F6D931 /* FirefoxStaging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = ActionExtension;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = FirefoxStaging;
 		};
 		D39FA1681A83E0EC00EE869C /* Fennec */ = {
 			isa = XCBuildConfiguration;
@@ -29335,6 +29344,7 @@
 				8C19C1DF2D8C453C00BEAA17 /* Fennec_Enterprise */,
 				8C19C1E02D8C453C00BEAA17 /* Firefox */,
 				8C19C1E12D8C453C00BEAA17 /* FirefoxBeta */,
+				8CA4C9962DA8099100F6D931 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
