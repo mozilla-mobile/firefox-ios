@@ -198,7 +198,7 @@ class WKEngineSession: NSObject,
                         category: .webview)
             return
         }
-        _ = webView.go(to: backForwardListItem)
+        webView.go(to: backForwardListItem)
     }
 
     func currentHistoryItem() -> (EngineSessionBackForwardListItem)? {

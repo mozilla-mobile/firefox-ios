@@ -45,11 +45,14 @@ public protocol EngineSession: NSObject {
     /// - Parameter item: EngineSessionBackForwardListItem in the back forward list that
     /// you would like to navigate to.
     func goToHistory(item: EngineSessionBackForwardListItem)
-
+    
+    /// Returns the current EngineSessionBackForwardListItem
     func currentHistoryItem() -> (EngineSessionBackForwardListItem)?
 
+    /// Returns the history backlist as a list of EngineSessionBackForwardListItems
     func getBackListItems() -> [EngineSessionBackForwardListItem]
 
+    /// Returns the history forwardlist as a list of EngineSessionBackForwardListItems
     func getForwardListItems() -> [EngineSessionBackForwardListItem]
 
     /// Restore a saved state; only data that is saved (history, scroll position, zoom, and form data)

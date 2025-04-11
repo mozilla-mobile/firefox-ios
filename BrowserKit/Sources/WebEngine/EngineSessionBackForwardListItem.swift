@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Foundation
+import WebKit
 
 public protocol EngineSessionBackForwardListItem {
     var url: URL { get }
@@ -10,3 +11,5 @@ public protocol EngineSessionBackForwardListItem {
 
     var initialURL: URL { get }
 }
+
+extension WKBackForwardListItem: EngineSessionBackForwardListItem {}

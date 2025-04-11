@@ -59,6 +59,7 @@ protocol WKEngineWebView: UIView {
 
     func goForward() -> WKNavigation?
 
+    @discardableResult
     func go(to item: WKBackForwardListItem) -> WKNavigation?
 
     func currentBackForwardListItem() -> WKBackForwardListItem?
