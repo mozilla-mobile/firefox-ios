@@ -91,11 +91,9 @@ open class TabToolbarHelper: NSObject {
 
     private var longPressGestureRecognizers: [UILongPressGestureRecognizer] = []
     private let uiLargeContentViewInteraction: UILargeContentViewerInteraction = .init()
-    private let tabsPanelTelemetry: TabsPanelTelemetry
 
-    init(toolbar: TabToolbarProtocol, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+    init(toolbar: TabToolbarProtocol) {
         self.toolbar = toolbar
-        self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper)
         super.init()
 
         toolbar.addUILargeContentViewInteraction(interaction: uiLargeContentViewInteraction)
