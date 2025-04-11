@@ -497,8 +497,14 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = false
                 navigationToolbarContainer.applyTheme(theme: currentTheme())
                 updateTabCountUsingTabManager(self.tabManager)
+                if isSwipingTabsEnabled {
+                    addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                }
             } else {
                 navigationToolbarContainer.isHidden = true
+                if isSwipingTabsEnabled {
+                    addressBarPanGestureHandler?.disablePanGestureRecognizer()
+                }
             }
             updateToolbarStateTraitCollectionIfNecessary(newCollection)
         } else {
@@ -810,7 +816,10 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentStackView.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
+        if isSwipingTabsEnabled {
+            webPagePreview.applyTheme(theme: theme)
+            view.backgroundColor = theme.colors.layer1
+        }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -3585,7 +3594,9 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-
+        if isSwipingTabsEnabled {
+            addressBarPanGestureHandler?.disablePanGestureRecognizer()
+        }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.screenChanged,
@@ -3603,6 +3614,9 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        if isSwipingTabsEnabled {
+            addressBarPanGestureHandler?.enablePanGestureRecognizer()
+        }
         if searchSessionState == .active {
             // This delegate method may be called even if the user isn't
             // currently searching, but we only want to update the search
