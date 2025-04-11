@@ -67,6 +67,8 @@
         "A11ySettingsTests\/testSettingToolbarPageAudit()",
         "A11ySettingsTests\/testTrackingProtectionAccessibilityReport()",
         "A11ySettingsTests\/testTrackingProtectionPageAudit()",
+        "A11yTabTrayTests",
+        "A11yTabTrayTests\/testAccessibility()",
         "A11yUtils",
         "ActivityStreamTest\/testActivityStreamPages()",
         "ActivityStreamTest\/testDefaultSites()",
