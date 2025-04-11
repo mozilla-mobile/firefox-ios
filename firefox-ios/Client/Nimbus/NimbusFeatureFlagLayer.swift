@@ -10,9 +10,6 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
-        case .accountSettingsRedux:
-            return checkAccountSettingsRedux(from: nimbus)
-
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
@@ -154,10 +151,6 @@ final class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Private methods
-    private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.accountSettingsReduxFeature.value().enabled
-    }
-
     private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarkRefactorFeature.value().enabled
     }

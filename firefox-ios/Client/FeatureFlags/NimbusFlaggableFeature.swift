@@ -10,7 +10,6 @@ import UIKit
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
-    case accountSettingsRedux
     case addressAutofillEdit
     case appearanceMenu
     case bookmarksRefactor
@@ -122,7 +121,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
-                .accountSettingsRedux,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
