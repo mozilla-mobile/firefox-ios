@@ -1025,7 +1025,7 @@ class BrowserCoordinator: BaseCoordinator,
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
                          style: UIModalPresentationStyle) {
-        browserViewController.willNavigateAway()
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
         if !UIAccessibility.isReduceMotionEnabled {
             router.present(viewController, animated: true, customTransition: customTransition, presentationStyle: style)
         } else {
@@ -1034,7 +1034,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway()
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
         router.present(viewController)
     }
 

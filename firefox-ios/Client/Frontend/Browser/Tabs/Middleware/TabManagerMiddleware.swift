@@ -41,9 +41,20 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
             self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? ScreenshotAction {
+            self.resolveScreenshotActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
+    }
+
+    private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
+        guard let tabsState = state.screenState(TabsPanelState.self,
+                                                for: .tabsPanel,
+                                                window: action.windowUUID) else { return }
+        let manager = tabManager(for: action.windowUUID)
+        manager.tabDidSetScreenshot(action.tab)
+        triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
     private func resolveTabPeekActions(action: TabPeekAction, state: AppState) {
@@ -377,7 +388,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
-            await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
+            self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
@@ -436,7 +447,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
-    @MainActor
     private func triggerRefresh(uuid: WindowUUID, isPrivate: Bool) {
         let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
