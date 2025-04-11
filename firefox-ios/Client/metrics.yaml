@@ -1019,6 +1019,23 @@ usage:
       - glean-team@mozilla.com
     expires: never
 
+  is_managed_device:
+    type: boolean
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      Was the app installed using MDM software.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/X
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
 # Downloads
 downloads:
   download_now_button_tapped:
