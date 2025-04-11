@@ -60,6 +60,7 @@ jobs:
             sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
           fi
           xcrun simctl list devices iphone
+          xcrun simctl boot "${{ matrix.ios_simulator }}"
       - name: Build Focus
         id: compile
         run: |
