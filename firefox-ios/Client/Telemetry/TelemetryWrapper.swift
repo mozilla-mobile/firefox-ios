@@ -215,7 +215,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Record default search engine setting
         let defaultEngine = profile.searchEnginesManager.defaultEngine
 
-        GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "custom")
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
         // Record the open tab count
         let windowManager: WindowManager = AppContainer.shared.resolve()
