@@ -41,6 +41,8 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     private static let normalSessionsProcessPool = WKProcessPool()
     private static let privateSessionsProcessPool = WKProcessPool()
 
+    public init() {}
+
     public func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration {
         let configuration = WKWebViewConfiguration()
 
