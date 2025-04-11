@@ -42,6 +42,9 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
         guard let client, let records = client.getRecords() else {
             // If we can't fetch icons, return the input engines list with blank icons
             // This should never happen, but we need to make sure we handle it regardless
+            logger.log("Search engine icon fetch failed. Nil client or getRecords() was empty.",
+                       level: .warning,
+                       category: .remoteSettings)
             completion(engines.map { ($0, UIImage()) })
             return
         }
