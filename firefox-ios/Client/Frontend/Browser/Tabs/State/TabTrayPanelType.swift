@@ -42,4 +42,15 @@ enum TabTrayPanelType: Int, CaseIterable {
             return UIImage(named: StandardImageIdentifiers.Large.syncTabs)
         }
     }
+
+    var modeForTelemetry: TabsPanelTelemetry.Mode {
+        switch self {
+        case .tabs:
+            return .normal
+        case .privateTabs:
+            return .private
+        case .syncedTabs:
+            return .sync
+        }
+    }
 }
