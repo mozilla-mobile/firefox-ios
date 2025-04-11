@@ -189,16 +189,23 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.pageActions == rhs.pageActions &&
         lhs.browserActions == rhs.browserActions &&
 
+        lhs.toolbarLayoutStyle == rhs.toolbarLayoutStyle &&
         lhs.borderPosition == rhs.borderPosition &&
+        lhs.searchEngineName == rhs.searchEngineName &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
+        lhs.lockIconNeedsTheming == rhs.lockIconNeedsTheming &&
         lhs.safeListedURLImageName == rhs.safeListedURLImageName &&
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
+        lhs.didStartTyping == rhs.didStartTyping &&
         lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
+        lhs.isPrivateMode == rhs.isPrivateMode &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
+        lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
+        lhs.shouldAnimate == rhs.shouldAnimate &&
 
         lhs.windowUUID == rhs.windowUUID
     }
