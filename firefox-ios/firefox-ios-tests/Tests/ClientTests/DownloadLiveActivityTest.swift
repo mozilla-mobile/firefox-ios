@@ -13,7 +13,7 @@ class DownloadLiveActivityAttributesTests: XCTestCase {
         let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)
         let download3 = makeDownload(type: DownloadType.nilExpectedBytes, isComplete: false)
         let download4 = makeDownload(type: DownloadType.normal, totalBytesExpected: nil, isComplete: false)
-        var contentState = DownloadLiveActivityAttributes.ContentState(
+        let contentState = DownloadLiveActivityAttributes.ContentState(
             downloads: [download1, download2, download3, download4]
         )
 
@@ -25,7 +25,7 @@ class DownloadLiveActivityAttributesTests: XCTestCase {
     func testContentStateContainsOnlyEncodedFilesProperty() {
         let download1 = makeDownload(type: DownloadType.contentEncoded, isComplete: false)
         let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)
-        var contentState = DownloadLiveActivityAttributes.ContentState(
+        let contentState = DownloadLiveActivityAttributes.ContentState(
             downloads: [download1, download2]
         )
 
