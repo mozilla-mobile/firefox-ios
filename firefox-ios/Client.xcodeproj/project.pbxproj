@@ -1999,6 +1999,7 @@
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
 		F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F886218B270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift */; };
 		F886BFBD29AD56A400F77224 /* RustSyncManagerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F886BFBC29AD56A400F77224 /* RustSyncManagerAPI.swift */; };
+		F89453A92DA71D530022BA3F /* DeleteLoginsKeysSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89453A82DA71D070022BA3F /* DeleteLoginsKeysSetting.swift */; };
 		F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
 		F8A0B08329AD64790091C75B /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
 		F8A0B08429AD64790091C75B /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
@@ -10285,6 +10286,7 @@
 		F8708D291A0970990051AB07 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F886218B270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePasscodeRequiredViewController.swift; sourceTree = "<group>"; };
 		F886BFBC29AD56A400F77224 /* RustSyncManagerAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustSyncManagerAPI.swift; sourceTree = "<group>"; };
+		F89453A82DA71D070022BA3F /* DeleteLoginsKeysSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLoginsKeysSetting.swift; sourceTree = "<group>"; };
 		F8984594958004CB86902EE3 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustSyncManager.swift; sourceTree = "<group>"; };
 		F8AAC1B329663618000BCDEC /* RustAutofill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofill.swift; sourceTree = "<group>"; };
@@ -12223,6 +12225,7 @@
 				8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */,
 				8A093D7C2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift */,
 				8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */,
+				F89453A82DA71D070022BA3F /* DeleteLoginsKeysSetting.swift */,
 				8A3EF8082A2FD02B00796E3A /* ExperimentsSettings.swift */,
 				8A3EF7F32A2FCF5700796E3A /* ExportBrowserDataSetting.swift */,
 				8A3EF7F62A2FCF6D00796E3A /* ExportLogDataSetting.swift */,
@@ -17682,6 +17685,7 @@
 				5A32C2B62AD8517200A9B5A4 /* MetricKitWrapper.swift in Sources */,
 				8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
+				F89453A92DA71D530022BA3F /* DeleteLoginsKeysSetting.swift in Sources */,
 				8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */,
 				1D2F68AB2ACB262900524B92 /* RemoteTabsPanelAction.swift in Sources */,
 				8A5D1CB92A30DBDB005AD35C /* ChinaSyncServiceSetting.swift in Sources */,
