@@ -39,7 +39,12 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
         // Reminder: client creation must happen before sync() or the sync won't pull data for that client's collection
         if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
-        guard let client, let records = client.getRecords() else { completion([]); return }
+        guard let client, let records = client.getRecords() else {
+            // If we can't fetch icons, return the input engines list with blank icons
+            // This should never happen, but we need to make sure we handle it regardless
+            completion(engines.map { ($0, UIImage()) })
+            return
+        }
 
         logger.log("Fetched \(records.count) search icon records", level: .info, category: .remoteSettings)
         let iconRecords = records.map { ASSearchEngineIconRecord(record: $0) }
