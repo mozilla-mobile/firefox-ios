@@ -85,6 +85,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
 
         isUserInteractionEnabled = false
         isAccessibilityElement = false
+        accessibilityElementsHidden = true
         normalBackgroundColor = .clear
         highlightedBackgroundColor = .clear
         foregroundColor = .clear
