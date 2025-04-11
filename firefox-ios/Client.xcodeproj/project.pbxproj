@@ -1100,6 +1100,7 @@
 		8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */; };
 		8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */; };
 		8ACE9BFB2A54A010001E7A73 /* ExpandButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */; };
+		8ACF70552DA99E0F00D9C546 /* StopWatchTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACF70542DA99E0F00D9C546 /* StopWatchTimer.swift */; };
 		8AD0110D2CB42FE700368BF3 /* HeaderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD0110C2CB42FE700368BF3 /* HeaderState.swift */; };
 		8AD08D1527E9198E00B8E907 /* TabsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */; };
@@ -8347,6 +8348,7 @@
 		8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottlerTests.swift; sourceTree = "<group>"; };
 		8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButtonState.swift; sourceTree = "<group>"; };
+		8ACF70542DA99E0F00D9C546 /* StopWatchTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatchTimer.swift; sourceTree = "<group>"; };
 		8AD0110C2CB42FE700368BF3 /* HeaderState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderState.swift; sourceTree = "<group>"; };
 		8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsTelemetry.swift; sourceTree = "<group>"; };
 		8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsTelemetryTests.swift; sourceTree = "<group>"; };
@@ -14607,6 +14609,7 @@
 		E65075551E37F714006961AC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8ACF70542DA99E0F00D9C546 /* StopWatchTimer.swift */,
 				0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */,
 				5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */,
 				5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */,
@@ -17678,6 +17681,7 @@
 				E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */,
 				0B3F8C5E2CA4471C00DB5367 /* EditBookmarkViewModel.swift in Sources */,
 				8AD0110D2CB42FE700368BF3 /* HeaderState.swift in Sources */,
+				8ACF70552DA99E0F00D9C546 /* StopWatchTimer.swift in Sources */,
 				968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				0A5E6F402CF88A7900C1DFC9 /* SwitchDetailedView.swift in Sources */,
