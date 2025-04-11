@@ -190,9 +190,12 @@ class WKEngineSession: NSObject,
 
     func goToHistory(item: EngineSessionBackForwardListItem) {
         guard let backForwardListItem = item as? WKBackForwardListItem else {
-            logger.log("Going to an EngineSessionBackForwardListItem that is not of type WKBackForwardListItem in WKEngineSession is not permitted",
-                       level: .debug,
-                       category: .webview)
+            logger.log("""
+                        Going to an EngineSessionBackForwardListItem that is not of \
+                        type WKBackForwardListItem in WKEngineSession is not permitted
+                        """,
+                        level: .debug,
+                        category: .webview)
             return
         }
         _ = webView.go(to: backForwardListItem)

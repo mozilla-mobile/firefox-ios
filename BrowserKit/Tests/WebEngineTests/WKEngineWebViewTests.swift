@@ -96,7 +96,7 @@ final class WKEngineWebViewTests: XCTestCase {
             self.delegate.webViewPropertyChangedCallback = nil
             expectation.fulfill()
         }
-        
+
         subject.load(URLRequest(url: testURL))
 
         wait(for: [expectation])
