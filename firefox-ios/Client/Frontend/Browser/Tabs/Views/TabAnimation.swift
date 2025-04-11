@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import UIKit
 import Shared
@@ -182,6 +183,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.reloadData()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
+        let theme = currentTheme()
 
         if let indexPath = dataSource.indexPath(for: item) {
             // This is needed otherwise the collection views content offset is incorrect
@@ -190,15 +192,17 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             tabCell = cv.cellForItem(at: indexPath) as? ExperimentTabCell
             if let cell = tabCell {
                 cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                // Hide the cell that is being animated since we are making a copy of it to animate in
+                // Hide the cell and border that is being animated since we are making a copy of it to animate in
                 cell.isHidden = true
+                cell.backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
+                cell.backgroundHolder.layer.borderWidth = ExperimentTabCell.UX.unselectedBorderWidth
                 cell.alpha = 0.0
             }
         }
 
         cv.transform = .init(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
-        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.825) {
+        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
             cv.transform = .identity
             cv.alpha = 1
             if let frame = cellFrame {
@@ -218,13 +222,21 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 tabCell?.alpha = 1
             }.startAnimation()
         }
-        animator.addCompletion { _ in
+        animator.addCompletion { [weak self] _ in
             backgroundView.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
             bvcSnapshot.removeFromSuperview()
+            self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
             context.completeTransition(true)
         }
         animator.startAnimation()
+    }
+
+    private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
+        guard let tab = tabCell else { return }
+        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        tab.backgroundHolder.layer.borderColor = borderColor.cgColor
+        tab.backgroundHolder.layer.borderWidth = ExperimentTabCell.UX.selectedBorderWidth
     }
 
     private func runDismissalAnimation(
