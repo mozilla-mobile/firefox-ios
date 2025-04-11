@@ -303,13 +303,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
             let contentContainer = browserVC.contentContainer
             tabSnapshot.frame = contentContainer.convert(contentContainer.bounds, to: browserVC.view)
-            print("✨Tab snapshot frame✨")
-            print(tabSnapshot.frame)
             tabSnapshot.layer.cornerRadius = 0
-            print("🐣toVCSnapshot frame🐣")
-            print(toVCSnapshot.frame)
-            print("🍄‍🟫Final Frame🍄‍🟫")
-            print(finalFrame)
             toVCSnapshot.frame = finalFrame
             toVCSnapshot.layer.cornerRadius = 0
             backgroundView.alpha = 1
