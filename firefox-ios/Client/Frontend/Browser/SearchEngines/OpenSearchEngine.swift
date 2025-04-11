@@ -18,7 +18,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     let isCustomEngine: Bool
     let searchTemplate: String
 
-    /// The telemetry ID to send for search.defaultengine and search.counts
+    /// The telemetry ID to send for `search.default_engine` and `search.counts`
     /// Prior to Search Consolidation, we sent the engineID from our engine XML
     /// documents. Post-consolidation we send the engineID + suffix (if available)
     var telemetryID: String {
