@@ -19,9 +19,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
     case deeplinkOptimizationRefactor
-    case fakespotBackInStock
-    case fakespotFeature
-    case fakespotProductAds
     case feltPrivacySimplifiedUI
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
@@ -127,9 +124,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .deeplinkOptimizationRefactor,
-                .fakespotBackInStock,
-                .fakespotFeature,
-                .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
                 .loginAutofill,

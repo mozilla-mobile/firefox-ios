@@ -18,7 +18,6 @@ enum ContextualHintType: String {
     case inactiveTabs = "InactiveTabs"
     case toolbarLocation = "ToolbarLocation"
     case mainMenu = "MainMenu"
-    case shoppingExperience = "ShoppingExperience"
     case dataClearance = "DataClearance"
     case navigation = "Navigation"
 }
@@ -115,14 +114,7 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
     }
 
     var isActionType: Bool {
-        switch hintType {
-        case .inactiveTabs,
-                .toolbarLocation,
-                .shoppingExperience:
-            return true
-
-        default: return false
-        }
+        return false
     }
 
     // MARK: - Telemetry

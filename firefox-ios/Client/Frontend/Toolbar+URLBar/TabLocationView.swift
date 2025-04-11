@@ -72,7 +72,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     var url: URL? {
-        willSet { handleShoppingAdsCacheURLChange(newURL: newValue) }
         didSet {
             hideButtons()
             updateTextWithURL()
@@ -98,7 +97,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             trackingProtectionButton,
             space1px,
             urlTextField,
-            shoppingButton,
             readerModeButton,
             reloadButton
         ]
@@ -148,20 +146,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         trackingProtectionButton.accessibilityLabel = .TabLocationLockButtonAccessibilityLabel
     }
 
-    private lazy var shoppingButton: UIButton = .build { button in
-        let image = UIImage(named: StandardImageIdentifiers.Large.shopping)
-
-        button.addTarget(self, action: #selector(self.didPressShoppingButton(_:)), for: .touchUpInside)
-        button.isHidden = true
-        button.setImage(image?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
-        button.accessibilityLabel = .TabLocationShoppingAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shoppingButton
-        button.showsLargeContentViewer = true
-        button.largeContentTitle = .TabLocationShoppingAccessibilityLabel
-        button.largeContentImage = image
-    }
-
     private(set) lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
         readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(
@@ -205,8 +189,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         setupNotifications(
             forObserver: self,
             observing: [
-                .FakespotViewControllerDidDismiss,
-                .FakespotViewControllerDidAppear,
                 .TrackingProtectionViewControllerDidDismiss,
                 .TrackingProtectionViewControllerDidAppear
             ]
@@ -226,8 +208,6 @@ class TabLocationView: UIView, FeatureFlaggable {
 
             trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-            shoppingButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
-            shoppingButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
@@ -252,7 +232,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     private lazy var _accessibilityElements = [
         trackingProtectionButton,
         urlTextField,
-        shoppingButton,
         readerModeButton,
         reloadButton
     ]
@@ -316,53 +295,8 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     @objc
-    func didPressShoppingButton(_ button: UIButton) {
-        button.isSelected = true
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        let action = FakespotAction(windowUUID: windowUUID,
-                                    actionType: FakespotActionType.pressedShoppingButton)
-        store.dispatch(action)
-    }
-
-    @objc
     func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
-    }
-
-    func updateShoppingButtonVisibility(for tab: Tab) {
-        guard let url else {
-            shoppingButton.isHidden = true
-            return
-        }
-        let environment = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? FakespotEnvironment.staging : .prod
-        let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
-        if product.product != nil && !tab.isPrivate {
-            sendProductPageDetectedTelemetry()
-        }
-
-        let shouldHideButton = !product.isShoppingButtonVisible || tab.isPrivate
-        shoppingButton.isHidden = shouldHideButton
-        if !shouldHideButton {
-            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingButton)
-            delegate?.tabLocationViewPresentCFR(at: shoppingButton)
-            setReaderModeState(.unavailable)
-        } else {
-            setReaderModeState(.available)
-        }
-    }
-
-    private func sendProductPageDetectedTelemetry() {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .shoppingProductPageVisits)
-    }
-
-    private func handleShoppingAdsCacheURLChange(newURL: URL?) {
-        guard  url?.displayURL != newURL,
-               !shoppingButton.isHidden else { return }
-        Task {
-            await ProductAdsCache.shared.clearCache()
-        }
     }
 
     private func updateTextWithURL() {
@@ -431,7 +365,6 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // Fixes: https://github.com/mozilla-mobile/firefox-ios/issues/17403
     private func hideButtons() {
-        [shoppingButton].forEach { $0.isHidden = true }
     }
 
     private func currentTheme() -> Theme {
@@ -449,7 +382,7 @@ private extension TabLocationView {
         let wasHidden = readerModeButton.isHidden
         self.readerModeButton.readerModeState = newReaderModeState
 
-        readerModeButton.isHidden = shoppingButton.isHidden ? newReaderModeState == .unavailable : true
+        readerModeButton.isHidden = newReaderModeState == .unavailable
         // When the user turns on the reader mode we need to hide the trackingProtectionButton (according to 16400),
         // we will hide it once the newReaderModeState == .active
         if newReaderModeState == .active {
@@ -479,10 +412,6 @@ extension TabLocationView: Notifiable {
         guard let notificationUUID = notification.object as? UUID else { return }
         guard windowUUID == notificationUUID else { return }
         switch notification.name {
-        case .FakespotViewControllerDidDismiss:
-            shoppingButton.isSelected = false
-        case .FakespotViewControllerDidAppear:
-            shoppingButton.isSelected = true
         case .TrackingProtectionViewControllerDidDismiss:
             isTrackingProtectionDisplayed = false
         case .TrackingProtectionViewControllerDidAppear:
@@ -546,10 +475,6 @@ extension TabLocationView: ThemeApplicable {
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
-        shoppingButton.tintColor = theme.colors.textPrimary
-        shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
-            .withTintColor(theme.colors.actionPrimary),
-                                for: .selected)
         setTrackingProtection(theme: theme)
     }
 }

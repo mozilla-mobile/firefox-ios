@@ -385,29 +385,6 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case defaultSearchEngine = "default-search-engine"
         case showPullRefreshEasterEgg = "show-pull-refresh-easter-egg"
-        // MARK: Fakespot
-        case shoppingButton = "shopping-button"
-        case shoppingBottomSheet = "shopping-bottom-sheet"
-        case shoppingProductPageVisits = "product_page_visits"
-        case shoppingRecentReviews = "shopping-recent-reviews"
-        case shoppingSettingsChevronButton = "shopping-settings-chevron-button"
-        case shoppingOnboarding = "shopping-onboarding"
-        case shoppingOptIn = "shopping-opt-in"
-        case shoppingNotNowButton = "shopping-not-now-button"
-        case shoppingTermsOfUseButton = "shopping-terms-of-use-button"
-        case shoppingPrivacyPolicyButton = "shopping-privacy-policy-button"
-        case shoppingLearnMoreButton = "shopping-learn-more-button"
-        case shoppingLearnMoreReviewQualityButton = "shopping-learn-more-review-quality-button"
-        case shoppingPoweredByFakespotLabel = "shopping-powered-by-fakespot-label"
-        case shoppingNoAnalysisCardViewPrimaryButton = "shopping-no-analysis-card-view-primary-button"
-        case shoppingNeedsAnalysisCardViewPrimaryButton = "shopping-needs-analysis-card-view-primary-button"
-        case shoppingProductBackInStockButton = "shopping-product-back-in-stock-button"
-        case shoppingSurfaceStaleAnalysisShown = "shopping-surface-stale-analysis-shown"
-        case shoppingNimbusDisabled = "shopping-nimbus-disabled"
-        case shoppingComponentOptedOut = "shopping-component-opted-out"
-        case shoppingUserHasOnboarded = "shopping-user-has-onboarded"
-        case shoppingAdsOptedOut = "shopping-ads-opted-out"
-        case shoppingAdsSettingToggle = "shopping-ads-setting-toggle"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
         case messaging = "messaging"
@@ -678,11 +655,7 @@ extension TelemetryWrapper {
         case bookmarkItem = "bookmark-item"
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
-        case shoppingCFRsDisplayed = "shopping-cfrs-displayed"
         case surfaceAdsClicked = "surface-ads-clicked"
-        case shoppingAdsExposure = "shopping-ads-exposure"
-        case shoppingAdsImpression = "shopping-ads-impression"
-        case shoppingNoAdsAvailable = "shopping-no-ads-available"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
         case crashedLastLaunch = "crashed_last_launch"
@@ -780,23 +753,6 @@ extension TelemetryWrapper {
         // Password Manager
         case loginsQuantity = "loginsQuantity"
         case isLoginSyncEnabled = "sync-enabled"
-        // Shopping Experience
-        public enum Shopping: String {
-            // Extra Keys for `surface_closed` event
-            case clickOutside = "click-outside"
-            case interactionWithALink = "interaction-with-a-link"
-            case swipingTheSurfaceHandle = "swiping-the-surface-handle"
-            case optingOutOfTheFeature = "opting-out-of-the-feature"
-            case adsSettingToggle = "ads-setting-toggle"
-            case closeButton = "close-button"
-            case isNimbusDisabled = "is-nimbus-disabled"
-            case isComponentOptedOut = "is-component-opted-out"
-            case isUserOnboarded = "is-user-onboarded"
-            case areAdsDisabled = "are-ads-disabled"
-            // Extra Keys for `surface_displayed` event
-            case halfView = "half-view"
-            case fullView = "full-view"
-        }
 
         // Awesomebar
         public enum UrlbarTelemetry: String {
@@ -1310,138 +1266,6 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
-        // MARK: Shopping Experience (Fakespot)
-        case (.action, .view, .shoppingBottomSheet, .surfaceAdsClicked, _):
-            GleanMetrics.Shopping.surfaceAdsClicked.record()
-        case (.action, .tap, .shoppingButton, _, _):
-            GleanMetrics.Shopping.addressBarIconClicked.record()
-        case (.action, .view, .shoppingBottomSheet, .shoppingAdsExposure, _):
-            GleanMetrics.Shopping.adsExposure.record()
-        case (.action, .view, .shoppingBottomSheet, .shoppingAdsImpression, _):
-            GleanMetrics.Shopping.surfaceAdsImpression.record()
-        case (.action, .view, .shoppingBottomSheet, .shoppingNoAdsAvailable, _):
-            GleanMetrics.Shopping.surfaceNoAdsAvailable.record()
-        case (.action, .view, .shoppingButton, _, _):
-            GleanMetrics.Shopping.addressBarIconDisplayed.record()
-        case (.action, .close, .shoppingBottomSheet, _, let extras):
-            if let action = extras?[EventExtraKey.action.rawValue] as? String {
-                let actionExtra = GleanMetrics.Shopping.SurfaceClosedExtra(action: action)
-                GleanMetrics.Shopping.surfaceClosed.record(actionExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
-        case (.action, .tap, .shoppingRecentReviews, _, _):
-            GleanMetrics.Shopping.surfaceShowMoreRecentReviewsClicked.record()
-        case (.action, .view, .shoppingBottomSheet, _, let extras):
-            if let size = extras?[EventExtraKey.size.rawValue] as? String {
-                let sizeExtra = GleanMetrics.Shopping.SurfaceDisplayedExtra(size: size)
-                GleanMetrics.Shopping.surfaceDisplayed.record(sizeExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
-        case (.action, .view, .shoppingSettingsChevronButton, _, _):
-            GleanMetrics.Shopping.surfaceSettingsExpandClicked.record()
-        case (.action, .view, .shoppingOnboarding, _, _):
-            GleanMetrics.Shopping.surfaceOnboardingDisplayed.record()
-        case (.action, .tap, .shoppingOptIn, _, _):
-            GleanMetrics.Shopping.surfaceOptInAccepted.record()
-        case (.action, .tap, .shoppingNotNowButton, _, _):
-            GleanMetrics.Shopping.surfaceNotNowClicked.record()
-        case (.action, .tap, .shoppingTermsOfUseButton, _, _):
-            GleanMetrics.Shopping.surfaceShowTermsClicked.record()
-        case (.action, .tap, .shoppingPrivacyPolicyButton, _, _):
-            GleanMetrics.Shopping.surfaceShowPrivacyPolicyClicked.record()
-        case (.action, .tap, .shoppingLearnMoreButton, _, _):
-            GleanMetrics.Shopping.surfaceLearnMoreClicked.record()
-        case (.action, .tap, .shoppingLearnMoreReviewQualityButton, _, _):
-            GleanMetrics.Shopping.surfaceShowQualityExplainerClicked.record()
-        case (.action, .navigate, .shoppingButton, .shoppingCFRsDisplayed, _):
-            GleanMetrics.Shopping.addressBarFeatureCalloutDisplayed.record()
-        case (.information, .view, .shoppingProductPageVisits, _, _):
-            GleanMetrics.Shopping.productPageVisits.add()
-        case (.action, .tap, .shoppingPoweredByFakespotLabel, _, _):
-            GleanMetrics.Shopping.surfacePoweredByFakespotLinkClicked.record()
-        case (.action, .tap, .shoppingNoAnalysisCardViewPrimaryButton, _, _):
-            GleanMetrics.Shopping.surfaceAnalyzeReviewsNoneAvailableClicked.record()
-        case (.action, .tap, .shoppingNeedsAnalysisCardViewPrimaryButton, _, _):
-            GleanMetrics.Shopping.surfaceReanalyzeClicked.record()
-        case (.action, .tap, .shoppingProductBackInStockButton, _, _):
-            GleanMetrics.Shopping.surfaceReactivatedButtonClicked.record()
-        case(.action, .tap, .shoppingAdsSettingToggle, _, let extras):
-            if let isEnabled = extras?[EventExtraKey.Shopping.adsSettingToggle.rawValue]
-                as? Bool {
-                let isEnabledExtra = GleanMetrics.Shopping.SurfaceAdsSettingToggledExtra(isEnabled: isEnabled)
-                GleanMetrics.Shopping.surfaceAdsSettingToggled.record(isEnabledExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
-        case (.action, .navigate, .shoppingBottomSheet, _, _):
-            GleanMetrics.Shopping.surfaceNoReviewReliabilityAvailable.record()
-        case (.action, .view, .shoppingSurfaceStaleAnalysisShown, _, _):
-            GleanMetrics.Shopping.surfaceStaleAnalysisShown.record()
-        case(.information, .settings, .shoppingNimbusDisabled, _, let extras):
-            if let isDisabled = extras?[EventExtraKey.Shopping.isNimbusDisabled.rawValue]
-                as? Bool {
-                GleanMetrics.ShoppingSettings.nimbusDisabledShopping.set(isDisabled)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
-        case(.information, .settings, .shoppingComponentOptedOut, _, let extras):
-            if let isOptedOut = extras?[EventExtraKey.Shopping.isComponentOptedOut.rawValue]
-                as? Bool {
-                GleanMetrics.ShoppingSettings.componentOptedOut.set(isOptedOut)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
-        case(.information, .settings, .shoppingUserHasOnboarded, _, let extras):
-            if let isOnboarded = extras?[EventExtraKey.Shopping.isUserOnboarded.rawValue]
-                as? Bool {
-                GleanMetrics.ShoppingSettings.userHasOnboarded.set(isOnboarded)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
-        case(.information, .settings, .shoppingAdsOptedOut, _, let extras):
-            if let fakespotAdsEnabled = extras?[EventExtraKey.Shopping.areAdsDisabled.rawValue]
-                as? Bool {
-                GleanMetrics.ShoppingSettings.disabledAds.set(fakespotAdsEnabled)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
         // MARK: Onboarding
         case (.action, .view, .onboardingCardView, _, let extras):
             if let type = extras?[ExtraKey.cardType.rawValue] as? String,
