@@ -25,11 +25,11 @@ jobs:
             device_type: ""
             runtime: ""
           - ios_version: 16.4
-            ios_simulator: iPhone 14
+            ios_simulator: iPhone 14 iOS 16.4
             device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-14
             runtime: com.apple.CoreSimulator.SimRuntime.iOS-16-4
           - ios_version: 15.5
-            ios_simulator: iPhone 13
+            ios_simulator: iPhone 13 iOS 15.5
             device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-13
             runtime: com.apple.CoreSimulator.SimRuntime.iOS-15-5"
     steps:
