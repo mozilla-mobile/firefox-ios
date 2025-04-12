@@ -90,7 +90,7 @@ jobs:
             -target ${{ env.xcodebuild_target }} \
             -derivedDataPath ~/DerivedData \
             -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
-            -testPlan SmokeTests \
+            -testPlan SmokeTest \
             -only-testing:XCUITest/SettingTest/testCheckSetting && exit ${PIPESTATUS[0]}
           xcodebuild \
             test-without-building \
