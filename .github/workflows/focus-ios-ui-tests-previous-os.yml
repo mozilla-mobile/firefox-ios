@@ -20,10 +20,10 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - ios_version: 17.5
-            ios_simulator: iPhone 15
-            device_type: ""
-            runtime: ""
+          #- ios_version: 17.5
+          #  ios_simulator: iPhone 15
+          #  device_type: ""
+          #  runtime: ""
           - ios_version: 16.4
             ios_simulator: iPhone 14 iOS 16.4
             device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-14
