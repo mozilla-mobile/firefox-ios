@@ -83,6 +83,15 @@ jobs:
         id: run-smoketests
         run: |
           xcrun simctl list devices iphone
+          # "warmup" the simulator by running one test. It's ok this attempt fails
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -testPlan SmokeTests \
+            -only-testing:XCUITest/SettingTest/testCheckSetting && exit ${PIPESTATUS[0]}
           xcodebuild \
             test-without-building \
             -scheme ${{ env.xcodebuild_scheme }} \
