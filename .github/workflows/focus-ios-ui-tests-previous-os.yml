@@ -64,9 +64,7 @@ jobs:
           else
             echo "Install iOS ${{ matrix.ios_version }} runtime"
             sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
-            xcrun simctl create "${{ matrix.ios_simulator }}" ${{ matrix.device_type }} ${{ matrix.runtime }}
           fi
-          xcrun simctl boot "${{ matrix.ios_simulator }}"
       - name: Build Focus
         id: compile
         run: |
