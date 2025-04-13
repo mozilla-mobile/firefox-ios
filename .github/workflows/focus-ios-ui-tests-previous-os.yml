@@ -22,16 +22,10 @@ jobs:
         include:
           - ios_version: 17.5
             ios_simulator: iPhone 15
-            device_type: ""
-            runtime: ""
           - ios_version: 16.4
             ios_simulator: iPhone 14
-            device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-14
-            runtime: com.apple.CoreSimulator.SimRuntime.iOS-16-4
           - ios_version: 15.5
             ios_simulator: iPhone 13
-            device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-13
-            runtime: com.apple.CoreSimulator.SimRuntime.iOS-15-5
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
