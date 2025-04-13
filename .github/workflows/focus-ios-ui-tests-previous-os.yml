@@ -20,16 +20,16 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          #- ios_version: 17.5
-          #  ios_simulator: iPhone 15
-          #  device_type: ""
-          #  runtime: ""
+          - ios_version: 17.5
+            ios_simulator: iPhone 15
+            device_type: ""
+            runtime: ""
           - ios_version: 16.4
-            ios_simulator: iPhone 14 iOS 16.4
+            ios_simulator: iPhone 14
             device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-14
             runtime: com.apple.CoreSimulator.SimRuntime.iOS-16-4
           - ios_version: 15.5
-            ios_simulator: iPhone 13 iOS 15.5
+            ios_simulator: iPhone 13
             device_type: com.apple.CoreSimulator.SimDeviceType.iPhone-13
             runtime: com.apple.CoreSimulator.SimRuntime.iOS-15-5
     steps:
@@ -66,7 +66,6 @@ jobs:
             sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
             xcrun simctl create "${{ matrix.ios_simulator }}" ${{ matrix.device_type }} ${{ matrix.runtime }}
           fi
-          xcrun simctl list devices iphone
           xcrun simctl boot "${{ matrix.ios_simulator }}"
       - name: Build Focus
         id: compile
@@ -91,7 +90,7 @@ jobs:
             -derivedDataPath ~/DerivedData \
             -destination 'platform=iOS Simulator,arch=arm64,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest \
-            -only-testing:XCUITest/SettingTest/testCheckSetting | xcpretty _0.3.0_
+            -only-testing:XCUITest/CopyPasteTest/testPastenGo | xcpretty _0.3.0_
           xcodebuild \
             test-without-building \
             -scheme ${{ env.xcodebuild_scheme }} \
