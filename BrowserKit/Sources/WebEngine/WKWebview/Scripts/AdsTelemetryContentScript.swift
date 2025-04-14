@@ -54,23 +54,24 @@ public struct EngineSearchProviderModel {
 /// Delegate protocol for AdsTelemetryContentScript. Provides callbacks to delegates for ad tracking detection
 /// and allows the delegate to provide the search engine definitions and regexes. (See: `EngineSearchProviderModel`)
 protocol AdsTelemetryScriptDelegate: AnyObject {
-    func trackAdsFoundOnPage(providerName: String, urls: [String])
-    func trackAdsClickedOnPage(providerName: String)
     func searchProviderModels() -> [EngineSearchProviderModel]
 }
 
 /// Script utility to handle tracking of ads on pages, based on provided search engine regexes. (See `searchProviderModels`)
 class AdsTelemetryContentScript: WKContentScript {
     private var logger: Logger
-    private weak var delegate: AdsTelemetryScriptDelegate?
+    private weak var delegate: ContentScriptDelegate?
+    private let searchProviderModels: [EngineSearchProviderModel]
 
-    init(logger: Logger = DefaultLogger.shared,
-         delegate: AdsTelemetryScriptDelegate?) {
+    init(delegate: ContentScriptDelegate?,
+         searchProviderModels: [EngineSearchProviderModel] = [],
+         logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         self.delegate = delegate
+        self.searchProviderModels = searchProviderModels
     }
 
-    class func name() -> String {
+    static func name() -> String {
         return "Ads"
     }
 
@@ -92,7 +93,6 @@ class AdsTelemetryContentScript: WKContentScript {
     // MARK: - Utility
 
     private func getProviderForMessage(message: Any) -> EngineSearchProviderModel? {
-        guard let searchProviderModels = delegate?.searchProviderModels() else { return nil }
         guard let body = message as? [String: Any], let url = body["url"] as? String else { return nil }
         for provider in searchProviderModels {
             guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
@@ -105,11 +105,11 @@ class AdsTelemetryContentScript: WKContentScript {
     // MARK: - Tracking
 
     private func trackAdsFoundOnPage(providerName: String, urls: [String]) {
-        delegate?.trackAdsFoundOnPage(providerName: providerName, urls: urls)
+        delegate?.contentScriptDidSendEvent(.trackedAdsFoundOnPage(provider: providerName, urls: urls))
     }
 
     private func trackAdsClickedOnPage(providerName: String) {
         // TODO: [FXIOS-8629] This will require some client-side integration and hooks. Will revisit soon.
-        delegate?.trackAdsClickedOnPage(providerName: providerName)
+        delegate?.contentScriptDidSendEvent(.trackedAdsClickedOnPage(provider: providerName))
     }
 }
