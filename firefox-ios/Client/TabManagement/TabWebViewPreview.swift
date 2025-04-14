@@ -11,7 +11,6 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         static let addressBarCornerRadius: CGFloat = 8
         static let addressBarBorderHeight: CGFloat = 1
         static let addressBarHeight: CGFloat = 43
-        static let toolbarHeight: CGFloat = 48
         static let addressBarOnToplayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         static let addressBarOnBottomlayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
