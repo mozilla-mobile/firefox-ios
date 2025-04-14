@@ -7,7 +7,6 @@ import WebKit
 import PassKit
 import Combine
 import Glean
-import Shared
 
 protocol LegacyBrowserState {
     var url: URL? { get }
