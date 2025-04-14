@@ -21,7 +21,6 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
-                          FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
@@ -148,17 +147,27 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
-            isZeroSearch: isZeroSearch,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+    }
+
+    private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
+        store.dispatch(
+            HomepageAction(
+                isZeroSearch: isZeroSearch,
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.embeddedHomepage
+            )
+        )
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
@@ -770,63 +779,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showETPMenu(sourceView: sourceView)
-    }
-
-    func showFakespotFlowAsModal(productURL: URL) {
-        guard let coordinator = makeFakespotCoordinator() else { return }
-        coordinator.startModal(productURL: productURL)
-    }
-
-    func showFakespotFlowAsSidebar(productURL: URL,
-                                   sidebarContainer: SidebarEnabledViewProtocol,
-                                   parentViewController: UIViewController) {
-        guard let coordinator = makeFakespotCoordinator() else { return }
-        coordinator.startSidebar(productURL: productURL,
-                                 sidebarContainer: sidebarContainer,
-                                 parentViewController: parentViewController)
-    }
-
-    func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no modal to close
-        }
-        fakespotCoordinator.dismissModal(animated: animated)
-    }
-
-    func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no sidebar to close
-        }
-        fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
-                                         parentViewController: parentViewController)
-    }
-
-    func updateFakespotSidebar(productURL: URL,
-                               sidebarContainer: SidebarEnabledViewProtocol,
-                               parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no sidebar
-        }
-        fakespotCoordinator.updateSidebar(productURL: productURL,
-                                          sidebarContainer: sidebarContainer,
-                                          parentViewController: parentViewController)
-    }
-
-    private func makeFakespotCoordinator() -> FakespotCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
-            return nil // flow is already handled
-        }
-
-        let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
-        coordinator.parentCoordinator = self
-        add(child: coordinator)
-        return coordinator
     }
 
     /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.

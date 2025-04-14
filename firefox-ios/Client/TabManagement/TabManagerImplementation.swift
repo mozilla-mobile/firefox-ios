@@ -924,8 +924,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: isPrivateBrowsing ?? false)
         tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
 
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if shouldClearPrivateTabs(), !tab.isPrivate {
+        // Make sure to wipe the private tabs if the user has the pref turned on and there are private tabs to remove
+        if shouldClearPrivateTabs(), !tab.isPrivate && !privateTabs.isEmpty {
             removeAllPrivateTabs()
         }
 
@@ -968,6 +968,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
+            tab.setZoomLevelforDomain()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 

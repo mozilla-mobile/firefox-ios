@@ -92,8 +92,7 @@ final class RouteBuilder: FeatureFlaggable {
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
-                if !UIPasteboard.general.hasURLs {
-                    let searchText = UIPasteboard.general.string ?? ""
+                if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
                     return .searchQuery(query: searchText, isPrivate: isPrivate)
                 } else {
                     let url = UIPasteboard.general.url

@@ -51,10 +51,6 @@ extension Notification.Name {
 
     public static let HomePanelPrefsChanged = Notification.Name("HomePanelPrefsChanged")
 
-    public static let FakespotViewControllerDidDismiss = Notification.Name("FakespotViewControllerDidDismiss")
-
-    public static let FakespotViewControllerDidAppear = Notification.Name("FakespotViewControllerDidAppear")
-
     public static let TrackingProtectionViewControllerDidDismiss =
     Notification.Name("TrackingProtectionViewControllerDidDismiss")
 

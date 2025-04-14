@@ -324,7 +324,7 @@ class SearchTests: BaseTestCase {
             let customizeHomepageElement = AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage
             let customizeHomepage = app.cells.otherElements.buttons[customizeHomepageElement]
             let menuSettingsButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            scrollToElement(customizeHomepage)
+            app.swipeUp()
             mozWaitForElementToExist(customizeHomepage)
             let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
             XCTAssertTrue(urlBar.isBelow(element: customizeHomepage))

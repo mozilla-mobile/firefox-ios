@@ -16,5 +16,7 @@
 	<array>
 		<string>$(AppIdentifierPrefix)org.mozilla.ios.Fennec</string>
 	</array>
+	<key>com.apple.developer.web-browser</key>
+	<true/>
 </dict>
 </plist>

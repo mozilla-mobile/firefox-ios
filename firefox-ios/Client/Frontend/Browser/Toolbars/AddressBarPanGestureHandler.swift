@@ -9,7 +9,7 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
         static let offset: CGFloat = 24
-        static let swipingDuration: TimeInterval = 0.2
+        static let swipingDuration: TimeInterval = 0.15
         static let swipingVelocity: CGFloat = 150
     }
 
@@ -57,6 +57,15 @@ final class AddressBarPanGestureHandler: NSObject {
         addressBarContainer.addGestureRecognizer(newPanGesture)
 
         panGestureRecognizer = newPanGesture
+        panGestureRecognizer?.isEnabled = true
+    }
+
+    func enablePanGestureRecognizer() {
+        panGestureRecognizer?.isEnabled = true
+    }
+
+    func disablePanGestureRecognizer() {
+        panGestureRecognizer?.isEnabled = false
     }
 
     // MARK: - Pan Gesture Handling

@@ -447,7 +447,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             AppDataUsageReportSetting(settings: self),
             DeleteExportedDataSetting(settings: self),
             ForceCrashSetting(settings: self),
-            SwitchFakespotProduction(settings: self, settingsDelegate: self),
             ChangeToChinaSetting(settings: self),
             AppReviewPromptSetting(settings: self, settingsDelegate: self),
             ToggleInactiveTabs(settings: self, settingsDelegate: self),
@@ -457,7 +456,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
-            ScreenshotSetting(settings: self)
+            ScreenshotSetting(settings: self),
+            DeleteLoginsKeysSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

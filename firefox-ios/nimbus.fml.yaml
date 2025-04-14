@@ -13,7 +13,6 @@ channels:
   - beta
   - release
 include:
-  - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
@@ -21,7 +20,6 @@ include:
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
-  - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
@@ -50,4 +48,3 @@ include:
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/unifiedAds.yaml
-  - nimbus-features/zoomFeature.yaml

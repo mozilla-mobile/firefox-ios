@@ -207,7 +207,6 @@ class MainMenuViewController: UIViewController,
 
     private func setupHintView() {
         var viewModel = ContextualHintViewModel(
-            isActionType: viewProvider.isActionType,
             actionButtonTitle: viewProvider.getCopyFor(.action),
             title: viewProvider.getCopyFor(.title),
             description: viewProvider.getCopyFor(.description),

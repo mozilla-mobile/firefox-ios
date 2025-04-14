@@ -1030,7 +1030,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
-            updateFakespot(tab: tab, isReload: true)
         }
     }
 

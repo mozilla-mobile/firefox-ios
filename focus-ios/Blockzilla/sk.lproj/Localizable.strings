@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zavrieť";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Zdá sa, že internetové pripojenie je offline.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Skúsiť znova";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Začíname";
 

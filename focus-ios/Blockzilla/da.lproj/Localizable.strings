@@ -80,7 +80,7 @@
 "Autocomplete.customUrlAdded" = "Ny brugerdefineret URL tilføjet.";
 
 /* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Autocomplete.defaultDescriptoin" = "Aktiver for at få %@ til at autofuldføre over 450 populære URL'er i adresselinjen.";
+"Autocomplete.defaultDescriptoin" = "Aktiver for at få %@ til at autofuldføre over 450 populære URL'er i adressefeltet.";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Deaktiveret";
@@ -284,7 +284,7 @@
 "SearchSuggestions.promptEnable" = "Ja";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "For at kunne vise søgeforslag sender %@ dine indtastninger i søgefeltet til søgetjenesten.";
+"SearchSuggestions.promptMessage" = "For at kunne vise søgeforslag sender %@ dine indtastninger i adressefeltet til søgetjenesten.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Vis søgeforslag?";
@@ -314,7 +314,7 @@
 "Settings.detailTextCrashReports.V2" = "Dette hjælper os med at diagnosticere og løse problemer med browseren.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Settings.detailTextSearchSuggestion" = "%@ sender det indtastede i adresselinjen til den valgte søgetjeneste.";
+"Settings.detailTextSearchSuggestion" = "%@ sender det indtastede i adressefeltet til den valgte søgetjeneste.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla stræber efter kun at indsamle, hvad vi skal bruge for at kunne tilbyde og forbedre %@ for alle.";
