@@ -8,8 +8,8 @@ class ZoomingTests: BaseTestCase {
     let zoomInButton = XCUIApplication().buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton]
     let zoomOutButton = XCUIApplication().buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton]
     var zoomLevel = XCUIApplication().staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-    let zoomInLevels = ["110%", "125%", "150%", "175%"]
-    let zoomOutLevels = ["150%", "125%", "110%", "100%"]
+    let zoomInLevels = ["110%", "125%", "150%"]
+    let zoomOutLevels = ["125%", "110%", "100%"]
     let zoomOutLevelsLandscape = ["90%", "75%", "50%"]
     let zoomInLevelsLandscape = ["75%", "90%"]
     let bookOfMozillaTxt = XCUIApplication().staticTexts.containingText("The Book of Mozilla").element(boundBy: 1)
@@ -29,8 +29,23 @@ class ZoomingTests: BaseTestCase {
     func testZoomingActions() {
         // Regular browsing
         validateZoomActions()
+    }
 
-        // Repeat all the steps in private browsing
+    // https://mozilla.testrail.io/index.php?/cases/view/3003915
+    func testZoomingActionsLandscape() {
+        navigator.openURL(websites[0])
+        waitUntilPageLoad()
+        // Tap on the hamburger menu -> Tap on Zoom
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(PageZoom)
+        // The zoom bar is displayed
+        waitForElementsToExist(
+            [
+                zoomInButton,
+                zoomOutButton
+            ]
+        )
+        validateZoomActionsLandscape()
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
@@ -39,6 +54,7 @@ class ZoomingTests: BaseTestCase {
         }
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         validateZoomActions()
+        validateZoomActionsLandscape()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
@@ -51,7 +67,7 @@ class ZoomingTests: BaseTestCase {
         forceRestartApp()
         openWebsiteAndReachZoomSetting(website: 0)
         zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 150%")
         zoomOut()
         zoomOutButton.waitAndTap()
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
@@ -146,16 +162,18 @@ class ZoomingTests: BaseTestCase {
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
         // Tap on + and - buttons
         zoomIn()
-        // Swipe up and down the page
-        swipeUp()
-        swipeDown()
         zoomOut()
         zoomOutButton.waitAndTap()
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+    }
+
+    func validateZoomActionsLandscape() {
         // Switch the device orientation to landscape
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         zoomOutLandscape()
+        swipeUp()
+        swipeDown()
         zoomInLandscape()
         zoomInButton.waitAndTap()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel])
@@ -169,7 +187,7 @@ class ZoomingTests: BaseTestCase {
         let viewCount = app.buttons.matching(identifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel).count
         XCTAssertLessThanOrEqual(viewCount, 1, "Too many matches")
 
-        for i in 0...3 {
+        for i in 0...2 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height
             zoomInButton.waitAndTap()
@@ -181,7 +199,7 @@ class ZoomingTests: BaseTestCase {
     }
 
     func zoomOut() {
-        for i in 0...2 {
+        for i in 0...1 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height
             zoomOutButton.waitAndTap()
@@ -229,7 +247,7 @@ class ZoomingTests: BaseTestCase {
     }
 
     func swipeDown() {
-        for _ in 0...2 {
+        for _ in 0...1 {
             app.swipeDown()
             panScreen()
             mozWaitForElementToExist(app.staticTexts.element)
@@ -237,7 +255,7 @@ class ZoomingTests: BaseTestCase {
     }
 
     func swipeUp() {
-        for _ in 0...2 {
+        for _ in 0...1 {
             app.swipeUp()
             panScreen()
             mozWaitForElementToExist(app.staticTexts.element)

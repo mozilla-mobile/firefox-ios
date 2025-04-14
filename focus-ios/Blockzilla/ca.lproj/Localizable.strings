@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Els vostres drets";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Condicions d’ús";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blocar els elements de seguiment per millorar la privadesa";
 
@@ -178,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Tanca";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Sembla que esteu sense connexió a Internet.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Torna-ho a provar";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Inicia";
 
@@ -214,6 +223,12 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Més que d'incògnit";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "avís de privadesa";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "El Firefox prioritza la vostra privadesa. Més informació en l’%@.";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Configureu els paràmetres per decidir si voleu compartir molt o poc.";
 
@@ -222,6 +237,24 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Porteu la navegació privada a un altre nivell.";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Accepta i continua";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Fet";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "condicions d’ús del Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "Ràpid. Privat. Sense distraccions.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "En continuar, accepteu les %@.";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "Us donem la benvinguda al %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Us donem la benvinguda al Firefox %@";

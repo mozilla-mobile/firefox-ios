@@ -21,7 +21,9 @@ protocol TemporaryDocument {
 
     func cancelDownload()
 
-    func pauseResumeDownload()
+    func pauseDownload()
+
+    func resumeDownload()
 }
 
 class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate {
@@ -181,16 +183,14 @@ class DefaultTemporaryDocument: NSObject,
         currentDownloadTask = nil
     }
 
-    func pauseResumeDownload() {
-        guard let currentDownloadTask else { return }
-        switch currentDownloadTask.state {
-        case .running:
-            currentDownloadTask.suspend()
-        case .suspended:
-            currentDownloadTask.resume()
-        default:
-            break
+    func pauseDownload() {
+        if currentDownloadTask?.state == .running {
+            currentDownloadTask?.suspend()
         }
+    }
+
+    func resumeDownload() {
+        currentDownloadTask?.resume()
     }
 
     private func storeTempDownloadFile(at url: URL) -> URL? {

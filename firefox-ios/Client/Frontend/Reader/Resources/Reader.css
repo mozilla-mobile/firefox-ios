@@ -40,36 +40,7 @@ body {
   font-family: -apple-system, sans-serif;
 }
 
-.light {
-  background-color: #ffffff;
-  color: #15141a;
-}
-
-.dark {
-  background-color: #333333;
-  color: #fbfbfe;
-}
-
-.sepia {
-    background-color: #fff4de;
-    color: #15141a;
-}
-
-.sans-serif {
-  font-family: -apple-system, sans-serif;
-}
-
-.sans-serif-bold {
-  font-family: -apple-system, sans-serif;
-  font-weight: bold;
-}
-
-.serif {
-  font-family: new-york;
-}
-
-.serif-bold {
-    font-family: new-york;
+.bold {
     font-weight: bold;
 }
 

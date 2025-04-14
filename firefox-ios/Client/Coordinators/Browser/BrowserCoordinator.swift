@@ -21,7 +21,6 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
-                          FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
@@ -772,63 +771,6 @@ class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: sourceView)
     }
 
-    func showFakespotFlowAsModal(productURL: URL) {
-        guard let coordinator = makeFakespotCoordinator() else { return }
-        coordinator.startModal(productURL: productURL)
-    }
-
-    func showFakespotFlowAsSidebar(productURL: URL,
-                                   sidebarContainer: SidebarEnabledViewProtocol,
-                                   parentViewController: UIViewController) {
-        guard let coordinator = makeFakespotCoordinator() else { return }
-        coordinator.startSidebar(productURL: productURL,
-                                 sidebarContainer: sidebarContainer,
-                                 parentViewController: parentViewController)
-    }
-
-    func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no modal to close
-        }
-        fakespotCoordinator.dismissModal(animated: animated)
-    }
-
-    func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no sidebar to close
-        }
-        fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
-                                         parentViewController: parentViewController)
-    }
-
-    func updateFakespotSidebar(productURL: URL,
-                               sidebarContainer: SidebarEnabledViewProtocol,
-                               parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no sidebar
-        }
-        fakespotCoordinator.updateSidebar(productURL: productURL,
-                                          sidebarContainer: sidebarContainer,
-                                          parentViewController: parentViewController)
-    }
-
-    private func makeFakespotCoordinator() -> FakespotCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
-            return nil // flow is already handled
-        }
-
-        let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
-        coordinator.parentCoordinator = self
-        add(child: coordinator)
-        return coordinator
-    }
-
     /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
     ///
     /// For shared tabs where the user is currently on a non-HTML page (e.g. viewing a PDF), this method will initiate a
@@ -1067,8 +1009,8 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.showDocumentLoadingView()
     }
 
-    func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        browserViewController.removeDocumentLoadingView(completion: completion)
+    func removeDocumentLoading() {
+        browserViewController.removeDocumentLoadingView()
     }
 
     // MARK: Microsurvey

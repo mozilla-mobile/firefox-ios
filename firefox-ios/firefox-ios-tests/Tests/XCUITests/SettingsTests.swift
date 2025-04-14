@@ -297,7 +297,6 @@ class SettingsTests: BaseTestCase {
                 app.switches[settingsQuery.Browsing.inactiveTabsSwitch],
                 table.cells[settingsQuery.OpenWithMail.title],
                 app.switches[settingsQuery.OfferToOpen.title],
-                app.switches[settingsQuery.ShowLink.title],
                 table.cells[settingsQuery.Browsing.autoPlay],
                 table.cells[settingsQuery.BlockPopUp.title],
                 table.cells[settingsQuery.NoImageMode.title],
@@ -310,9 +309,6 @@ class SettingsTests: BaseTestCase {
         XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
                        "0",
                        "Offer to Open Copied Links - toggle is not disabled by default")
-        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
-                       "1",
-                       "Show Links Previews - toggle is not enabled by default")
         app.swipeUp()
         XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
                        "1",

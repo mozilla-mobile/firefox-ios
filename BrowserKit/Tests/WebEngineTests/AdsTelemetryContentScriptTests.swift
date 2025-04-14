@@ -6,29 +6,29 @@ import XCTest
 @testable import WebEngine
 
 final class AdsTelemetryContentScriptTests: XCTestCase {
-    private var adsTelemetryDelegate: MockAdsTelemetryDelegate!
+    private var contentScriptDelegate: MockContentScriptDelegate!
 
     override func setUp() {
         super.setUp()
-        adsTelemetryDelegate = MockAdsTelemetryDelegate()
+        contentScriptDelegate = MockContentScriptDelegate()
     }
 
     override func tearDown() {
+        contentScriptDelegate = nil
         super.tearDown()
-        adsTelemetryDelegate = nil
     }
 
     func testDidReceiveMessageGivenEmptyMessageThenNoDelegateCalled() {
-        let subject = AdsTelemetryContentScript(delegate: adsTelemetryDelegate)
+        let subject = createSubject()
 
         subject.userContentController(didReceiveMessage: [])
 
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsFoundOnPageCalled, 0)
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsClickedOnPageCalled, 0)
+        XCTAssertEqual(contentScriptDelegate.contentScriptDidSendEventCalled, 0)
+        XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
     func testDidReceiveMessageWithNoAdURLMatchThenNoDelegateCalled() {
-        let subject = AdsTelemetryContentScript(delegate: adsTelemetryDelegate)
+        let subject = createSubject()
 
         subject.userContentController(didReceiveMessage: [
             "url": "https://www.someSiteWeDontCareAbout.com/search?q=something",
@@ -36,12 +36,12 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
             "urls": ["https://www.somewebsite.com/somepage"]
         ])
 
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsFoundOnPageCalled, 0)
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsClickedOnPageCalled, 0)
+        XCTAssertEqual(contentScriptDelegate.contentScriptDidSendEventCalled, 0)
+        XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
     func testDidReceiveMessageWithBasicURLMatchButNoAdURLsThenNoDelegateCalled() {
-        let subject = AdsTelemetryContentScript(delegate: adsTelemetryDelegate)
+        let subject = createSubject()
 
         subject.userContentController(didReceiveMessage: [
             "url": "https://www.mocksearch.com/search?q=something",
@@ -49,12 +49,12 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
             "urls": ["https://www.somewebsite.com/somepage"]
         ])
 
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsFoundOnPageCalled, 0)
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsClickedOnPageCalled, 0)
+        XCTAssertEqual(contentScriptDelegate.contentScriptDidSendEventCalled, 0)
+        XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
-    func testDidReceiveMessageWithBasicURLMatchAndMatchingAdURLsThenTrackOnPageCalled() {
-        let subject = AdsTelemetryContentScript(delegate: adsTelemetryDelegate)
+    func testDidReceiveMessageWithBasicURLMatchAndMatchingAdURLsThenTrackOnPageCalled() throws {
+        let subject = createSubject()
 
         subject.userContentController(didReceiveMessage: [
             "url": "https://www.mocksearch.com/search?q=something",
@@ -62,12 +62,14 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
             "urls": ["https://www.mocksearch.com/pagead/aclk"]
         ])
 
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsFoundOnPageCalled, 1)
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsClickedOnPageCalled, 0)
+        let event = try XCTUnwrap(contentScriptDelegate.lastContentScriptEvent)
+        XCTAssertEqual(contentScriptDelegate.contentScriptDidSendEventCalled, 1)
+        XCTAssertEqual(event, .trackedAdsFoundOnPage(provider: "mocksearch",
+                                                     urls: ["https://www.mocksearch.com/pagead/aclk"]))
     }
 
-    func testDidReceiveMessageWithBasicURLMatchAndMatchingAdURLsThenTrackOnPageCalledAndURLsSent() {
-        let subject = AdsTelemetryContentScript(delegate: adsTelemetryDelegate)
+    func testDidReceiveMessageWithBasicURLMatchAndMatchingAdURLsThenTrackOnPageCalledAndURLsSent() throws {
+        let subject = createSubject()
 
         subject.userContentController(didReceiveMessage: [
             "url": "https://www.mocksearch.com/search?q=something",
@@ -76,9 +78,23 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
                      "https://www.mocksearch.com/pagead/bclk"]
         ])
 
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsFoundOnPageCalled, 1)
-        XCTAssertEqual(adsTelemetryDelegate.savedTrackAdsOnPageURLs?.count ?? 0, 2)
-        XCTAssertEqual(adsTelemetryDelegate.savedTrackAdsOnPageProviderName, "mocksearch")
-        XCTAssertEqual(adsTelemetryDelegate.trackAdsClickedOnPageCalled, 0)
+        guard let event = contentScriptDelegate.lastContentScriptEvent,
+              case .trackedAdsFoundOnPage(let provider, let urls) = event else {
+            XCTFail("Couldn't find expected event")
+            return
+        }
+
+        XCTAssertEqual(contentScriptDelegate.contentScriptDidSendEventCalled, 1)
+        XCTAssertEqual(urls.count, 2)
+        XCTAssertEqual(provider, "mocksearch")
+    }
+
+    private func createSubject() -> AdsTelemetryContentScript {
+        let subject = AdsTelemetryContentScript(
+            delegate: contentScriptDelegate,
+            searchProviderModels: MockAdsTelemetrySearchProvider.mockSearchProviderModels()
+        )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }

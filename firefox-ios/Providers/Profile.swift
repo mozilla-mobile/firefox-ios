@@ -707,34 +707,27 @@ open class BrowserProfile: Profile {
     }()
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
-        do {
-            // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-            // let bucketName = (server == .prod ? "main" : "main-preview")
-            // For now we're always using prod, per AS team guidance
-            let server = RemoteSettingsServer.prod
-            let bucketName = "main"
-            let config = RemoteSettingsConfig2(server: server,
-                                               bucketName: bucketName,
-                                               appContext: remoteSettingsAppContext())
+        // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
+        // let bucketName = (server == .prod ? "main" : "main-preview")
+        // For now we're always using prod, per AS team guidance
+        let server = RemoteSettingsServer.prod
+        let bucketName = "main"
+        let config = RemoteSettingsConfig2(server: server,
+                                           bucketName: bucketName,
+                                           appContext: remoteSettingsAppContext())
 
-            let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
-            let path = url.path
+        let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
+        let path = url.path
 
-            // Create the remote settings directory if needed
-            if !FileManager.default.fileExists(atPath: path) {
-                try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-            }
-            let service = try RemoteSettingsService(storageDir: path, config: config)
-            #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-            serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
-            #endif
-            return service
-        } catch {
-            logger.log("Failed to instantiate RemoteSettingsService",
-                       level: .fatal,
-                       category: .storage)
-            return nil
+        // Create the remote settings directory if needed
+        if !FileManager.default.fileExists(atPath: path) {
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         }
+        let service = RemoteSettingsService(storageDir: path, config: config)
+        #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+        serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
+        #endif
+        return service
     }()
 
     private var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?

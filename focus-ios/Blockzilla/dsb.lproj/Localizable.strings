@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Zacyniś";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Zda se, až internetny zwisk jo pśetergnjony.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Hyšći raz wopytaś";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Prědne kšace";
 

@@ -48,6 +48,10 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         var totalProgress: Double {
             totalBytesExpected == 0 ? 0 : Double(totalBytesDownloaded) / Double(totalBytesExpected)
         }
+
+        var containsOnlyEncodedFiles: Bool {
+            downloads.allSatisfy { $0.hasContentEncoding == true }
+        }
     }
 }
 @available(iOS 16.2, *)
@@ -104,6 +108,7 @@ struct DownloadLiveActivity: Widget {
             static let downloadingFontSize: CGFloat = 17
             static let progressFontSize: CGFloat = 15
             static let wordsTopPadding: CGFloat = 0
+            static let wordsTopPaddingNoSubtitle: CGFloat = 4
             static let wordsLeftPadding: CGFloat = 5
             static let wordsRightPadding: CGFloat = 5
             static let wordsBottomPadding: CGFloat = 0
@@ -137,12 +142,6 @@ struct DownloadLiveActivity: Widget {
         }
     }
     private func lockScreenView (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
-        let bytesCompleted = liveDownload.state.totalBytesDownloaded
-        let bytesExpected = liveDownload.state.totalBytesExpected
-        let mbCompleted = ByteCountFormatter.string(fromByteCount: bytesCompleted, countStyle: .file)
-        let mbExpected = ByteCountFormatter.string(fromByteCount: bytesExpected, countStyle: .file)
-        let subtitle = String(format: .LiveActivity.Downloads.FileProgressText, mbCompleted, mbExpected)
-        let totalCompletion = liveDownload.state.completedDownloads == liveDownload.state.downloads.count
         return ZStack {
             Rectangle()
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
@@ -157,42 +156,59 @@ struct DownloadLiveActivity: Widget {
                         .scaledToFit()
                         .frame(width: UX.LockScreen.iconSize, height: UX.LockScreen.iconSize)
                 }
-                VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
-                    Text(liveDownload.state.downloads.count == 1 ?
-                         String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
-                            String(format: .LiveActivity.Downloads.FileCountText,
-                                   String(liveDownload.state.downloads.count)))
-                        .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
-                        .foregroundColor(UX.LockScreen.labelColor)
-                    Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
-                        .opacity(0.8)
-                        .foregroundColor(UX.LockScreen.labelColor)
-                        .contentTransition(.identity)
-                }
+                lockScreenTexts(liveDownload: liveDownload)
                 Spacer()
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: UX.LockScreen.circleWidth)
-                        .foregroundColor(UX.LockScreen.labelColor)
-                        .opacity(0.3)
-                    Circle()
-                        .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
-                        .stroke(style: StrokeStyle(lineWidth: UX.LockScreen.circleWidth))
-                        .rotationEffect(.degrees(270))
-                        .animation(.linear, value: UX.LockScreen.circleAnimation)
-                        .foregroundColor(UX.LockScreen.labelColor)
-                    Image(totalCompletion ? UX.checkmarkIcon : UX.mediaStopIcon)
-                        .renderingMode(.template)
-                        .frame(width: UX.LockScreen.progressIconSize, height: UX.LockScreen.progressIconSize)
-                        .foregroundStyle(UX.LockScreen.labelColor)
-                }
-                .frame(width: UX.LockScreen.circleRadius, height: UX.LockScreen.circleRadius)
+                lockScreenDownloadProgress(liveDownload: liveDownload)
             }
             .padding()
         }
     }
-    private func leadingExpandedRegion
-    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+
+    private func lockScreenTexts(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+        let bytesCompleted = liveDownload.state.totalBytesDownloaded
+        let bytesExpected = liveDownload.state.totalBytesExpected
+        let mbCompleted = ByteCountFormatter.string(fromByteCount: bytesCompleted, countStyle: .file)
+        let mbExpected = ByteCountFormatter.string(fromByteCount: bytesExpected, countStyle: .file)
+        let subtitle = String(format: .LiveActivity.Downloads.FileProgressText, mbCompleted, mbExpected)
+        return VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
+            Text(liveDownload.state.downloads.count == 1 ?
+                 String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
+                    String(format: .LiveActivity.Downloads.FileCountText,
+                           String(liveDownload.state.downloads.count)))
+            .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
+            .foregroundColor(UX.LockScreen.labelColor)
+            Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
+                .opacity(0.8)
+                .foregroundColor(UX.LockScreen.labelColor)
+                .contentTransition(.identity)
+        }
+    }
+
+    private func lockScreenDownloadProgress(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+        let totalCompletion = liveDownload.state.completedDownloads == liveDownload.state.downloads.count
+        let circleProgressPercentage = min(
+          liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
+        )
+        return ZStack {
+            Circle()
+                .stroke(lineWidth: UX.LockScreen.circleWidth)
+                .foregroundColor(UX.LockScreen.labelColor)
+                .opacity(0.3)
+            Circle()
+                .trim(from: 0.0, to: circleProgressPercentage)
+                .stroke(style: StrokeStyle(lineWidth: UX.LockScreen.circleWidth))
+                .rotationEffect(.degrees(270))
+                .animation(.linear, value: UX.LockScreen.circleAnimation)
+                .foregroundColor(UX.LockScreen.labelColor)
+            Image(totalCompletion ? UX.checkmarkIcon : UX.mediaStopIcon)
+                .renderingMode(.template)
+                .frame(width: UX.LockScreen.progressIconSize, height: UX.LockScreen.progressIconSize)
+                .foregroundStyle(UX.LockScreen.labelColor)
+        }
+        .frame(width: UX.LockScreen.circleRadius, height: UX.LockScreen.circleRadius)
+    }
+
+    private func leadingExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
       DynamicIslandExpandedRegion(.leading) {
         ZStack {
@@ -211,8 +227,7 @@ struct DownloadLiveActivity: Widget {
                              trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
       }
     }
-    private func centerExpandedRegion
-    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    private func centerExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
       DynamicIslandExpandedRegion(.center) {
           Text(liveDownload.state.downloads.count == 1 ?
@@ -221,41 +236,47 @@ struct DownloadLiveActivity: Widget {
           .font(.headline)
           .frame(maxWidth: .infinity,
                  alignment: .leading)
-          .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
+          .padding(EdgeInsets(top: liveDownload.state.containsOnlyEncodedFiles ?
+                              DownloadLiveActivity.UX.DynamicIsland.wordsTopPaddingNoSubtitle :
+                              DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
                               leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
                               bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
                               trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
         let bytesDownloaded = ByteCountFormatter.string(
           fromByteCount: liveDownload.state.totalBytesDownloaded,
           countStyle: .file
-          )
+        )
         let bytesExpected = ByteCountFormatter.string(
           fromByteCount: liveDownload.state.totalBytesExpected,
           countStyle: .file
-          )
-        Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
-          .font(.subheadline)
-          .foregroundColor(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
-          .frame(maxWidth: .infinity,
-                 alignment: .leading)
-          .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
-                              leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
-                              bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
-                              trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
-          .contentTransition(.identity)
+        )
+        if !liveDownload.state.containsOnlyEncodedFiles {
+          Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
+            .font(.subheadline)
+            .foregroundColor(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
+            .frame(maxWidth: .infinity,
+                   alignment: .leading)
+            .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
+                                leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
+                                bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
+                                trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
+            .contentTransition(.identity)
+        }
       }
     }
-    private func trailingExpandedRegion
-    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    private func trailingExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
-      DynamicIslandExpandedRegion(.trailing) {
+      let circleProgressPercentage = min(
+        liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
+      )
+      return DynamicIslandExpandedRegion(.trailing) {
         ZStack {
           Circle()
             .stroke(UX.DynamicIsland.circleStrokeColor, lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
             .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
                    height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
           Circle()
-            .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+            .trim(from: 0.0, to: circleProgressPercentage)
             .stroke(style: StrokeStyle(lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth))
             .rotationEffect(.degrees(DownloadLiveActivity.UX.DynamicIsland.rotation))
             .animation(.linear, value: 0.5)
@@ -295,6 +316,9 @@ struct DownloadLiveActivity: Widget {
                     .foregroundStyle(.orange)
                     .padding([.leading, .trailing], 2)
             } compactTrailing: {
+                let circleProgressPercentage = min(
+                  liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
+                )
                 ZStack {
                     Circle()
                         .stroke(lineWidth: UX.DynamicIsland.lineWidth)
@@ -304,7 +328,7 @@ struct DownloadLiveActivity: Widget {
                         .padding(.leading, 2)
                         .padding(.trailing, 1)
                     Circle()
-                        .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                        .trim(from: 0.0, to: circleProgressPercentage)
                         .stroke(style: StrokeStyle(lineWidth: UX.DynamicIsland.lineWidth))
                         .rotationEffect(.degrees(UX.DynamicIsland.rotation))
                         .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))

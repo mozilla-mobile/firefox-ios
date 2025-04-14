@@ -30,7 +30,6 @@ public struct PrefsKeys {
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
-    public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let ShowClipboardBar = "showClipboardBar"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
@@ -126,8 +125,6 @@ public struct PrefsKeys {
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
         case mainMenuKey = "MainMenuHintKey"
-        case shoppingOnboardingKey = "ShoppingOnboardingCFRKey"
-        case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
         case navigationKey = "ContextualHintNavigation"
     }
 
@@ -164,12 +161,6 @@ public struct PrefsKeys {
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
     public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
 
-    // Shopping Keys
-    public static let Shopping2023EnableAds = "Shopping2023EnableAdsKey"
-    public static let Shopping2023OptIn = "Shopping2023OptInKey"
-    public static let Shopping2023OptInSeen = "Shopping2023OptInSeenKey"
-    public static let Shopping2023ExplicitOptOut = "Shopping2023ExplicitOptOutKey"
-
     // WallpaperManager Keys - Legacy
     public static let WallpaperManagerCurrentWallpaperObject = "WallpaperManagerCurrentWallpaperObject"
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
@@ -184,9 +175,6 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
-
-    // The last recorded CFR timestamp
-    public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"

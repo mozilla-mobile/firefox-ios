@@ -10,7 +10,7 @@
 
 ---
 $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
-
+  
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
@@ -22,6 +22,9 @@ Library:
 
 HistoryPanel:
   description: Corresponds to the history panel of the library.
+
+Homepage:
+  description: Corresponds to the homepage feature and all content that resides on the page.
 
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.

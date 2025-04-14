@@ -49,7 +49,8 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                                            children: generalSettings))
         }
 
-        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+            && !featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
             let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                                   titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
             settings.append(
@@ -74,17 +75,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
             )
 
-            let showLinksPreviewSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: theme,
-                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
-                defaultValue: true,
-                titleText: .SettingsShowLinkPreviewsTitle,
-                statusText: .SettingsShowLinkPreviewsStatus
-            )
-
-            linksSettings += [offerToOpenCopiedLinksSettings,
-                              showLinksPreviewSettings]
+            linksSettings += [offerToOpenCopiedLinksSettings]
 
             let blockOpeningExternalAppsSettings = BoolSetting(
                 prefs: profile.prefs,

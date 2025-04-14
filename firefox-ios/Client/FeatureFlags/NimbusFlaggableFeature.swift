@@ -10,9 +10,7 @@ import UIKit
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
-    case accountSettingsRedux
     case addressAutofillEdit
-    case appIconSelection
     case appearanceMenu
     case bookmarksRefactor
     case bottomSearchBar
@@ -20,9 +18,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
     case deeplinkOptimizationRefactor
-    case fakespotBackInStock
-    case fakespotFeature
-    case fakespotProductAds
     case feltPrivacySimplifiedUI
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
@@ -55,17 +50,16 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case toolbarRefactor
     case toolbarOneTapNewTab
+    case toolbarSwipingTabs
     case toolbarNavigationHint
     case tosFeature
     case trackingProtectionRefactor
     case useRustKeychain
-    case zoomFeature
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appIconSelection,
-                .appearanceMenu,
+        case    .appearanceMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
@@ -120,18 +114,13 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
-        case .appIconSelection,
-                .appearanceMenu,
+        case .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
-                .accountSettingsRedux,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .deeplinkOptimizationRefactor,
-                .fakespotBackInStock,
-                .fakespotFeature,
-                .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
                 .loginAutofill,
@@ -159,11 +148,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
+                .toolbarSwipingTabs,
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
-                .useRustKeychain,
-                .zoomFeature:
+                .useRustKeychain:
             return nil
         }
     }

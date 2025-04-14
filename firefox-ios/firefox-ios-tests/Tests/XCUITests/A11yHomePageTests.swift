@@ -12,6 +12,7 @@ class A11yHomePageTests: BaseTestCase {
     }
 
     func testA11yHomePageAccessibilityLabels() throws {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         guard #available(iOS 17.0, *), !skipPlatform else { return }
 
@@ -37,6 +38,6 @@ class A11yHomePageTests: BaseTestCase {
         )
 
         // Generate Report
-        A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+        A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName, generateCsv: false)
     }
 }

@@ -17,6 +17,11 @@ class MockRustKeychain: RustKeychain {
         _ = storage.removeValue(forKey: key)
     }
 
+    override public func removeLoginsKeysForDebugMenuItem() {
+        removeObject(key: loginsKeyIdentifier)
+        removeObject(key: loginsCanaryKeyIdentifier)
+    }
+
     override public func removeAllKeys() {
         storage.removeAll()
     }

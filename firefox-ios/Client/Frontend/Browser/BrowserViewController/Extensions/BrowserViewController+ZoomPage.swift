@@ -6,7 +6,7 @@ import Shared
 import Storage
 import Common
 
-extension BrowserViewController {
+extension BrowserViewController: ZoomPageBarDelegate {
     func updateZoomPageBarVisibility(visible: Bool) {
         toggleZoomPageBar(visible)
     }
@@ -60,17 +60,6 @@ extension BrowserViewController {
         }
     }
 
-    private func saveZoomLevel() {
-        guard let tab = tabManager.selectedTab, let host = tab.url?.host else { return }
-
-        let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: tab.pageZoom)
-        ZoomLevelStore.shared.save(domainZoomLevel)
-
-        // Notify other windows of zoom change (other pages with identical host should also update)
-        let userInfo: [AnyHashable: Any] = [WindowUUID.userInfoKey: windowUUID, "zoom": domainZoomLevel]
-        NotificationCenter.default.post(name: .PageZoomLevelUpdated, withUserInfo: userInfo)
-    }
-
     func zoomPageHandleEnterReaderMode() {
         guard let tab = tabManager.selectedTab else { return }
         updateZoomPageBarVisibility(visible: false)
@@ -93,14 +82,21 @@ extension BrowserViewController {
         if tab.pageZoom < zoom.zoomLevel { tab.zoomIn() } else { tab.zoomOut() }
         zoomPageBar?.updateZoomLabel()
     }
-}
 
-extension BrowserViewController: ZoomPageBarDelegate {
+    // MARK: - ZoomPageBarDelegate
+
     func didChangeZoomLevel() {
         saveZoomLevel()
     }
 
     func zoomPageDidPressClose() {
         updateZoomPageBarVisibility(visible: false)
+    }
+
+    private func saveZoomLevel() {
+        guard let tab = tabManager.selectedTab, let host = tab.url?.host else { return }
+
+        let zoomPageManager = ZoomPageManager(windowUUID: tab.windowUUID)
+        zoomPageManager.saveZoomLevel(for: host, zoomLevel: tab.pageZoom)
     }
 }
