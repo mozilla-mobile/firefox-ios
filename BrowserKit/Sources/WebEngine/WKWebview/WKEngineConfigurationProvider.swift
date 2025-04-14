@@ -16,7 +16,7 @@ public struct WKWebviewParameters {
     /// A value indicating the user preference for audio visual media types
     var autoPlay: WKAudiovisualMediaTypes
 
-    /// FXIOS-TODO - Allow Client to pass down it's own scheme handler for now, this will be internal later on
+    /// FXIOS-11986  - Allow Client to pass down it's own scheme handler for now, this will be internal later on
     var schemeHandler: SchemeHandler
 
     public init(blockPopups: Bool,
@@ -31,15 +31,18 @@ public struct WKWebviewParameters {
 }
 
 /// Provider to get a configured `WKEngineConfiguration`
-/// Only one configuration provider per window should exists in the application.
+/// Only one configuration provider per application should exists.
 public protocol WKEngineConfigurationProvider {
     func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration
 }
 
-/// FXIOS-TODO - This will be internal when the WebEngine is fully integrated in Firefox iOS
+/// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static let normalSessionsProcessPool = WKProcessPool()
     private static let privateSessionsProcessPool = WKProcessPool()
+
+    private static let nonPersistentStore = WKWebsiteDataStore.nonPersistent()
+    private static let defaultStore = WKWebsiteDataStore.default()
 
     public init() {}
 
@@ -64,9 +67,12 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         if #available(iOS 15.4, *) {
             configuration.preferences.isElementFullscreenEnabled = true
         }
+
+        // The cookie store should only be created once, otherwise we can loose them
+        // https://mozilla-hub.atlassian.net/browse/FXIOS-11833
         configuration.websiteDataStore = parameters.isPrivate
-        ? WKWebsiteDataStore.nonPersistent()
-        : WKWebsiteDataStore.default()
+        ? DefaultWKEngineConfigurationProvider.nonPersistentStore
+        : DefaultWKEngineConfigurationProvider.defaultStore
 
         configuration.setURLSchemeHandler(parameters.schemeHandler,
                                           forURLScheme: parameters.schemeHandler.scheme)
