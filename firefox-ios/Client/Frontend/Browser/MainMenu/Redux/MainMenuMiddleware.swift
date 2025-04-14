@@ -55,6 +55,7 @@ final class MainMenuMiddleware {
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
 
         if self.handleMainMenuActionType(action: action, isHomepage: isHomepage) { return }
+        if self.handleGeneralBrowserActionType(action: action) { return }
 
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
