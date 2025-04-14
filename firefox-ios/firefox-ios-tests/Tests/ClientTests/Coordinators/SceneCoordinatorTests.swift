@@ -14,6 +14,7 @@ final class SceneCoordinatorTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
+        setIsDeeplinkOptimizationRefactorEnabled(false)
     }
 
     override func tearDown() {
@@ -141,6 +142,12 @@ final class SceneCoordinatorTests: XCTestCase {
         subject.router = mockRouter
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
     }
 
     private func testCanHandleAndHandle(_ subject: Coordinator, route: Route) -> Bool {
