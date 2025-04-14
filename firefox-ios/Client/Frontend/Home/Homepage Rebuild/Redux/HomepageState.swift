@@ -17,6 +17,17 @@ struct HomepageState: ScreenState, Equatable {
     let pocketState: PocketState
     let wallpaperState: WallpaperState
 
+    /// FXIOS-11504 - This is mainly used for telemetry for top sites and pocket and presenting CFRs.
+    /// At this time, we are keeping `isZeroSearch` the same as legacy. However, we should revisit this value
+    /// and confirm what the expectation is, as it seems inconsistent. See more details in ticket.
+    ///
+    /// FXIOS-6203 - Comment from legacy homepage:
+    /// `isZeroSearch` is true when the homepage is created from the tab tray, a long press
+    /// on the tab bar to open a new tab or by pressing the home page button on the tab bar.
+    /// The zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
+    /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
+    let isZeroSearch: Bool
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
             HomepageState.self,
@@ -35,7 +46,8 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: homepageState.jumpBackInState,
             bookmarkState: homepageState.bookmarkState,
             pocketState: homepageState.pocketState,
-            wallpaperState: homepageState.wallpaperState
+            wallpaperState: homepageState.wallpaperState,
+            isZeroSearch: homepageState.isZeroSearch
         )
     }
 
@@ -48,7 +60,8 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
-            wallpaperState: WallpaperState(windowUUID: windowUUID)
+            wallpaperState: WallpaperState(windowUUID: windowUUID),
+            isZeroSearch: false
         )
     }
 
@@ -60,7 +73,8 @@ struct HomepageState: ScreenState, Equatable {
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
         pocketState: PocketState,
-        wallpaperState: WallpaperState
+        wallpaperState: WallpaperState,
+        isZeroSearch: Bool
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -70,6 +84,7 @@ struct HomepageState: ScreenState, Equatable {
         self.bookmarkState = bookmarkState
         self.pocketState = pocketState
         self.wallpaperState = wallpaperState
+        self.isZeroSearch = isZeroSearch
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -88,7 +103,24 @@ struct HomepageState: ScreenState, Equatable {
                 jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
                 bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
                 pocketState: PocketState.reducer(state.pocketState, action),
-                wallpaperState: WallpaperState.reducer(state.wallpaperState, action)
+                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+                isZeroSearch: state.isZeroSearch
+            )
+        case HomepageActionType.embeddedHomepage:
+            guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
+                return defaultState(from: state)
+            }
+
+            return HomepageState(
+                windowUUID: state.windowUUID,
+                headerState: HeaderState.reducer(state.headerState, action),
+                messageState: MessageCardState.reducer(state.messageState, action),
+                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+                jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+                bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+                pocketState: PocketState.reducer(state.pocketState, action),
+                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+                isZeroSearch: isZeroSearch
             )
         default:
             return defaultState(from: state, action: action)
@@ -122,7 +154,8 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: jumpBackInState,
             bookmarkState: bookmarkState,
             pocketState: pocketState,
-            wallpaperState: wallpaperState
+            wallpaperState: wallpaperState,
+            isZeroSearch: state.isZeroSearch
         )
     }
 
