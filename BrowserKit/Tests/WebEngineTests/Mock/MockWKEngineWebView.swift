@@ -37,6 +37,10 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var stopLoadingCalled = 0
     var goBackCalled = 0
     var goForwardCalled = 0
+    var goToCalled = 0
+    var getBackListCalled = 0
+    var getForwardListCalled = 0
+    var getCurrentBackForwardItemCalled = 0
     var removeAllUserScriptsCalled = 0
     var removeFromSuperviewCalled = 0
     var closeCalled = 0
@@ -86,6 +90,26 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     func goForward() -> WKNavigation? {
         goForwardCalled += 1
+        return nil
+    }
+
+    func go(to item: WKBackForwardListItem) -> WKNavigation? {
+        goToCalled += 1
+        return nil
+    }
+
+    func backList() -> [WKBackForwardListItem] {
+        getBackListCalled += 1
+        return []
+    }
+
+    func forwardList() -> [WKBackForwardListItem] {
+        getForwardListCalled += 1
+        return []
+    }
+
+    func currentBackForwardListItem() -> WKBackForwardListItem? {
+        getCurrentBackForwardItemCalled += 1
         return nil
     }
 
