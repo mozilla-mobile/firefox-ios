@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Κλείσιμο";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Φαίνεται ότι δεν υπάρχει σύνδεση στο διαδίκτυο.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Δοκιμή ξανά";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Έναρξη";
 
