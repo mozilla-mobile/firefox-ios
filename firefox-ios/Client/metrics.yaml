@@ -1029,7 +1029,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/25980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/X
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26050
     data_sensitivity:
       - technical
     notification_emails:
