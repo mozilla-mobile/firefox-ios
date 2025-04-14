@@ -41,7 +41,6 @@ class RecordedNimbusContext: RecordedContext {
 
     var isFirstRun: Bool
     var isPhone: Bool
-    var isReviewCheckerEnabled: Bool
     var isDefaultBrowser: Bool
     var appVersion: String?
     var region: String?
@@ -56,7 +55,6 @@ class RecordedNimbusContext: RecordedContext {
     private var logger: Logger
 
     init(isFirstRun: Bool,
-         isReviewCheckerEnabled: Bool,
          isDefaultBrowser: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
          isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
@@ -68,7 +66,6 @@ class RecordedNimbusContext: RecordedContext {
 
         self.isFirstRun = isFirstRun
         self.isPhone = isPhone
-        self.isReviewCheckerEnabled = isReviewCheckerEnabled
         self.isDefaultBrowser = isDefaultBrowser
 
         let info = bundle.infoDictionary ?? [:]
@@ -129,7 +126,6 @@ class RecordedNimbusContext: RecordedContext {
             GleanMetrics.NimbusSystem.RecordedNimbusContextObject(
                 isFirstRun: isFirstRun,
                 eventQueryValues: eventQueryValuesObject,
-                isReviewCheckerEnabled: isReviewCheckerEnabled,
                 isPhone: isPhone,
                 appVersion: appVersion,
                 locale: locale,
@@ -170,7 +166,6 @@ class RecordedNimbusContext: RecordedContext {
             "is_first_run": isFirstRun,
             "isFirstRun": "\(isFirstRun)",
             "is_phone": isPhone,
-            "is_review_checker_enabled": isReviewCheckerEnabled,
             "events": eventQueryValues,
             "app_version": appVersion as Any,
             "region": region as Any,

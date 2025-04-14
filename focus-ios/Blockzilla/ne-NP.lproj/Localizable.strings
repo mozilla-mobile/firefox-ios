@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "बन्द गर्नुहोस्";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "इन्टरनेट जडान अफलाइन रहेको देखिन्छ।";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "पुनःप्रयास गर्नुहोस्";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "सुरु गर्नुहोस्";
 

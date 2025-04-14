@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "關閉";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "網路似乎離線。";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "重試";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "開始使用";
 

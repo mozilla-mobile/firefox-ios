@@ -57,15 +57,70 @@ workflows:
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
+
     - xcode-test-without-building@0:
-        timeout: 600
+        continue_on_fail: true
+        timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
     
-    - deploy-to-bitrise-io@2.9.2: {}
+    - script@1.2.1:
+        title: Count failed tests
+        is_always_run: true
+        inputs:
+        - content: |
+            echo "Analyzing test results from: $BITRISE_XCRESULT_PATH"
+            xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json > result.json --legacy
+
+            echo "Search for failed tests..."
+            FAILED_COUNT=$(jq -r '.metrics.testsFailedCount._value' result.json)
+          
+            echo "Total number of failures: $FAILED_COUNT"
+
+            envman add --key ACCESSIBILITY_FAILED_TEST_COUNT --value "$FAILED_COUNT"
+    
+    - script@1.2.1:
+        title: Collect All Accessibility Report Files
+        is_always_run: true
+        inputs:
+        - content: |
+            echo "🔍 Search reports inside the device sandbox..."
+
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+
+            find ~/Library/Developer/CoreSimulator/Devices -type f -name "AccessibilityReport*.txt" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+            find ~/Library/Developer/CoreSimulator/Devices -type f -name "AccessibilityReport*.csv" -exec cp {} "$BITRISE_DEPLOY_DIR" \;
+
+            echo "Files copied to $BITRISE_DEPLOY_DIR:"
+            ls -lh "$BITRISE_DEPLOY_DIR"
+    
+    - deploy-to-bitrise-io@2.9.2:
+        is_always_run: true
+
+    - slack@4.2.1:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Accessibility Tests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Accessibility Tests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Number of A11y Failures | ${ACCESSIBILITY_FAILED_TEST_COUNT}
+            Failures Report | ${BITRISE_BUILD_URL}
+            Accessibility Reports | ${BITRISE_BUILD_URL}?tab=artifacts
+        - buttons: |
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+
   firefox_configure_build:
     before_run:
     - 0_detect_standalone_build
@@ -1663,7 +1718,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
     - xcode-test-without-building@0:
-        timeout: 6000
+        timeout: 2400
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData"'

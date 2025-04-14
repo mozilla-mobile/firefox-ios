@@ -79,8 +79,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .mainMenu:
             descriptionCopy = CFRStrings.MainMenu.NewMenu.Body
 
-        case .shoppingExperience:
-            descriptionCopy = getShoppingCopy(.description)
         case .navigation:
             descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
         }
@@ -100,8 +98,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = CFRStrings.Toolbar.SearchBarPlacementButtonText
         case .mainMenu:
             actionCopy = ""
-        case .shoppingExperience:
-            actionCopy = getShoppingCopy(.action)
         case .jumpBackIn,
                 .jumpBackInSyncedTab:
             actionCopy = ""
@@ -127,19 +123,5 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             return CFRStrings.Toolbar.SearchBarBottomPlacement
         default: return ""
         }
-    }
-
-    private func getShoppingCopy(_ copyType: ContextualHintCopyType) -> String {
-        let hasOptedIn = prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
-        var copy: String
-        switch copyType {
-        case .action:
-            copy = hasOptedIn ? CFRStrings.Shopping.OptedInAction : CFRStrings.Shopping.NotOptedInAction
-        case .title:
-            copy = ""
-        case .description:
-            copy = hasOptedIn ? CFRStrings.Shopping.OptedInBody : CFRStrings.Shopping.NotOptedInBody
-        }
-        return copy
     }
 }

@@ -6,7 +6,6 @@ import UIKit
 
 /// The view model used to configure a `ContextualHintView`
 public struct ContextualHintViewModel {
-    public var isActionType: Bool
     public var actionButtonTitle: String
     public var title: String
     public var description: String
@@ -17,14 +16,12 @@ public struct ContextualHintViewModel {
     public var closeButtonAction: ((UIButton) -> Void)?
     public var actionButtonAction: ((UIButton) -> Void)?
 
-    public init(isActionType: Bool,
-                actionButtonTitle: String,
+    public init(actionButtonTitle: String,
                 title: String,
                 description: String,
                 arrowDirection: UIPopoverArrowDirection,
                 closeButtonA11yLabel: String,
                 actionButtonA11yId: String) {
-        self.isActionType = isActionType
         self.actionButtonTitle = actionButtonTitle
         self.title = title
         self.description = description

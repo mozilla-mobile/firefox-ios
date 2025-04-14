@@ -10,7 +10,6 @@ import UIKit
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
-    case accountSettingsRedux
     case addressAutofillEdit
     case appearanceMenu
     case bookmarksRefactor
@@ -19,9 +18,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
     case deeplinkOptimizationRefactor
-    case fakespotBackInStock
-    case fakespotFeature
-    case fakespotProductAds
     case feltPrivacySimplifiedUI
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
@@ -59,7 +55,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case trackingProtectionRefactor
     case useRustKeychain
-    case zoomFeature
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -122,14 +117,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
-                .accountSettingsRedux,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .deeplinkOptimizationRefactor,
-                .fakespotBackInStock,
-                .fakespotFeature,
-                .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
                 .loginAutofill,
@@ -161,8 +152,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
-                .useRustKeychain,
-                .zoomFeature:
+                .useRustKeychain:
             return nil
         }
     }

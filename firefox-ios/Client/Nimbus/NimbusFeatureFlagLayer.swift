@@ -10,9 +10,6 @@ final class NimbusFeatureFlagLayer {
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
         switch featureID {
-        case .accountSettingsRedux:
-            return checkAccountSettingsRedux(from: nimbus)
-
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
@@ -46,20 +43,11 @@ final class NimbusFeatureFlagLayer {
                 .historyHighlights:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .fakespotFeature:
-            return checkFakespotFeature(from: nimbus)
-
-        case .fakespotProductAds:
-            return checkFakespotProductAds(from: nimbus)
-
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
-
-        case .fakespotBackInStock:
-            return checkProductBackInStockFakespotFeature(from: nimbus)
 
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
@@ -147,17 +135,10 @@ final class NimbusFeatureFlagLayer {
 
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
-
-        case .zoomFeature:
-            return checkZoomFeature(from: nimbus)
         }
     }
 
     // MARK: - Private methods
-    private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.accountSettingsReduxFeature.value().enabled
-    }
-
     private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarkRefactorFeature.value().enabled
     }
@@ -351,26 +332,8 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shopping2023.value()
-
-        return config.status
-    }
-
-    private func checkFakespotProductAds(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shopping2023.value()
-
-        return config.productAds
-    }
-
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.pdfRefactorFeature.value().enabled
-    }
-
-    private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.shopping2023.value()
-
-        return config.backInStockReporting
     }
 
     private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
@@ -399,12 +362,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.downloadLiveActivitiesFeature.value().enabled
-    }
-
-    private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.zoomFeature.value()
-
-        return config.status
     }
 
     private func checkFirefoxSuggestFeature(from nimbus: FxNimbus) -> Bool {

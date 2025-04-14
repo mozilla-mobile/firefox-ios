@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Clauder";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Le connexion internet pare disactivate.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Retentar";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Comenciar";
 

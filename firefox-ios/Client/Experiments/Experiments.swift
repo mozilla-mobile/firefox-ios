@@ -172,7 +172,6 @@ enum Experiments {
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
             "is_phone": isPhone,
-            "is_review_checker_enabled": isReviewCheckerEnabled(),
             "is_default_browser": isDefaultBrowser(),
         ]
 
@@ -184,14 +183,6 @@ enum Experiments {
             channel: AppConstants.buildChannel.nimbusString,
             customTargetingAttributes: customTargetingAttributes
         )
-    }
-
-    private static func isReviewCheckerEnabled() -> Bool {
-        var isReviewCheckerEnabled = false
-        if let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) {
-            isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
-        }
-        return isReviewCheckerEnabled
     }
 
     private static func isDefaultBrowser() -> Bool {
@@ -210,7 +201,6 @@ enum Experiments {
 
         let nimbusRecordedContext = RecordedNimbusContext(
             isFirstRun: isFirstRun,
-            isReviewCheckerEnabled: isReviewCheckerEnabled(),
             isDefaultBrowser: isDefaultBrowser()
         )
 

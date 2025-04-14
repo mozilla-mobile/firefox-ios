@@ -13,7 +13,6 @@ import enum MozillaAppServices.VisitType
 
 class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegate {
     var showSettingsCalled = 0
-    var showFakespotCalled = 0
     var showCreditCardAutofillCalled = 0
     var showLoginAutofillCalled = 0
     var showRequiredPassCodeCalled = 0
@@ -24,13 +23,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showTabTrayCalled = 0
     var showQrCodeCalled = 0
     var didFinishCalled = 0
-    var showFakespotFlowAsModalCalled = 0
-    var showFakespotFlowAsSidebarCalled = 0
     var showBackForwardListCalled = 0
     var showSearchEngineSelectionCalled = 0
-    var dismissFakespotModalCalled = 0
-    var dismissFakespotSidebarCalled = 0
-    var updateFakespotSidebarCalled = 0
     var showMicrosurveyCalled = 0
     var showMainMenuCalled = 0
     var showPasswordGeneratorCalled = 0
@@ -82,10 +76,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showHomepanelSectionCalled += 1
     }
 
-    func showFakespotFlow(productURL: URL) {
-        showFakespotCalled += 1
-    }
-
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showEnhancedTrackingProtectionCalled += 1
     }
@@ -106,18 +96,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         didFinishCalled += 1
     }
 
-    func showFakespotFlowAsModal(productURL: URL) {
-        showFakespotFlowAsModalCalled += 1
-    }
-
     func showMainMenu() {
         showMainMenuCalled += 1
-    }
-
-    func showFakespotFlowAsSidebar(productURL: URL,
-                                   sidebarContainer: Client.SidebarEnabledViewProtocol,
-                                   parentViewController: UIViewController) {
-        showFakespotFlowAsSidebarCalled += 1
     }
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
@@ -130,21 +110,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showContextMenu(for configuration: ContextMenuConfiguration) {
         showContextMenuCalled += 1
-    }
-
-    func dismissFakespotModal(animated: Bool) {
-        dismissFakespotModalCalled += 1
-    }
-
-    func dismissFakespotSidebar(sidebarContainer: Client.SidebarEnabledViewProtocol,
-                                parentViewController: UIViewController) {
-        dismissFakespotSidebarCalled += 1
-    }
-
-    func updateFakespotSidebar(productURL: URL,
-                               sidebarContainer: SidebarEnabledViewProtocol,
-                               parentViewController: UIViewController) {
-        updateFakespotSidebarCalled += 1
     }
 
     func showMicrosurvey(model: MicrosurveyModel) {
