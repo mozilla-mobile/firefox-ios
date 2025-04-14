@@ -93,9 +93,11 @@ extension Notification.Name {
 
     public static let TabMimeTypeDidSet = Notification.Name("TabMimeTypeDidSet")
 
-    public static let ReaderModeSessionChanged = Notification.Name("ReaderModeSessionChanged")
-
     public static let ThemeDidChange = Notification.Name("ThemeDidChange")
+
+    // MARK: Web Engine
+
+    public static let ReaderModeSessionChanged = Notification.Name("ReaderModeSessionChanged")
 
     // MARK: Tab manager
 
