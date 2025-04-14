@@ -17,7 +17,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     var device: UIDeviceInterface
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?
-    var isCFRToolbarFeatureEnabled: Bool
 
     init(with profile: Profile,
          overlayState: OverlayStateProtocol?,
@@ -26,7 +25,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         self.profile = profile
         self.overlayState = overlayState
         self.device = device
-        self.isCFRToolbarFeatureEnabled = isCFRToolbarFeatureEnabled
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
@@ -75,9 +73,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// presented if the feature is enabled. If the Toolbar CFR flag is disabled or the device
     /// is iPad (toolbar CFR is not presented on iPad) we bypass it
     private var shouldCheckToolbarHasShown: Bool {
-        guard device.userInterfaceIdiom != .pad,
-              isCFRToolbarFeatureEnabled else { return true }
-
+        guard device.userInterfaceIdiom != .pad else { return true }
         return profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue) ?? false
     }
 

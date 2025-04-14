@@ -20,8 +20,7 @@ final class NimbusFeatureFlagLayer {
             return checkBookmarksRefactor(from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights,
-                .isToolbarCFREnabled:
+                .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .cleanupHistoryReenabled:
@@ -177,7 +176,6 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         case .searchHighlights: return config.searchHighlights
-        case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
     }
