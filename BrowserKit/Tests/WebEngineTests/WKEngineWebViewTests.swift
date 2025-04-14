@@ -99,7 +99,7 @@ final class WKEngineWebViewTests: XCTestCase {
 
         subject.load(URLRequest(url: testURL))
 
-        wait(for: [expectation])
+        wait(for: [expectation], timeout: 10)
     }
 
     func testGetBackHistoryList() {
@@ -127,7 +127,7 @@ final class WKEngineWebViewTests: XCTestCase {
             expectation1.fulfill()
         }
         subject.goBack()
-        wait(for: [expectation1])
+        wait(for: [expectation1], timeout: 10)
 
         delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
             guard webEngineViewProperty == .loading(false) else {return}
@@ -136,7 +136,7 @@ final class WKEngineWebViewTests: XCTestCase {
             expectation2.fulfill()
         }
         subject.goBack()
-        wait(for: [expectation2])
+        wait(for: [expectation2], timeout: 10)
     }
 
     func createBackList(subject: DefaultWKEngineWebView) {
@@ -155,14 +155,14 @@ final class WKEngineWebViewTests: XCTestCase {
             expectation1.fulfill()
         }
         subject.load(URLRequest(url: testURL1))
-        wait(for: [expectation1])
+        wait(for: [expectation1], timeout: 10)
 
         delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
             guard webEngineViewProperty == .loading(false) else {return}
             expectation2.fulfill()
         }
         subject.load(URLRequest(url: testURL2))
-        wait(for: [expectation2])
+        wait(for: [expectation2], timeout: 10)
 
         delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
             guard webEngineViewProperty == .loading(false) else {return}
@@ -170,7 +170,7 @@ final class WKEngineWebViewTests: XCTestCase {
             expectation3.fulfill()
         }
         subject.load(URLRequest(url: currentURL))
-        wait(for: [expectation3])
+        wait(for: [expectation3], timeout: 10)
     }
 
     func createSubject(file: StaticString = #file,

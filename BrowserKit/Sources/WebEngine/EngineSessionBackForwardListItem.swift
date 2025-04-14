@@ -8,8 +8,6 @@ public protocol EngineSessionBackForwardListItem {
     var url: URL { get }
 
     var title: String? { get }
-
-    var initialURL: URL { get }
 }
 
 extension WKBackForwardListItem: EngineSessionBackForwardListItem {}

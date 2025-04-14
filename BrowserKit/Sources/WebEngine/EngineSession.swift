@@ -47,7 +47,7 @@ public protocol EngineSession: NSObject {
     func goToHistory(item: EngineSessionBackForwardListItem)
 
     /// Returns the current EngineSessionBackForwardListItem
-    func currentHistoryItem() -> (EngineSessionBackForwardListItem)?
+    func currentHistoryItem() -> EngineSessionBackForwardListItem?
 
     /// Returns the history backlist as a list of EngineSessionBackForwardListItems
     func getBackListItems() -> [EngineSessionBackForwardListItem]
