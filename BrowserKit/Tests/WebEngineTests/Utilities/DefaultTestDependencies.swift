@@ -5,11 +5,18 @@
 @testable import WebEngine
 
 struct DefaultTestDependencies {
+    var mockTelemetryProxy: MockEngineTelemetryProxy
     var webviewParameters = WKWebviewParameters(blockPopups: true,
                                                 isPrivate: true,
                                                 autoPlay: .all,
                                                 schemeHandler: WKInternalSchemeHandler())
+
+    init(mockTelemetryProxy: MockEngineTelemetryProxy = MockEngineTelemetryProxy()) {
+        self.mockTelemetryProxy = mockTelemetryProxy
+    }
+
     var sessionDependencies: EngineSessionDependencies {
-        return EngineSessionDependencies(webviewParameters: webviewParameters)
+        return EngineSessionDependencies(webviewParameters: webviewParameters,
+                                         telemetryProxy: mockTelemetryProxy)
     }
 }

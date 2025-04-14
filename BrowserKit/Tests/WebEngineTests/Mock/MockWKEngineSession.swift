@@ -13,8 +13,9 @@ class MockWKEngineSession: WKEngineSession {
     var callJavascriptMethodCalled = 0
 
     init() {
+        let defaultDependencies =  DefaultTestDependencies(mockTelemetryProxy: mockTelemetryProxy)
         super.init(userScriptManager: MockWKUserScriptManager(),
-                   dependencies: DefaultTestDependencies().sessionDependencies,
+                   dependencies: defaultDependencies.sessionDependencies,
                    configurationProvider: MockWKEngineConfigurationProvider(),
                    webViewProvider: webviewProvider,
                    contentScriptManager: MockWKContentScriptManager())!
