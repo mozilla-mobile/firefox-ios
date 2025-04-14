@@ -105,7 +105,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
         self.engineID = (aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String) ??
         Self.generateCustomEngineID()
-        self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String
+        self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.telemetrySuffix.rawValue) as? String
         self.suggestTemplate = nil
     }
 
