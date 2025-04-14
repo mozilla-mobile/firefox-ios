@@ -106,7 +106,7 @@ final class URLFormatterTests: XCTestCase {
         let result = subject.getURL(entry: givenURL)
 
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
-    }    
+    }
 
     func testGetURLGivenNoHttpsURLWithTildeThenValidEscapedURL() {
         let initialUrl = "foo.bar/~/"
