@@ -12,8 +12,14 @@ struct EngineProvider {
     private(set) var session: EngineSession
     private(set) var view: EngineView
 
+<<<<<<< HEAD
     init?(dependencyManager: EngineDependencyManager) async {
         self.engine = WKEngine.factory(engineDependencies: dependencyManager.engineDependencies)
+=======
+    init?(engine: Engine,
+          sessionDependencies: EngineSessionDependencies) {
+        self.engine = engine
+>>>>>>> b7975dc676 (Fix sample browser)
 
         do {
             session = try await engine.createSession(dependencies: dependencyManager.sessionDependencies)

@@ -14,8 +14,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
         sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
     )
 
+<<<<<<< HEAD
     lazy var engineDependencyManager = EngineDependencyManager()
     var engineProvider: EngineProvider?
+=======
+    lazy var engineProvider: EngineProvider = {
+        let parameters = WKWebviewParameters(blockPopups: false,
+                                             isPrivate: false)
+        let sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
+                                                            telemetryProxy: TelemetryHandler())
+
+        let readerModeConfig = ReaderModeConfiguration(loadingText: "Loading",
+                                                       loadingFailedText: "Loading failed",
+                                                       loadOriginalText: "Loading",
+                                                       readerModeErrorText: "Error")
+        let engineDependencies = EngineDependencies(readerModeConfiguration: readerModeConfig)
+        let engine = WKEngine.factory(engineDependencies: engineDependencies)
+        return EngineProvider(engine: engine, sessionDependencies: sessionDependencies)!
+    }()
+>>>>>>> b7975dc676 (Fix sample browser)
 
     func application(
         _ application: UIApplication,
