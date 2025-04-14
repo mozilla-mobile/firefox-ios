@@ -212,7 +212,7 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .ReaderModeSessionChanged:
-            guard let isPrivate = notification.userInfo?[WKEngineConstants.isPrivateKey] as? Bool else { return }
+            guard let isPrivate = notification.userInfo?[EngineConstants.isPrivateKey] as? Bool else { return }
             readerModeCache = isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         default:
             break

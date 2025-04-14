@@ -4,8 +4,12 @@
 
 import Foundation
 
-struct EngineConstants {
+/// The constants related to the Web Engine
+public struct EngineConstants {
     static let aboutBlank = "about:blank"
+    static var webserverPort = 6571
+    static let isPrivateKey = "isPrivate"
+    static let readerModeStateKey = "readerModeStateKey"
 }
 
 /// Value change type for adjusting browser page zoom.

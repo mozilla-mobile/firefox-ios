@@ -30,25 +30,20 @@ struct DefaultWKSessionLifecycleManager: WKSessionLifecycleManager {
 //        selectedTab.applyTheme(theme: currentTheme())
 //        selectedTab.webView?.applyTheme(theme: currentTheme())
 
+        // When the newly selected tab is the homepage or another internal tab,
+        // we need to explicitly set the reader mode state to be unavailable.
+        let readerModeState: ReaderModeState
+        if let url = session.webView.url, WKInternalURL.scheme != url.scheme {
+            readerModeState = session.sessionData.readerModeState ?? .unavailable
+        } else {
+            readerModeState = .unavailable
+        }
         notificationCenter.post(
             name: .ReaderModeSessionChanged,
             withObject: nil,
-            withUserInfo: [WKEngineConstants.isPrivateKey: session.sessionData.isPrivate]
+            withUserInfo: [EngineConstants.isPrivateKey: session.sessionData.isPrivate ?? false,
+                           EngineConstants.readerModeStateKey: readerModeState]
         )
-
-        // When the newly selected tab is the homepage or another internal tab,
-        // we need to explicitly set the reader mode state to be unavailable.
-        if let url = session.webView.url, WKInternalURL.scheme != url.scheme,
-           let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)
-            if readerMode.state == .active {
-                showReaderModeBar(animated: false)
-            } else {
-                hideReaderModeBar(animated: false)
-            }
-        } else {
-            updateReaderModeState(for: selectedTab, readerModeState: .unavailable)
-        }
 
         // TODO: Add JIRA - Handle needs reload when selected tab changed
 //        if webView.url == nil {
