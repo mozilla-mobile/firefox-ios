@@ -34,10 +34,6 @@ protocol WKEngineConfigurationProvider {
 struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     var parameters: WKWebviewParameters
 
-    init(parameters: WKWebviewParameters) {
-        self.parameters = parameters
-    }
-
     func createConfiguration() -> WKEngineConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()

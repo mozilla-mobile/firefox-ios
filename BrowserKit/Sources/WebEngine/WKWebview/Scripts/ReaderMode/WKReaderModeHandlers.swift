@@ -23,7 +23,7 @@ public struct ReaderModeConfiguration {
         loadingFailedText: String,
         loadOriginalText: String,
         readerModeErrorText: String,
-        cachedReaderModeStyle: [String : Any]? = nil
+        cachedReaderModeStyle: [String: Any]? = nil
     ) {
         self.loadingText = loadingText
         self.loadingFailedText = loadingFailedText
@@ -46,7 +46,7 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
 
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
         mainQueue.ensureMainThread { [weak self] in
-            self?.register(webServer, readerModeConfiguration: readerModeConfiguration)
+            self?.register(webServer: webServer, readerModeConfiguration: readerModeConfiguration)
         }
     }
 
