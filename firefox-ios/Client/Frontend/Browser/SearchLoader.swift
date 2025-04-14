@@ -118,7 +118,9 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
             GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
         }
 
-        let combinedSites = (results[safe: 0] ?? []) + (results[safe: 1] ?? [])
+        let bookmarksSite = results[safe: 0] ?? []
+        let historySites = results[safe: 1] ?? []
+        let combinedSites = bookmarksSites + historySites
 
         // Load the data in the table view.
         load(ArrayCursor(data: combinedSites))
