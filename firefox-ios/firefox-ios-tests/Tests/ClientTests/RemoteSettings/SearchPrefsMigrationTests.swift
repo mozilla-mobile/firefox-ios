@@ -27,6 +27,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "google",
             shortName: "Google",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -35,6 +36,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "ddg",
             shortName: "DuckDuckGo",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -43,6 +45,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "wikipedia",
             shortName: "Wikipedia (en)",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -51,6 +54,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "Custom-1234-1234-1234-1234",
             shortName: "MyWebsite",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -62,6 +66,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "google-b-1-m",
             shortName: "Google",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -70,6 +75,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "ddg",
             shortName: "DuckDuckGo",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -78,6 +84,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "wikipedia",
             shortName: "Wikipedia",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -86,6 +93,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         OpenSearchEngine(
             engineID: "Custom-1234-1234-1234-1234",
             shortName: "MyWebsite",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
