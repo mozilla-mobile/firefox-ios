@@ -1760,8 +1760,9 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" Focus.entitlements
-            /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" Klar.entitlements
+            echo "Skip PlistBuddy for now"
+            # /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" Focus.entitlements
+            # /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" Klar.entitlements
     - script@1.2.1:
         title: Build for Testing Focus
         inputs:
@@ -2000,8 +2001,9 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
-            /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
+            echo "Skip PlistBuddy command for now"
+            # /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
+            # /usr/libexec/PlistBuddy -c "Set :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
 
   # # Update the name change in Taskcluster files 
   # focus_l10n_build:
