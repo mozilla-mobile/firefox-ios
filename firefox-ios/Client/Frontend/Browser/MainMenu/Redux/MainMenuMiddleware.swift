@@ -56,6 +56,7 @@ final class MainMenuMiddleware {
 
         if self.handleMainMenuActionType(action: action, isHomepage: isHomepage) { return }
         if self.handleGeneralBrowserActionType(action: action) { return }
+        if self.handleMainMenuDetailsActionType(action: action, isHomepage: isHomepage) { return }
 
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
