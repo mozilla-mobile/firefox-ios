@@ -57,67 +57,6 @@ final class MainMenuMiddleware {
         if self.handleMainMenuActionType(action: action, isHomepage: isHomepage) { return }
         if self.handleGeneralBrowserActionType(action: action) { return }
         if self.handleMainMenuDetailsActionType(action: action, isHomepage: isHomepage) { return }
-
-        switch action.actionType {
-        case MainMenuActionType.tapNavigateToDestination:
-            self.handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuActionType.tapShowDetailsView:
-            self.handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuActionType.tapToggleUserAgent:
-            self.handleTapToggleUserAgentAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuActionType.tapCloseMenu:
-            self.telemetry.closeButtonTapped(isHomepage: isHomepage)
-
-        case GeneralBrowserActionType.showReaderMode:
-            self.handleShowReaderModeAction(action: action)
-
-        case MainMenuActionType.didInstantiateView:
-            self.handleDidInstantiateViewAction(action: action)
-
-        case MainMenuActionType.viewDidLoad:
-            self.handleViewDidLoadAction(action: action)
-
-        case MainMenuActionType.menuDismissed:
-            self.telemetry.menuDismissed(isHomepage: isHomepage)
-
-        case MainMenuDetailsActionType.tapZoom:
-            self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
-
-        case MainMenuDetailsActionType.tapReportBrokenSite:
-            self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.reportBrokenSite)
-
-        case MainMenuDetailsActionType.tapAddToBookmarks:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.bookmarkThisPage)
-
-        case MainMenuDetailsActionType.tapEditBookmark:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
-
-        case MainMenuDetailsActionType.tapAddToShortcuts:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.addToShortcuts)
-
-        case MainMenuDetailsActionType.tapRemoveFromShortcuts:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromShortcuts)
-
-        case MainMenuDetailsActionType.tapAddToReadingList:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.saveToReadingList)
-
-        case MainMenuDetailsActionType.tapRemoveFromReadingList:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
-
-        case MainMenuDetailsActionType.tapToggleNightMode:
-            self.handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuDetailsActionType.tapBackToMainMenu:
-            self.handleTapBackToMainMenuAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuDetailsActionType.tapDismissView:
-            self.telemetry.closeButtonTapped(isHomepage: isHomepage)
-
-        default: break
-        }
     }
 
     private func handleMainMenuActionType(action: MainMenuAction, isHomepage: Bool) -> Bool {
