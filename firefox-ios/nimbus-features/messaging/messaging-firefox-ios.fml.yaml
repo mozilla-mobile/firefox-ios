@@ -51,6 +51,7 @@ import:
               OPEN_SETTINGS_PRIVACY:              ://deep-link?url=settings/clear-private-data
               OPEN_SETTINGS_FXA:                  ://deep-link?url=settings/fxa
               OPEN_SETTINGS_THEME:                ://deep-link?url=settings/theme
+              OPEN_SETTINGS_APP_ICON:             ://deep-link?url=settings/app-icon
               OPEN_URL:                           ://open-url
               VIEW_BOOKMARKS:                     ://deep-link?url=homepanel/bookmarks
               VIEW_TOP_SITES:                     ://deep-link?url=homepanel/top-sites

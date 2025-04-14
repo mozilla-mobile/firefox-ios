@@ -22,7 +22,7 @@ class ScreenshotHelper {
     /// Takes a screenshot of the WebView to be displayed on the tab view page
     /// If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
     /// If taking a screenshot of a website, uses apple's `takeSnapshot` function
-    func takeScreenshot(_ tab: Tab) {
+    func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID) {
         guard let webView = tab.webView else {
             logger.log("Tab Snapshot Error",
                        level: .debug,
@@ -45,7 +45,14 @@ class ScreenshotHelper {
                 let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
-                TabEvent.post(.didSetScreenshot(isHome: true), for: tab)
+                store.dispatch(
+                    ScreenshotAction(
+                        windowUUID: windowUUID,
+                        tab: tab,
+                        actionType:
+                            ScreenshotActionType.screenshotTaken
+                    )
+                )
             }
             // Handle error page screenshots
         } else if isNativeErrorPage {
@@ -53,21 +60,33 @@ class ScreenshotHelper {
                 let screenshot = view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = false
                 tab.setScreenshot(screenshot)
-                TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
+                store.dispatch(
+                    ScreenshotAction(
+                        windowUUID: windowUUID,
+                        tab: tab,
+                        actionType:
+                            ScreenshotActionType.screenshotTaken
+                    )
+                )
             }
             // Handle webview screenshots
         } else {
             let configuration = WKSnapshotConfiguration()
-            // This is for a bug in certain iOS 13 versions, snapshots cannot be taken
-            // correctly without this boolean being set
-            configuration.afterScreenUpdates = false
+            configuration.afterScreenUpdates = true
             configuration.snapshotWidth = 320
 
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image = image {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
-                    TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
+                    store.dispatch(
+                        ScreenshotAction(
+                            windowUUID: windowUUID,
+                            tab: tab,
+                            actionType:
+                                ScreenshotActionType.screenshotTaken
+                        )
+                    )
                 } else if let error = error {
                     self.logger.log("Tab Snapshot Error",
                                     level: .debug,

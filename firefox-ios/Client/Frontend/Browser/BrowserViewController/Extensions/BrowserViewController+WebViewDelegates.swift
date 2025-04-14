@@ -208,7 +208,10 @@ extension BrowserViewController: WKUIDelegate {
                 name: ContextMenuHelper.name()
               ) as? ContextMenuHelper,
               let elements = contextHelper.elements
-        else { return }
+        else {
+            completionHandler(nil)
+            return
+        }
         completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
         ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
     }

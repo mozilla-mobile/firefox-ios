@@ -536,7 +536,7 @@ class BrowserViewController: UIViewController,
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
         if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
@@ -1089,9 +1089,9 @@ class BrowserViewController: UIViewController,
         UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
-    func willNavigateAway() {
-        if let tab = tabManager.selectedTab {
-            screenshotHelper?.takeScreenshot(tab)
+    func willNavigateAway(from tab: Tab?) {
+        if let tab {
+            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
         }
     }
 
@@ -2902,8 +2902,6 @@ class BrowserViewController: UIViewController,
 
         guard let webView = tab.webView else { return }
 
-        self.screenshotHelper?.takeScreenshot(tab)
-
         // when navigating in a tab, if the tab's mime type is pdf, we should:
         // - scroll to top
         // - set readermode state to unavailable
@@ -2949,7 +2947,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab)
+                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
@@ -4150,6 +4148,8 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if topTabsVisible {
+            /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
+            willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
         }
 
@@ -4244,7 +4244,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             if isToolbarRefactorEnabled {
-               updateToolbarTabCount(count)
+                updateToolbarTabCount(count)
             } else if !isToolbarRefactorEnabled, let legacyUrlBar {
                 toolbar.updateTabCount(count, animated: animated)
                 legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)

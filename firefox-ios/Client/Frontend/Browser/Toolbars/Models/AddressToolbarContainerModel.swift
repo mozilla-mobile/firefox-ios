@@ -8,7 +8,8 @@ import Shared
 
 final class AddressToolbarContainerModel: Equatable {
     let navigationActions: [ToolbarElement]
-    let pageActions: [ToolbarElement]
+    let leadingPageActions: [ToolbarElement]
+    let trailingPageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
 
     let toolbarLayoutStyle: ToolbarLayoutStyle
@@ -84,7 +85,8 @@ final class AddressToolbarContainerModel: Equatable {
         return AddressToolbarConfiguration(
             locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
-            pageActions: pageActions,
+            leadingPageActions: leadingPageActions,
+            trailingPageActions: trailingPageActions,
             browserActions: browserActions,
             borderPosition: borderPosition,
             uxConfiguration: uxConfiguration,
@@ -96,9 +98,12 @@ final class AddressToolbarContainerModel: Equatable {
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          isShowingTopTabs: state.isShowingTopTabs,
                                                                          windowUUID: windowUUID)
-        self.pageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.pageActions,
-                                                                   isShowingTopTabs: state.isShowingTopTabs,
-                                                                   windowUUID: windowUUID)
+        self.leadingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.leadingPageActions,
+                                                                          isShowingTopTabs: state.isShowingTopTabs,
+                                                                          windowUUID: windowUUID)
+        self.trailingPageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.trailingPageActions,
+                                                                           isShowingTopTabs: state.isShowingTopTabs,
+                                                                           windowUUID: windowUUID)
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
                                                                       isShowingTopTabs: state.isShowingTopTabs,
                                                                       windowUUID: windowUUID)
@@ -186,19 +191,26 @@ final class AddressToolbarContainerModel: Equatable {
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
         lhs.navigationActions == rhs.navigationActions &&
-        lhs.pageActions == rhs.pageActions &&
+        lhs.trailingPageActions == rhs.trailingPageActions &&
         lhs.browserActions == rhs.browserActions &&
 
+        lhs.toolbarLayoutStyle == rhs.toolbarLayoutStyle &&
         lhs.borderPosition == rhs.borderPosition &&
+        lhs.searchEngineName == rhs.searchEngineName &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
+        lhs.lockIconNeedsTheming == rhs.lockIconNeedsTheming &&
         lhs.safeListedURLImageName == rhs.safeListedURLImageName &&
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
+        lhs.didStartTyping == rhs.didStartTyping &&
         lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
+        lhs.isPrivateMode == rhs.isPrivateMode &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
+        lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
+        lhs.shouldAnimate == rhs.shouldAnimate &&
 
         lhs.windowUUID == rhs.windowUUID
     }
