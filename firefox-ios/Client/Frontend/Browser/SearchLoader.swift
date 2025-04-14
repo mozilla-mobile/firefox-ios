@@ -117,7 +117,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
             GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
         }
 
-        let bookmarksSite = results[safe: 0] ?? []
+        let bookmarksSites = results[safe: 0] ?? []
         let historySites = results[safe: 1] ?? []
         let combinedSites = bookmarksSites + historySites
 
