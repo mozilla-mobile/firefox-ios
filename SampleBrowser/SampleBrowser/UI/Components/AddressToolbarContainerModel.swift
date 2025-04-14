@@ -20,7 +20,8 @@ struct AddressToolbarContainerModel {
         return AddressToolbarConfiguration(
             locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
-            pageActions: pageActions,
+            leadingPageActions: pageActions,
+            trailingPageActions: browserActions,
             browserActions: browserActions,
             borderPosition: borderPosition,
             uxConfiguration: AddressToolbarUXConfiguration.default,

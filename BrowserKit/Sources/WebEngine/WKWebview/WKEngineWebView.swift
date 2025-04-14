@@ -43,6 +43,8 @@ protocol WKEngineWebView: UIView {
 
     init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider)
 
+    func addPullRefresh(_ type: EnginePullRefreshView.Type)
+
     @discardableResult
     func load(_ request: URLRequest) -> WKNavigation?
 
@@ -112,11 +114,17 @@ extension WKEngineWebView {
 }
 
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
-final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface, ThemeApplicable {
+final class DefaultWKEngineWebView: WKWebView,
+                                    UIScrollViewDelegate,
+                                    WKEngineWebView,
+                                    MenuHelperWebViewInterface,
+                                    ThemeApplicable {
     var engineScrollView: WKScrollView?
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
+    private var pullRefreshViewType: (any EnginePullRefreshView.Type)?
+    private var pullRefreshView: EnginePullRefreshView?
     private var observedTokens = [NSKeyValueObservation]()
 
     override var inputAccessoryView: UIView? {
@@ -129,15 +137,19 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
         return super.inputAccessoryView
     }
 
-    required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
+    required init?(
+        frame: CGRect,
+        configurationProvider: WKEngineConfigurationProvider
+    ) {
         let configuration = configurationProvider.createConfiguration()
-        self.engineConfiguration = configuration
+        engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
 
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 
-        self.engineScrollView = scrollView
-        self.setupObservers()
+        engineScrollView = scrollView
+        scrollView.delegate = self
+        setupObservers()
     }
 
     required init?(coder: NSCoder) {
@@ -148,6 +160,11 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
         close()
     }
 
+    func addPullRefresh(_ type: any EnginePullRefreshView.Type) {
+        pullRefreshViewType = type
+        setupPullRefresh()
+    }
+
     func close() {
         removeObservers()
         removeAllUserScripts()
@@ -156,6 +173,21 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
         navigationDelegate = nil
         uiDelegate = nil
         delegate = nil
+    }
+
+    private func setupPullRefresh() {
+        guard let pullRefreshViewType else { return }
+        let refresh = pullRefreshViewType.init(scrollView: scrollView)
+        scrollView.addSubview(refresh)
+        refresh.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
+            refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
+            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+            refresh.heightAnchor.constraint(equalToConstant: 300.0),
+            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        ])
+        pullRefreshView = refresh
     }
 
     private func setupObservers() {

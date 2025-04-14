@@ -80,15 +80,6 @@ class RootViewControllerModel {
 
     // MARK: - Address toolbar
     func addressToolbarContainerModel(url: URL?) -> AddressToolbarContainerModel {
-        let pageActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.qrCode,
-            isEnabled: true,
-            a11yLabel: "Read QR Code",
-            a11yHint: nil,
-            a11yId: "qrCodeButton",
-            hasLongPressAction: false,
-            onSelected: nil)]
-
         let browserActions = [ToolbarElement(
             iconName: StandardImageIdentifiers.Large.appMenu,
             isEnabled: true,
@@ -127,7 +118,7 @@ class RootViewControllerModel {
             isPrivate: false,
             locationViewConfiguration: locationViewConfig,
             navigationActions: [],
-            pageActions: pageActions,
+            pageActions: [],
             browserActions: browserActions)
     }
 }

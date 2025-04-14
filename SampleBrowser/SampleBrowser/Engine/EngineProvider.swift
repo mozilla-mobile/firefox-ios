@@ -11,8 +11,19 @@ struct EngineProvider {
     private(set) var session: EngineSession
     let view: EngineView
 
-    init?(engine: Engine = WKEngine.factory(),
-          sessionDependencies: EngineSessionDependencies) {
+    init?(
+        engine: Engine = WKEngine.factory(
+            engineDependencies: .init(
+                readerModeConfiguration: .init(
+                    loadingText: "",
+                    loadingFailedText: "",
+                    loadOriginalText: "",
+                    readerModeErrorText: ""
+                )
+            )
+        ),
+        sessionDependencies: EngineSessionDependencies
+    ) {
         self.engine = engine
 
         do {

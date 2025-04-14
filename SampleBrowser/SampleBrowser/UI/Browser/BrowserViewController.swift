@@ -71,6 +71,7 @@ class BrowserViewController: UIViewController,
 
     private func setupBrowserView(_ engineView: EngineView) {
         engineView.render(session: engineSession)
+        engineView.addPullRefresh(PullRefreshView.self)
     }
 
     private func setupProgressBar() {
