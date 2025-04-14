@@ -968,7 +968,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
-            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) {
+            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) &&
+            UIDevice.current.userInterfaceIdiom != .pad {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
         } else {
