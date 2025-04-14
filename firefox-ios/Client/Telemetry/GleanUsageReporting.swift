@@ -57,6 +57,9 @@ final class GleanUsageReporting: GleanUsageReportingApi {
         if let date = InstallationUtils.inferredDateInstalledOn {
             GleanMetrics.Usage.firstRunDate.set(date)
         }
+        let managedConfig = UserDefaults.standard.dictionary(forKey: "com.apple.configuration.managed")
+        let isManaged = (managedConfig != nil) ? true : false
+        GleanMetrics.Usage.isManagedDevice.set(isManaged)
     }
 }
 
