@@ -534,7 +534,7 @@ class TabTrayViewController: UIViewController,
         return button
     }
 
-    private func currentTheme() -> Theme {
+    internal func currentTheme() -> Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
