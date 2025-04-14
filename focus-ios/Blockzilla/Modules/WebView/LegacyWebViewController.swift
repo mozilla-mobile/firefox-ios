@@ -154,6 +154,18 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         configuration.allowsInlineMediaPlayback = true
         configuration.ignoresViewportScaleLimits = true
 
+        // For consistency we set our user agent similar to Firefox iOS.
+        //
+        // Important to note that this UA change only applies when the webview is created initially or
+        // when people hit the erase session button. The UA is not changed when you change the width of
+        // Focus on iPad, which means there could be some edge cases right now.
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            configuration.applicationNameForUserAgent = "Version/15.0 Safari/605.1.15"
+        } else {
+            configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Mobile/15E148 Version/15.0"
+        }
+
         if #available(iOS 15.0, *) {
             configuration.upgradeKnownHostsToHTTPS = true
         }
@@ -165,7 +177,6 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
-        browserView.customUserAgent = UserAgent.mobileUserAgent()
 
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
