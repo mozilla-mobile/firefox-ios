@@ -2256,7 +2256,7 @@ class BrowserViewController: UIViewController,
                let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString, invalidCharacters: false) {
+                if let url = URL(string: urlString) {
                     self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }
@@ -3403,7 +3403,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)", invalidCharacters: false) {
+            if let url = URL(string: "tel:\(phoneNumber)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 defaultAction()

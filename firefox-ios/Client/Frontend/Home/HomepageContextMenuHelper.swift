@@ -253,7 +253,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.share,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            guard let url = URL(string: site.url, invalidCharacters: false) else { return }
+            guard let url = URL(string: site.url) else { return }
 
             self.browserNavigationHandler?.showShareSheet(
                 shareType: .site(url: url),

@@ -76,7 +76,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     }
 
     private func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
-        guard let uri = URL(string: uriString, invalidCharacters: false),
+        guard let uri = URL(string: uriString),
               let scheme = uri.scheme, !scheme.isEmpty,
               let host = uri.host
         else {

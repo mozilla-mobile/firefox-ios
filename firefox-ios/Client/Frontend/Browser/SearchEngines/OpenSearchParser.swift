@@ -128,7 +128,7 @@ class OpenSearchParser {
 
         let uiImage: UIImage
         if let imageElement = largestImageElement,
-            let imageURL = URL(string: imageElement.stringValue, invalidCharacters: false),
+            let imageURL = URL(string: imageElement.stringValue),
             let imageData = try? Data(contentsOf: imageURL),
             let image = UIImage(data: imageData) {
             uiImage = image
