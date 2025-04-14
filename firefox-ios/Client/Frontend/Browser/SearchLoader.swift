@@ -94,7 +94,6 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                 var queries = [bookmarks]
                 let group = DispatchGroup()
                 group.enter()
-                // Lets only add the history query if history highlights are not enabled
                 self.getHistoryAsSites(matchingSearchQuery: self.query, limit: 100) { history in
                     queries.append(history)
                     group.leave()
