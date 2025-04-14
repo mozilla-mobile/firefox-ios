@@ -46,7 +46,7 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
 
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
         mainQueue.ensureMainThread { [weak self] in
-            self?.register(webServer, readerModeConfiguration: readerModeConfiguration)
+            self?.register(webServer: webServer, readerModeConfiguration: readerModeConfiguration)
         }
     }
 
