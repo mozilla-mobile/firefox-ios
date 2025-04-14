@@ -73,8 +73,7 @@ class TabScrollController: NSObject,
     private let logger: Logger
 
     private var toolbarsShowing: Bool {
-        let bottomShowing = overKeyboardContainerOffset == 0 && bottomContainerOffset == 0
-        return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
+        return toolbarState == .visible
     }
 
     private var isZoomedOut = false
@@ -249,6 +248,7 @@ class TabScrollController: NSObject,
 
     func showToolbars(animated: Bool) {
         guard toolbarState != .visible else { return }
+
         toolbarState = .visible
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
@@ -264,6 +264,7 @@ class TabScrollController: NSObject,
 
     func hideToolbars(animated: Bool, isFindInPageMode: Bool = false) {
         guard toolbarState != .collapsed else { return }
+
         toolbarState = .collapsed
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * hideDurationRation)
@@ -548,10 +549,7 @@ private extension TabScrollController {
 
         contentOffsetBeforeAnimation = scrollView.contentOffset
 
-        let isShownFromHidden = shouldAdjustScrollForToolbarShow(currentOffset: headerTopOffset, targetOffset: headerOffset)
-
         let animationBlock = buildToolbarAnimationBlock(
-            isShownFromHidden: isShownFromHidden,
             headerOffset: headerOffset,
             bottomContainerOffset: bottomContainerOffset,
             overKeyboardOffset: overKeyboardOffset,
@@ -561,24 +559,12 @@ private extension TabScrollController {
         runToolbarAnimation(animated: animated, duration: duration, animations: animationBlock, completion: completion)
     }
 
-    func shouldAdjustScrollForToolbarShow(currentOffset: CGFloat, targetOffset: CGFloat) -> Bool {
-        return currentOffset == -headerHeight && targetOffset == 0
-    }
-
-    func buildToolbarAnimationBlock(isShownFromHidden: Bool,
-                                    headerOffset: CGFloat,
+    func buildToolbarAnimationBlock(headerOffset: CGFloat,
                                     bottomContainerOffset: CGFloat,
                                     overKeyboardOffset: CGFloat,
                                     alpha: CGFloat) -> () -> Void {
         return { [weak self] in
-            guard let self = self, let scrollView = self.scrollView else { return }
-
-            if isShownFromHidden {
-                scrollView.contentOffset = CGPoint(
-                    x: self.contentOffsetBeforeAnimation.x,
-                    y: self.contentOffsetBeforeAnimation.y + self.headerHeight
-                )
-            }
+            guard let self = self else { return }
 
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset
@@ -653,6 +639,10 @@ extension TabScrollController: UIScrollViewDelegate {
             } else {
                 hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
             }
+
+            // this action controls the address toolbar's border position,
+            // we keep track of lastContentOffsetY to know if the border needs to be updated
+            sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
         }
     }
 
