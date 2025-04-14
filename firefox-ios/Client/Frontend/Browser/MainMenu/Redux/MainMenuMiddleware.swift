@@ -54,6 +54,8 @@ final class MainMenuMiddleware {
         guard let action = action as? MainMenuAction else { return }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
 
+        if self.handleMainMenuActionType(action: action, isHomepage: isHomepage) { return }
+
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
             self.handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
