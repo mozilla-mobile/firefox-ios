@@ -113,10 +113,6 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
         return copyProvider.getCopyFor(copyType, of: hintType)
     }
 
-    var isActionType: Bool {
-        return false
-    }
-
     // MARK: - Telemetry
     func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
         let hintTypeExtra = hintType == .toolbarLocation ? getToolbarLocation() : hintType.rawValue

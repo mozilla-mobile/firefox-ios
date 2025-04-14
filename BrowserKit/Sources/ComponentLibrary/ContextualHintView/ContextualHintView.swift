@@ -15,7 +15,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
         static let closeButtonTop: CGFloat = 23
         static let closeButtonBottom: CGFloat = 12
         static let closeButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 7.5, bottom: 15, trailing: 7.5)
-        static let actionButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         static let stackViewLeading: CGFloat = 16
         static let stackViewTopArrowTopConstraint: CGFloat = 16
         static let stackViewBottomArrowTopConstraint: CGFloat = 5
@@ -48,12 +47,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var actionButton: LinkButton = .build { button in
-        button.titleLabel?.textAlignment = .left
-        button.titleLabel?.numberOfLines = 0
-        button.addTarget(self, action: #selector(self.didTapActionButton), for: .touchUpInside)
-    }
-
     private lazy var stackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .fillProportionally
@@ -84,13 +77,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
     public func configure(viewModel: ContextualHintViewModel) {
         self.viewModel = viewModel
 
-        let actionButtonViewModel = LinkButtonViewModel(
-            title: viewModel.actionButtonTitle,
-            a11yIdentifier: viewModel.actionButtonA11yId,
-            contentInsets: UX.actionButtonInsets
-        )
-        actionButton.configure(viewModel: actionButtonViewModel)
-
         closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
         descriptionLabel.text = viewModel.description
 
@@ -107,7 +93,6 @@ public class ContextualHintView: UIView, ThemeApplicable {
             stackView.addArrangedSubview(titleLabel)
         }
         stackView.addArrangedSubview(descriptionLabel)
-        if viewModel.isActionType { stackView.addArrangedSubview(actionButton) }
 
         setupConstraints()
     }
@@ -156,32 +141,10 @@ public class ContextualHintView: UIView, ThemeApplicable {
         viewModel?.closeButtonAction?(sender)
     }
 
-    @objc
-    private func didTapActionButton(sender: UIButton) {
-        viewModel?.actionButtonAction?(sender)
-    }
-
     public func applyTheme(theme: Theme) {
         closeButton.tintColor = theme.colors.textOnDark
         titleLabel.textColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
-
-        guard let viewModel else { return }
-
-        if viewModel.isActionType {
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: FXFontStyles.Regular.body.scaledFont(),
-                .foregroundColor: theme.colors.textOnDark,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-
-            let attributeString = NSMutableAttributedString(
-                string: viewModel.actionButtonTitle,
-                attributes: textAttributes
-            )
-
-            actionButton.setAttributedTitle(attributeString, for: .normal)
-        }
     }
 }
