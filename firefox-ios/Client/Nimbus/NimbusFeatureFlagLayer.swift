@@ -73,9 +73,6 @@ final class NimbusFeatureFlagLayer {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
-        case .nightMode:
-            return checkNightModeFeature(from: nimbus)
-
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
@@ -386,12 +383,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
-
-        return config.enabled
-    }
-
-    private func checkNightModeFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.nightModeFeature.value()
 
         return config.enabled
     }
