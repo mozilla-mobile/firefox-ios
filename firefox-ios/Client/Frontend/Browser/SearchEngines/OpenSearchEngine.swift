@@ -114,6 +114,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         aCoder.encode(shortName, forKey: CodingKeys.shortName.rawValue)
         aCoder.encode(isCustomEngine, forKey: CodingKeys.isCustomEngine.rawValue)
         aCoder.encode(engineID, forKey: CodingKeys.engineID.rawValue)
+        aCoder.encode(telemetrySuffix, forKey: CodingKeys.telemetrySuffix.rawValue)
 
         // Images loaded from the BrowserKit bundle will not directly contain image data to encode. Here we force the UIImage
         // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]
