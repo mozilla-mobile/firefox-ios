@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Đóng";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Kết nối Internet có vẻ như đang ngoại tuyến.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Thử lại";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Bắt đầu";
 

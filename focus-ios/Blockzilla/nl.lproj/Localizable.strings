@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Sluiten";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "De internetverbinding lijkt offline te zijn.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Opnieuw proberen";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Beginnen";
 
