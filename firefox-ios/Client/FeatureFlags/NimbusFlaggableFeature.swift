@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case appearanceMenu
+    case addressBarMenu
     case bookmarksRefactor
     case bottomSearchBar
     case cleanupHistoryReenabled
