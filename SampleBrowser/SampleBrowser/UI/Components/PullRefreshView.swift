@@ -27,7 +27,7 @@ class PullRefreshView: UIView,
         static let easterEggDelayInSeconds: CGFloat = 4.0
     }
 
-    private let onRefreshCallback: VoidReturnCallback
+    private var onRefreshCallback: VoidReturnCallback
     private lazy var progressView: UIImageView = .build { view in
         view.image = UIImage(named: "syncLarge")?.withRenderingMode(.alwaysTemplate)
         view.contentMode = .scaleAspectFit
@@ -49,32 +49,24 @@ class PullRefreshView: UIView,
         return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
 
-    required init(scrollView: UIScrollView?) {
-        self.scrollView = scrollView
-        onRefreshCallback = { }
+    init() {
+        onRefreshCallback = {}
         super.init(frame: .zero)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(with scrollView: UIScrollView, onRefresh: @escaping () -> Void) {
+        onRefreshCallback = onRefresh
+        self.scrollView = scrollView
         // This is needed otherwise the final pull refresh flash would go out of bounds
         clipsToBounds = true
         setupEasterEgg(isPortrait: true)
         setupSubviews()
         startObservingContentScroll()
-    }
-
-    init(parentScrollView: UIScrollView?,
-         isPortraitOrientation: Bool,
-         onRefreshCallback: @escaping VoidReturnCallback) {
-        self.scrollView = parentScrollView
-        self.onRefreshCallback = onRefreshCallback
-        super.init(frame: .zero)
-        // This is needed otherwise the final pull refresh flash would go out of bounds
-        clipsToBounds = true
-        setupEasterEgg(isPortrait: isPortraitOrientation)
-        setupSubviews()
-        startObservingContentScroll()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        applyTheme(theme: LightTheme())
     }
 
     private func setupEasterEgg(isPortrait: Bool) {
@@ -155,6 +147,7 @@ class PullRefreshView: UIView,
             self?.progressContainerView.transform = .identity
             self?.progressView.transform = .identity
             self?.onRefreshCallback()
+            self?.startObservingContentScroll()
         })
     }
 

@@ -12,6 +12,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView
 
     func webViewPropertyChanged(_ property: WKEngineWebViewProperty)
+    func webViewNeedsReload()
 }
 
 /// Abstraction on top of the `WKWebView`
@@ -42,8 +43,6 @@ protocol WKEngineWebView: UIView {
     var isInspectable: Bool { get set }
 
     init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider)
-
-    func addPullRefresh(_ type: EnginePullRefreshView.Type)
 
     @discardableResult
     func load(_ request: URLRequest) -> WKNavigation?
@@ -123,8 +122,10 @@ final class DefaultWKEngineWebView: WKWebView,
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
-    private var pullRefreshViewType: (any EnginePullRefreshView.Type)?
+    private let pullRefreshViewType: EnginePullRefreshViewType
     private var pullRefreshView: EnginePullRefreshView?
+    private var pullRefreshViewHeightConstraint: NSLayoutConstraint?
+    private var pullRefreshViewWidthConstraint: NSLayoutConstraint?
     private var observedTokens = [NSKeyValueObservation]()
 
     override var inputAccessoryView: UIView? {
@@ -144,12 +145,14 @@ final class DefaultWKEngineWebView: WKWebView,
         let configuration = configurationProvider.createConfiguration()
         engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
+        pullRefreshViewType = configuration.pullRefreshType
 
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 
         engineScrollView = scrollView
         scrollView.delegate = self
         setupObservers()
+        setupPullRefresh()
     }
 
     required init?(coder: NSCoder) {
@@ -158,11 +161,6 @@ final class DefaultWKEngineWebView: WKWebView,
 
     deinit {
         close()
-    }
-
-    func addPullRefresh(_ type: any EnginePullRefreshView.Type) {
-        pullRefreshViewType = type
-        setupPullRefresh()
     }
 
     func close() {
@@ -176,23 +174,42 @@ final class DefaultWKEngineWebView: WKWebView,
     }
 
     private func setupPullRefresh() {
-        guard let pullRefreshViewType else { return }
-        let refresh = pullRefreshViewType.init(scrollView: scrollView)
+        guard !scrollView.isZooming, pullRefreshView == nil else { return }
+        let refresh = pullRefreshViewType.init()
+        pullRefreshView = refresh
+        refresh.configure(with: scrollView) { [weak self] in
+            self?.delegate?.webViewNeedsReload()
+        }
+        guard pullRefreshViewType != UIRefreshControl.self else { return }
         scrollView.addSubview(refresh)
         refresh.translatesAutoresizingMaskIntoConstraints = false
+        pullRefreshViewHeightConstraint = refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
+        pullRefreshViewHeightConstraint?.isActive = true
+        pullRefreshViewWidthConstraint = refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        pullRefreshViewWidthConstraint?.isActive = true
         NSLayoutConstraint.activate([
             refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: 300.0),
-            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
         ])
-        pullRefreshView = refresh
+    }
+
+    private func removePullRefresh() {
+        pullRefreshView?.removeFromSuperview()
+        pullRefreshViewWidthConstraint = nil
+        pullRefreshViewHeightConstraint = nil
+        pullRefreshView = nil
     }
 
     private func setupObservers() {
         let loadingToken = observe(\.isLoading, options: [.new]) { [weak self] _, change in
             guard let isLoading = change.newValue else { return }
+            if isLoading {
+                // MARK: TODO - for native pull refresh we should start refreshing here `beginRefreshing()`
+                self?.removePullRefresh()
+            } else {
+                self?.setupPullRefresh()
+            }
             self?.delegate?.webViewPropertyChanged(.loading(isLoading))
         }
 
@@ -228,6 +245,8 @@ final class DefaultWKEngineWebView: WKWebView,
 
         let contentSizeObserver = scrollView.observe(\.contentSize, options: [.new]) { [weak self] _, change in
             guard let newSize = change.newValue else { return }
+            self?.pullRefreshViewHeightConstraint?.constant = newSize.height
+            self?.pullRefreshViewWidthConstraint?.constant = newSize.width
             self?.delegate?.webViewPropertyChanged(.contentSize(newSize))
         }
 
@@ -291,6 +310,16 @@ final class DefaultWKEngineWebView: WKWebView,
             becomeFirstResponder()
         }
         return super.hitTest(point, with: event)
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        removePullRefresh()
+    }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        setupPullRefresh()
     }
 
     // MARK: - ThemeApplicable

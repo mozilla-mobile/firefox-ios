@@ -13,9 +13,15 @@ public struct WKWebviewParameters {
     /// A boolean value indicating if we have a persitent webview data store.
     var isPrivate: Bool
 
-    public init(blockPopups: Bool, isPrivate: Bool) {
+    /// The type of pull refresh that is going to be instantiated and displayed by the webview.
+    var pullRefreshType: EnginePullRefreshViewType
+
+    public init(blockPopups: Bool,
+                isPrivate: Bool,
+                pullRefreshType: EnginePullRefreshViewType = UIRefreshControl.self) {
         self.blockPopups = blockPopups
         self.isPrivate = isPrivate
+        self.pullRefreshType = pullRefreshType
     }
 }
 
@@ -48,6 +54,7 @@ struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
 
         configuration.setURLSchemeHandler(WKInternalSchemeHandler(),
                                           forURLScheme: WKInternalSchemeHandler.scheme)
-        return DefaultEngineConfiguration(webViewConfiguration: configuration)
+        return DefaultEngineConfiguration(pullRefreshType: parameters.pullRefreshType,
+                                          webViewConfiguration: configuration)
     }
 }

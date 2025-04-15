@@ -8,6 +8,4 @@ import UIKit
 public protocol EngineView: UIView {
     /// Render the content of the given session.
     func render(session: EngineSession)
-
-    func addPullRefresh(_ type: EnginePullRefreshView.Type)
 }

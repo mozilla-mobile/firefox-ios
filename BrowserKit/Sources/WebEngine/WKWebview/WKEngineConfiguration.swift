@@ -7,6 +7,8 @@ import WebKit
 
 /// Abstraction on top of `WKWebViewConfiguration` and the `WKUserContentController`
 protocol WKEngineConfiguration {
+    var pullRefreshType: EnginePullRefreshViewType { get }
+
     func addUserScript(_ userScript: WKUserScript)
     func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String)
     func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String)
@@ -16,6 +18,7 @@ protocol WKEngineConfiguration {
 }
 
 struct DefaultEngineConfiguration: WKEngineConfiguration {
+    let pullRefreshType: EnginePullRefreshViewType
     var webViewConfiguration: WKWebViewConfiguration
 
     func addUserScript(_ userScript: WKUserScript) {

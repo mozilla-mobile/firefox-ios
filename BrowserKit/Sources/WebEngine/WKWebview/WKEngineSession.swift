@@ -348,6 +348,10 @@ class WKEngineSession: NSObject,
         }
     }
 
+    func webViewNeedsReload() {
+        reload()
+    }
+
     // MARK: - WebView Properties Change
 
     private func handleHasOnlySecureContentChanged(_ value: Bool) {

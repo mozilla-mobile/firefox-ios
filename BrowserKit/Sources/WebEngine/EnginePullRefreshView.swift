@@ -5,6 +5,16 @@
 import Foundation
 import UIKit
 
+public typealias EnginePullRefreshViewType = EnginePullRefreshView.Type
+
 public protocol EnginePullRefreshView: UIView {
-    init(scrollView: UIScrollView?)
+    func configure(with scrollView: UIScrollView, onRefresh: @escaping () -> Void)
+}
+
+extension UIRefreshControl: EnginePullRefreshView {
+    public func configure(with scrollView: UIScrollView, onRefresh: @escaping () -> Void) {
+        scrollView.refreshControl = self
+        addAction(UIAction(handler: { _ in onRefresh() }),
+                  for: .valueChanged)
+    }
 }
