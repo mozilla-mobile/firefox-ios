@@ -260,12 +260,6 @@ struct EasterEggViewLayoutBuilder {
     let easterEggSize: CGSize
 
     func layoutEasterEggView(_ view: UIView, superview: UIView, isPortrait: Bool, isIpad: Bool) {
-        var isPortrait = isPortrait
-//        if let screenHeight = 1000,
-//           screenHeight <= UX.smallDevicesMaxScreenHeight {
-//            // Force landscape layout so the easter egg shows only bottom sides and doesn't render clipped for small devices
-//            isPortrait = false
-//        }
         if isPortrait || isIpad {
             layoutEasterEggView(view, superview: superview, position: randomPortraitLayoutPosition())
         } else {
