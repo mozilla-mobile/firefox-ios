@@ -115,7 +115,7 @@ class NotificationManager: NotificationManagerProtocol {
     // Determines if the user has allowed notifications
     func hasPermission() async -> Bool {
         // FXIOS-11895 Temporary test for reverting continuation workaround we put in place for iOS 18.0 (beta?) users
-        if ContinuationWrapper.shouldUseCheckedContinuation {
+        if ContinuationsChecker.shouldUseCheckedContinuation {
             await withCheckedContinuation { continuation in
                 hasPermission { hasPermission in
                     continuation.resume(returning: hasPermission)

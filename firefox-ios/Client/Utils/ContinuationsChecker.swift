@@ -4,8 +4,10 @@
 
 /// In the future, we may wish to flesh out a wrapper for continuations. This will allow us to check for usage violations
 /// to log misuse rather than crash the app (FXIOS-11895).
-struct ContinuationWrapper {
-    // FXIOS-11895 Temporary test for reverting continuation workaround we put in place for iOS 18.0 (beta?) users
+struct ContinuationsChecker {
+    /// Always returns true except for iOS 18.0 users who are not under an experiment to revert unsafe continuation usage
+    /// back to checked continuations.
+    /// FXIOS-11895 This is a temp. check for reverting a continuation workaround we put in place for iOS 18.0 (beta?) users
     static var shouldUseCheckedContinuation: Bool {
         let systemVersion = UIDevice.current.systemVersion
         let isRevertUnsafeContinuationsRefactorEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(
