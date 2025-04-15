@@ -44,4 +44,9 @@ struct TabsPanelTelemetry {
         let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected, extras: extras)
     }
+
+    func tabSelected(at index: Int) {
+        let extras = GleanMetrics.TabsPanel.TabSelectedExtra(selectedTabIndex: Int32(index))
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabSelected, extras: extras)
+    }
 }

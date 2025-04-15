@@ -3665,25 +3665,6 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-  open:
-    type: labeled_counter
-    description: |
-      The count of tabs opened by the user. Increments the
-      appropriate label when either a normal or private tab
-      is opened.
-    labels:
-      - normal-tab
-      - private-tab
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   close:
     type: labeled_counter
     description: |
@@ -3716,20 +3697,6 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7008
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7008
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  click_tab:
-    type: event
-    description: |
-      Recorded when a user clicks an open tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
@@ -3984,6 +3951,26 @@ tabs:
 
 # Tabs Panel
 tabs_panel:
+  tab_selected:
+    type: event
+    description: |
+      Recorded when a user selects an open tab
+    extra_keys:
+      selected_tab_index:
+        type: quantity
+        description: |
+          The index of the open tab that the user selects
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
   new_tab_button_tapped:
     type: event
     description: | 
@@ -4002,7 +3989,6 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -4458,6 +4444,7 @@ tabs_tray:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    
 # Inactive Tabs metrics
 inactive_tabs_tray:
   toggle_inactive_tab_tray:

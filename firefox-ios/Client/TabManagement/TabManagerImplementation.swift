@@ -959,7 +959,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know
