@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Ecosia
 
 // MARK: - Settings Flow Delegate Protocol
 
@@ -85,6 +86,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         setupNavigationBar()
         configureAccessibilityIdentifiers()
+
+        // Ecosia: Register Nudge Card if needed
+        if User.shared.shouldShowDefaultBrowserSettingNudgeCard {
+            tableView.register(DefaultBrowserSettingsNudgeCardHeaderView.self,
+                               forHeaderFooterViewReuseIdentifier: DefaultBrowserSettingsNudgeCardHeaderView.cellIdentifier)
+        }
     }
 
     /* Ecosia: Move settings reload to `viewWillAppear`
@@ -471,11 +478,83 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     // MARK: - UITableViewDelegate
 
+    /* Ecosia: Set the header view for the table view with custom handling for the default browser nudge card
+       Adds other overrides after this one to modify the UI logic
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = super.tableView(
             tableView,
             viewForHeaderInSection: section
         ) as! ThemedTableSectionHeaderFooterView
         return headerView
+    }
+     */
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if shouldShowDefaultBrowserNudgeCardInSection(section),
+           let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: DefaultBrowserSettingsNudgeCardHeaderView.cellIdentifier)
+            as? DefaultBrowserSettingsNudgeCardHeaderView {
+            header.onDismiss = { [weak self] in
+                User.shared.hideDefaultBrowserSettingNudgeCard()
+                Analytics.shared.defaultBrowserSettingsViaNudgeCardDismiss()
+                self?.hideDefaultBrowserNudgeCardInSection(section)
+            }
+            header.onTap = { [weak self] in
+                User.shared.hideDefaultBrowserSettingNudgeCard()
+                self?.showDefaultBrowserDetailView()
+            }
+            header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            return header
+        } else if let headerView = super.tableView(
+            tableView,
+            viewForHeaderInSection: section
+        ) as? ThemedTableSectionHeaderFooterView {
+            return headerView
+        }
+        return nil
+    }
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard shouldShowDefaultBrowserNudgeCardInSection(section) else {
+            return super.tableView(tableView, viewForFooterInSection: section)
+        }
+        return nil
+    }
+
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        guard shouldShowDefaultBrowserNudgeCardInSection(section) else {
+            return super.tableView(tableView, heightForFooterInSection: section)
+        }
+        return 0
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if shouldShowDefaultBrowserNudgeCardInSection(section) {
+            return UITableView.automaticDimension
+        }
+        return super.tableView(tableView, heightForHeaderInSection: section)
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if shouldShowDefaultBrowserNudgeCardInSection(section) {
+            return 1
+        }
+        return super.tableView(tableView, numberOfRowsInSection: section)
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if shouldShowDefaultBrowserNudgeCardInSection(indexPath.section) {
+            let cell = UITableViewCell()
+            cell.isUserInteractionEnabled = false
+            cell.backgroundColor = .clear
+            cell.contentView.isHidden = true
+            return cell
+        }
+        return super.tableView(tableView, cellForRowAt: indexPath)
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if shouldShowDefaultBrowserNudgeCardInSection(indexPath.section) {
+            return .leastNonzeroMagnitude
+        }
+        return super.tableView(tableView, heightForRowAt: indexPath)
     }
 }

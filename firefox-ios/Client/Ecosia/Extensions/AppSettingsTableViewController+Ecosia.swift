@@ -11,7 +11,6 @@ extension AppSettingsTableViewController {
 
     func getEcosiaSettingsSectionsShowingDebug(_ isDebugSectionEnabled: Bool) -> [SettingSection] {
         var sections = [
-            getEcosiaDefaultBrowserSection(),
             getSearchSection(),
             getCustomizationSection(),
             getEcosiaGeneralSection(),
@@ -19,6 +18,10 @@ extension AppSettingsTableViewController {
             getEcosiaSupportSection(),
             getEcosiaAboutSection()
         ]
+
+        if User.shared.shouldShowDefaultBrowserSettingNudgeCard {
+            sections.insert(getEcosiaDefaultBrowserSection(), at: 0)
+        }
 
         if isDebugSectionEnabled {
             sections.append(getEcosiaDebugSupportSection())
@@ -30,14 +33,15 @@ extension AppSettingsTableViewController {
 
 extension AppSettingsTableViewController {
 
+    // We need this section as a placeholder for the default browser nudge card.
     private func getEcosiaDefaultBrowserSection() -> SettingSection {
-        .init(footerTitle: .init(string: .localized(.linksFromWebsites)),
-              children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])
+        .init(children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])
     }
 
     private func getSearchSection() -> SettingSection {
 
-        var settings: [Setting] = [
+        let settings: [Setting] = [
+            EcosiaDefaultBrowserSettings(),
             SearchAreaSetting(settings: self),
             SafeSearchSettings(settings: self),
             AutoCompleteSettings(prefs: profile.prefs, theme: themeManager.getCurrentTheme(for: windowUUID)),
@@ -149,6 +153,7 @@ extension AppSettingsTableViewController {
             AddClaim(settings: self),
             ChangeSearchCount(settings: self),
             ResetSearchCount(settings: self),
+            ResetDefaultBrowserNudgeCard(settings: self),
             AnalyticsIdentifierSetting(settings: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             UnleashBrazeIntegrationSetting(settings: self),
@@ -168,5 +173,32 @@ extension AppSettingsTableViewController {
         }
 
         return SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugSettings)
+    }
+}
+
+// MARK: - Default Browser Nudge Card helpers
+
+extension AppSettingsTableViewController {
+
+    func isDefaultBrowserCell(_ section: Int) -> Bool {
+        settings[section].children.first?.accessibilityIdentifier == AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
+    }
+
+    func shouldShowDefaultBrowserNudgeCardInSection(_ section: Int) -> Bool {
+        isDefaultBrowserCell(section) &&
+        User.shared.shouldShowDefaultBrowserSettingNudgeCard
+    }
+
+    func hideDefaultBrowserNudgeCardInSection(_ section: Int) {
+        guard section < settings.count else { return }
+        self.settings.remove(at: section)
+        self.tableView.deleteSections(IndexSet(integer: section), with: .automatic)
+    }
+
+    func showDefaultBrowserDetailView() {
+        DefaultBrowserCoordinator.makeDefaultCoordinatorAndShowDetailViewFrom(navigationController,
+                                                                              analyticsLabel: .settingsNudgeCard,
+                                                                              topViewContentBackground: EcosiaColor.DarkGreen50.color,
+                                                                              with: themeManager.getCurrentTheme(for: windowUUID))
     }
 }

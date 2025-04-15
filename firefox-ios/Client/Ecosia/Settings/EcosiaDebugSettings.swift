@@ -200,6 +200,25 @@ final class ChangeSearchCount: HiddenSetting {
     }
 }
 
+final class ResetDefaultBrowserNudgeCard: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Makes the Default Browser nudge card visible again", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+    }
+
+    override var status: NSAttributedString? {
+        let status = "\(User.shared.shouldShowDefaultBrowserSettingNudgeCard)"
+        let suggestion = User.shared.shouldShowDefaultBrowserSettingNudgeCard ? "" : " (Click to show)"
+        return NSAttributedString(string: "Card visible: \(status)\(suggestion)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        guard !User.shared.shouldShowDefaultBrowserSettingNudgeCard else { return }
+        User.shared.showDefaultBrowserSettingNudgeCard()
+        self.settings.settings = self.settings.generateSettings()
+        self.settings.tableView.reloadData()
+    }
+}
+
 class UnleashVariantResetSetting: HiddenSetting {
     var titleName: String? { return nil }
     var variant: Unleash.Variant? { return nil }

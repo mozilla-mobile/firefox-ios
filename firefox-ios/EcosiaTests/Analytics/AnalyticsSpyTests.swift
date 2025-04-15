@@ -6,6 +6,8 @@ import XCTest
 import Storage
 import SnowplowTracker
 import Common
+import SwiftUI
+import ViewInspector
 @testable import Client
 @testable import Ecosia
 
@@ -128,6 +130,26 @@ final class AnalyticsSpy: Analytics {
     var clearAllPrivateDataSectionCalled: Property.SettingsPrivateDataSection?
     override func clearsDataFromSection(_ section: Analytics.Property.SettingsPrivateDataSection) {
         clearAllPrivateDataSectionCalled = section
+    }
+
+    var defaultBrowserSettingsShowsDetailViewLabelCalled: Analytics.Label.DefaultBrowser?
+    override func defaultBrowserSettingsShowsDetailViewVia(_ label: Analytics.Label.DefaultBrowser) {
+        defaultBrowserSettingsShowsDetailViewLabelCalled = label
+    }
+
+    var defaultBrowserSettingsViaNudgeCardDismissCalled = false
+    override func defaultBrowserSettingsViaNudgeCardDismiss() {
+        defaultBrowserSettingsViaNudgeCardDismissCalled = true
+    }
+
+    var defaultBrowserSettingsOpenNativeSettingsLabelCalled: Analytics.Label.DefaultBrowser?
+    override func defaultBrowserSettingsOpenNativeSettingsVia(_ label: Analytics.Label.DefaultBrowser) {
+        defaultBrowserSettingsOpenNativeSettingsLabelCalled = label
+    }
+
+    var defaultBrowserSettingsDismissDetailViewLabelCalled: Analytics.Label.DefaultBrowser?
+    override func defaultBrowserSettingsDismissDetailViewVia(_ label: Analytics.Label.DefaultBrowser) {
+        defaultBrowserSettingsDismissDetailViewLabelCalled = label
     }
 }
 
@@ -839,6 +861,72 @@ final class AnalyticsSpyTests: XCTestCase {
         // Assert
         XCTAssertEqual(analyticsSpy.clearAllPrivateDataSectionCalled, .websites, "Analytics should track clearAllPrivateDataSectionCalled as .websites because we are simulating the click on Clear Websiste Data")
     }
+
+    // MARK: Analytics Default Browser
+
+    func testShowInstructionStepsTriggersAnalyticsEvent() throws {
+        User.shared.showDefaultBrowserSettingNudgeCard()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+
+        let view = makeInstructionsViewSUT()
+            .onAppear {
+                Analytics.shared.defaultBrowserSettingsDismissDetailViewVia(.settingsNudgeCard)
+            }
+
+        try view.inspect().callOnAppear()
+
+        XCTAssertEqual(analyticsSpy.defaultBrowserSettingsDismissDetailViewLabelCalled, .settingsNudgeCard)
+    }
+
+    func testTappingDismissButtonOnNudgeCardTriggersAnalyticsEvent() {
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        User.shared.showDefaultBrowserSettingNudgeCard()
+        let vc = AppSettingsTableViewController(with: profileMock,
+                                                and: tabManagerMock)
+        vc.loadViewIfNeeded()
+        vc.viewWillAppear(false)
+
+        guard let header = vc.tableView(vc.tableView, viewForHeaderInSection: 0) as? DefaultBrowserSettingsNudgeCardHeaderView else {
+            XCTFail("Expected nudge card header")
+            return
+        }
+
+        header.onDismiss?()
+
+        XCTAssertTrue(analyticsSpy.defaultBrowserSettingsViaNudgeCardDismissCalled)
+    }
+
+    func testDismissInstructionStepsTriggersAnalyticsEvent() throws {
+        User.shared.showDefaultBrowserSettingNudgeCard()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+
+        let view = makeInstructionsViewSUT()
+            .onDisappear {
+                Analytics.shared.defaultBrowserSettingsDismissDetailViewVia(.settingsNudgeCard)
+            }
+
+        try view.inspect().callOnDisappear()
+
+        XCTAssertEqual(analyticsSpy.defaultBrowserSettingsDismissDetailViewLabelCalled, .settingsNudgeCard)
+    }
+
+    func testDefaultBrowserSettingsOpenNativeSettingsTracksLabelAndProperty() throws {
+        User.shared.showDefaultBrowserSettingNudgeCard()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+
+        let view = makeInstructionsViewSUT(onButtonTap: {
+            Analytics.shared.defaultBrowserSettingsOpenNativeSettingsVia(.settings)
+        })
+
+        try view.inspect().find(button: String.Key.defaultBrowserCardDetailButton.rawValue).tap()
+
+        analyticsSpy.defaultBrowserSettingsOpenNativeSettingsVia(.settings)
+        XCTAssertEqual(analyticsSpy.defaultBrowserSettingsOpenNativeSettingsLabelCalled, .settings, "Expected label 'default_browser_settings' to be tracked.")
+    }
 }
 
 // MARK: - Helper SUTs
@@ -857,6 +945,29 @@ extension AnalyticsSpyTests {
 
     func makeWelcome() -> Welcome {
         Welcome(delegate: MockWelcomeDelegate(), windowUUID: .XCTestDefaultUUID)
+    }
+
+    func makeInstructionsViewSUT(onButtonTap: @escaping () -> Void = {}) -> InstructionStepsView<some View> {
+        let style = InstructionStepsViewStyle(
+            backgroundPrimaryColor: .blue,
+            topContentBackgroundColor: .blue,
+            stepsBackgroundColor: .blue,
+            textPrimaryColor: .blue,
+            textSecondaryColor: .blue,
+            buttonBackgroundColor: .blue,
+            buttonTextColor: .blue,
+            stepRowStyle: StepRowStyle(stepNumberColor: .blue, stepTextColor: .blue)
+        )
+
+        return InstructionStepsView(
+            title: .defaultBrowserCardDetailTitle,
+            steps: [InstructionStep(text: .defaultBrowserCardDetailInstructionStep1)],
+            buttonTitle: .defaultBrowserCardDetailButton,
+            onButtonTap: onButtonTap,
+            style: style
+        ) {
+            EmptyView()
+        }
     }
 }
 

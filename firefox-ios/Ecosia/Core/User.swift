@@ -211,13 +211,26 @@ extension User {
         state[Key.bookmarksImportExportTooltipShown.rawValue] = "\(false)"
     }
 
+    public var shouldShowDefaultBrowserSettingNudgeCard: Bool {
+        state[Key.isDefaultBrowserSettingNudgeCardShown.rawValue].map(Bool.init) != true
+    }
+
+    public mutating func showDefaultBrowserSettingNudgeCard() {
+        state[Key.isDefaultBrowserSettingNudgeCardShown.rawValue] = "\(false)"
+    }
+
+    public mutating func hideDefaultBrowserSettingNudgeCard() {
+        state[Key.isDefaultBrowserSettingNudgeCardShown.rawValue] = "\(true)"
+    }
+
     enum Key: String {
         case
         referralSpotlight,
         impactIntro = "counterIntro", // Reusing previous key
         inactiveTabsTooltip,
         bookmarksImportExportTooltipShown,
-        isNewUserSinceBookmarksImportExportHasBeenShipped
+        isNewUserSinceBookmarksImportExportHasBeenShipped,
+        isDefaultBrowserSettingNudgeCardShown
     }
 }
 

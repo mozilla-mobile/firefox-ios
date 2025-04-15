@@ -117,8 +117,6 @@ extension String {
         case weAreMomentarilyUnable = "We are momentarily unable to load all of your settings."
         case continueMessage = "Continue"
         case retryMessage = "Retry"
-        case setAsDefaultBrowser = "Set Ecosia as default browser"
-        case linksFromWebsites = "Links from websites, emails or messages will automatically open in Ecosia."
         case showTopSites = "Show Top Sites"
         case helpYourFriendsBecome = "Help your friends become climate active and plant trees together"
         case friendsJoined = "%d friend(s) joined"
@@ -234,5 +232,13 @@ extension String {
         case newsletterNTPCardExperimentTitle = "Be the first to know"
         case newsletterNTPCardExperimentDescription = "Subscribe to our monthly newsletter for updates on your climate impact."
         case newsletterNTPCardExperimentButton = "Sign up"
+        case defaultBrowserSettingTitle = "Default browser"
+        case defaultBrowserCardTitle = "Make Ecosia your default browser app"
+        case defaultBrowserCardDescription = "Safely open all links from other apps in Ecosia"
+        case defaultBrowserCardDetailTitle = "Use Ecosia as default"
+        case defaultBrowserCardDetailInstructionStep1 = "Open **Settings**"
+        case defaultBrowserCardDetailInstructionStep2 = "Select **Default Browser App**"
+        case defaultBrowserCardDetailInstructionStep3 = "Choose **Ecosia**"
+        case defaultBrowserCardDetailButton = "Make default in settings"
     }
 }

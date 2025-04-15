@@ -16,6 +16,22 @@ func ecosiaDisclosureIndicator(theme: Theme) -> UIImageView {
     return disclosureIndicator
 }
 
+final class EcosiaDefaultBrowserSettings: Setting {
+
+    override var accessoryView: UIImageView? { ecosiaDisclosureIndicator(theme: theme) }
+
+    override var title: NSAttributedString? {
+        NSAttributedString(string: .localized(.defaultBrowserSettingTitle), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        DefaultBrowserCoordinator.makeDefaultCoordinatorAndShowDetailViewFrom(navigationController,
+                                                                              analyticsLabel: .settings,
+                                                                              topViewContentBackground: EcosiaColor.DarkGreen50.color,
+                                                                              with: theme)
+    }
+}
+
 final class SearchAreaSetting: Setting {
     override var title: NSAttributedString? {
         NSAttributedString(string: .localized(.searchRegion), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])

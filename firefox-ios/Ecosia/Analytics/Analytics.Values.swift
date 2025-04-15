@@ -41,7 +41,8 @@ extension Analytics {
             case
             deeplink = "default_browser_deeplink",
             promo = "default_browser_promo",
-            settings = "default_browser_settings"
+            settings = "default_browser_settings",
+            settingsNudgeCard = "default_browser_settings_nudge_card"
         }
 
         public enum Menu: String {
@@ -205,7 +206,9 @@ extension Analytics {
         case
         enable,
         disable,
-        home
+        home,
+        detail,
+        nativeSettings = "native_settings"
 
         public enum APNConsent: String {
             case

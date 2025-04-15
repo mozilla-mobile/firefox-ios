@@ -293,6 +293,7 @@
 		28E91E751B443AD5009DF274 /* SyncConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E91E741B443AD5009DF274 /* SyncConstants.swift */; };
 		28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		2C1298AF2BF602D3005AE4E4 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
+		2C2EA77F2DA3F2990085F5BC /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 2C2EA77E2DA3F2990085F5BC /* Lottie */; };
 		2C2F31F52D46612F00977F55 /* TopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */; };
 		2C2F31F62D4663D800977F55 /* DependencyHelperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70EF18295E2E1600790249 /* DependencyHelperMock.swift */; };
 		2C2F31F72D4664CB00977F55 /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75A622A46272000533F8D /* MockThemeManager.swift */; };
@@ -323,6 +324,7 @@
 		2C6C908F2C614A6C007D9B43 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 2C6C908E2C614A6C007D9B43 /* SnapshotTesting */; };
 		2C7DC2402B1648BA00C049C8 /* LegacyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179A20E69A7E00B12184 /* LegacyTheme.swift */; };
 		2C7DC2462B16493C00C049C8 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
+		2CC0C2AD2DA804EA006FE9B7 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2CC0C2AC2DA804EA006FE9B7 /* ViewInspector */; };
 		2CC246602D520EF90098467A /* EcosiaLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465E2D520EF90098467A /* EcosiaLightTheme.swift */; };
 		2CC246612D520EF90098467A /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465C2D520EF90098467A /* EcosiaColor.swift */; };
 		2CC246632D520EF90098467A /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */; };
@@ -9705,6 +9707,7 @@
 				2CFE9FCE2D45363500B25CE0 /* BrazeUI in Frameworks */,
 				2CFE9FD22D45364600B25CE0 /* Common in Frameworks */,
 				2CFE9FEA2D45404800B25CE0 /* SwiftSoup in Frameworks */,
+				2C2EA77F2DA3F2990085F5BC /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9714,6 +9717,7 @@
 			files = (
 				2CFE9FC02D45348700B25CE0 /* RustMozillaAppServices.framework in Frameworks */,
 				2CFE9FBF2D45348200B25CE0 /* SnowplowTracker in Frameworks */,
+				2CC0C2AD2DA804EA006FE9B7 /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14893,6 +14897,7 @@
 				2CFE9FCF2D45364100B25CE0 /* SnowplowTracker */,
 				2CFE9FD12D45364600B25CE0 /* Common */,
 				2CFE9FE92D45404800B25CE0 /* SwiftSoup */,
+				2C2EA77E2DA3F2990085F5BC /* Lottie */,
 			);
 			productName = Ecosia;
 			productReference = 2CFE99662D45329200B25CE0 /* Ecosia.framework */;
@@ -14917,6 +14922,7 @@
 			name = EcosiaTests;
 			packageProductDependencies = (
 				2CFE9FBE2D45348200B25CE0 /* SnowplowTracker */,
+				2CC0C2AC2DA804EA006FE9B7 /* ViewInspector */,
 			);
 			productName = EcosiaTests;
 			productReference = 2CFE996F2D45329300B25CE0 /* EcosiaTests.xctest */;
@@ -15464,6 +15470,7 @@
 				126509832CD925B30011BA36 /* XCRemoteSwiftPackageReference "braze-swift-sdk" */,
 				12C25BEB2D27EBFF0048BADA /* XCRemoteSwiftPackageReference "snowplow-ios-tracker" */,
 				2CFE9FE82D453F9600B25CE0 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				2CC0C2A72DA802CD006FE9B7 /* XCRemoteSwiftPackageReference "ViewInspector" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -27139,6 +27146,14 @@
 				minimumVersion = 1.17.3;
 			};
 		};
+		2CC0C2A72DA802CD006FE9B7 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
 		2CCFB3D82C0FC4DC00BEDCA0 /* XCRemoteSwiftPackageReference "rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ecosia/rust-components-swift/";
@@ -27270,6 +27285,11 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Redux;
 		};
+		2C2EA77E2DA3F2990085F5BC /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		2C69DA7A2C6225C400D7F69F /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
@@ -27283,6 +27303,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2CCFB3D82C0FC4DC00BEDCA0 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = MozillaAppServices;
+		};
+		2CC0C2AC2DA804EA006FE9B7 /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2CC0C2A72DA802CD006FE9B7 /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
 		};
 		2CFE9FBE2D45348200B25CE0 /* SnowplowTracker */ = {
 			isa = XCSwiftPackageProductDependency;
