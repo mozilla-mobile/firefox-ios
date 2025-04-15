@@ -48,8 +48,6 @@ final class HomepageViewController: UIViewController,
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
     private let syncTabContextualHintViewController: ContextualHintViewController
-    // TODO: FXIOS-11504: Move this to state + add comments on what this is + why we use it
-    private let isZeroSearch: Bool
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
 
@@ -70,7 +68,6 @@ final class HomepageViewController: UIViewController,
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         isZeroSearch: Bool,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -80,7 +77,6 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.isZeroSearch = isZeroSearch
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -742,7 +738,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
         store.dispatch(
             PocketAction(
                 telemetryConfig: config,
@@ -754,7 +750,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchOpenTopSitesAction(at index: Int, tileType: String, urlString: String) {
         let config = TopSitesTelemetryConfig(
-            isZeroSearch: isZeroSearch,
+            isZeroSearch: homepageState.isZeroSearch,
             position: index,
             tileType: tileType,
             url: urlString
@@ -896,13 +892,13 @@ final class HomepageViewController: UIViewController,
             overlayState: overlayManager)
     }
 
-    private var canModalBePresented: Bool {
-        return presentedViewController == nil && isZeroSearch
+    private var canContextHintBePresented: Bool {
+        return presentedViewController == nil && homepageState.isZeroSearch
     }
 
     @objc
     private func presentContextualHint(with contextualHintViewController: ContextualHintViewController) {
-        guard canModalBePresented else { return }
+        guard canContextHintBePresented else { return }
         contextualHintViewController.isPresenting = true
         present(contextualHintViewController, animated: true, completion: nil)
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)

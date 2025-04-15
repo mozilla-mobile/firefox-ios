@@ -135,6 +135,7 @@ class OpenSearchEngineTests: XCTestCase {
         return OpenSearchEngine(
             engineID: type.engineID,
             shortName: type.name,
+            telemetrySuffix: nil,
             image: testImage,
             searchTemplate: "some link",
             suggestTemplate: nil,

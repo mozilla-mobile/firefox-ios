@@ -13,14 +13,37 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
     let shortName: String
     let engineID: String
+    let telemetrySuffix: String?
     let image: UIImage
     let isCustomEngine: Bool
     let searchTemplate: String
 
+    /// The telemetry ID to send for `search.default_engine` and `search.counts`
+    /// Prior to Search Consolidation, we sent the engineID from our engine XML
+    /// documents. Post-consolidation we send the engineID + suffix (if available)
+    var telemetryID: String {
+        guard !isCustomEngine else { return "custom" }
+        if SearchEngineFlagManager.isSECEnabled {
+            if let suffix = telemetrySuffix, !suffix.isEmpty {
+                return engineID + "-" + suffix
+            } else {
+                return engineID
+            }
+        } else {
+            return engineID
+        }
+    }
+
     private let suggestTemplate: String?
     private let searchTermComponent = "{searchTerms}"
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
-    private let googleEngineID = "google-b-1-m"
+    private let googleEngineID = {
+        if SearchEngineFlagManager.isSECEnabled {
+            return "google"
+        } else {
+            return "google-b-1-m"
+        }
+    }()
 
     var headerSearchTitle: String {
         guard engineID != googleEngineID else {
@@ -36,6 +59,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         case shortName
         case image
         case engineID
+        case telemetrySuffix
     }
 
     override var debugDescription: String {
@@ -46,6 +70,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
     init(engineID: String,
          shortName: String,
+         telemetrySuffix: String?,
          image: UIImage,
          searchTemplate: String,
          suggestTemplate: String?,
@@ -54,6 +79,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         self.image = image
         self.searchTemplate = searchTemplate
         self.suggestTemplate = suggestTemplate
+        self.telemetrySuffix = telemetrySuffix
         self.isCustomEngine = isCustomEngine
         self.engineID = engineID
     }
@@ -76,8 +102,10 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         self.shortName = shortName as String
         self.isCustomEngine = isCustomEngine
         self.image = image
+
         self.engineID = (aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String) ??
         Self.generateCustomEngineID()
+        self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.telemetrySuffix.rawValue) as? String
         self.suggestTemplate = nil
     }
 
@@ -86,6 +114,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         aCoder.encode(shortName, forKey: CodingKeys.shortName.rawValue)
         aCoder.encode(isCustomEngine, forKey: CodingKeys.isCustomEngine.rawValue)
         aCoder.encode(engineID, forKey: CodingKeys.engineID.rawValue)
+        aCoder.encode(telemetrySuffix, forKey: CodingKeys.telemetrySuffix.rawValue)
 
         // Images loaded from the BrowserKit bundle will not directly contain image data to encode. Here we force the UIImage
         // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]

@@ -524,16 +524,6 @@ workflows:
                 envman add --key NEW_RC_VERSION --value New_RC_Version
             fi
         title: Save Branch Name
-    - script@1.2.1:
-        title: Add default web browser entitlement for Fennec
-        inputs:
-        - content: |-
-            #/usr/bin/env bash
-            set -x
-
-            echo "Adding com.apple.developer.web-browser to entitlements"
-
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" firefox-ios/Client/Entitlements/FennecApplication.entitlements
     - cache-pull@2.7.2: {}
   2_certificate_and_profile:
     steps:
@@ -1718,7 +1708,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
     - xcode-test-without-building@0:
-        timeout: 6000
+        timeout: 2400
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData"'

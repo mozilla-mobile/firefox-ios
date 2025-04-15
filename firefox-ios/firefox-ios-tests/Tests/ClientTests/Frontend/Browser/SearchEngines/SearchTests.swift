@@ -61,6 +61,7 @@ class SearchTests: XCTestCase {
         let engine = OpenSearchEngine(
             engineID: "mock",
             shortName: "Mock engine",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "\(webServerBase)?q={searchTerms}",

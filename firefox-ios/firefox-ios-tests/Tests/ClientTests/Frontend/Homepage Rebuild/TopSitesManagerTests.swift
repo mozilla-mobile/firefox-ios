@@ -326,6 +326,7 @@ final class TopSitesManagerTests: XCTestCase {
     func test_searchEngine_sponsoredSite_getsRemoved() throws {
         let searchEngine = OpenSearchEngine(engineID: "Firefox",
                                             shortName: "Firefox",
+                                            telemetrySuffix: nil,
                                             image: UIImage(),
                                             searchTemplate: "https://firefox.com/find?q={searchTerm}",
                                             suggestTemplate: nil,
