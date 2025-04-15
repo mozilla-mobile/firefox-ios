@@ -373,6 +373,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSearchEngine_googleTile_doesntGetRemoved() {
         let googleSearchEngine = OpenSearchEngine(engineID: "12345",
                                                   shortName: "Google",
+                                                  telemetrySuffix: nil,
                                                   image: UIImage(),
                                                   searchTemplate: "https://google.com/find?q={searchTerm}",
                                                   suggestTemplate: nil,
@@ -388,6 +389,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSearchEngine_pinnedTile_doesntGetRemoved() {
         let pinnedTileSearchEngine = OpenSearchEngine(engineID: "12345",
                                                       shortName: "Apinnedurl1",
+                                                      telemetrySuffix: nil,
                                                       image: UIImage(),
                                                       searchTemplate: "https://apinnedurl1.com/find?q={searchTerm}",
                                                       suggestTemplate: nil,
@@ -403,6 +405,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSearchEngine_historyTile_doesntGetRemoved() {
         let historyTileSearchEngine = OpenSearchEngine(engineID: "12345",
                                                        shortName: "Aurl0",
+                                                       telemetrySuffix: nil,
                                                        image: UIImage(),
                                                        searchTemplate: "https://aurl0.com/find?q={searchTerm}",
                                                        suggestTemplate: nil,
@@ -417,6 +420,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     func testSearchEngine_sponsoredTile_getsRemoved() {
         let sponsoredTileSearchEngine = OpenSearchEngine(engineID: "Firefox",
                                                          shortName: "Firefox",
+                                                         telemetrySuffix: nil,
                                                          image: UIImage(),
                                                          searchTemplate: "https://firefox.com/find?q={searchTerm}",
                                                          suggestTemplate: nil,

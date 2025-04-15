@@ -139,6 +139,7 @@ class OpenSearchParser {
         return OpenSearchEngine(
             engineID: engineID,
             shortName: shortName,
+            telemetrySuffix: nil, /* Only used for AS-based engines */
             image: uiImage,
             searchTemplate: searchTemplate,
             suggestTemplate: suggestTemplate,
