@@ -7089,7 +7089,6 @@ extension String {
                 tableName: nil,
                 value: "Firefox may install and run studies from time to time.",
                 comment: "A short description that explains that Mozilla is running studies")
-            )
             public static let SendCrashReportsSettingLink = MZLocalizedString(
                 key: "Settings.CrashReports.Link.v135",
                 tableName: "Settings",
@@ -7188,6 +7187,26 @@ extension String {
                 comment: "Description displayed under the ”Show Link Previews” option")
         }
         struct v139 {
+            public static let PagesCount = MZLocalizedString(
+                key: "FirefoxHomepage.Common.PagesCount.v112",
+                tableName: nil,
+                value: "Pages: %d",
+                comment: "Label showing how many pages there is in a search group. %d represents a number")
+            public static let Title = MZLocalizedString(
+                key: "ActivityStream.RecentHistory.Title",
+                tableName: nil,
+                value: "Recently Visited",
+                comment: "Section title label for recently visited websites")
+            public static let Remove = MZLocalizedString(
+                key: "FirefoxHome.RecentHistory.Remove",
+                tableName: nil,
+                value: "Remove",
+                comment: "When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item.")
+            public static let RecentlyVisited = MZLocalizedString(
+                key: "Settings.Home.Option.RecentlyVisited",
+                tableName: nil,
+                value: "Recently Visited",
+                comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off")
             public static let RememberThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.RememberThisCard.v122",
                 tableName: "Settings",
