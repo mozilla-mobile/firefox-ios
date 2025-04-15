@@ -20,7 +20,6 @@ final class NimbusFeatureFlagLayer {
             return checkBookmarksRefactor(from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights,
                 .isToolbarCFREnabled:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
@@ -39,8 +38,7 @@ final class NimbusFeatureFlagLayer {
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
-        case .jumpBackIn,
-                .historyHighlights:
+        case .jumpBackIn:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
         case .firefoxSuggestFeature:
@@ -173,7 +171,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        case .searchHighlights: return config.searchHighlights
         case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
@@ -187,7 +184,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
-        case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
         default: return false
         }
 
