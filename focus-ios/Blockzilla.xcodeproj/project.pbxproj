@@ -149,6 +149,7 @@
 		C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6327F59D9C00C60DC6 /* UIHelpers */; };
 		C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6527F5A79300C60DC6 /* DesignSystem */; };
 		CD44FD932CC104320080D111 /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = CD44FD922CC104320080D111 /* pings.yaml */; };
+		CD92AAC22DA95B3D00B9C685 /* metrics_legacy.yaml in Resources */ = {isa = PBXBuildFile; fileRef = CD92AAC12DA95B3D00B9C685 /* metrics_legacy.yaml */; };
 		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -787,6 +788,7 @@
 		C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemProvider.swift; sourceTree = "<group>"; };
 		C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BlockzillaPackage; sourceTree = "<group>"; };
 		CD44FD922CC104320080D111 /* pings.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
+		CD92AAC12DA95B3D00B9C685 /* metrics_legacy.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = metrics_legacy.yaml; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1911,6 +1913,7 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
+				CD92AAC12DA95B3D00B9C685 /* metrics_legacy.yaml */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */,
 				8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */,
@@ -2465,6 +2468,7 @@
 				846A23182668CC4500DB3C37 /* FullScreen.js in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
+				CD92AAC22DA95B3D00B9C685 /* metrics_legacy.yaml in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
 				F8324CE5264EA223007E4BFA /* licenses.html in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
@@ -2565,6 +2569,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Blockzilla/metrics.yaml",
+				"$(SRCROOT)/Blockzilla/metrics_legacy.yaml",
 				"$(SRCROOT)/Blockzilla/pings.yaml",
 			);
 			name = Glean;
@@ -7270,7 +7275,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 139.0.20250411050343;
+				version = 139.0.20250414204556;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7286,7 +7291,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 64.0.0;
+				minimumVersion = 64.1.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {

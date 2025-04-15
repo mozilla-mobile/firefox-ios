@@ -201,7 +201,7 @@ class SyncDataDisplay {
 
     func displayNewSentTabNotification(tab: [String: String]) {
         if let urlString = tab[NotificationSentTabs.Payload.urlKey],
-            let url = URL(string: urlString, invalidCharacters: false),
+            let url = URL(string: urlString),
             url.isWebPage(),
             let title = tab[NotificationSentTabs.Payload.titleKey] {
             let tab = [

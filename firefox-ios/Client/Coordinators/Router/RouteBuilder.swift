@@ -178,7 +178,7 @@ final class RouteBuilder: FeatureFlaggable {
         if userActivity.activityType == CSSearchableItemActionType {
             guard let userInfo = userActivity.userInfo,
                   let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                  let url = URL(string: urlString, invalidCharacters: false)
+                  let url = URL(string: urlString)
             else {
                 return nil
             }

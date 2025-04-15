@@ -11,8 +11,8 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         static let addressBarCornerRadius: CGFloat = 8
         static let addressBarBorderHeight: CGFloat = 1
         static let addressBarHeight: CGFloat = 43
-        static let toolbarHeight: CGFloat = 48
-        static let layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        static let addressBarOnToplayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        static let addressBarOnBottomlayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
@@ -33,6 +33,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupLayout()
+        setStackViewsLayoutMargins()
     }
 
     required init?(coder: NSCoder) {
@@ -85,8 +86,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
                 equalTo: bottomStackView.topAnchor
             )
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(
-                equalTo: bottomAnchor,
-                constant: UX.toolbarHeight + UIConstants.BottomInset
+                equalTo: addressBarBorderView.topAnchor
             )
         case .top:
             topStackView.addArrangedSubview(skeletonAddressBar)
@@ -114,8 +114,12 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         return .build { stackView in
             stackView.axis = .vertical
             stackView.isLayoutMarginsRelativeArrangement = true
-            stackView.layoutMargins = UX.layoutMargins
         }
+    }
+
+    private func setStackViewsLayoutMargins() {
+        topStackView.layoutMargins = UX.addressBarOnToplayoutMargins
+        bottomStackView.layoutMargins = UX.addressBarOnBottomlayoutMargins
     }
 
     private func setStackViewsVisibility(by searchBarPosition: SearchBarPosition) {

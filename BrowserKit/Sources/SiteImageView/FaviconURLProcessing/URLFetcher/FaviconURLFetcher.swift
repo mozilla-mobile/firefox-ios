@@ -47,7 +47,7 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
             if let refresh = meta["http-equiv"], refresh == "Refresh",
                let content = meta["content"],
                let index = content.range(of: "URL="),
-               let url = URL(string: String(content[index.upperBound...]), invalidCharacters: false) {
+               let url = URL(string: String(content[index.upperBound...])) {
                 reloadURL = url
             }
         }

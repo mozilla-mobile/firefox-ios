@@ -30,8 +30,8 @@ public class DefaultURLFormatter: URLFormatter {
 
     public func getURL(entry: String) -> URL? {
         // If it's an Internal URL no formatting should happen
-        if let url = URL(string: entry, invalidCharacters: false), WKInternalURL.isValid(url: url) {
-            return URL(string: entry, invalidCharacters: false)
+        if let url = URL(string: entry), WKInternalURL.isValid(url: url) {
+            return URL(string: entry)
         }
 
         // If the entry is `localhost` then navigate to it
@@ -60,7 +60,7 @@ public class DefaultURLFormatter: URLFormatter {
     // Handle the entry if it has a scheme, make sure it's safe before browsing to it
     private func handleWithScheme(with entry: String) -> URL? {
         // Check if the URL includes a scheme
-        guard let url = URL(string: entry, invalidCharacters: false),
+        guard let url = URL(string: entry),
               url.scheme != nil,
               entry.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil else {
             return nil
@@ -78,7 +78,7 @@ public class DefaultURLFormatter: URLFormatter {
         // Only allow this URL if it's safe
         let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
         if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
-            return URL(string: entry, invalidCharacters: false)
+            return URL(string: entry)
         } else {
             return nil
         }
@@ -116,7 +116,7 @@ public class DefaultURLFormatter: URLFormatter {
         let finalURL = escapedURL.hasPrefix("http://") || escapedURL.hasPrefix("https://") ? escapedURL : "http://\(escapedURL)"
 
         // If there is a host, return this formatted as a URL
-        if let url = URL(string: finalURL, invalidCharacters: false), url.host != nil {
+        if let url = URL(string: finalURL), url.host != nil {
             return url
         }
 

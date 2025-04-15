@@ -19,29 +19,3 @@ struct ASGroup<T>: Hashable {
         lhs.identifier == rhs.identifier
     }
 }
-
-extension ASGroup: HighlightItem {
-    var group: [HighlightItem]? {
-        return groupedItems as? [HighlightItem]
-    }
-
-    var type: HighlightItemType {
-        return .group
-    }
-
-    var displayTitle: String {
-        return searchTerm
-    }
-
-    var description: String? {
-        return String.localizedStringWithFormat(.FirefoxHomepage.Common.PagesCount, groupedItems.count)
-    }
-
-    var siteUrl: URL? {
-        return nil
-    }
-
-    var urlString: String? {
-        return nil
-    }
-}

@@ -268,7 +268,7 @@ struct ContextMenuState {
             iconString: StandardImageIdentifiers.Large.share,
             allowIconScaling: true,
             tapHandler: { _ in
-                guard let url = URL(string: siteURL, invalidCharacters: false) else {
+                guard let url = URL(string: siteURL) else {
                     self.logger.log(
                         "Unable to retrieve URL for \(siteURL), return early",
                         level: .warning,
