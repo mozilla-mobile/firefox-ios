@@ -7050,6 +7050,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "Learn more.",
                 comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+            public static let TermsOfServiceLink = MZLocalizedString(
+                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
+                tableName: "Onboarding",
+                value: "%@ Terms of Service.",
+                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox).")
             public static let SendTechnicalDataSettingTitle = MZLocalizedString(
                 key: "Settings.TechnicalData.Title.v135",
                 tableName: "Settings",
@@ -7080,11 +7085,59 @@ extension String {
                 tableName: "Onboarding",
                 value: "Agree and continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
+            public static let SendUsageSettingTitle = MZLocalizedString(
+                key: "Settings.SendUsage.Title",
+                tableName: nil,
+                value: "Send Usage Data",
+                comment: "The title for the setting to send usage data.")
+            public static let SendUsageSettingLink = MZLocalizedString(
+                key: "Settings.SendUsage.Link",
+                tableName: nil,
+                value: "Learn More.",
+                comment: "title for a link that explains how mozilla collects telemetry")
+            public static let SendUsageSettingMessage = MZLocalizedString(
+                key: "Settings.SendUsage.Message",
+                tableName: nil,
+                value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.",
+                comment: "A short description that explains why mozilla collects usage data.")
+            public static let SettingsStudiesToggleTitle = MZLocalizedString(
+                key: "Settings.Studies.Toggle.Title",
+                tableName: nil,
+                value: "Studies",
+                comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+            public static let SettingsStudiesToggleLink = MZLocalizedString(
+                key: "Settings.Studies.Toggle.Link",
+                tableName: nil,
+                value: "Learn More.",
+                comment: "Title for a link that explains what Mozilla means by Studies")
+            public static let SettingsStudiesToggleMessage = MZLocalizedString(
+                key: "Settings.Studies.Toggle.Message",
+                tableName: nil,
+                value: "Firefox may install and run studies from time to time.",
+                comment: "A short description that explains that Mozilla is running studies")
+            )
             public static let SendCrashReportsSettingLink = MZLocalizedString(
                 key: "Settings.CrashReports.Link.v135",
                 tableName: "Settings",
                 value: "Learn More.",
                 comment: "Title for a link that explains how Mozilla send crash reports.")
+        }
+        struct v136 {
+            public static let ExternalLinkGenericConfirmation = MZLocalizedString(
+                key: "ExternalLink.AppStore.GenericConfirmationTitle",
+                tableName: nil,
+                value: "Open this link in external app?",
+                comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
+            public static let AppSettingsPrivacyPolicy = MZLocalizedString(
+                key: "Privacy Policy",
+                tableName: nil,
+                value: nil,
+                comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
+            public static let AppSettingsYourRights = MZLocalizedString(
+                key: "Your Rights",
+                tableName: nil,
+                value: nil,
+                comment: "Your Rights settings section title")
         }
         struct v137 {
             public static let ShareMessageA = MZLocalizedString(
@@ -7097,6 +7150,70 @@ extension String {
                 tableName: "SocialShare",
                 value: "%1$@ Sent from %2$@ 🦊 %3$@",
                 comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app.")
+            public static let TabsTitle = MZLocalizedString(
+                key: "Settings.Tabs.Title",
+                tableName: nil,
+                value: "Tabs",
+                comment: "In the settings menu, this is the title for the Tabs customization section option")
+        }
+        struct v138 {
+            public static let ClearHistoryMenuTitle = MZLocalizedString(
+                key: "LibraryPanel.History.ClearHistoryMenuTitle.v100",
+                tableName: nil,
+                value: "Removes history (including history synced from other devices), cookies and other browsing data.",
+                comment: "Within the History Panel, users can open an action menu to clear recent history.")
+            public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionTheLastHour",
+                tableName: nil,
+                value: "The Last Hour",
+                comment: "Button to perform action to clear history for the last hour")
+            public static let ClearHistoryMenuOptionToday = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionToday",
+                tableName: nil,
+                value: "Today",
+                comment: "Button to perform action to clear history for today only")
+            public static let ClearHistoryMenuOptionTodayAndYesterday = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday",
+                tableName: nil,
+                value: "Today and Yesterday",
+                comment: "Button to perform action to clear history for yesterday and today")
+            public static let ClearHistoryMenuOptionEverything = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionEverything",
+                tableName: nil,
+                value: "Everything",
+                comment: "Option title to clear all browsing history.")
+            public static let Today = MZLocalizedString(
+                key: "Today",
+                tableName: nil,
+                value: "Today",
+                comment: "This label is meant to signify the section containing a group of items from the current day.")
+            public static let Yesterday = MZLocalizedString(
+                key: "Yesterday",
+                tableName: nil,
+                value: "Yesterday",
+                comment: "This label is meant to signify the section containing a group of items from the past 24 hours.")
+            public static let LastWeek = MZLocalizedString(
+                key: "Last week",
+                tableName: nil,
+                value: "Last week",
+                comment: "This label is meant to signify the section containing a group of items from the past seven days.")
+            public static let LastMonth = MZLocalizedString(
+                key: "Last month",
+                tableName: nil,
+                value: "Last month",
+                comment: "This label is meant to signify the section containing a group of items from the past thirty days.")
+            public static let SettingsShowLinkPreviewsTitle = MZLocalizedString(
+                key: "Settings.ShowLinkPreviews.Title",
+                tableName: nil,
+                value: "Show Link Previews",
+                comment: "Title of setting to enable link previews when long-pressing links.")
+            public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
+                key: "Settings.ShowLinkPreviews.StatusV2",
+                tableName: nil,
+                value: "When long-pressing links",
+                comment: "Description displayed under the ”Show Link Previews” option")
+        }
+        struct v139 {
             public static let RememberThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.RememberThisCard.v122",
                 tableName: "Settings",
@@ -7608,63 +7725,6 @@ extension String {
                 tableName: "PasswordGenerator",
                 value: "Password Generator",
                 comment: "Accessibility label describing a feature that generates a password when the password field of a signup form is interacted with.")
-        }
-        struct v138 {
-            public static let ClearHistoryMenuTitle = MZLocalizedString(
-                key: "LibraryPanel.History.ClearHistoryMenuTitle.v100",
-                tableName: nil,
-                value: "Removes history (including history synced from other devices), cookies and other browsing data.",
-                comment: "Within the History Panel, users can open an action menu to clear recent history.")
-            public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString(
-                key: "HistoryPanel.ClearHistoryMenuOptionTheLastHour",
-                tableName: nil,
-                value: "The Last Hour",
-                comment: "Button to perform action to clear history for the last hour")
-            public static let ClearHistoryMenuOptionToday = MZLocalizedString(
-                key: "HistoryPanel.ClearHistoryMenuOptionToday",
-                tableName: nil,
-                value: "Today",
-                comment: "Button to perform action to clear history for today only")
-            public static let ClearHistoryMenuOptionTodayAndYesterday = MZLocalizedString(
-                key: "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday",
-                tableName: nil,
-                value: "Today and Yesterday",
-                comment: "Button to perform action to clear history for yesterday and today")
-            public static let ClearHistoryMenuOptionEverything = MZLocalizedString(
-                key: "HistoryPanel.ClearHistoryMenuOptionEverything",
-                tableName: nil,
-                value: "Everything",
-                comment: "Option title to clear all browsing history.")
-            public static let Today = MZLocalizedString(
-                key: "Today",
-                tableName: nil,
-                value: "Today",
-                comment: "This label is meant to signify the section containing a group of items from the current day.")
-            public static let Yesterday = MZLocalizedString(
-                key: "Yesterday",
-                tableName: nil,
-                value: "Yesterday",
-                comment: "This label is meant to signify the section containing a group of items from the past 24 hours.")
-            public static let LastWeek = MZLocalizedString(
-                key: "Last week",
-                tableName: nil,
-                value: "Last week",
-                comment: "This label is meant to signify the section containing a group of items from the past seven days.")
-            public static let LastMonth = MZLocalizedString(
-                key: "Last month",
-                tableName: nil,
-                value: "Last month",
-                comment: "This label is meant to signify the section containing a group of items from the past thirty days.")
-            public static let SettingsShowLinkPreviewsTitle = MZLocalizedString(
-                key: "Settings.ShowLinkPreviews.Title",
-                tableName: nil,
-                value: "Show Link Previews",
-                comment: "Title of setting to enable link previews when long-pressing links.")
-            public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
-                key: "Settings.ShowLinkPreviews.StatusV2",
-                tableName: nil,
-                value: "When long-pressing links",
-                comment: "Description displayed under the ”Show Link Previews” option")
         }
     }
 }
