@@ -20,7 +20,6 @@ final class NimbusFeatureFlagLayer {
             return checkBookmarksRefactor(from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights,
                 .isToolbarCFREnabled:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
@@ -39,8 +38,7 @@ final class NimbusFeatureFlagLayer {
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
-        case .jumpBackIn,
-                .historyHighlights:
+        case .jumpBackIn:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
         case .firefoxSuggestFeature:
@@ -72,9 +70,6 @@ final class NimbusFeatureFlagLayer {
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
-
-        case .nightMode:
-            return checkNightModeFeature(from: nimbus)
 
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
@@ -133,6 +128,9 @@ final class NimbusFeatureFlagLayer {
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
 
+        case .revertUnsafeContinuationsRefactor:
+            return checkRevertUnsafeContinuationsRefactor(from: nimbus)
+
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
         }
@@ -176,7 +174,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        case .searchHighlights: return config.searchHighlights
         case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
@@ -190,7 +187,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
-        case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
         default: return false
         }
 
@@ -390,18 +386,17 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkNightModeFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.nightModeFeature.value()
-
-        return config.enabled
-    }
-
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().enabled
     }
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
+    }
+
+    private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
+        return config.enabled
     }
 
     private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {

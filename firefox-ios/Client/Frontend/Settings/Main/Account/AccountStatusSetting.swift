@@ -88,7 +88,7 @@ class AccountStatusSetting: WithAccountSetting {
                 .tinted(withColor: theme.colors.iconPrimary)
 
             guard let str = RustFirefoxAccounts.shared.userProfile?.avatarUrl,
-                  let actionIconUrl = URL(string: str, invalidCharacters: false)
+                  let actionIconUrl = URL(string: str)
             else { return }
 
             GeneralizedImageFetcher().getImageFor(url: actionIconUrl) { image in

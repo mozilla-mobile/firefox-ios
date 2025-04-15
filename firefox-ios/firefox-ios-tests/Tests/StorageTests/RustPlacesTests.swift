@@ -264,13 +264,6 @@ final class RustPlacesTests: XCTestCase {
         XCTAssertEqual(queryResults.successValue!.count, 1)
         XCTAssertEqual(queryResults.successValue![0].url, "https://www.example.com/")
 
-        // Able to query highlights.
-        let highlights = places.getHighlights(
-            weights: HistoryHighlightWeights(viewTime: 1.0, frequency: 1.0),
-            limit: 10
-        ).value
-        XCTAssertEqual(highlights.successValue!.count, 4)
-
         // Deletions.
         queryResults = places.getHistoryMetadataSince(since: 0).value
         XCTAssertEqual(queryResults.successValue!.count, 4)

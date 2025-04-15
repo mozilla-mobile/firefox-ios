@@ -61,7 +61,7 @@ class NavigationToolbarContainer: UIView,
     }
 
     func configure(_ model: NavigationToolbarContainerModel) {
-        toolbar.configure(config: model.state, toolbarDelegate: self)
+        toolbar.configure(config: model.state, isVersion1Layout: true, toolbarDelegate: self)
     }
 
     private func setupLayout() {

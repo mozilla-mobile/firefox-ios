@@ -27,10 +27,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return PocketProvider.islocaleSupported(Locale.current.identifier)
     }
 
-    var isHistoryHighlightsSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
-    }
-
     // MARK: - Initializers
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
@@ -145,11 +141,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             )
         }
 
-        let historyHighlightsSetting = BoolSetting(
-            with: .historyHighlights,
-            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited)
-        )
-
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
@@ -174,10 +165,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 )
             }
             sectionItems.append(bookmarksSetting)
-        }
-
-        if isHistoryHighlightsSectionEnabled {
-            sectionItems.append(historyHighlightsSetting)
         }
 
         if isPocketSectionEnabled, let profile {

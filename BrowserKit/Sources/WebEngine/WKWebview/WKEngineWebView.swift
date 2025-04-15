@@ -59,6 +59,15 @@ protocol WKEngineWebView: UIView {
 
     func goForward() -> WKNavigation?
 
+    @discardableResult
+    func go(to item: WKBackForwardListItem) -> WKNavigation?
+
+    func currentBackForwardListItem() -> WKBackForwardListItem?
+
+    func backList() -> [WKBackForwardListItem]
+
+    func forwardList() -> [WKBackForwardListItem]
+
     func evaluateJavaScript(
         _ javaScript: String,
         in frame: WKFrameInfo?,
@@ -127,6 +136,18 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
             }
         }
         return super.inputAccessoryView
+    }
+
+    func backList() -> [WKBackForwardListItem] {
+        return self.backForwardList.backList
+    }
+
+    func forwardList() -> [WKBackForwardListItem] {
+        return self.backForwardList.forwardList
+    }
+
+    func currentBackForwardListItem() -> WKBackForwardListItem? {
+        return self.backForwardList.currentItem
     }
 
     required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {

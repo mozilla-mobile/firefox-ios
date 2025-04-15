@@ -188,8 +188,29 @@ class WKEngineSession: NSObject,
         }
     }
 
-    func goToHistory(index: Int) {
-        // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
+    func goToHistory(item: EngineSessionBackForwardListItem) {
+        guard let backForwardListItem = item as? WKBackForwardListItem else {
+            logger.log("""
+                        Going to an EngineSessionBackForwardListItem that is not of \
+                        type WKBackForwardListItem in WKEngineSession is not permitted
+                        """,
+                        level: .debug,
+                        category: .webview)
+            return
+        }
+        webView.go(to: backForwardListItem)
+    }
+
+    func currentHistoryItem() -> (EngineSessionBackForwardListItem)? {
+        return webView.currentBackForwardListItem()
+    }
+
+    func getBackListItems() -> [EngineSessionBackForwardListItem] {
+        return webView.backList()
+    }
+
+    func getForwardListItems() -> [EngineSessionBackForwardListItem] {
+        return webView.forwardList()
     }
 
     func restore(state: Data) {

@@ -13,18 +13,21 @@ class SponsoredTileDataUtilityTests: XCTestCase {
     // MARK: Stubs
     let searchEngine = OpenSearchEngine(engineID: "test",
                                         shortName: "test",
+                                        telemetrySuffix: nil,
                                         image: UIImage(),
                                         searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                         suggestTemplate: nil,
                                         isCustomEngine: false)
     let caseInsensitiveSearchEngine = OpenSearchEngine(engineID: "TesT",
                                                        shortName: "TesT",
+                                                       telemetrySuffix: nil,
                                                        image: UIImage(),
                                                        searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                                        suggestTemplate: nil,
                                                        isCustomEngine: false)
     let tldIncludedSearchEngine = OpenSearchEngine(engineID: "Test.com",
                                                    shortName: "Test.com",
+                                                   telemetrySuffix: nil,
                                                    image: UIImage(),
                                                    searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                                    suggestTemplate: nil,

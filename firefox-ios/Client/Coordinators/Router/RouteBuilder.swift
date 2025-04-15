@@ -92,8 +92,7 @@ final class RouteBuilder: FeatureFlaggable {
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
-                if !UIPasteboard.general.hasURLs {
-                    let searchText = UIPasteboard.general.string ?? ""
+                if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
                     return .searchQuery(query: searchText, isPrivate: isPrivate)
                 } else {
                     let url = UIPasteboard.general.url
@@ -179,7 +178,7 @@ final class RouteBuilder: FeatureFlaggable {
         if userActivity.activityType == CSSearchableItemActionType {
             guard let userInfo = userActivity.userInfo,
                   let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                  let url = URL(string: urlString, invalidCharacters: false)
+                  let url = URL(string: urlString)
             else {
                 return nil
             }

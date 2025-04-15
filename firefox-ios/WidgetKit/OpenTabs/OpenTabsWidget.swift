@@ -133,7 +133,7 @@ struct OpenTabsView: View {
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
-        return URL(string: urlString, invalidCharacters: false)!
+        return URL(string: urlString)!
     }
 }
 

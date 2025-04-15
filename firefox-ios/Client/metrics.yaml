@@ -1019,6 +1019,23 @@ usage:
       - glean-team@mozilla.com
     expires: never
 
+  is_managed_device:
+    type: boolean
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      Was the app installed using MDM software.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26050
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
 # Downloads
 downloads:
   download_now_button_tapped:
@@ -2272,82 +2289,6 @@ firefox_home_page:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9494
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_show_all:
-    type: counter
-    description: |
-      Counts the number of times a user taps the
-      Show All button in the History section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_item_opened:
-    type: event
-    description: |
-      Counts the number of times a user taps to open an
-      existing tab from the History Highlights section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_impressions:
-    type: event
-    description: |
-      Records the number of times a user views
-      history highlights section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/18088
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18068
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_group_open:
-    type: event
-    description: |
-      Records the event where a user taps on a group item
-      within the History Highlights (Recently Visited) section.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_context:
-    type: event
-    description: |
-        Records when a user clicks on a contextual
-        menu option on a history highlight
-    extra_keys:
-      type:
-        type: string
-        description: |
-          Type of contextual action
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:

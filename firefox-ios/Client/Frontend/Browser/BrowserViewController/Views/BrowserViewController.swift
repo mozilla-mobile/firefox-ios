@@ -628,7 +628,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
-        nightModeUpdates()
+        NightModeHelper.cleanNightModeDefaults()
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab, !isToolbarRefactorEnabled {
@@ -640,16 +640,6 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-    }
-
-    private func nightModeUpdates() {
-        if NightModeHelper.isActivated(),
-           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff()
-            themeManager.applyThemeUpdatesToWindows()
-        }
-
-        NightModeHelper.cleanNightModeDefaults()
     }
 
     private func dismissModalsIfStartAtHome() {
@@ -1262,25 +1252,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Constraints
 
-    private var contentStackViewBottomConstraint: NSLayoutConstraint?
-
-    private func updateContentStackViewBottomConstraint() {
-        guard isSwipingTabsEnabled else {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            contentStackViewBottomConstraint?.isActive = true
-            return
-        }
-        contentStackViewBottomConstraint?.isActive = false
-        if isBottomSearchBar {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        } else {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(
-                equalTo: overKeyboardContainer.topAnchor
-            )
-        }
-        contentStackViewBottomConstraint?.isActive = true
-    }
-
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1292,6 +1263,7 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
         if isSwipingTabsEnabled {
@@ -1302,7 +1274,6 @@ class BrowserViewController: UIViewController,
                 webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
             ])
         }
-        updateContentStackViewBottomConstraint()
 
         updateHeaderConstraints()
     }
@@ -1366,7 +1337,6 @@ class BrowserViewController: UIViewController,
             adjustBottomSearchBarForKeyboard()
         }
 
-        updateContentStackViewBottomConstraint()
         super.updateViewConstraints()
     }
 
@@ -2256,7 +2226,7 @@ class BrowserViewController: UIViewController,
                let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString, invalidCharacters: false) {
+                if let url = URL(string: urlString) {
                     self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }
@@ -3403,7 +3373,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)", invalidCharacters: false) {
+            if let url = URL(string: "tel:\(phoneNumber)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 defaultAction()

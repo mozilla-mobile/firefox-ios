@@ -92,7 +92,7 @@ final class WKInternalURL: InternalURL {
 
     private var extractedUrlParam: URL? {
         if let nestedUrl = url.getQuery()[WKInternalURL.Param.url.rawValue]?.removingPercentEncoding {
-            return URL(string: nestedUrl, invalidCharacters: false)
+            return URL(string: nestedUrl)
         }
         return nil
     }

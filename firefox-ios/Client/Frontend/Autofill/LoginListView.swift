@@ -54,7 +54,7 @@ struct LoginListView_Previews: PreviewProvider {
         LoginListView(
             windowUUID: .XCTestDefaultUUID,
             viewModel: LoginListViewModel(
-                tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
+                tabURL: URL(string: "http://www.example.com")!,
                 field: FocusFieldType.username,
                 loginStorage: MockLoginStorage(),
                 logger: MockLogger(),

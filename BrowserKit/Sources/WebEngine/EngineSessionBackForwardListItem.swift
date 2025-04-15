@@ -1,14 +1,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
-
 import Foundation
+import WebKit
 
-enum SearchListSection: Int, CaseIterable {
-    case searchSuggestions
-    case firefoxSuggestions
-    case openedTabs
-    case bookmarks
-    case remoteTabs
-    case history
+public protocol EngineSessionBackForwardListItem {
+    var url: URL { get }
+
+    var title: String? { get }
 }
+
+extension WKBackForwardListItem: EngineSessionBackForwardListItem {}

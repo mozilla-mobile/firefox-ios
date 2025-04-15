@@ -11,7 +11,6 @@ enum HomepageSectionType: Int, CaseIterable {
     case topSites
     case jumpBackIn
     case bookmarks
-    case historyHighlights
     case pocket
     case customizeHome
 
@@ -20,7 +19,6 @@ enum HomepageSectionType: Int, CaseIterable {
         case .pocket: return .FirefoxHomepage.Pocket.SectionTitle
         case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
         case .bookmarks: return .BookmarksSectionTitle
-        case .historyHighlights: return .FirefoxHomepage.HistoryHighlights.Title
         default: return nil
         }
     }
@@ -36,7 +34,6 @@ enum HomepageSectionType: Int, CaseIterable {
         // JumpBackIn has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .jumpBackIn: return ""
         case .bookmarks: return LegacyBookmarksCell.cellIdentifier
-        case .historyHighlights: return HistoryHighlightsCell.cellIdentifier
         case .customizeHome: return CustomizeHomepageSectionCell.cellIdentifier
         }
     }
@@ -50,7 +47,6 @@ enum HomepageSectionType: Int, CaseIterable {
                 PocketDiscoverCell.self,
                 LegacyPocketStandardCell.self,
                 LegacyBookmarksCell.self,
-                HistoryHighlightsCell.self,
                 CustomizeHomepageSectionCell.self,
                 LegacySyncedTabCell.self
         ]
