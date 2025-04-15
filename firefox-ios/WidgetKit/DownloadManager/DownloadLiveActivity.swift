@@ -301,7 +301,7 @@ struct DownloadLiveActivity: Widget {
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { liveDownload in
-            lockScreenView(liveDownload: liveDownload).transition(.identity)
+            lockScreenView(liveDownload: liveDownload)
         } dynamicIsland: { liveDownload in
             DynamicIsland {
                 leadingExpandedRegion(liveDownload: liveDownload)
