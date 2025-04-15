@@ -34,7 +34,6 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
                             completion: @escaping ((RefinedSearchConfig?, Error?) -> Void)) {
         do {
             try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
-            if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
 
             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
             // TODO: [FXIOS-11885] What happens if the locale or region changes during app runtime?
