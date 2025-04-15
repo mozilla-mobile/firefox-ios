@@ -175,10 +175,14 @@ final class WKEngineWebViewTests: XCTestCase {
 
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> DefaultWKEngineWebView {
-        let parameters = WKWebviewParameters(blockPopups: true, isPrivate: false)
-        let configuration = DefaultWKEngineConfigurationProvider(parameters: parameters)
+        let parameters = WKWebviewParameters(blockPopups: true,
+                                             isPrivate: false,
+                                             autoPlay: .all,
+                                             schemeHandler: WKInternalSchemeHandler())
+        let configuration = DefaultWKEngineConfigurationProvider()
         let subject = DefaultWKEngineWebView(frame: .zero,
-                                             configurationProvider: configuration)!
+                                             configurationProvider: configuration,
+                                             parameters: parameters)!
         subject.delegate = delegate
         trackForMemoryLeaks(subject, file: file, line: line)
 

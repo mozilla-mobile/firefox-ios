@@ -631,6 +631,7 @@ final class WKEngineSessionTests: XCTestCase {
                        line: UInt = #line,
                        uiHandler: WKUIHandler = DefaultUIHandler()) -> WKEngineSession? {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
+                                            dependencies: DefaultTestDependencies().sessionDependencies,
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
                                             contentScriptManager: contentScriptManager,

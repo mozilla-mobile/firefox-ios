@@ -52,8 +52,9 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var loadFileReadAccessURL: URL?
 
     required init?(frame: CGRect,
-                   configurationProvider: WKEngineConfigurationProvider) {
-        self.engineConfiguration = configurationProvider.createConfiguration()
+                   configurationProvider: WKEngineConfigurationProvider,
+                   parameters: WKWebviewParameters) {
+        self.engineConfiguration = configurationProvider.createConfiguration(parameters: parameters)
         super.init(frame: frame)
     }
 

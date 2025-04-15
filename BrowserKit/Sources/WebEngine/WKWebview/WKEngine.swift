@@ -11,6 +11,7 @@ public class WKEngine: Engine {
     private let userScriptManager: WKUserScriptManager
     private let webServerUtil: WKWebServerUtil
     private let engineDependencies: EngineDependencies
+    private let configProvider: WKEngineConfigurationProvider
 
     public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
         return WKEngine(engineDependencies: engineDependencies)
@@ -19,10 +20,12 @@ public class WKEngine: Engine {
     init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager(),
          webServerUtil: WKWebServerUtil = DefaultWKWebServerUtil(),
          sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory(),
+         configProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
          engineDependencies: EngineDependencies) {
         self.userScriptManager = userScriptManager
         self.webServerUtil = webServerUtil
         self.sourceTimerFactory = sourceTimerFactory
+        self.configProvider = configProvider
         self.engineDependencies = engineDependencies
 
         InternalUtil().setUpInternalHandlers()
@@ -33,9 +36,8 @@ public class WKEngine: Engine {
     }
 
     public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
-        let configProvider = DefaultWKEngineConfigurationProvider(parameters: dependencies.webviewParameters)
         guard let session = WKEngineSession(userScriptManager: userScriptManager,
-                                            telemetryProxy: dependencies.telemetryProxy,
+                                            dependencies: dependencies,
                                             configurationProvider: configProvider) else {
             throw EngineError.sessionNotCreated
         }
