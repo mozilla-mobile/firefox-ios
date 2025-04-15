@@ -1333,6 +1333,8 @@
 		BA03AE592D41715900C7FA7B /* MockMZKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA03AE582D41714B00C7FA7B /* MockMZKeychainWrapper.swift */; };
 		BA1237BC2DAE608100BB6333 /* GenericSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */; };
 		BA1237BF2DAE675B00BB6333 /* GenericImageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */; };
+		BA1237C12DAE6D2C00BB6333 /* AddressBarSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */; };
+		BA1237C32DAE6D5700BB6333 /* AddressBarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */; };
 		BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */; };
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
 		BA43A7F52DA4015C0005DF94 /* NightModeAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA43A7F42DA4015A0005DF94 /* NightModeAllFramesAtDocumentStart.js */; };
@@ -8963,6 +8965,8 @@
 		BA05405089CFDC6097258640 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionView.swift; sourceTree = "<group>"; };
 		BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericImageOption.swift; sourceTree = "<group>"; };
+		BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarSelectionView.swift; sourceTree = "<group>"; };
+		BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarSettingsView.swift; sourceTree = "<group>"; };
 		BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKFrameInfoExtensionsTest.swift; sourceTree = "<group>"; };
 		BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebKit.swift; sourceTree = "<group>"; };
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -13350,6 +13354,8 @@
 		BA4BB9962D7F371F006BD137 /* AppearanceSettings */ = {
 			isa = PBXGroup;
 			children = (
+				BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */,
+				BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */,
 				BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */,
 				BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */,
 				BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */,
@@ -17065,6 +17071,7 @@
 				8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */,
 				E1E5BE252A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift in Sources */,
 				E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */,
+				BA1237C12DAE6D2C00BB6333 /* AddressBarSelectionView.swift in Sources */,
 				8A4EA0D12C010BE700E4E4F1 /* MicrosurveySurfaceManager.swift in Sources */,
 				8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */,
 				5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */,
@@ -17358,6 +17365,7 @@
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */,
 				0E77DF0F2CB8220000B80BA1 /* GeneratedPasswordStorage.swift in Sources */,
+				BA1237C32DAE6D5700BB6333 /* AddressBarSettingsView.swift in Sources */,
 				219A0FDB2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift in Sources */,
 				B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */,
 				63B213282CCA796D00A466DB /* NativeErrorPageAction.swift in Sources */,
