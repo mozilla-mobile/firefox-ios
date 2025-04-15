@@ -10,10 +10,17 @@ import Shared
 
 @available(iOS 17, *)
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
-    enum DurationToDismissal: Double {
-        case none = 0
-        case delayed = 2
+    private struct UX {
+        static let updateCooldown: TimeInterval = 0.75
     }
+
+    enum DurationToDismissal: UInt64 {
+        case none = 0
+        case delayed = 3_000_000_000 // Milliseconds to dismissal
+    }
+
+    private var lastUpdateTime = Date.distantPast
+
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
     var downloadProgressManager: DownloadProgressManager
@@ -43,20 +50,31 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         }
     }
 
-    private func update() {
-        let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
-        let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
-        Task {
-            await downloadLiveActivity?.update(using: contentState)
-        }
-    }
-
     func end(durationToDismissal: DurationToDismissal) {
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
+        update(throttle: false)
         Task {
-            await downloadLiveActivity?.end(using: contentState,
-                                            dismissalPolicy: .after(.now.addingTimeInterval(durationToDismissal.rawValue)))
+            try await Task.sleep(nanoseconds: durationToDismissal.rawValue)
+            await downloadLiveActivity?.end(using: contentState, dismissalPolicy: .immediate)
+        }
+    }
+
+    private func shouldUpdateLiveActivity() -> Bool {
+        let currentTime = Date()
+        
+        guard currentTime.timeIntervalSince(lastUpdateTime) >= UX.updateCooldown else {return false}
+        lastUpdateTime = currentTime
+        return true
+    }
+
+    private func update(throttle: Bool = true) {
+        let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
+        let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
+        if !throttle || shouldUpdateLiveActivity() {
+            Task {
+                    await self.downloadLiveActivity?.update(using: contentState)
+            }
         }
     }
 
