@@ -135,6 +135,7 @@ class BrowserViewController: UIViewController,
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
+    private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
@@ -1127,16 +1128,19 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
         // Remove existing constraints
-        statusBarOverlay.removeConstraints(statusBarOverlay.constraints)
+        statusBarOverlay.removeConstraints(statusBarOverlayConstraints)
+        statusBarOverlayConstraints.removeAll()
 
         // Set new constraints for the statusBarOverlay
-        NSLayoutConstraint.activate([
+        statusBarOverlayConstraints.append(contentsOf: [
             statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
         ])
+        NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()
