@@ -1928,6 +1928,7 @@
 		ED7A08DD2CF6749B0035EC8F /* ShareType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DC2CF6749B0035EC8F /* ShareType.swift */; };
 		ED7A08DF2CF674BA0035EC8F /* ShareTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DE2CF674BA0035EC8F /* ShareTab.swift */; };
 		ED7A08E12CF679CE0035EC8F /* MockShareTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */; };
+		ED80541B2DAD967000484080 /* ContinuationsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */; };
 		ED8B49B92D6CF72700743444 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8B49B82D6CF72700743444 /* AppIcon.swift */; };
 		ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */; };
 		EDADF77A2D70BD3E00C39295 /* AppIconSelectionTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF7792D70BD3E00C39295 /* AppIconSelectionTelemetry.swift */; };
@@ -10130,6 +10131,7 @@
 		ED7A08DC2CF6749B0035EC8F /* ShareType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareType.swift; sourceTree = "<group>"; };
 		ED7A08DE2CF674BA0035EC8F /* ShareTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTab.swift; sourceTree = "<group>"; };
 		ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockShareTab.swift; sourceTree = "<group>"; };
+		ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuationsChecker.swift; sourceTree = "<group>"; };
 		ED84423D8666C751BBFC76AC /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Storage.strings; sourceTree = "<group>"; };
 		ED8B49B82D6CF72700743444 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
 		ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFromFirefoxSetting.swift; sourceTree = "<group>"; };
@@ -14596,6 +14598,7 @@
 			isa = PBXGroup;
 			children = (
 				8ACF70542DA99E0F00D9C546 /* StopWatchTimer.swift */,
+				ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */,
 				0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */,
 				5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */,
 				5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */,
@@ -17824,6 +17827,7 @@
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
+				ED80541B2DAD967000484080 /* ContinuationsChecker.swift in Sources */,
 				ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */,
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				1D69FF8D27B17286001F660E /* HomeLogoHeaderCell.swift in Sources */,
