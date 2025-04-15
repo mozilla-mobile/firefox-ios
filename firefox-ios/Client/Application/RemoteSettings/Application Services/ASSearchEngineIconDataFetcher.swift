@@ -38,7 +38,6 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
         // Reminder: client creation must happen before sync() or the sync won't pull data for that client's collection
-        if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
         guard let client, let records = client.getRecords() else {
             // If we can't fetch icons, return the input engines list with blank icons
             // This should never happen, but we need to make sure we handle it regardless

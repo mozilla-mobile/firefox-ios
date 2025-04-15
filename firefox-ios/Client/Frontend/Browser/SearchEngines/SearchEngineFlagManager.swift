@@ -10,8 +10,4 @@ struct SearchEngineFlagManager {
         // SEC always disabled (for now)
         return false
     }
-
-    /// Temporary. App Services framework does not yet have all dumps in place to provide
-    /// cached results. To force a sync for testing purposes, you can enable this flag.
-    static let temp_dbg_forceASSync = false
 }
