@@ -141,6 +141,7 @@ extension AppSettingsTableViewController {
             ForceCrashSetting(settings: self),
             PushBackInstallation(settings: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
+            ToggleDefaultBrowserPromo(settings: self),
             ToggleImpactIntro(settings: self),
             ShowTour(settings: self, windowUUID: windowUUID),
             CreateReferralCode(settings: self),
@@ -153,6 +154,7 @@ extension AppSettingsTableViewController {
             UnleashBrazeIntegrationSetting(settings: self),
             UnleashAPNConsent(settings: self),
             UnleashNativeSRPVAnalyticsSetting(settings: self),
+            UnleashDefaultBrowserPromoSetting(settings: self),
             UnleashSeedCounterNTPSetting(settings: self),
         ]
 

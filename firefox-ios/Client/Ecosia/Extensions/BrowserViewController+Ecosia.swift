@@ -16,7 +16,7 @@ extension BrowserViewController: HomepageViewControllerDelegate {
 // MARK: DefaultBrowserDelegate
 extension BrowserViewController: DefaultBrowserDelegate {
     @available(iOS 14, *)
-    func defaultBrowserDidShow(_ defaultBrowser: DefaultBrowser) {
+    func defaultBrowserDidShow(_ defaultBrowser: DefaultBrowserViewController) {
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 //        homepageViewController?.reloadTooltip()
     }

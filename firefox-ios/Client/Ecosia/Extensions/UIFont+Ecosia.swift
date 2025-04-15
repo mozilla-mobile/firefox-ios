@@ -14,6 +14,10 @@ extension UIFont {
         return withTraits(traits: .traitBold)
     }
 
+    func semibold() -> UIFont {
+        return .systemFont(ofSize: pointSize, weight: .semibold)
+    }
+
     func italic() -> UIFont {
         return withTraits(traits: .traitItalic)
     }

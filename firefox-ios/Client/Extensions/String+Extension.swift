@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Foundation
+import UIKit
 
 extension String {
     /// Returns an attributed string in which the first occurrence of the given

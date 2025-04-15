@@ -23,6 +23,7 @@ extension Unleash {
             case apnConsent = "mob_ios_apn_consent_on_launch_rollout"
             case brazeIntegration = "mob_ios_braze_integration"
             case configTest = "mob_ios_staging_config"
+            case defaultBrowserPromoCTR = "mob_ios_default_browser_promo_ctr"
             case seedCounterNTP = "mob_ios_seed_counter_ntp"
             case nativeSRPVAnalytics = "mob_ios_native_srpv_analytics"
             case newsletterCard = "mob_ios_newsletter_card"

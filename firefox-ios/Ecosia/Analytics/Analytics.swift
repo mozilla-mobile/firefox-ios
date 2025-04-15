@@ -121,6 +121,8 @@ open class Analytics {
             .label(Label.DefaultBrowser.promo.rawValue)
             .property(Property.home.rawValue)
 
+        addABTestContexts(to: event, toggles: [.defaultBrowserPromoCTR])
+
         track(event)
     }
 

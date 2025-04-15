@@ -76,6 +76,8 @@
 		1214167C2D6375960097788B /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416792D6375960097788B /* MainFrameAtDocumentEnd.js */; };
 		12141E6C2D6877EB0097788B /* EcosiaNetError.html in Resources */ = {isa = PBXBuildFile; fileRef = 12141E682D686C030097788B /* EcosiaNetError.html */; };
 		12141E6D2D6877F00097788B /* EcosiaNetError.css in Resources */ = {isa = PBXBuildFile; fileRef = 12141E6A2D686C1C0097788B /* EcosiaNetError.css */; };
+		123475C32DA6730A0017B0C2 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A6AB4528CA6A4C00EBEBDD /* String+Extension.swift */; };
+		123475CC2DA7D6620017B0C2 /* BeforeOrAfterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123475CB2DA7D6580017B0C2 /* BeforeOrAfterView.swift */; };
 		124DAE822D350EFD0050104C /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		124DAE8A2D3512FA0050104C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		1251623C2D59FB30005CB958 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
@@ -383,7 +385,7 @@
 		2CFEA07C2D455BD500B25CE0 /* NTPImpactCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0202D455BD500B25CE0 /* NTPImpactCellViewModel.swift */; };
 		2CFEA07D2D455BD500B25CE0 /* EmptyBookmarksViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFE9FFE2D455BD500B25CE0 /* EmptyBookmarksViewDelegate.swift */; };
 		2CFEA07E2D455BD500B25CE0 /* WelcomeTour.Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA03C2D455BD500B25CE0 /* WelcomeTour.Step.swift */; };
-		2CFEA07F2D455BD500B25CE0 /* DefaultBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0332D455BD500B25CE0 /* DefaultBrowser.swift */; };
+		2CFEA07F2D455BD500B25CE0 /* DefaultBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0332D455BD500B25CE0 /* DefaultBrowserViewController.swift */; };
 		2CFEA0802D455BD500B25CE0 /* SeedCounterHiddenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0152D455BD500B25CE0 /* SeedCounterHiddenSettings.swift */; };
 		2CFEA0812D455BD500B25CE0 /* WhatsNewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0502D455BD500B25CE0 /* WhatsNewItem.swift */; };
 		2CFEA0822D455BD500B25CE0 /* NTPLibaryCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0252D455BD500B25CE0 /* NTPLibaryCellViewModel.swift */; };
@@ -2369,6 +2371,7 @@
 		12141E682D686C030097788B /* EcosiaNetError.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = EcosiaNetError.html; sourceTree = "<group>"; };
 		12141E6A2D686C1C0097788B /* EcosiaNetError.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = EcosiaNetError.css; sourceTree = "<group>"; };
 		123045959E0F295753B4B4DB /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Today.strings; sourceTree = "<group>"; };
+		123475CB2DA7D6580017B0C2 /* BeforeOrAfterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeOrAfterView.swift; sourceTree = "<group>"; };
 		124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDarkTheme.swift; sourceTree = "<group>"; };
 		124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveredLegacyTheme.swift; sourceTree = "<group>"; };
 		124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyThemeManager.swift; sourceTree = "<group>"; };
@@ -2851,7 +2854,7 @@
 		2CFEA02F2D455BD500B25CE0 /* NTPConfigurableNudgeCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPConfigurableNudgeCardCell.swift; sourceTree = "<group>"; };
 		2CFEA0302D455BD500B25CE0 /* NTPConfigurableNudgeCardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPConfigurableNudgeCardCellViewModel.swift; sourceTree = "<group>"; };
 		2CFEA0322D455BD500B25CE0 /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
-		2CFEA0332D455BD500B25CE0 /* DefaultBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowser.swift; sourceTree = "<group>"; };
+		2CFEA0332D455BD500B25CE0 /* DefaultBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserViewController.swift; sourceTree = "<group>"; };
 		2CFEA0342D455BD500B25CE0 /* NTPLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPLayout.swift; sourceTree = "<group>"; };
 		2CFEA0352D455BD500B25CE0 /* NTPTooltip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPTooltip.swift; sourceTree = "<group>"; };
 		2CFEA0362D455BD500B25CE0 /* NTPTooltip.Highlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPTooltip.Highlight.swift; sourceTree = "<group>"; };
@@ -10416,6 +10419,7 @@
 			children = (
 				2CFE9FF82D455BD500B25CE0 /* Colours.xcassets */,
 				2CFE9FF92D455BD500B25CE0 /* Ecosia.xcassets */,
+				123475CB2DA7D6580017B0C2 /* BeforeOrAfterView.swift */,
 				2CFE9FFA2D455BD500B25CE0 /* EcosiaFindInPageBar.swift */,
 				2CFE9FFB2D455BD500B25CE0 /* EcosiaNavigation.swift */,
 				2CFE9FFC2D455BD500B25CE0 /* EcosiaPrimaryButton.swift */,
@@ -10640,7 +10644,7 @@
 				2CFEA02E2D455BD500B25CE0 /* News */,
 				2CFEA0312D455BD500B25CE0 /* NudgeCards */,
 				2CFEA0322D455BD500B25CE0 /* CircleButton.swift */,
-				2CFEA0332D455BD500B25CE0 /* DefaultBrowser.swift */,
+				2CFEA0332D455BD500B25CE0 /* DefaultBrowserViewController.swift */,
 				2CFEA0342D455BD500B25CE0 /* NTPLayout.swift */,
 				2CFEA0352D455BD500B25CE0 /* NTPTooltip.swift */,
 				2CFEA0362D455BD500B25CE0 /* NTPTooltip.Highlight.swift */,
@@ -15981,6 +15985,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				123475C32DA6730A0017B0C2 /* String+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -16976,6 +16981,7 @@
 				E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				12C11E992D28279C00E4DDBF /* SeedCounterNTPExperiment.swift in Sources */,
 				B2FEA68B2B460D1D0058E616 /* AddressAutofillSettingsView.swift in Sources */,
+				123475CC2DA7D6620017B0C2 /* BeforeOrAfterView.swift in Sources */,
 				E12BD0AC28AC37F00029AAF0 /* UIColor+Extension.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
@@ -17078,7 +17084,7 @@
 				2CFEA07C2D455BD500B25CE0 /* NTPImpactCellViewModel.swift in Sources */,
 				2CFEA07D2D455BD500B25CE0 /* EmptyBookmarksViewDelegate.swift in Sources */,
 				2CFEA07E2D455BD500B25CE0 /* WelcomeTour.Step.swift in Sources */,
-				2CFEA07F2D455BD500B25CE0 /* DefaultBrowser.swift in Sources */,
+				2CFEA07F2D455BD500B25CE0 /* DefaultBrowserViewController.swift in Sources */,
 				2CFEA0802D455BD500B25CE0 /* SeedCounterHiddenSettings.swift in Sources */,
 				2CFEA0812D455BD500B25CE0 /* WhatsNewItem.swift in Sources */,
 				2CFEA0822D455BD500B25CE0 /* NTPLibaryCellViewModel.swift in Sources */,

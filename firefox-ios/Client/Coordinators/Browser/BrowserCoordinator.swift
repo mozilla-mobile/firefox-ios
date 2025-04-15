@@ -1077,7 +1077,7 @@ extension BrowserCoordinator {
 
     private var shouldShowDefaultBrowserPromo: Bool {
         browserViewController.profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil &&
-        DefaultBrowser.minPromoSearches <= User.shared.searchCount
+        DefaultBrowserExperiment.isEnabled
     }
 
     private var presentableCards: [() -> Bool] {
@@ -1098,7 +1098,7 @@ extension BrowserCoordinator {
         guard shouldShowDefaultBrowserPromo else { return false }
 
         if #available(iOS 14, *) {
-            let defaultPromo = DefaultBrowser(windowUUID: windowUUID, delegate: browserViewController)
+            let defaultPromo = DefaultBrowserViewController(windowUUID: windowUUID, delegate: browserViewController)
             present(defaultPromo, animated: true)
         } else {
             profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)

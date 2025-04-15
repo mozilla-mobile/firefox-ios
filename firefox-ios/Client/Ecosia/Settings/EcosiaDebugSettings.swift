@@ -40,6 +40,28 @@ final class ToggleImpactIntro: HiddenSetting {
     }
 }
 
+final class ToggleDefaultBrowserPromo: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Toggle - Show Default Browser Promo", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+    }
+
+    override var status: NSAttributedString? {
+        let introSeen = profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil
+        return NSAttributedString(string: introSeen ? "False (click to reset)" : "True", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
+        settings.tableView.reloadData()
+    }
+
+    let profile: Profile
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
+    }
+}
+
 final class ShowTour: HiddenSetting, WelcomeDelegate {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Show Intro", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
@@ -241,6 +263,16 @@ final class UnleashNativeSRPVAnalyticsSetting: UnleashVariantResetSetting {
 
     override var unleashEnabled: Bool? {
         Unleash.isEnabled(.nativeSRPVAnalytics)
+    }
+}
+
+final class UnleashDefaultBrowserPromoSetting: UnleashVariantResetSetting {
+    override var titleName: String? {
+        "Default Browser Promo"
+    }
+
+    override var variant: Unleash.Variant? {
+        Unleash.getVariant(.defaultBrowserPromoCTR)
     }
 }
 
