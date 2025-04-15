@@ -402,8 +402,6 @@ extension TelemetryWrapper {
         case tabPrivateQuantity = "private-tab-quantity"
         case tabInactiveQuantity = "inactive-tab-quantity"
         case iPadWindowCount = "ipad-window-count"
-        case groupedTab = "grouped-tab"
-        case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionSafelist = "tracking-protection-safelist"
         case trackingProtectionMenu = "tracking-protection-menu"
@@ -638,7 +636,6 @@ extension TelemetryWrapper {
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
         case openRecentlyClosedTab = "openRecentlyClosedTab"
-        case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
         case messageImpression = "message-impression"
         case messageDismissed = "message-dismissed"
@@ -866,8 +863,6 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.close[privateOrNormal.rawValue].add()
         case (.action, .closeAll, .tab, let privateOrNormal?, _):
             GleanMetrics.Tabs.closeAll[privateOrNormal.rawValue].add()
-        case (.action, .open, .tabTray, _, _):
-            GleanMetrics.Tabs.openTabTray.record()
         case (.action, .close, .tabTray, _, _):
             GleanMetrics.Tabs.closeTabTray.record()
         case (.action, .press, .tabToolbar, .tabView, _):
@@ -1591,21 +1586,6 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .newPrivateTab, .tabTray, _):
             GleanMetrics.TabsTray.newPrivateTabTapped.record()
-
-        // MARK: Tab Groups
-        case (.action, .view, .tabTray, .tabGroupWithExtras, let extras):
-           let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra(
-            averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32,
-            groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32,
-            groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32,
-            totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32,
-            totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
-            GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
-        case (.action, .tap, .groupedTab, .closeGroupedTab, _):
-            GleanMetrics.Tabs.groupedTabClosed.add()
-        case (.action, .tap, .groupedTabPerformSearch, _, _):
-            GleanMetrics.Tabs.groupedTabSearch.add()
-
         // MARK: Firefox Homepage
         case (.action, .view, .firefoxHomepage, .fxHomepageOrigin, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {

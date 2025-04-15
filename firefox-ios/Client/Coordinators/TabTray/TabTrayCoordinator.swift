@@ -64,9 +64,6 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .open,
-                                     object: .tabTray)
         switch panelType {
         case .tabs:
             makeTabsCoordinator(navigationController: navigationController)
