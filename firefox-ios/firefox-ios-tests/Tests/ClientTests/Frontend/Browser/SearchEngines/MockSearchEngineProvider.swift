@@ -12,6 +12,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
         OpenSearchEngine(
             engineID: "ATester",
             shortName: "ATester",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
@@ -20,6 +21,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
         OpenSearchEngine(
             engineID: "BTester",
             shortName: "BTester",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
@@ -28,6 +30,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
         OpenSearchEngine(
             engineID: "CTester",
             shortName: "CTester",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
@@ -36,6 +39,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
         OpenSearchEngine(
             engineID: "DTester",
             shortName: "DTester",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
@@ -44,6 +48,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
         OpenSearchEngine(
             engineID: "ETester",
             shortName: "ETester",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
@@ -52,6 +57,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
         OpenSearchEngine(
             engineID: "FTester",
             shortName: "FTester",
+            telemetrySuffix: nil,
             image: UIImage(),
             searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
