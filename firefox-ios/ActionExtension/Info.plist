@@ -6,6 +6,16 @@
 	<string>$(DEVELOPMENT_TEAM)</string>
     <key>CFBundleDisplayName</key>
     <string>Open in Firefox</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(APP_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>CFBundleDisplayName</key>
