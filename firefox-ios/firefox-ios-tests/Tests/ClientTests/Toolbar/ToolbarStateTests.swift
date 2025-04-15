@@ -516,7 +516,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         return reducer(
             state,
             ToolbarAction(
-                url: URL(string: "http://mozilla.com", invalidCharacters: false),
+                url: URL(string: "http://mozilla.com"),
                 isPrivate: false,
                 isShowingNavigationToolbar: true,
                 canGoBack: true,

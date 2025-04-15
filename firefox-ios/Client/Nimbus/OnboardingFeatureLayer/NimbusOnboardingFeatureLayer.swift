@@ -184,7 +184,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from cardLink: NimbusOnboardingLink?
     ) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
-              let url = URL(string: cardLink.url, invalidCharacters: false)
+              let url = URL(string: cardLink.url)
         else { return nil }
 
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)

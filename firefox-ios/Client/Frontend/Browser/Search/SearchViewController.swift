@@ -461,20 +461,20 @@ class SearchViewController: SiteTableViewController,
         case .history:
             let site = viewModel.historySites[indexPath.row]
             searchTelemetry?.selectedResult = .history
-            if let url = URL(string: site.url, invalidCharacters: false) {
+            if let url = URL(string: site.url) {
                 selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .bookmarks:
             let site = viewModel.bookmarkSites[indexPath.row]
             searchTelemetry?.selectedResult = .bookmark
-            if let url = URL(string: site.url, invalidCharacters: false) {
+            if let url = URL(string: site.url) {
                 selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .searchHighlights:
             if let urlString = viewModel.searchHighlights[indexPath.row].urlString,
-                let url = URL(string: urlString, invalidCharacters: false) {
+                let url = URL(string: urlString) {
                 searchTelemetry?.selectedResult = .searchHistory
                 selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)

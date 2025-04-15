@@ -361,12 +361,9 @@ internal class RemoteTabsCommandQueue {
 
 public extension RemoteTabRecord {
     func toRemoteTab(client: RemoteClient) -> RemoteTab? {
-        guard let url = Foundation.URL(string: self.urlHistory[0], invalidCharacters: false) else { return nil }
+        guard let url = Foundation.URL(string: self.urlHistory[0]) else { return nil }
         let history = self.urlHistory[1...].map { url in
-            Foundation.URL(
-                string: url,
-                invalidCharacters: false
-            )
+            Foundation.URL(string: url)
         }.compactMap { $0 }
         let icon = self.icon != nil ? Foundation.URL(fileURLWithPath: self.icon ?? "") : nil
 
