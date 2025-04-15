@@ -40,6 +40,12 @@ struct ImageIdentifiers {
         public static let lightBrowserThemeGradient = "lightBrowserThemeGradient"
         public static let darkBrowserThemeGradient = "darkBrowserThemeGradient"
     }
+
+    public struct AddressBar {
+        public static let addressBarIllustrationBottom = "addressBarIllustrationBottom"
+        public static let addressBarIllustrationTop = "addressBarIllustrationTop"
+    }
+
     public struct Onboarding {
         public struct HeaderImages {
             public static let welcomev106 = "onboardingWelcome"
