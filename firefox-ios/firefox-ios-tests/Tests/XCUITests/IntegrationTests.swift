@@ -181,7 +181,6 @@ class IntegrationTests: BaseTestCase {
 
         // Sign in with FxAccount
         signInFxAccounts()
-
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
     }
