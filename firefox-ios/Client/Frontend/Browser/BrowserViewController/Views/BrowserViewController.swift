@@ -1020,7 +1020,7 @@ class BrowserViewController: UIViewController,
 
     func addSubviews() {
         view.addSubviews(contentContainer)
-        view.addSubview(webPagePreview)
+        if isSwipingTabsEnabled { view.addSubview(webPagePreview) }
 
         view.addSubview(topTouchArea)
 
@@ -1262,25 +1262,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Constraints
 
-    private var contentStackViewBottomConstraint: NSLayoutConstraint?
-
-    private func updateContentStackViewBottomConstraint() {
-        guard isSwipingTabsEnabled else {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            contentStackViewBottomConstraint?.isActive = true
-            return
-        }
-        contentStackViewBottomConstraint?.isActive = false
-        if isBottomSearchBar {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        } else {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(
-                equalTo: overKeyboardContainer.topAnchor
-            )
-        }
-        contentStackViewBottomConstraint?.isActive = true
-    }
-
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1292,6 +1273,7 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
         if isSwipingTabsEnabled {
@@ -1302,7 +1284,6 @@ class BrowserViewController: UIViewController,
                 webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
             ])
         }
-        updateContentStackViewBottomConstraint()
 
         updateHeaderConstraints()
     }
@@ -1366,7 +1347,6 @@ class BrowserViewController: UIViewController,
             adjustBottomSearchBarForKeyboard()
         }
 
-        updateContentStackViewBottomConstraint()
         super.updateViewConstraints()
     }
 
