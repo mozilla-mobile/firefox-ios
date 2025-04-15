@@ -35,7 +35,7 @@ struct AddressBarSettingsView: View {
             GenericSectionView(theme: currentTheme, title: .Settings.AddressBar.AddressBarSectionTitle) {
                 AddressBarSelectionView(
                     theme: currentTheme,
-                    selectedAddressBarPostion: addressBarPosition,
+                    selectedAddressBarPosition: addressBarPosition,
                     onSelected: viewModel.saveSearchBarPosition)
             }
             Spacer()

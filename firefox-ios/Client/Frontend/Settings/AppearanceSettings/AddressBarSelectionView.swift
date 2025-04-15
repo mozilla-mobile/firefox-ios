@@ -8,7 +8,7 @@ import Common
 struct AddressBarSelectionView: View {
     let theme: Theme?
 
-    @State var selectedAddressBarPostion: SearchBarPosition = .bottom
+    @State var selectedAddressBarPosition: SearchBarPosition = .bottom
 
     /// Callback executed when a new option is selected.
     var onSelected: ((SearchBarPosition) -> Void)?
@@ -27,9 +27,9 @@ struct AddressBarSelectionView: View {
         HStack(spacing: UX.spacing) {
             ForEach(SearchBarPosition.allCases, id: \.label) { addressBarPosition in
                 GenericImageOption(
-                    isSelected: selectedAddressBarPostion == addressBarPosition,
+                    isSelected: selectedAddressBarPosition == addressBarPosition,
                     onSelected: {
-                        selectedAddressBarPostion = addressBarPosition
+                        selectedAddressBarPosition = addressBarPosition
                         onSelected?(selectedAddressBarPostion)
                     },
                     label: addressBarPosition.label,
