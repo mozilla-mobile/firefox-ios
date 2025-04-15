@@ -2425,6 +2425,31 @@ homepage:
       tags:
         - Homepage
 
+  item_viewed:
+    type: event
+    description: |
+      Records when an item has been viewed on the homepage.
+    extra_keys:
+      section:
+       type: string
+       description: |
+        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.TappedItemType` under `sectionName`.
+      type:
+       type: string
+       description: |
+        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.TappedItemType`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25083
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26144
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
+
 # Metrics related to the history panel of the library
 library:
   panel_pressed:

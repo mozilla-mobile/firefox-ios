@@ -63,6 +63,7 @@ final class HomepageViewController: UIViewController,
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
+    private var alreadyTrackedItems = Set<HomepageItem>()
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -166,9 +167,19 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackVisibleImpressions()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopCFRsTimer()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        alreadyTrackedItems.removeAll()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -198,6 +209,10 @@ final class HomepageViewController: UIViewController,
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
         handleToolbarStateOnScroll()
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        trackVisibleImpressions()
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -480,7 +495,7 @@ final class HomepageViewController: UIViewController,
                 onOpenSyncedTabAction: { [weak self] url in
                     guard let self else { return }
                     self.navigateToNewTab(with: url)
-                    self.sendTappedItemAction(item: item)
+                    self.sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
                 }
             )
             prepareSyncedTabContextualHint(onCell: syncedTabCell)
@@ -620,7 +635,7 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // MARK: Tap Geasutre Recognizer
+    // MARK: Tap Gesture Recognizer
     private func addTapGestureRecognizerToDismissKeyboard() {
         // We want any interaction with the homepage to dismiss the keyboard, including taps
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -829,18 +844,59 @@ final class HomepageViewController: UIViewController,
     /// is handled differently due to how tapping is handled for the cell. See `onOpenSyncedTabAction` in this file.
     private func dispatchDidSelectCardItemAction(with item: HomepageItem) {
         if case .jumpBackInSyncedTab = item { return }
-        sendTappedItemAction(item: item)
+        sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
     }
 
-    private func sendTappedItemAction(item: HomepageItem) {
+    private func sendItemActionWithTelemetryExtras(item: HomepageItem, actionType: HomepageActionType) {
         let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryTappedItemType)
         store.dispatch(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
                 windowUUID: windowUUID,
-                actionType: HomepageActionType.didSelectItem
+                actionType: actionType
             )
         )
+    }
+
+    /// Want to handle tracking here to capture any cells about to viewed,
+    /// but some cells do not get reconfigured so we add additional tracking detection with `trackVisibleImpressions`
+    func collectionView(
+        _ collectionView: UICollectionView,
+        willDisplay cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        guard let item = dataSource?.itemIdentifier(for: indexPath),
+              !alreadyTrackedItems.contains(item)
+        else {
+            return
+        }
+        handleTrackingItemImpression(with: item)
+    }
+
+    /// Used to track item impressions. If the user has seen the item on the homepage, we only record the impression once.
+    /// We want to track at initial seen as well as when users scrolls.
+    private func trackVisibleImpressions() {
+        guard let collectionView else {
+            logger.log(
+                "Homepage collectionview should not have been nil, unable to track impression",
+                level: .warning,
+                category: .homepage
+            )
+            return
+        }
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard let item = dataSource?.itemIdentifier(for: indexPath),
+                  !alreadyTrackedItems.contains(item)
+            else {
+                continue
+            }
+            handleTrackingItemImpression(with: item)
+        }
+    }
+
+    private func handleTrackingItemImpression(with item: HomepageItem) {
+        alreadyTrackedItems.insert(item)
+        sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.itemSeen)
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)

@@ -49,6 +49,11 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemTapped, extras: itemNameExtra)
     }
 
+    func sendItemImpressionTelemetryEvent(for itemType: TappedItemType) {
+        let itemNameExtra = GleanMetrics.Homepage.ItemViewedExtra(section: itemType.sectionName, type: itemType.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemViewed, extras: itemNameExtra)
+    }
+
     // MARK: - Top Sites
     enum ContextMenuTelemetryActionType: String {
         case remove, unpin, pin, settings, sponsoredSupport
