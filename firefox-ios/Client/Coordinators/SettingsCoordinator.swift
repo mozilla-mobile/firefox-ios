@@ -392,7 +392,10 @@ final class SettingsCoordinator: BaseCoordinator,
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
         if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly) {
-            let viewController = UIHostingController(rootView: AddressBarSettingsView(windowUUID: windowUUID, viewModel: viewModel))
+            let viewController = UIHostingController(
+                rootView: AddressBarSettingsView(
+                windowUUID: windowUUID,
+                viewModel: viewModel))
             viewController.title = .Settings.AddressBar.AddressBarMenuTitle
             router.push(viewController)
         } else {
