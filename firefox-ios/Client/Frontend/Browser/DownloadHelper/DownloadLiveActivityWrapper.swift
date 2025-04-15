@@ -62,7 +62,7 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
 
     private func shouldUpdateLiveActivity() -> Bool {
         let currentTime = Date()
-        
+
         guard currentTime.timeIntervalSince(lastUpdateTime) >= UX.updateCooldown else {return false}
         lastUpdateTime = currentTime
         return true
