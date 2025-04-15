@@ -2484,6 +2484,28 @@ extension String {
             )
         }
 
+        public struct AddressBar {
+            public static let AddressBarMenuTitle = MZLocalizedString(
+                key: "Settings.AddressBar.SettingsTitle.v138",
+                tableName: nil,
+                value: "Address Bar",
+                comment: "In the settings menu, this label indicates that there is an option of customizing the Address Bar position.")
+            public static let Top = MZLocalizedString(
+                key: "Settings.AddressBar.Top.v138",
+                tableName: nil,
+                value: "Top",
+                comment: "In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen.")
+            public static let Bottom = MZLocalizedString(
+                key: "Settings.AddressBar.Bottom.v138",
+                tableName: nil,
+                value: "Bottom",
+                comment: "In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen.")
+            public static let AddressBarSectionTitle = MZLocalizedString(
+                key: "Settings.AddressBar.SectionTitle.v138",
+                tableName: nil,
+                value: "Address Bar Placement",
+                comment: "In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position.")
+        }
         public struct Toolbar {
             public static let Toolbar = MZLocalizedString(
                 key: "Settings.Toolbar.SettingsTitle",
