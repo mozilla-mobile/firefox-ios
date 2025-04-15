@@ -203,7 +203,6 @@
 		1DCEC4122D8372E600129966 /* ASSearchEngineUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC4112D8372DD00129966 /* ASSearchEngineUtilities.swift */; };
 		1DCEC4142D83B7EB00129966 /* ASSearchEngineIconDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC4132D83B7E600129966 /* ASSearchEngineIconDataFetcher.swift */; };
 		1DD39AC42DA5D591005B4D90 /* SearchEngineFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD39AC32DA5D58E005B4D90 /* SearchEngineFlagManager.swift */; };
-		1DD39AC52DA5D591005B4D90 /* SearchEngineFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD39AC32DA5D58E005B4D90 /* SearchEngineFlagManager.swift */; };
 		1DD4B26E2CA4D09100B51945 /* TabErrorTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */; };
 		1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */; };
 		1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDE3DB22AC34E1E0039363B /* TabCell.swift */; };
@@ -18333,7 +18332,6 @@
 				F8B710A02ABE38980029726E /* RustErrors.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */,
 				210E0EBB298D9D6600BB4F33 /* OpenSearchEngine.swift in Sources */,
-				1DD39AC52DA5D591005B4D90 /* SearchEngineFlagManager.swift in Sources */,
 				2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */,
 				E136D41A2B19D35D003D0302 /* EmbeddedNavController.swift in Sources */,
 				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
