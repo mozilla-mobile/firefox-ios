@@ -32,6 +32,7 @@ include:
   - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/newAppearanceMenu.yaml
+  - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
