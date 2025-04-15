@@ -52,6 +52,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     private func signInFxAccounts() {
+        navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
