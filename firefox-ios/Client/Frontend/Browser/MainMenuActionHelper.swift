@@ -241,8 +241,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         /// In the new experiment, where website theming is different from app theming homepage menu should not show
         /// the website theming option, since it will follow the app theme.
-        if featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly),
-           !(themeManager.isNewAppearanceMenuOn && isHomePage) {
+        if !(themeManager.isNewAppearanceMenuOn && isHomePage) {
             let nightModeAction = getNightModeAction()
             append(to: &section, action: nightModeAction)
         }
