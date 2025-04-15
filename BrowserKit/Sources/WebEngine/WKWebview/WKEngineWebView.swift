@@ -173,43 +173,10 @@ final class DefaultWKEngineWebView: WKWebView,
         delegate = nil
     }
 
-    private func setupPullRefresh() {
-        guard !scrollView.isZooming, pullRefreshView == nil else { return }
-        let refresh = pullRefreshViewType.init()
-        pullRefreshView = refresh
-        refresh.configure(with: scrollView) { [weak self] in
-            self?.delegate?.webViewNeedsReload()
-        }
-        guard pullRefreshViewType != UIRefreshControl.self else { return }
-        scrollView.addSubview(refresh)
-        refresh.translatesAutoresizingMaskIntoConstraints = false
-        pullRefreshViewHeightConstraint = refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
-        pullRefreshViewHeightConstraint?.isActive = true
-        pullRefreshViewWidthConstraint = refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
-        pullRefreshViewWidthConstraint?.isActive = true
-        NSLayoutConstraint.activate([
-            refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
-            refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
-            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-        ])
-    }
-
-    private func removePullRefresh() {
-        pullRefreshView?.removeFromSuperview()
-        pullRefreshViewWidthConstraint = nil
-        pullRefreshViewHeightConstraint = nil
-        pullRefreshView = nil
-    }
-
     private func setupObservers() {
         let loadingToken = observe(\.isLoading, options: [.new]) { [weak self] _, change in
             guard let isLoading = change.newValue else { return }
-            if isLoading {
-                // MARK: TODO - for native pull refresh we should start refreshing here `beginRefreshing()`
-                self?.removePullRefresh()
-            } else {
-                self?.setupPullRefresh()
-            }
+            self?.handleWebsiteLoadingChanged(isLoading)
             self?.delegate?.webViewPropertyChanged(.loading(isLoading))
         }
 
@@ -284,6 +251,50 @@ final class DefaultWKEngineWebView: WKWebView,
         observedTokens.removeAll()
     }
 
+    private func setupPullRefresh() {
+        guard !scrollView.isZooming, pullRefreshView == nil else { return }
+        let refresh = pullRefreshViewType.init()
+        pullRefreshView = refresh
+        refresh.configure(with: scrollView) { [weak self] in
+            self?.delegate?.webViewNeedsReload()
+        }
+        guard pullRefreshViewType != UIRefreshControl.self else { return }
+        scrollView.addSubview(refresh)
+        refresh.translatesAutoresizingMaskIntoConstraints = false
+        pullRefreshViewHeightConstraint = refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
+        pullRefreshViewHeightConstraint?.isActive = true
+        pullRefreshViewWidthConstraint = refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        pullRefreshViewWidthConstraint?.isActive = true
+        NSLayoutConstraint.activate([
+            refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
+            refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
+            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+        ])
+    }
+
+    private func removePullRefresh() {
+        pullRefreshView?.removeFromSuperview()
+        pullRefreshViewWidthConstraint = nil
+        pullRefreshViewHeightConstraint = nil
+        pullRefreshView = nil
+    }
+
+    private func handleWebsiteLoadingChanged(_ isLoading: Bool) {
+        guard let refreshControl = pullRefreshView as? UIRefreshControl else {
+            if isLoading {
+                removePullRefresh()
+            } else {
+                setupPullRefresh()
+            }
+            return
+        }
+        if isLoading {
+            refreshControl.beginRefreshing()
+        } else {
+            refreshControl.endRefreshing()
+        }
+    }
+
     func removeAllUserScripts() {
         configuration.userContentController.removeAllUserScripts()
         configuration.userContentController.removeAllScriptMessageHandlers()
@@ -327,6 +338,9 @@ final class DefaultWKEngineWebView: WKWebView,
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: any Common.Theme) {
+        if let pullRefreshView = pullRefreshView as? ThemeApplicable {
+            pullRefreshView.applyTheme(theme: theme)
+        }
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
