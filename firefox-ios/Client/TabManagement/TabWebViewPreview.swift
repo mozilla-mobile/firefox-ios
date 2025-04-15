@@ -8,10 +8,18 @@ import Common
 final class TabWebViewPreview: UIView, ThemeApplicable {
     // MARK: - UX Constants
     private struct UX {
+<<<<<<< HEAD
         static let addressBarCornerRadius = CGFloat(8)
         static let layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         static let addressBarBorderHeight = CGFloat(1)
         static let addressBarHeight = CGFloat(43)
+=======
+        static let addressBarCornerRadius: CGFloat = 8
+        static let addressBarBorderHeight: CGFloat = 1
+        static let addressBarHeight: CGFloat = 43
+        static let addressBarOnToplayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        static let addressBarOnBottomlayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
+>>>>>>> 026245b16 (Bugfix FXIOS-11980 - [Toolbar - Swipe Tabs Animation] - Textfield is cut off at the bottom of the screen (#26084))
     }
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
@@ -33,6 +41,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupLayout()
+        setStackViewsLayoutMargins()
     }
 
     required init?(coder: NSCoder) {
@@ -75,9 +84,18 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         case .bottom:
             bottomStackView.addArrangedSubview(skeletonAddressBar)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
+<<<<<<< HEAD
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor)
             addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor
                 .constraint(equalTo: bottomStackView.topAnchor)
+=======
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(
+                equalTo: bottomStackView.topAnchor
+            )
+            webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(
+                equalTo: addressBarBorderView.topAnchor
+            )
+>>>>>>> 026245b16 (Bugfix FXIOS-11980 - [Toolbar - Swipe Tabs Animation] - Textfield is cut off at the bottom of the screen (#26084))
         case .top:
             topStackView.addArrangedSubview(skeletonAddressBar)
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
@@ -95,12 +113,23 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         return .build { stackView in
             stackView.axis = .vertical
             stackView.isLayoutMarginsRelativeArrangement = true
-            stackView.layoutMargins = UX.layoutMargins
         }
     }
 
+<<<<<<< HEAD
     func setScreenshot(_ image: UIImage?) {
         webPageScreenshotImageView.image = image
+=======
+    private func setStackViewsLayoutMargins() {
+        topStackView.layoutMargins = UX.addressBarOnToplayoutMargins
+        bottomStackView.layoutMargins = UX.addressBarOnBottomlayoutMargins
+    }
+
+    private func setStackViewsVisibility(by searchBarPosition: SearchBarPosition) {
+        let isBottom = searchBarPosition == .bottom
+        bottomStackView.isHidden = !isBottom
+        topStackView.isHidden = isBottom
+>>>>>>> 026245b16 (Bugfix FXIOS-11980 - [Toolbar - Swipe Tabs Animation] - Textfield is cut off at the bottom of the screen (#26084))
     }
 
     // MARK: - ThemeApplicable

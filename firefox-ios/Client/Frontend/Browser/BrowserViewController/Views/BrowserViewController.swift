@@ -1017,9 +1017,14 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
+<<<<<<< HEAD
         view.addSubviews(contentStackView)
 
         contentStackView.addArrangedSubview(contentContainer)
+=======
+        view.addSubviews(contentContainer)
+        if isSwipingTabsEnabled { view.addSubview(webPagePreview) }
+>>>>>>> 026245b16 (Bugfix FXIOS-11980 - [Toolbar - Swipe Tabs Animation] - Textfield is cut off at the bottom of the screen (#26084))
 
         view.addSubview(topTouchArea)
 
@@ -1299,12 +1304,30 @@ class BrowserViewController: UIViewController,
         }
 
         NSLayoutConstraint.activate([
+<<<<<<< HEAD
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
         ])
 
+=======
+            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
+            contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
+        ])
+
+        if isSwipingTabsEnabled {
+            NSLayoutConstraint.activate([
+                webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
+            ])
+        }
+
+>>>>>>> 026245b16 (Bugfix FXIOS-11980 - [Toolbar - Swipe Tabs Animation] - Textfield is cut off at the bottom of the screen (#26084))
         updateHeaderConstraints()
     }
 
