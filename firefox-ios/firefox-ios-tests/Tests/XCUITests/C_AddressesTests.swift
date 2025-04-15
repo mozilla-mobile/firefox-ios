@@ -4,7 +4,7 @@
 
 import Foundation
 
-class AddressesTests: BaseTestCase {
+class O_AddressesTests: BaseTestCase {
     let addressSavedTxt = "Address Saved"
     let savedAddressesTxt = "SAVED ADDRESSES"
     let removedAddressTxt = "Address Removed"
