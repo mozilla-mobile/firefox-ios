@@ -367,8 +367,12 @@ extension IntroViewController: OnboardingCardDelegate {
             turnSystemTheme(on: true)
         case .toolbarBottom:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+            let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.bottom]
+            notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         case .toolbarTop:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
+            let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.top]
+            notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         }
         viewModel.telemetryUtility.sendMultipleChoiceButtonActionTelemetry(
             from: cardName,
