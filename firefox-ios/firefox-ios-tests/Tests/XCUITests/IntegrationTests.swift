@@ -179,6 +179,9 @@ class IntegrationTests: BaseTestCase {
         // Save the login
         app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
 
+        // Sign in with FxAccount
+        signInFxAccounts()
+
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
     }
