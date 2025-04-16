@@ -1920,7 +1920,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
-        let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
+        let showDataClearanceFlow = browserViewControllerState?.browserViewType == .privateHomepage
         let showFireButton = featureFlags.isFeatureEnabled(
             .feltPrivacyFeltDeletion,
             checking: .buildOnly
