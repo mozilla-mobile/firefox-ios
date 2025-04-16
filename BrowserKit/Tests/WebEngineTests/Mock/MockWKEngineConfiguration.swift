@@ -7,6 +7,11 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineConfiguration: WKEngineConfiguration {
+    var webViewParameters: WKWebViewParameters = WKWebViewParameters(
+        blockPopups: true,
+        isPrivate: false,
+        pullRefreshType: MockEnginePullRefreshView.self
+    )
     var scriptNameAdded: String?
     var addUserScriptCalled = 0
     var addInDefaultContentWorldCalled = 0

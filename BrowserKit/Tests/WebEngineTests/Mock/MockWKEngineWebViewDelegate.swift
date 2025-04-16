@@ -6,6 +6,7 @@ import UIKit
 @testable import WebEngine
 
 class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
+    var webViewNeedsReloadCalled = 0
     var webViewPropertyChangedCalled = 0
     var lastWebViewPropertyChanged: WKEngineWebViewProperty?
 
@@ -20,5 +21,9 @@ class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
     func webViewPropertyChanged(_ property: WKEngineWebViewProperty) {
         webViewPropertyChangedCalled += 1
         lastWebViewPropertyChanged = property
+    }
+
+    func webViewNeedsReload() {
+        webViewNeedsReloadCalled += 1
     }
 }

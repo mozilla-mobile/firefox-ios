@@ -12,6 +12,12 @@ protocol WKReaderModeHandlersProtocol {
 }
 
 public struct ReaderModeConfiguration {
+    var loadingText: String
+    var loadingFailedText: String
+    var loadOriginalText: String
+    var readerModeErrorText: String
+    var cachedReaderModeStyle: [String: Any]?
+
     public init(
         loadingText: String,
         loadingFailedText: String,
@@ -25,12 +31,6 @@ public struct ReaderModeConfiguration {
         self.readerModeErrorText = readerModeErrorText
         self.cachedReaderModeStyle = cachedReaderModeStyle
     }
-
-    var loadingText: String
-    var loadingFailedText: String
-    var loadOriginalText: String
-    var readerModeErrorText: String
-    var cachedReaderModeStyle: [String: Any]?
 }
 
 struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
