@@ -848,7 +848,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func sendItemActionWithTelemetryExtras(item: HomepageItem, actionType: HomepageActionType) {
-        let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryTappedItemType)
+        let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryItemType)
         store.dispatch(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
@@ -865,11 +865,7 @@ final class HomepageViewController: UIViewController,
         willDisplay cell: UICollectionViewCell,
         forItemAt indexPath: IndexPath
     ) {
-        guard let item = dataSource?.itemIdentifier(for: indexPath),
-              !alreadyTrackedItems.contains(item)
-        else {
-            return
-        }
+        guard let item = dataSource?.itemIdentifier(for: indexPath) else { return }
         handleTrackingItemImpression(with: item)
     }
 
@@ -885,16 +881,13 @@ final class HomepageViewController: UIViewController,
             return
         }
         for indexPath in collectionView.indexPathsForVisibleItems {
-            guard let item = dataSource?.itemIdentifier(for: indexPath),
-                  !alreadyTrackedItems.contains(item)
-            else {
-                continue
-            }
+            guard let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
             handleTrackingItemImpression(with: item)
         }
     }
 
     private func handleTrackingItemImpression(with item: HomepageItem) {
+        guard !alreadyTrackedItems.contains(item) else { return }
         alreadyTrackedItems.insert(item)
         sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.itemSeen)
     }
