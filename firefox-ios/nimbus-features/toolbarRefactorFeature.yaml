@@ -29,6 +29,11 @@ features:
           Enables swipe gestures to switch between browser tabs.
         type: Boolean
         default: false
+      translucency:
+        description: >
+          Enables translucency for toolbars.
+        type: Boolean
+        default: false
       layout:
         description: >
           The type of layout of the toolbars.
@@ -43,6 +48,7 @@ features:
           one_tap_new_tab: false
           navigation_hint: false
           swiping_tabs: false
+          translucency: false
           layout: baseline
       - channel: developer
         value:
@@ -51,6 +57,7 @@ features:
           one_tap_new_tab: false
           navigation_hint: true
           swiping_tabs: false
+          translucency: true
           layout: baseline
 
 enums:
