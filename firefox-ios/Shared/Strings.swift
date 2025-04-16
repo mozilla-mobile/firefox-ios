@@ -7357,7 +7357,7 @@ extension String {
                 tableName: "Onboarding",
                 value: "*Is %@ already your default?* Close this message and tap Skip.",
                 comment: "The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
-            struct Notifications {
+            private struct Notifications {
                 public static let ContinueAction = MZLocalizedString(
                     key: "Onboarding.Customization.Intro.Continue.Action.v123",
                     tableName: "Onboarding",
@@ -7379,46 +7379,24 @@ extension String {
                 tableName: "Onboarding",
                 value: "Dark",
                 comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices.")
-            struct Customization {
+            private struct Customization {
                 public static let ContinueAction = MZLocalizedString(
                     key: "Onboarding.Customization.Theme.Continue.Action.v123",
                     tableName: "Onboarding",
                     value: "Save and Continue",
                     comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
             }
-            struct Theme {
-                public static let SystemAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.System.Action.v123",
-                    tableName: "Onboarding",
-                    value: "System Auto",
-                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices.")
-                public static let LightAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Light.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Light",
-                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices.")
-                public static let DarkAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Dark.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Dark",
-                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices.")
-                public static let ContinueAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Continue.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Save and Continue",
-                    comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
-            }
+            public static let TopAction = MZLocalizedString(
+                key: "Onboarding.Customization.Toolbar.Top.Action.v123",
+                tableName: "Onboarding",
+                value: "Top",
+                comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen.")
+            public static let BottomAction = MZLocalizedString(
+                key: "Onboarding.Customization.Toolbar.Bottom.Action.v123",
+                tableName: "Onboarding",
+                value: "Bottom",
+                comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
             struct Toolbar {
-                public static let TopAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Toolbar.Top.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Top",
-                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen.")
-                public static let BottomAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Toolbar.Bottom.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Bottom",
-                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
                 public static let ContinueAction = MZLocalizedString(
                     key: "Onboarding.Customization.Toolbar.Continue.Action.v123",
                     tableName: "Onboarding",
@@ -7440,48 +7418,46 @@ extension String {
                 tableName: nil,
                 value: "OPENING SCREEN",
                 comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.")
-            public struct AccessibilityLabels {
-                public static let FxHomepageWallpaperButton = MZLocalizedString(
-                    key: "FxHomepage.Wallpaper.ButtonLabel.v99",
-                    tableName: nil,
-                    value: "Firefox logo, change the wallpaper.",
-                    comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper")
-                public static let ToggleButton = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton",
-                    tableName: nil,
-                    value: "Homepage wallpaper cycle toggle",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.")
-                public static let DefaultWallpaper = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99",
-                    tableName: nil,
-                    value: "Default clear wallpaper.",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.")
-                public static let FxAmethystWallpaper = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99",
-                    tableName: nil,
-                    value: "Firefox wallpaper, amethyst pattern.",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.")
-                public static let FxSunriseWallpaper = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99",
-                    tableName: nil,
-                    value: "Firefox wallpaper, sunrise pattern.",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.")
-                public static let FxCeruleanWallpaper = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99",
-                    tableName: nil,
-                    value: "Firefox wallpaper, cerulean pattern.",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.")
-                public static let FxBeachHillsWallpaper = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100",
-                    tableName: nil,
-                    value: "Firefox wallpaper, beach hills pattern.",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper.")
-                public static let FxTwilightHillsWallpaper = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100",
-                    tableName: nil,
-                    value: "Firefox wallpaper, twilight hills pattern.",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper.")
-            }
+            public static let FxHomepageWallpaperButton = MZLocalizedString(
+                key: "FxHomepage.Wallpaper.ButtonLabel.v99",
+                tableName: nil,
+                value: "Firefox logo, change the wallpaper.",
+                comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper")
+            public static let ToggleButton = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton",
+                tableName: nil,
+                value: "Homepage wallpaper cycle toggle",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.")
+            public static let DefaultWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99",
+                tableName: nil,
+                value: "Default clear wallpaper.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.")
+            public static let FxAmethystWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99",
+                tableName: nil,
+                value: "Firefox wallpaper, amethyst pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.")
+            public static let FxSunriseWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99",
+                tableName: nil,
+                value: "Firefox wallpaper, sunrise pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.")
+            public static let FxCeruleanWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99",
+                tableName: nil,
+                value: "Firefox wallpaper, cerulean pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.")
+            public static let FxBeachHillsWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100",
+                tableName: nil,
+                value: "Firefox wallpaper, beach hills pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper.")
+            public static let FxTwilightHillsWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100",
+                tableName: nil,
+                value: "Firefox wallpaper, twilight hills pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper.")
             public static let TabsSectionTitle = MZLocalizedString(
                 key: "Settings.Tabs.CustomizeTabsSection.Title",
                 tableName: nil,
@@ -7548,50 +7524,48 @@ extension String {
                     tableName: "EngagementNotification",
                     value: "Browse without a trace",
                     comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
-                public static let BodyTreatmentA = MZLocalizedString(
-                    key: "Engagement.Notification.Treatment.A.Body.v114",
-                    tableName: "EngagementNotification",
-                    value: "Private browsing in %@ doesn’t save your info and blocks hidden trackers.",
-                    comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
-                public static let TitleTreatmentB = MZLocalizedString(
-                    key: "Engagement.Notification.Treatment.B.Title.v114",
-                    tableName: "EngagementNotification",
-                    value: "Try private browsing",
-                    comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
-                public static let BodyTreatmentB = MZLocalizedString(
-                    key: "Engagement.Notification.Treatment.B.Body.v114",
-                    tableName: "EngagementNotification",
-                    value: "Browse with no saved cookies or history in %@.",
-                    comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
             }
+            public static let BodyTreatmentA = MZLocalizedString(
+                key: "Engagement.Notification.Treatment.A.Body.v114",
+                tableName: "EngagementNotification",
+                value: "Private browsing in %@ doesn’t save your info and blocks hidden trackers.",
+                comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
+            public static let TitleTreatmentB = MZLocalizedString(
+                key: "Engagement.Notification.Treatment.B.Title.v114",
+                tableName: "EngagementNotification",
+                value: "Try private browsing",
+                comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
+            public static let BodyTreatmentB = MZLocalizedString(
+                key: "Engagement.Notification.Treatment.B.Body.v114",
+                tableName: "EngagementNotification",
+                value: "Browse with no saved cookies or history in %@.",
+                comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
             public static let ToolbarButtonA11yLabel = MZLocalizedString(
                 key: "QRCode.Toolbar.Button.A11y.Title.v128",
                 tableName: "QRCode",
                 value: "Scan QR code",
                 comment: "Accessibility label of the QR code button in the toolbar")
+            public static let AddToHomeScreen = MZLocalizedString(
+                key: "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131",
+                tableName: "MainMenu",
+                value: "Add to Home Screen",
+                comment: "On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen.")
+            public static let AddToHomeScreenSubtitle = MZLocalizedString(
+                key: "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131",
+                tableName: "MainMenu",
+                value: "Home",
+                comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool.")
             struct Save {
                 public static let AddToHomeScreen = MZLocalizedString(
-                    key: "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131",
+                    key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132",
                     tableName: "MainMenu",
                     value: "Add to Home Screen",
-                    comment: "On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen.")
+                    comment: "On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen.")
                 public static let AddToHomeScreenSubtitle = MZLocalizedString(
-                    key: "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131",
+                    key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132",
                     tableName: "MainMenu",
                     value: "Home",
-                    comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool.")
-                struct AccessibilityLabels {
-                    public static let AddToHomeScreen = MZLocalizedString(
-                        key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132",
-                        tableName: "MainMenu",
-                        value: "Add to Home Screen",
-                        comment: "On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen.")
-                    public static let AddToHomeScreenSubtitle = MZLocalizedString(
-                        key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132",
-                        tableName: "MainMenu",
-                        value: "Home",
-                        comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen.")
-                }
+                    comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen.")
             }
             public static let TopTitle = MZLocalizedString(
                 key: "UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133",
