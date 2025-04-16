@@ -721,11 +721,6 @@ extension String {
                 tableName: "Settings",
                 value: "Save your card information securely to check out faster next time.",
                 comment: "Description label for when there are no credit cards shown in credit card list in autofill settings screen.")
-            public static let RememberThisCard = MZLocalizedString(
-                key: "CreditCard.Settings.RememberThisCard.v122",
-                tableName: "Settings",
-                value: "Securely save this card?",
-                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
             public static let Yes = MZLocalizedString(
                 key: "CreditCard.Settings.Yes.v122",
                 tableName: "Settings",
@@ -736,21 +731,11 @@ extension String {
                 tableName: "Settings",
                 value: "Not Now",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
-            public static let UpdateThisCard = MZLocalizedString(
-                key: "CreditCard.Settings.UpdateThisCard.v122",
-                tableName: "Settings",
-                value: "Update card?",
-                comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.")
             public static let ManageCards = MZLocalizedString(
                 key: "CreditCards.Settings.ManageCards.v112",
                 tableName: "Settings",
                 value: "Manage cards",
                 comment: "When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen.")
-            public static let UseASavedCard = MZLocalizedString(
-                key: "CreditCards.Settings.UseASavedCard.v122",
-                tableName: "Settings",
-                value: "Use saved card",
-                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.")
             public static let UseSavedCardFromKeyboard = MZLocalizedString(
                 key: "CreditCards.Settings.UseSavedCardFromKeyboard.v112",
                 tableName: "Settings",
@@ -859,16 +844,6 @@ extension String {
                 tableName: "EditCard",
                 value: "SAVED CARDS",
                 comment: "Title label for user to pick a credit card from the list below to be updated.")
-            public static let ExpiredDateTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.ExpiredDateTitle.v112",
-                tableName: "EditCard",
-                value: "Expires %@",
-                comment: "Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation.")
-            public static let NavButtonSaveTitle = MZLocalizedString(
-                key: "CreditCard.EditCard.NavButtonSaveTitle.v112",
-                tableName: "EditCard",
-                value: "Save",
-                comment: "Button title which, when tapped, will allow the user to save valid credit card details.")
         }
 
         // Remember Card
@@ -990,12 +965,6 @@ extension String {
                 value: "This will remove the card from all of your synced devices.",
                 comment: "Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices")
 
-            public static let CancelRemoveCardButton = MZLocalizedString(
-                key: "CreditCard.SnackBar.CancelRemoveCardButton.v112",
-                tableName: "Alert",
-                value: "Cancel",
-                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation.")
-
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardButton.v112",
                 tableName: "Alert",
@@ -1029,55 +998,15 @@ extension String {
                     tableName: "Default Browser",
                     value: "Set links from websites, emails, and Messages to open automatically in Firefox.",
                     comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
-                public static let HomeTabBannerButton = MZLocalizedString(
-                    key: "DefaultBrowserCard.Button.v2",
-                    tableName: "Default Browser",
-                    value: "Learn How",
-                    comment: "Button string to learn how to set your default browser.")
                 public static let HomeTabBannerCloseAccessibility = MZLocalizedString(
                     key: "DefaultBrowserCloseButtonAccessibility.v102",
                     tableName: nil,
                     value: "Close",
                     comment: "Accessibility label for action denoting closing default browser home tab banner.")
-                public static let PeaceOfMindTitle = MZLocalizedString(
-                    key: "DefaultBrowserCard.PeaceOfMind.Title.v108",
-                    tableName: "Default Browser",
-                    value: "Firefox Has Privacy Covered",
-                    comment: "Title for small home tab banner that allows the user to switch their default browser to Firefox.")
-                public static let PeaceOfMindDescription = MZLocalizedString(
-                    key: "DefaultBrowserCard.PeaceOfMind.Description.v108",
-                    tableName: "Default Browser",
-                    value: "Firefox blocks 3,000+ trackers per user each month on average. Make us your default browser for privacy peace of mind.",
-                    comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
-                public static let BetterInternetTitle = MZLocalizedString(
-                    key: "DefaultBrowserCard.BetterInternet.Title.v108",
-                    tableName: "Default Browser",
-                    value: "Default to a Better Internet",
-                    comment: "Title for small home tab banner that allows the user to switch their default browser to Firefox.")
-                public static let BetterInternetDescription = MZLocalizedString(
-                    key: "DefaultBrowserCard.BetterInternet.Description.v108",
-                    tableName: "Default Browser",
-                    value: "Making Firefox your default browser is a vote for an open, accessible internet.",
-                    comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
-                public static let NextLevelTitle = MZLocalizedString(
-                    key: "DefaultBrowserCard.NextLevel.Title.v108",
-                    tableName: "Default Browser",
-                    value: "Elevate Everyday Browsing",
-                    comment: "Title for small home tab banner that allows the user to switch their default browser to Firefox.")
-                public static let NextLevelDescription = MZLocalizedString(
-                    key: "DefaultBrowserCard.NextLevel.Description.v108",
-                    tableName: "Default Browser",
-                    value: "Choose Firefox as your default browser to make speed, safety, and privacy automatic.",
-                    comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
             }
         }
 
         public struct JumpBackIn {
-            public static let GroupSiteCount = MZLocalizedString(
-                key: "ActivityStream.JumpBackIn.TabGroup.SiteCount",
-                tableName: nil,
-                value: "Tabs: %d",
-                comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar.")
             public static let SyncedTabTitle = MZLocalizedString(
                 key: "FirefoxHomepage.JumpBackIn.TabPickup.v104",
                 tableName: nil,
@@ -1216,11 +1145,6 @@ extension String {
             tableName: nil,
             value: "Clear Recent History",
             comment: "A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
-        public static let CloseAllTabsInTabTray = MZLocalizedString(
-            key: "TabTray.CloseAllTabs.KeyCodeTitle",
-            tableName: nil,
-            value: "Close All Tabs",
-            comment: "A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         public static let CloseCurrentTab = MZLocalizedString(
             key: "Hotkeys.CloseTab.DiscoveryTitle",
             tableName: nil,
@@ -1256,11 +1180,6 @@ extension String {
             tableName: nil,
             value: "Normal Browsing Mode",
             comment: "A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
-        public static let OpenNewTabInTabTray = MZLocalizedString(
-            key: "TabTray.OpenNewTab.KeyCodeTitle",
-            tableName: nil,
-            value: "Open New Tab",
-            comment: "A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         public static let PrivateBrowsingMode = MZLocalizedString(
             key: "Hotkeys.PrivateMode.DiscoveryTitle",
             tableName: nil,
@@ -1397,11 +1316,6 @@ extension String {
         public struct Bookmarks { }
 
         public struct History {
-            public static let HistoryPanelClearHistoryButtonTitle = MZLocalizedString(
-                key: "HistoryPanel.ClearHistoryButtonTitle",
-                tableName: nil,
-                value: "Clear Recent History…",
-                comment: "Title for button in the history panel to clear recent history")
             public static let SearchHistoryPlaceholder = MZLocalizedString(
                 key: "LibraryPanel.History.SearchHistoryPlaceholder.v99",
                 tableName: nil,
@@ -1422,26 +1336,16 @@ extension String {
                 tableName: nil,
                 value: "Recently Closed",
                 comment: "Title for the Recently Closed button in the History Panel")
-            public static let SyncedHistory = MZLocalizedString(
-                key: "LibraryPanel.History.SyncedHistory.v100",
+            public static let ClearHistoryMenuTitle = MZLocalizedString(
+                key: "LibraryPanel.History.ClearHistoryMenuTitle.v100",
                 tableName: nil,
-                value: "Synced History",
-                comment: "Within the History Panel, users can see the option of viewing their history from synced tabs.")
+                value: "Removes history (including history synced from other devices), cookies and other browsing data.",
+                comment: "Within the History Panel, users can open an action menu to clear recent history.")
             public static let ClearGroupedTabsTitle = MZLocalizedString(
                 key: "LibraryPanel.History.ClearGroupedTabsTitle.v100",
                 tableName: nil,
                 value: "Delete all sites in %@?",
                 comment: "Within the History Panel, users can delete search group sites history. %@ represents the search group name.")
-            public static let ClearGroupedTabsCancel = MZLocalizedString(
-                key: "LibraryPanel.History.ClearGroupedTabsCancel.v100",
-                tableName: nil,
-                value: "Cancel",
-                comment: "Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button.")
-            public static let ClearGroupedTabsDelete = MZLocalizedString(
-                key: "LibraryPanel.History.ClearGroupedTabsDelete.v100",
-                tableName: nil,
-                value: "Delete",
-                comment: "Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button.")
             public static let Delete = MZLocalizedString(
                 key: "LibraryPanel.History.DeleteGroupedItem.v104",
                 tableName: nil,
@@ -1735,19 +1639,6 @@ extension String {
             }
         }
 
-        public struct Intro {
-            public static let DescriptionPart1 = MZLocalizedString(
-                key: "Onboarding.IntroDescriptionPart1.v114",
-                tableName: "Onboarding",
-                value: "Indie. Non-profit. For good.",
-                comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant.")
-            public static let DescriptionPart2 = MZLocalizedString(
-                key: "Onboarding.IntroDescriptionPart2.v114",
-                tableName: "Onboarding",
-                value: "Committed to the promise of a better Internet for everyone.",
-                comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens.")
-        }
-
         public struct Wallpaper {
             public static let Title = MZLocalizedString(
                 key: "Onboarding.Wallpaper.Title.v114",
@@ -1797,21 +1688,7 @@ extension String {
                 tableName: "Onboarding",
                 value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
                 comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let TitleTreatmentA = MZLocalizedString(
-                key: "Onboarding.Welcome.Title.TreatementA.v120",
-                tableName: "Onboarding",
-                value: "We love keeping you safe",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
-            public static let DescriptionTreatementA = MZLocalizedString(
-                key: "Onboarding.Welcome.Description.TreatementA.v120",
-                tableName: "Onboarding",
-                value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
-                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
-            public static let GetStartedAction = MZLocalizedString(
-                key: "Onboarding.Welcome.Action.v114",
-                tableName: "Onboarding",
-                value: "Get Started",
-                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.")
+
             public static let ActionTreatementA = MZLocalizedString(
                 key: "Onboarding.Welcome.ActionTreatementA.v114",
                 tableName: "Onboarding",
@@ -1858,16 +1735,6 @@ extension String {
                 tableName: "Onboarding",
                 value: "Securely send tabs between your devices and discover other privacy features in %@.",
                 comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let ContinueAction = MZLocalizedString(
-                key: "Onboarding.Notification.Continue.Action.v114",
-                tableName: "Onboarding",
-                value: "Continue",
-                comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
-            public static let TurnOnNotificationsAction = MZLocalizedString(
-                key: "Onboarding.Notification.TurnOnNotifications.Action.v114",
-                tableName: "Onboarding",
-                value: "Turn On Notifications",
-                comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
             public static let SkipAction = MZLocalizedString(
                 key: "Onboarding.Notification.Skip.Action.v115",
                 tableName: "Onboarding",
@@ -1881,26 +1748,6 @@ extension String {
                 tableName: "Onboarding",
                 value: "Switch Your Default Browser",
                 comment: "The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser.")
-            public static let FirstInstruction = MZLocalizedString(
-                key: "DefaultBrowserPopup.FirstLabel.v114",
-                tableName: "Onboarding",
-                value: "1. Go to *Settings*",
-                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
-            public static let SecondInstruction = MZLocalizedString(
-                key: "DefaultBrowserPopup.SecondLabel.v114",
-                tableName: "Onboarding",
-                value: "2. Tap *Default Browser App*",
-                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
-            public static let ThirdInstruction = MZLocalizedString(
-                key: "DefaultBrowserPopup.ThirdLabel.v114",
-                tableName: "Onboarding",
-                value: "3. Select *%@*",
-                comment: "The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
-            public static let DescriptionFooter = MZLocalizedString(
-                key: "DefaultBrowserPopup.DescriptionFooter.v124",
-                tableName: "Onboarding",
-                value: "*Is %@ already your default?* Close this message and tap Skip.",
-                comment: "The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
             public static let ButtonTitle = MZLocalizedString(
                 key: "DefaultBrowserPopup.ButtonTitle.v114",
                 tableName: "Onboarding",
@@ -1920,11 +1767,6 @@ extension String {
                     tableName: "Onboarding",
                     value: "Set your theme and toolbar to match your unique browsing style.",
                     comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens.")
-                public static let ContinueAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Intro.Continue.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Customize %@",
-                    comment: "String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox).")
                 public static let SkipAction = MZLocalizedString(
                     key: "Onboarding.Customization.Intro.Skip.Action.v123",
                     tableName: "Onboarding",
@@ -1943,26 +1785,6 @@ extension String {
                     tableName: "Onboarding",
                     value: "See the web in the best light.",
                     comment: "String used to describe the description label of the theme customization onboarding page in our Onboarding screens.")
-                public static let SystemAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.System.Action.v123",
-                    tableName: "Onboarding",
-                    value: "System Auto",
-                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices.")
-                public static let LightAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Light.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Light",
-                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices.")
-                public static let DarkAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Dark.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Dark",
-                    comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices.")
-                public static let ContinueAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Theme.Continue.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Save and Continue",
-                    comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
                 public static let SkipAction = MZLocalizedString(
                     key: "Onboarding.Customization.Theme.Skip.Action.v123",
                     tableName: "Onboarding",
@@ -1981,21 +1803,6 @@ extension String {
                     tableName: "Onboarding",
                     value: "Keep searches within reach.",
                     comment: "String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens.")
-                public static let TopAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Toolbar.Top.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Top",
-                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen.")
-                public static let BottomAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Toolbar.Bottom.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Bottom",
-                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
-                public static let ContinueAction = MZLocalizedString(
-                    key: "Onboarding.Customization.Toolbar.Continue.Action.v123",
-                    tableName: "Onboarding",
-                    value: "Save and Start Browsing",
-                    comment: "String used to describe the option to save set preferences and leave onboarding to start browsing in the app.")
                 public static let SkipAction = MZLocalizedString(
                     key: "Onboarding.Customization.Toolbar.Skip.Action.v123",
                     tableName: "Onboarding",
@@ -2050,11 +1857,6 @@ extension String {
 // MARK: - Research Surface
 extension String {
     public struct ResearchSurface {
-        public static let BodyText = MZLocalizedString(
-            key: "Body.Text.v112",
-            tableName: "ResearchSurface",
-            value: "Please help make %@ better by taking a short survey.",
-            comment: "On the Research Survey popup, the text that explains what the screen is about. %@ is the app name (e.g. Firefox).")
         public static let TakeSurveyButtonLabel = MZLocalizedString(
             key: "PrimaryButton.Label.v112",
             tableName: "ResearchSurface",
@@ -2250,16 +2052,6 @@ extension String {
             }
 
             public struct Wallpaper {
-                public static let PageTitle = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.Title",
-                    tableName: nil,
-                    value: "Wallpaper",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application.")
-                public static let CollectionTitle = MZLocalizedString(
-                    key: "Settings.Home.Option.Wallpaper.CollectionTitle",
-                    tableName: nil,
-                    value: "OPENING SCREEN",
-                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.")
                 public static let SwitchTitle = MZLocalizedString(
                     key: "Settings.Home.Option.Wallpaper.SwitchTitle.v99",
                     tableName: nil,
@@ -2301,59 +2093,10 @@ extension String {
                     tableName: nil,
                     value: "Learn more",
                     comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user.")
-
-                // Accessibility
-                public struct AccessibilityLabels {
-                    public static let FxHomepageWallpaperButton = MZLocalizedString(
-                        key: "FxHomepage.Wallpaper.ButtonLabel.v99",
-                        tableName: nil,
-                        value: "Firefox logo, change the wallpaper.",
-                        comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper")
-                    public static let ToggleButton = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton",
-                        tableName: nil,
-                        value: "Homepage wallpaper cycle toggle",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.")
-                    public static let DefaultWallpaper = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99",
-                        tableName: nil,
-                        value: "Default clear wallpaper.",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.")
-                    public static let FxAmethystWallpaper = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99",
-                        tableName: nil,
-                        value: "Firefox wallpaper, amethyst pattern.",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.")
-                    public static let FxSunriseWallpaper = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99",
-                        tableName: nil,
-                        value: "Firefox wallpaper, sunrise pattern.",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.")
-                    public static let FxCeruleanWallpaper = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99",
-                        tableName: nil,
-                        value: "Firefox wallpaper, cerulean pattern.",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.")
-                    public static let FxBeachHillsWallpaper = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100",
-                        tableName: nil,
-                        value: "Firefox wallpaper, beach hills pattern.",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper.")
-                    public static let FxTwilightHillsWallpaper = MZLocalizedString(
-                        key: "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100",
-                        tableName: nil,
-                        value: "Firefox wallpaper, twilight hills pattern.",
-                        comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper.")
-                }
             }
         }
 
         public struct Tabs {
-            public static let TabsSectionTitle = MZLocalizedString(
-                key: "Settings.Tabs.CustomizeTabsSection.Title",
-                tableName: nil,
-                value: "Customize Tab Tray",
-                comment: "In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage")
             public static let InactiveTabs = MZLocalizedString(
                 key: "Settings.Tabs.CustomizeTabsSection.InactiveTabs",
                 tableName: nil,
@@ -2364,11 +2107,6 @@ extension String {
                 tableName: nil,
                 value: "Tabs you haven’t viewed for two weeks get moved to the inactive section.",
                 comment: "This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not")
-            public static let TabGroups = MZLocalizedString(
-                key: "Settings.Tabs.CustomizeTabsSection.TabGroups",
-                tableName: nil,
-                value: "Tab Groups",
-                comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off")
         }
 
         public struct Browsing {
@@ -2716,11 +2454,6 @@ extension String {
                 tableName: nil,
                 value: "Your passwords are now protected by Face ID, Touch ID or a device passcode.",
                 comment: "Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application.")
-            public static let FingerPrintReason = MZLocalizedString(
-                key: "Settings.Passwords.FingerPrintReason.v103",
-                tableName: nil,
-                value: "Use your fingerprint to access passwords now.",
-                comment: "Touch ID prompt subtitle when accessing logins and passwords")
         }
 
         public struct Sync {
@@ -2853,11 +2586,6 @@ extension String {
 // MARK: - Share Sheet
 extension String {
     public struct ShareSheet {
-        public static let CopyButtonTitle = MZLocalizedString(
-            key: "ShareSheet.Copy.Title.v108",
-            tableName: nil,
-            value: "Copy",
-            comment: "Button in share sheet to copy the url of the current tab.")
         public static let SendToDeviceButtonTitle = MZLocalizedString(
             key: "ShareSheet.SendToDevice.Title.v108",
             tableName: nil,
@@ -2951,15 +2679,6 @@ extension String {
 
 // MARK: - What's New
 extension String {
-    /// The text for the What's New onboarding card
-    public struct WhatsNew {
-        public static let RecentButtonTitle = MZLocalizedString(
-            key: "Onboarding.WhatsNew.Button.Title",
-            tableName: nil,
-            value: "Start Browsing",
-            comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card")
-    }
-
     /// The localizations for the custom implemented content on the WebView
     public struct WebView {
         public static let DocumentLoadingLabel = MZLocalizedString(
@@ -3034,16 +2753,6 @@ extension String {
 
 // MARK: - Activity Stream
 extension String {
-    public static let RecentlySavedSectionTitle = MZLocalizedString(
-        key: "ActivityStream.Library.Title",
-        tableName: nil,
-        value: "Recently Saved",
-        comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
-    public static let RecentlySavedShowAllText = MZLocalizedString(
-        key: "RecentlySaved.Actions.More",
-        tableName: nil,
-        value: "Show All",
-        comment: "More button text for Recently Saved items at the home page.")
     public static let BookmarksSectionTitle = MZLocalizedString(
         key: "ActivityStream.Bookmarks.Title.v128",
         tableName: "ActivityStream",
@@ -3093,11 +2802,6 @@ extension String {
         tableName: nil,
         value: "Remove",
         comment: "The title for the Remove context menu action for sites in Home Panels")
-    public static let EditContextMenuTitle = MZLocalizedString(
-        key: "HomePanel.ContextMenu.Edit.v131",
-        tableName: "Bookmarks",
-        value: "Edit",
-        comment: "The title for the Edit context menu action for sites in Home Panels")
     public static let PinTopsiteActionTitle2 = MZLocalizedString(
         key: "ActivityStream.ContextMenu.PinTopsite2",
         tableName: nil,
@@ -3307,11 +3011,6 @@ extension String {
 
 // MARK: - History Panel
 extension String {
-    public static let HistoryBackButtonTitle = MZLocalizedString(
-        key: "HistoryPanel.HistoryBackButton.Title",
-        tableName: nil,
-        value: "History",
-        comment: "Title for the Back to History button in the History Panel")
     public static let EmptySyncedTabsPanelStateTitle = MZLocalizedString(
         key: "HistoryPanel.EmptySyncedTabsState.Title",
         tableName: nil,
@@ -3856,16 +3555,6 @@ extension String {
         tableName: nil,
         value: "OK",
         comment: "Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
-    public static let UnableToOpenURLError = MZLocalizedString(
-        key: "OpenURL.Error.Message",
-        tableName: nil,
-        value: "Firefox cannot open the page because it has an invalid address.",
-        comment: "The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app.")
-    public static let UnableToOpenURLErrorTitle = MZLocalizedString(
-        key: "OpenURL.Error.Title",
-        tableName: nil,
-        value: "Cannot Open Page",
-        comment: "Title of the message shown when the user attempts to navigate to an invalid link.")
     public static let CouldntDownloadWallpaperErrorTitle = MZLocalizedString(
         key: "Wallpaper.Download.Error.Title.v106",
         tableName: nil,
@@ -3935,11 +3624,6 @@ extension String {
         tableName: nil,
         value: "Download Cancelled",
         comment: "The label text in the Download Cancelled toast for showing confirmation that the download was cancelled.")
-    public static let DownloadFailedToastLabelText = MZLocalizedString(
-        key: "Downloads.Toast.Failed.LabelText",
-        tableName: nil,
-        value: "Download Failed",
-        comment: "The label text in the Download Failed toast for showing confirmation that the download has failed.")
     public static let DownloadMultipleFilesToastDescriptionText = MZLocalizedString(
         key: "Downloads.Toast.MultipleFiles.DescriptionText",
         tableName: nil,
@@ -4137,28 +3821,6 @@ extension String {
             tableName: "EngagementNotification",
             value: "Find something nearby. Or discover something fun.",
             comment: "Body of notification sent to user after inactivity to encourage them to use the search feature.")
-
-        public static let TitleTreatmentA = MZLocalizedString(
-            key: "Engagement.Notification.Treatment.A.Title.v114",
-            tableName: "EngagementNotification",
-            value: "Browse without a trace",
-            comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
-        public static let BodyTreatmentA = MZLocalizedString(
-            key: "Engagement.Notification.Treatment.A.Body.v114",
-            tableName: "EngagementNotification",
-            value: "Private browsing in %@ doesn’t save your info and blocks hidden trackers.",
-            comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
-
-        public static let TitleTreatmentB = MZLocalizedString(
-            key: "Engagement.Notification.Treatment.B.Title.v114",
-            tableName: "EngagementNotification",
-            value: "Try private browsing",
-            comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
-        public static let BodyTreatmentB = MZLocalizedString(
-            key: "Engagement.Notification.Treatment.B.Body.v114",
-            tableName: "EngagementNotification",
-            value: "Browse with no saved cookies or history in %@.",
-            comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
     }
 }
 
@@ -4265,14 +3927,6 @@ extension String {
         tableName: "ScanQRCode",
         value: "Deny",
         comment: "Deny button to cancel opening URL from scanned QR Code")
-
-    public struct QRCode {
-        public static let ToolbarButtonA11yLabel = MZLocalizedString(
-            key: "QRCode.Toolbar.Button.A11y.Title.v128",
-            tableName: "QRCode",
-            value: "Scan QR code",
-            comment: "Accessibility label of the QR code button in the toolbar")
-    }
 }
 
 // MARK: - Main Menu
@@ -4706,16 +4360,6 @@ extension String {
                     tableName: "MainMenu",
                     value: "Shortcut",
                     comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool.")
-                public static let AddToHomeScreen = MZLocalizedString(
-                    key: "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131",
-                    tableName: "MainMenu",
-                    value: "Add to Home Screen",
-                    comment: "On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen.")
-                public static let AddToHomeScreenSubtitle = MZLocalizedString(
-                    key: "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131",
-                    tableName: "MainMenu",
-                    value: "Home",
-                    comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool.")
                 public static let SaveToReadingList = MZLocalizedString(
                     key: "MainMenu.Submenus.Save.SaveToReadingList.Title.v131",
                     tableName: "MainMenu",
@@ -4773,16 +4417,6 @@ extension String {
                         tableName: "MainMenu",
                         value: "Shortcut",
                         comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool.")
-                    public static let AddToHomeScreen = MZLocalizedString(
-                        key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132",
-                        tableName: "MainMenu",
-                        value: "Add to Home Screen",
-                        comment: "On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen.")
-                    public static let AddToHomeScreenSubtitle = MZLocalizedString(
-                        key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132",
-                        tableName: "MainMenu",
-                        value: "Home",
-                        comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen.")
                     public static let SaveToReadingList = MZLocalizedString(
                         key: "MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132",
                         tableName: "MainMenu",
@@ -4816,12 +4450,6 @@ extension String {
     // MARK: - Unified Search
     public struct UnifiedSearch {
         public struct SearchEngineSelection {
-            public static let TopTitle = MZLocalizedString(
-                key: "UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133",
-                tableName: "SearchEngineSelection",
-                value: "This time search in:",
-                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the title for the sheet.")
-
             public static let SearchSettings = MZLocalizedString(
                 key: "UnifiedSearch.SearchEngineSelection.SearchSettings.Title.v133",
                 tableName: "SearchEngineSelection",
@@ -4829,12 +4457,6 @@ extension String {
                 comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
 
             public struct AccessibilityLabels {
-                public static let TopTitleLabel = MZLocalizedString(
-                    key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133",
-                    tableName: "SearchEngineSelection",
-                    value: "This time search in:",
-                    comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the title of that sheet.")
-
                 public static let SearchSettingsLabel = MZLocalizedString(
                     key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v133",
                     tableName: "SearchEngineSelection",
@@ -4846,12 +4468,6 @@ extension String {
                     tableName: "SearchEngineSelection",
                     value: "Opens search settings",
                     comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint for tapping the search settings row at the bottom of the list, which opens the app's search settings screen.")
-
-                public static let CloseButtonLabel = MZLocalizedString(
-                    key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v133",
-                    tableName: "SearchEngineSelection",
-                    value: "Close",
-                    comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button.")
             }
         }
     }
@@ -5163,11 +4779,6 @@ extension String {
                 tableName: nil,
                 value: "Menu",
                 comment: "Accessibility label for the Menu button.")
-            public static let HomeMenuButtonAccessibilityLabel = MZLocalizedString(
-                key: "Menu.Toolbar.Home.AccessibilityLabel.v99",
-                tableName: nil,
-                value: "Home",
-                comment: "Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page.")
             public static let BookmarksButtonAccessibilityLabel = MZLocalizedString(
                 key: "Menu.Toolbar.Bookmarks.AccessibilityLabel.v99",
                 tableName: nil,
@@ -5562,12 +5173,6 @@ extension String {
         value: "Protections are OFF for this site",
         comment: "A switch to disable enhanced tracking protection inside the menu.")
 
-    public static let TPDetailsVerifiedBy = MZLocalizedString(
-        key: "Menu.TrackingProtection.Details.Verifier",
-        tableName: nil,
-        value: "Verified by %@",
-        comment: "String to let users know the site verifier, where %@ represents the SSL certificate signer.")
-
     // Category Titles
     public static let TPCryptominersBlocked = MZLocalizedString(
         key: "Menu.TrackingProtectionCryptominersBlocked.Title",
@@ -5757,11 +5362,6 @@ extension String {
         tableName: nil,
         value: "Only HTTP and HTTPS links can be shared.",
         comment: "Message in error prompt explaining why the URL is invalid.")
-    public static let SendToCloseButton = MZLocalizedString(
-        key: "SendTo.Close.Button",
-        tableName: nil,
-        value: "Close",
-        comment: "Close button in top navigation bar")
     public static let SendToNotSignedInText = MZLocalizedString(
         key: "SendTo.NotSignedIn.Title.v119",
         tableName: "Share",
@@ -5969,26 +5569,6 @@ extension String {
         tableName: nil,
         value: "Add Tab",
         comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-}
-
-// MARK: - Cover Sheet
-extension String {
-    // ETP Cover Sheet
-    public static let CoverSheetETPTitle = MZLocalizedString(
-        key: "CoverSheet.v24.ETP.Title",
-        tableName: nil,
-        value: "Protection Against Ad Tracking",
-        comment: "Title for the new ETP mode i.e. standard vs strict")
-    public static let CoverSheetETPDescription = MZLocalizedString(
-        key: "CoverSheet.v24.ETP.Description",
-        tableName: nil,
-        value: "Built-in Enhanced Tracking Protection helps stop ads from following you around. Turn on Strict to block even more trackers, ads, and popups. ",
-        comment: "Description for the new ETP mode i.e. standard vs strict")
-    public static let CoverSheetETPSettingsButton = MZLocalizedString(
-        key: "CoverSheet.v24.ETP.Settings.Button",
-        tableName: nil,
-        value: "Go to Settings",
-        comment: "Text for the new ETP settings button")
 }
 
 // MARK: - FxA Signin screen
@@ -6465,11 +6045,6 @@ extension String {
         tableName: "TabLocation",
         value: "Tracking Protection",
         comment: "Accessibility label for the lock / tracking protection button on the URL bar")
-    public static let TabLocationShareButtonLargeContentTitle = MZLocalizedString(
-        key: "TabLocation.ShareButton.AccessibilityLabel.v122",
-        tableName: "TabLocation",
-        value: "Share",
-        comment: "Large content title for the share button. This title is displayed when using accessible font sizes is enabled")
     public static let TabsButtonShowTabsLargeContentTitle = MZLocalizedString(
         key: "TabsButton.Accessibility.LargeContentTitle.v122",
         tableName: "TabLocation",
@@ -6562,21 +6137,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the Tabs Tray view.")
-    public static let TabTrayNoTabsAccessibilityHint = MZLocalizedString(
-        key: "No tabs",
-        tableName: nil,
-        value: nil,
-        comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")
-    public static let TabTrayVisibleTabRangeAccessibilityHint = MZLocalizedString(
-        key: "Tab %@ of %@",
-        tableName: nil,
-        value: "Tab %1$@ of %2$@",
-        comment: "Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total.")
-    public static let TabTrayVisiblePartialRangeAccessibilityHint = MZLocalizedString(
-        key: "Tabs %@ to %@ of %@",
-        tableName: nil,
-        value: "Tabs %1$@ to %2$@ of %3$@",
-        comment: "Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total.")
     public static let TabTrayClosingTabAccessibilityMessage =  MZLocalizedString(
         key: "Closing tab",
         tableName: nil,
@@ -6617,11 +6177,6 @@ extension String {
         tableName: nil,
         value: "Currently selected tab.",
         comment: "Accessibility label for the currently selected tab.")
-    public static let TabTrayOtherTabsSectionHeader = MZLocalizedString(
-        key: "TabTray.Header.FilteredTabs.SectionHeader",
-        tableName: nil,
-        value: "Others",
-        comment: "In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”.")
 }
 
 // MARK: - URL Bar
@@ -6687,12 +6242,6 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search Engine: %@",
             comment: "Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google).")
-
-        public static let SearchEngineA11yHint = MZLocalizedString(
-            key: "AddressToolbar.SearchEngine.A11y.Hint.v133",
-            tableName: "AddressToolbar",
-            value: "Opens search engine selection",
-            comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does.")
 
         public static let PrivacyAndSecuritySettingsA11yLabel = MZLocalizedString(
             key: "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128",
@@ -6807,11 +6356,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for Mobile Device image in remote tabs list")
-    public static let RemoteTabCreateAccount = MZLocalizedString(
-        key: "Create an account",
-        tableName: nil,
-        value: nil,
-        comment: "See http://mzl.la/1Qtkf0j")
 }
 
 // MARK: - Login list
@@ -7078,13 +6622,6 @@ extension String {
 
 // MARK: - Clearables
 extension String {
-    // Removed Clearables as part of Bug 1226654, but keeping the string around.
-    private static let removedSavedLoginsLabel = MZLocalizedString(
-        key: "Saved Logins",
-        tableName: "ClearPrivateData",
-        value: nil,
-        comment: "Settings item for clearing passwords and login data")
-
     public static let ClearableHistory = MZLocalizedString(
         key: "Browsing History",
         tableName: "ClearPrivateData",
@@ -7140,30 +6677,6 @@ extension String {
         comment: "Error message that is shown in settings when there was a problem loading")
 }
 
-// MARK: - SearchInput
-extension String {
-    public static let SearchInputAccessibilityLabel = MZLocalizedString(
-        key: "Search Input Field",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Accessibility label for the search input field in the Logins list")
-    public static let SearchInputTitle = MZLocalizedString(
-        key: "SearchInput.Title.Search.v106",
-        tableName: "LoginManager",
-        value: "Search",
-        comment: "Title for the search field at the top of the Logins list screen")
-    public static let SearchInputClearAccessibilityLabel = MZLocalizedString(
-        key: "Clear Search",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
-    public static let SearchInputEnterSearchMode = MZLocalizedString(
-        key: "Enter Search Mode",
-        tableName: "LoginManager",
-        value: nil,
-        comment: "Accessibility label for entering search mode for logins")
-}
-
 // MARK: - TabsButton
 extension String {
     public static let TabsButtonShowTabsAccessibilityLabel = MZLocalizedString(
@@ -7175,11 +6688,6 @@ extension String {
 
 // MARK: - TabTrayButtons
 extension String {
-    public static let TabTrayButtonNewTabAccessibilityLabel = MZLocalizedString(
-        key: "New Tab",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the New Tab button in the tab toolbar.")
     public static let TabTrayButtonShowTabsAccessibilityLabel = MZLocalizedString(
         key: "TabTrayButtons.Accessibility.ShowTabs.v106",
         tableName: nil,
@@ -7291,11 +6799,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Tile title for Wikipedia")
-    public static let DefaultSuggestedTwitter = MZLocalizedString(
-        key: "Twitter",
-        tableName: nil,
-        value: nil,
-        comment: "Tile title for Twitter")
     public static let DefaultSuggestedX = MZLocalizedString(
         key: "SuggestedSites.X.Title.v131",
         tableName: "SuggestedSites",
@@ -7431,11 +6934,6 @@ extension String {
             tableName: "PasswordGenerator",
             value: "Use Password",
             comment: "Label of a button that is part of a popup displayed when a user interacts with the password field in a signup form. A random password has been generated for the user and clicking this button fills in the password field of the signup form with this generated password.")
-        public static let A11yLabel = MZLocalizedString(
-            key: "PasswordGenerator.A11yLabel.v132",
-            tableName: "PasswordGenerator",
-            value: "Password Generator",
-            comment: "Accessibility label describing a feature that generates a password when the password field of a signup form is interacted with.")
         public static let CloseButtonA11yLabel = MZLocalizedString(
             key: "PasswordGenerator.CloseButtonA11ylabel.v132",
             tableName: "PasswordGenerator",
@@ -7520,78 +7018,17 @@ extension String {
     /// For more detailed information on how to use this struct, please see
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     struct OldStrings {
-        struct v133 {
-            public static let LocationA11yLabel = MZLocalizedString(
-                key: "AddressToolbar.Location.A11y.Label.v128",
-                tableName: "AddressToolbar",
-                value: "Search or enter address",
-                comment: "Accessibility label for the address field in the address toolbar.")
-            public static let Tools = MZLocalizedString(
-                key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132",
-                tableName: "MainMenu",
-                value: "Tools",
-                comment: "On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu.")
-            public static let Save = MZLocalizedString(
-                key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v132",
-                tableName: "MainMenu",
-                value: "Save",
-                comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
-        }
-        struct v134 {
-            public struct RestoreTabs {
-                public static let Title = MZLocalizedString(
-                    key: "Alerts.RestoreTabs.Title.v109.v2",
-                    tableName: "Alerts",
-                    value: "%@ crashed. Restore your tabs?",
-                    comment: "The title of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. %@ is the name of the app (e.g. Firefox).")
-                public static let Message = MZLocalizedString(
-                    key: "Alerts.RestoreTabs.Message.v109",
-                    tableName: "Alerts",
-                    value: "Sorry about that. Restore tabs to pick up where you left off.",
-                    comment: "The body of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed.")
-                public static let ButtonNo = MZLocalizedString(
-                    key: "Alerts.RestoreTabs.Button.No.v109",
-                    tableName: "Alerts",
-                    value: "No",
-                    comment: "The title for the negative action of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed, and will reject the action of restoring tabs.")
-                public static let ButtonYes = MZLocalizedString(
-                    key: "Alerts.RestoreTabs.Button.Yes.v109",
-                    tableName: "Alerts",
-                    value: "Restore tabs",
-                    comment: "The title for the affirmative action of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed, and will restore existing tabs.")
-            }
-            public static let CrashOptInAlertTitle = MZLocalizedString(
-                key: "Oops! Firefox crashed",
-                tableName: nil,
-                value: nil,
-                comment: "Title for prompt displayed to user after the app crashes")
-            public static let CrashOptInAlertMessage = MZLocalizedString(
-                key: "Send a crash report so Mozilla can fix the problem?",
-                tableName: nil,
-                value: nil,
-                comment: "Message displayed in the crash dialog above the buttons used to select when sending reports")
-            public static let CrashOptInAlertSend = MZLocalizedString(
-                key: "Send Report",
-                tableName: nil,
-                value: nil,
-                comment: "Used as a button label for crash dialog prompt")
-            public static let CrashOptInAlertAlwaysSend = MZLocalizedString(
-                key: "Always Send",
-                tableName: nil,
-                value: nil,
-                comment: "Used as a button label for crash dialog prompt")
-            public static let CrashOptInAlertDontSend = MZLocalizedString(
-                key: "Don’t Send",
-                tableName: nil,
-                value: nil,
-                comment: "Used as a button label for crash dialog prompt")
-        }
         struct v135 {
             public static let LearnMore = MZLocalizedString(
                 key: "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135",
                 tableName: "Onboarding",
                 value: "Learn more.",
                 comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+            public static let TermsOfServiceLink = MZLocalizedString(
+                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
+                tableName: "Onboarding",
+                value: "%@ Terms of Service.",
+                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox).")
             public static let SendTechnicalDataSettingTitle = MZLocalizedString(
                 key: "Settings.TechnicalData.Title.v135",
                 tableName: "Settings",
@@ -7612,11 +7049,6 @@ extension String {
                 tableName: "Settings",
                 value: "Learn More.",
                 comment: "Title for a link that explains how Mozilla send daily usage ping.")
-            public static let TermsOfServiceLink = MZLocalizedString(
-                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
-                tableName: "Onboarding",
-                value: "%@ Terms of Service.",
-                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox).")
             public static let SendCrashReportsSettingMessage = MZLocalizedString(
                 key: "Settings.CrashReports.Message.v135",
                 tableName: "Settings",
@@ -7754,7 +7186,6 @@ extension String {
                 value: "When long-pressing links",
                 comment: "Description displayed under the ”Show Link Previews” option")
         }
-
         struct v139 {
             public static let PagesCount = MZLocalizedString(
                 key: "FirefoxHomepage.Common.PagesCount.v112",
@@ -7776,6 +7207,491 @@ extension String {
                 tableName: nil,
                 value: "Recently Visited",
                 comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off")
+            public static let RememberThisCard = MZLocalizedString(
+                key: "CreditCard.Settings.RememberThisCard.v122",
+                tableName: "Settings",
+                value: "Securely save this card?",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
+            public static let UpdateThisCard = MZLocalizedString(
+                key: "CreditCard.Settings.UpdateThisCard.v122",
+                tableName: "Settings",
+                value: "Update card?",
+                comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.")
+            public static let UseASavedCard = MZLocalizedString(
+                key: "CreditCards.Settings.UseASavedCard.v122",
+                tableName: "Settings",
+                value: "Use saved card",
+                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.")
+            public static let ExpiredDateTitle = MZLocalizedString(
+                key: "CreditCard.EditCard.ExpiredDateTitle.v112",
+                tableName: "EditCard",
+                value: "Expires %@",
+                comment: "Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation.")
+            public static let NavButtonSaveTitle = MZLocalizedString(
+                key: "CreditCard.EditCard.NavButtonSaveTitle.v112",
+                tableName: "EditCard",
+                value: "Save",
+                comment: "Button title which, when tapped, will allow the user to save valid credit card details.")
+            public static let CancelRemoveCardButton = MZLocalizedString(
+                key: "CreditCard.SnackBar.CancelRemoveCardButton.v112",
+                tableName: "Alert",
+                value: "Cancel",
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation.")
+            public static let PeaceOfMindTitle = MZLocalizedString(
+                key: "DefaultBrowserCard.PeaceOfMind.Title.v108",
+                tableName: "Default Browser",
+                value: "Firefox Has Privacy Covered",
+                comment: "Title for small home tab banner that allows the user to switch their default browser to Firefox.")
+            public static let PeaceOfMindDescription = MZLocalizedString(
+                key: "DefaultBrowserCard.PeaceOfMind.Description.v108",
+                tableName: "Default Browser",
+                value: "Firefox blocks 3,000+ trackers per user each month on average. Make us your default browser for privacy peace of mind.",
+                comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
+            public static let BetterInternetTitle = MZLocalizedString(
+                key: "DefaultBrowserCard.BetterInternet.Title.v108",
+                tableName: "Default Browser",
+                value: "Default to a Better Internet",
+                comment: "Title for small home tab banner that allows the user to switch their default browser to Firefox.")
+            public static let BetterInternetDescription = MZLocalizedString(
+                key: "DefaultBrowserCard.BetterInternet.Description.v108",
+                tableName: "Default Browser",
+                value: "Making Firefox your default browser is a vote for an open, accessible internet.",
+                comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
+            public static let NextLevelTitle = MZLocalizedString(
+                key: "DefaultBrowserCard.NextLevel.Title.v108",
+                tableName: "Default Browser",
+                value: "Elevate Everyday Browsing",
+                comment: "Title for small home tab banner that allows the user to switch their default browser to Firefox.")
+            public static let NextLevelDescription = MZLocalizedString(
+                key: "DefaultBrowserCard.NextLevel.Description.v108",
+                tableName: "Default Browser",
+                value: "Choose Firefox as your default browser to make speed, safety, and privacy automatic.",
+                comment: "Description for small home tab banner that allows the user to switch their default browser to Firefox.")
+            public static let GroupSiteCount = MZLocalizedString(
+                key: "ActivityStream.JumpBackIn.TabGroup.SiteCount",
+                tableName: nil,
+                value: "Tabs: %d",
+                comment: "On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar.")
+            public static let CloseAllTabsInTabTray = MZLocalizedString(
+                key: "TabTray.CloseAllTabs.KeyCodeTitle",
+                tableName: nil,
+                value: "Close All Tabs",
+                comment: "A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
+            public static let OpenNewTabInTabTray = MZLocalizedString(
+                key: "TabTray.OpenNewTab.KeyCodeTitle",
+                tableName: nil,
+                value: "Open New Tab",
+                comment: "A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
+            public static let HistoryPanelClearHistoryButtonTitle = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryButtonTitle",
+                tableName: nil,
+                value: "Clear Recent History…",
+                comment: "Title for button in the history panel to clear recent history")
+            public static let SyncedHistory = MZLocalizedString(
+                key: "LibraryPanel.History.SyncedHistory.v100",
+                tableName: nil,
+                value: "Synced History",
+                comment: "Within the History Panel, users can see the option of viewing their history from synced tabs.")
+            public static let ClearGroupedTabsCancel = MZLocalizedString(
+                key: "LibraryPanel.History.ClearGroupedTabsCancel.v100",
+                tableName: nil,
+                value: "Cancel",
+                comment: "Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button.")
+            public static let ClearGroupedTabsDelete = MZLocalizedString(
+                key: "LibraryPanel.History.ClearGroupedTabsDelete.v100",
+                tableName: nil,
+                value: "Delete",
+                comment: "Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button.")
+            public static let DescriptionPart1 = MZLocalizedString(
+                key: "Onboarding.IntroDescriptionPart1.v114",
+                tableName: "Onboarding",
+                value: "Indie. Non-profit. For good.",
+                comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant.")
+            public static let DescriptionPart2 = MZLocalizedString(
+                key: "Onboarding.IntroDescriptionPart2.v114",
+                tableName: "Onboarding",
+                value: "Committed to the promise of a better Internet for everyone.",
+                comment: "String used to describes what Firefox is on the first onboarding page in our Onboarding screens.")
+            public static let TitleTreatmentA = MZLocalizedString(
+                key: "Onboarding.Welcome.Title.TreatementA.v120",
+                tableName: "Onboarding",
+                value: "We love keeping you safe",
+                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
+            public static let DescriptionTreatementA = MZLocalizedString(
+                key: "Onboarding.Welcome.Description.TreatementA.v120",
+                tableName: "Onboarding",
+                value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
+                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
+            public static let GetStartedAction = MZLocalizedString(
+                key: "Onboarding.Welcome.Action.v114",
+                tableName: "Onboarding",
+                value: "Get Started",
+                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding.")
+            public static let ContinueAction = MZLocalizedString(
+                key: "Onboarding.Notification.Continue.Action.v114",
+                tableName: "Onboarding",
+                value: "Continue",
+                comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
+            public static let TurnOnNotificationsAction = MZLocalizedString(
+                key: "Onboarding.Notification.TurnOnNotifications.Action.v114",
+                tableName: "Onboarding",
+                value: "Turn On Notifications",
+                comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
+            public static let FirstInstruction = MZLocalizedString(
+                key: "DefaultBrowserPopup.FirstLabel.v114",
+                tableName: "Onboarding",
+                value: "1. Go to *Settings*",
+                comment: "The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            public static let SecondInstruction = MZLocalizedString(
+                key: "DefaultBrowserPopup.SecondLabel.v114",
+                tableName: "Onboarding",
+                value: "2. Tap *Default Browser App*",
+                comment: "The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            public static let ThirdInstruction = MZLocalizedString(
+                key: "DefaultBrowserPopup.ThirdLabel.v114",
+                tableName: "Onboarding",
+                value: "3. Select *%@*",
+                comment: "The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            public static let DescriptionFooter = MZLocalizedString(
+                key: "DefaultBrowserPopup.DescriptionFooter.v124",
+                tableName: "Onboarding",
+                value: "*Is %@ already your default?* Close this message and tap Skip.",
+                comment: "The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
+            private struct Notifications {
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Intro.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Customize %@",
+                    comment: "String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox).")
+            }
+            public static let SystemAction = MZLocalizedString(
+                key: "Onboarding.Customization.Theme.System.Action.v123",
+                tableName: "Onboarding",
+                value: "System Auto",
+                comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices.")
+            public static let LightAction = MZLocalizedString(
+                key: "Onboarding.Customization.Theme.Light.Action.v123",
+                tableName: "Onboarding",
+                value: "Light",
+                comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices.")
+            public static let DarkAction = MZLocalizedString(
+                key: "Onboarding.Customization.Theme.Dark.Action.v123",
+                tableName: "Onboarding",
+                value: "Dark",
+                comment: "On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices.")
+            private struct Customization {
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Save and Continue",
+                    comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
+            }
+            public static let TopAction = MZLocalizedString(
+                key: "Onboarding.Customization.Toolbar.Top.Action.v123",
+                tableName: "Onboarding",
+                value: "Top",
+                comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen.")
+            public static let BottomAction = MZLocalizedString(
+                key: "Onboarding.Customization.Toolbar.Bottom.Action.v123",
+                tableName: "Onboarding",
+                value: "Bottom",
+                comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
+            struct Toolbar {
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Customization.Toolbar.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Save and Start Browsing",
+                    comment: "String used to describe the option to save set preferences and leave onboarding to start browsing in the app.")
+            }
+            public static let BodyText = MZLocalizedString(
+                key: "Body.Text.v112",
+                tableName: "ResearchSurface",
+                value: "Please help make %@ better by taking a short survey.",
+                comment: "On the Research Survey popup, the text that explains what the screen is about. %@ is the app name (e.g. Firefox).")
+            public static let PageTitle = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Title",
+                tableName: nil,
+                value: "Wallpaper",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application.")
+            public static let CollectionTitle = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.CollectionTitle",
+                tableName: nil,
+                value: "OPENING SCREEN",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application.")
+            public static let FxHomepageWallpaperButton = MZLocalizedString(
+                key: "FxHomepage.Wallpaper.ButtonLabel.v99",
+                tableName: nil,
+                value: "Firefox logo, change the wallpaper.",
+                comment: "On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper")
+            public static let ToggleButton = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton",
+                tableName: nil,
+                value: "Homepage wallpaper cycle toggle",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage.")
+            public static let DefaultWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99",
+                tableName: nil,
+                value: "Default clear wallpaper.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper.")
+            public static let FxAmethystWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99",
+                tableName: nil,
+                value: "Firefox wallpaper, amethyst pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper.")
+            public static let FxSunriseWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99",
+                tableName: nil,
+                value: "Firefox wallpaper, sunrise pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper.")
+            public static let FxCeruleanWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99",
+                tableName: nil,
+                value: "Firefox wallpaper, cerulean pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper.")
+            public static let FxBeachHillsWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100",
+                tableName: nil,
+                value: "Firefox wallpaper, beach hills pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper.")
+            public static let FxTwilightHillsWallpaper = MZLocalizedString(
+                key: "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100",
+                tableName: nil,
+                value: "Firefox wallpaper, twilight hills pattern.",
+                comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper.")
+            public static let TabsSectionTitle = MZLocalizedString(
+                key: "Settings.Tabs.CustomizeTabsSection.Title",
+                tableName: nil,
+                value: "Customize Tab Tray",
+                comment: "In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage")
+            public static let TabGroups = MZLocalizedString(
+                key: "Settings.Tabs.CustomizeTabsSection.TabGroups",
+                tableName: nil,
+                value: "Tab Groups",
+                comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off")
+            public static let FingerPrintReason = MZLocalizedString(
+                key: "Settings.Passwords.FingerPrintReason.v103",
+                tableName: nil,
+                value: "Use your fingerprint to access passwords now.",
+                comment: "Touch ID prompt subtitle when accessing logins and passwords")
+            public static let CopyButtonTitle = MZLocalizedString(
+                key: "ShareSheet.Copy.Title.v108",
+                tableName: nil,
+                value: "Copy",
+                comment: "Button in share sheet to copy the url of the current tab.")
+            public static let RecentButtonTitle = MZLocalizedString(
+                key: "Onboarding.WhatsNew.Button.Title",
+                tableName: nil,
+                value: "Start Browsing",
+                comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card")
+            public static let RecentlySavedSectionTitle = MZLocalizedString(
+                key: "ActivityStream.Library.Title",
+                tableName: nil,
+                value: "Recently Saved",
+                comment: "A string used to signify the start of the Recently Saved section in Home Screen.")
+            public static let RecentlySavedShowAllText = MZLocalizedString(
+                key: "RecentlySaved.Actions.More",
+                tableName: nil,
+                value: "Show All",
+                comment: "More button text for Recently Saved items at the home page.")
+            public static let EditContextMenuTitle = MZLocalizedString(
+                key: "HomePanel.ContextMenu.Edit.v131",
+                tableName: "Bookmarks",
+                value: "Edit",
+                comment: "The title for the Edit context menu action for sites in Home Panels")
+            public static let HistoryBackButtonTitle = MZLocalizedString(
+                key: "HistoryPanel.HistoryBackButton.Title",
+                tableName: nil,
+                value: "History",
+                comment: "Title for the Back to History button in the History Panel")
+            public static let UnableToOpenURLError = MZLocalizedString(
+                key: "OpenURL.Error.Message",
+                tableName: nil,
+                value: "Firefox cannot open the page because it has an invalid address.",
+                comment: "The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app.")
+            public static let UnableToOpenURLErrorTitle = MZLocalizedString(
+                key: "OpenURL.Error.Title",
+                tableName: nil,
+                value: "Cannot Open Page",
+                comment: "Title of the message shown when the user attempts to navigate to an invalid link.")
+            public static let DownloadFailedToastLabelText = MZLocalizedString(
+                key: "Downloads.Toast.Failed.LabelText",
+                tableName: nil,
+                value: "Download Failed",
+                comment: "The label text in the Download Failed toast for showing confirmation that the download has failed.")
+            struct EngagementNotification {
+                public static let TitleTreatmentA = MZLocalizedString(
+                    key: "Engagement.Notification.Treatment.A.Title.v114",
+                    tableName: "EngagementNotification",
+                    value: "Browse without a trace",
+                    comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
+            }
+            public static let BodyTreatmentA = MZLocalizedString(
+                key: "Engagement.Notification.Treatment.A.Body.v114",
+                tableName: "EngagementNotification",
+                value: "Private browsing in %@ doesn’t save your info and blocks hidden trackers.",
+                comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
+            public static let TitleTreatmentB = MZLocalizedString(
+                key: "Engagement.Notification.Treatment.B.Title.v114",
+                tableName: "EngagementNotification",
+                value: "Try private browsing",
+                comment: "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.")
+            public static let BodyTreatmentB = MZLocalizedString(
+                key: "Engagement.Notification.Treatment.B.Body.v114",
+                tableName: "EngagementNotification",
+                value: "Browse with no saved cookies or history in %@.",
+                comment: "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).")
+            public static let ToolbarButtonA11yLabel = MZLocalizedString(
+                key: "QRCode.Toolbar.Button.A11y.Title.v128",
+                tableName: "QRCode",
+                value: "Scan QR code",
+                comment: "Accessibility label of the QR code button in the toolbar")
+            public static let AddToHomeScreen = MZLocalizedString(
+                key: "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131",
+                tableName: "MainMenu",
+                value: "Add to Home Screen",
+                comment: "On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen.")
+            public static let AddToHomeScreenSubtitle = MZLocalizedString(
+                key: "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131",
+                tableName: "MainMenu",
+                value: "Home",
+                comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool.")
+            struct Save {
+                public static let AddToHomeScreen = MZLocalizedString(
+                    key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132",
+                    tableName: "MainMenu",
+                    value: "Add to Home Screen",
+                    comment: "On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen.")
+                public static let AddToHomeScreenSubtitle = MZLocalizedString(
+                    key: "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132",
+                    tableName: "MainMenu",
+                    value: "Home",
+                    comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen.")
+            }
+            public static let TopTitle = MZLocalizedString(
+                key: "UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133",
+                tableName: "SearchEngineSelection",
+                value: "This time search in:",
+                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the title for the sheet.")
+            public static let TopTitleLabel = MZLocalizedString(
+                key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133",
+                tableName: "SearchEngineSelection",
+                value: "This time search in:",
+                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the title of that sheet.")
+            public static let CloseButtonLabel = MZLocalizedString(
+                key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v133",
+                tableName: "SearchEngineSelection",
+                value: "Close",
+                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button.")
+            public static let HomeMenuButtonAccessibilityLabel = MZLocalizedString(
+                key: "Menu.Toolbar.Home.AccessibilityLabel.v99",
+                tableName: nil,
+                value: "Home",
+                comment: "Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page.")
+            public static let TPDetailsVerifiedBy = MZLocalizedString(
+                key: "Menu.TrackingProtection.Details.Verifier",
+                tableName: nil,
+                value: "Verified by %@",
+                comment: "String to let users know the site verifier, where %@ represents the SSL certificate signer.")
+            public static let SendToCloseButton = MZLocalizedString(
+                key: "SendTo.Close.Button",
+                tableName: nil,
+                value: "Close",
+                comment: "Close button in top navigation bar")
+            public static let InfoCardProgressAnalysisDescription = MZLocalizedString(
+                key: "Shopping.InfoCard.ProgressAnalysis.Description.v120",
+                tableName: "Shopping",
+                value: "This could take about 60 seconds.",
+                comment: "Description for info card when the product is in analysis mode")
+            public static let CoverSheetETPTitle = MZLocalizedString(
+                key: "CoverSheet.v24.ETP.Title",
+                tableName: nil,
+                value: "Protection Against Ad Tracking",
+                comment: "Title for the new ETP mode i.e. standard vs strict")
+            public static let CoverSheetETPDescription = MZLocalizedString(
+                key: "CoverSheet.v24.ETP.Description",
+                tableName: nil,
+                value: "Built-in Enhanced Tracking Protection helps stop ads from following you around. Turn on Strict to block even more trackers, ads, and popups. ",
+                comment: "Description for the new ETP mode i.e. standard vs strict")
+            public static let CoverSheetETPSettingsButton = MZLocalizedString(
+                key: "CoverSheet.v24.ETP.Settings.Button",
+                tableName: nil,
+                value: "Go to Settings",
+                comment: "Text for the new ETP settings button")
+            public static let TabLocationShareButtonLargeContentTitle = MZLocalizedString(
+                key: "TabLocation.ShareButton.AccessibilityLabel.v122",
+                tableName: "TabLocation",
+                value: "Share",
+                comment: "Large content title for the share button. This title is displayed when using accessible font sizes is enabled")
+            public static let TabTrayNoTabsAccessibilityHint = MZLocalizedString(
+                key: "No tabs",
+                tableName: nil,
+                value: nil,
+                comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")
+            public static let TabTrayVisibleTabRangeAccessibilityHint = MZLocalizedString(
+                key: "Tab %@ of %@",
+                tableName: nil,
+                value: "Tab %1$@ of %2$@",
+                comment: "Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total.")
+            public static let TabTrayVisiblePartialRangeAccessibilityHint = MZLocalizedString(
+                key: "Tabs %@ to %@ of %@",
+                tableName: nil,
+                value: "Tabs %1$@ to %2$@ of %3$@",
+                comment: "Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total.")
+            public static let TabTrayOtherTabsSectionHeader = MZLocalizedString(
+                key: "TabTray.Header.FilteredTabs.SectionHeader",
+                tableName: nil,
+                value: "Others",
+                comment: "In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”.")
+            public static let SearchEngineA11yHint = MZLocalizedString(
+                key: "AddressToolbar.SearchEngine.A11y.Hint.v133",
+                tableName: "AddressToolbar",
+                value: "Opens search engine selection",
+                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does.")
+            public static let RemoteTabCreateAccount = MZLocalizedString(
+                key: "Create an account",
+                tableName: nil,
+                value: nil,
+                comment: "See http://mzl.la/1Qtkf0j")
+            private static let removedSavedLoginsLabel = MZLocalizedString(
+                key: "Saved Logins",
+                tableName: "ClearPrivateData",
+                value: nil,
+                comment: "Settings item for clearing passwords and login data")
+            public static let SearchInputAccessibilityLabel = MZLocalizedString(
+                key: "Search Input Field",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Accessibility label for the search input field in the Logins list")
+            public static let SearchInputTitle = MZLocalizedString(
+                key: "SearchInput.Title.Search.v106",
+                tableName: "LoginManager",
+                value: "Search",
+                comment: "Title for the search field at the top of the Logins list screen")
+            public static let SearchInputClearAccessibilityLabel = MZLocalizedString(
+                key: "Clear Search",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
+            public static let SearchInputEnterSearchMode = MZLocalizedString(
+                key: "Enter Search Mode",
+                tableName: "LoginManager",
+                value: nil,
+                comment: "Accessibility label for entering search mode for logins")
+            public static let TabTrayButtonNewTabAccessibilityLabel = MZLocalizedString(
+                key: "New Tab",
+                tableName: nil,
+                value: nil,
+                comment: "Accessibility label for the New Tab button in the tab toolbar.")
+            public static let DefaultSuggestedTwitter = MZLocalizedString(
+                key: "Twitter",
+                tableName: nil,
+                value: nil,
+                comment: "Tile title for Twitter")
+            public static let A11yLabel = MZLocalizedString(
+                key: "PasswordGenerator.A11yLabel.v132",
+                tableName: "PasswordGenerator",
+                value: "Password Generator",
+                comment: "Accessibility label describing a feature that generates a password when the password field of a signup form is interacted with.")
         }
     }
 }
