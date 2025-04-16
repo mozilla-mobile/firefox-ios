@@ -15,6 +15,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         guard download.mimeType != MIMEType.Passbook else { return }
 
         if let downloadProgressManager = self.downloadProgressManager {
+            if tabManager.selectedTab?.isPrivate == true && self.downloadLiveActivityWrapper != nil {
+                dismissDownloadLiveActivity()
+            }
             downloadProgressManager.addDownload(download)
             return
         }
@@ -22,7 +25,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         let downloadProgressManager = DownloadProgressManager(downloads: [download])
         self.downloadProgressManager = downloadProgressManager
 
-        if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
+        if #available(iOS 16.2, *),
+            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+            tabManager.selectedTab?.isPrivate == false {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
             downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
             self.downloadLiveActivityWrapper = downloadLiveActivityWrapper
@@ -34,16 +39,20 @@ extension BrowserViewController: DownloadQueueDelegate {
         presentDownloadProgressToast(download: download, windowUUID: uuid)
     }
 
-    func stopDownload(buttonPressed: Bool) {
-        // When this toast is dismissed, be sure to clear this so that any
-        // subsequent downloads cause a new toast to be created.
-        self.downloadToast = nil
+    private func dismissDownloadLiveActivity() {
         if #available(iOS 16.2, *),
            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(durationToDismissal: .none)
             self.downloadLiveActivityWrapper = nil
         }
+    }
+
+    private func stopDownload(buttonPressed: Bool) {
+        // When this toast is dismissed, be sure to clear this so that any
+        // subsequent downloads cause a new toast to be created.
+        self.downloadToast = nil
+        dismissDownloadLiveActivity()
         self.downloadProgressManager = nil
 
         // Handle download cancellation
