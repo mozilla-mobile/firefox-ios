@@ -4081,10 +4081,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
             if isToolbarRefactorEnabled {
-                // We want to show the progress update only when swiping between tabs feature is not enabled.
-                if !isSwipingTabsEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: selectedTab.estimatedProgress)
-                }
+                addressToolbarContainer.hideProgressBar()
             } else {
                 legacyUrlBar?.updateProgressBar(Float(selectedTab.estimatedProgress))
             }
