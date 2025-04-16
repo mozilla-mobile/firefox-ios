@@ -1,0 +1,20 @@
+# The configuration for the logins verifiction feature
+features:
+  logins-verification:
+    description: >
+      Feature that enables the logins verification logic.
+    variables:
+      logins-verification-enabled:
+        description: >
+          Whether the logins verification logic is enabled. When enabled, an attempt will be made to decrypt all
+          stored logins when sync is enabled. If a login cannot be decrypted, it will be locally deleted to unblock
+          syncing.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          logins-verification-enabled: false
+      - channel: developer
+        value:
+          logins-verification-enabled: true
