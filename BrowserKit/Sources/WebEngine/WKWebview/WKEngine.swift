@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-public class WKEngine: Engine {
+public class WKEngine: @preconcurrency Engine {
     private let sourceTimerFactory: DispatchSourceTimerFactory
     private var shutdownWebServerTimer: DispatchSourceInterface?
     private let userScriptManager: WKUserScriptManager
@@ -13,32 +13,42 @@ public class WKEngine: Engine {
     private let engineDependencies: EngineDependencies
     private let configProvider: WKEngineConfigurationProvider
 
-    public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
-        return WKEngine(engineDependencies: engineDependencies)
+    public static func factory(engineDependencies: EngineDependencies) async -> WKEngine {
+        let configProvider = await DefaultWKEngineConfigurationProvider()
+        let userScriptManager = await DefaultUserScriptManager()
+        let webServerUtil = await DefaultWKWebServerUtil.make()
+        return await WKEngine(
+            userScriptManager: userScriptManager,
+            webServerUtil: webServerUtil,
+            sourceTimerFactory: DefaultDispatchSourceTimerFactory(),
+            configProvider: configProvider,
+            engineDependencies: engineDependencies
+        )
     }
 
-    init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager(),
-         webServerUtil: WKWebServerUtil = DefaultWKWebServerUtil(),
-         sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory(),
-         configProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
-         engineDependencies: EngineDependencies) {
+    init(userScriptManager: WKUserScriptManager,
+         webServerUtil: WKWebServerUtil,
+         sourceTimerFactory: DispatchSourceTimerFactory,
+         configProvider: WKEngineConfigurationProvider,
+         engineDependencies: EngineDependencies) async {
         self.userScriptManager = userScriptManager
         self.webServerUtil = webServerUtil
         self.sourceTimerFactory = sourceTimerFactory
         self.configProvider = configProvider
         self.engineDependencies = engineDependencies
 
-        InternalUtil().setUpInternalHandlers()
+        await InternalUtil().setUpInternalHandlers()
     }
 
+    @MainActor
     public func createView() -> EngineView {
         return WKEngineView(frame: .zero)
     }
 
-    public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
-        guard let session = WKEngineSession(userScriptManager: userScriptManager,
-                                            dependencies: dependencies,
-                                            configurationProvider: configProvider) else {
+    public func createSession(dependencies: EngineSessionDependencies) async throws -> EngineSession {
+        guard let session = await WKEngineSession.sessionFactory(userScriptManager: userScriptManager,
+                                                                 dependencies: dependencies,
+                                                                 configurationProvider: configProvider) else {
             throw EngineError.sessionNotCreated
         }
 

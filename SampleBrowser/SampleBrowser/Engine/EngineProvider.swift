@@ -11,12 +11,11 @@ struct EngineProvider {
     private(set) var session: EngineSession
     private(set) var view: EngineView
 
-    init?(engine: Engine,
-          sessionDependencies: EngineSessionDependencies) {
-        self.engine = engine
+    init?(dependencyManager: EngineDependencyManager) async {
+        self.engine = await WKEngine.factory(engineDependencies: dependencyManager.engineDependencies)
 
         do {
-            session = try engine.createSession(dependencies: sessionDependencies)
+            session = try await engine.createSession(dependencies: dependencyManager.sessionDependencies)
         } catch {
             return nil
         }

@@ -14,12 +14,17 @@ class DefaultWKWebServerUtil: WKWebServerUtil {
     private var webServer: WKEngineWebServerProtocol
     private let logger: Logger
 
-    init(webServer: WKEngineWebServerProtocol = WKEngineWebServer.shared,
+    init(webServer: WKEngineWebServerProtocol,
          readerModeHander: WKReaderModeHandlersProtocol = WKReaderModeHandlers(),
          logger: Logger = DefaultLogger.shared) {
         self.webServer = webServer
         self.readerModeHander = readerModeHander
         self.logger = logger
+    }
+
+    static func make() async -> DefaultWKWebServerUtil {
+        let webServer = await MainActor.run { WKEngineWebServer.shared }
+        return DefaultWKWebServerUtil(webServer: webServer)
     }
 
     func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration) {

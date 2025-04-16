@@ -30,10 +30,11 @@ class WKEngineSession: NSObject,
             uiHandler.delegate = delegate
         }
     }
+    weak var telemetryProxy: EngineTelemetryProxy?
+    weak var fullscreenDelegate: FullscreenDelegate?
+
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
-    var telemetryProxy: EngineTelemetryProxy?
-    var fullscreenDelegate: FullscreenDelegate?
 
     private var scriptResponder: EngineSessionScriptResponder
     private var logger: Logger
@@ -48,19 +49,48 @@ class WKEngineSession: NSObject,
         }
     }
 
+    public static func sessionFactory(
+        userScriptManager: WKUserScriptManager,
+        dependencies: EngineSessionDependencies,
+        configurationProvider: WKEngineConfigurationProvider
+    ) async -> WKEngineSession? {
+        let webViewProvider = await DefaultWKWebViewProvider()
+        let logger = DefaultLogger.shared
+        let sessionData = WKEngineSessionData()
+        let contentScriptManager = await DefaultContentScriptManager()
+        let scriptResponder = EngineSessionScriptResponder()
+        let metadataFetcher = DefaultMetadataFetcherHelper()
+        let navigationHandler = await DefaultNavigationHandler()
+        let uiHandler = await DefaultUIHandler()
+
+        return await WKEngineSession(
+            userScriptManager: userScriptManager,
+            dependencies: dependencies,
+            configurationProvider: configurationProvider,
+            webViewProvider: webViewProvider,
+            logger: logger,
+            sessionData: sessionData,
+            contentScriptManager: contentScriptManager,
+            scriptResponder: scriptResponder,
+            metadataFetcher: metadataFetcher,
+            navigationHandler: navigationHandler,
+            uiHandler: uiHandler
+        )
+    }
+
     init?(userScriptManager: WKUserScriptManager,
           dependencies: EngineSessionDependencies,
           configurationProvider: WKEngineConfigurationProvider,
-          webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
+          webViewProvider: WKWebViewProvider,
           logger: Logger = DefaultLogger.shared,
-          sessionData: WKEngineSessionData = WKEngineSessionData(),
-          contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
-          scriptResponder: EngineSessionScriptResponder = EngineSessionScriptResponder(),
-          metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
-          navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
-          uiHandler: WKUIHandler = DefaultUIHandler()) {
-        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider,
-                                                          parameters: dependencies.webviewParameters) else {
+          sessionData: WKEngineSessionData,
+          contentScriptManager: WKContentScriptManager,
+          scriptResponder: EngineSessionScriptResponder,
+          metadataFetcher: MetadataFetcherHelper,
+          navigationHandler: DefaultNavigationHandler,
+          uiHandler: WKUIHandler) async {
+        guard let webView = await webViewProvider.createWebview(configurationProvider: configurationProvider,
+                                                                parameters: dependencies.webviewParameters) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
                        category: .webview)
@@ -79,13 +109,16 @@ class WKEngineSession: NSObject,
         super.init()
 
         self.metadataFetcher.delegate = self
-        navigationHandler.session = self
+        await MainActor.run {
+            navigationHandler.session = self
+        }
+
         uiHandler.delegate = delegate
         uiHandler.isActive = isActive
         webView.uiDelegate = uiHandler
         webView.navigationDelegate = navigationHandler
         webView.delegate = self
-        userScriptManager.injectUserScriptsIntoWebView(webView)
+        await userScriptManager.injectUserScriptsIntoWebView(webView)
         addContentScripts()
     }
 

@@ -42,6 +42,7 @@ public protocol WKEngineConfigurationProvider {
 }
 
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
+@MainActor
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static let normalSessionsProcessPool = WKProcessPool()
     private static let privateSessionsProcessPool = WKProcessPool()

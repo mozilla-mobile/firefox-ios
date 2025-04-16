@@ -13,6 +13,7 @@ protocol WKWebViewProvider {
                        parameters: WKWebViewParameters) -> WKEngineWebView?
 }
 
+@MainActor
 struct DefaultWKWebViewProvider: WKWebViewProvider {
     private var logger: Logger
 

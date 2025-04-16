@@ -14,7 +14,7 @@ public protocol Engine {
     /// Creates a new engine session.
     /// - Parameter dependencies: Pass in the required session dependencies on creation
     /// - Returns: The created `EngineSession`
-    func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession
+    func createSession(dependencies: EngineSessionDependencies) async throws -> EngineSession
 
     /// Warm the `Engine` whenever we move the application to foreground
     func warmEngine()

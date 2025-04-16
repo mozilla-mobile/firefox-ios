@@ -14,29 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
         sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
     )
 
-    lazy var engineProvider: EngineProvider = {
-        let parameters = WKWebViewParameters(blockPopups: false,
-                                             isPrivate: false,
-                                             autoPlay: .all,
-                                             schemeHandler: WKInternalSchemeHandler(),
-                                             pullRefreshType: PullRefreshView.self)
-        let sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
-                                                            telemetryProxy: TelemetryHandler())
-
-        let readerModeConfig = ReaderModeConfiguration(loadingText: "Loading",
-                                                       loadingFailedText: "Loading failed",
-                                                       loadOriginalText: "Loading",
-                                                       readerModeErrorText: "Error")
-        let engineDependencies = EngineDependencies(readerModeConfiguration: readerModeConfig)
-        let engine = WKEngine.factory(engineDependencies: engineDependencies)
-        return EngineProvider(engine: engine, sessionDependencies: sessionDependencies)!
-    }()
+    lazy var engineDependencyManager = EngineDependencyManager()
+    var engineProvider: EngineProvider?
 
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        engineProvider.warmEngine()
+        Task { @MainActor in
+            self.engineProvider = await EngineProviderManager.shared.getProvider()
+            engineProvider?.warmEngine()
+        }
 
         return true
     }
@@ -53,11 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        engineProvider.idleEngine()
+        engineProvider?.idleEngine()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        engineProvider.warmEngine()
+        engineProvider?.warmEngine()
     }
 
     // MARK: UISceneSession Lifecycle

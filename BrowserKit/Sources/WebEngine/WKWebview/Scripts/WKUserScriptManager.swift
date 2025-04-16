@@ -7,9 +7,10 @@ import Foundation
 
 /// Manager used to inject scripts at document start or end inside a WKEngineWebView
 protocol WKUserScriptManager {
-    func injectUserScriptsIntoWebView(_ webView: WKEngineWebView)
+    func injectUserScriptsIntoWebView(_ webView: WKEngineWebView) async
 }
 
+@MainActor
 class DefaultUserScriptManager: WKUserScriptManager {
     // Scripts can use this to verify the application (not JS on the web) is calling into them
     private let appIdToken = UUID().uuidString
@@ -26,7 +27,7 @@ class DefaultUserScriptManager: WKUserScriptManager {
         injectUserScripts()
     }
 
-    func injectUserScriptsIntoWebView(_ webView: WKEngineWebView) {
+    func injectUserScriptsIntoWebView(_ webView: WKEngineWebView) async {
         // Remove any previously-added user scripts to prevent the same script from being injected twice
         webView.engineConfiguration.removeAllUserScripts()
 
