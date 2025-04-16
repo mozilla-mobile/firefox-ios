@@ -23,7 +23,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         self.downloadProgressManager = downloadProgressManager
 
         if #available(iOS 17, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
-            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager, windowUUID: windowUUID.uuidString)
+            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(
+                downloadProgressManager: downloadProgressManager,
+                windowUUID: windowUUID.uuidString)
             downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
             self.downloadLiveActivityWrapper = downloadLiveActivityWrapper
             guard downloadLiveActivityWrapper.start() else {
@@ -151,5 +153,4 @@ extension BrowserViewController: DownloadQueueDelegate {
                   afterWaiting: UX.downloadToastDelay,
                   duration: UX.downloadToastDuration)
     }
-
 }

@@ -9,7 +9,7 @@ import Common
 @available(iOS 17.0, *)
 struct DownloadLiveActivityIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "Stop Downloads"
-    
+
     @Parameter(title: "WindowUUID")
     var windowUUID: String
 
@@ -19,5 +19,3 @@ struct DownloadLiveActivityIntent: LiveActivityIntent {
         return .result()
     }
 }
-
-
