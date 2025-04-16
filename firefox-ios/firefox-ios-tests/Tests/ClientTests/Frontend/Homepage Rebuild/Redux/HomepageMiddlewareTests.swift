@@ -174,6 +174,32 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.section, "top_sites")
     }
 
+    func test_itemSeenAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.itemSeen
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemViewedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemViewedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemViewed)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.type, "top_site")
+        XCTAssertEqual(savedExtras.section, "top_sites")
+    }
+
     // MARK: - Helpers
     private func createSubject() -> HomepageMiddleware {
         return HomepageMiddleware(

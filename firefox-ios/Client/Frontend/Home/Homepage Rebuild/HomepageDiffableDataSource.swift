@@ -60,7 +60,7 @@ final class HomepageDiffableDataSource:
             ]
         }
 
-        var telemetryTappedItemType: HomepageTelemetry.TappedItemType? {
+        var telemetryItemType: HomepageTelemetry.ItemType? {
             switch self {
             case .topSite:
                 return .topSite
