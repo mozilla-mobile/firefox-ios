@@ -10,10 +10,12 @@ struct ASSearchEngineUtilities {
     static func convertASToOpenSearch(_ engine: SearchEngineDefinition, image: UIImage) -> OpenSearchEngine {
         let engineID = engine.identifier
         let name = engine.name
+        let telemetrySuffix = engine.telemetrySuffix
         let searchTemplate = convertASSearchURLToOpenSearchURL(engine.urls.search, for: engine) ?? ""
         let suggestTemplate = convertASSearchURLToOpenSearchURL(engine.urls.suggestions, for: engine) ?? ""
         let converted = OpenSearchEngine(engineID: engineID,
                                          shortName: name,
+                                         telemetrySuffix: telemetrySuffix,
                                          image: image,
                                          searchTemplate: searchTemplate,
                                          suggestTemplate: suggestTemplate,
@@ -37,7 +39,6 @@ struct ASSearchEngineUtilities {
 
             let value: String
             if $0.value == "{partnerCode}" {
-                // TODO: [FXIOS-11583] Special-case Bing and other overrides here
                 value = engine.partnerCode
             } else {
                 value = $0.value ?? ""

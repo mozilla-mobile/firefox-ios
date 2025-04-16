@@ -63,10 +63,6 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", jumpBackIn as? String)
         let bookmarks = app.tables.cells.switches["Bookmarks"].value
         XCTAssertEqual("1", bookmarks as? String)
-        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
-        // Reloads for notification
-        // let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
-        // XCTAssertEqual("1", recentlyVisited as? String)
         let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
@@ -305,62 +301,6 @@ class HomePageSettingsUITests: BaseTestCase {
         checkBookmarksUpdated()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306923
-    // Smoketest
-    // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
-    // Reloads for notification
-//    func testRecentlyVisited() {
-//        navigator.openURL(websiteUrl1)
-//        waitUntilPageLoad()
-//        navigator.performAction(Action.GoToHomePage)
-//        mozWaitForElementToExist(
-//            app.scrollViews
-//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
-//                .staticTexts[urlMozillaLabel]
-//        )
-//        navigator.goto(HomeSettings)
-//        navigator.performAction(Action.ToggleRecentlyVisited)
-//
-//        // On iPad we have the homepage button always present,
-//        // on iPhone we have the search button instead when we're on a new tab page
-//        if !iPad() {
-//            navigator.performAction(Action.ClickSearchButton)
-//        } else {
-//            navigator.performAction(Action.GoToHomePage)
-//        }
-//
-//        XCTAssertFalse(
-//            app.scrollViews
-//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
-//                .staticTexts[urlMozillaLabel].exists
-//        )
-//        if !iPad() {
-//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton], timeout: 3)
-//            navigator.performAction(Action.CloseURLBarOpen)
-//        }
-//        navigator.nowAt(NewTabScreen)
-//        navigator.goto(HomeSettings)
-//        navigator.performAction(Action.ToggleRecentlyVisited)
-//        navigator.nowAt(HomeSettings)
-//        navigator.performAction(Action.OpenNewTabFromTabTray)
-//        XCTAssert(
-//            app.scrollViews
-//                .cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell]
-//                .staticTexts[urlMozillaLabel].exists
-//        )
-
-        // swiftlint:disable line_length
-//        Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/11271
-//        navigator.openURL("mozilla ")
-//        navigator.openURL(websiteUrl2)
-//        navigator.performAction(Action.GoToHomePage)
-//        XCTAssert(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
-//        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].staticTexts["Mozilla , Pages: 2"].press(forDuration: 1.5)
-//        selectOptionFromContextMenu(option: "Remove")
-//        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
-        // swiftlint:enable line_length
-//    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306871
     // Smoketest
     func testCustomizeHomepage() {
@@ -394,12 +334,6 @@ class HomePageSettingsUITests: BaseTestCase {
 //            "1"
 //        )
 
-        // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
-        // Reloads for notification
-//        XCTAssertEqual(
-//            app.cells.switches[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.recentVisited].value as! String,
-//            "1"
-//        )
         XCTAssertEqual(
             app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as? String,
             "1"

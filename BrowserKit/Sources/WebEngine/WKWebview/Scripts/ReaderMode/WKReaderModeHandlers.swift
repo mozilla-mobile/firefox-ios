@@ -62,7 +62,7 @@ struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
             resource: "page-exists"
         ) { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             guard let stringURL = request?.query?["url"],
-                  let url = URL(string: stringURL, invalidCharacters: false) else {
+                  let url = URL(string: stringURL) else {
                 return GCDWebServerResponse(statusCode: 500)
             }
 
@@ -77,7 +77,7 @@ struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
             resource: "page"
         ) { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             if let url = request?.query?["url"] {
-                if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
+                if let url = URL(string: url), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
                         guard let response = generateHtmlFor(

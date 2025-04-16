@@ -64,7 +64,7 @@ class ZoomingTests: BaseTestCase {
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
         // Tap on + and - buttons
         zoomIn()
-        forceRestartApp()
+        closeFromAppSwitcherAndRelaunch()
         openWebsiteAndReachZoomSetting(website: 0)
         zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 150%")

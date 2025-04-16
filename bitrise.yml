@@ -524,16 +524,6 @@ workflows:
                 envman add --key NEW_RC_VERSION --value New_RC_Version
             fi
         title: Save Branch Name
-    - script@1.2.1:
-        title: Add default web browser entitlement for Fennec
-        inputs:
-        - content: |-
-            #/usr/bin/env bash
-            set -x
-
-            echo "Adding com.apple.developer.web-browser to entitlements"
-
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" firefox-ios/Client/Entitlements/FennecApplication.entitlements
     - cache-pull@2.7.2: {}
   2_certificate_and_profile:
     steps:

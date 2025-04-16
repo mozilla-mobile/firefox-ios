@@ -15,14 +15,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
     )
 
     lazy var engineProvider: EngineProvider = {
-        let parameters = WKWebViewParameters(
-            blockPopups: false,
-            isPrivate: false,
-            pullRefreshType: PullRefreshView.self
-        )
-        let dependencies = EngineSessionDependencies(webviewParameters: parameters,
-                                                     telemetryProxy: TelemetryHandler())
-        return EngineProvider(sessionDependencies: dependencies)!
+        let parameters = WKWebviewParameters(blockPopups: false,
+                                             isPrivate: false,
+                                             autoPlay: .all,
+                                             schemeHandler: WKInternalSchemeHandler())
+        let sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
+                                                            telemetryProxy: TelemetryHandler())
+
+        let readerModeConfig = ReaderModeConfiguration(loadingText: "Loading",
+                                                       loadingFailedText: "Loading failed",
+                                                       loadOriginalText: "Loading",
+                                                       readerModeErrorText: "Error")
+        let engineDependencies = EngineDependencies(readerModeConfiguration: readerModeConfig)
+        let engine = WKEngine.factory(engineDependencies: engineDependencies)
+        return EngineProvider(engine: engine, sessionDependencies: sessionDependencies)!
     }()
 
     func application(

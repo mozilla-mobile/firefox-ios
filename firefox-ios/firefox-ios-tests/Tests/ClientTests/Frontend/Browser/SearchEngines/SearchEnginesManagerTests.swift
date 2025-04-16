@@ -60,6 +60,7 @@ class SearchEnginesManagerTests: XCTestCase {
         }
         let testEngine = OpenSearchEngine(engineID: "ATester",
                                           shortName: "ATester",
+                                          telemetrySuffix: nil,
                                           image: testImage,
                                           searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                           suggestTemplate: nil,

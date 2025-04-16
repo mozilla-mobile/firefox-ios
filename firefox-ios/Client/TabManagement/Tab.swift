@@ -166,13 +166,13 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             return url
         }
         if let string = pageMetadata?.siteURL,
-           let siteURL = URL(string: string, invalidCharacters: false) {
+           let siteURL = URL(string: string) {
             // If the canonical URL from the page metadata doesn't contain the
             // "#" fragment, check if the tab's URL has a fragment and if so,
             // append it to the canonical URL.
             if siteURL.fragment == nil,
                let fragment = self.url?.fragment,
-               let siteURLWithFragment = URL(string: "\(string)#\(fragment)", invalidCharacters: false) {
+               let siteURLWithFragment = URL(string: "\(string)#\(fragment)") {
                 return siteURLWithFragment
             }
 
@@ -285,7 +285,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         didSet {
             guard let url = url,
                   let faviconURLString = faviconURL,
-                  let faviconUrl = URL(string: faviconURLString, invalidCharacters: false)
+                  let faviconUrl = URL(string: faviconURLString)
             else { return }
             faviconHelper.cacheFaviconURL(
                 siteURL: url,
@@ -301,7 +301,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 url = sourceURL
             }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
-                url = URL(string: internalUrl.stripAuthorization, invalidCharacters: false)
+                url = URL(string: internalUrl.stripAuthorization)
             }
         }
     }

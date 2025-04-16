@@ -9,6 +9,7 @@ class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
     var webViewNeedsReloadCalled = 0
     var webViewPropertyChangedCalled = 0
     var lastWebViewPropertyChanged: WKEngineWebViewProperty?
+    var webViewPropertyChangedCallback: ((WKEngineWebViewProperty) -> Void)?
 
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {}
 
@@ -21,6 +22,7 @@ class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
     func webViewPropertyChanged(_ property: WKEngineWebViewProperty) {
         webViewPropertyChangedCalled += 1
         lastWebViewPropertyChanged = property
+        webViewPropertyChangedCallback?(property)
     }
 
     func webViewNeedsReload() {

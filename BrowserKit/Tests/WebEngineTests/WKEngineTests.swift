@@ -32,10 +32,7 @@ final class WKEngineTests: XCTestCase {
 
     func testCreateSessionThenCreatesSession() throws {
         let subject = createSubject()
-
-        let params = WKWebViewParameters(blockPopups: true, isPrivate: false)
-        let dependencies = EngineSessionDependencies(webviewParameters: params)
-        let session = try XCTUnwrap(subject.createSession(dependencies: dependencies))
+        let session = try XCTUnwrap(subject.createSession(dependencies: DefaultTestDependencies().sessionDependencies))
         XCTAssertNotNil(session)
     }
 
