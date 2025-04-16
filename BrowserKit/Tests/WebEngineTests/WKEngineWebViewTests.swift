@@ -85,7 +85,7 @@ final class WKEngineWebViewTests: XCTestCase {
 
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> DefaultWKEngineWebView {
-        let parameters = WKWebviewParameters(blockPopups: true, isPrivate: false)
+        let parameters = WKWebViewParameters(blockPopups: true, isPrivate: false)
         let configuration = DefaultWKEngineConfigurationProvider(parameters: parameters)
         let subject = DefaultWKEngineWebView(frame: .zero,
                                              configurationProvider: configuration)!

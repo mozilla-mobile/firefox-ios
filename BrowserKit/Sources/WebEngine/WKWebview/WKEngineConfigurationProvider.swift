@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-public struct WKWebviewParameters {
+public struct WKWebViewParameters {
     /// A boolean value customizable with a user preference indicating whether JavaScript can
     /// open windows without user interaction.
     var blockPopups: Bool
@@ -31,9 +31,9 @@ protocol WKEngineConfigurationProvider {
 }
 
 struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
-    private let parameters: WKWebviewParameters
+    private let parameters: WKWebViewParameters
 
-    init(parameters: WKWebviewParameters) {
+    init(parameters: WKWebViewParameters) {
         self.parameters = parameters
     }
 
@@ -54,7 +54,7 @@ struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
 
         configuration.setURLSchemeHandler(WKInternalSchemeHandler(),
                                           forURLScheme: WKInternalSchemeHandler.scheme)
-        return DefaultEngineConfiguration(pullRefreshType: parameters.pullRefreshType,
+        return DefaultEngineConfiguration(webViewParameters: parameters,
                                           webViewConfiguration: configuration)
     }
 }

@@ -145,8 +145,7 @@ final class DefaultWKEngineWebView: WKWebView,
         let configuration = configurationProvider.createConfiguration()
         engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
-        pullRefreshViewType = configuration.pullRefreshType
-
+        pullRefreshViewType = configuration.webViewParameters.pullRefreshType
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 
         engineScrollView = scrollView

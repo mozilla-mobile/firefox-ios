@@ -13,8 +13,8 @@ struct EngineProvider {
 
     init?(
         engine: Engine = WKEngine.factory(
-            engineDependencies: .init(
-                readerModeConfiguration: .init(
+            engineDependencies: EngineDependencies(
+                readerModeConfiguration: ReaderModeConfiguration(
                     loadingText: "",
                     loadingFailedText: "",
                     loadOriginalText: "",

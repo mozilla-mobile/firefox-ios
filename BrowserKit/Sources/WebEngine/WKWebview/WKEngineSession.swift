@@ -322,7 +322,6 @@ class WKEngineSession: NSObject,
     func webViewPropertyChanged(_ property: WKEngineWebViewProperty) {
         switch property {
         case .loading(let isLoading):
-            setupLoadingSpinnerFor(webView, isLoading: isLoading)
             delegate?.onLoadingStateChange(loading: isLoading)
         case .estimatedProgress(let progress):
             if let url = webView.url, !WKInternalURL.isValid(url: url) {
@@ -364,14 +363,6 @@ class WKEngineSession: NSObject,
         if !title.isEmpty, title != sessionData.title {
             sessionData.title = title
             delegate?.onTitleChange(title: title)
-        }
-    }
-
-    private func setupLoadingSpinnerFor(_ webView: WKEngineWebView, isLoading: Bool) {
-        if isLoading {
-            webView.engineScrollView?.refreshControl?.beginRefreshing()
-        } else {
-            webView.engineScrollView?.refreshControl?.endRefreshing()
         }
     }
 
