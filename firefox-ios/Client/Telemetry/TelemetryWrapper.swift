@@ -99,7 +99,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // the event in the startup sequence.
 
         let defaultEngine = profile.searchEnginesManager.defaultEngine
-        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
         // Set the date that the app was last used as default browser
         if let timestamp = profile.prefs.timestampForKey(PrefsKeys.LastOpenedAsDefaultBrowser) {
@@ -214,7 +214,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         // Record default search engine setting
         let defaultEngine = profile.searchEnginesManager.defaultEngine
-        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
+
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
         // Record the open tab count
         let windowManager: WindowManager = AppContainer.shared.resolve()
@@ -307,9 +308,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Homepage section preferences
         let isJumpBackInEnabled = featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser)
         GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
-
-        let isRecentlyVisitedEnabled = featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser)
-        GleanMetrics.Preferences.recentlyVisited.set(isRecentlyVisitedEnabled)
 
         let isBookmarksEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
         GleanMetrics.Preferences.recentlySaved.set(isBookmarksEnabled)
@@ -506,7 +504,6 @@ extension TelemetryWrapper {
         case mediumTopSitesWidget = "medium-top-sites-widget"
         case topSiteTile = "top-site-tile"
         case topSiteContextualMenu = "top-site-contextual-menu"
-        case historyHighlightContextualMenu = "history-highlights-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
         // MARK: - App menu
@@ -554,7 +551,6 @@ extension TelemetryWrapper {
         case contextualHint = "contextual-hint"
         case jumpBackInTileImpressions = "jump-back-in-tile-impressions"
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
-        case historyImpressions = "history-highlights-impressions"
         case bookmarkImpressions = "bookmark-impressions"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
@@ -565,7 +561,6 @@ extension TelemetryWrapper {
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
-        case searchHighlights = "search-highlights"
         case viewDownloadsPanel = "view-downloads-panel"
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
@@ -625,9 +620,6 @@ extension TelemetryWrapper {
         case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
         case jumpBackInSectionSyncedTabShowAll = "jump-back-in-section-synced-tab-show-all"
         case jumpBackInSectionSyncedTabOpened = "jump-back-in-section-synced-tab-opened"
-        case historyHighlightsShowAll = "history-highlights-show-all"
-        case historyHighlightsItemOpened = "history-highlights-item-opened"
-        case historyHighlightsGroupOpen = "history-highlights-group-open"
         case topSite = "top-site"
         case pocketSite = "pocket-site"
         case customizeHomepageButton = "customize-homepage-button"
@@ -654,7 +646,6 @@ extension TelemetryWrapper {
         case openedTab = "opened-tab"
         case bookmarkItem = "bookmark-item"
         case searchSuggestion = "search-suggestion"
-        case searchHighlights = "search-highlights"
         case surfaceAdsClicked = "surface-ads-clicked"
         case awesomebarShareTap = "awesomebar-share-tap"
         case largeFileWrite = "large-file-write"
@@ -1672,24 +1663,6 @@ extension TelemetryWrapper {
 
         case (.action, .tap, .firefoxHomepage, .customizeHomepageButton, _):
             GleanMetrics.FirefoxHomePage.customizeHomepageButton.add()
-
-        // MARK: - History Highlights
-        case (.action, .tap, .firefoxHomepage, .historyHighlightsShowAll, _):
-            GleanMetrics.FirefoxHomePage.historyHighlightsShowAll.add()
-        case (.action, .tap, .firefoxHomepage, .historyHighlightsItemOpened, _):
-            GleanMetrics.FirefoxHomePage.historyHighlightsItemOpened.record()
-        case (.action, .tap, .firefoxHomepage, .historyHighlightsGroupOpen, _):
-            GleanMetrics.FirefoxHomePage.historyHighlightsGroupOpen.record()
-        case (.action, .view, .historyImpressions, _, _):
-            GleanMetrics.FirefoxHomePage.historyImpressions.record()
-        case (.action, .view, .historyHighlightContextualMenu, _, let extras):
-            if let type = extras?[EventExtraKey.contextualMenuType.rawValue] as? String {
-                let contextExtra = GleanMetrics.FirefoxHomePage.HistoryHighlightsContextExtra(type: type)
-                GleanMetrics.FirefoxHomePage.historyHighlightsContext.record(contextExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-
         // MARK: - Wallpaper related
         case (.action, .tap, .wallpaperSettings, .wallpaperSelected, let extras):
             if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,

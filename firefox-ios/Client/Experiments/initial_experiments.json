@@ -613,21 +613,21 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "tab-tray-rapid-ui-experiment",
-      "id": "tab-tray-rapid-ui-experiment",
+      "slug": "tab-tray-rapid-ui-experiment-weekly-release",
+      "id": "tab-tray-rapid-ui-experiment-weekly-release",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "Tab Tray - Rapid UI Experiment",
+      "userFacingName": "Tab Tray - Rapid UI Experiment Weekly Release",
       "userFacingDescription": "Tab Tray Experiment",
       "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
         "namespace": "ios-tab-tray-ui-experiments-release-1",
-        "start": 0,
+        "start": 2000,
         "count": 2000,
         "total": 10000
       },
@@ -669,14 +669,14 @@
               "enabled": true,
               "value": {
                 "enabled": true,
-                "animation-feature": true
+                "animation-feature": false
               }
             }
           ]
         }
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true' && is_phone) && (app_version|versionCompare('137.2.0') >= 0)))",
-      "startDate": "2025-04-11",
+      "startDate": "2025-04-15",
       "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 28,
@@ -685,7 +685,7 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2025-04-11T18:32:48.157955Z",
+      "publishedDate": "2025-04-15T15:19:00.625931Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
       "firefoxLabsDescription": null,

@@ -14,7 +14,8 @@ final class WKUserScriptManagerTests: XCTestCase {
 
     func testInjectUserScriptThenScriptsAreAddedInWebView() {
         let webview = MockWKEngineWebView(frame: .zero,
-                                          configurationProvider: MockWKEngineConfigurationProvider())!
+                                          configurationProvider: MockWKEngineConfigurationProvider(),
+                                          parameters: DefaultTestDependencies().webviewParameters)!
         let subject = createSubject()
 
         subject.injectUserScriptsIntoWebView(webview)

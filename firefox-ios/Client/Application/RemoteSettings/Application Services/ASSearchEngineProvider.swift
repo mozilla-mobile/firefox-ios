@@ -124,8 +124,8 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             // Per AS team, optional engines can be ignored. Currently only used on Android.
             let filteredEngines = result.engines.filter { $0.optional == false }
 
-            // TODO: can we parallelize this? We need the search engines before we can use the icon data but the initial
-            // icon fetch can be done concurrently with the search engine request
+            // TODO [FXIOS-11992]: can we parallelize this? We need the search engines before we can use the
+            // icon data but the initial icon fetch can be done concurrently with the search engine request
 
             iconPopulator.populateEngineIconData(filteredEngines) { enginesAndIcons in
                 var openSearchEngines: [OpenSearchEngine] = []

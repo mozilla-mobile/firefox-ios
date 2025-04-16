@@ -83,12 +83,106 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    func testCurrentHistoryItemSetAfterVisitingPage() {
+        let subject = createSubject()
+        let testURL = URL(string: "https://www.example.com/")!
+
+        let expectation = expectation(description: "Wait for the decision handler to be called")
+
+        XCTAssertNil(subject.currentBackForwardListItem())
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else {return}
+            XCTAssertNotNil(subject.currentBackForwardListItem())
+            self.delegate.webViewPropertyChangedCallback = nil
+            expectation.fulfill()
+        }
+
+        subject.load(URLRequest(url: testURL))
+
+        wait(for: [expectation], timeout: 10)
+    }
+
+    func testGetBackHistoryList() {
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.backList().count, 0)
+
+        createBackList(subject: subject)
+
+        XCTAssertEqual(subject.backList().count, 2)
+    }
+
+    func testGetForwardHistoryList() {
+        let subject = createSubject()
+
+        let expectation1 = expectation(description: "Wait for the decision handler to be called")
+        let expectation2 = expectation(description: "Wait for the decision handler to be called twice")
+
+        createBackList(subject: subject)
+
+        XCTAssertEqual(subject.forwardList().count, 0)
+
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else {return}
+            expectation1.fulfill()
+        }
+        subject.goBack()
+        wait(for: [expectation1], timeout: 10)
+
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else {return}
+            XCTAssertEqual(subject.forwardList().count, 2)
+            self.delegate.webViewPropertyChangedCallback = nil
+            expectation2.fulfill()
+        }
+        subject.goBack()
+        wait(for: [expectation2], timeout: 10)
+    }
+
+    func createBackList(subject: DefaultWKEngineWebView) {
+        let testURL1 = URL(string: "https://www.example.com/")!
+        let testURL2 = URL(string: "https://www.youtube.com/")!
+        let currentURL = URL(string: "https://www.google.com/")!
+
+        let expectation1 = expectation(description: "Wait for the decision handler to be called once")
+
+        let expectation2 = expectation(description: "Wait for the decision handler to be called twice")
+
+        let expectation3 = expectation(description: "Wait for the decision handler to be called three times")
+
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else {return}
+            expectation1.fulfill()
+        }
+        subject.load(URLRequest(url: testURL1))
+        wait(for: [expectation1], timeout: 10)
+
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else {return}
+            expectation2.fulfill()
+        }
+        subject.load(URLRequest(url: testURL2))
+        wait(for: [expectation2], timeout: 10)
+
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else {return}
+            self.delegate.webViewPropertyChangedCallback = nil
+            expectation3.fulfill()
+        }
+        subject.load(URLRequest(url: currentURL))
+        wait(for: [expectation3], timeout: 10)
+    }
+
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> DefaultWKEngineWebView {
-        let parameters = WKWebviewParameters(blockPopups: true, isPrivate: false)
-        let configuration = DefaultWKEngineConfigurationProvider(parameters: parameters)
+        let parameters = WKWebviewParameters(blockPopups: true,
+                                             isPrivate: false,
+                                             autoPlay: .all,
+                                             schemeHandler: WKInternalSchemeHandler())
+        let configuration = DefaultWKEngineConfigurationProvider()
         let subject = DefaultWKEngineWebView(frame: .zero,
-                                             configurationProvider: configuration)!
+                                             configurationProvider: configuration,
+                                             parameters: parameters)!
         subject.delegate = delegate
         trackForMemoryLeaks(subject, file: file, line: line)
 

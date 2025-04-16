@@ -347,33 +347,12 @@ class LoginTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2798597
     // Smoketest
     func testVerifyUpdatedPasswordIsSaved() {
-        saveLogin(givenUrl: testLoginPage)
-        openLoginsSettings()
-        // There is a Saved Password toggle option (enabled)
-        XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
-                       "1",
-                       "Save passwords toggle in not enabled by default")
-        navigator.goto(NewTabScreen)
-        navigator.openURL(testLoginPage)
-        waitUntilPageLoad()
-        app.secureTextFields.firstMatch.waitAndTap()
-        app.secureTextFields.firstMatch.press(forDuration: 1.5)
-        app.staticTexts["Select All"].waitAndTap()
-        app.secureTextFields.firstMatch.typeText("password")
-        app.buttons["submit"].waitAndTap()
-        waitForElementsToExist(
-            [
-                app.staticTexts["Update password?"],
-                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton],
-                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton]
-            ]
-        )
-        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton].waitAndTap()
-        openLoginsSettings()
-        app.tables[loginList].cells.element(boundBy: 2).waitAndTap()
-        app.tables.cells["Password"].waitAndTap()
-        app.staticTexts["Reveal"].waitAndTap()
-        mozWaitForElementToExist(app.tables.cells.elementContainingText("password"))
+        validateChangedPasswordSavedState()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2798598
+    func testVerifyUpdatedPasswordIsNotSaved() {
+        validateChangedPasswordSavedState(isPasswordSaved: false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3001341
@@ -458,6 +437,44 @@ class LoginTest: BaseTestCase {
         validateLoginTextFieldsCanBeCopied(indexField: 1, copiedText: "foo", field: "username")
         app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         validateLoginTextFieldsCanBeCopied(indexField: 2, copiedText: "bar", field: "password")
+    }
+
+    private func validateChangedPasswordSavedState(isPasswordSaved: Bool = true) {
+        saveLogin(givenUrl: testLoginPage)
+        openLoginsSettings()
+        // There is a Saved Password toggle option (enabled)
+        XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
+                       "1",
+                       "Save passwords toggle in not enabled by default")
+        navigator.goto(NewTabScreen)
+        navigator.openURL(testLoginPage)
+        waitUntilPageLoad()
+        app.secureTextFields.firstMatch.waitAndTap()
+        app.secureTextFields.firstMatch.press(forDuration: 1.5)
+        app.staticTexts["Select All"].waitAndTap()
+        app.secureTextFields.firstMatch.typeText("password")
+        app.buttons["submit"].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.staticTexts["Update password?"],
+                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton],
+                app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton]
+            ]
+        )
+        if isPasswordSaved {
+            app.buttons[AccessibilityIdentifiers.SaveLoginAlert.updateButton].waitAndTap()
+        } else {
+            app.buttons[AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton].waitAndTap()
+        }
+        openLoginsSettings()
+        app.tables[loginList].cells.element(boundBy: 2).waitAndTap()
+        app.tables.cells["Password"].waitAndTap()
+        app.staticTexts["Reveal"].waitAndTap()
+        if isPasswordSaved {
+            mozWaitForElementToExist(app.tables.cells.elementContainingText("password"))
+        } else {
+            mozWaitForElementToNotExist(app.tables.cells.elementContainingText("password"))
+        }
     }
 
     private func validateLoginTextFieldsCanBeCopied(indexField: Int, copiedText: String, field: String) {

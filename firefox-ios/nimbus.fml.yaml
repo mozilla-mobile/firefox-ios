@@ -31,7 +31,6 @@ include:
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/newAppearanceMenu.yaml
-  - nimbus-features/nightModeFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
@@ -47,4 +46,5 @@ include:
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
+  - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/unifiedAds.yaml

@@ -49,7 +49,7 @@ class WKEngineSession: NSObject,
     }
 
     init?(userScriptManager: WKUserScriptManager,
-          telemetryProxy: EngineTelemetryProxy? = nil,
+          dependencies: EngineSessionDependencies,
           configurationProvider: WKEngineConfigurationProvider,
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
@@ -59,7 +59,8 @@ class WKEngineSession: NSObject,
           metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
           navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
           uiHandler: WKUIHandler = DefaultUIHandler()) {
-        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
+        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider,
+                                                          parameters: dependencies.webviewParameters) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
                        category: .webview)
@@ -74,7 +75,7 @@ class WKEngineSession: NSObject,
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
         self.scriptResponder = scriptResponder
-        self.telemetryProxy = telemetryProxy
+        self.telemetryProxy = dependencies.telemetryProxy
         super.init()
 
         self.metadataFetcher.delegate = self
@@ -188,8 +189,29 @@ class WKEngineSession: NSObject,
         }
     }
 
-    func goToHistory(index: Int) {
-        // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
+    func goToHistory(item: EngineSessionBackForwardListItem) {
+        guard let backForwardListItem = item as? WKBackForwardListItem else {
+            logger.log("""
+                        Going to an EngineSessionBackForwardListItem that is not of \
+                        type WKBackForwardListItem in WKEngineSession is not permitted
+                        """,
+                        level: .debug,
+                        category: .webview)
+            return
+        }
+        webView.go(to: backForwardListItem)
+    }
+
+    func currentHistoryItem() -> (EngineSessionBackForwardListItem)? {
+        return webView.currentBackForwardListItem()
+    }
+
+    func getBackListItems() -> [EngineSessionBackForwardListItem] {
+        return webView.backList()
+    }
+
+    func getForwardListItems() -> [EngineSessionBackForwardListItem] {
+        return webView.forwardList()
     }
 
     func restore(state: Data) {

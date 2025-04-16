@@ -17,6 +17,20 @@ public struct ReaderModeConfiguration {
     var loadOriginalText: String
     var readerModeErrorText: String
     var cachedReaderModeStyle: [String: Any]?
+
+    public init(
+        loadingText: String,
+        loadingFailedText: String,
+        loadOriginalText: String,
+        readerModeErrorText: String,
+        cachedReaderModeStyle: [String: Any]? = nil
+    ) {
+        self.loadingText = loadingText
+        self.loadingFailedText = loadingFailedText
+        self.loadOriginalText = loadOriginalText
+        self.readerModeErrorText = readerModeErrorText
+        self.cachedReaderModeStyle = cachedReaderModeStyle
+    }
 }
 
 struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
@@ -48,7 +62,7 @@ struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
             resource: "page-exists"
         ) { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             guard let stringURL = request?.query?["url"],
-                  let url = URL(string: stringURL, invalidCharacters: false) else {
+                  let url = URL(string: stringURL) else {
                 return GCDWebServerResponse(statusCode: 500)
             }
 
@@ -63,7 +77,7 @@ struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
             resource: "page"
         ) { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             if let url = request?.query?["url"] {
-                if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
+                if let url = URL(string: url), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
                         guard let response = generateHtmlFor(

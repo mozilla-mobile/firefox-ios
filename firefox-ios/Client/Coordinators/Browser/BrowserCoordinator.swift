@@ -147,17 +147,27 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
-            isZeroSearch: isZeroSearch,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+    }
+
+    private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
+        store.dispatch(
+            HomepageAction(
+                isZeroSearch: isZeroSearch,
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.embeddedHomepage
+            )
+        )
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
@@ -968,7 +978,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
-            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) {
+            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) &&
+            UIDevice.current.userInterfaceIdiom != .pad {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
         } else {

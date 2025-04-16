@@ -41,7 +41,7 @@ protocol WKEngineWebView: UIView {
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
 
-    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider)
+    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider, parameters: WKWebviewParameters)
 
     @discardableResult
     func load(_ request: URLRequest) -> WKNavigation?
@@ -58,6 +58,15 @@ protocol WKEngineWebView: UIView {
     func goBack() -> WKNavigation?
 
     func goForward() -> WKNavigation?
+
+    @discardableResult
+    func go(to item: WKBackForwardListItem) -> WKNavigation?
+
+    func currentBackForwardListItem() -> WKBackForwardListItem?
+
+    func backList() -> [WKBackForwardListItem]
+
+    func forwardList() -> [WKBackForwardListItem]
 
     func evaluateJavaScript(
         _ javaScript: String,
@@ -111,7 +120,6 @@ extension WKEngineWebView {
     }
 }
 
-// TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
 final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface, ThemeApplicable {
     var engineScrollView: WKScrollView?
     var engineConfiguration: WKEngineConfiguration
@@ -129,8 +137,22 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
         return super.inputAccessoryView
     }
 
-    required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
-        let configuration = configurationProvider.createConfiguration()
+    func backList() -> [WKBackForwardListItem] {
+        return self.backForwardList.backList
+    }
+
+    func forwardList() -> [WKBackForwardListItem] {
+        return self.backForwardList.forwardList
+    }
+
+    func currentBackForwardListItem() -> WKBackForwardListItem? {
+        return self.backForwardList.currentItem
+    }
+
+    required init?(frame: CGRect,
+                   configurationProvider: WKEngineConfigurationProvider,
+                   parameters: WKWebviewParameters) {
+        let configuration = configurationProvider.createConfiguration(parameters: parameters)
         self.engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
 
