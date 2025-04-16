@@ -7,7 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineConfiguration: WKEngineConfiguration {
-    var webViewParameters: WKWebViewParameters = WKWebViewParameters(
+    var webViewParameters = WKWebViewParameters(
         blockPopups: true,
         isPrivate: false,
         pullRefreshType: MockEnginePullRefreshView.self

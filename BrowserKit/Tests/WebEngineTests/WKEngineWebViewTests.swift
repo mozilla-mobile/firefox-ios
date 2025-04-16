@@ -126,6 +126,18 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    func testScrollDidEndZooming_doesntSetupPullRefreshAgain() {
+        let subject = createSubject()
+
+        subject.scrollViewDidEndZooming(UIScrollView(), with: nil, atScale: 1.0)
+
+        let pullRefresh = subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
+        XCTAssertNotNil(pullRefresh)
+        XCTAssertNil(subject.scrollView.refreshControl)
+        XCTAssertEqual((pullRefresh as? MockEnginePullRefreshView)?.configureCalled, 1)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
     func testTriggerPullRefresh_callsDelegate() throws {
         let subject = createSubject()
         let pullRefresh = try XCTUnwrap(subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
