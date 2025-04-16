@@ -70,8 +70,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldPresentJumpBackHint() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: false),
-                                                   isCFRToolbarFeatureEnabled: true)
+                                                   device: MockUIDevice(isIpad: false))
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
@@ -79,8 +78,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldNotPresentJumpBackHint_iPhoneWithoutAndToolbarCFREnabled() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: false),
-                                                   isCFRToolbarFeatureEnabled: true)
+                                                   device: MockUIDevice(isIpad: false))
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertFalse(result)
     }
@@ -88,8 +86,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldPresentJumpBackHint_iPhoneWithoutAndToolbarCFRDisabled() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: false),
-                                                   isCFRToolbarFeatureEnabled: false)
+                                                   device: MockUIDevice(isIpad: false))
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
@@ -97,8 +94,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldPresentJumpBackHint_iPadWithoutToolbar() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: true),
-                                                   isCFRToolbarFeatureEnabled: true)
+                                                   device: MockUIDevice(isIpad: true))
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
@@ -106,8 +102,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldPresentSyncedTabHint() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: false),
-                                                   isCFRToolbarFeatureEnabled: true)
+                                                   device: MockUIDevice(isIpad: false))
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
     }
@@ -115,8 +110,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldNotPresentSyncedHint_iPhoneWithoutToolbarAndFeatureEnabled() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: false),
-                                                   isCFRToolbarFeatureEnabled: true)
+                                                   device: MockUIDevice(isIpad: false))
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)
     }
@@ -124,8 +118,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldPresentSyncedHint_iPhoneWithoutToolbarAndFeatureDisabled() {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
-                                                   device: MockUIDevice(isIpad: false),
-                                                   isCFRToolbarFeatureEnabled: false)
+                                                   device: MockUIDevice(isIpad: false))
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
     }

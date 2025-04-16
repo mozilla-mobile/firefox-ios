@@ -20,8 +20,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
     init(with profile: Profile,
          overlayState: OverlayStateProtocol?,
-         device: UIDeviceInterface = UIDevice.current,
-         isCFRToolbarFeatureEnabled: Bool = false) {
+         device: UIDeviceInterface = UIDevice.current) {
         self.profile = profile
         self.overlayState = overlayState
         self.device = device
