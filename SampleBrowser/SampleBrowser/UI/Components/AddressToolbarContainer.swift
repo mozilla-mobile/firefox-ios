@@ -27,6 +27,7 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
                    toolbarDelegate: AddressToolbarDelegate) {
         compactToolbar.configure(
             config: model.state,
+            toolbarPosition: .top,
             toolbarDelegate: toolbarDelegate,
             leadingSpace: 0,
             trailingSpace: 0,
@@ -35,6 +36,7 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
         )
         regularToolbar.configure(
             config: model.state,
+            toolbarPosition: .top,
             toolbarDelegate: toolbarDelegate,
             leadingSpace: 0,
             trailingSpace: 0,

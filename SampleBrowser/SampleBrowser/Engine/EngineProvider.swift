@@ -9,9 +9,9 @@ struct EngineProvider {
     private var engine: Engine
     // We only have one session and one view in the SampleBrowser so this code is very simple
     private(set) var session: EngineSession
-    let view: EngineView
+    private(set) var view: EngineView
 
-    init?(engine: Engine = WKEngine.factory(),
+    init?(engine: Engine,
           sessionDependencies: EngineSessionDependencies) {
         self.engine = engine
 

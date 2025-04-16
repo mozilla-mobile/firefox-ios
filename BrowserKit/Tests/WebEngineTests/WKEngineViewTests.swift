@@ -12,6 +12,7 @@ final class WKEngineViewTests: XCTestCase {
     override func setUp() {
         super.setUp()
         engineSession = WKEngineSession(userScriptManager: MockWKUserScriptManager(),
+                                        dependencies: DefaultTestDependencies().sessionDependencies,
                                         configurationProvider: MockWKEngineConfigurationProvider(),
                                         webViewProvider: MockWKWebViewProvider(),
                                         contentScriptManager: MockWKContentScriptManager(),
@@ -34,6 +35,7 @@ final class WKEngineViewTests: XCTestCase {
     func testRemoveSetsIsActiveFalse() {
         let subject = createSubject()
         let newEngineSession = WKEngineSession(userScriptManager: MockWKUserScriptManager(),
+                                               dependencies: DefaultTestDependencies().sessionDependencies,
                                                configurationProvider: MockWKEngineConfigurationProvider(),
                                                webViewProvider: MockWKWebViewProvider(),
                                                contentScriptManager: MockWKContentScriptManager(),

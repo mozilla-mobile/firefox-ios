@@ -629,7 +629,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
-        nightModeUpdates()
+        NightModeHelper.cleanNightModeDefaults()
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab, !isToolbarRefactorEnabled {
@@ -641,16 +641,6 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-    }
-
-    private func nightModeUpdates() {
-        if NightModeHelper.isActivated(),
-           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff()
-            themeManager.applyThemeUpdatesToWindows()
-        }
-
-        NightModeHelper.cleanNightModeDefaults()
     }
 
     private func dismissModalsIfStartAtHome() {
@@ -2240,7 +2230,7 @@ class BrowserViewController: UIViewController,
                let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString, invalidCharacters: false) {
+                if let url = URL(string: urlString) {
                     self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }
@@ -3387,7 +3377,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)", invalidCharacters: false) {
+            if let url = URL(string: "tel:\(phoneNumber)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 defaultAction()
@@ -4124,7 +4114,7 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
-       /// If the selectedTab is showing an error page trigger a reload
+        /// If the selectedTab is showing an error page trigger a reload
         if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
             needsReload = true
         }

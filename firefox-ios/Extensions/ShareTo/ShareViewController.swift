@@ -534,7 +534,7 @@ extension ShareViewController {
             return "firefox://open-url?url=\(encoded)"
         }
 
-        guard let url = URL(string: firefoxUrl(url), invalidCharacters: false) else { return }
+        guard let url = URL(string: firefoxUrl(url)) else { return }
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
         while let current = responder {

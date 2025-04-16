@@ -48,13 +48,6 @@ public enum ReaderModeFontType: String {
     public func isSameFamily(_ font: ReaderModeFontType) -> Bool {
         return FontFamily.families.contains(where: { $0.contains(font) && $0.contains(self) })
     }
-
-    public func attributes() -> [String: String] {
-        [
-            "fontType": fontFamily,
-            "fontWeight": fontWeight
-        ]
-    }
 }
 
 private struct FontFamily {

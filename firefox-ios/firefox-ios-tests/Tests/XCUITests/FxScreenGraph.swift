@@ -155,7 +155,6 @@ class Action {
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
-    static let ToggleRecentlyVisited = "ToggleRecentlyVisited"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
@@ -757,10 +756,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables.cells["TopSitesRows"].waitAndTap()
             select(rows: userState.numTopSitesRows)
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
-        }
-
-        screenState.gesture(forAction: Action.ToggleRecentlyVisited) { userState in
-            app.tables.cells.switches["Recently Visited"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
