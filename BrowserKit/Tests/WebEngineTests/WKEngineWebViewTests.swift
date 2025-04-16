@@ -149,17 +149,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    func createSubject(
-        pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) -> DefaultWKEngineWebView {
-        let parameters = WKWebViewParameters(
-            blockPopups: true,
-            isPrivate: false,
-            pullRefreshType: pullRefreshViewType
-        )
-        let configuration = DefaultWKEngineConfigurationProvider(parameters: parameters)
     func testCurrentHistoryItemSetAfterVisitingPage() {
         let subject = createSubject()
         let testURL = URL(string: "https://www.example.com/")!
@@ -250,12 +239,14 @@ final class WKEngineWebViewTests: XCTestCase {
         wait(for: [expectation3], timeout: 10)
     }
 
-    func createSubject(file: StaticString = #file,
+    func createSubject(pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
+                       file: StaticString = #file,
                        line: UInt = #line) -> DefaultWKEngineWebView {
-        let parameters = WKWebviewParameters(blockPopups: true,
+        let parameters = WKWebViewParameters(blockPopups: true,
                                              isPrivate: false,
                                              autoPlay: .all,
-                                             schemeHandler: WKInternalSchemeHandler())
+                                             schemeHandler: WKInternalSchemeHandler(),
+                                             pullRefreshType: pullRefreshViewType)
         let configuration = DefaultWKEngineConfigurationProvider()
         let subject = DefaultWKEngineWebView(frame: .zero,
                                              configurationProvider: configuration,
@@ -264,15 +255,5 @@ final class WKEngineWebViewTests: XCTestCase {
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
-    }
-}
-
-class MockEnginePullRefreshView: UIView, EnginePullRefreshView {
-    var configureCalled = 0
-    var onRefresh: (() -> Void)?
-
-    func configure(with scrollView: UIScrollView, onRefresh: @escaping () -> Void) {
-        configureCalled += 1
-        self.onRefresh = onRefresh
     }
 }

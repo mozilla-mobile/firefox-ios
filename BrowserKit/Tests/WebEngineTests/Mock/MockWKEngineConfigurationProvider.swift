@@ -7,7 +7,7 @@ import WebKit
 @testable import WebEngine
 
 struct MockWKEngineConfigurationProvider: WKEngineConfigurationProvider {
-    func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration {
+    func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
         return MockWKEngineConfiguration(webViewConfiguration: WKWebViewConfiguration())
     }
 }

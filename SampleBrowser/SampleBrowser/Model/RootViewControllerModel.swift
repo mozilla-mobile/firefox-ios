@@ -107,7 +107,8 @@ class RootViewControllerModel {
             isPrivate: false,
             locationViewConfiguration: locationViewConfig,
             navigationActions: [],
-            pageActions: [],
+            leadingPageActions: [],
+            trailingPageActions: [],
             browserActions: [])
     }
 }

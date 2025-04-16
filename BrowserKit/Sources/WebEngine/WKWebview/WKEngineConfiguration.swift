@@ -7,7 +7,6 @@ import WebKit
 
 /// Abstraction on top of `WKWebViewConfiguration` and the `WKUserContentController`    
 public protocol WKEngineConfiguration {
-    var webViewParameters: WKWebViewParameters { get }
     var webViewConfiguration: WKWebViewConfiguration { get set }
 
     func addUserScript(_ userScript: WKUserScript)
@@ -19,7 +18,6 @@ public protocol WKEngineConfiguration {
 }
 
 struct DefaultEngineConfiguration: WKEngineConfiguration {
-    let webViewParameters: WKWebViewParameters
     var webViewConfiguration: WKWebViewConfiguration
 
     func addUserScript(_ userScript: WKUserScript) {

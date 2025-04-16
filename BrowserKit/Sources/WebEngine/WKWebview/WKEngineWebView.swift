@@ -42,7 +42,7 @@ protocol WKEngineWebView: UIView {
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
 
-    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider, parameters: WKWebviewParameters)
+    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider, parameters: WKWebViewParameters)
 
     @discardableResult
     func load(_ request: URLRequest) -> WKNavigation?
@@ -161,11 +161,11 @@ final class DefaultWKEngineWebView: WKWebView,
 
     required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider,
-                   parameters: WKWebviewParameters) {
+                   parameters: WKWebViewParameters) {
         let configuration = configurationProvider.createConfiguration(parameters: parameters)
         self.engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
-        pullRefreshViewType = configuration.webViewParameters.pullRefreshType
+        pullRefreshViewType = parameters.pullRefreshType
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 
         engineScrollView = scrollView

@@ -38,7 +38,7 @@ public struct WKWebViewParameters {
 /// Provider to get a configured `WKEngineConfiguration`
 /// Only one configuration provider per application should exists.
 public protocol WKEngineConfigurationProvider {
-    func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration
+    func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration
 }
 
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
@@ -51,7 +51,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     public init() {}
 
-    public func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration {
+    public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
         let configuration = WKWebViewConfiguration()
 
         // Since our app creates multiple web views, we assign the same WKProcessPool object to web views that
