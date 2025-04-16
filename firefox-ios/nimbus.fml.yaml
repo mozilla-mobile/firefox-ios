@@ -13,34 +13,30 @@ channels:
   - beta
   - release
 include:
-  - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
-  - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
   - nimbus-features/contextualHintFeature.yaml
-  - nimbus-features/darkReaderFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
-  - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/gleanServerKnobs.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
-  - nimbus-features/jsAlertRefactor.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
+  - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
-  - nimbus-features/nightModeFeature.yaml
+  - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
-  - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
+  - nimbus-features/rustKeychainRefactor.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
@@ -51,5 +47,5 @@ include:
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
+  - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/unifiedAds.yaml
-  - nimbus-features/zoomFeature.yaml

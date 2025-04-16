@@ -7,9 +7,8 @@ import Foundation
 enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
     case firefoxSuggestions
+    case openedTabs
     case bookmarks
     case remoteTabs
     case history
-    case openedTabs
-    case searchHighlights
 }

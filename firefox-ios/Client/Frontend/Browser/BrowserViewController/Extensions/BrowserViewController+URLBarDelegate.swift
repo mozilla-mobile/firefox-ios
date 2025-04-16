@@ -43,59 +43,7 @@ extension BrowserViewController: URLBarDelegate {
         tabManager.selectedTab?.reload()
     }
 
-    internal func dismissFakespotIfNeeded(animated: Bool = true) {
-        guard !contentStackView.isSidebarVisible else {
-            // hide sidebar as user tapped on shopping icon for a second time
-            navigationHandler?.dismissFakespotSidebar(sidebarContainer: contentStackView, parentViewController: self)
-            return
-        }
-
-        // dismiss modal as user tapped on shopping icon for a second time
-        navigationHandler?.dismissFakespotModal(animated: animated)
-    }
-
-    internal func handleFakespotFlow(productURL: URL, viewSize: CGSize? = nil) {
-        let shouldDisplayInSidebar = FakespotUtils().shouldDisplayInSidebar(viewSize: viewSize)
-        if !shouldDisplayInSidebar, contentStackView.isSidebarVisible {
-            // Quick fix: make sure to sidebar is hidden
-            // Relates to FXIOS-7844
-            contentStackView.hideSidebar(self)
-        }
-
-        if shouldDisplayInSidebar {
-            navigationHandler?.showFakespotFlowAsSidebar(productURL: productURL,
-                                                         sidebarContainer: contentStackView,
-                                                         parentViewController: self)
-        } else {
-            navigationHandler?.showFakespotFlowAsModal(productURL: productURL)
-        }
-    }
-
     func urlBarPresentCFR(at sourceView: UIView) {
-        configureShoppingContextVC(at: sourceView)
-    }
-
-    private func configureShoppingContextVC(at sourceView: UIView) {
-        let windowUUID = windowUUID
-        shoppingContextHintVC.configure(
-            anchor: sourceView,
-            withArrowDirection: isBottomSearchBar ? .down : .up,
-            andDelegate: self,
-            presentedUsing: { [unowned self] in
-                self.present(shoppingContextHintVC, animated: true)
-                TelemetryWrapper.recordEvent(
-                    category: .action,
-                    method: .navigate,
-                    object: .shoppingButton,
-                    value: .shoppingCFRsDisplayed
-                )
-            },
-            andActionForButton: {
-                let action = FakespotAction(windowUUID: windowUUID,
-                                            actionType: FakespotActionType.show)
-                store.dispatch(action)
-            },
-            overlayState: overlayManager)
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
@@ -202,8 +150,9 @@ extension BrowserViewController: URLBarDelegate {
 
         Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
 
+        let engineTelemetryID: String = engine.telemetryID
         GleanMetrics.Search
-            .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
+            .counts["\(engineTelemetryID).\(SearchLocation.actionBar.rawValue)"]
             .add()
         searchTelemetry.shouldSetUrlTypeSearch = true
 

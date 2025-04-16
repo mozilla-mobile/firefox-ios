@@ -75,7 +75,7 @@ public class HeroImageView: UIView, SiteImageView {
 
     func setURL(_ siteURLString: String, type: SiteImageType) {
         guard canMakeRequest(with: siteURLString),
-              let siteURL = URL(string: siteURLString, invalidCharacters: false) else {
+              let siteURL = URL(string: siteURLString) else {
             return
         }
 

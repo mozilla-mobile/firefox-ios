@@ -84,7 +84,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createAddressBarState(withSearchEngine: SearchEngineModel?) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
                                navigationActions: [],
-                               pageActions: [],
+                               leadingPageActions: [],
+                               trailingPageActions: [],
                                browserActions: [],
                                borderPosition: nil,
                                url: nil,

@@ -166,7 +166,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarActionType.cancelEdit)
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
@@ -181,7 +181,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarActionType.cancelEditOnHomepage)
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
@@ -516,7 +516,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         return reducer(
             state,
             ToolbarAction(
-                url: URL(string: "http://mozilla.com", invalidCharacters: false),
+                url: URL(string: "http://mozilla.com"),
                 isPrivate: false,
                 isShowingNavigationToolbar: true,
                 canGoBack: true,

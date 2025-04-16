@@ -7,7 +7,7 @@ import WidgetKit
 
 @testable import Client
 
-class DownloadLiveActivityTest: XCTestCase {
+class DownloadLiveActivityAttributesTests: XCTestCase {
     func testContentStateComputedProperties() {
         let download1 = makeDownload(type: DownloadType.normal, isComplete: true)
         let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)
@@ -19,6 +19,17 @@ class DownloadLiveActivityTest: XCTestCase {
 
         XCTAssertEqual(contentState.completedDownloads, 2)
         XCTAssertEqual(contentState.totalDownloads, 4)
+        XCTAssertEqual(contentState.containsOnlyEncodedFiles, false)
+    }
+
+    func testContentStateContainsOnlyEncodedFilesProperty() {
+        let download1 = makeDownload(type: DownloadType.contentEncoded, isComplete: false)
+        let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)
+        let contentState = DownloadLiveActivityAttributes.ContentState(
+            downloads: [download1, download2]
+        )
+
+        XCTAssertEqual(contentState.containsOnlyEncodedFiles, true)
     }
 
     func testGetDownloadProgress() {
@@ -98,7 +109,6 @@ class DownloadLiveActivityTest: XCTestCase {
         isComplete: Bool = false
     ) -> DownloadLiveActivityAttributes.ContentState.Download {
         DownloadLiveActivityAttributes.ContentState.Download(
-            id: UUID(),
             fileName: fileName,
             hasContentEncoding: type == DownloadType.contentEncoded,
             totalBytesExpected: type == DownloadType.nilExpectedBytes ? nil : totalBytesExpected,

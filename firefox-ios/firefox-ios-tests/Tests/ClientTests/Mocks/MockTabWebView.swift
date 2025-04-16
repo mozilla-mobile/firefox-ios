@@ -16,6 +16,8 @@ final class MockTabWebView: TabWebView {
     var stopLoadingCalled = 0
     var mockTitle: String?
     var loadedURL: URL?
+    var takeSnapshotWasCalled = false
+    var takeSnapshotShouldFail = false
 
     override var title: String? {
         return mockTitle
@@ -72,5 +74,30 @@ final class MockTabWebView: TabWebView {
 
     override func stopLoading() {
         stopLoadingCalled += 1
+    }
+
+    override func takeSnapshot(
+        with snapshotConfiguration: WKSnapshotConfiguration?,
+        completionHandler: @escaping @MainActor (UIImage?, (any Error)?) -> Void
+    ) {
+        takeSnapshotWasCalled = true
+        if takeSnapshotShouldFail {
+            completionHandler(nil, NSError(domain: "", code: 500, userInfo: nil))
+        } else {
+            completionHandler(UIImage.strokedCheckmark, nil)
+        }
+    }
+}
+
+class MockTab: Tab {
+    var enqueueDocumentCalled = 0
+
+    override func getSessionCookies(_ completion: @escaping ([HTTPCookie]) -> Void) {
+        completion([])
+    }
+
+    override func enqueueDocument(_ document: any TemporaryDocument) {
+        enqueueDocumentCalled += 1
+        super.enqueueDocument(document)
     }
 }

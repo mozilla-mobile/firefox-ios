@@ -7,13 +7,14 @@ import Storage
 import XCTest
 import Glean
 import Common
+import Shared
 
 @testable import Client
 
 class BrowserViewControllerTests: XCTestCase {
     var profile: MockProfile!
     var tabManager: MockTabManager!
-    var browserViewController: BrowserViewController!
+    var browserCoordinator: MockBrowserCoordinator!
 
     override func setUp() {
         super.setUp()
@@ -27,21 +28,21 @@ class BrowserViewControllerTests: XCTestCase {
 
         profile = MockProfile()
         tabManager = MockTabManager()
-        browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        browserCoordinator = MockBrowserCoordinator()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
         TelemetryContextualIdentifier.clearUserDefaults()
-        DependencyHelperMock().reset()
         profile = nil
         tabManager = nil
-        browserViewController = nil
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
     func testTrackVisibleSuggestion() {
+        let subject = createSubject()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
 
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
@@ -59,7 +60,7 @@ class BrowserViewControllerTests: XCTestCase {
             expectation.fulfill()
         }
 
-        browserViewController.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
+        subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
             RustFirefoxSuggestionTelemetryInfo.amp(
                 blockId: 1,
                 advertiser: "test advertiser",
@@ -75,10 +76,9 @@ class BrowserViewControllerTests: XCTestCase {
     }
 
     func testOpenURLInNewTab_withPrivateModeEnabled() {
-        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-        browserViewController.topTabsViewController = topTabsViewController
-        browserViewController.openURLInNewTab(nil, isPrivate: true)
-        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        let subject = createSubject()
+
+        subject.openURLInNewTab(nil, isPrivate: true)
         XCTAssertTrue(tabManager.addTabWasCalled)
         XCTAssertNotNil(tabManager.selectedTab)
         guard let selectedTab = tabManager.selectedTab else {
@@ -86,5 +86,74 @@ class BrowserViewControllerTests: XCTestCase {
             return
         }
         XCTAssertTrue(selectedTab.isPrivate)
+    }
+
+    func testDidSelectedTabChange_appliesExpectedUIModeToAllUIElements_whenToolbarRefactorDisabled() {
+        let subject = createSubject()
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusToolbarRefactorTesting(isEnabled: false)
+
+        subject.topTabsViewController = topTabsViewController
+        subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
+
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertFalse(subject.toolbar.privateModeBadge.badge.isHidden)
+    }
+
+    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
+        let subject = createSubject()
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusToolbarRefactorTesting(isEnabled: true)
+
+        subject.topTabsViewController = topTabsViewController
+
+        subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
+
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertTrue(subject.toolbar.privateModeBadge.badge.isHidden)
+    }
+
+    // MARK: - Handle PDF
+
+    func testHandlePDF_showsDocumentLoadingView() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let response = URLResponse()
+        let request = URLRequest(url: URL(fileURLWithPath: "test"))
+
+        subject.handlePDFResponse(tab: tab, response: response, request: request)
+
+        XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 1)
+    }
+
+    func testHandlePDF_callsEnqueueDocumentOnTab() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let response = URLResponse()
+        let request = URLRequest(url: URL(fileURLWithPath: "test"))
+
+        subject.handlePDFResponse(tab: tab, response: response, request: request)
+
+        XCTAssertEqual(tab.enqueueDocumentCalled, 1)
+        XCTAssertNotNil(tab.temporaryDocument)
+    }
+
+    private func createSubject() -> BrowserViewController {
+        let subject = BrowserViewController(profile: profile, tabManager: tabManager)
+        subject.navigationHandler = browserCoordinator
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(enabled: isEnabled)
+        }
     }
 }

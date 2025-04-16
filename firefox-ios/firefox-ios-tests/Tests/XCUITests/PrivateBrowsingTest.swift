@@ -255,7 +255,6 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
 
-        // "Undo" toast message is displayed. Tap on "Undo" button
         app.buttons["Undo"].waitAndTap()
 
         // All the private tabs are restored

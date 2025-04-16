@@ -18,7 +18,7 @@ struct PocketState: StateType, Equatable {
     let pocketData: [PocketStoryConfiguration]
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderState(
+    let sectionHeaderState = SectionHeaderConfiguration(
         title: .FirefoxHomepage.Pocket.SectionTitle,
         a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
     )

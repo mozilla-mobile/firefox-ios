@@ -6,12 +6,15 @@ import Foundation
 import WebEngine
 
 struct EngineProvider {
-    // We only have one session in the SampleBrowser
+    private var engine: Engine
+    // We only have one session and one view in the SampleBrowser so this code is very simple
     private(set) var session: EngineSession
-    let view: EngineView
+    private(set) var view: EngineView
 
-    init?(engine: Engine = WKEngine.factory(),
+    init?(engine: Engine,
           sessionDependencies: EngineSessionDependencies) {
+        self.engine = engine
+
         do {
             session = try engine.createSession(dependencies: sessionDependencies)
         } catch {
@@ -19,5 +22,13 @@ struct EngineProvider {
         }
 
         view = engine.createView()
+    }
+
+    func warmEngine() {
+        engine.warmEngine()
+    }
+
+    func idleEngine() {
+        engine.idleEngine()
     }
 }

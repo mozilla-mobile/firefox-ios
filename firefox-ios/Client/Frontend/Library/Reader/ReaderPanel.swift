@@ -57,7 +57,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
-        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFont
+        label.font = FXFontStyles.Bold.body.scaledFont()
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
@@ -360,7 +360,7 @@ class ReadingListPanel: UITableViewController,
         }
         if let record = records?[indexPath.row] {
             cell.title = record.title
-            cell.url = URL(string: record.url, invalidCharacters: false)!
+            cell.url = URL(string: record.url)!
             cell.unread = record.unread
             cell.applyTheme(theme: currentTheme())
         }
@@ -404,7 +404,7 @@ class ReadingListPanel: UITableViewController,
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         if let record = records?[indexPath.row],
-            let url = URL(string: record.url, invalidCharacters: false),
+            let url = URL(string: record.url),
             let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             // Mark the item as read
             profile.readingList.updateRecord(record, unread: false)
@@ -511,7 +511,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
         at indexPath: IndexPath
     ) -> [UIDragItem] {
         guard let site = getSiteDetails(for: indexPath),
-              let url = URL(string: site.url, invalidCharacters: false),
+              let url = URL(string: site.url),
               let itemProvider = NSItemProvider(contentsOf: url)
         else { return [] }
 

@@ -30,7 +30,7 @@ class CopyPasteTest: BaseTestCase {
             return
         }
 
-        XCTAssert(text == "www.example.com")
+        XCTAssert(text == "example.com")
     }
 
     // Smoketest
@@ -54,7 +54,7 @@ class CopyPasteTest: BaseTestCase {
         app.typeText("\n")
 
         // Check the correct site is reached
-        waitForValueContains(searchOrEnterAddressTextField, value: "www.mozilla")
+        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla")
         waitForWebPageLoad()
 
         // Tap URL field, check for paste & go menu

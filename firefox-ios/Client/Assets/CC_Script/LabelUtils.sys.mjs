@@ -2,6 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
+});
+
 /**
  * This is a utility object to work with HTML labels in web pages,
  * including finding label elements and label text extraction.
@@ -13,7 +18,8 @@ export const LabelUtils = {
   EXCLUDED_TAGS: ["SCRIPT", "NOSCRIPT", "OPTION", "STYLE"],
 
   // A map object, whose keys are the id's of form fields and each value is an
-  // array consisting of label elements correponding to the id.
+  // array consisting of label elements correponding to the id. This map only
+  // contains those labels with an id that matches a form element.
   // @type {Map<string, array>}
   _mappedLabels: null,
 
@@ -67,10 +73,118 @@ export const LabelUtils = {
     return strings;
   },
 
+  /**
+   * From a starting label element, find a nearby input or select element
+   * by traversing the nodes in document order, but don't search past another
+   * related element or outside the form.
+   */
+  findAdjacentControl(labelElement, potentialLabels) {
+    // First, look for an form element after the label.
+    let foundElementAfter = this.findNextFormControl(
+      labelElement,
+      false,
+      potentialLabels
+    );
+
+    // If the control has the same parent as the label, return it.
+    if (foundElementAfter?.parentNode == labelElement.parentNode) {
+      return foundElementAfter;
+    }
+
+    // Otherwise, look for a form control with the same parent backwards
+    // in the document.
+    let foundElementBefore = this.findNextFormControl(
+      labelElement,
+      true,
+      potentialLabels
+    );
+    if (foundElementBefore?.parentNode == labelElement.parentNode) {
+      return foundElementBefore;
+    }
+
+    // If there is no form control with the same parent forward or backward,
+    // return the form control nearest forward, if any, even though it doesn't
+    // have the same parent.
+    return foundElementAfter;
+  },
+
+  /**
+   * Find the next form control in the document tree after a starting label that
+   * could correspond to the label. If the form control is in potentialLabels, then
+   * it has already been possibly matched to another label so should be ignored.
+   *
+   *   @param {HTMLLabelElement} element
+   *          starting <label> element
+   *   @param {boolean} reverse
+   *          true to search backwards or false to search forwards
+   *   @param {Map} potentialLabels
+   *           map of form controls that have already potentially matched
+   */
+  findNextFormControl(element, reverse, potentialLabels) {
+    // Ignore elements and stop searching for elements that are already potentially
+    // labelled or are form elements that cannot be autofilled.
+    while ((element = this.nextElementInOrder(element, reverse))) {
+      if (potentialLabels.has(element)) {
+        break;
+      } else if (
+        lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
+      ) {
+        return element;
+      } else if (
+        [
+          "button",
+          "input",
+          "label",
+          "meter",
+          "output",
+          "progress",
+          "select",
+          "textarea",
+        ].includes(element.localName)
+      ) {
+        break;
+      }
+    }
+
+    return null;
+  },
+
+  nextElementInOrder(element, reverse) {
+    let result = reverse ? element.lastElementChild : element.firstElementChild;
+    if (result) {
+      return result;
+    }
+
+    while (element) {
+      result = reverse
+        ? element.previousElementSibling
+        : element.nextElementSibling;
+      if (result) {
+        return result;
+      }
+
+      element = element.parentNode;
+      if (
+        !element ||
+        element.localName == "form" ||
+        element.localName == "fieldset"
+      ) {
+        break;
+      }
+    }
+
+    return null;
+  },
+
   generateLabelMap(doc) {
     this._mappedLabels = new Map();
     this._unmappedLabelControls = [];
     this._labelStrings = new WeakMap();
+
+    // A map of potential label -> control for labels that don't have an id or
+    // control associated with them. Labels that have ids or associated controls
+    // will be placed in _mappedLabels.
+    let potentialLabels = new Map();
 
     for (let label of doc.querySelectorAll("label")) {
       let id = label.htmlFor;
@@ -78,13 +192,11 @@ export const LabelUtils = {
       if (!id) {
         control = label.control;
         if (!control) {
-          // If the label has no control, yet there is a single control
-          // adjacent to the label, assume that is meant to be the control.
-          let nodes = label.parentNode.querySelectorAll(
-            ":scope > :is(input,select)"
-          );
-          if (nodes.length == 1) {
-            control = nodes[0];
+          // If the label has no control, look for the next input or select
+          // element in the document and add that to the potentialLabels list.
+          control = this.findAdjacentControl(label, potentialLabels);
+          if (control) {
+            potentialLabels.set(control, label);
           } else {
             continue;
           }
@@ -101,6 +213,23 @@ export const LabelUtils = {
       } else {
         // control must be non-empty here
         this._unmappedLabelControls.push({ label, control });
+      }
+    }
+
+    // Now check the potentialLabels list. If any of the labels match form controls
+    // that are not bound to a label, add them. This allows a label to match a form
+    // control that is nearby even when it has no for attribute or doesn't match an id.
+    if (potentialLabels.size) {
+      for (let label of potentialLabels) {
+        if (
+          !this._unmappedLabelControls.some(e => e.control == label[0]) &&
+          (!label[1].id || !this._mappedLabels.has(label[1].id))
+        ) {
+          this._unmappedLabelControls.push({
+            label: label[1],
+            control: label[0],
+          });
+        }
       }
     }
   },

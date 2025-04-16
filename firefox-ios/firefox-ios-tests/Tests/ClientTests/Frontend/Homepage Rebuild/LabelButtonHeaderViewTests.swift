@@ -9,7 +9,7 @@ import Common
 
 final class LabelButtonHeaderViewTests: XCTestCase {
     let theme = DarkTheme()
-    let sectionHeaderState = SectionHeaderState(title: "test title", a11yIdentifier: "test a11y identifier")
+    let sectionHeaderState = SectionHeaderConfiguration(title: "test title", a11yIdentifier: "test a11y identifier")
 
     func test_configure_withStateColor_appliesStateColorOverThemeColors() {
         let view = createSubject()

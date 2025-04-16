@@ -10,6 +10,7 @@ import MobileCoreServices
 import WebKit
 import SiteImageView
 import Common
+import WebEngine
 
 let browsingActivityType = "org.mozilla.ios.firefox.browsing"
 
@@ -70,7 +71,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        guard let url = URL(string: metadata.siteURL, invalidCharacters: false) else { return }
+        guard let url = URL(string: metadata.siteURL) else { return }
 
         setUserActivityForTab(tab, url: url)
     }

@@ -108,7 +108,7 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func configure(viewModel: BackForwardCellViewModel, theme: Theme) {
         self.viewModel = viewModel
 
-        if let url = URL(string: viewModel.site.url, invalidCharacters: false),
+        if let url = URL(string: viewModel.site.url),
            InternalURL(url)?.isAboutHomeURL == true {
             faviconView.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
         } else {

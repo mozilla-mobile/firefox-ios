@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
 
@@ -51,6 +52,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     private func signInFxAccounts() {
+        navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
@@ -58,11 +60,12 @@ class IntegrationTests: BaseTestCase {
             app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
             timeout: TIMEOUT_LONG
         )
-        mozWaitForElementToExist(app.staticTexts["Continue to your Mozilla account"], timeout: TIMEOUT_LONG)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
+        mozWaitForElementToNotExist(app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
         mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.FxATypePasswordExistingAccount)
         navigator.performAction(Action.FxATapOnSignInButton)
@@ -74,6 +77,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
@@ -136,13 +140,16 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabs () {
-        navigator.openURL(testingURL)
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
         signInFxAccounts()
 
-        // Wait for initial sync to complete
+        // We only sync tabs if the user is signed in
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.openURL(testingURL)
+        waitUntilPageLoad()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 1).waitAndTap()
@@ -154,9 +161,9 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].waitAndTap()
-        mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
-        app.tables.cells.element(boundBy: 2).waitAndTap()
-        mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
+        waitForInitialSyncComplete()
     }
 
     func testFxASyncLogins () {
@@ -290,7 +297,6 @@ class IntegrationTests: BaseTestCase {
 
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["GENERAL"])
-        app.swipeDown()
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
 

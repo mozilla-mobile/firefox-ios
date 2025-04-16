@@ -48,8 +48,6 @@ final class HomepageViewController: UIViewController,
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
     private let syncTabContextualHintViewController: ContextualHintViewController
-    // TODO: FXIOS-11504: Move this to state + add comments on what this is + why we use it
-    private let isZeroSearch: Bool
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
 
@@ -65,12 +63,12 @@ final class HomepageViewController: UIViewController,
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
+    private var alreadyTrackedItems = Set<HomepageItem>()
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         isZeroSearch: Bool,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -80,7 +78,6 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.isZeroSearch = isZeroSearch
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -116,11 +113,7 @@ final class HomepageViewController: UIViewController,
             .TopSitesUpdated,
             .DefaultSearchEngineUpdated,
             .BookmarksUpdated,
-            .RustPlacesOpened,
-            .TabDataUpdated,
-            .TabsTrayDidClose,
-            .TabsTrayDidSelectHomeTab,
-            .TopTabsTabClosed
+            .RustPlacesOpened
         ])
 
         subscribeToRedux()
@@ -162,9 +155,31 @@ final class HomepageViewController: UIViewController,
         addTapGestureRecognizerToDismissKeyboard()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        /// Used as a trigger for showing a microsurvey based on viewing the homepage
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillAppear
+            )
+        )
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackVisibleImpressions()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopCFRsTimer()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        alreadyTrackedItems.removeAll()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -194,6 +209,10 @@ final class HomepageViewController: UIViewController,
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
         handleToolbarStateOnScroll()
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        trackVisibleImpressions()
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -414,10 +433,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(headerState: state) { [weak self] in
-                self?.toggleHomepageMode()
-            }
-
+            headerCell.configure(headerState: state)
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
@@ -477,7 +493,9 @@ final class HomepageViewController: UIViewController,
                     self?.navigateToTabTray(with: .syncedTabs)
                 },
                 onOpenSyncedTabAction: { [weak self] url in
-                    self?.navigateToNewTab(with: url)
+                    guard let self else { return }
+                    self.navigateToNewTab(with: url)
+                    self.sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
                 }
             )
             prepareSyncedTabContextualHint(onCell: syncedTabCell)
@@ -617,7 +635,7 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // MARK: Tap Geasutre Recognizer
+    // MARK: Tap Gesture Recognizer
     private func addTapGestureRecognizerToDismissKeyboard() {
         // We want any interaction with the homepage to dismiss the keyboard, including taps
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -657,22 +675,12 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    // MARK: Dispatch Actions
-    private func toggleHomepageMode() {
-        store.dispatch(
-            HeaderAction(
-                windowUUID: windowUUID,
-                actionType: HeaderActionType.toggleHomepageMode
-            )
-        )
-    }
-
     private func navigateToHomepageSettings() {
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
-                actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
+                actionType: NavigationBrowserActionType.tapOnCustomizeHomepageButton
             )
         )
     }
@@ -745,12 +753,28 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
-        let config = OpenPocketTelemetryConfig(isZeroSearch: isZeroSearch, position: index)
+        let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
         store.dispatch(
             PocketAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
                 actionType: actionType
+            )
+        )
+    }
+
+    private func dispatchOpenTopSitesAction(at index: Int, tileType: String, urlString: String) {
+        let config = TopSitesTelemetryConfig(
+            isZeroSearch: homepageState.isZeroSearch,
+            position: index,
+            tileType: tileType,
+            url: urlString
+        )
+        store.dispatch(
+            TopSitesAction(
+                telemetryConfig: config,
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         )
     }
@@ -765,6 +789,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
+        dispatchDidSelectCardItemAction(with: item)
         switch item {
         case .topSite(let state, _):
             let destination = NavigationDestination(
@@ -774,6 +799,11 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+            dispatchOpenTopSitesAction(
+                at: indexPath.item,
+                tileType: state.getTelemetrySiteType,
+                urlString: state.site.url
+            )
         case .jumpBackIn(let config):
             store.dispatch(
                 JumpBackInAction(
@@ -808,6 +838,58 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    /// Sends telemetry data associated with tapping on a card item. The jump back in synced card item
+    /// is handled differently due to how tapping is handled for the cell. See `onOpenSyncedTabAction` in this file.
+    private func dispatchDidSelectCardItemAction(with item: HomepageItem) {
+        if case .jumpBackInSyncedTab = item { return }
+        sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
+    }
+
+    private func sendItemActionWithTelemetryExtras(item: HomepageItem, actionType: HomepageActionType) {
+        let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryItemType)
+        store.dispatch(
+            HomepageAction(
+                telemetryExtras: telemetryExtras,
+                windowUUID: windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
+    /// Want to handle tracking here to capture any cells about to viewed,
+    /// but some cells do not get reconfigured so we add additional tracking detection with `trackVisibleImpressions`
+    func collectionView(
+        _ collectionView: UICollectionView,
+        willDisplay cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        guard let item = dataSource?.itemIdentifier(for: indexPath) else { return }
+        handleTrackingItemImpression(with: item)
+    }
+
+    /// Used to track item impressions. If the user has seen the item on the homepage, we only record the impression once.
+    /// We want to track at initial seen as well as when users scrolls.
+    private func trackVisibleImpressions() {
+        guard let collectionView else {
+            logger.log(
+                "Homepage collectionview should not have been nil, unable to track impression",
+                level: .warning,
+                category: .homepage
+            )
+            return
+        }
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
+            handleTrackingItemImpression(with: item)
+        }
+    }
+
+    private func handleTrackingItemImpression(with item: HomepageItem) {
+        guard !alreadyTrackedItems.contains(item) else { return }
+        alreadyTrackedItems.insert(item)
+        sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.itemSeen)
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)
@@ -859,13 +941,13 @@ final class HomepageViewController: UIViewController,
             overlayState: overlayManager)
     }
 
-    private var canModalBePresented: Bool {
-        return presentedViewController == nil && isZeroSearch
+    private var canContextHintBePresented: Bool {
+        return presentedViewController == nil && homepageState.isZeroSearch
     }
 
     @objc
     private func presentContextualHint(with contextualHintViewController: ContextualHintViewController) {
-        guard canModalBePresented else { return }
+        guard canContextHintBePresented else { return }
         contextualHintViewController.isPresenting = true
         present(contextualHintViewController, animated: true, completion: nil)
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
@@ -903,9 +985,6 @@ final class HomepageViewController: UIViewController,
             )
         case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
             dispatchActionToFetchTopSites()
-            dispatchActionToFetchTabs()
-
-        case .TabDataUpdated, .TabsTrayDidClose, .TabsTrayDidSelectHomeTab, .TopTabsTabClosed:
             dispatchActionToFetchTabs()
         default: break
         }

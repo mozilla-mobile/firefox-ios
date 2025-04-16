@@ -6,12 +6,7 @@ import Foundation
 import Shared
 import Common
 import WebKit
-
-enum ReadabilityOperationResult {
-    case success(ReadabilityResult)
-    case error(NSError)
-    case timeout
-}
+import WebEngine
 
 class ReadabilityOperation: Operation, @unchecked Sendable {
     let profile: Profile
@@ -115,7 +110,7 @@ extension ReadabilityOperation: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-        webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
+        webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeInfo.namespace.rawValue).checkReadability()")
     }
 }
 

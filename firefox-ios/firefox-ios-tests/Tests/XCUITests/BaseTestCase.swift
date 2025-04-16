@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import MappaMundi
 import XCTest
 import Shared
@@ -410,15 +411,20 @@ class BaseTestCase: XCTestCase {
     }
 
     func switchThemeToDarkOrLight(theme: String) {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        if !app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].isHittable {
+            app.buttons["Done"].waitAndTap()
+        }
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
+        sleep(3)
+        if !app.switches["SystemThemeSwitchValue"].exists {
+            navigator.goto(DisplaySettings)
+        }
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
             navigator.performAction(Action.SystemThemeSwitch)
         }
-        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
         if theme == "Dark" {
             app.cells.staticTexts["Dark"].waitAndTap()
         } else {

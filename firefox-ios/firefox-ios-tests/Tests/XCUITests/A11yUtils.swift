@@ -25,6 +25,7 @@ class A11yUtils: XCTestCase {
             let hasA11yLabel = !(element.accessibilityLabel?.isEmpty ?? true)
             let hasLabel = !(element.label.isEmpty) // Checks visible UI label
 
+            guard element.exists else { continue }
             if !hasA11yLabel && !hasLabel && !element.identifier.isEmpty {
                 missingLabels.append(A11yUtils.MissingAccessibilityElement(
                     elementType: elementType,
@@ -32,6 +33,31 @@ class A11yUtils: XCTestCase {
                     screen: screenName
                 ))
             }
+        }
+    }
+
+    public static func checkButtonLabels(
+        in element: XCUIElement,
+        screenName: String,
+        missingLabels: inout [MissingAccessibilityElement]
+    ) {
+        // If the element is a button, check its labels.
+        if element.elementType == .button {
+            let hasA11yLabel = !(element.accessibilityLabel?.isEmpty ?? true)
+            let hasLabel = !(element.label.isEmpty)
+            if !hasA11yLabel && !hasLabel && !element.identifier.isEmpty {
+                missingLabels.append(MissingAccessibilityElement(
+                    elementType: "Button",
+                    identifier: element.identifier,
+                    screen: screenName
+                ))
+            }
+        }
+
+        // Recursively check all children of the current element.
+        let children = element.children(matching: .any).allElementsBoundByIndex
+        for child in children where child.exists {
+            checkButtonLabels(in: child, screenName: screenName, missingLabels: &missingLabels)
         }
     }
 
@@ -57,7 +83,8 @@ class A11yUtils: XCTestCase {
 
     // Saves the given report content to a file and returns the file path.
     public static func saveReportToFile(report: String, fileName: String) -> URL {
-        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+        let deployDir = ProcessInfo.processInfo.environment["BITRISE_DEPLOY_DIR"] ?? NSTemporaryDirectory()
+        let fileURL = URL(fileURLWithPath: deployDir).appendingPathComponent(fileName)
 
         do {
             try report.write(to: fileURL, atomically: true, encoding: .utf8)
@@ -70,22 +97,27 @@ class A11yUtils: XCTestCase {
     }
 
     // Generates the report and attaches it to the XCUITest results.
-    public static func generateAndAttachReport(missingLabels: [MissingAccessibilityElement]) {
-        XCTContext.runActivity(named: "Accessibility Report") { activity in
+    public static func generateAndAttachReport(missingLabels: [MissingAccessibilityElement],
+                                               testName: String,
+                                               generateTxt: Bool = true,
+                                               generateCsv: Bool = true) {
+        XCTContext.runActivity(named: "Accessibility Report - \(testName)") { activity in
             if missingLabels.isEmpty {
                 activity.add(XCTAttachment(string: "✅ All elements have accessibility labels 🎉"))
-            } else {
-                let reportText = generateTxtReport(missingLabels: missingLabels)
-                let reportCSV = generateCSVReport(missingLabels: missingLabels)
+            }
 
+            if generateTxt {
+                let reportText = generateTxtReport(missingLabels: missingLabels)
                 // Save to files
-                let txtFilePath = saveReportToFile(report: reportText, fileName: "AccessibilityReport.txt")
+                let txtFilePath = saveReportToFile(report: reportText, fileName: "AccessibilityReport_\(testName).txt")
                 // Attach reports to Xcode test results
                 let txtAttachment = XCTAttachment(contentsOfFile: txtFilePath)
                 txtAttachment.lifetime = .keepAlways
                 activity.add(txtAttachment)
-
-                let csvFilePath = saveReportToFile(report: reportCSV, fileName: "AccessibilityReport.csv")
+            }
+            if generateCsv {
+                let reportCSV = generateCSVReport(missingLabels: missingLabels)
+                let csvFilePath = saveReportToFile(report: reportCSV, fileName: "AccessibilityReport_\(testName).csv")
                 let csvAttachment = XCTAttachment(contentsOfFile: csvFilePath)
                 csvAttachment.lifetime = .keepAlways
                 activity.add(csvAttachment)

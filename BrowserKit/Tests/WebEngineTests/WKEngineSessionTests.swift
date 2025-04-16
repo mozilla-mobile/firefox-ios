@@ -14,6 +14,8 @@ final class WKEngineSessionTests: XCTestCase {
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
     private var metadataFetcher: MockMetadataFetcherHelper!
+    private var fullscreenDelegate: MockFullscreenDelegate!
+    private var scriptResponder: MockEngineSessionScriptResponder!
 
     override func setUp() {
         super.setUp()
@@ -23,6 +25,8 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
         metadataFetcher = MockMetadataFetcherHelper()
+        fullscreenDelegate = MockFullscreenDelegate()
+        scriptResponder = MockEngineSessionScriptResponder()
     }
 
     override func tearDown() {
@@ -33,6 +37,8 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = nil
         engineSessionDelegate = nil
         metadataFetcher = nil
+        fullscreenDelegate = nil
+        scriptResponder = nil
     }
 
     // MARK: Load URL
@@ -442,6 +448,26 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(engineSessionDelegate.onHasOnlySecureContentCalled, 1)
     }
 
+    func testFullscreeChangeGivenFullscreenStateThenCallsDelegate() {
+        let expectedFullscreenState = true
+        let subject = createSubject()
+        subject?.fullscreenDelegate = fullscreenDelegate
+        subject?.webViewPropertyChanged(.isFullScreen(expectedFullscreenState))
+
+        XCTAssertEqual(fullscreenDelegate.onFullscreeChangeCalled, 1)
+        XCTAssertTrue(fullscreenDelegate.savedFullscreenState)
+    }
+
+    func testFullscreeChangeGivenNotFullscreenStateThenCallsDelegate() {
+        let expectedFullscreenState = false
+        let subject = createSubject()
+        subject?.fullscreenDelegate = fullscreenDelegate
+        subject?.webViewPropertyChanged(.isFullScreen(expectedFullscreenState))
+
+        XCTAssertEqual(fullscreenDelegate.onFullscreeChangeCalled, 1)
+        XCTAssertFalse(fullscreenDelegate.savedFullscreenState)
+    }
+
     // MARK: Page Zoom
 
     func testIncreaseZoom() {
@@ -531,9 +557,10 @@ final class WKEngineSessionTests: XCTestCase {
     func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
         _ = createSubject()
 
-        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], FocusContentScript.name())
     }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
@@ -604,9 +631,11 @@ final class WKEngineSessionTests: XCTestCase {
                        line: UInt = #line,
                        uiHandler: WKUIHandler = DefaultUIHandler()) -> WKEngineSession? {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
+                                            dependencies: DefaultTestDependencies().sessionDependencies,
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
                                             contentScriptManager: contentScriptManager,
+                                            scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
                                             uiHandler: uiHandler) else {
             return nil

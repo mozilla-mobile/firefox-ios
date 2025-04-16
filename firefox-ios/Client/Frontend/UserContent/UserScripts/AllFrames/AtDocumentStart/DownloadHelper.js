@@ -37,7 +37,13 @@ Object.defineProperty(window.__firefox__, "download", {
         }
 
         var blob = this.response;
-
+        
+        // Checking if the blob is a pkpass (Passbook Pass) or download, if not, continue navigation
+        if (blob.type != "application/vnd.apple.pkpass" && !fileName) {
+          window.location.href = url;
+          return
+        }
+      
         blobToBase64String(blob, function(base64String) {
           webkit.messageHandlers.downloadManager.postMessage({
             url: url,

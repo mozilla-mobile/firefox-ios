@@ -19,6 +19,10 @@ protocol LibraryPanelContextMenu {
 }
 
 extension LibraryPanelContextMenu {
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        return nil
+    }
+
     func presentContextMenu(for indexPath: IndexPath) {
         guard let site = getSiteDetails(for: indexPath) else { return }
 
@@ -45,7 +49,7 @@ extension LibraryPanelContextMenu {
         for site: Site,
         recentlyClosedPanelDelegate: RecentlyClosedPanelDelegate?
     ) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
+        guard let siteURL = URL(string: site.url) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(
             title: .OpenInNewTabContextMenuTitle,
@@ -68,7 +72,7 @@ extension LibraryPanelContextMenu {
         for site: Site,
         libraryPanelDelegate: LibraryPanelDelegate?
     ) -> [PhotonRowActions]? {
-        guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return nil }
+        guard let siteURL = URL(string: site.url) else { return nil }
 
         let openInNewTabAction = SingleActionViewModel(title: .OpenInNewTabContextMenuTitle,
                                                        iconString: StandardImageIdentifiers.Large.plus) { _ in
@@ -88,7 +92,7 @@ extension LibraryPanelContextMenu {
         return SingleActionViewModel(
             title: .ShareContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.share) { _ in
-                guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return }
+                guard let siteURL = URL(string: site.url) else { return }
                 delegate?.shareLibraryItem(url: siteURL, sourceView: sourceView)
         }.items
     }

@@ -12,11 +12,18 @@ protocol SessionHandler: AnyObject {
     func received(error: NSError, forURL url: URL)
 }
 
+protocol WKJavascriptInterface: AnyObject {
+    /// Calls a javascript method.
+    /// - Parameter method: The method signature to be called in javascript world.
+    /// - Parameter scope: An optional string defining the scope in which the method should be called.
+    func callJavascriptMethod(_ method: String, scope: String?)
+}
+
 class WKEngineSession: NSObject,
                        EngineSession,
                        WKEngineWebViewDelegate,
+                       WKJavascriptInterface,
                        MetadataFetcherDelegate,
-                       AdsTelemetryScriptDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate? {
         didSet {
@@ -26,7 +33,9 @@ class WKEngineSession: NSObject,
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
+    var fullscreenDelegate: FullscreenDelegate?
 
+    private var scriptResponder: EngineSessionScriptResponder
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var metadataFetcher: MetadataFetcherHelper
@@ -40,16 +49,18 @@ class WKEngineSession: NSObject,
     }
 
     init?(userScriptManager: WKUserScriptManager,
-          telemetryProxy: EngineTelemetryProxy? = nil,
+          dependencies: EngineSessionDependencies,
           configurationProvider: WKEngineConfigurationProvider,
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
+          scriptResponder: EngineSessionScriptResponder = EngineSessionScriptResponder(),
           metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
           navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
           uiHandler: WKUIHandler = DefaultUIHandler()) {
-        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
+        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider,
+                                                          parameters: dependencies.webviewParameters) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
                        category: .webview)
@@ -63,6 +74,8 @@ class WKEngineSession: NSObject,
         self.metadataFetcher = metadataFetcher
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
+        self.scriptResponder = scriptResponder
+        self.telemetryProxy = dependencies.telemetryProxy
         super.init()
 
         self.metadataFetcher.delegate = self
@@ -176,8 +189,29 @@ class WKEngineSession: NSObject,
         }
     }
 
-    func goToHistory(index: Int) {
-        // TODO: FXIOS-7907 #17651 Handle goToHistoryIndex in WKEngineSession (equivalent to goToBackForwardListItem)
+    func goToHistory(item: EngineSessionBackForwardListItem) {
+        guard let backForwardListItem = item as? WKBackForwardListItem else {
+            logger.log("""
+                        Going to an EngineSessionBackForwardListItem that is not of \
+                        type WKBackForwardListItem in WKEngineSession is not permitted
+                        """,
+                        level: .debug,
+                        category: .webview)
+            return
+        }
+        webView.go(to: backForwardListItem)
+    }
+
+    func currentHistoryItem() -> (EngineSessionBackForwardListItem)? {
+        return webView.currentBackForwardListItem()
+    }
+
+    func getBackListItems() -> [EngineSessionBackForwardListItem] {
+        return webView.backList()
+    }
+
+    func getForwardListItems() -> [EngineSessionBackForwardListItem] {
+        return webView.forwardList()
     }
 
     func restore(state: Data) {
@@ -261,12 +295,36 @@ class WKEngineSession: NSObject,
         delegate?.onErrorPageRequest(error: error)
     }
 
+    // MARK: - WKJavascriptInterface
+
+    func callJavascriptMethod(_ method: String, scope: String?) {
+        guard let scope else {
+            webView.evaluateJavascriptInDefaultContentWorld(method)
+            return
+        }
+        webView.evaluateJavaScript(method, in: nil, in: .world(name: scope), completionHandler: nil)
+    }
+
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
+        scriptResponder.session = self
+        let searchProviders = delegate?.adsSearchProviderModels() ?? []
+        contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: scriptResponder,
+                                                                        searchProviderModels: searchProviders),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
+        contentScriptManager.addContentScript(FocusContentScript(delegate: scriptResponder),
+                                              name: FocusContentScript.name(),
+                                              forSession: self)
+    }
+
+    func setReaderMode(style: ReaderModeStyle, namespace: ReaderModeInfo) {
+        webView.evaluateJavascriptInDefaultContentWorld(
+            "\(namespace.rawValue).setStyle(\(style.encode()))"
+        ) { object, error in
+            return
+        }
     }
 
     // MARK: - WKEngineWebViewDelegate
@@ -307,6 +365,8 @@ class WKEngineSession: NSObject,
             break
         case .hasOnlySecureContent(let hasOnlySecureContent):
             handleHasOnlySecureContentChanged(hasOnlySecureContent)
+        case .isFullScreen(let isFullScreen):
+            handleFullscreen(isFullScreen: isFullScreen)
         }
     }
 
@@ -356,23 +416,17 @@ class WKEngineSession: NSObject,
         commitURLChange()
     }
 
+    func handleFullscreen(isFullScreen: Bool) {
+        if isFullScreen {
+            fullscreenDelegate?.enteringFullscreen()
+        } else {
+            fullscreenDelegate?.exitingFullscreen()
+        }
+    }
+
     // MARK: - MetadataFetcherDelegate
 
     func didLoad(pageMetadata: EnginePageMetadata) {
         delegate?.didLoad(pageMetadata: pageMetadata)
-    }
-
-    // MARK: - AdsTelemetryScriptDelegate
-
-    func trackAdsClickedOnPage(providerName: String) {
-        telemetryProxy?.handleTelemetry(event: .trackAdsClickedOnPage(providerName: providerName))
-    }
-
-    func trackAdsFoundOnPage(providerName: String, urls: [String]) {
-        telemetryProxy?.handleTelemetry(event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
-    }
-
-    func searchProviderModels() -> [EngineSearchProviderModel] {
-        return delegate?.adsSearchProviderModels() ?? []
     }
 }

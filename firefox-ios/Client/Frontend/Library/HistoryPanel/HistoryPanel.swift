@@ -287,7 +287,7 @@ class HistoryPanel: UIViewController,
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {
-            case .lastHour, .today, .yesterday:
+            case .lastHour, .lastTwentyFourHours, .lastSevenDays, .lastFourWeeks:
                 self?.viewModel.deleteGroupsFor(dateOption: dateOption)
             default:
                 self?.viewModel.removeAllData()
@@ -690,7 +690,7 @@ extension HistoryPanel: UITableViewDelegate {
     }
 
     private func handleSiteItemTapped(site: Site) {
-        guard let url = URL(string: site.url, invalidCharacters: false) else {
+        guard let url = URL(string: site.url) else {
             self.logger.log("Couldn't navigate to site",
                             level: .warning,
                             category: .library)

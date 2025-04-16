@@ -5,6 +5,7 @@
 import AuthenticationServices
 import LocalAuthentication
 
+import MozillaAppServices
 import Shared
 import Storage
 
@@ -38,6 +39,9 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
+        // In this case we need to call this before we try to decrypt any passwords, otherwise decryption fails.
+        MozillaAppServices.initialize()
         self.presenter = CredentialProviderPresenter(view: self)
     }
 

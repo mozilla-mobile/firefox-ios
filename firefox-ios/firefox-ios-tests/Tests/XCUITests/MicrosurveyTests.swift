@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
-import Shared
 
 final class MicrosurveyTests: BaseTestCase {
     override func setUp() {
@@ -89,22 +89,7 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     private func generateTriggerForMicrosurvey() {
-        let homepageToggleButtonIphone =
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton]
-        let homepageToggleButtonIpad = app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton]
-        if !iPad() {
-            homepageToggleButtonIphone.waitAndTap()
-            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.PrivateMode.Homepage.link])
-        } else {
-            homepageToggleButtonIpad.waitAndTap()
-            mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
-        }
-        if !iPad() {
-            homepageToggleButtonIphone.waitAndTap()
-            mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        } else {
-            homepageToggleButtonIpad.waitAndTap()
-            mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
-        }
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(path(forTestPage: url_2["url"]!))
     }
 }

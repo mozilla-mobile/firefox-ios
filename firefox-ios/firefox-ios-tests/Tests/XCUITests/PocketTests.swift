@@ -73,15 +73,18 @@ class PocketTests: BaseTestCase {
         // The url textField is not empty
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         XCTAssertNotEqual(url.value as? String, "", "The url textField is empty")
-        app.buttons["TabToolbar.backButton"].waitAndTap()
+        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        backButton.waitAndTap()
+        if #unavailable(iOS 17) {
+            backButton.waitAndTap()
+        }
 
         scrollToElement(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel],
                         direction: SwipeDirection.up,
                         maxSwipes: MAX_SWIPE)
-        app.swipeUp()
-        scrollToElement(app.cells.staticTexts["Discover more"], direction: .left, maxSwipes: MAX_SWIPE)
+        scrollToElement(app.cells.buttons["Discover more"], direction: .left, maxSwipes: MAX_SWIPE)
 
-        app.cells.staticTexts["Discover more"].waitAndTap()
+        app.cells.buttons["Discover more"].waitAndTap()
         waitUntilPageLoad()
         mozWaitForElementToExist(url)
         XCTAssertEqual(url.value as? String, "getpocket.com", "The url textField is empty")

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Common
 import UIKit
 import Glean
 import Sentry
@@ -364,6 +365,14 @@ extension AppDelegate {
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
     func setupTelemetry() {
+        let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
+        let configuration = Configuration(channel: channel)
+
+        Glean.shared.initialize(
+            uploadEnabled: TelemetryManager.shared.isGleanEnabled,
+            configuration: configuration,
+            buildInfo: GleanMetrics.GleanBuild.info
+        )
         let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         GleanMetrics.Search.defaultEngine.set(defaultSearchEngineProvider)
@@ -385,19 +394,10 @@ extension AppDelegate {
         if TelemetryManager.shared.isNewTosEnabled {
             gleanUsageReportingMetricsService.start()
         } else {
-            gleanUsageReportingMetricsService.unsetUsageProfileId()
+            gleanUsageReportingMetricsService.lifecycleObserver.profileIdentifier.unsetUsageProfileId()
         }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
-
-        let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
-        let configuration = Configuration(channel: channel)
-
-        Glean.shared.initialize(
-            uploadEnabled: TelemetryManager.shared.isGleanEnabled,
-            configuration: configuration,
-            buildInfo: GleanMetrics.GleanBuild.info
-        )
 
         let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry

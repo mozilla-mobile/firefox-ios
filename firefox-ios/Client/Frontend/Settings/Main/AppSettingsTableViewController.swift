@@ -330,9 +330,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        // For enrolled users whose devices support alternate app icons, add the App Icon setting
-        if featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
-           UIApplication.shared.supportsAlternateIcons {
+        // For users whose devices support alternate app icons, add the App Icon setting
+        if UIApplication.shared.supportsAlternateIcons {
             generalSettings.append(
                 AppIconSetting(
                     theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -448,7 +447,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             AppDataUsageReportSetting(settings: self),
             DeleteExportedDataSetting(settings: self),
             ForceCrashSetting(settings: self),
-            SwitchFakespotProduction(settings: self, settingsDelegate: self),
             ChangeToChinaSetting(settings: self),
             AppReviewPromptSetting(settings: self, settingsDelegate: self),
             ToggleInactiveTabs(settings: self, settingsDelegate: self),
@@ -457,7 +455,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            ScreenshotSetting(settings: self),
+            DeleteLoginsKeysSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

@@ -392,8 +392,9 @@ extension FxAWebViewModel {
               let sessionToken = data["sessionToken"] as? String
         else { return }
 
-        profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) {
+        profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) { [weak self] in
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            self?.profile.syncManager?.syncEverything(why: .enabledChange)
         }
     }
 
@@ -415,7 +416,7 @@ extension FxAWebViewModel {
         // The app handles this event fully in native UI.
         let redirectUrl = RustFirefoxAccounts.redirectURL
         if let navigationURL = navigationURL {
-            let expectedRedirectURL = URL(string: redirectUrl, invalidCharacters: false)!
+            let expectedRedirectURL = URL(string: redirectUrl)!
             if navigationURL.scheme == expectedRedirectURL.scheme
                 && navigationURL.host == expectedRedirectURL.host
                 && navigationURL.path == expectedRedirectURL.path {

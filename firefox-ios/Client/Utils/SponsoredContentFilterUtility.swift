@@ -5,8 +5,6 @@
 import Foundation
 import Storage
 
-import struct MozillaAppServices.HistoryHighlight
-
 // Utility to filter sponsored content out of certain data type
 struct SponsoredContentFilterUtility {
     /// Hide with search param is defined by adMarketplace, indicates this URL was registered through sponsored clicks
@@ -29,11 +27,5 @@ struct SponsoredContentFilterUtility {
 
     func filterSponsoredTabs(from tabs: [Tab]) -> [Tab] {
         return tabs.filter { !($0.lastKnownUrl?.absoluteString.contains(hideWithSearchParam) ?? false) }
-    }
-
-    func filterSponsoredHighlights(from items: [HistoryHighlight]) -> [HistoryHighlight] {
-        return items.filter {
-            return !$0.url.contains(hideWithSearchParam)
-        }
     }
 }

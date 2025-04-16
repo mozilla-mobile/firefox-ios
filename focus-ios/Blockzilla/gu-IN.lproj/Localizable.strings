@@ -13,10 +13,10 @@
 /* Label for row in About screen */
 "About.rowRights" = "તમારા અધિકારો";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ તમને નિયંત્રણમાં મૂકે છે.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ માં ખોલો";
 
 /* Label for button to add a custom URL */
@@ -79,10 +79,10 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "બંધ કરો";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "%@ સક્ષમ કરો";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ સક્ષમ નથી.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -175,7 +175,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "સરનામું શોધો અથવા દાખલ કરો";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "ની શોધ માં %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */

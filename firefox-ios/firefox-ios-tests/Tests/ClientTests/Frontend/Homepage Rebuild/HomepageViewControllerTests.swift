@@ -45,7 +45,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 12)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
@@ -53,17 +53,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                                                            .TopSitesUpdated,
                                                            .DefaultSearchEngineUpdated,
                                                            .BookmarksUpdated,
-                                                           .RustPlacesOpened,
-                                                           .TabDataUpdated,
-                                                           .TabsTrayDidClose,
-                                                           .TabsTrayDidSelectHomeTab,
-                                                           .TopTabsTabClosed
+                                                           .RustPlacesOpened
         ])
 
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 13)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
@@ -72,10 +68,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                                                            .DefaultSearchEngineUpdated,
                                                            .BookmarksUpdated,
                                                            .RustPlacesOpened,
-                                                           .TabDataUpdated,
-                                                           .TabsTrayDidClose,
-                                                           .TabsTrayDidSelectHomeTab,
-                                                           .TopTabsTabClosed,
                                                            .ThemeDidChange
         ])
     }
@@ -189,6 +181,76 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(actionCalled.showiPadSetup ?? true)
     }
 
+    func test_viewWillAppear_triggersHomepageAction() throws {
+        let subject = createSubject()
+        subject.viewWillAppear(false)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.viewWillAppear)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_collectionDelegate_willDisplay_triggersHomepageAction() throws {
+        let subject = createSubject()
+        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // used to check whether we should send dispatch action or not
+        subject.loadViewIfNeeded()
+        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+
+        subject.collectionView(
+            UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()),
+            willDisplay: UICollectionViewCell(),
+            forItemAt: IndexPath(item: 0, section: 0)
+        )
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidAppear_triggersHomepageAction() throws {
+        let subject = createSubject()
+        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // used to check whether we should send dispatch action or not
+        // layoutIfNeeded() recalculates the collection view to have items
+        subject.loadViewIfNeeded()
+        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.view.layoutIfNeeded()
+        subject.viewDidAppear(false)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_scrollViewDidEndDecelerating_triggersHomepageAction() throws {
+        let subject = createSubject()
+        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // used to check whether we should send dispatch action or not
+        // layoutIfNeeded() recalculates the collection view to have items
+        subject.loadViewIfNeeded()
+        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.view.layoutIfNeeded()
+
+        subject.scrollViewDidEndDecelerating(UIScrollView())
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
@@ -198,7 +260,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
-            isZeroSearch: true,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),

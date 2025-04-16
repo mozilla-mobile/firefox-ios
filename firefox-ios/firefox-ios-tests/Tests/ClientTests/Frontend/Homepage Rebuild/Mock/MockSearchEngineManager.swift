@@ -21,7 +21,15 @@ class MockSearchEnginesManager: SearchEnginesManagerProvider {
         self.searchEngines = searchEngines
     }
 
-    func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
-        completion(searchEngines)
+    func getOrderedEngines(completion: @escaping SearchEngineCompletion) {
+        completion(
+            SearchEnginePrefs(
+                engineIdentifiers: searchEngines.map {
+                    $0.shortName
+                },
+                disabledEngines: [],
+                version: .v1),
+            searchEngines
+        )
     }
 }

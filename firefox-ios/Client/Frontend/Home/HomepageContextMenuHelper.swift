@@ -29,24 +29,30 @@ enum BookmarkAction {
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol,
-                                 BookmarksRefactorFeatureFlagProvider {
+                                 BookmarksRefactorFeatureFlagProvider,
+                                 CanRemoveQuickActionBookmark {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
+    private let profile: Profile
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
     private let bookmarksSaver: BookmarksSaver
+    let bookmarksHandler: BookmarksHandler
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
     private let bookmarksTelemetry = BookmarksTelemetry()
 
     init(
+        profile: Profile,
         viewModel: HomepageViewModel,
         toastContainer: UIView,
         bookmarksSaver: BookmarksSaver? = nil
     ) {
+        self.profile = profile
         self.viewModel = viewModel
         self.toastContainer = toastContainer
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: viewModel.profile)
+        self.bookmarksHandler = profile.places
     }
 
     func presentContextMenu(for site: Site,
@@ -83,26 +89,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         return actions
     }
 
-    func presentContextMenu(for highlightItem: HighlightItem,
-                            with sourceView: UIView?,
-                            sectionType: HomepageSectionType,
-                            completionHandler: @escaping () -> PhotonActionSheet?
-    ) {
-        guard let contextMenu = completionHandler() else { return }
-        delegate?.present(contextMenu, animated: true, completion: nil)
-    }
-
-    func getContextMenuActions(for highlightItem: HighlightItem,
-                               with sourceView: UIView?,
-                               sectionType: HomepageSectionType
-    ) -> [PhotonRowActions]? {
-        guard sectionType == .historyHighlights,
-              let highlightsActions = getHistoryHighlightsActions(for: highlightItem, with: sourceView)
-        else { return nil }
-
-        return highlightsActions
-    }
-
     // MARK: - Default actions
     func getOpenInNewPrivateTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
         return SingleActionViewModel(
@@ -113,23 +99,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
             sectionType.newPrivateTabActionTelemetry()
         }.items
-    }
-
-    // MARK: - History Highlights
-
-    private func getHistoryHighlightsActions(
-        for highlightItem: HighlightItem,
-        with sourceView: UIView?
-    ) -> [PhotonRowActions]? {
-        guard let siteURL = highlightItem.siteUrl else { return nil }
-
-        let site = Site.createBasicSite(url: siteURL.absoluteString, title: highlightItem.displayTitle)
-        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .historyHighlights)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .historyHighlights)
-        let shareAction = getShareAction(site: site, sourceView: sourceView)
-        let bookmarkAction = getBookmarkAction(site: site)
-
-        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
 
     // MARK: Jump Back In
@@ -203,8 +172,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // We don't need to do anything after this call completes
-            _ = self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url)
+            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+                self.removeBookmarkShortcut()
+            }
 
             self.delegate?.homePanelDidRequestBookmarkToast(urlString: site.url, action: .remove)
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .activityStream)
@@ -245,7 +216,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.share,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            guard let url = URL(string: site.url, invalidCharacters: false) else { return }
+            guard let url = URL(string: site.url) else { return }
 
             self.browserNavigationHandler?.showShareSheet(
                 shareType: .site(url: url),
@@ -369,14 +340,5 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
             value: nil,
             extras: extras
         )
-    }
-
-    func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
-        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .historyHighlightContextualMenu,
-                                     value: nil,
-                                     extras: extras)
     }
 }

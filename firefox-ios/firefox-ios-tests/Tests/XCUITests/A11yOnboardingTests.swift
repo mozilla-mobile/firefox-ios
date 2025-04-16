@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
-import Shared
 
 class A11yOnboardingTests: BaseTestCase {
     var currentScreen = 0
@@ -25,6 +25,7 @@ class A11yOnboardingTests: BaseTestCase {
     }
 
     func testA11yFirstRunTour() throws {
+        let sanitizedTestName = self.name.replacingOccurrences(of: "()", with: "").replacingOccurrences(of: ".", with: "_")
         // swiftlint:disable large_tuple
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         // swiftlint:enable large_tuple
@@ -172,6 +173,6 @@ class A11yOnboardingTests: BaseTestCase {
         mozWaitForElementToExist(topSites)
 
         // Generate Report
-        A11yUtils.generateAndAttachReport(missingLabels: missingLabels)
+        A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName, generateCsv: false)
     }
 }

@@ -86,7 +86,7 @@ class ExperimentsSettingsViewController: UIViewController {
     private func loadRemoteExperiments(sender: AnyObject) {
         guard
             let text = experimentsView.customRemoteSettingsTextField.text,
-            let url = URL(string: text, invalidCharacters: false),
+            let url = URL(string: text),
             let data = try? String(contentsOf: url)
             else { return }
 

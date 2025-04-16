@@ -157,12 +157,25 @@ public class RustRemoteTabs {
 
             let clientAndTabs = rustClientAndTabs
                 .map { $0.toClientAndTabs() }
-                .filter({ record in
-                    remoteDeviceIds.contains { deviceId in
-                        return record.client.fxaDeviceId != nil &&
-                            record.client.fxaDeviceId! == deviceId
-                    }
-                })
+                .filter { record in
+                    guard let fxaDeviceId = record.client.fxaDeviceId else { return false }
+                    return remoteDeviceIds.contains(fxaDeviceId)
+                }
+                .map { client -> ClientAndTabs in
+                    // Sort tabs in descending order by lastUsed
+                    var clientCopy = client
+                    clientCopy.tabs.sort { $0.lastUsed > $1.lastUsed }
+                    return clientCopy
+                }
+                .sorted { lhs, rhs in
+                    // Get the most recent tab timestamp for each client (or 0 if no tabs)
+                    let lhsLatest = lhs.tabs.first?.lastUsed ?? 0
+                    let rhsLatest = rhs.tabs.first?.lastUsed ?? 0
+
+                    // Sort by most recent tab timestamp
+                    return lhsLatest > rhsLatest
+                }
+
             return deferMaybe(clientAndTabs)
         }
     }
@@ -348,12 +361,9 @@ internal class RemoteTabsCommandQueue {
 
 public extension RemoteTabRecord {
     func toRemoteTab(client: RemoteClient) -> RemoteTab? {
-        guard let url = Foundation.URL(string: self.urlHistory[0], invalidCharacters: false) else { return nil }
+        guard let url = Foundation.URL(string: self.urlHistory[0]) else { return nil }
         let history = self.urlHistory[1...].map { url in
-            Foundation.URL(
-                string: url,
-                invalidCharacters: false
-            )
+            Foundation.URL(string: url)
         }.compactMap { $0 }
         let icon = self.icon != nil ? Foundation.URL(fileURLWithPath: self.icon ?? "") : nil
 

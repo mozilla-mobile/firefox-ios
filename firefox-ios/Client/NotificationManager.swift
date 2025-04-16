@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import UserNotifications
 import Shared
@@ -113,10 +114,18 @@ class NotificationManager: NotificationManagerProtocol {
 
     // Determines if the user has allowed notifications
     func hasPermission() async -> Bool {
-        // NOTE: Testing "unsafe" variant of this method, see FXIOS-10832 for details.
-        await withUnsafeContinuation { continuation in
-            hasPermission { hasPermission in
-                continuation.resume(returning: hasPermission)
+        // FXIOS-11895 Temporary test for reverting continuation workaround we put in place for iOS 18.0 (beta?) users
+        if ContinuationsChecker.shouldUseCheckedContinuation {
+            await withCheckedContinuation { continuation in
+                hasPermission { hasPermission in
+                    continuation.resume(returning: hasPermission)
+                }
+            }
+        } else {
+            await withUnsafeContinuation { continuation in
+                hasPermission { hasPermission in
+                    continuation.resume(returning: hasPermission)
+                }
             }
         }
     }

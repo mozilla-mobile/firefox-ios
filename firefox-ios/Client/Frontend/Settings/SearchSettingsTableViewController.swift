@@ -214,8 +214,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case SearchSuggestItem.privateSuggestions.rawValue:
-                if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly),
-                   !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
                     buildSettingWith(
                         prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
                         defaultValue: model.shouldShowPrivateModeSearchSuggestions,
@@ -361,8 +360,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
         case .searchEnginesSuggestions:
-            return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) &&
-            !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
             ? SearchSuggestItem.allCases.count : 1
         case .firefoxSuggestSettings:
             return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
@@ -710,8 +708,9 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             NotificationCenter.default.post(name: .SearchSettingsDidUpdateDefaultSearchEngine)
             self.tableView.reloadData()
 
+            let engineID: String = engine.telemetryID
             let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
-                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engine.engineID ?? "custom"]
+                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engineID]
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
         _ = navigationController?.popViewController(animated: true)

@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
-import UIKit
 import Glean
+import UIKit
 import Shared
 
 enum UsageReason: String, Equatable {
@@ -56,6 +57,9 @@ final class GleanUsageReporting: GleanUsageReportingApi {
         if let date = InstallationUtils.inferredDateInstalledOn {
             GleanMetrics.Usage.firstRunDate.set(date)
         }
+        let managedConfig = UserDefaults.standard.dictionary(forKey: "com.apple.configuration.managed")
+        let isManaged = (managedConfig != nil) ? true : false
+        GleanMetrics.Usage.isManagedDevice.set(isManaged)
     }
 }
 

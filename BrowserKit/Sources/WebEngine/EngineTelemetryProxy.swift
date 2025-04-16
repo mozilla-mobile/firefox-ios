@@ -6,7 +6,7 @@ import Foundation
 
 /// Defines events which are engine-agnostic but typically applicable to all WebEngine
 /// clients, such as web view navigation failures and error page events.
-public enum EngineTelemetryEvent {
+public enum EngineTelemetryEvent: Equatable {
     // Navigation failed.
     case didFailNavigation
 

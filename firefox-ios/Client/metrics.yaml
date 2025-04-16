@@ -592,6 +592,74 @@ bookmarks:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
+# Context menus
+context_menu:
+  option_selected:
+    type: event
+    description: |
+      Records when the user selects an option from a context menu.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The type of option selected.
+          Options are listed in the ContextMenuTelemetry.OptionExtra enumeration.
+      origin:
+        type: string
+        description: |
+          The type of context menu the option was selected from.
+          Options are listed in the ContextMenuTelemetry.OriginExtra enumeration.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25805
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - ContextMenu
+  shown:
+    type: event
+    description: |
+      Records when a context menu is shown.
+    extra_keys:
+      origin:
+        type: string
+        description: |
+          The type of context menu the option was selected from.
+          Options are listed in the ContextMenuTelemetry.OriginExtra enumeration.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25805
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - ContextMenu
+  dismissed:
+    type: event
+    description: |
+      Records when a context menu is dismissed.
+    extra_keys:
+      origin:
+        type: string
+        description: |
+          The type of context menu the option was selected from.
+          Options are listed in the ContextMenuTelemetry.OriginExtra enumeration.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25805
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - ContextMenu
+
 # Default browser card metrics
 default_browser_card:
   dismiss_pressed:
@@ -951,6 +1019,23 @@ usage:
       - glean-team@mozilla.com
     expires: never
 
+  is_managed_device:
+    type: boolean
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      Was the app installed using MDM software.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26050
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
 # Downloads
 downloads:
   download_now_button_tapped:
@@ -1121,422 +1206,6 @@ microsurvey:
     notification_emails:
         - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-
-# Shopping Experience (Fakespot)
-shopping:
-  product_page_visits:
-    type: counter
-    description: |
-      A count of the number of eligible product pages the user has visited.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16539
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16635
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  ads_exposure:
-    type: event
-    description: |
-      On a supported product page, the review checker showed analysis, and
-      the ads exposure pref was enabled, or review checker ads were enabled,
-      and when we tried to fetch an ad from the ad server, an ad was available.
-      Does not indicate whether the ad was actually shown.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17306
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17493
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    send_in_pings:
-      - events
-
-  surface_no_ads_available:
-    type: event
-    description: |
-      On a supported product page, the review checker
-      showed analysis, and review checker ads were enabled,
-      but when we tried to fetch an ad from the ad server,
-      no ad was available.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17301
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17663
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    send_in_pings:
-      - events
-
-  surface_ads_impression:
-    type: event
-    description: |
-      An ad was shown and visible in the bottom sheet for 1.5 seconds.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17302
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17524
-    data_sensitivity:
-      - interaction
-    expires: "2025-07-01"
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    send_in_pings:
-      - events
-
-  surface_ads_clicked:
-    type: event
-    description: |
-      An ad shown in the fakespot bar was clicked.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7752
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17861
-    data_sensitivity:
-      - interaction
-    expires: "2025-07-01"
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    send_in_pings:
-      - events
-
-  address_bar_icon_clicked:
-    type: event
-    description: |
-      Records when the shopping icon from the address bar is tapped
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15681
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15780
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  address_bar_icon_displayed:
-    type: event
-    description: |
-      Records when the shopping icon from the address bar is displayed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15679
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16282
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_closed:
-    type: event
-    description: |
-      Records when the surface (bottom sheet) is dismissed
-    extra_keys:
-      action:
-        type: string
-        description: |
-          Records how the surface was closed:
-          "close-button/click-outside/interaction-with-a-link/swiping-the-surface-handle/opting-out-of-the-feature"
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15681
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15780
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_show_more_recent_reviews_clicked:
-    type: event
-    description: |
-      Records when the show more button of the recent reviews card is clicked
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15470
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16279
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_displayed:
-    type: event
-    description: |
-      Records when the surface (bottom sheet) is displayed
-    extra_keys:
-      size:
-        type: string
-        description: |
-          Records the state of the bottom sheet:
-          "half-view / full-view"
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16248
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16272
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_settings_expand_clicked:
-    type: event
-    description: |
-      Records when the Settings Card's header or chevron button is tapped and the card expands
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16247
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16367
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_onboarding_displayed:
-    type: event
-    description: |
-      Records when the shopping surface onboarding is displayed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16249
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16506
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_opt_in_accepted:
-    type: event
-    description: |
-      Records when the shopping surface opt in is accepted
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15477
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16411
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_not_now_clicked:
-    type: event
-    description: |
-      Records when the shopping surface opt in is dismissed from the not now button
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15477
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16411
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_show_terms_clicked:
-    type: event
-    description: |
-      Records when the terms of use is clicked in the shopping surface opt in
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15477
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16411
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_show_privacy_policy_clicked:
-    type: event
-    description: |
-      Records when the privacy policy is clicked in the shopping surface opt in
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15477
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16411
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_learn_more_clicked:
-    type: event
-    description: |
-      Records when the learn more button in the shopping surface opt in is displayed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15477
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16411
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_show_quality_explainer_clicked:
-    type: event
-    description: |
-      Records when the Learn more about how Fakespot determines review quality link is tapped
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16466
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16503
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  address_bar_feature_callout_displayed:
-    type: event
-    description: |
-      Records an event everytime a shopping CFR is shown on the screen
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15461
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16593
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_powered_by_fakespot_link_clicked:
-    type: event
-    description: |
-      Records an event when the user taps on
-      'Review checker is powered by Fakespot by mozilla' link.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16633
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16655
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_analyze_reviews_none_available_clicked:
-    type: event
-    description: |
-      Records an event when the user taps on
-      analyzer button from the 'No Analysis Card'.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_reanalyze_clicked:
-    type: event
-    description: |
-      Records an event when the user taps on
-      primary button from the 'Needs Analysis Card'.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16631
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16721
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_no_review_reliability_available:
-    type: event
-    description: |
-      Records an event when the Fakespot API doesn't return a grade.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16630
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16750
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_stale_analysis_shown:
-    type: event
-    description: |
-      Records an event when the "New info to check" card is shown.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16632
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16782
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_reactivated_button_clicked:
-    type: event
-    description: |
-      Records an event when a user reports a product as back in stock.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17145
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17230
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-  surface_ads_setting_toggled:
-    type: event
-    description: |
-      Whether the user has opted in for ads
-    extra_keys:
-      is_enabled:
-        type: boolean
-        description: |
-          Is enabled when the user has opted in for ads
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17303
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17681
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-
-shopping.settings:
-  nimbus_disabled_shopping:
-    type: boolean
-    lifetime: application
-    description: |
-      Indicates if Nimbus has disabled the use the shopping component.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    send_in_pings:
-      - metrics
-
-  component_opted_out:
-    type: boolean
-    lifetime: application
-    description: |
-      Indicates if the user has opted out of using the shopping component.
-      Set in BrowserViewController and updated when changed by user.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    send_in_pings:
-      - metrics
-
-  user_has_onboarded:
-    type: boolean
-    lifetime: application
-    description: |
-      Indicates if the user has completed the Shopping product Onboarding
-      experience. Set in BrowserViewController and updated when changed by user.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/16694
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/16780
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    send_in_pings:
-      - metrics
-
-  disabled_ads:
-    type: boolean
-    lifetime: application
-    description: |
-      Indicates if the user has opted out of being shown ads in the Fakespot screen
-      experience. Set in BrowserViewController and updated when changed by user.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/17304
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/17930
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    send_in_pings:
-      - metrics
 
 # Metrics related to the App Settings
 settings.app_icon:
@@ -2625,82 +2294,6 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-  history_highlights_show_all:
-    type: counter
-    description: |
-      Counts the number of times a user taps the
-      Show All button in the History section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_item_opened:
-    type: event
-    description: |
-      Counts the number of times a user taps to open an
-      existing tab from the History Highlights section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_impressions:
-    type: event
-    description: |
-      Records the number of times a user views
-      history highlights section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/18088
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18068
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_group_open:
-    type: event
-    description: |
-      Records the event where a user taps on a group item
-      within the History Highlights (Recently Visited) section.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_context:
-    type: event
-    description: |
-        Records when a user clicks on a contextual
-        menu option on a history highlight
-    extra_keys:
-      type:
-        type: string
-        description: |
-          Type of contextual action
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   pocket_stories_visible:
     type: boolean
     description: |
@@ -2717,24 +2310,71 @@ firefox_home_page:
 
 # HomePage - General
 homepage:
-  private_mode_toggle:
+  viewed:
     type: event
     description: |
-      Records when the private browsing mode icon is toggled on homepage.
-    extra_keys:
-      is_private_mode:
-       type: boolean
-       description: |
-        Set to true when you enter private browsing mode, false when you are going back to normal mode.
+      Records when the Firefox homepage is viewed. We consider a `view` to be if a user navigates to a new homepage whether through opening a new tab, navigating from a webpage, or after selecting the address bar. Seeing the homepage again after viewing a modal that is not full screen does not trigger a view.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/18522
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25082
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18518
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25923
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
 
-# Library
+  item_tapped:
+    type: event
+    description: |
+      Records when an item has been tapped on the homepage.
+    extra_keys:
+      section:
+       type: string
+       description: |
+        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.ItemType` under `sectionName`.
+      type:
+       type: string
+       description: |
+        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.ItemType`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25086
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25297
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
+  item_viewed:
+    type: event
+    description: |
+      Records when an item has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to an item has been scrolled to or seen on an homepage that has been viewed.
+    extra_keys:
+      section:
+       type: string
+       description: |
+        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.ItemType` under `sectionName`.
+      type:
+       type: string
+       description: |
+        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.ItemType`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25083
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26144
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
+
+# Metrics related to the history panel of the library
 library:
   panel_pressed:
     type: labeled_counter
@@ -2758,6 +2398,30 @@ library:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+
+# Library
+library.history_panel:
+  cleared_history: 
+    type: event
+    description: |
+      A user deleted history entries from a certain timeframe
+    extra_keys:
+      timeframe:
+        type: string
+        description: |
+          The timeframe all history was cleared from
+          Options are listed in the HistoryDeletionUtilityDateOptions enum
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24790
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25614
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - HistoryPanel
+        - Library
 
 # History Panel
 history:
@@ -2847,40 +2511,6 @@ history:
     type: event
     description: |
       A user removed a history item.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  removed_today:
-    type: event
-    description: |
-      A user removed history items opened that day.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  removed_today_and_yesterday:
-    type: event
-    description: |
-      A user removed history items opened that
-      day and the day before.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  removed_all:
-    type: event
-    description: |
-      A user removed all history items.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14905
     data_reviews:
@@ -3360,23 +2990,6 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14908
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15583
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  private_browsing_button_tapped:
-    type: event
-    description: |
-      Records when the private browsing button is tapped
-    extra_keys:
-      is_private:
-        type: string
-        description: |
-          If the button is tapped or not (true / false)
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -4112,21 +3725,6 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-  new_tab_pressed:
-    type: counter
-    description: |
-      Counts the number of times the add new tab button is
-      pressed
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   click_tab:
     type: event
     description: |
@@ -4387,6 +3985,91 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+# Tabs Panel
+tabs_panel:
+  new_tab_button_tapped:
+    type: event
+    description: | 
+      User taps the button in the tabs panel to open a new tab.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The tab mode you are in when you press the new tab 
+          button (normal or private).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_mode_selected:
+    type: event
+    description: | 
+      User changes the tab tray mode with the segmented control in the
+      tabs panel.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The tab mode the user is switching to (normal, private, or sync).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
+
+# Toasts
+toasts.close_single_tab:
+  undo_tapped:
+    type: event
+    description: | 
+      Records when the user selects undo after closing a tab.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - Toasts
+        - TabsPanel
+
+toasts.close_all_tabs:
+  undo_tapped:
+    type: event
+    description: | 
+      Records when the user selects undo after closing all tabs.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - Toasts
+        - TabsPanel
+  
 # Enhanced Tracking Protection metrics
 tracking_protection:
   enabled:
@@ -6616,8 +6299,6 @@ nimbus_system:
           properties:
             days_opened_in_last_28:
               type: number
-        is_review_checker_enabled:
-          type: boolean
         is_phone:
           type: boolean
         app_version:

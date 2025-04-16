@@ -65,6 +65,8 @@ let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 let BrowsingSettings = "BrowsingSettings"
 let AutofillPasswordSettings = "AutofillsPasswordsSettings"
+let Shortcuts = "Shortcuts"
+let AutoplaySettings = "AutoplaySettings"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -153,7 +155,6 @@ class Action {
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
-    static let ToggleRecentlyVisited = "ToggleRecentlyVisited"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
@@ -228,6 +229,7 @@ class Action {
 
     static let SelectToolbarBottom = "SelectToolbarBottom"
     static let SelectToolbarTop = "SelectToolbarTop"
+    static let SelectShortcuts = "TopSitesSettings"
 }
 
 @objcMembers
@@ -756,12 +758,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.ToggleRecentlyVisited) { userState in
-            app.tables.cells.switches["Recently Visited"].waitAndTap()
-        }
-
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
             app.tables.cells.switches["Bookmarks"].waitAndTap()
+        }
+
+        screenState.gesture(forAction: Action.SelectShortcuts) { userState in
+            let topSitesSetting = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+            app.tables.cells[topSitesSetting].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -802,11 +805,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(MailAppSettings) { screenState in
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(BrowsingSettings) { screenState in
-        screenState.tap(app.tables.element(boundBy: 0).cells["OpenWith.Setting"], to: MailAppSettings)
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -872,11 +870,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
             syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            regularModeSelector = app
+            regularModeSelector = app.toolbars["Toolbar"]
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
-            privateModeSelector = app
+            privateModeSelector = app.toolbars["Toolbar"]
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 1)
-            syncModeSelector = app
+            syncModeSelector = app.toolbars["Toolbar"]
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 2)
         }
         screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
@@ -1038,6 +1036,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(Shortcuts) { screenState in
+        let homePage = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+        screenState.tap(app.navigationBars.buttons[homePage], to: HomeSettings)
+    }
+
     map.addScreenState(FindInPage) { screenState in
         screenState.tap(app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton], to: BrowserTab)
     }
@@ -1082,6 +1085,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(BrowsingSettings) { screenState in
+        let table = app.tables.element(boundBy: 0)
+        
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.autoPlay], to: AutoplaySettings)
+        screenState.tap(table.cells["OpenWith.Setting"], to: MailAppSettings)
+
+        screenState.backAction = navigationControllerBackAction
+    }
+
     map.addScreenState(LoginsSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
@@ -1091,6 +1103,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(AddressesSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(AutoplaySettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 

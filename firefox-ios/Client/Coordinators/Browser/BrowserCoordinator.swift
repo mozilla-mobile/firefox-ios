@@ -21,7 +21,6 @@ class BrowserCoordinator: BaseCoordinator,
                           BrowserNavigationHandler,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
-                          FakespotCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
@@ -148,17 +147,27 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
-            isZeroSearch: isZeroSearch,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+    }
+
+    private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
+        store.dispatch(
+            HomepageAction(
+                isZeroSearch: isZeroSearch,
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.embeddedHomepage
+            )
+        )
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
@@ -225,8 +234,9 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
+            browserViewController.fullscreenDelegate = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
@@ -612,27 +622,32 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentSavePDFController() {
-        guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
-        webView.createPDF { [weak self] result in
-            switch result {
-            case .success(let data):
-                guard let pdf = PDFDocument(data: data),
-                      let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
-                    return
-                }
-                pdf.write(to: outputURL)
-                if FileManager.default.fileExists(atPath: outputURL.path) {
-                    let url = URL(fileURLWithPath: outputURL.path)
-                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                    if let popover = controller.popoverPresentationController {
-                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+        guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
+        if selectedTab.mimeType == MIMEType.PDF {
+            showShareSheetForCurrentlySelectedTab()
+        } else {
+            selectedTab.webView?.createPDF { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let data):
+                    guard let pdf = PDFDocument(data: data),
+                          let outputURL = pdf.createOutputURL(withFileName: selectedTab.webView?.title ?? "") else {
+                        return
                     }
-                    self?.present(controller)
+                    startShareSheetCoordinator(
+                        shareType: .file(url: outputURL),
+                        shareMessage: nil,
+                        sourceView: self.browserViewController.addressToolbarContainer,
+                        sourceRect: nil,
+                        toastContainer: self.browserViewController.contentContainer,
+                        popoverArrowDirection: .any
+                    )
+                case .failure(let error):
+                    // TODO: FXIOS-11542 [iOS Menu Redesign] - Handle saveAsPDF Menu option, error case
+                    self.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                    level: .debug,
+                                    category: .webview)
                 }
-            case .failure(let error):
-                self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
-                                 level: .debug,
-                                 category: .webview)
             }
         }
     }
@@ -764,63 +779,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showETPMenu(sourceView: sourceView)
-    }
-
-    func showFakespotFlowAsModal(productURL: URL) {
-        guard let coordinator = makeFakespotCoordinator() else { return }
-        coordinator.startModal(productURL: productURL)
-    }
-
-    func showFakespotFlowAsSidebar(productURL: URL,
-                                   sidebarContainer: SidebarEnabledViewProtocol,
-                                   parentViewController: UIViewController) {
-        guard let coordinator = makeFakespotCoordinator() else { return }
-        coordinator.startSidebar(productURL: productURL,
-                                 sidebarContainer: sidebarContainer,
-                                 parentViewController: parentViewController)
-    }
-
-    func dismissFakespotModal(animated: Bool = true) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no modal to close
-        }
-        fakespotCoordinator.dismissModal(animated: animated)
-    }
-
-    func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no sidebar to close
-        }
-        fakespotCoordinator.closeSidebar(sidebarContainer: sidebarContainer,
-                                         parentViewController: parentViewController)
-    }
-
-    func updateFakespotSidebar(productURL: URL,
-                               sidebarContainer: SidebarEnabledViewProtocol,
-                               parentViewController: UIViewController) {
-        guard let fakespotCoordinator = childCoordinators.first(where: {
-            $0 is FakespotCoordinator
-        }) as? FakespotCoordinator else {
-            return // there is no sidebar
-        }
-        fakespotCoordinator.updateSidebar(productURL: productURL,
-                                          sidebarContainer: sidebarContainer,
-                                          parentViewController: parentViewController)
-    }
-
-    private func makeFakespotCoordinator() -> FakespotCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
-            return nil // flow is already handled
-        }
-
-        let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
-        coordinator.parentCoordinator = self
-        add(child: coordinator)
-        return coordinator
     }
 
     /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
@@ -1009,10 +967,41 @@ class BrowserCoordinator: BaseCoordinator,
         tabTrayCoordinator.start(with: selectedPanel)
 
         navigationController.onViewDismissed = { [weak self] in
-            self?.didDismissTabTray(from: tabTrayCoordinator)
+            guard let self else { return }
+            self.didDismissTabTray(from: tabTrayCoordinator)
+            store.dispatch(
+                TabTrayAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TabTrayActionType.modalSwipedToClose
+                )
+            )
         }
 
-        present(navigationController)
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
+            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) &&
+            UIDevice.current.userInterfaceIdiom != .pad {
+            guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
+            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+        } else {
+            present(navigationController)
+        }
+    }
+
+    // This implementation of present is specifically for the animation on .tabTrayUIExperiments
+    private func present(_ viewController: UIViewController,
+                         customTransition: UIViewControllerTransitioningDelegate,
+                         style: UIModalPresentationStyle) {
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        if !UIAccessibility.isReduceMotionEnabled {
+            router.present(viewController, animated: true, customTransition: customTransition, presentationStyle: style)
+        } else {
+            router.present(viewController)
+        }
+    }
+
+    private func present(_ viewController: UIViewController) {
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        router.present(viewController)
     }
 
     func showBackForwardList() {
@@ -1028,11 +1017,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showDocumentLoading() {
-        webviewController?.showDocumentLoadingView()
+        browserViewController.showDocumentLoadingView()
     }
 
-    func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        webviewController?.removeDocumentLoadingView(completion: completion)
+    func removeDocumentLoading() {
+        browserViewController.removeDocumentLoadingView()
     }
 
     // MARK: Microsurvey
@@ -1078,11 +1067,6 @@ class BrowserCoordinator: BaseCoordinator,
     private func setiPadLayoutDetents(for controller: UIViewController) {
         guard controller.shouldUseiPadSetup() else { return }
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
-    }
-
-    private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway()
-        router.present(viewController)
     }
 
     // MARK: - Password Generator
@@ -1195,7 +1179,8 @@ class BrowserCoordinator: BaseCoordinator,
     private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument else {
+              let temporaryDocument = tab.temporaryDocument,
+              !temporaryDocument.isDownloading else {
             return shareType
         }
 

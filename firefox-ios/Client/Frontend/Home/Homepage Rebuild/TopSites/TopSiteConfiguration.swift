@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 /// Top site UI class, used in the homepage top site section
-struct TopSiteConfiguration: Hashable, Equatable {
+struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, CustomDebugStringConvertible {
     var site: Site
     var title: String
 
@@ -14,8 +14,19 @@ struct TopSiteConfiguration: Hashable, Equatable {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
 
+    private var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
+    }
+
+    private var pinnedStatusTitle: String {
+        return isPinned ? pinnedTitle : title
+    }
+
     var accessibilityLabel: String? {
-        return isSponsored ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
     }
 
     var isPinned: Bool {
@@ -46,6 +57,14 @@ struct TopSiteConfiguration: Hashable, Equatable {
         return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
 
+    public var debugDescription: String {
+        return "TopSiteConfiguration (\(site))"
+    }
+
+    public var description: String {
+        return debugDescription
+    }
+
     init(site: Site) {
         self.site = site
         if let provider = site.metadata?.providerName {
@@ -64,7 +83,7 @@ struct TopSiteConfiguration: Hashable, Equatable {
         DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
     }
 
-    func getTelemetrySiteType() -> String {
+    var getTelemetrySiteType: String {
         if isGooglePinnedTile {
             return "google"
         } else if isPinned {

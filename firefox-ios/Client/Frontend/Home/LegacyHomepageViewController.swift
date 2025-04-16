@@ -98,13 +98,16 @@ class LegacyHomepageViewController:
         )
         self.syncTabContextualHintViewController =
         ContextualHintViewController(with: syncTabContextualViewProvider, windowUUID: tabManager.windowUUID)
-        self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
+        self.contextMenuHelper = HomepageContextMenuHelper(
+            profile: profile,
+            viewModel: viewModel,
+            toastContainer: toastContainer
+        )
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
-        updateHeaderToShowPrivateModeToggle()
         viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
@@ -212,7 +215,6 @@ class LegacyHomepageViewController:
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
-        updateHeaderToShowPrivateModeToggle()
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
@@ -239,15 +241,6 @@ class LegacyHomepageViewController:
             actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatch(action)
-    }
-
-    // Displays or hides the private mode toggle button in the header
-    // Depends on feature flag and if user is on iPhone
-    private func updateHeaderToShowPrivateModeToggle() {
-        let featureFlagOn = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let showToggle = featureFlagOn && !shouldUseiPadSetup()
-        viewModel.headerViewModel.showPrivateModeToggle = showToggle
-        viewModel.headerViewModel.showiPadSetup = shouldUseiPadSetup()
     }
 
     // MARK: - Layout
@@ -753,29 +746,6 @@ private extension LegacyHomepageViewController {
             self?.prepareSyncedTabContextualHint(onCell: syncedTabCell)
         }
 
-        // History highlights
-        viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
-            guard let url = highlight.siteUrl else {
-                self?.openHistoryHighlightsSearchGroup(item: highlight)
-                return
-            }
-
-            self?.homePanelDelegate?.homePanel(didSelectURL: url,
-                                               visitType: .link,
-                                               isGoogleTopSite: false)
-        }
-
-        viewModel.historyHighlightsViewModel
-            .historyHighlightLongPressHandler = { [weak self] (highlightItem, sourceView) in
-                self?.contextMenuHelper.presentContextMenu(for: highlightItem,
-                                                           with: sourceView,
-                                                           sectionType: .historyHighlights)
-            }
-
-        viewModel.historyHighlightsViewModel.headerButtonAction = { [weak self] button in
-            self?.openHistory(button)
-        }
-
         // Pocket
         viewModel.pocketViewModel.onTapTileAction = { [weak self] url in
             self?.showSiteWithURLHandler(url)
@@ -789,41 +759,6 @@ private extension LegacyHomepageViewController {
         viewModel.customizeButtonViewModel.onTapAction = { [weak self] _ in
             self?.openCustomizeHomeSettings()
         }
-    }
-
-    private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
-        guard let groupItem = item.group else { return }
-
-        var groupedSites = [Site]()
-        for item in groupItem {
-            groupedSites.append(buildSite(from: item))
-        }
-        let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
-
-        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
-        let asGroupListVC = SearchGroupedItemsViewController(
-            viewModel: asGroupListViewModel,
-            profile: viewModel.profile,
-            windowUUID: windowUUID
-        )
-
-        let dismissableController: DismissableNavigationViewController
-        dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
-
-        self.present(dismissableController, animated: true, completion: nil)
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .historyHighlightsGroupOpen,
-                                     extras: nil)
-
-        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
-    }
-
-    private func buildSite(from highlight: HighlightItem) -> Site {
-        let itemURL = highlight.urlString ?? ""
-        return Site.createBasicSite(url: itemURL, title: highlight.displayTitle)
     }
 
     func openTabTray(_ sender: UIButton) {
@@ -847,17 +782,6 @@ private extension LegacyHomepageViewController {
                                          object: .firefoxHomepage,
                                          value: .bookmarkSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
-        }
-    }
-
-    func openHistory(_ sender: UIButton) {
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
-
-        if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .historyHighlightsShowAll)
         }
     }
 

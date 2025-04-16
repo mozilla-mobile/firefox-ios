@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Află mai multe";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ este produs de Mozilla. Misiunea noastră este să promovăm un internet sănătos și deschis.";
 
 /* Label on About screen */
@@ -34,19 +34,19 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Folosește-l ca extensie Safari:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Despre %@";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ îți oferă controlul.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "Deschide în %@";
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
 "AddPass.Error.Dismiss" = "OK";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Autentifică-te pentru a reveni la %@";
 
 /* Label for button to add a custom URL */
@@ -70,7 +70,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nou URL personalizat adăugat.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "Activează pentru ca %@ să completeze automat peste 450 de URL-uri populare în bara de adresă.";
 
 /* label describing URL Autocomplete as disabled */
@@ -91,7 +91,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Site-urile mele";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "Permite ca %@ să completeze automat URL-urile tale favorite.";
 
 /* Label for enabling or disabling top sites */
@@ -134,19 +134,19 @@
 "Error.tryAgainButton" = "Încearcă din nou";
 
 /* Button label used for cancelling to open another app from Focus */
-"ExternalAppLink.cancelTitle" = "Renunță";
+"ExternalAppLink.cancelTitle" = "Anulează";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ vrea să deschidă o altă aplicaţie";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Deschide";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Renunță";
+"ExternalLink.cancelButton" = "Anulează";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Trimite e-mail";
@@ -172,10 +172,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Apasă pe Safari, apoi selectează Sisteme de blocare a conținutului";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Activează %@";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ nu este activat.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -193,7 +193,7 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Da";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "Pentru a obține sugestii, %@ trebuie să trimită ce tastezi în bara de adresă la motorul de căutare.";
 
 /* Title for search suggestions prompt */
@@ -205,16 +205,19 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blocarea altor elementele de urmărire de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Anulează";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ va trimite ce tastezi în bara de adresă la motorul de căutare.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți %@ pentru toți.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Află mai multe.";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Evaluează %@";
 
 /* Label for Safari integration section */
@@ -271,7 +274,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Folosește Face ID pentru a debloca aplicația";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
 
 /* Show home screen tips toggle label on settings screen */
@@ -286,7 +289,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Folosește Touch ID pentru a debloca aplicația";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
 
 /* Title for settings section to enable different Siri Shortcuts. */
@@ -315,6 +318,9 @@
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Partajează pagina cu…";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Anulează";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adaugă";
@@ -361,7 +367,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Caută sau introdu adresa";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "Caută %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */

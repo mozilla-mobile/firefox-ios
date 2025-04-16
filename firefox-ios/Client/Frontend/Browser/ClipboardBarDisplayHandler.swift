@@ -101,7 +101,7 @@ class ClipboardBarDisplayHandler: NSObject {
             return true
         }
 
-        if let url = URL(string: clipboardURL, invalidCharacters: false),
+        if let url = URL(string: clipboardURL),
            tabManager?.getTabForURL(url) != nil {
             return true
         }

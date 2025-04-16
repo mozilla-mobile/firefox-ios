@@ -9,8 +9,6 @@ import UIKit
 import enum MozillaAppServices.VisitType
 
 class MockBrowserViewController: BrowserViewController {
-    var switchToPrivacyModeCalled = false
-    var switchToPrivacyModeIsPrivate = false
     var switchToTabForURLOrOpenCalled = false
     var switchToTabForURLOrOpenURL: URL?
     var switchToTabForURLOrOpenUUID: String?
@@ -30,7 +28,6 @@ class MockBrowserViewController: BrowserViewController {
     var openURLInNewTabURL: URL?
     var openURLInNewTabIsPrivate = false
 
-    var switchToPrivacyModeCount = 0
     var switchToTabForURLOrOpenCount = 0
     var openBlankNewTabCount = 0
     var handleQueryCount = 0
@@ -54,10 +51,13 @@ class MockBrowserViewController: BrowserViewController {
     var lastVisitType: VisitType?
     var isPrivate = false
 
-    override func switchToPrivacyMode(isPrivate: Bool) {
-        switchToPrivacyModeCalled = true
-        switchToPrivacyModeIsPrivate = isPrivate
-        switchToPrivacyModeCount += 1
+    var showDocumentLoadingViewCalled = 0
+    var removeDocumentLoadingViewCalled = 0
+
+    var mockContentContainer = MockContentContainer()
+
+    override var contentContainer: ContentContainer {
+        return mockContentContainer
     }
 
     override func switchToTabForURLOrOpen(
@@ -142,5 +142,31 @@ class MockBrowserViewController: BrowserViewController {
         didSelectURLCalled = true
         lastOpenedURL = url
         lastVisitType = visitType
+    }
+
+    override func showDocumentLoadingView() {
+        showDocumentLoadingViewCalled += 1
+    }
+
+    override func removeDocumentLoadingView() {
+        removeDocumentLoadingViewCalled += 1
+    }
+}
+
+class MockContentContainer: ContentContainer {
+    var shouldHaveNativeErrorPage = false
+
+    override var contentView: Screenshotable? {
+        return MockScreenshotView()
+    }
+
+    override var hasNativeErrorPage: Bool {
+        return shouldHaveNativeErrorPage
+    }
+}
+
+class MockScreenshotView: Screenshotable {
+    func screenshot(quality: CGFloat) -> UIImage? {
+        return UIImage.checkmark
     }
 }

@@ -19,12 +19,12 @@ class RecordedNimbusContextTests: XCTestCase {
      * This test should not be modified. It will fail if any of the eventQueries are invalid.
      */
     func testValidateEventQueries() throws {
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
+        let recordedContext = RecordedNimbusContext(isFirstRun: true, isDefaultBrowser: true)
         try validateEventQueries(recordedContext: recordedContext)
     }
 
     func testToJsonReturnsExpected() throws {
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
+        let recordedContext = RecordedNimbusContext(isFirstRun: true, isDefaultBrowser: true)
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
         let jsonString = recordedContext.toJson()
 
@@ -33,7 +33,6 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(json?.removeValue(forKey: "isFirstRun") as? String, "true")
         XCTAssertEqual(json?.removeValue(forKey: "is_first_run") as? Bool, true)
         XCTAssertEqual(json?.removeValue(forKey: "is_phone") as? Bool, recordedContext.isPhone)
-        XCTAssertEqual(json?.removeValue(forKey: "is_review_checker_enabled") as? Bool, true)
         XCTAssertEqual(json?.removeValue(forKey: "app_version") as? String, recordedContext.appVersion)
         XCTAssertEqual(json?.removeValue(forKey: "locale") as? String, recordedContext.locale)
         XCTAssertEqual(json?.removeValue(forKey: "language") as? String, recordedContext.language)
@@ -51,7 +50,7 @@ class RecordedNimbusContextTests: XCTestCase {
     }
 
     func testObjectRecordedToGleanMatchesExpected() throws {
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
+        let recordedContext = RecordedNimbusContext(isFirstRun: true, isDefaultBrowser: true)
 
         var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
@@ -69,7 +68,6 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
         XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
         XCTAssertEqual(value?.isPhone, recordedContext.isPhone)
-        XCTAssertEqual(value?.isReviewCheckerEnabled, recordedContext.isReviewCheckerEnabled)
         XCTAssertEqual(value?.locale, recordedContext.locale)
         XCTAssertEqual(value?.region, recordedContext.region)
         XCTAssertEqual(value?.language, recordedContext.language)
@@ -82,7 +80,7 @@ class RecordedNimbusContextTests: XCTestCase {
     }
 
     func testGetEventQueries() throws {
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
+        let recordedContext = RecordedNimbusContext(isFirstRun: true, isDefaultBrowser: true)
         let eventQueries = recordedContext.getEventQueries()
 
         XCTAssertEqual(eventQueries, RecordedNimbusContext.EVENT_QUERIES)

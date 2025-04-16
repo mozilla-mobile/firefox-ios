@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import UIKit
@@ -9,36 +10,28 @@ import UIKit
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
-    case accountSettingsRedux
     case addressAutofillEdit
-    case appIconSelection
+    case appearanceMenu
     case bookmarksRefactor
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
-    case darkReader
     case deeplinkOptimizationRefactor
-    case fakespotBackInStock
-    case fakespotFeature
-    case fakespotProductAds
     case feltPrivacySimplifiedUI
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
-    case historyHighlights
     case homepageRebuild
     case inactiveTabs
     case isToolbarCFREnabled
-    case jsAlertRefactor
     case jumpBackIn
     case loginAutofill
     case menuRefactor
     case menuRefactorHint
     case microsurvey
+    case loginsVerificationEnabled
     case nativeErrorPage
     case noInternetConnectionErrorPage
-    case nightMode
-    case passwordGenerator
     case pdfRefactor
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
@@ -46,41 +39,46 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reduxSearchSettings
     case reportSiteIssue
     case searchEngineConsolidation
-    case searchHighlights
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case splashScreen
     case unifiedAds
     case unifiedSearch
+    case tabAnimation
     case tabTrayUIExperiments
     case toolbarRefactor
     case toolbarOneTapNewTab
+    case toolbarSwipingTabs
     case toolbarNavigationHint
     case tosFeature
     case trackingProtectionRefactor
-    case zoomFeature
+    case revertUnsafeContinuationsRefactor
+    case useRustKeychain
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appIconSelection,
+        case    .appearanceMenu,
                 .bookmarksRefactor,
+                .deeplinkOptimizationRefactor,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
+                .loginsVerificationEnabled,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
+                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
-                .passwordGenerator,
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .unifiedAds,
-                .unifiedSearch:
+                .unifiedSearch,
+                .useRustKeychain:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -107,8 +105,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
-        case .historyHighlights:
-            return FlagKeys.HistoryHighlightsSection
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
@@ -116,29 +112,22 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
-        case .appIconSelection,
+        case .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
-                .accountSettingsRedux,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
-                .darkReader,
                 .deeplinkOptimizationRefactor,
-                .fakespotBackInStock,
-                .fakespotFeature,
-                .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
-                .jsAlertRefactor,
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
                 .menuRefactorHint,
+                .loginsVerificationEnabled,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
-                .nightMode,
-                .passwordGenerator,
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
@@ -148,18 +137,20 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
                 .searchEngineConsolidation,
-                .searchHighlights,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
                 .unifiedAds,
                 .unifiedSearch,
+                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
+                .toolbarSwipingTabs,
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
-                .zoomFeature:
+                .revertUnsafeContinuationsRefactor,
+                .useRustKeychain:
             return nil
         }
     }

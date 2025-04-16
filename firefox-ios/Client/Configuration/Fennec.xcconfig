@@ -4,6 +4,7 @@
 
 #include "Common.xcconfig"
 #include "Debug.xcconfig"
+#include "version.xcconfig"
 
 INFOPLIST_FILE = Client/Info.plist
 MOZ_BUNDLE_DISPLAY_NAME = Fennec ($(USER))

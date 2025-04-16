@@ -77,6 +77,7 @@
 		8A6445902BA3905100759319 /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445892BA3904100759319 /* disconnect-block-content.json */; };
 		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
 		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
+		8C0AB2292D817EC700E88035 /* ProfileIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */; };
 		8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */; };
 		8C28008F2D49354400ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C28008E2D49354400ED6D07 /* Shared */; };
 		8C2800912D49357C00ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C2800902D49357C00ED6D07 /* Shared */; };
@@ -148,6 +149,7 @@
 		C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6327F59D9C00C60DC6 /* UIHelpers */; };
 		C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6527F5A79300C60DC6 /* DesignSystem */; };
 		CD44FD932CC104320080D111 /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = CD44FD922CC104320080D111 /* pings.yaml */; };
+		CD92AAC22DA95B3D00B9C685 /* metrics_legacy.yaml in Resources */ = {isa = PBXBuildFile; fileRef = CD92AAC12DA95B3D00B9C685 /* metrics_legacy.yaml */; };
 		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -396,6 +398,11 @@
 		398E40872906BFC00077F5BD /* initial_experiments.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = initial_experiments.json; sourceTree = "<group>"; };
 		3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URIFixupTests.swift; sourceTree = "<group>"; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		430337CE2DAD1741002BD972 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/Intents.strings; sourceTree = "<group>"; };
+		430337CF2DAD1741002BD972 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		430337D02DAD1741002BD972 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/Intro.strings; sourceTree = "<group>"; };
+		430337D12DAD1741002BD972 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/Localizable.strings; sourceTree = "<group>"; };
+		430337D22DAD1741002BD972 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43157BC328FCB8C9007A8159 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		43157BC428FCB8C9007A8159 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		431ABAB728FCB95E00FD0FAC /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -452,6 +459,7 @@
 		437778062A24092200BD08C5 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		4379F1D62A24094200FB3E77 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		437ABD5C2921A2C300EDB369 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		437B7FFD2DAD170900D61873 /* nv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nv; path = nv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		437B9DA428FCB8A600E5B455 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		437E9A8728FCB8DE00D18ED5 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		437F4E552921A25A00D46ACC /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -508,6 +516,7 @@
 		451B81B92BA4DB9F00CF3C50 /* RustMozillaAppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustMozillaAppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTest.swift; sourceTree = "<group>"; };
 		58408BA4265FC524003C4E4F /* BrowsingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingTest.swift; sourceTree = "<group>"; };
+		5A2D1A4F2D8877850066F7C9 /* version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = version.xcconfig; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
 		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
 		741FDDFA294248AD00F4FF7B /* InternalURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalURL.swift; sourceTree = "<group>"; };
@@ -688,6 +697,7 @@
 		8A6445872BA3904100759319 /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
 		8A6445882BA3904100759319 /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
 		8A6445892BA3904100759319 /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
+		8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIdentifier.swift; sourceTree = "<group>"; };
 		8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
 		8C75DF652D3E636A00924EAB /* TelemetryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryManager.swift; sourceTree = "<group>"; };
 		8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProfileManager.swift; sourceTree = "<group>"; };
@@ -778,6 +788,7 @@
 		C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemProvider.swift; sourceTree = "<group>"; };
 		C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BlockzillaPackage; sourceTree = "<group>"; };
 		CD44FD922CC104320080D111 /* pings.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
+		CD92AAC12DA95B3D00B9C685 /* metrics_legacy.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = metrics_legacy.yaml; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1863,6 +1874,7 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				5A2D1A4F2D8877850066F7C9 /* version.xcconfig */,
 				D4E0142E2B053972006759D7 /* Focus.entitlements */,
 				D4E014302B053972006759D7 /* FocusEnterprise.entitlements */,
 				D4E014312B053973006759D7 /* Klar.entitlements */,
@@ -1901,9 +1913,11 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
+				CD92AAC12DA95B3D00B9C685 /* metrics_legacy.yaml */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */,
 				8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */,
+				8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */,
 				C8D0305A27E89CC0000664DA /* InternalSettings */,
@@ -2132,6 +2146,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Blockzilla" */;
 			buildPhases = (
+				5A2D1A4E2D8877150066F7C9 /* Update Version */,
 				F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */,
 				D48C953D27FF411800FF8AEF /* Run Swiftlint */,
 				D5D067F9252F939600C35227 /* Glean */,
@@ -2349,6 +2364,8 @@
 				"en-CA",
 				scn,
 				es,
+				nv,
+				tg,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
@@ -2451,6 +2468,7 @@
 				846A23182668CC4500DB3C37 /* FullScreen.js in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
+				CD92AAC22DA95B3D00B9C685 /* metrics_legacy.yaml in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
 				F8324CE5264EA223007E4BFA /* licenses.html in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
@@ -2504,6 +2522,25 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
 		};
+		5A2D1A4E2D8877150066F7C9 /* Update Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\nVERSION_FILE=\"${SRCROOT}/../version.txt\"\nXCCONFIG_FILE=\"${SRCROOT}/version.xcconfig\"\n\n# Read version from file\nif [ -f \"$VERSION_FILE\" ]; then\n    VERSION_NUMBER=$(cat \"$VERSION_FILE\" | tr -d '[:space:]')\nelse\n    echo \"Error: version.txt not found!\"\n    exit 1\nfi\n\n# Update the xcconfig file with the version number\necho \"APP_VERSION = $VERSION_NUMBER\" > \"$XCCONFIG_FILE\"\n\necho \"Updated Version.xcconfig with version: $VERSION_NUMBER\"\n";
+		};
 		D48C953D27FF411800FF8AEF /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -2532,6 +2569,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Blockzilla/metrics.yaml",
+				"$(SRCROOT)/Blockzilla/metrics_legacy.yaml",
 				"$(SRCROOT)/Blockzilla/pings.yaml",
 			);
 			name = Glean;
@@ -2668,6 +2706,7 @@
 				C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */,
 				163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */,
 				E5E4505028CF4575005A01F1 /* TipManager.swift in Sources */,
+				8C0AB2292D817EC700E88035 /* ProfileIdentifier.swift in Sources */,
 				16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */,
 				E5E4504E28CF4548005A01F1 /* TipsPageViewController.swift in Sources */,
 				C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */,
@@ -2952,6 +2991,7 @@
 				A8BDA74F2D27124B00E02B59 /* en-CA */,
 				A858FC2C2D271326008B994A /* scn */,
 				4348A97E2D75B78E00C257B0 /* es */,
+				430337D22DAD1741002BD972 /* tg */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3047,6 +3087,7 @@
 				A8BDA74C2D27124B00E02B59 /* en-CA */,
 				A858FC292D271326008B994A /* scn */,
 				4348A97B2D75B78E00C257B0 /* es */,
+				430337D02DAD1741002BD972 /* tg */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -3142,6 +3183,7 @@
 				A8BDA74D2D27124B00E02B59 /* en-CA */,
 				A858FC2A2D271326008B994A /* scn */,
 				4348A97C2D75B78E00C257B0 /* es */,
+				430337D12DAD1741002BD972 /* tg */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3237,6 +3279,8 @@
 				A8BDA74B2D27124B00E02B59 /* en-CA */,
 				A858FC282D271326008B994A /* scn */,
 				4348A97A2D75B78E00C257B0 /* es */,
+				437B7FFD2DAD170900D61873 /* nv */,
+				430337CF2DAD1741002BD972 /* tg */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3569,6 +3613,7 @@
 				A8BDA74A2D27124B00E02B59 /* en-CA */,
 				A858FC272D271326008B994A /* scn */,
 				4348A9792D75B78E00C257B0 /* es */,
+				430337CE2DAD1741002BD972 /* tg */,
 			);
 			name = Intents.intentdefinition;
 			sourceTree = "<group>";
@@ -5657,6 +5702,7 @@
 		};
 		D316DB111DA705FF006FA26B /* FocusEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-focus";
@@ -5759,6 +5805,7 @@
 		};
 		D3C70C6D1DDFC48100CEE458 /* KlarEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-klar";
@@ -5916,6 +5963,7 @@
 		};
 		D3E872AB1C471F7900BF4DE4 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-focus";
@@ -6023,6 +6071,7 @@
 		};
 		D3E872AE1C471F7F00BF4DE4 /* FocusRelease */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-focus";
@@ -6872,6 +6921,7 @@
 		};
 		E4BF2DE31BACE8CA00DA9D68 /* KlarDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-klar";
@@ -6932,6 +6982,7 @@
 		};
 		E4BF2DE41BACE8CA00DA9D68 /* KlarRelease */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-klar";
@@ -7224,7 +7275,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 138.0.20250306050345;
+				version = 139.0.20250414204556;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7240,7 +7291,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 63.0.0;
+				minimumVersion = 64.1.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {

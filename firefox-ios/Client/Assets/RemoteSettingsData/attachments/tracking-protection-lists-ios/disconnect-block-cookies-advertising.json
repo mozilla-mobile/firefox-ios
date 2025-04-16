@@ -1508,7 +1508,6 @@
 {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?orbengine\\.com","load-type":["third-party"],"unless-domain":["*augeomarketing.com","*bn.co"]}},
 {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?oridian\\.com","load-type":["third-party"],"unless-domain":["*brightcom.com","*luj.sdsjweb.com"]}},
 {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?origo\\.hu","load-type":["third-party"],"unless-domain":["*mediaworks.hu","*origo.hu"]}},
-{"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?osano\\.com","load-type":["third-party"],"unless-domain":["*osano.com"]}},
 {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?otm-r\\.com","load-type":["third-party"],"unless-domain":["*otm-r.ru"]}},
 {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?otracking\\.com","load-type":["third-party"],"unless-domain":["*deluxe.com","*orangesoda.com","*otracking.com"]}},
 {"action":{"type":"block-cookies"},"trigger":{"url-filter":"^https?://([^/]+\\.)?otto\\.de","load-type":["third-party"],"unless-domain":["*otto.de"]}},

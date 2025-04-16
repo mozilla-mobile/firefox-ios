@@ -9,7 +9,8 @@ import ToolbarKit
 struct AddressBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var navigationActions: [ToolbarActionConfiguration]
-    var pageActions: [ToolbarActionConfiguration]
+    var leadingPageActions: [ToolbarActionConfiguration]
+    var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
@@ -57,6 +58,14 @@ struct AddressBarState: StateType, Equatable {
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
 
+    private static let cancelEditTextAction = ToolbarActionConfiguration(
+        actionType: .cancelEdit,
+        actionLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
+        isFlippedForRTL: true,
+        isEnabled: true,
+        a11yLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
+        a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
+
     private static let newTabAction = ToolbarActionConfiguration(
         actionType: .newTab,
         iconName: StandardImageIdentifiers.Large.plus,
@@ -76,7 +85,8 @@ struct AddressBarState: StateType, Equatable {
         self.init(
             windowUUID: windowUUID,
             navigationActions: [],
-            pageActions: [],
+            leadingPageActions: [],
+            trailingPageActions: [],
             browserActions: [],
             borderPosition: nil,
             url: nil,
@@ -97,7 +107,8 @@ struct AddressBarState: StateType, Equatable {
 
     init(windowUUID: WindowUUID,
          navigationActions: [ToolbarActionConfiguration],
-         pageActions: [ToolbarActionConfiguration],
+         leadingPageActions: [ToolbarActionConfiguration],
+         trailingPageActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
@@ -115,7 +126,8 @@ struct AddressBarState: StateType, Equatable {
          alternativeSearchEngine: SearchEngineModel?) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
-        self.pageActions = pageActions
+        self.leadingPageActions = leadingPageActions
+        self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
         self.borderPosition = borderPosition
         self.url = url
@@ -221,8 +233,9 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: [ToolbarActionConfiguration](),
-            pageActions: [ToolbarActionConfiguration](),
-            browserActions: [tabsAction(), menuAction()],
+            leadingPageActions: [ToolbarActionConfiguration](),
+            trailingPageActions: [ToolbarActionConfiguration](),
+            browserActions: [ToolbarActionConfiguration](),
             borderPosition: borderPosition,
             url: nil,
             searchTerm: nil,
@@ -246,8 +259,9 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -273,10 +287,11 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: state.isEditing,
-                                     isEmptySearch: state.isEmptySearch),
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing,
+                                                     isEmptySearch: state.isEmptySearch),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -300,8 +315,15 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -330,11 +352,14 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: state.isEditing,
-                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing,
+                                                     isEmptySearch: isEmptySearch),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
             url: toolbarAction.url,
             searchTerm: nil,
@@ -360,7 +385,12 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -387,8 +417,13 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -414,8 +449,13 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -439,7 +479,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: toolbarAction.addressBorderPosition,
             url: state.url,
@@ -466,11 +507,12 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: true,
-                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: true,
+                                                     isEmptySearch: isEmptySearch),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -498,11 +540,12 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: true,
-                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: true,
+                                                     isEmptySearch: isEmptySearch),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: searchTerm,
@@ -537,11 +580,12 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: false,
-                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: false,
+                                                     isEmptySearch: isEmptySearch),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: false),
             borderPosition: state.borderPosition,
             url: url,
             searchTerm: nil,
@@ -567,11 +611,12 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: true,
-                                     isEmptySearch: isEmptySearch),
-            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: true,
+                                                     isEmptySearch: isEmptySearch),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -593,7 +638,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -618,10 +664,11 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: true,
-                                     isEmptySearch: true),
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: true,
+                                                     isEmptySearch: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: nil, // the url needs to be nil so that the location field doesn't display the url again while editing
@@ -646,10 +693,11 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: true,
-                                     isEmptySearch: true),
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: true,
+                                                     isEmptySearch: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -674,10 +722,11 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: pageActions(action: toolbarAction,
-                                     addressBarState: state,
-                                     isEditing: true,
-                                     isEmptySearch: false),
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: true,
+                                                     isEmptySearch: false),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -702,7 +751,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -727,7 +777,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -754,7 +805,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -779,7 +831,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -802,7 +855,8 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
             url: state.url,
@@ -835,14 +889,15 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+        let isEditingBaseLayout = isEditing && layout != .version1
 
-        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
-
-        if isEditing {
+        guard !isEditingBaseLayout else {
             // back caret when in edit mode
             actions.append(cancelEditAction)
-        } else if !isShowingNavigationToolbar {
+            return actions
+        }
+
+        if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
             let canGoBack = action.canGoBack ?? toolbarState.canGoBack
             let canGoForward = action.canGoForward ?? toolbarState.canGoForward
@@ -852,18 +907,62 @@ struct AddressBarState: StateType, Equatable {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
             }
+        }
+
+        return actions
+    }
+
+    private static func leadingPageActions(
+        action: ToolbarAction,
+        addressBarState: AddressBarState,
+        isEditing: Bool = false
+    ) -> [ToolbarActionConfiguration] {
+        var actions = [ToolbarActionConfiguration]()
+
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
+              !isEditing
+        else { return actions }
+
+        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+
+        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+
+        var shareAction = shareAction
+        if layout == .version1 {
+            shareAction.iconName = StandardImageIdentifiers.Medium.share
+            shareAction.hasCustomColor = true
+        }
+
+        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
+        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
+
+        if !isShowingNavigationToolbar {
+            if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
+                actions.append(dataClearanceAction)
+            }
 
             if !isHomepage, layout == .version1 {
+                var shareAction = shareAction
+                shareAction.isEnabled = isLoading == false
+                shareAction.iconName = StandardImageIdentifiers.Medium.share
+                shareAction.hasCustomColor = true
                 actions.append(shareAction)
             }
         } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
+            var shareAction = shareAction
+            shareAction.isEnabled = isLoading == false
+            shareAction.hasCustomColor = true
+            shareAction.iconName = StandardImageIdentifiers.Medium.share
             actions.append(shareAction)
         }
 
         return actions
     }
 
-    private static func pageActions(
+    private static func trailingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
         isEditing: Bool,
@@ -883,16 +982,25 @@ struct AddressBarState: StateType, Equatable {
 
         switch readerModeState {
         case .active, .available:
+            guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            else { break }
             let isSelected = readerModeState == .active
-            let iconName = isSelected ?
-            StandardImageIdentifiers.Large.readerViewFill :
-            StandardImageIdentifiers.Large.readerView
+            let isVersion1Layout = toolbarState.toolbarLayout == .version1
+            let iconName: String
+            if isVersion1Layout {
+                iconName = StandardImageIdentifiers.Medium.readerView
+            } else {
+                iconName = isSelected ?
+                StandardImageIdentifiers.Large.readerViewFill :
+                StandardImageIdentifiers.Large.readerView
+            }
 
             let readerModeAction = ToolbarActionConfiguration(
                 actionType: .readerMode,
                 iconName: iconName,
                 isEnabled: true,
                 isSelected: isSelected,
+                hasCustomColor: isVersion1Layout,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
@@ -904,16 +1012,28 @@ struct AddressBarState: StateType, Equatable {
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
-        if layout == .baseline {
-			actions.append(shareAction)
-        }
-
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
+        if layout == .baseline {
+            var shareAction = shareAction
+            shareAction.isEnabled = isLoading == false
+            actions.append(shareAction)
+        }
+
         if isLoading == true {
+            var stopLoadingAction = stopLoadingAction
+            if layout == .version1 {
+                stopLoadingAction.iconName = StandardImageIdentifiers.Medium.cross
+                stopLoadingAction.hasCustomColor = true
+            }
             actions.append(stopLoadingAction)
         } else if isLoading == false {
+            var reloadAction = reloadAction
+            if layout == .version1 {
+                reloadAction.iconName = StandardImageIdentifiers.Medium.arrowClockwise
+                reloadAction.hasCustomColor = true
+            }
             actions.append(reloadAction)
         }
 
@@ -922,7 +1042,8 @@ struct AddressBarState: StateType, Equatable {
 
     private static func browserActions(
         action: ToolbarAction,
-        addressBarState: AddressBarState
+        addressBarState: AddressBarState,
+        isEditing: Bool
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
@@ -931,9 +1052,22 @@ struct AddressBarState: StateType, Equatable {
                                                          window: action.windowUUID)
         else { return actions }
 
+        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isShowingTopTabs = action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+
+        if isEditing, layout == .version1 {
+            // cancel button when in edit mode
+            actions.append(cancelEditTextAction)
+        }
+
+        // In compact only cancel action should be shown
+        guard !isShowingNavigationToolbar else {
+            return actions
+        }
 
         if !isShowingTopTabs, !isHomepage {
             actions.append(newTabAction)
@@ -943,11 +1077,20 @@ struct AddressBarState: StateType, Equatable {
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
+        let menuIcon = layout == .version1 ? StandardImageIdentifiers.Large.moreHorizontalRound
+                                           : StandardImageIdentifiers.Large.appMenu
 
-        actions.append(contentsOf: [
-            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(showWarningBadge: showWarningBadge)
-        ])
+        if layout == .version1 {
+            actions.append(contentsOf: [
+                menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
+                tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
+            ])
+        } else {
+            actions.append(contentsOf: [
+                tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
+                menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
+            ])
+        }
 
         return actions
     }
@@ -973,10 +1116,10 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
+    private static func menuAction(iconName: String, showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .menu,
-            iconName: StandardImageIdentifiers.Large.appMenu,
+            iconName: iconName,
             badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
             maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
             isEnabled: true,

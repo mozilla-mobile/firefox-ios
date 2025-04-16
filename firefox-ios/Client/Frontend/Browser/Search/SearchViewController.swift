@@ -88,7 +88,6 @@ class SearchViewController: SiteTableViewController,
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.tabManager = tabManager
@@ -360,7 +359,7 @@ class SearchViewController: SiteTableViewController,
 
         let extras = [
             ExtraKey.recordSearchLocation.rawValue: SearchLocation.quickSearch,
-            ExtraKey.recordSearchEngineID.rawValue: engine.engineID as Any
+            ExtraKey.recordSearchEngineID.rawValue: engine.telemetryID as Any
         ] as [String: Any]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
@@ -378,21 +377,21 @@ class SearchViewController: SiteTableViewController,
         _ keyboardHelper: KeyboardHelper,
         keyboardWillShowWithState state: KeyboardState
     ) {
-        animateSearchEnginesWithKeyboard(state)
+        layoutSearchEngineScrollView()
     }
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper,
         keyboardWillHideWithState state: KeyboardState
     ) {
-        animateSearchEnginesWithKeyboard(state)
+        layoutSearchEngineScrollView()
     }
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper,
         keyboardWillChangeWithState state: KeyboardState
     ) {
-        animateSearchEnginesWithKeyboard(state)
+        layoutSearchEngineScrollView()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -402,18 +401,6 @@ class SearchViewController: SiteTableViewController,
             tableView.reloadData()
             layoutSearchEngineScrollViewContent()
         }, completion: nil)
-    }
-
-    private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
-        layoutSearchEngineScrollView()
-
-        UIView.animate(
-            withDuration: keyboardState.animationDuration,
-            delay: 0,
-            options: [UIView.AnimationOptions(rawValue: UInt(keyboardState.animationCurve.rawValue << 16))],
-            animations: {
-                self.view.layoutIfNeeded()
-            })
     }
 
     private func getCachedTabs() {
@@ -452,7 +439,7 @@ class SearchViewController: SiteTableViewController,
 
             let extras = [
                 ExtraKey.recordSearchLocation.rawValue: SearchLocation.suggestion,
-                ExtraKey.recordSearchEngineID.rawValue: defaultEngine.engineID as Any
+                ExtraKey.recordSearchEngineID.rawValue: defaultEngine.telemetryID as Any
             ] as [String: Any]
             TelemetryWrapper.gleanRecordEvent(category: .action,
                                               method: .tap,
@@ -473,21 +460,14 @@ class SearchViewController: SiteTableViewController,
         case .history:
             let site = viewModel.historySites[indexPath.row]
             searchTelemetry?.selectedResult = .history
-            if let url = URL(string: site.url, invalidCharacters: false) {
+            if let url = URL(string: site.url) {
                 selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .bookmarks:
             let site = viewModel.bookmarkSites[indexPath.row]
             searchTelemetry?.selectedResult = .bookmark
-            if let url = URL(string: site.url, invalidCharacters: false) {
-                selectedIndexPath = indexPath
-                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
-            }
-        case .searchHighlights:
-            if let urlString = viewModel.searchHighlights[indexPath.row].urlString,
-                let url = URL(string: urlString, invalidCharacters: false) {
-                searchTelemetry?.selectedResult = .searchHistory
+            if let url = URL(string: site.url) {
                 selectedIndexPath = indexPath
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
@@ -604,13 +584,6 @@ class SearchViewController: SiteTableViewController,
                         searchTelemetry?.visibleData.append(site)
                     }
                 }
-            case .searchHighlights:
-                let highlightItem = viewModel.searchHighlights[indexPath.row]
-                if searchTelemetry?.visibleSearchHighlights.contains(
-                    where: { $0.urlString == highlightItem.urlString }
-                ) == false {
-                    searchTelemetry?.visibleSearchHighlights.append(highlightItem)
-                }
             case .firefoxSuggestions:
                 if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
                     let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
@@ -636,8 +609,6 @@ class SearchViewController: SiteTableViewController,
             return viewModel.shouldShowBrowsingHistorySuggestions ? viewModel.historySites.count : 0
         case .bookmarks:
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
-        case .searchHighlights:
-            return viewModel.searchHighlights.count
         case .firefoxSuggestions:
             return viewModel.firefoxSuggestions.count
         }
@@ -783,16 +754,6 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
 
-        case .searchHighlights:
-            let highlightItem = SearchHighlightItem(highlightItem: viewModel.searchHighlights[indexPath.row])
-            twoLineCell.descriptionLabel.isHidden = false
-            twoLineCell.titleLabel.text = highlightItem.displayTitle
-            twoLineCell.descriptionLabel.text = highlightItem.urlString
-            twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-            twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-            twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: highlightItem.siteURL))
-            twoLineCell.accessoryView = nil
-            cell = twoLineCell
         case .firefoxSuggestions:
             let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
             twoLineCell.titleLabel.text = firefoxSuggestion.title

@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
-import Shared
 
 class OnboardingTests: BaseTestCase {
     var currentScreen = 0
@@ -76,7 +76,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
@@ -86,7 +86,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
@@ -144,7 +144,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
@@ -154,7 +154,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]

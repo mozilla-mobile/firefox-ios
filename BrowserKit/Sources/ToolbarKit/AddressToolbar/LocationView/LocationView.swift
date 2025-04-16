@@ -15,6 +15,7 @@ final class LocationView: UIView,
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let shieldImageViewSize = CGSize(width: 24, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
@@ -25,6 +26,7 @@ final class LocationView: UIView,
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
+    private var theme: Theme?
     private var isUnifiedSearchEnabled = false
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
@@ -35,7 +37,8 @@ final class LocationView: UIView,
         urlTextField.text?.isEmpty == true
     }
 
-    private var longPressRecognizer: UILongPressGestureRecognizer?
+    private var tapGestureRecognizer: UITapGestureRecognizer?
+    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
     private var doesURLTextFieldExceedViewWidth: Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
@@ -70,9 +73,7 @@ final class LocationView: UIView,
 
     // MARK: - Search Engine / Lock Image
     private lazy var iconContainerStackView: UIStackView = .build { view in
-        view.axis = .horizontal
         view.alignment = .center
-        view.distribution = .fill
     }
 
     private lazy var iconContainerBackgroundView: UIView = .build()
@@ -99,7 +100,14 @@ final class LocationView: UIView,
         let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
         urlTextField.textAlignment = layoutDirection == .rightToLeft ? .right : .left
     }
-    private var isURLTextFieldCentered = false
+
+    private var isURLTextFieldCentered = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
+            guard let theme, isURLTextFieldCentered != oldValue else { return }
+            applyTheme(theme: theme)
+        }
+    }
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -135,7 +143,7 @@ final class LocationView: UIView,
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
 
-        searchEngineContentView.configure(config, delegate: delegate)
+        searchEngineContentView.configure(config, isLocationTextCentered: isLocationTextCentered, delegate: delegate)
 
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -143,6 +151,12 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered)
+        handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
+        handleGesture(
+            &longPressGestureRecognizer,
+            type: UILongPressGestureRecognizer.self,
+            action: #selector(handleLongPress)
+        )
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
@@ -153,17 +167,17 @@ final class LocationView: UIView,
 
     private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
         NSLayoutConstraint.deactivate(containerViewConstrains)
-        if config.isEditing || !isURLTextFieldCentered {
+        if config.isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
             // leading alignment configuration
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
-        } else {
+        } else if let superview, !doesURLTextFieldExceedViewWidth {
             containerViewConstrains = [
-                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-                containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-                containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
+                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
+                containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
+                containerView.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
             ]
         }
         NSLayoutConstraint.activate(containerViewConstrains)
@@ -184,6 +198,9 @@ final class LocationView: UIView,
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradient()
+        // Updates the URL text field's leading constraint to ensure it reflects the current layout state
+        // during layout passes, such as on screen size or orientation changes.
+        updateURLTextFieldLeadingConstraintBasedOnState()
     }
 
     private func setupLayout() {
@@ -327,9 +344,11 @@ final class LocationView: UIView,
 
     private func updateUIForSearchEngineDisplay(isURLTextFieldCentered: Bool) {
         removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        if !isURLTextFieldCentered || isEditing {
+            iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        }
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
-        iconContainerStackViewLeadingConstraint?.constant = isURLTextFieldCentered ? 0.0 : UX.horizontalSpace
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 
@@ -432,6 +451,7 @@ final class LocationView: UIView,
 
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ config: LocationViewConfiguration) {
+        lockIconButton.isUserInteractionEnabled = isURLTextFieldCentered ? false : true
         lockIconImageName = config.lockIconImageName
         lockIconNeedsTheming = config.lockIconNeedsTheming
         safeListedURLImageName = config.safeListedURLImageName
@@ -439,7 +459,11 @@ final class LocationView: UIView,
             updateWidthForLockIcon(0)
             return
         }
-        updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+        if isURLTextFieldCentered {
+            updateWidthForLockIcon(UX.shieldImageViewSize.width)
+        } else {
+            updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+        }
         onTapLockIcon = config.onTapLockIcon
 
         setLockIconImage()
@@ -474,8 +498,24 @@ final class LocationView: UIView,
     // MARK: - Gesture Recognizers
     private func addLongPressGestureRecognizer() {
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        longPressRecognizer = gestureRecognizer
         urlTextField.addGestureRecognizer(gestureRecognizer)
+    }
+
+    private func handleGesture<T: UIGestureRecognizer>(
+        _ gesture: inout T?,
+        type: T.Type,
+        action: Selector
+    ) {
+        if isURLTextFieldCentered {
+            if gesture == nil {
+                let newGesture = type.init(target: self, action: action)
+                addGestureRecognizer(newGesture)
+                gesture = newGesture
+            }
+        } else if let existingGesture = gesture {
+            removeGestureRecognizer(existingGesture)
+            gesture = nil
+        }
     }
 
     // MARK: - Selectors
@@ -558,6 +598,7 @@ final class LocationView: UIView,
         lockIconButton.accessibilityLabel = config.lockIconButtonA11yLabel
 
         urlTextField.accessibilityIdentifier = config.urlTextFieldA11yId
+        accessibilityElements = [iconContainerStackView, urlTextField]
     }
 
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]? {
@@ -567,20 +608,32 @@ final class LocationView: UIView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        self.theme = theme
         let colors = theme.colors
+        // Get the appearance based on `isURLTextFieldCentered`
+        let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
+            .getAppearanceForVersion1(theme: theme)
+        } else {
+            .getAppearanceForBaseline(theme: theme)
+        }
+
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
+        gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = colors.layerSearch
-        lockIconButton.backgroundColor = colors.layerSearch
+        iconContainerBackgroundView.backgroundColor = appearance.backgroundColor
+        lockIconButton.backgroundColor = appearance.backgroundColor
         urlTextField.applyTheme(theme: theme)
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: urlTextField.placeholder ?? "",
+            attributes: [.foregroundColor: appearance.placeholderColor]
+        )
+
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = colors.iconPrimary
-        lockIconImageColor = colors.iconPrimary
+        lockIconButton.tintColor = appearance.etpIconTintColor
+        lockIconImageColor = appearance.etpIconImageColor
 
         setLockIconImage()
-
         // Applying the theme to urlTextField can cause the url formatting to get removed
         // so we apply it again
         formatAndTruncateURLTextField()

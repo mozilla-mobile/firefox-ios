@@ -41,6 +41,7 @@ class EditBookmarkCell: UITableViewCell,
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.urlTextField
+        view.autocapitalizationType = .none
     }
     var onTitleFieldUpdate: ((String) -> Void)?
     var onURLFieldUpdate: ((String) -> Void)?
@@ -55,6 +56,19 @@ class EditBookmarkCell: UITableViewCell,
     }
 
     private func setupSubviews() {
+        typealias A11y = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel
+        let textFieldViewModel = TextFieldViewModel(
+            formA11yId: A11y.titleTextField,
+            clearButtonA11yId: A11y.titleTextFieldClearButton,
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearTextFieldButtonA11yLabel
+        )
+        titleTextfield.configure(viewModel: textFieldViewModel)
+        let urlTextFieldViewModel = TextFieldViewModel(
+            formA11yId: A11y.urlTextField,
+            clearButtonA11yId: A11y.urlTextFieldClearButton,
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearTextFieldButtonA11yLabel
+        )
+        urlTextfield.configure(viewModel: urlTextFieldViewModel)
         textFieldsContainerView.addArrangedSubview(titleTextfield)
         textFieldsContainerView.addArrangedSubview(textFieldsDivider)
         textFieldsContainerView.addArrangedSubview(urlTextfield)

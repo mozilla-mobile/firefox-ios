@@ -22,13 +22,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         .value()
         .creditCardAutofillStatus
 
+    private let rustKeychainEnabled = FxNimbus.shared
+        .features
+        .rustKeychainRefactor
+        .value()
+        .rustKeychainEnabled
+
+    private let loginsVerificationEnabled = FxNimbus.shared
+        .features
+        .loginsVerification
+        .value()
+        .loginsVerificationEnabled
+
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
-        creditCardAutofillEnabled: creditCardAutofillStatus
-    )
+        creditCardAutofillEnabled: creditCardAutofillStatus,
+        rustKeychainEnabled: rustKeychainEnabled,
+        loginsVerificationEnabled: loginsVerificationEnabled)
 
-    lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+    lazy var themeManager: ThemeManager = DefaultThemeManager(
+        sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
+        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
+    )
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()

@@ -30,13 +30,16 @@ struct ImageIdentifiers {
     public static let noBookmarksInRoot = "noBookmarksInRoot"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
-    public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
-    public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"
     public static let syncOpenTab = "sync_open_tab"
     public static let radioButtonNotSelected = "radioButtonNotSelected"
     public static let radioButtonSelected = "radioButtonSelected"
 
+    public struct Appearance {
+        public static let automaticBrowserThemeGradient = "automaticBrowserThemeGradient"
+        public static let lightBrowserThemeGradient = "lightBrowserThemeGradient"
+        public static let darkBrowserThemeGradient = "darkBrowserThemeGradient"
+    }
     public struct Onboarding {
         public struct HeaderImages {
             public static let welcomev106 = "onboardingWelcome"

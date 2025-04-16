@@ -23,7 +23,7 @@ export let FormLikeFactory = {
     }
 
     let formLike = {
-      elements: [...aForm.elements],
+      elements: this.gatherFormElements(aForm),
       rootElement: aForm,
     };
 
@@ -34,6 +34,42 @@ export let FormLikeFactory = {
     this._addToJSONProperty(formLike);
 
     return formLike;
+  },
+
+  gatherFormElements(aForm) {
+    // If there is no nested <form> element, just return the form's elements.
+    if (!aForm.querySelector("form")) {
+      return [...aForm.elements];
+    }
+
+    // Get all of the child input and select elements from the form. Nested
+    // forms are normally removed during markup parsing, but could be created
+    // if the document is modified later. Consider all of the elements that
+    // are descendants of the form or within the form's .elements list to be
+    // part of the form, except those with a form attribute set to a different
+    // form. These are all added in document order.
+    let childElements = [...aForm.querySelectorAll("input, select")];
+    childElements = childElements.filter(
+      e => !e.getAttribute("form") || e.form == aForm
+    );
+
+    // Add the element into the child elements list in document order.
+    let index = 0;
+    for (const formElement of aForm.elements) {
+      if (!childElements.includes(formElement)) {
+        // Insert elements that appear before the <form> at the beginning and
+        // other elements at the end.
+        let position = aForm.compareDocumentPosition(formElement);
+        if (position & Node.DOCUMENT_POSITION_PRECEDING) {
+          childElements.splice(index++, 0, formElement);
+          continue;
+        } else {
+          childElements.push(formElement);
+        }
+      }
+    }
+
+    return childElements;
   },
 
   /**
@@ -69,7 +105,9 @@ export let FormLikeFactory = {
     // be computed when it's eventually needed (if ever).
     ChromeUtils.defineLazyGetter(formLike, "elements", function () {
       let elements = [];
-      for (let el of aDocumentRoot.querySelectorAll("input, select")) {
+      for (let el of aDocumentRoot.querySelectorAll(
+        "input, select, textarea"
+      )) {
         // Exclude elements inside the rootElement that are already in a <form> as
         // they will be handled by their own FormLike.
         if (!el.form || aOptions.ignoreForm) {
@@ -108,7 +146,8 @@ export let FormLikeFactory = {
     if (
       (!HTMLInputElement.isInstance(aField) &&
         !HTMLIFrameElement.isInstance(aField) &&
-        !HTMLSelectElement.isInstance(aField)) ||
+        !HTMLSelectElement.isInstance(aField) &&
+        !HTMLTextAreaElement.isInstance(aField)) ||
       !aField.ownerDocument
     ) {
       throw new Error("createFromField requires a field in a document");
@@ -154,8 +193,15 @@ export let FormLikeFactory = {
    */
   findRootForField(aField, { ignoreForm = false } = {}) {
     if (!ignoreForm) {
-      const form = aField.form || this.closestFormIgnoringShadowRoots(aField);
+      let form = aField.form || this.closestFormIgnoringShadowRoots(aField);
       if (form) {
+        // If a <form> appears inside another form, use the outermost <form> element.
+        let parent = form;
+        while ((parent = parent.parentNode)) {
+          if (HTMLFormElement.isInstance(parent)) {
+            form = parent;
+          }
+        }
         return form;
       }
     }

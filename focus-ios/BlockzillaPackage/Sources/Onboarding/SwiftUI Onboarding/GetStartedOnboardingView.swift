@@ -36,19 +36,12 @@ struct GetStartedOnboardingView: View {
                         .font(.title20)
                         .multilineTextAlignment(.center)
                         .padding(Constants.subtitlePadding)
-
-                    Button {
-                        withAnimation { viewModel.open(.default) }
-                    } label: {
+                    
+                    Button(action: { withAnimation { viewModel.open(.default) } }) {
                         Text(viewModel.config.buttonTitle)
-                            .foregroundColor(.systemBackground)
-                            .font(.body16Bold)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: Constants.navigationLinkViewHeight)
-                            .background(Color.actionButton)
-                            .cornerRadius(Constants.navigationLinkViewCornerRadius)
-                            .padding(Constants.buttonPadding)
                     }
+                    .buttonStyle(PrimaryButtonStyle())
+                    .padding(Constants.buttonPadding)
                     .simultaneousGesture(TapGesture().onEnded({ _ in
                         viewModel.send(.getStartedButtonTapped)
                     }))
@@ -71,8 +64,6 @@ struct GetStartedOnboardingView: View {
         static let buttonPadding: CGFloat = 26
         static let titlePadding: CGFloat = 20
         static let subtitlePadding: CGFloat = 10
-        static let navigationLinkViewHeight: CGFloat = 44
-        static let navigationLinkViewCornerRadius: CGFloat = 12
     }
 }
 
@@ -108,6 +99,21 @@ internal extension OnboardingViewModel {
             topButtonTitle: "Set as Default Browser",
             bottomButtonTitle: "Skip"
         ),
+        tosConfig: TermsOfServiceConfig(
+            title: "Welcome to Firefox Focus",
+            subtitle: "Fast. Private. No distractions.",
+            termsText: "By continuing, you agree to the Firefox Terms of Use",
+            privacyText: "Firefox cares about your privacy. Read more in our Privacy Notice",
+            termsLinkText: "Firefox Terms of Use",
+            privacyLinkText: "Privacy Notice",
+            buttonText: "Agree and Continue",
+            doneButton: "Done",
+            errorMessage: "The Internet connection appears to be offline.",
+            retryButtonText: "Try Again"
+        ),
+        isTosEnabled: true,
+        termsURL: URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/")!,
+        privacyURL: URL(string: "https://www.mozilla.org/privacy/firefox-focus/")!,
         dismissAction: {},
         telemetry: { _ in }
     )

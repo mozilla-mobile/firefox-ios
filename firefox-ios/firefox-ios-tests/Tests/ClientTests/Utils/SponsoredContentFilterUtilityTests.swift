@@ -93,35 +93,6 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
         let result = subject.filterSponsoredTabs(from: tabs)
         XCTAssertEqual(result.count, 7, "All sponsored tabs were removed")
     }
-
-    // MARK: - Highlights
-
-    func testNoNormalHighlightsFilter() {
-        let subject = SponsoredContentFilterUtility()
-        let highlights = createHistoryHighlight(normalHighlightsCount: 5,
-                                                sponsoredHighlightsCount: 0)
-        XCTAssertEqual(highlights.count, 5)
-        let result = subject.filterSponsoredHighlights(from: highlights)
-        XCTAssertEqual(result.count, 5, "No sponsored highlights were removed")
-    }
-
-    func testSponsoredHighlightsFilter() {
-        let subject = SponsoredContentFilterUtility()
-        let highlights = createHistoryHighlight(normalHighlightsCount: 0,
-                                                sponsoredHighlightsCount: 5)
-        XCTAssertEqual(highlights.count, 5)
-        let result = subject.filterSponsoredHighlights(from: highlights)
-        XCTAssertEqual(result.count, 0, "All sponsored highlights were removed")
-    }
-
-    func testSponsoredHighlightsFilterMixed() {
-        let subject = SponsoredContentFilterUtility()
-        let highlights = createHistoryHighlight(normalHighlightsCount: 3,
-                                                sponsoredHighlightsCount: 2)
-        XCTAssertEqual(highlights.count, 5)
-        let result = subject.filterSponsoredHighlights(from: highlights)
-        XCTAssertEqual(result.count, 3, "All sponsored highlights were removed")
-    }
 }
 
 // MARK: - Helpers
@@ -166,32 +137,5 @@ extension SponsoredContentFilterUtilityTests {
         }
 
         return tabs
-    }
-
-    func createHistoryHighlight(
-        normalHighlightsCount: Int,
-        sponsoredHighlightsCount: Int,
-        sponsoredUrl: String = SponsoredContentFilterUtilityTests.sponsoredStandardURL
-    ) -> [HistoryHighlight] {
-        var highlights = [HistoryHighlight]()
-        (0..<normalHighlightsCount).forEach { index in
-            let highlight = HistoryHighlight(score: 0,
-                                             placeId: 0,
-                                             url: normalURL,
-                                             title: "",
-                                             previewImageUrl: nil)
-            highlights.append(highlight)
-        }
-
-        (0..<sponsoredHighlightsCount).forEach { index in
-            let highlight = HistoryHighlight(score: 0,
-                                             placeId: 0,
-                                             url: sponsoredUrl,
-                                             title: "",
-                                             previewImageUrl: nil)
-            highlights.append(highlight)
-        }
-
-        return highlights
     }
 }

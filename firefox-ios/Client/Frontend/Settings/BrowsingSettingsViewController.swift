@@ -36,7 +36,21 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
+        // Setting only available for iPad
+        if let profile, UIDevice.current.userInterfaceIdiom == .pad {
+            var generalSettings = [Setting]()
+            let toolbarHide = BoolSetting(prefs: profile.prefs,
+                                          theme: themeManager.getCurrentTheme(for: windowUUID),
+                                          prefKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide,
+                                          defaultValue: true,
+                                          titleText: .Settings.General.ScrollToHideTabAndAddressBar.Title)
+            generalSettings.append(toolbarHide)
+            settings.append(SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
+                                           children: generalSettings))
+        }
+
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
+            && !featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
             let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                                   titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
             settings.append(
@@ -61,17 +75,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
             )
 
-            let showLinksPreviewSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: theme,
-                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
-                defaultValue: true,
-                titleText: .SettingsShowLinkPreviewsTitle,
-                statusText: .SettingsShowLinkPreviewsStatus
-            )
-
-            linksSettings += [offerToOpenCopiedLinksSettings,
-                              showLinksPreviewSettings]
+            linksSettings += [offerToOpenCopiedLinksSettings]
 
             let blockOpeningExternalAppsSettings = BoolSetting(
                 prefs: profile.prefs,
