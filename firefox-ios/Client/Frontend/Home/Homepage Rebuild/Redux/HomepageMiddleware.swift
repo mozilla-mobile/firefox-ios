@@ -7,6 +7,7 @@ import Redux
 
 final class HomepageMiddleware {
     private let homepageTelemetry: HomepageTelemetry
+
     init(homepageTelemetry: HomepageTelemetry = HomepageTelemetry()) {
         self.homepageTelemetry = homepageTelemetry
     }
@@ -36,6 +37,12 @@ final class HomepageMiddleware {
                 return
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
+
+        case HomepageActionType.itemSeen:
+            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
+                return
+            }
+            self.homepageTelemetry.sendItemImpressionTelemetryEvent(for: type)
 
         default:
             break
