@@ -49,21 +49,22 @@ class WKEngineSession: NSObject,
         }
     }
 
+    @MainActor
     public static func sessionFactory(
         userScriptManager: WKUserScriptManager,
         dependencies: EngineSessionDependencies,
         configurationProvider: WKEngineConfigurationProvider
-    ) async -> WKEngineSession? {
-        let webViewProvider = await DefaultWKWebViewProvider()
+    ) -> WKEngineSession? {
+        let webViewProvider = DefaultWKWebViewProvider()
         let logger = DefaultLogger.shared
         let sessionData = WKEngineSessionData()
-        let contentScriptManager = await DefaultContentScriptManager()
+        let contentScriptManager = DefaultContentScriptManager()
         let scriptResponder = EngineSessionScriptResponder()
         let metadataFetcher = DefaultMetadataFetcherHelper()
-        let navigationHandler = await DefaultNavigationHandler()
-        let uiHandler = await DefaultUIHandler()
+        let navigationHandler = DefaultNavigationHandler()
+        let uiHandler = DefaultUIHandler()
 
-        return await WKEngineSession(
+        return WKEngineSession(
             userScriptManager: userScriptManager,
             dependencies: dependencies,
             configurationProvider: configurationProvider,
@@ -78,6 +79,7 @@ class WKEngineSession: NSObject,
         )
     }
 
+    @MainActor
     init?(userScriptManager: WKUserScriptManager,
           dependencies: EngineSessionDependencies,
           configurationProvider: WKEngineConfigurationProvider,
@@ -88,9 +90,9 @@ class WKEngineSession: NSObject,
           scriptResponder: EngineSessionScriptResponder,
           metadataFetcher: MetadataFetcherHelper,
           navigationHandler: DefaultNavigationHandler,
-          uiHandler: WKUIHandler) async {
-        guard let webView = await webViewProvider.createWebview(configurationProvider: configurationProvider,
-                                                                parameters: dependencies.webviewParameters) else {
+          uiHandler: WKUIHandler) {
+        guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider,
+                                                          parameters: dependencies.webviewParameters) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
                        category: .webview)
@@ -109,16 +111,14 @@ class WKEngineSession: NSObject,
         super.init()
 
         self.metadataFetcher.delegate = self
-        await MainActor.run {
-            navigationHandler.session = self
-        }
+        navigationHandler.session = self
 
         uiHandler.delegate = delegate
         uiHandler.isActive = isActive
         webView.uiDelegate = uiHandler
         webView.navigationDelegate = navigationHandler
         webView.delegate = self
-        await userScriptManager.injectUserScriptsIntoWebView(webView)
+        userScriptManager.injectUserScriptsIntoWebView(webView)
         addContentScripts()
     }
 

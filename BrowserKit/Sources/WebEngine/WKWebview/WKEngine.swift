@@ -13,11 +13,12 @@ public class WKEngine: Engine {
     private let engineDependencies: EngineDependencies
     private let configProvider: WKEngineConfigurationProvider
 
-    public static func factory(engineDependencies: EngineDependencies) async -> WKEngine {
-        let configProvider = await DefaultWKEngineConfigurationProvider()
-        let userScriptManager = await DefaultUserScriptManager()
-        let webServerUtil = await DefaultWKWebServerUtil.make()
-        return await WKEngine(
+    @MainActor
+    public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
+        let configProvider = DefaultWKEngineConfigurationProvider()
+        let userScriptManager = DefaultUserScriptManager()
+        let webServerUtil = DefaultWKWebServerUtil.factory()
+        return WKEngine(
             userScriptManager: userScriptManager,
             webServerUtil: webServerUtil,
             sourceTimerFactory: DefaultDispatchSourceTimerFactory(),
@@ -26,28 +27,30 @@ public class WKEngine: Engine {
         )
     }
 
+    @MainActor
     init(userScriptManager: WKUserScriptManager,
          webServerUtil: WKWebServerUtil,
          sourceTimerFactory: DispatchSourceTimerFactory,
          configProvider: WKEngineConfigurationProvider,
-         engineDependencies: EngineDependencies) async {
+         engineDependencies: EngineDependencies) {
         self.userScriptManager = userScriptManager
         self.webServerUtil = webServerUtil
         self.sourceTimerFactory = sourceTimerFactory
         self.configProvider = configProvider
         self.engineDependencies = engineDependencies
 
-        await InternalUtil().setUpInternalHandlers()
+        InternalUtil().setUpInternalHandlers()
     }
 
     public func createView() -> EngineView {
         return WKEngineView(frame: .zero)
     }
 
-    public func createSession(dependencies: EngineSessionDependencies) async throws -> EngineSession {
-        guard let session = await WKEngineSession.sessionFactory(userScriptManager: userScriptManager,
-                                                                 dependencies: dependencies,
-                                                                 configurationProvider: configProvider) else {
+    @MainActor
+    public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
+        guard let session = WKEngineSession.sessionFactory(userScriptManager: userScriptManager,
+                                                           dependencies: dependencies,
+                                                           configurationProvider: configProvider) else {
             throw EngineError.sessionNotCreated
         }
 

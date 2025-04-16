@@ -22,8 +22,9 @@ class DefaultWKWebServerUtil: WKWebServerUtil {
         self.logger = logger
     }
 
-    static func make() async -> DefaultWKWebServerUtil {
-        let webServer = await MainActor.run { WKEngineWebServer.shared }
+    @MainActor
+    static func factory() -> DefaultWKWebServerUtil {
+        let webServer = WKEngineWebServer.shared
         return DefaultWKWebServerUtil(webServer: webServer)
     }
 

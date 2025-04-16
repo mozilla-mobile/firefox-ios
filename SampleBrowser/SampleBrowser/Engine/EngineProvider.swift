@@ -5,6 +5,7 @@
 import Foundation
 import WebEngine
 
+@MainActor
 struct EngineProvider {
     private var engine: Engine
     // We only have one session and one view in the SampleBrowser so this code is very simple
@@ -12,7 +13,7 @@ struct EngineProvider {
     private(set) var view: EngineView
 
     init?(dependencyManager: EngineDependencyManager) async {
-        self.engine = await WKEngine.factory(engineDependencies: dependencyManager.engineDependencies)
+        self.engine = WKEngine.factory(engineDependencies: dependencyManager.engineDependencies)
 
         do {
             session = try await engine.createSession(dependencies: dependencyManager.sessionDependencies)
