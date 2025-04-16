@@ -5,7 +5,6 @@
 import Common
 import UIKit
 
-@MainActor
 class WKEngineView: UIView, EngineView, FullscreenDelegate {
     private var session: WKEngineSession?
     private var logger: Logger

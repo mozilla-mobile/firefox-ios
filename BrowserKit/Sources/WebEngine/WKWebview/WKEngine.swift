@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-public class WKEngine: @preconcurrency Engine {
+public class WKEngine: Engine {
     private let sourceTimerFactory: DispatchSourceTimerFactory
     private var shutdownWebServerTimer: DispatchSourceInterface?
     private let userScriptManager: WKUserScriptManager
@@ -40,7 +40,6 @@ public class WKEngine: @preconcurrency Engine {
         await InternalUtil().setUpInternalHandlers()
     }
 
-    @MainActor
     public func createView() -> EngineView {
         return WKEngineView(frame: .zero)
     }

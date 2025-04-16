@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        Task { @MainActor in
+        Task {
             self.engineProvider = await EngineProviderManager.shared.getProvider()
             engineProvider?.warmEngine()
         }
