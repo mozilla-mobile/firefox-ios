@@ -36,18 +36,6 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
              try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
              if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
 
-<<<<<<< HEAD
-             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
-             // TODO: What happens if the locale or region changes during app runtime?
-             let env = SearchUserEnvironment(locale: locale,
-                                             region: region,
-                                             updateChannel: SearchUpdateChannel.release,
-                                             distributionId: "",    // Confirmed with AS: leave empty, no distr on iOS
-                                             experiment: "",        // Confirmed with AS: leave empty
-                                             appName: .firefoxIos,
-                                             version: AppInfo.appVersion,
-                                             deviceType: deviceType)
-=======
             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
             // TODO: [FXIOS-11885] What happens if the locale or region changes during app runtime?
             let env = SearchUserEnvironment(locale: locale,
@@ -58,7 +46,6 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
                                             appName: .firefoxIos,
                                             version: AppInfo.appVersion,
                                             deviceType: deviceType)
->>>>>>> dd1953509 (Refactor FXIOS-11428 [SEC] [WIP] Search engine telemetry updates (#25957))
 
              let filtered = try engineSelector.filterEngineConfiguration(userEnvironment: env)
              completion(filtered, nil)
