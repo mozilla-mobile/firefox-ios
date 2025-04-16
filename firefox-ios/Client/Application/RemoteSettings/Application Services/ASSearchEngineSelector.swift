@@ -36,16 +36,16 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
              try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
              if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
 
-             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
-             // TODO: What happens if the locale or region changes during app runtime?
-             let env = SearchUserEnvironment(locale: locale,
-                                             region: region,
-                                             updateChannel: SearchUpdateChannel.release,
-                                             distributionId: "",    // Confirmed with AS: leave empty, no distr on iOS
-                                             experiment: "",        // Confirmed with AS: leave empty
-                                             appName: .firefoxIos,
-                                             version: AppInfo.appVersion,
-                                             deviceType: deviceType)
+            let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
+            // TODO: [FXIOS-11885] What happens if the locale or region changes during app runtime?
+            let env = SearchUserEnvironment(locale: locale,
+                                            region: region,
+                                            updateChannel: SearchUpdateChannel.release,
+                                            distributionId: "",    // Confirmed with AS: leave empty, no distr on iOS
+                                            experiment: "",        // Confirmed with AS: leave empty
+                                            appName: .firefoxIos,
+                                            version: AppInfo.appVersion,
+                                            deviceType: deviceType)
 
              let filtered = try engineSelector.filterEngineConfiguration(userEnvironment: env)
              completion(filtered, nil)
