@@ -8,6 +8,7 @@ import WebKit
 
 final class WKEngineWebViewTests: XCTestCase {
     private var delegate: MockWKEngineWebViewDelegate!
+    private let testURL = URL(string: "https://www.example.com/")!
 
     override func setUp() {
         super.setUp()
@@ -29,15 +30,14 @@ final class WKEngineWebViewTests: XCTestCase {
 
     func testLoad_callsObservers() {
         let subject = createSubject()
-        let testURL = URL(string: "https://www.example.com/")!
         let loadingExpectation = expectation(that: \WKWebView.isLoading, on: subject) { _, change in
             guard change.newValue != nil else { return false }
             return true
         }
         let titleExpectation = expectation(that: \WKWebView.title, on: subject)
-        let urlExpectation = expectation(that: \WKWebView.url, on: subject) { _, change in
+        let urlExpectation = expectation(that: \WKWebView.url, on: subject) { [weak self] _, change in
             guard let url = change.newValue as? URL else { return false }
-            XCTAssertEqual(url, testURL)
+            XCTAssertEqual(url, self?.testURL)
             return true
         }
         let progressExpectation = expectation(that: \WKWebView.estimatedProgress, on: subject) { _, change in
@@ -80,6 +80,17 @@ final class WKEngineWebViewTests: XCTestCase {
 
         XCTAssertGreaterThan(delegate.webViewPropertyChangedCalled, 0)
         XCTAssertNotNil(delegate.lastWebViewPropertyChanged)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testLoad_callsBeginRefreshing_onUIRefreshControl() throws {
+        let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
+        let pullRefresh = try XCTUnwrap(subject.scrollView.refreshControl as? MockUIRefreshControl)
+
+        subject.load(URLRequest(url: testURL))
+
+        XCTAssertEqual(pullRefresh.beginRefreshingCalled, 1)
+        XCTAssertEqual(pullRefresh.endRefreshingCalled, 0)
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
