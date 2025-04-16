@@ -2801,7 +2801,7 @@ homepage:
   viewed:
     type: event
     description: |
-      Records when the Firefox homepage is viewed.
+      Records when the Firefox homepage is viewed. We consider a `view` to be if a user navigates to a new homepage whether through opening a new tab, navigating from a webpage, or after selecting the address bar. Seeing the homepage again after viewing a modal that is not full screen does not trigger a view.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/25082
     data_reviews:
@@ -2821,11 +2821,11 @@ homepage:
       section:
        type: string
        description: |
-        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.TappedItemType` under `sectionName`.
+        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.ItemType` under `sectionName`.
       type:
        type: string
        description: |
-        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.TappedItemType`.
+        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.ItemType`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/25086
     data_reviews:
@@ -2836,6 +2836,31 @@ homepage:
     metadata:
       tags:
         - Homepage
+
+  item_viewed:
+    type: event
+    description: |
+      Records when an item has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to an item has been scrolled to or seen on an homepage that has been viewed.
+    extra_keys:
+      section:
+       type: string
+       description: |
+        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.ItemType` under `sectionName`.
+      type:
+       type: string
+       description: |
+        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.ItemType`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25083
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26144
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
 
 # Metrics related to the history panel of the library
 library:

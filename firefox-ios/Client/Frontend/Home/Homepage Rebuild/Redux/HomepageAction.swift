@@ -6,7 +6,7 @@ import Common
 import Redux
 
 struct HomepageTelemetryExtras {
-    let itemType: HomepageTelemetry.TappedItemType?
+    let itemType: HomepageTelemetry.ItemType?
 }
 
 final class HomepageAction: Action {
@@ -38,4 +38,5 @@ enum HomepageActionType: ActionType {
     case viewWillAppear
     case didSelectItem
     case embeddedHomepage
+    case itemSeen
 }
