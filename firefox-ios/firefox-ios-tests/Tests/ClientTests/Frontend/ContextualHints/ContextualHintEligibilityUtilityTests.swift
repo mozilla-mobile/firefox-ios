@@ -72,8 +72,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
                                                    overlayState: overlayState,
                                                    device: MockUIDevice(isIpad: false),
                                                    isCFRToolbarFeatureEnabled: true)
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarOnboardingKey.rawValue)
-
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
@@ -110,8 +108,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
                                                    overlayState: overlayState,
                                                    device: MockUIDevice(isIpad: false),
                                                    isCFRToolbarFeatureEnabled: true)
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarOnboardingKey.rawValue)
-
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
     }
