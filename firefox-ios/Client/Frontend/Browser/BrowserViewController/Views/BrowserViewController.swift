@@ -781,10 +781,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled {
-            webPagePreview.applyTheme(theme: theme)
-            view.backgroundColor = theme.colors.layer1
-        }
+        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -3258,6 +3255,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        if isSwipingTabsEnabled { view.backgroundColor = currentTheme.colors.layer1 }
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
