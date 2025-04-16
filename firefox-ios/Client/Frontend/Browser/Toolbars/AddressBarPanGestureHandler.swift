@@ -82,6 +82,9 @@ final class AddressBarPanGestureHandler: NSObject {
             originalPosition = contentContainer.frame.origin
             // Set the initial position of webPagePreview with the offset
             webPagePreview.frame.origin.x = calculateX(width: originalPosition.x)
+            // Set to true to deactivate Auto Layout because we manipulate the rect of
+            // the view directly and want to avoid conflicts such as flickering.
+            webPagePreview.translatesAutoresizingMaskIntoConstraints = true
         case .changed:
             updateWebPagePreview(translation: translation, index: index, tabs: tabs)
         case .ended:
@@ -141,6 +144,8 @@ final class AddressBarPanGestureHandler: NSObject {
         }) { [self] _ in
             // Hide the webPagePreview after the animation.
             webPagePreview.isHidden = true
+            // Reactivate Auto Layout after the animation.
+            webPagePreview.translatesAutoresizingMaskIntoConstraints = false
             if shouldCompleteTransition && isValidIndex {
                 // Reset the positions and select the new tab if the transition was completed.
                 contentContainer.frame.origin.x = 0

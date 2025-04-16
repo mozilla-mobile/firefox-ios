@@ -1009,8 +1009,8 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        view.addSubviews(contentContainer)
         if isSwipingTabsEnabled { view.addSubview(webPagePreview) }
+        view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
 
