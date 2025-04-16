@@ -172,7 +172,6 @@ struct DownloadLiveActivity: Widget {
                 }
                 .padding()
             }
-        
     }
 
     private func lockScreenTexts(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
@@ -289,7 +288,8 @@ struct DownloadLiveActivity: Widget {
           Button(intent: intent) {
               ZStack {
                   Circle()
-                      .stroke(UX.DynamicIsland.circleStrokeColor, lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
+                      .stroke(UX.DynamicIsland.circleStrokeColor,
+                              lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
                       .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
                              height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
                   Circle()
@@ -315,7 +315,7 @@ struct DownloadLiveActivity: Widget {
                                   bottom: DownloadLiveActivity.UX.DynamicIsland.iconBottomPadding,
                                   trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
           }.buttonStyle(.plain)
-          }
+      }
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { liveDownload in

@@ -17,7 +17,7 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
     var downloadProgressManager: DownloadProgressManager
-    
+
     let windowUUID: String
 
     init(downloadProgressManager: DownloadProgressManager, windowUUID: String) {
@@ -61,10 +61,10 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     }
 
     func updateCombinedBytesDownloaded(value: Int64) {
-        update()
+//        update()
     }
 
     func updateCombinedTotalBytesExpected(value: Int64?) {
-        update()
+//        update()
     }
 }

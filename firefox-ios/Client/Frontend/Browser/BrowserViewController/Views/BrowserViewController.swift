@@ -919,10 +919,19 @@ class BrowserViewController: UIViewController,
             name: .RemoteTabNotificationTapped,
             object: nil
         )
-        _ = notificationCenter.addObserver(name: UserDefaults.didChangeNotification, queue: .main) {_ in
-            print("Stopped UUID: \(UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "stopDownload") ?? "not working")")
-            print("window UUID: \(self.windowUUID.uuidString)")
-            guard UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "stopDownload") == self.windowUUID.uuidString else{
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onStopDownloadChanged),
+            name: UserDefaults.didChangeNotification,
+            object: nil
+        )
+    }
+
+    @objc
+    private func onStopDownloadChanged() {
+        ensureMainThread {
+            guard UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?
+                .string(forKey: "stopDownload") == self.windowUUID.uuidString else {
                 return
             }
             self.downloadToast?.dismiss(true)
