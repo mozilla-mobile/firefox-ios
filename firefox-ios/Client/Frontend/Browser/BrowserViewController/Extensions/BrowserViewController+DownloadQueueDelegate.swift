@@ -15,7 +15,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         guard download.mimeType != MIMEType.Passbook else { return }
 
         if let downloadProgressManager = self.downloadProgressManager {
-            if tabManager.selectedTab?.isPrivate == true && self.downloadLiveActivityWrapper != nil {
+            if tabManager.selectedTab?.isPrivate == true {
                 dismissDownloadLiveActivity()
             }
             downloadProgressManager.addDownload(download)
