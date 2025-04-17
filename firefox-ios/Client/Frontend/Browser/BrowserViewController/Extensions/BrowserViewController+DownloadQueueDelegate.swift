@@ -22,8 +22,10 @@ extension BrowserViewController: DownloadQueueDelegate {
         let downloadProgressManager = DownloadProgressManager(downloads: [download])
         self.downloadProgressManager = downloadProgressManager
 
-        if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
-            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
+        if #available(iOS 17, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
+            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(
+                downloadProgressManager: downloadProgressManager,
+                windowUUID: windowUUID.uuidString)
             downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
             self.downloadLiveActivityWrapper = downloadLiveActivityWrapper
             guard downloadLiveActivityWrapper.start() else {
@@ -38,7 +40,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         // When this toast is dismissed, be sure to clear this so that any
         // subsequent downloads cause a new toast to be created.
         self.downloadToast = nil
-        if #available(iOS 16.2, *),
+        if #available(iOS 17, *),
            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(durationToDismissal: .none)
@@ -83,7 +85,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
         DispatchQueue.main.async { [weak self] in
             downloadToast.dismiss(false)
-            if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
+            if #available(iOS 17, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
                 self?.downloadLiveActivityWrapper = nil
             }
@@ -102,7 +104,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         // We only care about download errors specific to our window's downloads
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
-            if #available(iOS 16.2, *),
+            if #available(iOS 17, *),
                let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
                 self.downloadLiveActivityWrapper = nil
