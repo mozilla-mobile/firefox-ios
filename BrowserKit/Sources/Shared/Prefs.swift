@@ -107,7 +107,6 @@ public struct PrefsKeys {
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
-        public static let TabsAndAddressBarAutoHide = "TabsAndAddressBarAutoHidePrefsKey"
     }
 
     // Firefox contextual hint
