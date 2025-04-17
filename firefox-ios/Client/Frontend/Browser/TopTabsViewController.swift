@@ -23,6 +23,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         static let topTabsBackgroundShadowWidth: CGFloat = 12
         static let faderPadding: CGFloat = 8
         static let animationSpeed: TimeInterval = 0.1
+        static let backgroundAlphaForBlur: CGFloat = 0.8
     }
 
     // MARK: - Properties
@@ -183,11 +184,21 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
-        view.backgroundColor = colors.layer3
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+
+        if isToolbarRefactorEnabled,
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           toolbarState.isTranslucent {
+            view.backgroundColor = colors.layer3.withAlphaComponent(UX.backgroundAlphaForBlur)
+            collectionView.backgroundColor = .clear
+        } else {
+            view.backgroundColor = colors.layer3
+            collectionView.backgroundColor = view.backgroundColor
+        }
+
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
         newTab.tintColor = colors.iconPrimary
-        collectionView.backgroundColor = view.backgroundColor
         collectionView.reloadData()
         topTabDisplayManager.refreshStore()
     }
