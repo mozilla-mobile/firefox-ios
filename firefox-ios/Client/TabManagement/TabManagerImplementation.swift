@@ -98,7 +98,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
-    private let tabMigration: TabMigrationUtility
     private let windowManager: WindowManager
     private let windowIsNew: Bool
     private let profile: Profile
@@ -137,7 +136,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
          uuid: ReservedWindowUUID,
          tabDataStore: TabDataStore? = nil,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
-         tabMigration: TabMigrationUtility? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -147,7 +145,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         self.tabDataStore = dataStore
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
-        self.tabMigration = tabMigration ?? DefaultTabMigrationUtility(tabDataStore: dataStore)
         self.notificationCenter = notificationCenter
         self.inactiveTabsManager = inactiveTabsManager
         self.windowManager = windowManager
@@ -502,18 +499,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         isRestoringTabs = true
         AppEventQueue.started(.tabRestoration(windowUUID))
 
-        guard tabMigration.shouldRunMigration else {
-            logger.log("Not running the migration",
-                       level: .debug,
-                       category: .tabs)
-            restoreOnly()
-            return
-        }
-
-        logger.log("Running the migration",
-                   level: .debug,
-                   category: .tabs)
-        migrateAndRestore()
+        restoreTabs()
     }
 
     /// Provides a tab on which to open if the start at home feature is enabled. This tab
@@ -590,18 +576,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
     }
 
-    private func migrateAndRestore() {
-        Task {
-            await buildTabRestore(window: await tabMigration.runMigration(for: windowUUID))
-            Task { @MainActor in
-                // Log on main thread, where computed `tab` properties can be accessed without risk of races
-                logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
-                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
-            }
-        }
-    }
-
-    private func restoreOnly() {
+    private func restoreTabs() {
         tabs = [Tab]()
         Task { [weak self, windowUUID] in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
@@ -732,13 +707,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         newTab.screenshotUUID = tabData.id
         newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
         newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
-        let groupData = LegacyTabGroupData(
-            searchTerm: tabData.tabGroupData?.searchTerm ?? "",
-            searchUrl: tabData.tabGroupData?.searchUrl ?? "",
-            nextReferralUrl: tabData.tabGroupData?.nextUrl ?? "",
-            tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? ""
-        )
-        newTab.metadataManager?.tabGroupData = groupData
 
         if newTab.url == nil {
             logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
@@ -831,13 +799,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         let tabData = tabsToSave.map { tab in
-            let oldTabGroupData = tab.metadataManager?.tabGroupData
-            let state = TabGroupTimerState(rawValue: oldTabGroupData?.tabHistoryCurrentState ?? "")
-            let groupData = TabGroupData(searchTerm: oldTabGroupData?.tabAssociatedSearchTerm,
-                                         searchUrl: oldTabGroupData?.tabAssociatedSearchUrl,
-                                         nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
-                                         tabHistoryCurrentState: state)
-
             let tabId =  UUID(uuidString: tab.tabUUID) ?? UUID()
             if tab.url == nil {
                 logger.log("Tab has empty tab.URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime))",
@@ -845,6 +806,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
                            category: .tabs)
             }
 
+            // FXIOS-11987 - TabGroupData is nil since it was part of the legacy tab metadata
             return TabData(id: tabId,
                            title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
@@ -852,7 +814,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),
                            createdAtTime: Date.fromTimestamp(tab.firstCreatedTime),
-                           tabGroupData: groupData)
+                           tabGroupData: nil)
         }
 
         let logInfo: String
@@ -919,10 +881,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         saveSessionData(forTab: selectedTab)
 
         willSelectTab(url)
-
-        let isPrivateBrowsing = previous?.isPrivate
-        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: isPrivateBrowsing ?? false)
-        tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
 
         // Make sure to wipe the private tabs if the user has the pref turned on and there are private tabs to remove
         if shouldClearPrivateTabs(), !tab.isPrivate && !privateTabs.isEmpty {
