@@ -6,7 +6,7 @@
 
 struct DefaultTestDependencies {
     var mockTelemetryProxy: MockEngineTelemetryProxy
-    var webviewParameters = WKWebviewParameters(blockPopups: true,
+    var webviewParameters = WKWebViewParameters(blockPopups: true,
                                                 isPrivate: true,
                                                 autoPlay: .all,
                                                 schemeHandler: WKInternalSchemeHandler())

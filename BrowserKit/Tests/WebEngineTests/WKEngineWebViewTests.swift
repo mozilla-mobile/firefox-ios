@@ -8,6 +8,7 @@ import WebKit
 
 final class WKEngineWebViewTests: XCTestCase {
     private var delegate: MockWKEngineWebViewDelegate!
+    private let testURL = URL(string: "https://www.example.com/")!
 
     override func setUp() {
         super.setUp()
@@ -29,15 +30,14 @@ final class WKEngineWebViewTests: XCTestCase {
 
     func testLoad_callsObservers() {
         let subject = createSubject()
-        let testURL = URL(string: "https://www.example.com/")!
         let loadingExpectation = expectation(that: \WKWebView.isLoading, on: subject) { _, change in
             guard change.newValue != nil else { return false }
             return true
         }
         let titleExpectation = expectation(that: \WKWebView.title, on: subject)
-        let urlExpectation = expectation(that: \WKWebView.url, on: subject) { _, change in
+        let urlExpectation = expectation(that: \WKWebView.url, on: subject) { [weak self] _, change in
             guard let url = change.newValue as? URL else { return false }
-            XCTAssertEqual(url, testURL)
+            XCTAssertEqual(url, self?.testURL)
             return true
         }
         let progressExpectation = expectation(that: \WKWebView.estimatedProgress, on: subject) { _, change in
@@ -80,6 +80,83 @@ final class WKEngineWebViewTests: XCTestCase {
 
         XCTAssertGreaterThan(delegate.webViewPropertyChangedCalled, 0)
         XCTAssertNotNil(delegate.lastWebViewPropertyChanged)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testLoad_callsBeginRefreshing_onUIRefreshControl() throws {
+        let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
+        let pullRefresh = try XCTUnwrap(subject.scrollView.refreshControl as? MockUIRefreshControl)
+
+        subject.load(URLRequest(url: testURL))
+
+        XCTAssertEqual(pullRefresh.beginRefreshingCalled, 1)
+        XCTAssertEqual(pullRefresh.endRefreshingCalled, 0)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testInit_setupsPullRefresh() throws {
+        let subject = createSubject()
+
+        let pullRefresh = try XCTUnwrap(subject.scrollView.subviews.first {
+            $0 is EnginePullRefreshView
+        }) as? MockEnginePullRefreshView
+
+        XCTAssertNotNil(pullRefresh)
+        XCTAssertNil(subject.scrollView.refreshControl)
+        XCTAssertEqual(pullRefresh?.configureCalled, 1)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testInit_withUIRefreshControl_setupsCorrectlyPullRefresh() {
+        let subject = createSubject(pullRefreshViewType: UIRefreshControl.self)
+
+        XCTAssertNotNil(subject.scrollView.refreshControl)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testScrollWillBeginZooming_removesPullRefresh() {
+        let subject = createSubject()
+
+        subject.scrollViewWillBeginZooming(UIScrollView(), with: nil)
+
+        let pullRefresh = subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
+        XCTAssertNil(pullRefresh)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testScrollDidEndZooming_setupsPullRefresh() {
+        let subject = createSubject()
+
+        subject.scrollViewWillBeginZooming(UIScrollView(), with: nil)
+        subject.scrollViewDidEndZooming(UIScrollView(), with: nil, atScale: 1.0)
+
+        let pullRefresh = subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
+        XCTAssertNotNil(pullRefresh)
+        XCTAssertNil(subject.scrollView.refreshControl)
+        XCTAssertEqual((pullRefresh as? MockEnginePullRefreshView)?.configureCalled, 1)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testScrollDidEndZooming_doesntSetupPullRefreshAgain() {
+        let subject = createSubject()
+
+        subject.scrollViewDidEndZooming(UIScrollView(), with: nil, atScale: 1.0)
+
+        let pullRefresh = subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
+        XCTAssertNotNil(pullRefresh)
+        XCTAssertNil(subject.scrollView.refreshControl)
+        XCTAssertEqual((pullRefresh as? MockEnginePullRefreshView)?.configureCalled, 1)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testTriggerPullRefresh_callsDelegate() throws {
+        let subject = createSubject()
+        let pullRefresh = try XCTUnwrap(subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
+                                        as? MockEnginePullRefreshView)
+
+        pullRefresh.onRefresh?()
+
+        XCTAssertEqual(delegate.webViewNeedsReloadCalled, 1)
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
@@ -173,12 +250,14 @@ final class WKEngineWebViewTests: XCTestCase {
         wait(for: [expectation3], timeout: 10)
     }
 
-    func createSubject(file: StaticString = #file,
+    func createSubject(pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
+                       file: StaticString = #file,
                        line: UInt = #line) -> DefaultWKEngineWebView {
-        let parameters = WKWebviewParameters(blockPopups: true,
+        let parameters = WKWebViewParameters(blockPopups: true,
                                              isPrivate: false,
                                              autoPlay: .all,
-                                             schemeHandler: WKInternalSchemeHandler())
+                                             schemeHandler: WKInternalSchemeHandler(),
+                                             pullRefreshType: pullRefreshViewType)
         let configuration = DefaultWKEngineConfigurationProvider()
         let subject = DefaultWKEngineWebView(frame: .zero,
                                              configurationProvider: configuration,

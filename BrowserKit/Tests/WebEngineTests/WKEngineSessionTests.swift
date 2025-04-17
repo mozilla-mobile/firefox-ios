@@ -321,30 +321,6 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertTrue(engineSessionDelegate.savedLoading!)
     }
 
-    func testLoadingGivenIsLoadingThenCallsRefreshControlBegin() {
-        let subject = createSubject()
-        subject?.delegate = engineSessionDelegate
-        let refreshControl = MockUIRefreshControl()
-        webViewProvider.webView.engineScrollView?.refreshControl = refreshControl
-
-        subject?.webViewPropertyChanged(.loading(true))
-
-        XCTAssertEqual(refreshControl.beginRefreshingCalled, 1)
-        XCTAssertEqual(refreshControl.endRefreshingCalled, 0)
-    }
-
-    func testLoadingGivenIsNotLoadingThenCallsRefreshControlEnd() {
-        let subject = createSubject()
-        subject?.delegate = engineSessionDelegate
-        let refreshControl = MockUIRefreshControl()
-        webViewProvider.webView.engineScrollView?.refreshControl = refreshControl
-
-        subject?.webViewPropertyChanged(.loading(false))
-
-        XCTAssertEqual(refreshControl.beginRefreshingCalled, 0)
-        XCTAssertEqual(refreshControl.endRefreshingCalled, 1)
-    }
-
     func testTitleChangeGivenEmptyTitleThenDoesntCallDelegate() {
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate

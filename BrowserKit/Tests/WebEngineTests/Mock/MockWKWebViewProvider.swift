@@ -10,7 +10,7 @@ class MockWKWebViewProvider: WKWebViewProvider {
     var webView: MockWKEngineWebView!
 
     func createWebview(configurationProvider: WKEngineConfigurationProvider,
-                       parameters: WKWebviewParameters) -> WKEngineWebView? {
+                       parameters: WKWebViewParameters) -> WKEngineWebView? {
         let webView = MockWKEngineWebView(frame: .zero,
                                           configurationProvider: configurationProvider,
                                           parameters: parameters)

@@ -12,6 +12,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView
 
     func webViewPropertyChanged(_ property: WKEngineWebViewProperty)
+    func webViewNeedsReload()
 }
 
 /// Abstraction on top of the `WKWebView`
@@ -41,7 +42,7 @@ protocol WKEngineWebView: UIView {
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
 
-    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider, parameters: WKWebviewParameters)
+    init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider, parameters: WKWebViewParameters)
 
     @discardableResult
     func load(_ request: URLRequest) -> WKNavigation?
@@ -120,11 +121,19 @@ extension WKEngineWebView {
     }
 }
 
-final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface, ThemeApplicable {
+final class DefaultWKEngineWebView: WKWebView,
+                                    UIScrollViewDelegate,
+                                    WKEngineWebView,
+                                    MenuHelperWebViewInterface,
+                                    ThemeApplicable {
     var engineScrollView: WKScrollView?
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
+    private let pullRefreshViewType: EnginePullRefreshViewType
+    private var pullRefreshView: EnginePullRefreshView?
+    private var pullRefreshViewHeightConstraint: NSLayoutConstraint?
+    private var pullRefreshViewWidthConstraint: NSLayoutConstraint?
     private var observedTokens = [NSKeyValueObservation]()
 
     override var inputAccessoryView: UIView? {
@@ -151,15 +160,17 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
 
     required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider,
-                   parameters: WKWebviewParameters) {
+                   parameters: WKWebViewParameters) {
         let configuration = configurationProvider.createConfiguration(parameters: parameters)
         self.engineConfiguration = configuration
         guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
-
+        pullRefreshViewType = parameters.pullRefreshType
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 
-        self.engineScrollView = scrollView
-        self.setupObservers()
+        engineScrollView = scrollView
+        scrollView.delegate = self
+        setupObservers()
+        setupPullRefresh()
     }
 
     required init?(coder: NSCoder) {
@@ -183,6 +194,7 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
     private func setupObservers() {
         let loadingToken = observe(\.isLoading, options: [.new]) { [weak self] _, change in
             guard let isLoading = change.newValue else { return }
+            self?.handleWebsiteLoadingChanged(isLoading)
             self?.delegate?.webViewPropertyChanged(.loading(isLoading))
         }
 
@@ -218,6 +230,8 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
 
         let contentSizeObserver = scrollView.observe(\.contentSize, options: [.new]) { [weak self] _, change in
             guard let newSize = change.newValue else { return }
+            self?.pullRefreshViewHeightConstraint?.constant = newSize.height
+            self?.pullRefreshViewWidthConstraint?.constant = newSize.width
             self?.delegate?.webViewPropertyChanged(.contentSize(newSize))
         }
 
@@ -255,6 +269,50 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
         observedTokens.removeAll()
     }
 
+    private func setupPullRefresh() {
+        guard !scrollView.isZooming, pullRefreshView == nil else { return }
+        let refresh = pullRefreshViewType.init()
+        pullRefreshView = refresh
+        refresh.configure(with: scrollView) { [weak self] in
+            self?.delegate?.webViewNeedsReload()
+        }
+        guard pullRefreshViewType != UIRefreshControl.self else { return }
+        scrollView.addSubview(refresh)
+        refresh.translatesAutoresizingMaskIntoConstraints = false
+        pullRefreshViewHeightConstraint = refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
+        pullRefreshViewHeightConstraint?.isActive = true
+        pullRefreshViewWidthConstraint = refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        pullRefreshViewWidthConstraint?.isActive = true
+        NSLayoutConstraint.activate([
+            refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
+            refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
+            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+        ])
+    }
+
+    private func removePullRefresh() {
+        pullRefreshView?.removeFromSuperview()
+        pullRefreshViewWidthConstraint = nil
+        pullRefreshViewHeightConstraint = nil
+        pullRefreshView = nil
+    }
+
+    private func handleWebsiteLoadingChanged(_ isLoading: Bool) {
+        guard let refreshControl = pullRefreshView as? UIRefreshControl else {
+            if isLoading {
+                removePullRefresh()
+            } else {
+                setupPullRefresh()
+            }
+            return
+        }
+        if isLoading {
+            refreshControl.beginRefreshing()
+        } else {
+            refreshControl.endRefreshing()
+        }
+    }
+
     func removeAllUserScripts() {
         configuration.userContentController.removeAllUserScripts()
         configuration.userContentController.removeAllScriptMessageHandlers()
@@ -283,11 +341,24 @@ final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebVie
         return super.hitTest(point, with: event)
     }
 
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        removePullRefresh()
+    }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        setupPullRefresh()
+    }
+
     // MARK: - ThemeApplicable
 
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: any Common.Theme) {
+        if let pullRefreshView = pullRefreshView as? ThemeApplicable {
+            pullRefreshView.applyTheme(theme: theme)
+        }
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")

@@ -5,13 +5,16 @@
 import Foundation
 import WebKit
 
-public struct WKWebviewParameters {
+public struct WKWebViewParameters {
     /// A boolean value customizable with a user preference indicating whether JavaScript can
     /// open windows without user interaction.
     var blockPopups: Bool
 
     /// A boolean value indicating if we have a persitent webview data store.
     var isPrivate: Bool
+
+    /// The type of pull refresh that is going to be instantiated and displayed by the webview.
+    var pullRefreshType: EnginePullRefreshViewType
 
     /// A value indicating the user preference for audio visual media types
     var autoPlay: WKAudiovisualMediaTypes
@@ -22,18 +25,20 @@ public struct WKWebviewParameters {
     public init(blockPopups: Bool,
                 isPrivate: Bool,
                 autoPlay: WKAudiovisualMediaTypes,
-                schemeHandler: SchemeHandler) {
+                schemeHandler: SchemeHandler,
+                pullRefreshType: EnginePullRefreshViewType = UIRefreshControl.self) {
         self.blockPopups = blockPopups
         self.isPrivate = isPrivate
         self.autoPlay = autoPlay
         self.schemeHandler = schemeHandler
+        self.pullRefreshType = pullRefreshType
     }
 }
 
 /// Provider to get a configured `WKEngineConfiguration`
 /// Only one configuration provider per application should exists.
 public protocol WKEngineConfigurationProvider {
-    func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration
+    func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration
 }
 
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
@@ -46,7 +51,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     public init() {}
 
-    public func createConfiguration(parameters: WKWebviewParameters) -> WKEngineConfiguration {
+    public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
         let configuration = WKWebViewConfiguration()
 
         // Since our app creates multiple web views, we assign the same WKProcessPool object to web views that

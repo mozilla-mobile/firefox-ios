@@ -15,10 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
     )
 
     lazy var engineProvider: EngineProvider = {
-        let parameters = WKWebviewParameters(blockPopups: false,
+        let parameters = WKWebViewParameters(blockPopups: false,
                                              isPrivate: false,
                                              autoPlay: .all,
-                                             schemeHandler: WKInternalSchemeHandler())
+                                             schemeHandler: WKInternalSchemeHandler(),
+                                             pullRefreshType: PullRefreshView.self)
         let sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
                                                             telemetryProxy: TelemetryHandler())
 
