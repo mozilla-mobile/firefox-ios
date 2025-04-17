@@ -59,11 +59,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case trackingProtectionRefactor
     case useRustKeychain
-<<<<<<< HEAD
-    case zoomFeature
-=======
     case updatedPasswordManager
->>>>>>> b5aa146ea (Add FXIOS-11067 [Password Manager] P1. Add feature flag for updated password manager scripts (#26162))
+    case zoomFeature
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -166,14 +163,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
-<<<<<<< HEAD
                 .useRustKeychain,
+                .updatedPasswordManager,
                 .zoomFeature:
-=======
-                .revertUnsafeContinuationsRefactor,
-                .useRustKeychain,
-                .updatedPasswordManager:
->>>>>>> b5aa146ea (Add FXIOS-11067 [Password Manager] P1. Add feature flag for updated password manager scripts (#26162))
             return nil
         }
     }

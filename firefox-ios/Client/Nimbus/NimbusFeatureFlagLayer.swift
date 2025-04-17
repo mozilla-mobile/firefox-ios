@@ -148,13 +148,11 @@ final class NimbusFeatureFlagLayer {
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
 
-<<<<<<< HEAD
-        case .zoomFeature:
-            return checkZoomFeature(from: nimbus)
-=======
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
->>>>>>> b5aa146ea (Add FXIOS-11067 [Password Manager] P1. Add feature flag for updated password manager scripts (#26162))
+
+        case .zoomFeature:
+            return checkZoomFeature(from: nimbus)
         }
     }
 
