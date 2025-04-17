@@ -10,10 +10,11 @@ class EngineDependencyManager {
     let telemetryHandler = TelemetryHandler()
 
     init() {
-        let parameters = WKWebviewParameters(blockPopups: false,
+        let parameters = WKWebViewParameters(blockPopups: false,
                                              isPrivate: false,
                                              autoPlay: .all,
-                                             schemeHandler: WKInternalSchemeHandler())
+                                             schemeHandler: WKInternalSchemeHandler(),
+                                             pullRefreshType: PullRefreshView.self)
         self.sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
                                                              telemetryProxy: telemetryHandler)
 
