@@ -7,6 +7,7 @@ import Redux
 
 struct HomepageTelemetryExtras {
     let itemType: HomepageTelemetry.ItemType?
+    let topSitesTelemetryConfig: TopSitesTelemetryConfig?
 }
 
 final class HomepageAction: Action {

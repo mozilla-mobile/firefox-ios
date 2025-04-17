@@ -8,8 +8,7 @@ import Redux
 struct TopSitesTelemetryConfig {
     let isZeroSearch: Bool
     let position: Int
-    let tileType: String
-    let url: String
+    let topSiteConfig: TopSiteConfiguration
 }
 
 final class TopSitesAction: Action {
