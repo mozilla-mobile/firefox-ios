@@ -4039,7 +4039,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityElementsHidden = false
 
             if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView)
+                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
             } else {
                 browserDelegate?.show(webView: webView)
             }
@@ -4115,10 +4115,22 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    /// Updates the content in BVC depending on whether its a home page or web page
-    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView) {
+    /// Updates the embedded content in the browser view controller (BVC) based on whether its a home page or web page.
+    /// - Parameters:
+    ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
+    ///   - webView: The `WKWebView` instance to be displayed.
+    ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
+    ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
+    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
+            guard previousTab?.isFxHomeTab ?? false else { return }
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                )
+            )
         } else {
             browserDelegate?.show(webView: webView)
         }
