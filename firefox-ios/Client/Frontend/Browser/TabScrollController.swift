@@ -7,20 +7,9 @@ import SnapKit
 import Shared
 import Common
 
-<<<<<<< HEAD
-protocol ScrollToHideToolbar: AnyObject {
-    var isScrollToHideToolbarEnabled: Bool { get }
-}
-
 class TabScrollingController: NSObject,
                               SearchBarLocationProvider,
-                              ScrollToHideToolbar,
                               Themeable {
-=======
-class TabScrollController: NSObject,
-                           SearchBarLocationProvider,
-                           Themeable {
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -72,11 +61,6 @@ class TabScrollController: NSObject,
     private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
-<<<<<<< HEAD
-
-    let deviceType: DeviceTypeProvider
-=======
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
 
     private let windowUUID: WindowUUID
     private let logger: Logger
@@ -111,19 +95,6 @@ class TabScrollController: NSObject,
         }
     }
 
-<<<<<<< HEAD
-=======
-    private var overKeyboardScrollHeight: CGFloat {
-        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
-        return overKeyboardHeight
-    }
-
-    private var bottomContainerScrollHeight: CGFloat {
-        let bottomContainerHeight = bottomContainer?.frame.height ?? 0
-        return bottomContainerHeight
-    }
-
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
     private lazy var panGesture: UIPanGestureRecognizer = {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         panGesture.maximumNumberOfTouches = 1
@@ -149,7 +120,6 @@ class TabScrollController: NSObject,
         return windowUUID
     }
 
-<<<<<<< HEAD
     // Over keyboard content and bottom content
     private var overKeyboardScrollHeight: CGFloat {
         let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
@@ -161,15 +131,6 @@ class TabScrollController: NSObject,
         return bottomContainerHeight
     }
 
-    var isScrollToHideToolbarEnabled: Bool {
-        guard deviceType.userInterfaceIdiom == .pad,
-              let prefs = tab?.profile.prefs else { return true }
-
-        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide) ?? true
-    }
-
-=======
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
     // If scrollview contentSize height is bigger that device height plus delta
     // New settings to disable bar autohide only for iPad
     var isAbleToScroll: Bool {
@@ -187,12 +148,7 @@ class TabScrollController: NSObject,
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-<<<<<<< HEAD
-         logger: Logger = DefaultLogger.shared,
-         deviceType: DeviceTypeProvider = UIDevice.current) {
-=======
          logger: Logger = DefaultLogger.shared) {
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter

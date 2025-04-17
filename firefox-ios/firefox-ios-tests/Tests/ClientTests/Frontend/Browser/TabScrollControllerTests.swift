@@ -34,36 +34,6 @@ final class TabScrollControllerTests: XCTestCase {
         super.tearDown()
     }
 
-<<<<<<< HEAD
-    func testIsAbleToScrollTrue_ForIpadWhenAutoHideSettingIsEnabled() {
-        let subject = createSubject()
-        setupTabScroll(with: subject)
-        mockProfile.prefs.setBool(true,
-                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
-
-        XCTAssertTrue(subject.isAbleToScroll)
-    }
-
-    func testIsAbleToScrollTrue_ForIpaWhenAutoHideSettingIsDisabled() {
-        let subject = createSubject()
-        setupTabScroll(with: subject)
-        mockProfile.prefs.setBool(false,
-                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
-
-        XCTAssertFalse(subject.isAbleToScroll)
-    }
-
-    func testIsAbleToScrollTrue_WhenDeviceisIphone() {
-        let subject = createSubject(isIpad: false)
-        setupTabScroll(with: subject)
-        mockProfile.prefs.setBool(false,
-                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
-
-        XCTAssertTrue(subject.isAbleToScroll)
-    }
-
-=======
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
     func testHandlePan_ScrollingUp() {
         let subject = createSubject()
         setupTabScroll(with: subject)
@@ -174,15 +144,8 @@ final class TabScrollControllerTests: XCTestCase {
         subject.header = header
     }
 
-<<<<<<< HEAD
-    private func createSubject(isIpad: Bool = true) -> TabScrollingController {
-        let deviceType = MockDeviceTypeProvider(idiom: isIpad ? .pad : .phone)
-        let subject = TabScrollingController(windowUUID: .XCTestDefaultUUID,
-                                             deviceType: deviceType)
-=======
-    private func createSubject() -> TabScrollController {
-        let subject = TabScrollController(windowUUID: .XCTestDefaultUUID)
->>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
+    private func createSubject() -> TabScrollingController {
+        let subject = TabScrollingController(windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
     }
