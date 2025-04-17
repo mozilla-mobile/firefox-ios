@@ -28,12 +28,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         .value()
         .rustKeychainEnabled
 
+    private let loginsVerificationEnabled = FxNimbus.shared
+        .features
+        .loginsVerification
+        .value()
+        .loginsVerificationEnabled
+
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
         creditCardAutofillEnabled: creditCardAutofillStatus,
-        rustKeychainEnabled: rustKeychainEnabled
-    )
+        rustKeychainEnabled: rustKeychainEnabled,
+        loginsVerificationEnabled: loginsVerificationEnabled)
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,

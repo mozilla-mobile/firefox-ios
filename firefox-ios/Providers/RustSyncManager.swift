@@ -37,6 +37,7 @@ public class RustSyncManager: NSObject, SyncManager {
     private var notificationCenter: NotificationProtocol
     var creditCardAutofillEnabled = false
     var rustKeychainEnabled = false
+    var loginsVerificationEnabled = false
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
 
@@ -70,6 +71,7 @@ public class RustSyncManager: NSObject, SyncManager {
     init(profile: BrowserProfile,
          creditCardAutofillEnabled: Bool = false,
          rustKeychainEnabled: Bool = false,
+         loginsVerificationEnabled: Bool = false,
          logger: Logger = DefaultLogger.shared,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
@@ -80,6 +82,7 @@ public class RustSyncManager: NSObject, SyncManager {
         super.init()
         self.creditCardAutofillEnabled = creditCardAutofillEnabled
         self.rustKeychainEnabled = rustKeychainEnabled
+        self.loginsVerificationEnabled = loginsVerificationEnabled
     }
 
     @objc
@@ -355,6 +358,22 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get token server endpoint url."
     }
 
+    func shouldSyncLogins(completion: @escaping (Bool) -> Void) {
+        if !(self.prefs.boolForKey(PrefsKeys.LoginsHaveBeenVerified) ?? false) {
+            // We should only sync logins when the verification step has completed successfully.
+            // Otherwise logins could exist in the database that can't be decrypted and would
+            // prevent logins from syncing if they are not removed.
+
+            self.profile?.logins.verifyLogins { successfullyVerified in
+                self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.LoginsHaveBeenVerified)
+                completion(successfullyVerified)
+            }
+        } else {
+            // Successful logins verification already occurred so login syncing can proceed
+            completion(true)
+        }
+    }
+
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
                                      loginKey: String?,
                                      creditCardKey: String?,
@@ -371,9 +390,18 @@ public class RustSyncManager: NSObject, SyncManager {
                  self.profile?.tabs.registerWithSyncManager()
                  rustEngines.append(engine.rawValue)
              case .passwords:
-                 if loginKey != nil {
-                     self.profile?.logins.registerWithSyncManager()
-                     rustEngines.append(engine.rawValue)
+                 if loginsVerificationEnabled {
+                     self.shouldSyncLogins { shouldSync in
+                         if shouldSync, loginKey != nil {
+                             self.profile?.logins.registerWithSyncManager()
+                             rustEngines.append(engine.rawValue)
+                         }
+                     }
+                 } else {
+                     if loginKey != nil {
+                          self.profile?.logins.registerWithSyncManager()
+                          rustEngines.append(engine.rawValue)
+                      }
                  }
              case .creditcards:
                  if self.creditCardAutofillEnabled {
