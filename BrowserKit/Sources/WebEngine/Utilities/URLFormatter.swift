@@ -72,7 +72,7 @@ public class DefaultURLFormatter: URLFormatter {
             return nil
         }
 
-        // Check presence of top-level domain if scheme is "http://" or "https://"
+        // Check possible presence of top-level domain if scheme is "http://" or "https://"
         if escapedEntry.hasPrefix("http://") || escapedEntry.hasPrefix("https://") {
             if !escapedEntry.contains(".") {
                 return nil
