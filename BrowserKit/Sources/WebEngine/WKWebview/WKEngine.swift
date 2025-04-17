@@ -13,6 +13,7 @@ public class WKEngine: Engine {
     private let engineDependencies: EngineDependencies
     private let configProvider: WKEngineConfigurationProvider
 
+    // TODO: With Swift 6 we can use default params in the init
     @MainActor
     public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
         let configProvider = DefaultWKEngineConfigurationProvider()

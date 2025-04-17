@@ -11,9 +11,9 @@ final class WKEngineTests: XCTestCase {
     private var webServerUtil: MockWKWebServerUtil!
     private var sourceTimerFactory: MockDispatchSourceTimerFactory!
 
-    override func setUp() {
-        super.setUp()
-        userScriptManager = MockWKUserScriptManager()
+    override func setUp() async throws {
+        try await super.setUp()
+        userScriptManager = await MockWKUserScriptManager()
         webServerUtil = MockWKWebServerUtil()
         sourceTimerFactory = MockDispatchSourceTimerFactory()
     }
@@ -25,27 +25,27 @@ final class WKEngineTests: XCTestCase {
         super.tearDown()
     }
 
-    func testCreateViewThenCreatesView() {
-        let subject = createSubject()
+    func testCreateViewThenCreatesView() async {
+        let subject = await createSubject()
         XCTAssertNotNil(subject.createView())
     }
 
-    func testCreateSessionThenCreatesSession() throws {
-        let subject = createSubject()
-        let session = try XCTUnwrap(subject.createSession(dependencies: DefaultTestDependencies().sessionDependencies))
+    func testCreateSessionThenCreatesSession() async throws {
+        let subject = await createSubject()
+        let session = try await subject.createSession(dependencies: DefaultTestDependencies().sessionDependencies)
         XCTAssertNotNil(session)
     }
 
-    func testWarmEngineCallsSetupEngine() {
-        let subject = createSubject()
+    func testWarmEngineCallsSetupEngine() async {
+        let subject = await createSubject()
         subject.warmEngine()
 
         XCTAssertEqual(sourceTimerFactory.dispatchSource.cancelCalled, 0)
         XCTAssertEqual(webServerUtil.setUpWebServerCalled, 1)
     }
 
-    func testWarmEngineAfterIdle() {
-        let subject = createSubject()
+    func testWarmEngineAfterIdle() async {
+        let subject = await createSubject()
         subject.idleEngine()
         subject.warmEngine()
 
@@ -53,8 +53,8 @@ final class WKEngineTests: XCTestCase {
         XCTAssertEqual(webServerUtil.setUpWebServerCalled, 1)
     }
 
-    func testIdleEngineCallsStopEngine() {
-        let subject = createSubject()
+    func testIdleEngineCallsStopEngine() async {
+        let subject = await createSubject()
         subject.idleEngine()
 
         XCTAssertEqual(sourceTimerFactory.dispatchSource.scheduleCalled, 1)
@@ -66,11 +66,13 @@ final class WKEngineTests: XCTestCase {
     // MARK: Helper
 
     func createSubject(file: StaticString = #file,
-                       line: UInt = #line) -> WKEngine {
-        let subject = WKEngine(userScriptManager: userScriptManager,
-                               webServerUtil: webServerUtil,
-                               sourceTimerFactory: sourceTimerFactory,
-                               engineDependencies: engineDependencies)
+                       line: UInt = #line) async -> WKEngine {
+        let configProvider = await MockWKEngineConfigurationProvider()
+        let subject = await WKEngine(userScriptManager: userScriptManager,
+                                     webServerUtil: webServerUtil,
+                                     sourceTimerFactory: sourceTimerFactory,
+                                     configProvider: configProvider,
+                                     engineDependencies: engineDependencies)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

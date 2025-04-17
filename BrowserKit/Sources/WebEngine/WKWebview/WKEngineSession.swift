@@ -34,7 +34,7 @@ class WKEngineSession: NSObject,
     weak var fullscreenDelegate: FullscreenDelegate?
 
     private(set) var webView: WKEngineWebView
-    var sessionData: WKEngineSessionData
+    var sessionData = WKEngineSessionData()
 
     private var scriptResponder: EngineSessionScriptResponder
     private var logger: Logger
@@ -49,6 +49,7 @@ class WKEngineSession: NSObject,
         }
     }
 
+    // TODO: With Swift 6 we can use default params in the init
     @MainActor
     public static func sessionFactory(
         userScriptManager: WKUserScriptManager,
@@ -57,7 +58,6 @@ class WKEngineSession: NSObject,
     ) -> WKEngineSession? {
         let webViewProvider = DefaultWKWebViewProvider()
         let logger = DefaultLogger.shared
-        let sessionData = WKEngineSessionData()
         let contentScriptManager = DefaultContentScriptManager()
         let scriptResponder = EngineSessionScriptResponder()
         let metadataFetcher = DefaultMetadataFetcherHelper()
@@ -70,7 +70,6 @@ class WKEngineSession: NSObject,
             configurationProvider: configurationProvider,
             webViewProvider: webViewProvider,
             logger: logger,
-            sessionData: sessionData,
             contentScriptManager: contentScriptManager,
             scriptResponder: scriptResponder,
             metadataFetcher: metadataFetcher,
@@ -85,7 +84,6 @@ class WKEngineSession: NSObject,
           configurationProvider: WKEngineConfigurationProvider,
           webViewProvider: WKWebViewProvider,
           logger: Logger = DefaultLogger.shared,
-          sessionData: WKEngineSessionData,
           contentScriptManager: WKContentScriptManager,
           scriptResponder: EngineSessionScriptResponder,
           metadataFetcher: MetadataFetcherHelper,
@@ -101,7 +99,6 @@ class WKEngineSession: NSObject,
 
         self.webView = webView
         self.logger = logger
-        self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
         self.metadataFetcher = metadataFetcher
         self.navigationHandler = navigationHandler
