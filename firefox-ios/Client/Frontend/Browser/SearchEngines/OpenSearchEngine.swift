@@ -18,11 +18,6 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     let isCustomEngine: Bool
     let searchTemplate: String
 
-    private let suggestTemplate: String?
-    private let searchTermComponent = "{searchTerms}"
-    private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
-
-#if !MOZ_TARGET_SHARETO
     /// The telemetry ID to send for `search.default_engine` and `search.counts`
     /// Prior to Search Consolidation, we sent the engineID from our engine XML
     /// documents. Post-consolidation we send the engineID + suffix (if available)
@@ -39,6 +34,9 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         }
     }
 
+    private let suggestTemplate: String?
+    private let searchTermComponent = "{searchTerms}"
+    private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
     private let googleEngineID = {
         if SearchEngineFlagManager.isSECEnabled {
             return "google"
@@ -54,7 +52,6 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
         return String(format: .Search.EngineSectionTitle, shortName)
     }
-#endif
 
     enum CodingKeys: String, CodingKey {
         case isCustomEngine
