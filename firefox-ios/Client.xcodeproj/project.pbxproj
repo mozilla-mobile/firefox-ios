@@ -191,6 +191,7 @@
 		1D91C1932CF526EF00B24960 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17C2CF11EA500B24960 /* disconnect-block-social.json */; };
 		1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */; };
 		1DA3CE5F24EEE7C600422BB2 /* LegacyTabDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */; };
+		1DA3E4B22DB1C86F0065F7E7 /* ASSearchEngineUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */; };
 		1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */; };
 		1DA710072AE7106B00677F6B /* AppDataUsageReportSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */; };
 		1DAEEE002D93532900F4B42D /* UIImage+RenderingUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAEEDFF2D93532400F4B42D /* UIImage+RenderingUtilities.swift */; };
@@ -2657,6 +2658,7 @@
 		1DA24C60879E7D4B2073FD63 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Search.strings; sourceTree = "<group>"; };
 		1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenTabsWidget.swift; sourceTree = "<group>"; };
 		1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabDataRetriever.swift; sourceTree = "<group>"; };
+		1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineUtilitiesTests.swift; sourceTree = "<group>"; };
 		1DA64656B1F6A74800D22055 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEventCoordinator.swift; sourceTree = "<group>"; };
 		1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDataUsageReportSetting.swift; sourceTree = "<group>"; };
@@ -13011,6 +13013,7 @@
 			children = (
 				8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */,
 				1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */,
+				1DA3E4B12DB1C86A0065F7E7 /* ASSearchEngineUtilitiesTests.swift */,
 				8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */,
 			);
 			path = RemoteSettings;
@@ -18217,6 +18220,7 @@
 				ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */,
 				5AD3B67A2CF653A600AFA1FE /* MockLocale.swift in Sources */,
 				8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */,
+				1DA3E4B22DB1C86F0065F7E7 /* ASSearchEngineUtilitiesTests.swift in Sources */,
 				5A3A7DDA2889EC4D0065F81A /* ReadingListMock.swift in Sources */,
 				8A33221F27DFE318008F809E /* TopSitesDataAdaptorTests.swift in Sources */,
 				2165B2C02860BB41004C0786 /* AdjustTelemetryHelperTests.swift in Sources */,
