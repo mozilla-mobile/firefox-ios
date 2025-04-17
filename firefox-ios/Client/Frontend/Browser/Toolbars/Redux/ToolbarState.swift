@@ -23,6 +23,7 @@ struct ToolbarState: ScreenState, Equatable {
     var canShowDataClearanceAction: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
+    var isTranslucent: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = store.state.screenState(
@@ -49,7 +50,8 @@ struct ToolbarState: ScreenState, Equatable {
                   isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
                   canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
-                  shouldAnimate: toolbarState.shouldAnimate
+                  shouldAnimate: toolbarState.shouldAnimate,
+                  isTranslucent: toolbarState.isTranslucent
         )
     }
 
@@ -70,7 +72,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: false,
             canShowDataClearanceAction: false,
             canShowNavigationHint: false,
-            shouldAnimate: false
+            shouldAnimate: false,
+            isTranslucent: false
         )
     }
 
@@ -90,7 +93,8 @@ struct ToolbarState: ScreenState, Equatable {
         isNewTabFeatureEnabled: Bool,
         canShowDataClearanceAction: Bool,
         canShowNavigationHint: Bool,
-        shouldAnimate: Bool
+        shouldAnimate: Bool,
+        isTranslucent: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -108,6 +112,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
+        self.isTranslucent = isTranslucent
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -167,7 +172,8 @@ struct ToolbarState: ScreenState, Equatable {
     private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction,
               let toolbarPosition = toolbarAction.toolbarPosition,
-              let toolbarLayout = toolbarAction.toolbarLayout
+              let toolbarLayout = toolbarAction.toolbarLayout,
+              let isTranslucent = toolbarAction.isTranslucent
         else { return defaultState(from: state) }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
@@ -187,7 +193,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: toolbarAction.isNewTabFeatureEnabled ?? state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: toolbarAction.canShowDataClearanceAction ?? state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: isTranslucent
         )
     }
 
@@ -212,7 +219,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: shouldAnimate
+            shouldAnimate: shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -234,7 +242,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -256,7 +265,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -283,7 +293,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -305,7 +316,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -327,7 +339,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -349,7 +362,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -371,7 +385,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: true,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -393,7 +408,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: false,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -418,7 +434,8 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
         )
     }
 
@@ -446,6 +463,7 @@ struct ToolbarState: ScreenState, Equatable {
                             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
                             canShowDataClearanceAction: state.canShowDataClearanceAction,
                             canShowNavigationHint: state.canShowNavigationHint,
-                            shouldAnimate: state.shouldAnimate)
+                            shouldAnimate: state.shouldAnimate,
+                            isTranslucent: state.isTranslucent)
     }
 }

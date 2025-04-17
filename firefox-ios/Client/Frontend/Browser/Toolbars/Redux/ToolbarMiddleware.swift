@@ -51,6 +51,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
                 toolbarLayout: toolbarLayout,
+                isTranslucent: toolbarConfig.translucency,
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
                 isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
