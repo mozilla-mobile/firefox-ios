@@ -10,7 +10,7 @@ import WebKit
 /// the usage of a configuration provider and an webview abstraction.
 protocol WKWebViewProvider {
     func createWebview(configurationProvider: WKEngineConfigurationProvider,
-                       parameters: WKWebviewParameters) -> WKEngineWebView?
+                       parameters: WKWebViewParameters) -> WKEngineWebView?
 }
 
 struct DefaultWKWebViewProvider: WKWebViewProvider {
@@ -21,7 +21,7 @@ struct DefaultWKWebViewProvider: WKWebViewProvider {
     }
 
     func createWebview(configurationProvider: WKEngineConfigurationProvider,
-                       parameters: WKWebviewParameters) -> WKEngineWebView? {
+                       parameters: WKWebViewParameters) -> WKEngineWebView? {
         guard let webView = DefaultWKEngineWebView(frame: .zero,
                                                    configurationProvider: configurationProvider,
                                                    parameters: parameters) else {

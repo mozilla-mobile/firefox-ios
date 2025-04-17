@@ -782,10 +782,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled {
-            webPagePreview.applyTheme(theme: theme)
-            view.backgroundColor = theme.colors.layer1
-        }
+        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -1010,8 +1007,8 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        view.addSubviews(contentContainer)
         if isSwipingTabsEnabled { view.addSubview(webPagePreview) }
+        view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
 
@@ -3262,6 +3259,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        if isSwipingTabsEnabled { view.backgroundColor = currentTheme.colors.layer1 }
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -4085,10 +4083,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
             if isToolbarRefactorEnabled {
-                // We want to show the progress update only when swiping between tabs feature is not enabled.
-                if !isSwipingTabsEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: selectedTab.estimatedProgress)
-                }
+                addressToolbarContainer.hideProgressBar()
             } else {
                 legacyUrlBar?.updateProgressBar(Float(selectedTab.estimatedProgress))
             }

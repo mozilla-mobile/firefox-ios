@@ -12,6 +12,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case appearanceMenu
+    case addressBarMenu
     case bookmarksRefactor
     case bottomSearchBar
     case contextualHintForToolbar
@@ -29,6 +30,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case menuRefactor
     case menuRefactorHint
     case microsurvey
+    case loginsVerificationEnabled
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case pdfRefactor
@@ -59,6 +61,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .addressBarMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
@@ -66,6 +69,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
+                .loginsVerificationEnabled,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
@@ -112,6 +116,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
         case .appearanceMenu,
+                .addressBarMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .addressAutofillEdit,
@@ -124,6 +129,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .microsurvey,
                 .menuRefactor,
                 .menuRefactorHint,
+                .loginsVerificationEnabled,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .pdfRefactor,

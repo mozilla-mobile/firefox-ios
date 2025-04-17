@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer {
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
+        case .addressBarMenu:
+            return checkAddressBarMenuFeature(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -64,6 +67,9 @@ final class NimbusFeatureFlagLayer {
 
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
+
+        case .loginsVerificationEnabled:
+            return checkLoginsVerificationFeature(from: nimbus)
 
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
@@ -359,6 +365,11 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
+    private func checkAddressBarMenuFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressBarMenuFeature.value()
+        return config.status
+    }
+
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
@@ -392,6 +403,10 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.microsurveyFeature.value()
 
         return config.enabled
+    }
+
+    private func checkLoginsVerificationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.loginsVerification.value().loginsVerificationEnabled
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {

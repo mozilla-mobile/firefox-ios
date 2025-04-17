@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B3B69D42DAD3A33005BFAAF /* PullRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */; };
 		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
 		1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */; };
 		21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullRefreshView.swift; sourceTree = "<group>"; };
 		1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHandler.swift; sourceTree = "<group>"; };
 		1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAdsTrackerDefinitions.swift; sourceTree = "<group>"; };
 		21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 		8A4602152B0FE42300FFD17F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */,
 				8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */,
 				E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */,
 				E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */,
@@ -424,6 +427,7 @@
 				21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */,
 				E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
+				0B3B69D42DAD3A33005BFAAF /* PullRefreshView.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

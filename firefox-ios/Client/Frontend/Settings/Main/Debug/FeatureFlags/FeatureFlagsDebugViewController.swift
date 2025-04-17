@@ -27,6 +27,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
+                    with: .addressBarMenu,
+                    titleText: format(string: "Enable New AddressBar Menu"),
+                    statusText: format(string: "Toggle to show the new address bar menu")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .appearanceMenu,
                     titleText: format(string: "Enable New Appearance Menu"),
                     statusText: format(string: "Toggle to show the new apperance menu")
@@ -77,6 +84,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .menuRefactor,
                     titleText: format(string: "Enable New Menu"),
                     statusText: format(string: "Toggle to use the new menu")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .loginsVerificationEnabled,
+                    titleText: format(string: "Enable Logins Verification"),
+                    statusText: format(string: "Toggle to enable logins verification")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

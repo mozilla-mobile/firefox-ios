@@ -53,7 +53,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     required init?(frame: CGRect,
                    configurationProvider: WKEngineConfigurationProvider,
-                   parameters: WKWebviewParameters) {
+                   parameters: WKWebViewParameters) {
         self.engineConfiguration = configurationProvider.createConfiguration(parameters: parameters)
         super.init(frame: frame)
     }
