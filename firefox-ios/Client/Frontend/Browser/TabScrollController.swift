@@ -98,7 +98,6 @@ class TabScrollController: NSObject,
         }
     }
 
-    // Over keyboard content and bottom content
     private var overKeyboardScrollHeight: CGFloat {
         let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
         return overKeyboardHeight
@@ -131,17 +130,6 @@ class TabScrollController: NSObject,
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
         return windowUUID
-    }
-
-    // Over keyboard content and bottom content
-    private var overKeyboardScrollHeight: CGFloat {
-        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
-        return overKeyboardHeight
-    }
-
-    private var bottomContainerScrollHeight: CGFloat {
-        let bottomContainerHeight = bottomContainer?.frame.height ?? 0
-        return bottomContainerHeight
     }
 
     // If scrollview contentSize height is bigger that device height plus delta
