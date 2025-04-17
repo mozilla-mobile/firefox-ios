@@ -96,6 +96,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
     func testHandleRoute_launchFinishedAndBrowserNotReady_routeSaved() throws {
         let subject = createSubject()
+        setupNimbusDeeplinkOptimization(isEnabled: false)
 
         subject.start()
         subject.launchBrowser()
@@ -147,5 +148,11 @@ final class SceneCoordinatorTests: XCTestCase {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setupNimbusDeeplinkOptimization(isEnabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
+        }
     }
 }
