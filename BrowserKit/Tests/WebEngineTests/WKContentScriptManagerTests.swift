@@ -89,9 +89,9 @@ final class WKContentScriptManagerTests: XCTestCase {
         await subject.addContentScript(script,
                                        name: MockWKContentScript.name(),
                                        forSession: session)
-        
+
         await subject.uninstall(session: session)
-        
+
         XCTAssertEqual(script.scriptMessageHandlerNamesCalled, 2)
         XCTAssertEqual(script.prepareForDeinitCalled, 1)
     }
