@@ -61,30 +61,30 @@ public class DefaultURLFormatter: URLFormatter {
     private func handleWithScheme(with entry: String) -> URL? {
         // First trim white spaces and encode any invalid characters
         let trimmedEntry = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        guard let escapedURL = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
+        guard let escapedEntry = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
             return nil
         }
 
         // Check if the URL includes a scheme
-        guard let url = URL(string: entry),
+        guard let url = URL(string: escapedEntry),
               url.scheme != nil,
               entry.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil else {
             return nil
         }
 
         // Check presence of top-level domain if scheme is "http://" or "https://"
-        if entry.hasPrefix("http://") || entry.hasPrefix("https://") {
-            if !entry.contains(".") {
+        if escapedEntry.hasPrefix("http://") || escapedEntry.hasPrefix("https://") {
+            if !escapedEntry.contains(".") {
                 return nil
             }
         }
 
-        guard let url = URL(string: entry, invalidCharacters: false) else { return nil }
+        guard let url = URL(string: escapedEntry) else { return nil }
 
         // Only allow this URL if it's safe
-        let browsingContext = BrowsingContext(type: .internalNavigation, url: escapedURL)
+        let browsingContext = BrowsingContext(type: .internalNavigation, url: escapedEntry)
         if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
-            return URL(string: entry)
+            return URL(string: escapedEntry)
         } else {
             return nil
         }
@@ -92,40 +92,42 @@ public class DefaultURLFormatter: URLFormatter {
 
     // Handle the entry if it has no scheme
     private func handleNoScheme(with entry: String) -> URL? {
-        // First trim white spaces
+        // First trim white spaces and encode any invalid characters
         let trimmedEntry = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        guard let escapedEntry = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
+            return nil
+        }
 
         // Make sure there's at least one "." in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme
-        if !trimmedEntry.contains(".") { return nil }
+        if !escapedEntry.contains(".") { return nil }
 
         // If entry is a valid floating point number, don't fixup
-        if Double(trimmedEntry) != nil {
-            return nil
-        }
-
-        // If entry doesn't have a valid ending in Public Suffix List
-        // and it's not all digits and dot, stop fix up.
-        if !trimmedEntry.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.")).isEmpty,
-           let maybeUrl = URL(string: "http://\(trimmedEntry.lowercased())"),
-           maybeUrl.publicSuffix == nil {
-            return nil
-        }
-
-        // Make sure entry only has allowed characters in it
-        guard let escapedURL = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
+        if Double(escapedEntry) != nil {
             return nil
         }
 
         // We're going to prepend "http://" only if it's not already present
-        let finalURL = escapedURL.hasPrefix("http://") || escapedURL.hasPrefix("https://") ? escapedURL : "http://\(escapedURL)"
+        let entryPlusScheme = escapedEntry.hasPrefix("http://") || escapedEntry.hasPrefix("https://") ? escapedEntry : "http://\(escapedURL)"
 
-        // If there is a host, return this formatted as a URL
-        if let url = URL(string: finalURL), url.host != nil {
-            return url
+        // If entry doesn't have a valid ending in Public Suffix List
+        // and it's not all digits and dot, stop fix up.
+        if !escapedEntry.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.")).isEmpty,
+           let maybeUrl = URL(string: entryPlusScheme.lowercased()),
+           maybeUrl.publicSuffix == nil {
+            return nil
         }
 
-        return nil
+        // Only proceed if there is a host
+        guard let url = URL(string: entryPlusScheme), url.host != nil else { return nil }
+
+        // Only allow this URL if it's safe
+        let browsingContext = BrowsingContext(type: .internalNavigation, url: entryPlusScheme)
+        if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
+            return URL(string: entryPlusScheme)
+        } else {
+            return nil
+        }
     }
 }
