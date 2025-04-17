@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer {
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
+        case .addressBarMenu:
+            return checkAddressBarMenuFeature(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -351,6 +354,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
+        return config.status
+    }
+
+    private func checkAddressBarMenuFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressBarMenuFeature.value()
         return config.status
     }
 
