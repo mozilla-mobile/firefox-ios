@@ -58,6 +58,8 @@
 		0B7C1E951F6097AD006A8869 /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */; };
 		0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */; };
 		0B7FC3D32CAE811F005C5CCE /* DefaultBookmarksSaverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */; };
+		0B81AFEC2DB1000C000AF70F /* HomePageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */; };
+		0B81AFEE2DB1036B000AF70F /* HomePageActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */; };
 		0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */; };
 		0B8A39F12D351C2500853E47 /* EditBookmarkDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */; };
 		0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */; };
@@ -2432,6 +2434,8 @@
 		0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
 		0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFolderHierarchyFetcherTests.swift; sourceTree = "<group>"; };
 		0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookmarksSaverTests.swift; sourceTree = "<group>"; };
+		0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageActivity.swift; sourceTree = "<group>"; };
+		0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageActivityTests.swift; sourceTree = "<group>"; };
 		0B8749EB891EE229EA88FEF3 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDiffableDataSource.swift; sourceTree = "<group>"; };
 		0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDataSourceTests.swift; sourceTree = "<group>"; };
@@ -14025,6 +14029,7 @@
 				2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */,
 				E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */,
 				D3972BF11C22412B00035B87 /* ShareManager.swift */,
+				0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */,
 				ED67B2952D0C921600BDC599 /* ShareTelemetry.swift */,
 				ED7A08DA2CF674730035EC8F /* ShareMessage.swift */,
 				ED7A08DC2CF6749B0035EC8F /* ShareType.swift */,
@@ -14820,6 +14825,7 @@
 				ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */,
 				ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */,
 				ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */,
+				0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */,
 			);
 			path = Sharing;
 			sourceTree = "<group>";
@@ -17077,6 +17083,7 @@
 				C2D71B9B2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift in Sources */,
 				C869912F28917688007ACC5C /* WallpaperMetadataLoader.swift in Sources */,
 				8A6904802B97BBAE00E30047 /* SplashScreenAnimation.swift in Sources */,
+				0B81AFEC2DB1000C000AF70F /* HomePageActivity.swift in Sources */,
 				2137785D297F1F2800D01309 /* DownloadedFile.swift in Sources */,
 				1DCEC4142D83B7EB00129966 /* ASSearchEngineIconDataFetcher.swift in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
@@ -18140,6 +18147,7 @@
 				8A8629E72880B7330096DDB1 /* LegacyBookmarksPanelTests.swift in Sources */,
 				61A1644A2CE7BE8A001D6058 /* WallpaperMiddlewareTests.swift in Sources */,
 				C8B394362A0ED55D00700E49 /* MockOnboardingCardDelegate.swift in Sources */,
+				0B81AFEE2DB1036B000AF70F /* HomePageActivityTests.swift in Sources */,
 				8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */,
 				8ABB15C92D5A4E3900A4635C /* RemoteTabsMiddlewareTests.swift in Sources */,
 				C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */,

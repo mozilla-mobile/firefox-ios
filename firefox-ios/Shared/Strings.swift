@@ -5401,6 +5401,11 @@ extension String {
         tableName: nil,
         value: "Add to Reading List",
         comment: "Action label on share extension to add page to the Firefox reading list.")
+    public static let ShareFileCopiedToClipboard = MZLocalizedString(
+        key: "ShareExtension.FileCopiedToClipboard.Title.v139",
+        tableName: "Share",
+        value: "File Copied To Clipboard",
+        comment: "The Toast message that appears when the user press copy on the share sheet with a file like a pdf")
     public static let ShareAddToReadingListDone = MZLocalizedString(
         key: "ShareExtension.AddToReadingListActionDone.Title",
         tableName: nil,
