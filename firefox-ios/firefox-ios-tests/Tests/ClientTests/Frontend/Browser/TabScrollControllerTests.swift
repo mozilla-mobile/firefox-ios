@@ -34,6 +34,7 @@ final class TabScrollControllerTests: XCTestCase {
         super.tearDown()
     }
 
+<<<<<<< HEAD
     func testIsAbleToScrollTrue_ForIpadWhenAutoHideSettingIsEnabled() {
         let subject = createSubject()
         setupTabScroll(with: subject)
@@ -61,6 +62,8 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertTrue(subject.isAbleToScroll)
     }
 
+=======
+>>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
     func testHandlePan_ScrollingUp() {
         let subject = createSubject()
         setupTabScroll(with: subject)
@@ -171,10 +174,15 @@ final class TabScrollControllerTests: XCTestCase {
         subject.header = header
     }
 
+<<<<<<< HEAD
     private func createSubject(isIpad: Bool = true) -> TabScrollingController {
         let deviceType = MockDeviceTypeProvider(idiom: isIpad ? .pad : .phone)
         let subject = TabScrollingController(windowUUID: .XCTestDefaultUUID,
                                              deviceType: deviceType)
+=======
+    private func createSubject() -> TabScrollController {
+        let subject = TabScrollController(windowUUID: .XCTestDefaultUUID)
+>>>>>>> fd8788994 (Remove FXIOS-3820 #10114 ⁃ [UX Fundamentals] iPad settings for No way to stop address/tab bar from auto hiding (#26180))
         trackForMemoryLeaks(subject)
         return subject
     }
