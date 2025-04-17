@@ -21,7 +21,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
         static let topTabsBackgroundShadowWidth: CGFloat = 12
-        static let faderPading: CGFloat = 8
+        static let faderPadding: CGFloat = 8
         static let animationSpeed: TimeInterval = 0.1
     }
 
@@ -249,7 +249,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
                 } else {
                     // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                     let padFrame = frame.insetBy(
-                        dx: -(UX.topTabsBackgroundShadowWidth+UX.faderPading),
+                        dx: -(UX.topTabsBackgroundShadowWidth+UX.faderPadding),
                         dy: 0
                     )
                     if animated {
