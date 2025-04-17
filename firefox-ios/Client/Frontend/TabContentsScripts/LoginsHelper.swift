@@ -136,7 +136,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
               let type = res["type"] as? String
         else { return }
 
-        // NOTE: This is added only to be able t oswitch between implementations inside the JS.
+        // NOTE(FXIOS-12024): This is added only to be able t oswitch between implementations inside the JS.
         // Once we rollout the update for all users, this will be removed.
         if type == "ready" {
             LoginsHelper.setUpdatedPasswordEnabled(with: self.tab)
