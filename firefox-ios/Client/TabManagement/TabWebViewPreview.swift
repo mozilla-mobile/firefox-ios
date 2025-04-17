@@ -11,8 +11,8 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         static let addressBarCornerRadius: CGFloat = 8
         static let addressBarBorderHeight: CGFloat = 1
         static let addressBarHeight: CGFloat = 43
-        static let addressBarOnToplayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        static let addressBarOnBottomlayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
+        static let addressBarOnTopLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        static let addressBarOnBottomLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
@@ -22,7 +22,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     private lazy var bottomStackView = createStackView()
 
     private lazy var skeletonAddressBar: UIView = .build { addressBar in
-        addressBar.layer.cornerRadius = UX.addressBarCornerRadius
+        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
     }
     // MARK: - Constraint Properties
     private var webViewTopConstraint: NSLayoutConstraint?
@@ -118,8 +118,8 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     }
 
     private func setStackViewsLayoutMargins() {
-        topStackView.layoutMargins = UX.addressBarOnToplayoutMargins
-        bottomStackView.layoutMargins = UX.addressBarOnBottomlayoutMargins
+        topStackView.layoutMargins =  UX.addressBarOnTopLayoutMargins
+        bottomStackView.layoutMargins = UX.addressBarOnBottomLayoutMargins
     }
 
     private func setStackViewsVisibility(by searchBarPosition: SearchBarPosition) {
@@ -131,9 +131,10 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
+        let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
         addressBarBorderView.backgroundColor = colors.borderPrimary
-        topStackView.backgroundColor = colors.layer1
-        bottomStackView.backgroundColor = colors.layer1
-        skeletonAddressBar.backgroundColor = colors.layerSearch
+        topStackView.backgroundColor = appearance.containerStackViewBackgroundColor
+        bottomStackView.backgroundColor = appearance.containerStackViewBackgroundColor
+        skeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
     }
 }
