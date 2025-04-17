@@ -59,7 +59,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case trackingProtectionRefactor
     case useRustKeychain
+<<<<<<< HEAD
     case zoomFeature
+=======
+    case updatedPasswordManager
+>>>>>>> b5aa146ea (Add FXIOS-11067 [Password Manager] P1. Add feature flag for updated password manager scripts (#26162))
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -83,7 +87,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .downloadLiveActivities,
                 .unifiedAds,
                 .unifiedSearch,
-                .useRustKeychain:
+                .useRustKeychain,
+                .updatedPasswordManager:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -161,8 +166,14 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
+<<<<<<< HEAD
                 .useRustKeychain,
                 .zoomFeature:
+=======
+                .revertUnsafeContinuationsRefactor,
+                .useRustKeychain,
+                .updatedPasswordManager:
+>>>>>>> b5aa146ea (Add FXIOS-11067 [Password Manager] P1. Add feature flag for updated password manager scripts (#26162))
             return nil
         }
     }
