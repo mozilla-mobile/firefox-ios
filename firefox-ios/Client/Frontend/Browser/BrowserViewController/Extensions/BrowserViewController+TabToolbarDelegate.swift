@@ -94,12 +94,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         didTapOnHome()
     }
 
-    // Presents alert to clear users private session data
     func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnDataClearance()
     }
 
+    /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
     func didTapOnDataClearance() {
+        guard !(profile.prefs.boolForKey(PrefsKeys.dataClearanceAlertShown) ?? false) else {
+            performDeletionAction()
+            return
+        }
+
         let alert = UIAlertController(
             title: .Alerts.FeltDeletion.Title,
             message: .Alerts.FeltDeletion.Body,
@@ -118,34 +123,29 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             title: .Alerts.FeltDeletion.ConfirmButton,
             style: .destructive,
             handler: { [weak self] _ in
-                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-                self?.setupDataClearanceAnimation { timingConstant in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
-                        self?.closePrivateTabsAndOpenNewPrivateHomepage()
-                        self?.showDataClearanceConfirmationToast()
-                    }
-                }
+                self?.performDeletionAction()
             }
         )
 
         alert.addAction(deleteDataAction)
         alert.addAction(cancelAction)
-        present(alert, animated: true)
+        present(alert, animated: true) { [weak self] in
+            self?.profile.prefs.setBool(true, forKey: PrefsKeys.dataClearanceAlertShown)
+        }
+    }
+
+    private func performDeletionAction() {
+        self.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
+        self.setupDataClearanceAnimation { timingConstant in
+            DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
+                self.closePrivateTabsAndOpenNewPrivateHomepage()
+            }
+        }
     }
 
     private func closePrivateTabsAndOpenNewPrivateHomepage() {
         tabManager.removeTabs(tabManager.privateTabs)
         tabManager.selectTab(tabManager.addTab(isPrivate: true))
-    }
-
-    private func showDataClearanceConfirmationToast() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            SimpleToast().showAlertWithText(
-                .FirefoxHomepage.FeltDeletion.ToastTitle,
-                bottomContainer: self.contentContainer,
-                theme: self.currentTheme()
-            )
-        }
     }
 
     /// Setup animation for data clearance flow unless reduce motion is enabled

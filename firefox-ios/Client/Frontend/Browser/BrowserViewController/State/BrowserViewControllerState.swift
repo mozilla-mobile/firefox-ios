@@ -38,7 +38,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
     let windowUUID: WindowUUID
     var searchScreenState: SearchScreenState
-    var showDataClearanceFlow: Bool
     var fakespotState: FakespotState
     var toast: ToastType?
     var showOverlay: Bool? // use default value when re-creating
@@ -62,7 +61,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
 
         self.init(searchScreenState: bvcState.searchScreenState,
-                  showDataClearanceFlow: bvcState.showDataClearanceFlow,
                   fakespotState: bvcState.fakespotState,
                   toast: bvcState.toast,
                   showOverlay: bvcState.showOverlay,
@@ -80,7 +78,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             searchScreenState: SearchScreenState(),
-            showDataClearanceFlow: false,
             fakespotState: FakespotState(windowUUID: windowUUID),
             toast: nil,
             showOverlay: nil,
@@ -95,7 +92,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
     init(
         searchScreenState: SearchScreenState,
-        showDataClearanceFlow: Bool,
         fakespotState: FakespotState,
         toast: ToastType? = nil,
         showOverlay: Bool? = nil,
@@ -110,7 +106,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         navigationDestination: NavigationDestination? = nil
     ) {
         self.searchScreenState = searchScreenState
-        self.showDataClearanceFlow = showDataClearanceFlow
         self.fakespotState = fakespotState
         self.toast = toast
         self.windowUUID = windowUUID
@@ -140,7 +135,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
@@ -168,7 +162,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             NavigationBrowserActionType.tapOnShareSheet:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
@@ -184,7 +177,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                                              state: BrowserViewControllerState) -> BrowserViewControllerState {
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
-            showDataClearanceFlow: state.showDataClearanceFlow,
             fakespotState: FakespotState.reducer(state.fakespotState, action),
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
@@ -195,7 +187,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                                                 state: BrowserViewControllerState) -> BrowserViewControllerState {
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
-            showDataClearanceFlow: state.showDataClearanceFlow,
             fakespotState: state.fakespotState,
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
@@ -209,7 +200,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             guard let toastType = action.toastType else { return state }
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: toastType,
                 windowUUID: state.windowUUID,
@@ -221,7 +211,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             let showOverlay = action.showOverlay ?? false
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
@@ -234,7 +223,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.goToHomepage:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -245,7 +233,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.addNewTab:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -256,7 +243,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showQRcodeReader:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -267,7 +253,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showBackForwardList:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -278,7 +263,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showTrackingProtectionDetails:
             return BrowserViewControllerState(
                     searchScreenState: state.searchScreenState,
-                    showDataClearanceFlow: state.showDataClearanceFlow,
                     fakespotState: state.fakespotState,
                     toast: state.toast,
                     windowUUID: state.windowUUID,
@@ -290,7 +274,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showMenu:
             return BrowserViewControllerState(
                     searchScreenState: state.searchScreenState,
-                    showDataClearanceFlow: state.showDataClearanceFlow,
                     fakespotState: state.fakespotState,
                     toast: state.toast,
                     windowUUID: state.windowUUID,
@@ -302,7 +285,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showTabsLongPressActions:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -313,7 +295,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showReloadLongPressAction:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -325,7 +306,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showLocationViewLongPressActionSheet:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -336,7 +316,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.navigateBack:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -346,7 +325,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.navigateForward:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -357,7 +335,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showTabTray:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -368,7 +345,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.reloadWebsite:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -379,7 +355,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.reloadWebsiteNoCache:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -390,7 +365,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.stopLoadingWebsite:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -401,7 +375,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showShare:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -413,7 +386,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showReaderMode:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -424,7 +396,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showNewTabLongPressActions:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -435,7 +406,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.addToReadingListLongPressAction:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
@@ -446,7 +416,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.clearData:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
@@ -455,7 +424,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case GeneralBrowserActionType.showPasswordGenerator:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
@@ -479,7 +447,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
-            showDataClearanceFlow: state.showDataClearanceFlow,
             fakespotState: fakespotState,
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
@@ -505,7 +472,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         return BrowserViewControllerState(
             searchScreenState: SearchScreenState(inPrivateMode: isPrivateBrowsing),
-            showDataClearanceFlow: state.showDataClearanceFlow,
             fakespotState: state.fakespotState,
             windowUUID: state.windowUUID,
             reloadWebView: true,
