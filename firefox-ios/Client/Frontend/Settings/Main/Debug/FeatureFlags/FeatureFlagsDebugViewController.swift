@@ -158,6 +158,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .updatedPasswordManager,
+                    titleText: format(string: "Enable Updated Password Manager"),
+                    statusText: format(string: "Toggle to enable updated password manager")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .sentFromFirefox,
                     titleText: format(string: "Enable Sent from Firefox"),
                     statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")

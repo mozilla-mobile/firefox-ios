@@ -51,4 +51,5 @@ include:
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/unifiedAds.yaml
+  - nimbus-features/updatedPasswordManager.yaml
   - nimbus-features/zoomFeature.yaml

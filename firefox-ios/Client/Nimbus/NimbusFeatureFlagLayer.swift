@@ -148,6 +148,9 @@ final class NimbusFeatureFlagLayer {
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
 
+        case .updatedPasswordManager:
+            return checkUpdatedPasswordManagerFeature(from: nimbus)
+
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
         }
@@ -450,5 +453,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.rustKeychainRefactor.value().rustKeychainEnabled
+    }
+
+    private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.updatedPasswordManagerFeature.value()
+        return config.status
     }
 }
