@@ -50,3 +50,4 @@ include:
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/unifiedAds.yaml
+  - nimbus-features/updatedPasswordManager.yaml
