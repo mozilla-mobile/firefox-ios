@@ -54,6 +54,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trackingProtectionRefactor
     case revertUnsafeContinuationsRefactor
     case useRustKeychain
+    case updatedPasswordManager
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -78,7 +79,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .downloadLiveActivities,
                 .unifiedAds,
                 .unifiedSearch,
-                .useRustKeychain:
+                .useRustKeychain,
+                .updatedPasswordManager:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -150,7 +152,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .trackingProtectionRefactor,
                 .revertUnsafeContinuationsRefactor,
-                .useRustKeychain:
+                .useRustKeychain,
+                .updatedPasswordManager:
             return nil
         }
     }
