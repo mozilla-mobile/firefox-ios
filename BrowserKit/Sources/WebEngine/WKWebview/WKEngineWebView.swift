@@ -121,7 +121,6 @@ extension WKEngineWebView {
     }
 }
 
-// TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
 final class DefaultWKEngineWebView: WKWebView,
                                     UIScrollViewDelegate,
                                     WKEngineWebView,
