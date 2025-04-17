@@ -10,15 +10,15 @@ protocol WKWebServerUtil {
 }
 
 class DefaultWKWebServerUtil: WKWebServerUtil {
-    private var readerModeHander: WKReaderModeHandlersProtocol
+    private var readerModeHandler: WKReaderModeHandlersProtocol
     private var webServer: WKEngineWebServerProtocol
     private let logger: Logger
 
     init(webServer: WKEngineWebServerProtocol,
-         readerModeHander: WKReaderModeHandlersProtocol = WKReaderModeHandlers(),
+         readerModeHandler: WKReaderModeHandlersProtocol = WKReaderModeHandlers(),
          logger: Logger = DefaultLogger.shared) {
         self.webServer = webServer
-        self.readerModeHander = readerModeHander
+        self.readerModeHandler = readerModeHandler
         self.logger = logger
     }
 
@@ -32,7 +32,7 @@ class DefaultWKWebServerUtil: WKWebServerUtil {
     func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration) {
         guard !webServer.isRunning else { return }
 
-        readerModeHander.register(webServer, readerModeConfiguration: readerModeConfiguration)
+        readerModeHandler.register(webServer, readerModeConfiguration: readerModeConfiguration)
 
         if AppConstants.isRunningTest {
             webServer.addTestHandler()
