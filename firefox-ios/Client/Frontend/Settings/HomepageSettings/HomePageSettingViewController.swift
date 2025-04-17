@@ -296,13 +296,6 @@ extension HomePageSettingViewController {
             let areShortcutsOn = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
             typealias Shortcuts = String.Settings.Homepage.Shortcuts
             let status: String = areShortcutsOn ? Shortcuts.ToggleOn : Shortcuts.ToggleOff
-            store.dispatch(
-                TopSitesAction(
-                    isEnabled: areShortcutsOn,
-                    windowUUID: self.windowUUID,
-                    actionType: TopSitesActionType.toggleShowSectionSetting
-                )
-            )
             return NSAttributedString(string: String(format: status))
         }
 
