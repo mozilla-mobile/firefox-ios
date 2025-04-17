@@ -3255,7 +3255,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        if isSwipingTabsEnabled { view.backgroundColor = currentTheme.colors.layer1 }
+        updateViewBackgroundColor(theme: currentTheme)
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -3272,6 +3272,14 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+    }
+
+    private func updateViewBackgroundColor(theme: Theme) {
+        if isSwipingTabsEnabled {
+            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+            let toolbarLayoutStyle = toolbarState?.toolbarLayout
+            view.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
+        }
     }
 
     var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
