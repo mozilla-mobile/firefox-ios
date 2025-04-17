@@ -92,6 +92,8 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    // TODO: YRD - update to use dependency helper
+    var zoomManager: ZoomPageManager
 
     // MARK: Optional UI elements
 
@@ -336,6 +338,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
+        self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         didInit()

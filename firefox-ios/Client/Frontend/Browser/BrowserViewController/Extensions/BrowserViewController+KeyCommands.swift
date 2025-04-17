@@ -341,28 +341,25 @@ extension BrowserViewController {
 
     @objc
     func zoomIn() {
-        guard let currentTab = tabManager.selectedTab else { return }
-
+        // TODO: YRD test if gainFocus is enought or we need to set the tab
         if !contentContainer.hasAnyHomepage {
-            currentTab.zoomIn()
+            _ = zoomManager.zoomIn()
         }
     }
 
     @objc
     func zoomOut() {
-        guard let currentTab = tabManager.selectedTab else { return }
-
+        // TODO: YRD test if gainFocus is enought or we need to set the tab
         if !contentContainer.hasAnyHomepage {
-            currentTab.zoomOut()
+            _ = zoomManager.zoomOut()
         }
     }
 
     @objc
     func resetZoom() {
-        guard let currentTab = tabManager.selectedTab else { return }
-
+        // TODO: YRD test if gainFocus is enought or we need to set the tab
         if !contentContainer.hasAnyHomepage {
-            currentTab.resetZoom()
+            zoomManager.resetZoom()
         }
     }
 
