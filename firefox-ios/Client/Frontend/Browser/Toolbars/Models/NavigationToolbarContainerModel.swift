@@ -9,15 +9,19 @@ struct NavigationToolbarContainerModel: Equatable {
     let actions: [ToolbarElement]
     let canShowNavigationHint: Bool
     let displayBorder: Bool
+    let isTranslucent: Bool
     let windowUUID: WindowUUID
 
     var navigationToolbarConfiguration: NavigationToolbarConfiguration {
-        return NavigationToolbarConfiguration(actions: actions, shouldDisplayBorder: displayBorder)
+        return NavigationToolbarConfiguration(actions: actions,
+                                              shouldDisplayBorder: displayBorder,
+                                              isTranslucencyEnabled: isTranslucent)
     }
 
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.canShowNavigationHint = state.canShowNavigationHint
+        self.isTranslucent = state.isTranslucent
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,

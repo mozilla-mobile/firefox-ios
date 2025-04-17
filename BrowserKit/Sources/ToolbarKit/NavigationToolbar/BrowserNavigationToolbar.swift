@@ -31,6 +31,13 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
             applyTheme(theme: theme)
         }
     }
+    private var isTranslucent: Bool = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the translucency changes.
+            guard let theme, isVersion1Layout != oldValue else { return }
+            applyTheme(theme: theme)
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -48,6 +55,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     ) {
         self.toolbarDelegate = toolbarDelegate
         self.isVersion1Layout = isVersion1Layout
+        self.isTranslucent = config.isTranslucencyEnabled
         updateActionStack(toolbarElements: config.actions)
 
         // Update border
@@ -105,7 +113,10 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = isVersion1Layout ? theme.colors.layer3 : theme.colors.layer1
+        let version1BackgroundColor = isTranslucent ? .clear : theme.colors.layer3
+        let baselineBackgroundColor = isTranslucent ? .clear : theme.colors.layer1
+
+        backgroundColor = isVersion1Layout ? version1BackgroundColor : baselineBackgroundColor
         toolbarBorderView.backgroundColor = theme.colors.borderPrimary
 
         actionStack.arrangedSubviews.forEach { element in
