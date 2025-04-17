@@ -350,7 +350,18 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        // Adjust the collection view frame to extend behind toolbars.
+        // The frame height is tripled and the y is moved up by the original height
+        // This is offset by applying the height as edge insets to the top and bottom.
+        // By using the original height we avoid doing calculations and
+        // needing to adjust for keyboard or toolbar position changes.
+        var frame = view.bounds
+        let height = view.bounds.size.height
+        frame.origin.y -= height
+        frame.size.height += height * 2
+
+        let collectionView = UICollectionView(frame: frame, collectionViewLayout: createLayout())
+        collectionView.contentInset = UIEdgeInsets(top: height, left: 0, bottom: height, right: 0)
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
