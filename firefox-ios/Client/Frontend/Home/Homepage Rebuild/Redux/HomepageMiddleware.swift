@@ -14,7 +14,7 @@ final class HomepageMiddleware {
 
     lazy var homepageProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.viewWillAppear:
+        case HomepageActionType.viewWillAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             self.homepageTelemetry.sendHomepageImpressionEvent()
 
         case NavigationBrowserActionType.tapOnCustomizeHomepageButton:
