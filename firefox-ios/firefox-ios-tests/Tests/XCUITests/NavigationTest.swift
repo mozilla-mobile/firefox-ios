@@ -15,7 +15,7 @@ let website_2 = [
     "label": "Example",
     "value": "example",
     "link": "More information...",
-    "moreLinkLongPressUrl": "http://www.iana.org/domains/example",
+    "moreLinkLongPressUrl": "iana.org",
     "moreLinkLongPressInfo": "iana"
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
