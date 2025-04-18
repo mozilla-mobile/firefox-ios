@@ -498,7 +498,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 self?.hideDefaultBrowserNudgeCardInSection(section)
             }
             header.onTap = { [weak self] in
-                User.shared.hideDefaultBrowserSettingNudgeCard()
                 self?.showDefaultBrowserDetailView()
             }
             header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
