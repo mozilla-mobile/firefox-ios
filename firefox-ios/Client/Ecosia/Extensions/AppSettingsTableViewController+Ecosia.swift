@@ -114,7 +114,7 @@ extension AppSettingsTableViewController {
             EcosiaSendAnonymousUsageDataSetting(prefs: profile.prefs, theme: themeManager.getCurrentTheme(for: windowUUID)),
             BoolSetting(prefs: profile.prefs,
                         theme: themeManager.getCurrentTheme(for: windowUUID),
-                        prefKey: "settings.closePrivateTabs",
+                        prefKey: PrefsKeys.Settings.closePrivateTabs,
                         defaultValue: false,
                         titleText: .AppSettingsClosePrivateTabsTitle,
                         statusText: .AppSettingsClosePrivateTabsDescription),
