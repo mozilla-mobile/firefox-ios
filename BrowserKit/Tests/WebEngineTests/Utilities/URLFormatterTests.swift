@@ -90,6 +90,42 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, "http://\(initialUrl)")
     }
 
+    func testGetURLGivenNoHttpsURLWithSpacePathThenValidEscapedURL() {
+        let initialUrl = "foo.bar/foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
+    }
+
+    func testGetURLGivenHttpURLWithSpacePathThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
+    }
+
+    func testGetURLGivenNoHttpsURLWithTildeThenValidEscapedURL() {
+        let initialUrl = "foo.bar/~/"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
+    }
+
+    func testGetURLGivenHttpURLWithTildeThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/~/"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
+    }
+
     func testGetURLGivenDotURLThenValidURL() {
         let initialUrl = "1.2.3"
         let subject = DefaultURLFormatter()
@@ -184,6 +220,15 @@ final class URLFormatterTests: XCTestCase {
 
     func testGetURLGivenURLWithSpaceBeforeTLDThenInvalidURL() {
         let initialUrl = "mozilla. org"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertNil(result)
+    }
+
+    func testGetURLGivenURLWithoutTLDThenInvalidURL() {
+        let initialUrl = "mozilla./foo bar"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
