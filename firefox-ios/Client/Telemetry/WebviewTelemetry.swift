@@ -8,21 +8,26 @@ import Glean
 /// Measure with a time distribution https://mozilla.github.io/glean/book/reference/metrics/timing_distribution.html
 /// how long it takes to load a webpage
 final class WebViewLoadMeasurementTelemetry {
+    private let gleanWrapper: GleanWrapper
     private var loadTimerId: GleanTimerId?
 
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func start() {
-        loadTimerId = GleanMetrics.Webview.pageLoad.start()
+        loadTimerId = gleanWrapper.startTiming(for: GleanMetrics.Webview.pageLoad)
     }
 
     func stop() {
         guard let timerId = loadTimerId else { return }
-        GleanMetrics.Webview.pageLoad.stopAndAccumulate(timerId)
+        gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Webview.pageLoad, timerId: timerId)
         loadTimerId = nil
     }
 
     func cancel() {
-        if let loadTimerId {
-            GleanMetrics.Webview.pageLoad.cancel(loadTimerId)
+        if let timerId = loadTimerId {
+            gleanWrapper.cancelTiming(for: GleanMetrics.Webview.pageLoad, timerId: timerId)
         }
     }
 }
