@@ -169,7 +169,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        trackVisibleImpressions()
+        trackVisibleItemImpressions()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -212,7 +212,7 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        trackVisibleImpressions()
+        trackVisibleItemImpressions()
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -295,6 +295,11 @@ final class HomepageViewController: UIViewController,
             state: state,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
+        // FXIOS-11523 - Trigger impression when user opens homepage view new tab
+        if homepageState.shouldTriggerImpression {
+            alreadyTrackedItems.removeAll()
+            trackVisibleItemImpressions()
+        }
     }
 
     func unsubscribeFromRedux() {
@@ -871,7 +876,7 @@ final class HomepageViewController: UIViewController,
 
     /// Used to track item impressions. If the user has seen the item on the homepage, we only record the impression once.
     /// We want to track at initial seen as well as when users scrolls.
-    private func trackVisibleImpressions() {
+    private func trackVisibleItemImpressions() {
         guard let collectionView else {
             logger.log(
                 "Homepage collectionview should not have been nil, unable to track impression",
