@@ -214,7 +214,7 @@ extension BrowserViewController: WKUIDelegate {
                                         image: elements.image,
                                         currentTab: currentTab,
                                         webView: webView)
-            return UIMenu(title: url.absoluteString, children: actions)
+            return UIMenu(title: url.normalizedHost ?? url.absoluteString, children: actions)
         }
     }
 
