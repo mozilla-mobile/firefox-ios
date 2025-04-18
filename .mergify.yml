@@ -77,3 +77,7 @@ priority_rules:
     conditions:
       - queue-name=rebase-queue
     priority: 2250
+  - name: priority for queue `rebase-queue`
+    conditions:
+      - queue-name=rebase-queue
+    priority: 2250
