@@ -220,7 +220,7 @@ extension BrowserViewController: WKUIDelegate {
 
     private func contextMenuPreviewProvider(for url: URL, webView: WKWebView) -> UIContextMenuContentPreviewProvider? {
         let provider: UIContextMenuContentPreviewProvider = {
-            let previewViewController = UIViewController()
+            let previewViewController = ContextMenuPreviewViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
 
