@@ -199,7 +199,7 @@ final class ShareManagerTests: XCTestCase {
 
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -244,7 +244,7 @@ final class ShareManagerTests: XCTestCase {
 
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -290,7 +290,7 @@ final class ShareManagerTests: XCTestCase {
 
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleSubtitleActivityItemProvider)
 
@@ -339,7 +339,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -389,7 +389,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -437,7 +437,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -485,7 +485,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -535,7 +535,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -592,7 +592,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
@@ -651,7 +651,7 @@ final class ShareManagerTests: XCTestCase {
         // The rest of the content should be unchanged from other tests:
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
