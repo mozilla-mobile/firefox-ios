@@ -6,6 +6,7 @@ import XCTest
 @testable import WebEngine
 import WebKit
 
+@MainActor
 @available(iOS 16.0, *)
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
@@ -605,7 +606,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     func createSubject(file: StaticString = #file,
                        line: UInt = #line,
-                       uiHandler: WKUIHandler = DefaultUIHandler()) -> WKEngineSession? {
+                       uiHandler: WKUIHandler? = nil) -> WKEngineSession? {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             dependencies: DefaultTestDependencies().sessionDependencies,
                                             configurationProvider: configurationProvider,
@@ -613,7 +614,8 @@ final class WKEngineSessionTests: XCTestCase {
                                             contentScriptManager: contentScriptManager,
                                             scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
-                                            uiHandler: uiHandler) else {
+                                            navigationHandler: DefaultNavigationHandler(),
+                                            uiHandler: uiHandler ?? DefaultUIHandler()) else {
             return nil
         }
 

@@ -19,9 +19,9 @@ final class MetadataFetcherHelperTests: XCTestCase {
         metadataDelegate = nil
     }
 
-    func testFetchFromSessionGivenNotWebpageURLThenPageMetadataNil() {
+    func testFetchFromSessionGivenNotWebpageURLThenPageMetadataNil() async {
         let subject = createSubject()
-        let session = MockWKEngineSession()
+        let session = await MockWKEngineSession()
         let url = URL(string: "blob:example.com")!
 
         subject.fetch(fromSession: session, url: url)
@@ -29,9 +29,9 @@ final class MetadataFetcherHelperTests: XCTestCase {
         XCTAssertNil(session.sessionData.pageMetadata)
     }
 
-    func testFetchFromSessionGivenInternalURLThenPageMetadataNil() {
+    func testFetchFromSessionGivenInternalURLThenPageMetadataNil() async {
         let subject = createSubject()
-        let session = MockWKEngineSession()
+        let session = await MockWKEngineSession()
         let url = URL(string: "http://localhost:1234/test-fixture/")!
 
         subject.fetch(fromSession: session, url: url)
@@ -40,11 +40,14 @@ final class MetadataFetcherHelperTests: XCTestCase {
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }
 
-    func testFetchFromSessionGivenErrorThenPageMetadataNil() {
+    // laurie
+    @MainActor
+    func testFetchFromSessionGivenErrorThenPageMetadataNil() async {
         let subject = createSubject()
-        let session = MockWKEngineSession()
+        let session = await MockWKEngineSession()
         let url = URL(string: "https://mozilla.com")!
         enum TestError: Error { case example }
+
         session.webviewProvider.webView.javascriptResult = .failure(TestError.example)
 
         subject.fetch(fromSession: session, url: url)
@@ -53,21 +56,23 @@ final class MetadataFetcherHelperTests: XCTestCase {
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }
 
-    func testFetchFromSessionGivenURLThenJavascriptIsProper() {
+    func testFetchFromSessionGivenURLThenJavascriptIsProper() async {
         let expectedJavascript = "__firefox__.metadata && __firefox__.metadata.getMetadata()"
         let subject = createSubject()
-        let session = MockWKEngineSession()
+        let session = await MockWKEngineSession()
         let url = URL(string: "https://mozilla.com")!
 
         subject.fetch(fromSession: session, url: url)
 
-        XCTAssertEqual(session.webviewProvider.webView.savedJavaScript, expectedJavascript)
+        let savedJavaScript = await session.webviewProvider.webView.savedJavaScript
+        XCTAssertEqual(savedJavaScript, expectedJavascript)
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }
 
-    func testFetchFromSessionGivenEmptyResultThenPageMetadataNil() {
+    @MainActor
+    func testFetchFromSessionGivenEmptyResultThenPageMetadataNil() async {
         let subject = createSubject()
-        let session = MockWKEngineSession()
+        let session = await MockWKEngineSession()
         let url = URL(string: "https://mozilla.com")!
         session.webviewProvider.webView.javascriptResult = .success(["": ""])
 
@@ -77,11 +82,12 @@ final class MetadataFetcherHelperTests: XCTestCase {
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }
 
-    func testFetchFromSessionGivenPageMetadataResultThenPageMetadataDelegateCalled() {
+    @MainActor
+    func testFetchFromSessionGivenPageMetadataResultThenPageMetadataDelegateCalled() async {
         let expectedTitle = "Some title"
         let expectedPageMetadata = createDictionnaryPageMetadata(title: expectedTitle)
         let subject = createSubject()
-        let session = MockWKEngineSession()
+        let session = await MockWKEngineSession()
         let url = URL(string: "https://mozilla.com")!
         session.webviewProvider.webView.javascriptResult = .success(expectedPageMetadata)
 

@@ -6,6 +6,7 @@ import WebKit
 import Foundation
 
 /// Manager used to inject scripts at document start or end inside a WKEngineWebView
+@MainActor
 protocol WKUserScriptManager {
     func injectUserScriptsIntoWebView(_ webView: WKEngineWebView)
 }

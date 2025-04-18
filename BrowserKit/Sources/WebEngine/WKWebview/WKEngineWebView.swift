@@ -163,7 +163,6 @@ final class DefaultWKEngineWebView: WKWebView,
                    parameters: WKWebViewParameters) {
         let configuration = configurationProvider.createConfiguration(parameters: parameters)
         self.engineConfiguration = configuration
-        guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
         pullRefreshViewType = parameters.pullRefreshType
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 

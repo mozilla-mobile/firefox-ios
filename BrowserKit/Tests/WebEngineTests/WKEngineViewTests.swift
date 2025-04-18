@@ -9,14 +9,9 @@ import XCTest
 final class WKEngineViewTests: XCTestCase {
     private var engineSession: WKEngineSession!
 
-    override func setUp() {
-        super.setUp()
-        engineSession = WKEngineSession(userScriptManager: MockWKUserScriptManager(),
-                                        dependencies: DefaultTestDependencies().sessionDependencies,
-                                        configurationProvider: MockWKEngineConfigurationProvider(),
-                                        webViewProvider: MockWKWebViewProvider(),
-                                        contentScriptManager: MockWKContentScriptManager(),
-                                        metadataFetcher: MockMetadataFetcherHelper())
+    override func setUp() async throws {
+        try await super.setUp()
+        engineSession = await MockWKEngineSession()
     }
 
     override func tearDown() {
@@ -32,14 +27,10 @@ final class WKEngineViewTests: XCTestCase {
         XCTAssertTrue(engineSession.isActive)
     }
 
-    func testRemoveSetsIsActiveFalse() {
+    @MainActor
+    func testRemoveSetsIsActiveFalse() async {
         let subject = createSubject()
-        let newEngineSession = WKEngineSession(userScriptManager: MockWKUserScriptManager(),
-                                               dependencies: DefaultTestDependencies().sessionDependencies,
-                                               configurationProvider: MockWKEngineConfigurationProvider(),
-                                               webViewProvider: MockWKWebViewProvider(),
-                                               contentScriptManager: MockWKContentScriptManager(),
-                                               metadataFetcher: MockMetadataFetcherHelper())!
+        let newEngineSession = await MockWKEngineSession()
 
         subject.render(session: engineSession)
         subject.render(session: newEngineSession)

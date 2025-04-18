@@ -7,27 +7,29 @@ import XCTest
 
 @available(iOS 16.0, *)
 final class WKUserScriptManagerTests: XCTestCase {
-    func testInitThenAddsUserScripts() {
-        let subject = createSubject()
-        XCTAssertEqual(subject.compiledUserScripts.count, 8)
+    func testInitThenAddsUserScripts() async {
+        let subject = await createSubject()
+
+        let userScripts = await subject.compiledUserScripts
+        XCTAssertEqual(userScripts.count, 8)
     }
 
-    func testInjectUserScriptThenScriptsAreAddedInWebView() {
-        let webview = MockWKEngineWebView(frame: .zero,
-                                          configurationProvider: MockWKEngineConfigurationProvider(),
-                                          parameters: DefaultTestDependencies().webviewParameters)!
-        let subject = createSubject()
+    func testInjectUserScriptThenScriptsAreAddedInWebView() async {
+        let webview = await MockWKEngineWebView(frame: .zero,
+                                                configurationProvider: MockWKEngineConfigurationProvider(),
+                                                parameters: DefaultTestDependencies().webviewParameters)!
+        let subject = await createSubject()
 
-        subject.injectUserScriptsIntoWebView(webview)
-        guard let config = webview.engineConfiguration as? MockWKEngineConfiguration else {
+        await subject.injectUserScriptsIntoWebView(webview)
+        guard let config = await webview.engineConfiguration as? MockWKEngineConfiguration else {
             XCTFail("Failed to cast webview engine configuration to MockWKEngineConfiguration")
             return
         }
         XCTAssertEqual(config.addUserScriptCalled, 8)
     }
 
-    func createSubject() -> DefaultUserScriptManager {
-        let subject = DefaultUserScriptManager(scriptProvider: MockUserScriptProvider())
+    func createSubject() async -> DefaultUserScriptManager {
+        let subject = await DefaultUserScriptManager(scriptProvider: MockUserScriptProvider())
         trackForMemoryLeaks(subject)
         return subject
     }

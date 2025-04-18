@@ -10,22 +10,29 @@ protocol WKWebServerUtil {
 }
 
 class DefaultWKWebServerUtil: WKWebServerUtil {
-    private var readerModeHander: WKReaderModeHandlersProtocol
+    private var readerModeHandler: WKReaderModeHandlersProtocol
     private var webServer: WKEngineWebServerProtocol
     private let logger: Logger
 
-    init(webServer: WKEngineWebServerProtocol = WKEngineWebServer.shared,
-         readerModeHander: WKReaderModeHandlersProtocol = WKReaderModeHandlers(),
+    init(webServer: WKEngineWebServerProtocol,
+         readerModeHandler: WKReaderModeHandlersProtocol = WKReaderModeHandlers(),
          logger: Logger = DefaultLogger.shared) {
         self.webServer = webServer
-        self.readerModeHander = readerModeHander
+        self.readerModeHandler = readerModeHandler
         self.logger = logger
+    }
+
+    // TODO: With Swift 6 we can use default params in the init
+    @MainActor
+    static func factory() -> DefaultWKWebServerUtil {
+        let webServer = WKEngineWebServer.shared
+        return DefaultWKWebServerUtil(webServer: webServer)
     }
 
     func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration) {
         guard !webServer.isRunning else { return }
 
-        readerModeHander.register(webServer, readerModeConfiguration: readerModeConfiguration)
+        readerModeHandler.register(webServer, readerModeConfiguration: readerModeConfiguration)
 
         if AppConstants.isRunningTest {
             webServer.addTestHandler()
