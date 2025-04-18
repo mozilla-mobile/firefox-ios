@@ -16,7 +16,6 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
-              is-toolbar-cfr-on: false
       - channel: developer
         value:
           awesome-bar:
@@ -24,7 +23,6 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
-              is-toolbar-cfr-on: false
       - channel: beta
         value:
           awesome-bar:
@@ -32,7 +30,6 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
-              is-toolbar-cfr-on: false
 
 objects:
   AwesomeBar:
@@ -58,7 +55,6 @@ objects:
         default:
           is-position-feature-enabled: true
           is-bottom: true
-          is-toolbar-cfr-on: true
 
   SearchBarPositionFeature:
     description: "The configuration for the bottom search bar on the homescreen"
@@ -70,8 +66,4 @@ objects:
       is-bottom:
         type: Boolean
         description: Whether or not the default position is at the bottom
-        default: true
-      is-toolbar-cfr-on:
-        type: Boolean
-        description: Whether or not the toolbar CFR shows. This is a temporary hack for Nimbus
         default: true

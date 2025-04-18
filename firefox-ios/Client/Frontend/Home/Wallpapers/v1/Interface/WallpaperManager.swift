@@ -82,9 +82,8 @@ class WallpaperManager: WallpaperManagerInterface {
     /// Doesn't need overlayState to check for CFR because the state was previously check
     func canOnboardingBeShown(using profile: Profile) -> Bool {
         let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
-        let toolbarCFRShown = !cfrHintUtility.canPresent(.toolbarLocation)
         let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
-        let cfrsHaveBeenShown = toolbarCFRShown && jumpBackInCFRShown
+        let cfrsHaveBeenShown = jumpBackInCFRShown
 
         guard cfrsHaveBeenShown,
               hasEnoughThumbnailsToShow,
