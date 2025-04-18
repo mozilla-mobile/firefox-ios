@@ -27,6 +27,7 @@ struct HomepageState: ScreenState, Equatable {
     /// The zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
     let isZeroSearch: Bool
+    let shouldTriggerImpression: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -47,7 +48,8 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: homepageState.bookmarkState,
             pocketState: homepageState.pocketState,
             wallpaperState: homepageState.wallpaperState,
-            isZeroSearch: homepageState.isZeroSearch
+            isZeroSearch: homepageState.isZeroSearch,
+            shouldTriggerImpression: homepageState.shouldTriggerImpression
         )
     }
 
@@ -61,7 +63,8 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
-            isZeroSearch: false
+            isZeroSearch: false,
+            shouldTriggerImpression: false
         )
     }
 
@@ -74,7 +77,8 @@ struct HomepageState: ScreenState, Equatable {
         bookmarkState: BookmarksSectionState,
         pocketState: PocketState,
         wallpaperState: WallpaperState,
-        isZeroSearch: Bool
+        isZeroSearch: Bool,
+        shouldTriggerImpression: Bool
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -85,6 +89,7 @@ struct HomepageState: ScreenState, Equatable {
         self.pocketState = pocketState
         self.wallpaperState = wallpaperState
         self.isZeroSearch = isZeroSearch
+        self.shouldTriggerImpression = shouldTriggerImpression
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -104,7 +109,8 @@ struct HomepageState: ScreenState, Equatable {
                 bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
                 pocketState: PocketState.reducer(state.pocketState, action),
                 wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-                isZeroSearch: state.isZeroSearch
+                isZeroSearch: state.isZeroSearch,
+                shouldTriggerImpression: false
             )
         case HomepageActionType.embeddedHomepage:
             guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
@@ -120,11 +126,29 @@ struct HomepageState: ScreenState, Equatable {
                 bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
                 pocketState: PocketState.reducer(state.pocketState, action),
                 wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-                isZeroSearch: isZeroSearch
+                isZeroSearch: isZeroSearch,
+                shouldTriggerImpression: false
             )
+        case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
+            return handleDidTabChangeToHomepageState(state: state, action: action)
         default:
             return defaultState(from: state, action: action)
         }
+    }
+
+    private static func handleDidTabChangeToHomepageState(state: HomepageState, action: Action) -> HomepageState {
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: PocketState.reducer(state.pocketState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: true
+        )
     }
 
     private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
@@ -155,7 +179,8 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: bookmarkState,
             pocketState: pocketState,
             wallpaperState: wallpaperState,
-            isZeroSearch: state.isZeroSearch
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false
         )
     }
 
