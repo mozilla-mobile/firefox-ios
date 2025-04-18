@@ -17,6 +17,7 @@ protocol TabManager: AnyObject {
     var delaySelectingNewPopupTab: TimeInterval { get }
     var recentlyAccessedNormalTabs: [Tab] { get }
     var count: Int { get }
+    var selectedIndex: Int { get }
 
     var selectedTab: Tab? { get }
     var backupCloseTab: BackupCloseTab? { get set }

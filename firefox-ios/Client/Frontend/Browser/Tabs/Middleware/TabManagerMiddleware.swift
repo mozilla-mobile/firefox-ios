@@ -655,6 +655,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
 
+        tabsPanelTelemetry.tabSelected(at: tabManager.selectedIndex)
         tabManager.selectTab(tab)
 
         let action = TabTrayAction(windowUUID: uuid,
