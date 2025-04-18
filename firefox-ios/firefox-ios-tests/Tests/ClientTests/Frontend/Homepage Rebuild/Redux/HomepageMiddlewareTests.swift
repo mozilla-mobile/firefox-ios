@@ -151,7 +151,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_didSelectItemAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = HomepageAction(
-            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite),
+            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite, topSitesTelemetryConfig: nil),
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.didSelectItem
         )
@@ -177,7 +177,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_itemSeenAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = HomepageAction(
-            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite),
+            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite, topSitesTelemetryConfig: nil),
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.itemSeen
         )
