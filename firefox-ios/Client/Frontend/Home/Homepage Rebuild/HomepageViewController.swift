@@ -767,7 +767,7 @@ final class HomepageViewController: UIViewController,
         let config = TopSitesTelemetryConfig(
             isZeroSearch: homepageState.isZeroSearch,
             position: index,
-            topSiteConfig: config
+            topSiteConfiguration: config
         )
         store.dispatch(
             TopSitesAction(
@@ -899,7 +899,7 @@ final class HomepageViewController: UIViewController,
                 topSitesTelemetryConfig: TopSitesTelemetryConfig(
                     isZeroSearch: homepageState.isZeroSearch,
                     position: index,
-                    topSiteConfig: config
+                    topSiteConfiguration: config
                 )
             )
         } else {

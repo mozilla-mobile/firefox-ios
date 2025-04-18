@@ -62,7 +62,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
             self.getTopSitesDataAndUpdateState(for: action)
 
         case TopSitesActionType.tapOnHomepageTopSitesCell:
-            self.sendOpenTopSitesItemTelemetry(for: action)
+            self.handleOpenTopSitesItemTelemetry(for: action)
 
         case ContextMenuActionType.tappedOnPinTopSite:
             guard let site = self.getSite(for: action) else { return }
@@ -163,15 +163,15 @@ final class TopSitesMiddleware: FeatureFlaggable {
             return
         }
 
-        guard telemetryMetadata.topSiteConfig.site.isSponsoredSite else { return }
+        guard telemetryMetadata.topSiteConfiguration.site.isSponsoredSite else { return }
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfig.site, position: telemetryMetadata.position)
+            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfiguration.site, position: telemetryMetadata.position)
         } else {
-            sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfig.site, position: telemetryMetadata.position)
+            sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfiguration.site, position: telemetryMetadata.position)
         }
     }
 
-    private func handleSponsoredClickTracking(with topSiteConfig: TopSiteConfiguration, and position: Int) {
+    private func sendSponsoredTappedTracking(with topSiteConfig: TopSiteConfiguration, and position: Int) {
         guard topSiteConfig.site.isSponsoredSite else { return }
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
             unifiedAdsTelemetry.sendClickTelemetry(tileSite: topSiteConfig.site, position: position)
@@ -192,7 +192,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         homepageTelemetry.sendOpenInPrivateTabEventForTopSites()
     }
 
-    private func sendOpenTopSitesItemTelemetry(for action: Action) {
+    private func handleOpenTopSitesItemTelemetry(for action: Action) {
         guard let telemetryConfig = (action as? TopSitesAction)?.telemetryConfig else {
             self.logger.log(
                 "Unable to retrieve config for \(action.actionType)",
@@ -201,8 +201,8 @@ final class TopSitesMiddleware: FeatureFlaggable {
             )
             return
         }
-        let config = telemetryConfig.topSiteConfig
-        handleSponsoredClickTracking(with: config, and: telemetryConfig.position)
+        let config = telemetryConfig.topSiteConfiguration
+        sendSponsoredTappedTracking(with: config, and: telemetryConfig.position)
 
         homepageTelemetry
             .sendTopSitesPressedEvent(
