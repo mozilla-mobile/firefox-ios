@@ -62,7 +62,17 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
             )
 
-            linksSettings += [offerToOpenCopiedLinksSettings]
+            let showLinksPreviewSettings = BoolSetting(
+                prefs: profile.prefs,
+                theme: theme,
+                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
+                defaultValue: true,
+                titleText: .SettingsShowLinkPreviewsTitle,
+                statusText: .SettingsShowLinkPreviewsStatus
+            )
+
+            linksSettings += [offerToOpenCopiedLinksSettings,
+                              showLinksPreviewSettings]
 
             let blockOpeningExternalAppsSettings = BoolSetting(
                 prefs: profile.prefs,
