@@ -93,7 +93,7 @@ final class AddressToolbarContainerModel: Equatable {
             shouldAnimate: shouldAnimate)
     }
 
-    init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
+    init(state: ToolbarState, profile: Profile, searchEnginesManager: SearchEnginesManager, windowUUID: UUID) {
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          isShowingTopTabs: state.isShowingTopTabs,
@@ -110,12 +110,12 @@ final class AddressToolbarContainerModel: Equatable {
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
-                                ?? profile.searchEnginesManager.defaultEngine?.generateModel()
+                                ?? searchEnginesManager.defaultEngine?.generateModel()
 
         self.windowUUID = windowUUID
         self.searchEngineName = searchEngineModel?.name ?? ""
         self.searchEngineImage = searchEngineModel?.image ?? UIImage()
-        self.searchEnginesManager = profile.searchEnginesManager
+        self.searchEnginesManager = searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName

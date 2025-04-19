@@ -88,7 +88,7 @@ class URLBarView: UIView,
     }
 
     var parent: UIStackView?
-    var searchEnginesManager: SearchEnginesManager?
+    let searchEnginesManager: SearchEnginesManager
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
     var helper: TabToolbarHelper?
@@ -241,7 +241,7 @@ class URLBarView: UIView,
         imageMask: ImageIdentifiers.menuWarningMask
     )
 
-    init(profile: Profile, windowUUID: WindowUUID) {
+    init(profile: Profile, searchEnginesManager: SearchEnginesManager, windowUUID: WindowUUID) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.searchEnginesManager = SearchEnginesManager(prefs: profile.prefs, files: profile.files)
@@ -254,7 +254,9 @@ class URLBarView: UIView,
     }
 
     func searchEnginesDidUpdate() {
-        let engineID = profile.searchEnginesManager.defaultEngine?.telemetryID ?? "unavailable"
+        let defaultEngine = searchEnginesManager.defaultEngine
+
+        let engineID = defaultEngine?.telemetryID ?? "unavailable"
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .change,
@@ -263,11 +265,11 @@ class URLBarView: UIView,
             extras: [TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engineID]
         )
 
-        self.searchIconImageView.image = profile.searchEnginesManager.defaultEngine?.image
-        self.searchIconImageView.largeContentTitle = profile.searchEnginesManager.defaultEngine?.shortName
+        self.searchIconImageView.image = defaultEngine?.image
+        self.searchIconImageView.largeContentTitle = defaultEngine?.shortName
         self.searchIconImageView.largeContentImage = nil
 
-        guard let name = profile.searchEnginesManager.defaultEngine?.shortName else { return }
+        guard let name = searchEnginesManager.defaultEngine?.shortName else { return }
         self.searchIconImageView.accessibilityLabel = String(format: .AddressToolbar.SearchEngineA11yLabel, name)
     }
 
@@ -293,7 +295,7 @@ class URLBarView: UIView,
             addSubview($0)
         }
 
-        profile.searchEnginesManager.delegate = self
+        searchEnginesManager.delegate = self
 
         privateModeBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)

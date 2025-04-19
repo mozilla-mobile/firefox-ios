@@ -176,10 +176,6 @@ open class MockProfile: Client.Profile {
         return CertStore()
     }()
 
-    public lazy var searchEnginesManager: SearchEnginesManager = {
-        return SearchEnginesManager(prefs: self.prefs, files: self.files, engineProvider: MockSearchEngineProvider())
-    }()
-
     public lazy var prefs: Prefs = {
         return MockProfilePrefs()
     }()

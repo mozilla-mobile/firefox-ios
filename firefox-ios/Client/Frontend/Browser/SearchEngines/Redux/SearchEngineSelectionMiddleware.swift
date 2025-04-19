@@ -8,14 +8,14 @@ import Redux
 final class SearchEngineSelectionMiddleware {
     private let profile: Profile
     private let logger: Logger
-    private let searchEnginesManager: SearchEnginesManagerProvider
+    private let searchEnginesManager: SearchEnginesManager
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         searchEnginesManager: SearchEnginesManagerProvider? = nil,
+         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger
-        self.searchEnginesManager = searchEnginesManager ?? profile.searchEnginesManager
+        self.searchEnginesManager = searchEnginesManager
     }
 
     lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in

@@ -14,15 +14,18 @@ class AppLaunchUtil {
     private var logger: Logger
 //    private var adjustHelper: AdjustHelper
     private var profile: Profile
+    private let searchEnginesManager: SearchEnginesManager
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
 
     init(
         logger: Logger = DefaultLogger.shared,
-        profile: Profile
+        profile: Profile,
+        searchEnginesManager: SearchEnginesManager
     ) {
         self.logger = logger
         self.profile = profile
+        self.searchEnginesManager = searchEnginesManager
 //        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
@@ -52,7 +55,7 @@ class AppLaunchUtil {
             let isTermsOfServiceAccepted = termsOfServiceManager.isAccepted || !introScreenManager.shouldShowIntroScreen
             logger.setup(sendCrashReports: sendCrashReports && isTermsOfServiceAccepted)
             if isTermsOfServiceAccepted {
-                TelemetryWrapper.shared.setup(profile: profile)
+                TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
                 TelemetryWrapper.shared.recordStartUpTelemetry()
             } else {
                 // If ToS are not accepted, we still need to setup the Contextual Identifier for
@@ -61,7 +64,7 @@ class AppLaunchUtil {
             }
         } else {
             logger.setup(sendCrashReports: sendCrashReports)
-            TelemetryWrapper.shared.setup(profile: profile)
+            TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
             TelemetryWrapper.shared.recordStartUpTelemetry()
         }
 

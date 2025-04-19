@@ -18,7 +18,11 @@ class AddressToolbarContainerModelTests: XCTestCase {
         mockProfile = MockProfile()
 
         // The MockProfile creates a SearchEnginesManager with a `MockSearchEngineProvider`
-        searchEnginesManager = mockProfile.searchEnginesManager
+        searchEnginesManager = SearchEnginesManager(
+            prefs: mockProfile.prefs,
+            files: mockProfile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
     }
 
     override func tearDown() {
@@ -78,6 +82,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
         return AddressToolbarContainerModel(state: state,
                                             profile: mockProfile,
+                                            searchEnginesManager: searchEnginesManager,
                                             windowUUID: windowUUID)
     }
 
