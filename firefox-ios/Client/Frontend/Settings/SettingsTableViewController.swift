@@ -824,6 +824,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
     var profile: Profile?
     var tabManager: TabManager?
+    var searchEnginesManager: SearchEnginesManager?
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -41,6 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         rustKeychainEnabled: rustKeychainEnabled,
         loginsVerificationEnabled: loginsVerificationEnabled)
 
+    lazy var searchEnginesManager = SearchEnginesManager(
+        prefs: profile.prefs,
+        files: profile.files
+    )
+
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
         isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
@@ -99,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 
-        appLaunchUtil = AppLaunchUtil(profile: profile)
+        appLaunchUtil = AppLaunchUtil(profile: profile, searchEnginesManager: searchEnginesManager)
         appLaunchUtil?.setUpPreLaunchDependencies()
 
         // Set up a web server that serves us static content.

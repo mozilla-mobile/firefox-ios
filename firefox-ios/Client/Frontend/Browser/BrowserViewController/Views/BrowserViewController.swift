@@ -280,6 +280,7 @@ class BrowserViewController: UIViewController,
     let ratingPromptManager: RatingPromptManager
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
+    let searchEnginesManager: SearchEnginesManager
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -324,7 +325,8 @@ class BrowserViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared,
-        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
+        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -335,6 +337,7 @@ class BrowserViewController: UIViewController,
         self.downloadQueue = downloadQueue
         self.logger = logger
         self.appAuthenticator = appAuthenticator
+        self.searchEnginesManager = searchEnginesManager
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
 
@@ -969,7 +972,7 @@ class BrowserViewController: UIViewController,
     private func createLegacyUrlBar() {
         guard !isToolbarRefactorEnabled else { return }
 
-        let urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
+        let urlBar = URLBarView(profile: profile, searchEnginesManager: searchEnginesManager, windowUUID: windowUUID)
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -987,6 +990,7 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.configure(
             windowUUID: windowUUID,
             profile: profile,
+            searchEnginesManager: searchEnginesManager,
             delegate: self,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled
         )
@@ -1675,12 +1679,12 @@ class BrowserViewController: UIViewController,
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
                                               isBottomSearchBar: isBottomSearchBar,
                                               profile: profile,
-                                              model: profile.searchEnginesManager,
+                                              model: searchEnginesManager,
                                               tabManager: tabManager)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     tabManager: tabManager)
-        searchViewModel.searchEnginesManager = profile.searchEnginesManager
+        searchViewModel.searchEnginesManager = searchEnginesManager
         searchController.searchDelegate = self
 
         let searchLoader = SearchLoader(
@@ -2856,7 +2860,7 @@ class BrowserViewController: UIViewController,
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
         popToBVC()
 
-        guard let engine = profile.searchEnginesManager.defaultEngine,
+        guard let engine = searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
@@ -3203,7 +3207,7 @@ class BrowserViewController: UIViewController,
             .searchScreenState
             .showSearchSugestionsView ?? false
 
-        let isSettingEnabled = profile.searchEnginesManager.shouldShowPrivateModeSearchSuggestions
+        let isSettingEnabled = searchEnginesManager.shouldShowPrivateModeSearchSuggestions
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
@@ -3870,7 +3874,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
+        let searchSettingsTableViewController = SearchSettingsTableViewController(
+            profile: profile,
+            searchEnginesManager: searchEnginesManager,
+            windowUUID: windowUUID
+        )
         let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)
     }

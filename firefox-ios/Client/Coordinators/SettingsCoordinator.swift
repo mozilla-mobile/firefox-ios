@@ -30,6 +30,7 @@ class SettingsCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
+    private let searchEnginesManager: SearchEnginesManager
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let settingsTelemetry: SettingsTelemetry
@@ -41,7 +42,8 @@ class SettingsCoordinator: BaseCoordinator,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve(),
-        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
     ) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
@@ -49,6 +51,7 @@ class SettingsCoordinator: BaseCoordinator,
         self.themeManager = themeManager
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.settingsTelemetry = SettingsTelemetry(gleanWrapper: gleanWrapper)
+        self.searchEnginesManager = searchEnginesManager
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
@@ -130,7 +133,11 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .search:
-            let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
+            let viewController = SearchSettingsTableViewController(
+                profile: profile,
+                searchEnginesManager: searchEnginesManager,
+                windowUUID: windowUUID
+            )
             return viewController
 
         case .clearPrivateData:
@@ -176,6 +183,7 @@ class SettingsCoordinator: BaseCoordinator,
             contentBlockerVC.settingsDelegate = self
             contentBlockerVC.profile = profile
             contentBlockerVC.tabManager = tabManager
+            contentBlockerVC.searchEnginesManager = searchEnginesManager
             return contentBlockerVC
 
         case .browser:
@@ -314,6 +322,7 @@ class SettingsCoordinator: BaseCoordinator,
         viewController.settingsDelegate = self
         viewController.profile = profile
         viewController.tabManager = tabManager
+        viewController.searchEnginesManager = searchEnginesManager
         router.push(viewController)
     }
 
@@ -365,7 +374,11 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSearchEngine() {
-        let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
+        let viewController = SearchSettingsTableViewController(
+            profile: profile,
+            searchEnginesManager: searchEnginesManager,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
     }
 
