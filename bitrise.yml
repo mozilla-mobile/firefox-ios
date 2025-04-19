@@ -66,7 +66,7 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
-    
+
     - script@1.2.1:
         title: Count failed tests
         is_always_run: true
@@ -77,11 +77,11 @@ workflows:
 
             echo "Search for failed tests..."
             FAILED_COUNT=$(jq -r '.metrics.testsFailedCount._value' result.json)
-          
+
             echo "Total number of failures: $FAILED_COUNT"
 
             envman add --key ACCESSIBILITY_FAILED_TEST_COUNT --value "$FAILED_COUNT"
-    
+
     - script@1.2.1:
         title: Collect All Accessibility Report Files
         is_always_run: true
@@ -96,7 +96,7 @@ workflows:
 
             echo "Files copied to $BITRISE_DEPLOY_DIR:"
             ls -lh "$BITRISE_DEPLOY_DIR"
-    
+
     - deploy-to-bitrise-io@2.9.2:
         is_always_run: true
 
@@ -829,7 +829,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-16.3.x
         machine_type_id: g2.mac.large
   L10nBuild:
     steps:
@@ -1289,7 +1289,7 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
-  
+
   SPM_Common_Steps:
     steps:
     - activate-ssh-key@4.1.1:
