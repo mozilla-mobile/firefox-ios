@@ -68,7 +68,7 @@ class CustomSearchViewController: SettingsTableViewController {
             do {
                 let engine = try await createEngine(query: trimmedQuery, name: trimmedTitle)
                 self.spinnerView.stopAnimating()
-                self.profile?.searchEnginesManager.addSearchEngine(engine)
+                self.searchEnginesManager?.addSearchEngine(engine)
 
                 CATransaction.begin() // Use transaction to call callback after animation has been completed
                 CATransaction.setCompletionBlock(self.successCallback)
@@ -126,8 +126,8 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     private func engineExists(name: String, template: String) -> Bool {
-        guard let profile else { return false }
-        return profile.searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
+        guard let searchEnginesManager else { return false }
+        return searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
         }
     }

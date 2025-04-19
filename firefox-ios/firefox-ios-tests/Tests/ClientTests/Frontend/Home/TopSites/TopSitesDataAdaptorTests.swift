@@ -10,6 +10,7 @@ import XCTest
 
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
+    private var searchEnginesManager: SearchEnginesManager!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
 
@@ -19,6 +20,12 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         notificationCenter = MockNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
+
+        searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
@@ -574,7 +581,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        profile.searchEnginesManager.defaultEngine = searchEngine
+        searchEnginesManager.defaultEngine = searchEngine
     }
 }
 

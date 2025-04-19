@@ -40,6 +40,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     private let contileProvider: ContileProviderInterface
     private let unifiedAdsProvider: UnifiedAdsProviderInterface
     private let dispatchGroup: DispatchGroupInterface
+    private let searchEnginesManager: SearchEnginesManager
 
     // Pre-loading the data with a default number of tiles so we always show section when needed
     // If this isn't done, then no data will be found from the view model and section won't show
@@ -52,6 +53,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
          contileProvider: ContileProviderInterface = ContileProvider(),
          unifiedAdsProvider: UnifiedAdsProviderInterface = UnifiedAdsProvider(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
+         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
         self.profile = profile
@@ -60,6 +62,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         self.contileProvider = contileProvider
         self.unifiedAdsProvider = unifiedAdsProvider
         self.notificationCenter = notificationCenter
+        self.searchEnginesManager = searchEnginesManager
         self.dispatchGroup = dispatchGroup
         topSiteHistoryManager.delegate = self
 
@@ -194,7 +197,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         if sponsoredTileSpaces > 0 {
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
-                                    defaultSearchEngine: profile.searchEnginesManager.defaultEngine)
+                                    defaultSearchEngine: searchEnginesManager.defaultEngine)
         }
     }
 

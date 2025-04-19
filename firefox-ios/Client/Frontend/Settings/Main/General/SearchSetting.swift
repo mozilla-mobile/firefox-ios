@@ -5,7 +5,7 @@
 import Foundation
 
 class SearchSetting: Setting {
-    private let profile: Profile?
+    private let searchEnginesManager: SearchEnginesManager?
     private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
@@ -16,9 +16,9 @@ class SearchSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString? {
-        guard let profile else { return nil }
+        guard let searchEnginesManager else { return nil }
         return NSAttributedString(
-            string: profile.searchEnginesManager.defaultEngine?.shortName ?? ""
+            string: searchEnginesManager.defaultEngine?.shortName ?? ""
         )
     }
 
@@ -28,7 +28,7 @@ class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController,
          settingsDelegate: GeneralSettingsDelegate?) {
-        self.profile = settings.profile
+        self.searchEnginesManager = settings.searchEnginesManager
         self.settingsDelegate = settingsDelegate
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
