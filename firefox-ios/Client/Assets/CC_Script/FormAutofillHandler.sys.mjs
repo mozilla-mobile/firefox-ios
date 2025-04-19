@@ -268,6 +268,11 @@ export class FormAutofillHandler {
     return false;
   }
 
+  updateFormByElement(element) {
+    const formLike = lazy.AutofillFormFactory.createFromField(element);
+    this._updateForm(formLike);
+  }
+
   /**
    * Update the form with a new FormLike, and the related fields should be
    * updated or clear to ensure the data consistency.
@@ -344,7 +349,7 @@ export class FormAutofillHandler {
   }
 
   /**
-   * Resetting the state element's fieldDetail after it was removed from the form
+   * Resetting the filled state after an element was removed from the form
    * Todo: We'll need to update this.filledResult in FormAutofillParent (Bug 1948077).
    *
    * @param {HTMLElement} element that was removed
@@ -353,8 +358,7 @@ export class FormAutofillHandler {
     if (this.getFilledStateByElement(element) != FIELD_STATES.AUTO_FILLED) {
       return;
     }
-    const fieldDetail = this.getFieldDetailByElement(element);
-    this.#filledStateByElement.delete(fieldDetail);
+    this.#filledStateByElement.delete(element);
   }
 
   /**

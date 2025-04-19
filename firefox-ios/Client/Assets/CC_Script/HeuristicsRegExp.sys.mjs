@@ -56,7 +56,8 @@ export const HeuristicsRegExp = {
       "address-line3": "addrline3|address_3|addl3",
       "address-level2": "città", // it-IT
       "address-housenumber":
-        "house\\s*number|hausnummer|haus|house[a-z\-]*n(r|o)",
+        "(house|building)\\s*number|hausnummer|haus|house[a-z\-]*n(r|o)" +
+        "|n[úu]mero",
       "address-level3":
         "(^address-?level-?3$)" +
         "|neighbou*rhood|barrio|bairro|colonia|suburb", // en/es/pt/mx/au/nz
@@ -653,10 +654,12 @@ export const HeuristicsRegExp = {
       "address-line2":
         "address|line" +
         "|house|building|apartment|floor" +    // de-DE
+        "|apartamento|" +    // pt
         "|adresse" +      // fr-FR
         "|indirizzo" +    // it-IT
         "|地址" +         // zh-CN
-        "|주소",          // ko-KR
+        "|주소" +         // ko-KR
+        "|mieszkan(ie|ia)",         // pl-PL
     },
   ],
 
