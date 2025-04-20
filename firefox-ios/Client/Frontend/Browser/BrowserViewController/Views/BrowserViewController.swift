@@ -1724,6 +1724,12 @@ class BrowserViewController: UIViewController,
         ])
 
         searchController.didMove(toParent: self)
+
+        // We need to hide the Homepage content
+        // from accessibility, otherwise it will
+        // be read by VoiceOver when reading in the
+        // Search Controller
+        contentContainer.accessibilityElementsHidden = true
     }
 
     func hideSearchController() {
@@ -1735,6 +1741,8 @@ class BrowserViewController: UIViewController,
 
         keyboardBackdrop?.removeFromSuperview()
         keyboardBackdrop = nil
+
+        contentContainer.accessibilityElementsHidden = false
     }
 
     func destroySearchController() {
@@ -1743,6 +1751,8 @@ class BrowserViewController: UIViewController,
         searchController = nil
         searchSessionState = nil
         searchLoader = nil
+
+        contentContainer.accessibilityElementsHidden = false
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
