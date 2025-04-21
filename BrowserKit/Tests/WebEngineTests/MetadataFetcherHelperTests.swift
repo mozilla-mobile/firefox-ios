@@ -40,7 +40,6 @@ final class MetadataFetcherHelperTests: XCTestCase {
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }
 
-    // laurie
     @MainActor
     func testFetchFromSessionGivenErrorThenPageMetadataNil() async {
         let subject = createSubject()
