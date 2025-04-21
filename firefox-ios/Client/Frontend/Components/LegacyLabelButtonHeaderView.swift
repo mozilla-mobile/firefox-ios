@@ -45,6 +45,7 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         label.font = FXFontStyles.Bold.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var moreButton: ActionButton = .build { button in
