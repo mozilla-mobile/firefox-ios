@@ -12,6 +12,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     var mockNotificationCenter: MockNotificationCenter?
     var mockThemeManager: MockThemeManager?
     var mockStore: MockStoreForMiddleware<AppState>!
+    var mockThrottler: MockThrottler!
 
     override func setUp() {
         super.setUp()
@@ -21,6 +22,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() {
+        mockThrottler = nil
         mockNotificationCenter = nil
         mockThemeManager = nil
         DependencyHelperMock().reset()
@@ -193,27 +195,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_collectionDelegate_willDisplay_triggersHomepageAction() throws {
-        let subject = createSubject()
-        // Need to call loadViewIfNeeded and newState to populate the datasource
-        // used to check whether we should send dispatch action or not
-        subject.loadViewIfNeeded()
-        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
-
-        subject.collectionView(
-            UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()),
-            willDisplay: UICollectionViewCell(),
-            forItemAt: IndexPath(item: 0, section: 0)
-        )
-
-        let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
-        )
-        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
-        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-    }
-
     func test_viewDidAppear_triggersHomepageAction() throws {
         let subject = createSubject()
         // Need to call loadViewIfNeeded and newState to populate the datasource
@@ -224,11 +205,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.view.layoutIfNeeded()
         subject.viewDidAppear(false)
 
+        XCTAssertTrue(mockThrottler.didCallThrottle)
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
         )
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
@@ -243,18 +225,20 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.scrollViewDidEndDecelerating(UIScrollView())
 
+        XCTAssertTrue(mockThrottler.didCallThrottle)
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
         )
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
     func test_newState_forTriggeringImpression_triggersHomepageAction() throws {
         let subject = createSubject()
+        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
         let newState = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            initialState,
             GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
                 actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
@@ -262,18 +246,20 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         )
 
         // Need to call loadViewIfNeeded and newState to populate the datasource
-        // used to check whether we should send dispatch action or not
         // layoutIfNeeded() recalculates the collection view to have items
         subject.loadViewIfNeeded()
-        XCTAssertTrue(newState.shouldTriggerImpression)
-        subject.newState(state: newState)
+        subject.newState(state: initialState)
         subject.view.layoutIfNeeded()
 
+        subject.newState(state: newState)
+
+        XCTAssertTrue(newState.shouldTriggerImpression)
+        XCTAssertTrue(mockThrottler.didCallThrottle)
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
         )
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
@@ -304,15 +290,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
         let mockOverlayManager = MockOverlayModeManager()
+        let throttler = MockThrottler()
         mockNotificationCenter = notificationCenter
         mockThemeManager = themeManager
+        mockThrottler = throttler
         let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),
-            notificationCenter: notificationCenter
+            notificationCenter: notificationCenter,
+            throttler: mockThrottler
         )
         trackForMemoryLeaks(homepageViewController)
         return homepageViewController
