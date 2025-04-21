@@ -25,6 +25,7 @@ final class WKEngineTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testCreateViewThenCreatesView() async {
         let subject = await createSubject()
         XCTAssertNotNil(subject.createView())
