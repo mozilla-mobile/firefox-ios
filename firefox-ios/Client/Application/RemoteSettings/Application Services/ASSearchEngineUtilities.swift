@@ -50,7 +50,9 @@ struct ASSearchEngineUtilities {
         if let searchArg = searchURL.searchTermParamName, !searchURL.base.contains("{searchTerms}") {
             queryItems.append(URLQueryItem(name: searchArg, value: "{searchTerms}"))
         }
-        components.queryItems = queryItems
+        if !queryItems.isEmpty {
+            components.queryItems = queryItems
+        }
 
         return components.url?.absoluteString.removingPercentEncoding
     }
