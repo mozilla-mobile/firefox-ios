@@ -639,7 +639,7 @@ class BrowserViewController: UIViewController,
 
         dismissModalsIfStartAtHome()
         if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab)
         }
     }
 
@@ -1109,7 +1109,7 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?) {
         if let tab {
-            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper?.takeScreenshot(tab)
         }
     }
 
@@ -2960,7 +2960,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
+                    self.screenshotHelper?.takeScreenshot(tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }

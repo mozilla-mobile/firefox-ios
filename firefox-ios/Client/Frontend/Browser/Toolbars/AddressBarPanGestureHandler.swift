@@ -108,7 +108,7 @@ final class AddressBarPanGestureHandler: NSObject {
 
         // Check if the new tab index is within bounds.
         if newTabIndex >= 0 && newTabIndex < tabs.count {
-            screenshotHelper?.takeScreenshot(tabs[index], windowUUID: windowUUID)
+            screenshotHelper?.takeScreenshot(tabs[index])
             webPagePreview.setScreenshot(tabs[safe: newTabIndex]?.screenshot)
         } else {
             webPagePreview.isHidden = true
