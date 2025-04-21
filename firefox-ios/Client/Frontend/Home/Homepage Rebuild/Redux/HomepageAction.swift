@@ -5,8 +5,12 @@
 import Common
 import Redux
 
+/// Extras are optionals since we pass in `item.telemetryItemType` as `itemType`
+/// and not all items will have telemetry extras (i.e. `header`)
+/// Only sponsored sites telemetry are using `topSitesTelemetryConfig`
 struct HomepageTelemetryExtras {
     let itemType: HomepageTelemetry.ItemType?
+    let topSitesTelemetryConfig: TopSitesTelemetryConfig?
 }
 
 final class HomepageAction: Action {
