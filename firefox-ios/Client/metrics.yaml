@@ -6099,6 +6099,22 @@ webview:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  process_did_terminate:
+    type: event
+    extra_keys:
+      consecutive_crash:
+        type: quantity
+        description: |
+          The number of consecutive times the webview has crashed.
+    description: |
+      Recorded when a webview process terminates and we attempt a reload of that webview.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25951
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-10-01"
 
 fx_suggest:
   ping_type:

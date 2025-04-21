@@ -1369,6 +1369,11 @@ extension TabManagerImplementation: WKNavigationDelegate {
             // Only automatically attempt to reload the crashed
             // tab three times before giving up.
             if tab.consecutiveCrashes < 3 {
+                logger.log("The webview has crashed, trying to reload. Attempt number \(tab.consecutiveCrashes)",
+                           level: .warning,
+                           category: .webview)
+                tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
+
                 webView.reload()
             } else {
                 tab.consecutiveCrashes = 0
