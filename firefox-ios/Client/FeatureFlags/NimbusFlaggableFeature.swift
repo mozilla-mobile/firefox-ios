@@ -37,7 +37,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
     case ratingPromptFeature
-    case reduxSearchSettings
     case reportSiteIssue
     case searchEngineConsolidation
     case sentFromFirefox
@@ -137,7 +136,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
                 .ratingPromptFeature,
-                .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
