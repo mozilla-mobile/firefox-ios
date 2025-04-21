@@ -13,15 +13,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let windowUUID = UUID()
-        let baseViewController = RootViewController(windowUUID: windowUUID)
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = baseViewController
-        window?.makeKeyAndVisible()
 
-        guard let window else { return }
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-        themeManager.setWindow(window, for: windowUUID)
-        themeManager.setSystemTheme(isOn: true)
+        let tempVC = UIViewController()
+        tempVC.view.backgroundColor = .systemBackground
+
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        window.rootViewController = tempVC
+        window.makeKeyAndVisible()
+
+        Task {
+            let engineProvider = await EngineProviderManager.shared.getProvider()
+            let windowUUID = UUID()
+            let rootVC = RootViewController(engineProvider: engineProvider, windowUUID: windowUUID)
+
+            await MainActor.run {
+                window.rootViewController = rootVC
+
+                let themeManager: ThemeManager = AppContainer.shared.resolve()
+                themeManager.setWindow(window, for: windowUUID)
+                themeManager.setSystemTheme(isOn: true)
+            }
+        }
     }
 }
