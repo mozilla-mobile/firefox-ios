@@ -295,10 +295,11 @@ final class HomepageViewController: UIViewController,
             state: state,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
-        // FXIOS-11523 - Trigger impression when user opens homepage view new tab
+        // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if homepageState.shouldTriggerImpression {
             alreadyTrackedItems.removeAll()
             trackVisibleItemImpressions()
+            scrollToTop()
         }
     }
 
