@@ -46,8 +46,8 @@ struct ASSearchEngineUtilities {
             return URLQueryItem(name: $0.name, value: value)
         }
         // From API docs: "This may be skipped if `{searchTerm}` is included in the base."
-        if let searchArg = searchURL.searchTermParamName, !searchURL.base.contains("{searchTerm}") {
-            // Note: term vs terms is not a typo.
+        // Note: there is a typo in the docs, the value is searchTerms (plural).
+        if let searchArg = searchURL.searchTermParamName, !searchURL.base.contains("{searchTerms}") {
             queryItems.append(URLQueryItem(name: searchArg, value: "{searchTerms}"))
         }
         components.queryItems = queryItems
