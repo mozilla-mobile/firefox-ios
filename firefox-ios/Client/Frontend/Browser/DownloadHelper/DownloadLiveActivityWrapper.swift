@@ -21,8 +21,6 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
 
     let throttler = Throttler(seconds: UX.updateCooldown)
 
-    private var lastUpdateTime = Date.distantPast
-
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
     var downloadProgressManager: DownloadProgressManager
@@ -53,9 +51,9 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     }
 
     func end(durationToDismissal: DurationToDismissal) {
-        let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
-        let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
         Task {
+            let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
+            let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
             await update()
             try await Task.sleep(nanoseconds: durationToDismissal.rawValue)
             await downloadLiveActivity?.end(using: contentState, dismissalPolicy: .immediate)
