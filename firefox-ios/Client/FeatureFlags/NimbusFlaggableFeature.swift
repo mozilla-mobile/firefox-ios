@@ -25,7 +25,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageRebuild
     case inactiveTabs
     case isToolbarCFREnabled
-    case jumpBackIn
     case loginAutofill
     case menuRefactor
     case menuRefactorHint
@@ -110,8 +109,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.FirefoxSuggest
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
-        case .jumpBackIn:
-            return FlagKeys.JumpBackInSection
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.

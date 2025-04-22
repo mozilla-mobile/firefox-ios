@@ -15,10 +15,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
 
-    var isJumpBackInSectionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly)
-    }
-
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown
     }
@@ -128,23 +124,25 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             format: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle,
             PocketAppName.shortName.rawValue)
 
-        let jumpBackInSetting = BoolSetting(
-            with: .jumpBackIn,
-            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn)
-        ) { value in
-            store.dispatch(
-                JumpBackInAction(
-                    isEnabled: value,
-                    windowUUID: self.windowUUID,
-                    actionType: JumpBackInActionType.toggleShowSectionSetting
-                )
-            )
-        }
-
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
-        if isJumpBackInSectionEnabled {
+        if let profile {
+            let jumpBackInSetting = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.UserFeatureFlagPrefs.JumpBackInSection,
+                defaultValue: true,
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
+            ) { value in
+                store.dispatch(
+                    JumpBackInAction(
+                        isEnabled: value,
+                        windowUUID: self.windowUUID,
+                        actionType: JumpBackInActionType.toggleShowSectionSetting
+                    )
+                )
+            }
             sectionItems.append(jumpBackInSetting)
         }
 
