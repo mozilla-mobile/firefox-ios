@@ -50,21 +50,23 @@ class OpenPassBookHelper {
     }
 
     func open(response: URLResponse, cookieStore: WKHTTPCookieStore, completion: @escaping () -> Void) {
-        do {
-            try openPassWithContentsOfURL(url: response.url)
-            completion()
-        } catch let error as InvalidPassError {
-            sendLogError(with: error.description)
-            openPassWithCookies(url: response.url, cookieStore: cookieStore) { error in
-                if error != nil {
-                    self.presentErrorAlert(completion: completion)
-                } else {
-                    completion()
+        Task {
+            do {
+                try await openPassWithContentsOfURL(url: response.url)
+                completion()
+            } catch let error as InvalidPassError {
+                sendLogError(with: error.description)
+                openPassWithCookies(url: response.url, cookieStore: cookieStore) { error in
+                    if error != nil {
+                        self.presentErrorAlert(completion: completion)
+                    } else {
+                        completion()
+                    }
                 }
+            } catch {
+                sendLogError(with: error.localizedDescription)
+                presentErrorAlert(completion: completion)
             }
-        } catch {
-            sendLogError(with: error.localizedDescription)
-            presentErrorAlert(completion: completion)
         }
     }
 
@@ -122,12 +124,13 @@ class OpenPassBookHelper {
         }
     }
 
-    private func openPassWithContentsOfURL(url: URL?) throws {
-        guard let url = url, let passData = try? Data(contentsOf: url) else {
+    private func openPassWithContentsOfURL(url: URL?) async throws {
+        guard let url = url else {
             throw InvalidPassError.contentsOfURL
         }
 
         do {
+            let (passData, _) = try await URLSession.shared.data(from: url)
             try open(passData: passData)
         } catch {
             sendLogError(with: error.localizedDescription)
@@ -145,7 +148,9 @@ class OpenPassBookHelper {
                 guard let addController = PKAddPassesViewController(pass: pass) else {
                     throw InvalidPassError.openError
                 }
-                presenter.present(addController, animated: true, completion: nil)
+                Task { @MainActor in
+                    presenter.present(addController, animated: true, completion: nil)
+                }
             }
         } catch {
             sendLogError(with: error.localizedDescription)
@@ -160,9 +165,11 @@ class OpenPassBookHelper {
 
         alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss,
                                                 style: .cancel) { (action) in })
-        presenter.present(alertController, animated: true, completion: {
-            completion()
-        })
+        Task { @MainActor in
+            presenter.present(alertController, animated: true, completion: {
+                completion()
+            })
+        }
     }
 
     private func sendLogError(with errorDescription: String) {
