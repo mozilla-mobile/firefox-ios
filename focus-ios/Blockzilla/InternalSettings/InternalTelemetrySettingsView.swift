@@ -108,6 +108,16 @@ extension InternalTelemetrySettingsView: View {
             }
         }.navigationBarTitle(Text(verbatim: "Telemetry"))
     }
+
+    private var loggingSection: some View {
+        return SwiftUI.Section(header: Text(verbatim: "Logging")) {
+            Toggle(isOn: $internalSettings.gleanLogPingsToConsole) {
+                VStack(alignment: .leading) {
+                    Text(verbatim: "Log Pings to Console")
+                }
+            }.onChange(of: internalSettings.gleanLogPingsToConsole, perform: changeLogPingsToConsole)
+        }
+    }
 }
 
 struct InternalTelemetrySettingsView_Previews: PreviewProvider {
