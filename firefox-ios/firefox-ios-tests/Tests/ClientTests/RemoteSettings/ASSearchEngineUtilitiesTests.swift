@@ -10,7 +10,7 @@ import WebKit
 import MozillaAppServices
 
 class ASSearchEngineUtilitiesTests: XCTestCase {
-    private let leo_eng_deu_engine =
+    private let leo_eng_deu_engine_no_search_params =
     SearchEngineDefinition(
         aliases: [],
         charset: "UTF-8",
@@ -25,6 +25,35 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
                 base: "https://dict.leo.org/englisch-deutsch/{searchTerms}",
                 method: "GET",
                 params: [],
+                searchTermParamName: nil
+            ),
+            suggestions: nil,
+            trending: nil,
+            searchForm: nil
+        ),
+        orderHint: nil,
+        clickUrl: nil
+    )
+    private let leo_eng_deu_engine =
+    SearchEngineDefinition(
+        aliases: [],
+        charset: "UTF-8",
+        classification: .unknown,
+        identifier: "leo_ende_de",
+        name: "LEO Eng-Deu",
+        optional: false,
+        partnerCode: "",
+        telemetrySuffix: "",
+        urls: SearchEngineUrls(
+            search: SearchEngineUrl(
+                base: "https://dict.leo.org/englisch-deutsch/{searchTerms}",
+                method: "GET",
+                params: [SearchUrlParam(
+                    name: "foo",
+                    value: "bar",
+                    enterpriseValue: nil,
+                    experimentConfig: nil
+                )],
                 searchTermParamName: nil
             ),
             suggestions: nil,
@@ -127,11 +156,20 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
     }
 
     func testSearchTermIncludedInBaseURL() {
-        let engine = leo_eng_deu_engine
+        let engine = leo_eng_deu_engine_no_search_params
 
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.search,
                                                                                for: engine)
         let expected = "https://dict.leo.org/englisch-deutsch/{searchTerms}"
+        XCTAssertEqual(result, expected)
+    }
+
+    func testSearchTermIncludedInBaseURLAndParams() {
+        let engine = leo_eng_deu_engine
+
+        let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.search,
+                                                                               for: engine)
+        let expected = "https://dict.leo.org/englisch-deutsch/{searchTerms}?foo=bar"
         XCTAssertEqual(result, expected)
     }
 }
