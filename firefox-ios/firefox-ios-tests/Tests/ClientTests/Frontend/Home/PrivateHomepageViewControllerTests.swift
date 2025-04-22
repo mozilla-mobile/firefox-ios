@@ -10,14 +10,14 @@ import Common
 final class PrivateHomepageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testPrivateHomepageViewController_simpleCreation_hasNoLeaks() {

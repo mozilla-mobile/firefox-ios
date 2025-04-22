@@ -36,7 +36,6 @@ include:
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
-  - nimbus-features/reduxSearchSettingsFeature.yaml
   - nimbus-features/rustKeychainRefactor.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml

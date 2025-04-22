@@ -24,7 +24,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxSuggestFeature
     case homepageRebuild
     case inactiveTabs
-    case isToolbarCFREnabled
     case jumpBackIn
     case loginAutofill
     case menuRefactor
@@ -36,7 +35,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pdfRefactor
     case downloadLiveActivities
     case ratingPromptFeature
-    case reduxSearchSettings
     case reportSiteIssue
     case searchEngineConsolidation
     case sentFromFirefox
@@ -124,7 +122,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .creditCardAutofillStatus,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
-                .isToolbarCFREnabled,
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
@@ -135,7 +132,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .ratingPromptFeature,
-                .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,

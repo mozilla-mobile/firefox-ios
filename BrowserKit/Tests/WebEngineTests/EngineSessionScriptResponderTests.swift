@@ -9,9 +9,9 @@ import XCTest
 class EngineSessionScriptResponderTests: XCTestCase {
     private var session: MockWKEngineSession!
 
-    override func setUp() {
-        super.setUp()
-        session = MockWKEngineSession()
+    override func setUp() async throws {
+        try await super.setUp()
+        session = await MockWKEngineSession()
     }
 
     override func tearDown() {

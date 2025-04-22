@@ -147,15 +147,15 @@ final class DefaultWKEngineWebView: WKWebView,
     }
 
     func backList() -> [WKBackForwardListItem] {
-        return self.backForwardList.backList
+        return backForwardList.backList
     }
 
     func forwardList() -> [WKBackForwardListItem] {
-        return self.backForwardList.forwardList
+        return backForwardList.forwardList
     }
 
     func currentBackForwardListItem() -> WKBackForwardListItem? {
-        return self.backForwardList.currentItem
+        return backForwardList.currentItem
     }
 
     required init?(frame: CGRect,
@@ -163,7 +163,6 @@ final class DefaultWKEngineWebView: WKWebView,
                    parameters: WKWebViewParameters) {
         let configuration = configurationProvider.createConfiguration(parameters: parameters)
         self.engineConfiguration = configuration
-        guard let configuration = configuration as? DefaultEngineConfiguration else { return nil }
         pullRefreshViewType = parameters.pullRefreshType
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 

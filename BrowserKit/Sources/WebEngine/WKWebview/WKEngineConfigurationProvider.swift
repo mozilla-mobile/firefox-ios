@@ -37,6 +37,7 @@ public struct WKWebViewParameters {
 
 /// Provider to get a configured `WKEngineConfiguration`
 /// Only one configuration provider per application should exists.
+@MainActor
 public protocol WKEngineConfigurationProvider {
     func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration
 }

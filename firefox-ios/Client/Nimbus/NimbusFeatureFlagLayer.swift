@@ -22,8 +22,7 @@ final class NimbusFeatureFlagLayer {
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
-        case .bottomSearchBar,
-                .isToolbarCFREnabled:
+        case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .cleanupHistoryReenabled:
@@ -82,9 +81,6 @@ final class NimbusFeatureFlagLayer {
 
         case .ratingPromptFeature:
             return checkRatingPromptFeature(from: nimbus)
-
-        case .reduxSearchSettings:
-            return checkReduxSearchSettingsFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -180,7 +176,6 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
     }
@@ -371,11 +366,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
-    }
-
-    private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.reduxSearchSettingsFeature.value()
-        return config.enabled
     }
 
     private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {

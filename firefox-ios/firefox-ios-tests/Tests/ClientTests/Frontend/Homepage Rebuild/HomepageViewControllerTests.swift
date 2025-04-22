@@ -277,6 +277,29 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
+    func test_newState_didSelectedTabChangeToHomepageAction_forScrollToTop_setsCollectionViewOffsetToZero() {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let subject = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            GeneralBrowserAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+            )
+        )
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        subject.newState(state: newState)
+
+        XCTAssertEqual(collectionView.contentOffset, .zero)
+    }
+
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()

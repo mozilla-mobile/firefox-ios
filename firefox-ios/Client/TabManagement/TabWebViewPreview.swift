@@ -25,7 +25,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
     private lazy var bottomStackView = createStackView()
 
     private lazy var skeletonAddressBar: UIView = .build { addressBar in
-        addressBar.layer.cornerRadius = UX.addressBarCornerRadius
+        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
     }
     // MARK: - Constraint Properties
     private var webViewTopConstraint: NSLayoutConstraint?
@@ -155,9 +155,10 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
+        let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
         addressBarBorderView.backgroundColor = colors.borderPrimary
-        topStackView.backgroundColor = colors.layer1
-        bottomStackView.backgroundColor = colors.layer1
-        skeletonAddressBar.backgroundColor = colors.layerSearch
+        topStackView.backgroundColor = appearance.containerStackViewBackgroundColor
+        bottomStackView.backgroundColor = appearance.containerStackViewBackgroundColor
+        skeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
     }
 }

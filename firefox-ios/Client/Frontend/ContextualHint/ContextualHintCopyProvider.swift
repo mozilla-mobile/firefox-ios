@@ -73,9 +73,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .jumpBackInSyncedTab:
             descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.SyncedTab
 
-        case .toolbarLocation:
-            return getToolbarDescriptionCopy(with: arrowDirection)
-
         case .mainMenu:
             descriptionCopy = CFRStrings.MainMenu.NewMenu.Body
 
@@ -94,8 +91,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = ""
         case .inactiveTabs:
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
-        case .toolbarLocation:
-            actionCopy = CFRStrings.Toolbar.SearchBarPlacementButtonText
         case .mainMenu:
             actionCopy = ""
         case .jumpBackIn,
@@ -106,22 +101,5 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         }
 
         return actionCopy
-    }
-
-    // MARK: - Private helpers
-
-    /// Toolbar description copy depends on the arrow direction.
-    private func getToolbarDescriptionCopy(with arrowDirection: UIPopoverArrowDirection?) -> String {
-        // Toolbar description should never be empty! If it is, find where this struct is being
-        // created for toolbar and ensure there's an arrowDirection passed.
-        guard let arrowDirection = arrowDirection else { return "" }
-
-        switch arrowDirection {
-        case .up:
-            return CFRStrings.Toolbar.SearchBarTopPlacement
-        case .down:
-            return CFRStrings.Toolbar.SearchBarBottomPlacement
-        default: return ""
-        }
     }
 }

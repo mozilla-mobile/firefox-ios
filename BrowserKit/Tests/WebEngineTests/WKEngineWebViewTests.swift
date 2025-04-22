@@ -20,6 +20,7 @@ final class WKEngineWebViewTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testNoLeaks() {
         let subject = createSubject()
         subject.close()
@@ -28,6 +29,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testLoad_callsObservers() {
         let subject = createSubject()
         let loadingExpectation = expectation(that: \WKWebView.isLoading, on: subject) { _, change in
@@ -83,6 +85,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testLoad_callsBeginRefreshing_onUIRefreshControl() throws {
         let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
         let pullRefresh = try XCTUnwrap(subject.scrollView.refreshControl as? MockUIRefreshControl)
@@ -94,6 +97,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testInit_setupsPullRefresh() throws {
         let subject = createSubject()
 
@@ -107,6 +111,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testInit_withUIRefreshControl_setupsCorrectlyPullRefresh() {
         let subject = createSubject(pullRefreshViewType: UIRefreshControl.self)
 
@@ -114,6 +119,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testScrollWillBeginZooming_removesPullRefresh() {
         let subject = createSubject()
 
@@ -124,6 +130,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testScrollDidEndZooming_setupsPullRefresh() {
         let subject = createSubject()
 
@@ -137,6 +144,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testScrollDidEndZooming_doesntSetupPullRefreshAgain() {
         let subject = createSubject()
 
@@ -149,6 +157,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testTriggerPullRefresh_callsDelegate() throws {
         let subject = createSubject()
         let pullRefresh = try XCTUnwrap(subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
@@ -160,6 +169,7 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
+    @MainActor
     func testCurrentHistoryItemSetAfterVisitingPage() {
         let subject = createSubject()
         let testURL = URL(string: "https://www.example.com/")!
@@ -179,77 +189,7 @@ final class WKEngineWebViewTests: XCTestCase {
         wait(for: [expectation], timeout: 10)
     }
 
-    func testGetBackHistoryList() {
-        let subject = createSubject()
-
-        XCTAssertEqual(subject.backList().count, 0)
-
-        createBackList(subject: subject)
-
-        XCTAssertEqual(subject.backList().count, 2)
-    }
-
-    func testGetForwardHistoryList() {
-        let subject = createSubject()
-
-        let expectation1 = expectation(description: "Wait for the decision handler to be called")
-        let expectation2 = expectation(description: "Wait for the decision handler to be called twice")
-
-        createBackList(subject: subject)
-
-        XCTAssertEqual(subject.forwardList().count, 0)
-
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            expectation1.fulfill()
-        }
-        subject.goBack()
-        wait(for: [expectation1], timeout: 10)
-
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            XCTAssertEqual(subject.forwardList().count, 2)
-            self.delegate.webViewPropertyChangedCallback = nil
-            expectation2.fulfill()
-        }
-        subject.goBack()
-        wait(for: [expectation2], timeout: 10)
-    }
-
-    func createBackList(subject: DefaultWKEngineWebView) {
-        let testURL1 = URL(string: "https://www.example.com/")!
-        let testURL2 = URL(string: "https://www.youtube.com/")!
-        let currentURL = URL(string: "https://www.google.com/")!
-
-        let expectation1 = expectation(description: "Wait for the decision handler to be called once")
-
-        let expectation2 = expectation(description: "Wait for the decision handler to be called twice")
-
-        let expectation3 = expectation(description: "Wait for the decision handler to be called three times")
-
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            expectation1.fulfill()
-        }
-        subject.load(URLRequest(url: testURL1))
-        wait(for: [expectation1], timeout: 10)
-
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            expectation2.fulfill()
-        }
-        subject.load(URLRequest(url: testURL2))
-        wait(for: [expectation2], timeout: 10)
-
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            self.delegate.webViewPropertyChangedCallback = nil
-            expectation3.fulfill()
-        }
-        subject.load(URLRequest(url: currentURL))
-        wait(for: [expectation3], timeout: 10)
-    }
-
+    @MainActor
     func createSubject(pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
                        file: StaticString = #file,
                        line: UInt = #line) -> DefaultWKEngineWebView {

@@ -8,17 +8,22 @@ import WebKit
 
 @available(iOS 16.0, *)
 class MockWKEngineSession: WKEngineSession {
-    let webviewProvider = MockWKWebViewProvider()
+    let webviewProvider: MockWKWebViewProvider!
     let mockTelemetryProxy = MockEngineTelemetryProxy()
     var callJavascriptMethodCalled = 0
 
-    init() {
+    init() async {
+        self.webviewProvider = await MockWKWebViewProvider()
         let defaultDependencies =  DefaultTestDependencies(mockTelemetryProxy: mockTelemetryProxy)
-        super.init(userScriptManager: MockWKUserScriptManager(),
-                   dependencies: defaultDependencies.sessionDependencies,
-                   configurationProvider: MockWKEngineConfigurationProvider(),
-                   webViewProvider: webviewProvider,
-                   contentScriptManager: MockWKContentScriptManager())!
+        await super.init(userScriptManager: MockWKUserScriptManager(),
+                         dependencies: defaultDependencies.sessionDependencies,
+                         configurationProvider: MockWKEngineConfigurationProvider(),
+                         webViewProvider: webviewProvider,
+                         contentScriptManager: MockWKContentScriptManager(),
+                         scriptResponder: EngineSessionScriptResponder(),
+                         metadataFetcher: DefaultMetadataFetcherHelper(),
+                         navigationHandler: DefaultNavigationHandler(),
+                         uiHandler: DefaultUIHandler())!
     }
 
     override func callJavascriptMethod(_ method: String, scope: String?) {
