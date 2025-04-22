@@ -3276,9 +3276,9 @@ class BrowserViewController: UIViewController,
 
     private func updateViewBackgroundColor(theme: Theme) {
         guard isSwipingTabsEnabled else { return }
-            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-            let toolbarLayoutStyle = toolbarState?.toolbarLayout
-            view.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let toolbarLayoutStyle = toolbarState?.toolbarLayout
+        view.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
     }
 
     var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
