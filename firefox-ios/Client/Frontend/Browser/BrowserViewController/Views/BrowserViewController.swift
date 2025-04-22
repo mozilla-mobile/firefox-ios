@@ -191,11 +191,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: Contextual Hints
 
-    private lazy var toolbarContextHintVC: ContextualHintViewController = {
-        let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation, with: profile)
-        return ContextualHintViewController(with: contextualViewProvider, windowUUID: tabManager.windowUUID)
-    }()
-
     private(set) lazy var dataClearanceContextHintVC: ContextualHintViewController = {
         let dataClearanceViewProvider = ContextualHintViewProvider(
             forHintType: .dataClearance,
@@ -1076,34 +1071,10 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
-        prepareURLOnboardingContextualHint()
-
         if !isDeeplinkOptimizationRefactorEnabled {
             browserDelegate?.browserHasLoaded()
         }
         AppEventQueue.signal(event: .browserIsReady)
-    }
-
-    private func prepareURLOnboardingContextualHint() {
-        guard toolbarContextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
-        else { return }
-
-        toolbarContextHintVC.configure(
-            anchor: urlBarView,
-            withArrowDirection: isBottomSearchBar ? .down : .up,
-            andDelegate: self,
-            presentedUsing: { [weak self] in self?.presentContextualHint() },
-            andActionForButton: { [weak self] in self?.homePanelDidRequestToOpenSettings(at: .toolbar) },
-            overlayState: overlayManager
-        )
-    }
-
-    private func presentContextualHint() {
-        if IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen { return }
-        present(toolbarContextHintVC, animated: true)
-
-        UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
     func willNavigateAway(from tab: Tab?) {

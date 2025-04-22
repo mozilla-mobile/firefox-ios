@@ -122,7 +122,6 @@ public struct PrefsKeys {
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
         case inactiveTabsKey = "ContextualHintInactiveTabs"
-        case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
         case mainMenuKey = "MainMenuHintKey"
         case navigationKey = "ContextualHintNavigation"
     }
