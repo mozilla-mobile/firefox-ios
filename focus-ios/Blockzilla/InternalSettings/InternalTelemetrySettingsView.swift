@@ -60,23 +60,7 @@ extension InternalTelemetrySettingsView: View {
 
                 debugViewSection
 
-                SwiftUI.Section {
-                    Button(action: { sendPendingEventPings() }) {
-                        Text(verbatim: "Send Pending Event Pings")
-                    }
-
-                    Button(action: { sendPendingBaselinePings() }) {
-                        Text(verbatim: "Send Baseline Event Pings")
-                    }
-
-                    Button(action: { sendPendingMetricsPings() }) {
-                        Text(verbatim: "Send Metrics Event Pings")
-                    }
-
-                    Button(action: { sendPendingDeletionRequestPings() }) {
-                        Text(verbatim: "Send Deletion Request Event Pings")
-                    }
-                }
+                eventPingsSection
             } else {
                 Text(verbatim: "Internal Telemetry Settings are only available on iOS 14 and newer.")
             }
