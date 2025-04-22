@@ -36,7 +36,6 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
             try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
 
             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
-            // TODO: [FXIOS-11885] What happens if the locale or region changes during app runtime?
             let env = SearchUserEnvironment(locale: locale,
                                             region: region,
                                             updateChannel: SearchUpdateChannel.release,

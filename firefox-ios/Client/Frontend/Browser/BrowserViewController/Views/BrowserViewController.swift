@@ -1728,6 +1728,12 @@ class BrowserViewController: UIViewController,
         ])
 
         searchController.didMove(toParent: self)
+
+        // We need to hide the Homepage content
+        // from accessibility, otherwise it will
+        // be read by VoiceOver when reading in the
+        // Search Controller
+        contentContainer.accessibilityElementsHidden = true
     }
 
     func hideSearchController() {
@@ -1739,6 +1745,8 @@ class BrowserViewController: UIViewController,
 
         keyboardBackdrop?.removeFromSuperview()
         keyboardBackdrop = nil
+
+        contentContainer.accessibilityElementsHidden = false
     }
 
     func destroySearchController() {
@@ -1747,6 +1755,8 @@ class BrowserViewController: UIViewController,
         searchController = nil
         searchSessionState = nil
         searchLoader = nil
+
+        contentContainer.accessibilityElementsHidden = false
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
@@ -1924,7 +1934,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
-        let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
+        let showDataClearanceFlow = browserViewControllerState?.browserViewType == .privateHomepage
         let showFireButton = featureFlags.isFeatureEnabled(
             .feltPrivacyFeltDeletion,
             checking: .buildOnly
@@ -3259,7 +3269,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        if isSwipingTabsEnabled { view.backgroundColor = currentTheme.colors.layer1 }
+        updateViewBackgroundColor(theme: currentTheme)
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -3276,6 +3286,13 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+    }
+
+    private func updateViewBackgroundColor(theme: Theme) {
+        guard isSwipingTabsEnabled else { return }
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let toolbarLayoutStyle = toolbarState?.toolbarLayout
+        view.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
     }
 
     var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
@@ -4043,7 +4060,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityElementsHidden = false
 
             if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView)
+                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
             } else {
                 browserDelegate?.show(webView: webView)
             }
@@ -4119,10 +4136,22 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    /// Updates the content in BVC depending on whether its a home page or web page
-    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView) {
+    /// Updates the embedded content in the browser view controller (BVC) based on whether its a home page or web page.
+    /// - Parameters:
+    ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
+    ///   - webView: The `WKWebView` instance to be displayed.
+    ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
+    ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
+    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
+            guard previousTab?.isFxHomeTab ?? false else { return }
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                )
+            )
         } else {
             browserDelegate?.show(webView: webView)
         }

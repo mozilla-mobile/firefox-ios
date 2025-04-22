@@ -22,6 +22,9 @@
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Дар бораи «%@»";
 
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"About.topLabel" = "Шумо «%@»-ро ҳаматарафа идора мекунед.";
+
 /* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "Кушодан дар «%@»";
 
@@ -262,6 +265,9 @@
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Ба «%@» баҳо диҳед";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "ҲАМГИРОИИ «SAFARI»";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Танзимот";
 
@@ -435,6 +441,15 @@
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "Пок кардан ва кушодан";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Кушодани сомонаи дилхоҳ";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Кушодани сомонаи дилхоҳ";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Нишонии «URL» барои кушодани сомона";
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Илова кардани миёнбури «Siri»";

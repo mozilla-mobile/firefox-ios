@@ -37,7 +37,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
     case ratingPromptFeature
-    case reduxSearchSettings
     case reportSiteIssue
     case searchEngineConsolidation
     case sentFromFirefox
@@ -56,6 +55,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trackingProtectionRefactor
     case revertUnsafeContinuationsRefactor
     case useRustKeychain
+    case updatedPasswordManager
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -81,7 +81,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .downloadLiveActivities,
                 .unifiedAds,
                 .unifiedSearch,
-                .useRustKeychain:
+                .useRustKeychain,
+                .updatedPasswordManager:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -136,7 +137,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
                 .ratingPromptFeature,
-                .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
@@ -155,7 +155,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .trackingProtectionRefactor,
                 .revertUnsafeContinuationsRefactor,
-                .useRustKeychain:
+                .useRustKeychain,
+                .updatedPasswordManager:
             return nil
         }
     }

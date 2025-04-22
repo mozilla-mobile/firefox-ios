@@ -8,6 +8,7 @@ import WebKit
 
 /// Abstraction that allow us to create a `WKWebView` object through
 /// the usage of a configuration provider and an webview abstraction.
+@MainActor
 protocol WKWebViewProvider {
     func createWebview(configurationProvider: WKEngineConfigurationProvider,
                        parameters: WKWebViewParameters) -> WKEngineWebView?

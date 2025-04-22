@@ -6,6 +6,7 @@ import Foundation
 
 /// Used to setup internal scheme handlers
 struct InternalUtil {
+    @MainActor
     func setUpInternalHandlers() {
         let responders: [(String, WKInternalSchemeResponse)] =
              [(WKAboutHomeHandler.path, WKAboutHomeHandler()),

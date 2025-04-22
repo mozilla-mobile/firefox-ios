@@ -112,7 +112,6 @@ public struct PrefsKeys {
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
-        public static let TabsAndAddressBarAutoHide = "TabsAndAddressBarAutoHidePrefsKey"
     }
 
     // Firefox contextual hint
@@ -205,6 +204,9 @@ public struct PrefsKeys {
 
     // The timestamp where the app was last opened as default browser
     public static let LastOpenedAsDefaultBrowser = "LastOpenedAsDefaultBrowser"
+
+    // Used to only show the felt deletion alert confirmation once, used for private mode
+    public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
     public struct Usage {
         public static let profileId = "profileId"

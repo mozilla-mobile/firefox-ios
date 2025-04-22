@@ -5,15 +5,18 @@
 import UIKit
 import Common
 
-final class TabWebViewPreview: UIView, ThemeApplicable {
+final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
     // MARK: - UX Constants
     private struct UX {
         static let addressBarCornerRadius: CGFloat = 8
         static let addressBarBorderHeight: CGFloat = 1
         static let addressBarHeight: CGFloat = 43
-        static let addressBarOnToplayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        static let addressBarOnBottomlayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
+        static let addressBarMaxHeight: CGFloat = 53
+        static let addressBarOnTopLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        static let addressBarOnBottomLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
+    var notificationCenter: any NotificationProtocol = NotificationCenter.default
+
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
     private lazy var addressBarBorderView: UIView = .build()
@@ -22,18 +25,21 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     private lazy var bottomStackView = createStackView()
 
     private lazy var skeletonAddressBar: UIView = .build { addressBar in
-        addressBar.layer.cornerRadius = UX.addressBarCornerRadius
+        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
     }
     // MARK: - Constraint Properties
     private var webViewTopConstraint: NSLayoutConstraint?
     private var webViewBottomConstraint: NSLayoutConstraint?
     private var addressBarBorderViewTopBottomConstraint: NSLayoutConstraint?
+    private var addressBarHeightConstraint: NSLayoutConstraint?
 
     // MARK: Inits
     init() {
         super.init(frame: .zero)
         setupLayout()
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setStackViewsLayoutMargins()
+        adjustSkeletonAddressBarHeightForA11ySizeCategory()
     }
 
     required init?(coder: NSCoder) {
@@ -44,12 +50,14 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     private func setupLayout() {
         addSubviews(webPageScreenshotImageView, addressBarBorderView, topStackView, bottomStackView)
 
+        addressBarHeightConstraint = skeletonAddressBar.heightAnchor
+            .constraint(equalToConstant: UX.addressBarHeight)
+        addressBarHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             addressBarBorderView.heightAnchor.constraint(equalToConstant: UX.addressBarBorderHeight),
             addressBarBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             addressBarBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            skeletonAddressBar.heightAnchor.constraint(equalToConstant: UX.addressBarHeight),
 
             topStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topStackView.topAnchor.constraint(equalTo: topAnchor),
@@ -62,6 +70,13 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
             bottomStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             bottomStackView.rightAnchor.constraint(equalTo: rightAnchor)
         ])
+    }
+
+    // MARK: - A11y
+    private func adjustSkeletonAddressBarHeightForA11ySizeCategory() {
+        let scaledHeight = min(UIFontMetrics.default.scaledValue(for: UX.addressBarHeight), UX.addressBarMaxHeight)
+        let isA11yCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        addressBarHeightConstraint?.constant = isA11yCategory ? scaledHeight : UX.addressBarHeight
     }
 
     // MARK: - Public Functions
@@ -118,8 +133,8 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     }
 
     private func setStackViewsLayoutMargins() {
-        topStackView.layoutMargins = UX.addressBarOnToplayoutMargins
-        bottomStackView.layoutMargins = UX.addressBarOnBottomlayoutMargins
+        topStackView.layoutMargins = UX.addressBarOnTopLayoutMargins
+        bottomStackView.layoutMargins = UX.addressBarOnBottomLayoutMargins
     }
 
     private func setStackViewsVisibility(by searchBarPosition: SearchBarPosition) {
@@ -128,12 +143,22 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         topStackView.isHidden = isBottom
     }
 
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            adjustSkeletonAddressBarHeightForA11ySizeCategory()
+        default: break
+        }
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
+        let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
         addressBarBorderView.backgroundColor = colors.borderPrimary
-        topStackView.backgroundColor = colors.layer1
-        bottomStackView.backgroundColor = colors.layer1
-        skeletonAddressBar.backgroundColor = colors.layerSearch
+        topStackView.backgroundColor = appearance.containerStackViewBackgroundColor
+        bottomStackView.backgroundColor = appearance.containerStackViewBackgroundColor
+        skeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
     }
 }

@@ -136,6 +136,13 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
               let type = res["type"] as? String
         else { return }
 
+        // NOTE(FXIOS-12024): This is added only to be able t oswitch between implementations inside the JS.
+        // Once we rollout the update for all users, this will be removed.
+        if type == "ready" {
+            LoginsHelper.setUpdatedPasswordEnabled(with: self.tab)
+            return
+        }
+
         if type == "clearAccessoryView" {
             tab?.webView?.accessoryView.reloadViewFor(.standard)
         }
@@ -391,6 +398,13 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     public static func yieldFocusBackToField(with tab: Tab) {
         let jsFocusCallback = "window.__firefox__.logins.yieldFocusBackToField()"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFocusCallback)
+    }
+
+    public static func setUpdatedPasswordEnabled(with tab: Tab?) {
+        guard let tab = tab else { return }
+        let status = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.updatedPasswordManager, checking: .buildOnly)
+        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(\(status))"
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(jsUpdatedPasswordEnabled)
     }
 
     // MARK: Theming System
