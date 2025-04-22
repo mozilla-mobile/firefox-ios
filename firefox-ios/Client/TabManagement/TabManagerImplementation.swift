@@ -709,9 +709,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
 
         if newTab.url == nil {
-            logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
+            logger.log("Tab restored has empty URL",
                        level: .debug,
-                       category: .tabs)
+                       category: .tabs,
+                       extra: [
+                        "tabID": tabData.id.uuidString,
+                        "lastUsedTime": tabData.lastUsedTime.description
+                       ]
+            )
         }
 
         // Restore screenshot
