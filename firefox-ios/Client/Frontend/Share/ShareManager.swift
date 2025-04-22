@@ -6,7 +6,6 @@ import Foundation
 import MobileCoreServices
 import WebKit
 import UniformTypeIdentifiers
-import Shared
 
 class ShareManager: NSObject, FeatureFlaggable {
     private struct ActivityIdentifiers {

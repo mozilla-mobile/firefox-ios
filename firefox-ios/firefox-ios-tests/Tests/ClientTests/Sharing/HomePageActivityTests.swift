@@ -16,6 +16,7 @@ final class HomePageActivityTests: XCTestCase {
 
         XCTAssertEqual(subject.url, url)
         XCTAssertEqual(subject.title, title)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
     func testInit_withLocalURL_returnsNilURL() {
@@ -25,6 +26,7 @@ final class HomePageActivityTests: XCTestCase {
 
         // has to be nil since we try only to unwrap the url param from internal url
         XCTAssertNil(subject.url)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
     func testInit_withLocalHostURL_returnsUnwrappedURLParameter() {
@@ -34,10 +36,14 @@ final class HomePageActivityTests: XCTestCase {
         let subject = createSubject(url: url)
 
         XCTAssertEqual(subject.url, URL(string: innerUrl))
+        // needed to fully deallocate the WKWebView
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
     private func createSubject(url: URL? = nil,
                                title: String? = nil) -> HomePageActivity {
-        return HomePageActivity(url: url, title: title)
+        let subject = HomePageActivity(url: url, title: title)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
