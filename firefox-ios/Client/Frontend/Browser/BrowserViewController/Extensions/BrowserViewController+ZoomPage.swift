@@ -64,16 +64,15 @@ extension BrowserViewController: ZoomPageBarDelegate {
     }
 
     func zoomPageHandleExitReaderMode() {
-        zoomManager.updatePageZoom()
+        zoomManager.setZoomAfterLeavingReaderMode()
     }
 
-    // TODO: YRD Move to manager keep only the update zoom value for the bar
+    // The zoom level was updated on another iPad window, but the host matches
+    // this window's selected tab, so we need to ensure we update also.
     func updateForZoomChangedInOtherIPadWindow(zoom: DomainZoomLevel) {
         guard let tab = tabManager.selectedTab,
               tab.pageZoom != zoom.zoomLevel else { return }
 
-        // The zoom level was updated on another iPad window, but the host matches
-        // this window's selected tab, so we need to ensure we update also.
         zoomManager.updateZoomChangedInOtherWindow()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomValue())
     }
