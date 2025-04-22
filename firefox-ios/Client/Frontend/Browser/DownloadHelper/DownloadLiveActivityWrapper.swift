@@ -11,13 +11,15 @@ import Shared
 @available(iOS 17, *)
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     private struct UX {
-        static let updateCooldown: TimeInterval = 0.75
+        static let updateCooldown: Double = 0.75 // Update Cooldown in Seconds
     }
 
     enum DurationToDismissal: UInt64 {
         case none = 0
         case delayed = 3_000_000_000 // Milliseconds to dismissal
     }
+
+    let throttler = Throttler(seconds: UX.updateCooldown)
 
     private var lastUpdateTime = Date.distantPast
 
@@ -53,36 +55,32 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     func end(durationToDismissal: DurationToDismissal) {
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
-        update(throttle: false)
         Task {
+            await update()
             try await Task.sleep(nanoseconds: durationToDismissal.rawValue)
             await downloadLiveActivity?.end(using: contentState, dismissalPolicy: .immediate)
         }
     }
 
-    private func shouldUpdateLiveActivity() -> Bool {
-        let currentTime = Date()
-
-        guard currentTime.timeIntervalSince(lastUpdateTime) >= UX.updateCooldown else {return false}
-        lastUpdateTime = currentTime
-        return true
-    }
-
-    private func update(throttle: Bool = true) {
+    private func update() async {
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
-        if !throttle || shouldUpdateLiveActivity() {
+        await self.downloadLiveActivity?.update(using: contentState)
+    }
+
+    func updateCombinedBytesDownloaded(value: Int64) {
+        throttler.throttle {
             Task {
-                    await self.downloadLiveActivity?.update(using: contentState)
+                await self.update()
             }
         }
     }
 
-    func updateCombinedBytesDownloaded(value: Int64) {
-        update()
-    }
-
     func updateCombinedTotalBytesExpected(value: Int64?) {
-        update()
+        throttler.throttle {
+            Task {
+                await self.update()
+            }
+        }
     }
 }
