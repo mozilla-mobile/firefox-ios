@@ -339,7 +339,6 @@ extension BrowserViewController {
 
     // MARK: Zoom
 
-    // TODO: YRD test if gainFocus is enough or we need to set the tab
     @objc
     func zoomIn() {
         guard contentContainer.hasAnyHomepage else { return }
@@ -351,7 +350,7 @@ extension BrowserViewController {
     @objc
     func zoomOut() {
         guard contentContainer.hasAnyHomepage else { return }
-    
+
         let zoomValue = zoomManager.zoomOut()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomValue)
     }

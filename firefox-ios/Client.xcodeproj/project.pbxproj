@@ -273,6 +273,8 @@
 		219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935EB2B07110900E5966F /* TabTrayModel.swift */; };
 		219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935F02B07DFA200E5966F /* TabDisplayPanelTests.swift */; };
 		21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */; };
+		2199A1D22DB80B6C00DC84BD /* ZoomPageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */; };
+		2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199A1D32DB8389000DC84BD /* MockZoomStore.swift */; };
 		219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */; };
 		219A0FD72ACC8C03009A6D1A /* InactiveTabsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */; };
 		219A0FD92ACC8C0F009A6D1A /* InactiveTabsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219A0FD82ACC8C0F009A6D1A /* InactiveTabsFooterView.swift */; };
@@ -2746,6 +2748,8 @@
 		219935EB2B07110900E5966F /* TabTrayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayModel.swift; sourceTree = "<group>"; };
 		219935F02B07DFA200E5966F /* TabDisplayPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayPanelTests.swift; sourceTree = "<group>"; };
 		21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayPanelType.swift; sourceTree = "<group>"; };
+		2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageManagerTests.swift; sourceTree = "<group>"; };
+		2199A1D32DB8389000DC84BD /* MockZoomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockZoomStore.swift; sourceTree = "<group>"; };
 		219A0FD42ACC8506009A6D1A /* InactiveTabsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsCell.swift; sourceTree = "<group>"; };
 		219A0FD62ACC8C03009A6D1A /* InactiveTabsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsHeaderView.swift; sourceTree = "<group>"; };
 		219A0FD82ACC8C0F009A6D1A /* InactiveTabsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsFooterView.swift; sourceTree = "<group>"; };
@@ -13590,6 +13594,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				2199A1D32DB8389000DC84BD /* MockZoomStore.swift */,
 				0B7B05422D64C08F007FD7AC /* MockURLProtocol.swift */,
 				0B7B05402D64C087007FD7AC /* MockURLResponse.swift */,
 				0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */,
@@ -14994,6 +14999,7 @@
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
 				0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */,
 				21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */,
+				2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -17961,6 +17967,7 @@
 				39AF317429DAE37E00F8E6F7 /* NimbusMessagingMessageTests.swift in Sources */,
 				E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */,
 				C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */,
+				2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */,
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */,
@@ -18244,6 +18251,7 @@
 				C88012232A40E38D00F4D1D6 /* IntroViewControllerTests.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
 				8A9D31602D13506400171502 /* MockParentFolderSelector.swift in Sources */,
+				2199A1D22DB80B6C00DC84BD /* ZoomPageManagerTests.swift in Sources */,
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				8AA0A6682CAC747500AC7EB3 /* HomepageDiffableDataSourceTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,

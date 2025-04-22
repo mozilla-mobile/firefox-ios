@@ -60,7 +60,7 @@ extension BrowserViewController: ZoomPageBarDelegate {
 
     func zoomPageHandleEnterReaderMode() {
         updateZoomPageBarVisibility(visible: false)
-        zoomManager.resetZoom()
+        zoomManager.resetZoom(shouldSave: false)
     }
 
     func zoomPageHandleExitReaderMode() {
