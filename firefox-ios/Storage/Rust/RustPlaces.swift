@@ -15,12 +15,9 @@ import enum MozillaAppServices.FrecencyThresholdOption
 import enum MozillaAppServices.PlacesApiError
 import enum MozillaAppServices.PlacesConnectionError
 import enum MozillaAppServices.VisitType
-import struct MozillaAppServices.HistoryMetadata
 import struct MozillaAppServices.HistoryMetadataKey
-import struct MozillaAppServices.HistoryMetadataObservation
 import struct MozillaAppServices.HistoryMigrationResult
 import struct MozillaAppServices.HistoryVisitInfosWithBound
-import struct MozillaAppServices.NoteHistoryMetadataObservationOptions
 import struct MozillaAppServices.PlacesTimestamp
 import struct MozillaAppServices.SearchResult
 import struct MozillaAppServices.TopFrecentSiteInfo
@@ -55,15 +52,7 @@ public protocol BookmarksHandler {
     )
 }
 
-public protocol HistoryMetadataObserver {
-    func noteHistoryMetadataObservation(
-        key: HistoryMetadataKey,
-        observation: HistoryMetadataObservation,
-        completion: @escaping () -> Void
-    )
-}
-
-public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
+public class RustPlaces: BookmarksHandler {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -523,74 +512,12 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func getHistoryMetadataSince(since: Int64) -> Deferred<Maybe<[HistoryMetadata]>> {
-        return withReader { connection in
-            return try connection.getHistoryMetadataSince(since: since)
-        }
-    }
-
-    public func queryHistoryMetadata(
-        query: String,
-        limit: Int32
-    ) -> Deferred<Maybe<[HistoryMetadata]>> {
-        return withReader { connection in
-            return try connection.queryHistoryMetadata(query: query, limit: limit)
-        }
-    }
-
-    public func noteHistoryMetadataObservation(key: HistoryMetadataKey,
-                                               observation: HistoryMetadataObservation,
-                                               completion: @escaping () -> Void) {
-        let deferredResponse = withReader { connection in
-            return self.noteHistoryMetadataObservation(key: key, observation: observation)
-        }
-
-        deferredResponse.upon { result in
-            completion()
-        }
-    }
-
-    /// Title observations must be made first for any given url. Observe one fact at a time
-    /// (e.g. just the viewTime, or just the documentType).
-    public func noteHistoryMetadataObservation(
-        key: HistoryMetadataKey,
-        observation: HistoryMetadataObservation
-    ) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
-            if let title = observation.title {
-                let response: Void = try connection.noteHistoryMetadataObservationTitle(
-                    key: key,
-                    title: title,
-                    NoteHistoryMetadataObservationOptions(ifPageMissing: .insertPage)
-                )
-                self.notificationCenter.post(name: .HistoryUpdated, object: nil)
-                return response
-            }
-            if let documentType = observation.documentType {
-                let response: Void = try connection.noteHistoryMetadataObservationDocumentType(
-                    key: key,
-                    documentType: documentType,
-                    NoteHistoryMetadataObservationOptions(ifPageMissing: .insertPage)
-                )
-                self.notificationCenter.post(name: .HistoryUpdated, object: nil)
-                return response
-            }
-            if let viewTime = observation.viewTime {
-                let response: Void = try connection.noteHistoryMetadataObservationViewTime(
-                    key: key,
-                    viewTime: viewTime,
-                    NoteHistoryMetadataObservationOptions(ifPageMissing: .insertPage)
-                )
-                self.notificationCenter.post(name: .HistoryUpdated, object: nil)
-                return response
-            }
-        }
-    }
-
+    // MARK: History metadata
+    // We are not collecting history metadata anymore since FXIOS-6729, but let's keep the possibility
+    // to delete metadata for a while.
     public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
             let response: Void = try connection.deleteHistoryMetadataOlderThan(olderThan: olderThan)
-            self.notificationCenter.post(name: .HistoryUpdated, object: nil)
             return response
         }
     }
@@ -632,14 +559,6 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                 return
             }
             completion(result)
-        }
-    }
-
-    public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
-        return withWriter { connection in
-            let response: Void = try connection.deleteHistoryMetadata(key: key)
-            self.notificationCenter.post(name: .HistoryUpdated, object: nil)
-            return response
         }
     }
 

@@ -164,7 +164,6 @@ class LegacyHomepageViewController:
         }
 
         notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
-        notificationCenter.post(name: .HistoryUpdated)
 
         applyTheme()
         reloadView()
