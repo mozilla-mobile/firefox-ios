@@ -92,7 +92,6 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
-    // TODO: YRD - update to use dependency helper
     var zoomManager: ZoomPageManager
 
     // MARK: Optional UI elements

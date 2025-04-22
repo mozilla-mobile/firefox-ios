@@ -12,7 +12,7 @@ struct ZoomConstants {
 }
 
 class ZoomPageManager: TabEventHandler {
-    let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .allWindows
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     let windowUUID: WindowUUID
     var tab: Tab?
@@ -92,11 +92,16 @@ class ZoomPageManager: TabEventHandler {
     }
 
     func updatePageZoom() {
-        guard let tab,
+        guard let tab = tab,
               let host = tab.url?.host,
               let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) else { return }
+        print("YRD --- udpate zoom level for tab \(host)")
 
         tab.pageZoom = domainZoomLevel.zoomLevel
+    }
+
+    func updateZoomChangedInOtherWindow() {
+        tab?.pageZoom = getZoomValue()
     }
 
     func setZoomAfterLeavingReaderMode() {
@@ -130,7 +135,6 @@ class ZoomPageManager: TabEventHandler {
         let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: zoomLevel)
         ZoomLevelStore.shared.save(domainZoomLevel)
 
-        print("YRD --- save zoom level \(domainZoomLevel)")
         // Notify other windows of zoom change (other pages with identical host should also update)
         let userInfo: [AnyHashable: Any] = [WindowUUID.userInfoKey: windowUUID, "zoom": domainZoomLevel]
         NotificationCenter.default.post(name: .PageZoomLevelUpdated, withUserInfo: userInfo)
@@ -147,19 +151,6 @@ class ZoomPageManager: TabEventHandler {
 
         print("YRD --- load zoom level \(domainZoomLevel)")
         return domainZoomLevel.zoomLevel
-    }
-
-    func updatePageZoom() {
-        guard let tab = tab,
-              let host = tab.url?.host,
-              let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) else { return }
-        print("YRD --- udpate zoom level for tab \(host)")
-
-        tab.pageZoom = domainZoomLevel.zoomLevel
-    }
-
-    func updateZoomChangedInOtherWindow() {
-        tab?.pageZoom = getZoomValue()
     }
 
     // MARK: - TabEventHandler
