@@ -109,7 +109,7 @@ public class DefaultURLFormatter: URLFormatter {
         }
 
         // We're going to prepend "http://" only if it's not already present
-        let entryPlusScheme = escapedEntry.hasPrefix("http://") || escapedEntry.hasPrefix("https://") ? escapedEntry : "http://\(escapedURL)"
+        let entryPlusScheme = escapedEntry.hasPrefix("http://") || escapedEntry.hasPrefix("https://") ? escapedEntry : "http://\(escapedEntry)"
 
         // If entry doesn't have a valid ending in Public Suffix List
         // and it's not all digits and dot, stop fix up.
