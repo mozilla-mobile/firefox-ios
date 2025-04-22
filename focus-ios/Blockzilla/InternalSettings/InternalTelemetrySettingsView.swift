@@ -56,13 +56,7 @@ extension InternalTelemetrySettingsView: View {
     var body: some View {
         Form {
             if #available(iOS 14, *) {
-                SwiftUI.Section(header: Text(verbatim: "Logging")) {
-                    Toggle(isOn: $internalSettings.gleanLogPingsToConsole) {
-                        VStack(alignment: .leading) {
-                            Text(verbatim: "Log Pings to Console")
-                        }
-                    }.onChange(of: internalSettings.gleanLogPingsToConsole, perform: changeLogPingsToConsole)
-                }
+                loggingSection
 
                 SwiftUI.Section(header: Text(verbatim: "Debug View")) {
                     Toggle(isOn: $internalSettings.gleanEnableDebugView) {
