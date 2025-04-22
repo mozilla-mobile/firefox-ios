@@ -153,7 +153,6 @@ public struct PrefsKeys {
 
     // Tabs Tray
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
-    public static let TabMigrationKey = "TabMigrationKey"
     public static let TabSyncEnabled = "sync.engine.tabs.enabled"
 
     // Widgetkit Key

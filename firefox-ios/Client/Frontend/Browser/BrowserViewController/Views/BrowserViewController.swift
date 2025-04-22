@@ -2190,17 +2190,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if tab == tabManager.selectedTab,
-            let displayUrl = tab.url?.displayURL,
-            let legacyUrlBar, legacyUrlBar.currentURL != displayUrl {
-            let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
-            searchData.tabAssociatedNextUrl = displayUrl.absoluteString
-            tab.metadataManager?.updateTimerAndObserving(
-                state: .tabNavigatedToDifferentUrl,
-                searchData: searchData,
-                isPrivate: tab.isPrivate)
-        }
-
         legacyUrlBar?.currentURL = tab.url?.displayURL
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
@@ -2857,7 +2846,6 @@ class BrowserViewController: UIViewController,
         }
 
         let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
-        freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -2874,17 +2862,6 @@ class BrowserViewController: UIViewController,
         }
 
         openURLInNewTab(searchURL, isPrivate: isPrivate)
-
-        if let tab = tabManager.selectedTab {
-            let searchData = LegacyTabGroupData(searchTerm: text,
-                                                searchUrl: searchURL.absoluteString,
-                                                nextReferralUrl: "")
-            tab.metadataManager?.updateTimerAndObserving(
-                state: .navSearchLoaded,
-                searchData: searchData,
-                isPrivate: tab.isPrivate
-            )
-        }
     }
 
     fileprivate func popToBVC() {
@@ -3866,14 +3843,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
     ) {
         guard let tab = tabManager.selectedTab else { return }
 
-        let searchData = LegacyTabGroupData(searchTerm: searchTerm ?? "",
-                                            searchUrl: url.absoluteString,
-                                            nextReferralUrl: "")
-        tab.metadataManager?.updateTimerAndObserving(
-            state: .navSearchLoaded,
-            searchData: searchData,
-            isPrivate: tab.isPrivate
-        )
         searchTelemetry.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
