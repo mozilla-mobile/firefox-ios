@@ -7,11 +7,11 @@ features:
         description: >
           Enables the bookmark refactor feature
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
       - channel: developer
         value:
           enabled: true
