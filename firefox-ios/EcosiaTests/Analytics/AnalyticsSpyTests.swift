@@ -8,6 +8,7 @@ import SnowplowTracker
 import Common
 import SwiftUI
 import ViewInspector
+import WebKit
 @testable import Client
 @testable import Ecosia
 
@@ -163,8 +164,10 @@ final class AnalyticsSpyTests: XCTestCase {
     var profileMock: MockProfile { MockProfile() }
     var tabManagerMock: TabManager {
         let mock = MockTabManager()
-        mock.selectedTab = .init(profile: profileMock, windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: profileMock, windowUUID: .XCTestDefaultUUID)
+        mock.selectedTab = tab
         mock.selectedTab?.url = URL(string: "https://example.com")
+        mock.subscriptedTab = tab
         return mock
     }
 
@@ -756,10 +759,10 @@ final class AnalyticsSpyTests: XCTestCase {
         XCTAssertNil(analyticsSpy.ntpTopSitePositionCalled, "Analytics ntpTopSitePositionCalled should be nil.")
     }
 
-    // MARK: - URL Bar Search Event
+    // MARK: - WebView delegate Search Event
 
-    func testURLBarViewTracksSearchEventOnEcosiaVerticalURLChange() {
-        let urlBar = URLBarView(profile: profileMock, windowUUID: .XCTestDefaultUUID)
+    func testWebViewDelegateTracksSearchEventOnEcosiaVerticalURLChange() {
+        let browser = BrowserViewController(profile: profileMock, tabManager: tabManagerMock)
 
         let rootURL = Environment.current.urlProvider.root
         let testCases = [
@@ -778,11 +781,49 @@ final class AnalyticsSpyTests: XCTestCase {
             analyticsSpy = AnalyticsSpy()
             Analytics.shared = analyticsSpy
             let url = URL(string: urlString)!
-            urlBar.currentURL = url
+            var action = FakeNavigationAction(url: url,
+                                              navigationType: .other)
+            browser.webView(makeWebView(),
+                            decidePolicyFor: action) { policy in
+                XCTAssertEqual(policy, .allow, "Should allow independent of tracking behavior")
+            }
 
             if shouldTrack {
                 XCTAssertEqual(analyticsSpy.inappSearchUrlCalled?.absoluteString,
-                               url.ecosified(isIncognitoEnabled: false).absoluteString,
+                               url.absoluteString,
+                               "Failure on: \(message)")
+            } else {
+                XCTAssertNil(analyticsSpy.inappSearchUrlCalled, "Failure on: \(message)")
+            }
+            analyticsSpy = nil
+            Analytics.shared = Analytics()
+        }
+    }
+
+    func testWebViewDelegateTracksSearchEventBasedOnNavigationType() {
+        let browser = BrowserViewController(profile: profileMock, tabManager: tabManagerMock)
+
+        let rootURL = Environment.current.urlProvider.root
+        let testCases = [
+            (WKNavigationType.other, "\(rootURL)/search?q=test", true, "Tracks regular navigation"),
+            (WKNavigationType.reload, "\(rootURL)/search?q=test", true, "Tracks reload (with unchanged url)"),
+            (WKNavigationType.backForward, "\(rootURL)/search?q=test1", false, "Does not track back forward"),
+        ]
+
+        for (type, urlString, shouldTrack, message) in testCases {
+            analyticsSpy = AnalyticsSpy()
+            Analytics.shared = analyticsSpy
+            let url = URL(string: urlString)!
+            var action = FakeNavigationAction(url: url,
+                                              navigationType: type)
+            browser.webView(makeWebView(),
+                            decidePolicyFor: action) { policy in
+                XCTAssertEqual(policy, .allow, "Should allow independent of tracking behavior")
+            }
+
+            if shouldTrack {
+                XCTAssertEqual(analyticsSpy.inappSearchUrlCalled?.absoluteString,
+                               url.absoluteString,
                                "Failure on: \(message)")
             } else {
                 XCTAssertNil(analyticsSpy.inappSearchUrlCalled, "Failure on: \(message)")
@@ -969,6 +1010,10 @@ extension AnalyticsSpyTests {
             EmptyView()
         }
     }
+
+    func makeWebView() -> WKWebView {
+        return WKWebView(frame: CGRect(width: 100, height: 100))
+    }
 }
 
 // MARK: - Helper Classes
@@ -978,5 +1023,20 @@ class MultiplyImpactTestable: MultiplyImpact {
 
     override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         capturedPresentedViewController = viewControllerToPresent
+    }
+}
+
+final class FakeNavigationAction: WKNavigationAction {
+    let urlRequest: URLRequest
+    let type: WKNavigationType
+
+    override var request: URLRequest { urlRequest }
+
+    override var navigationType: WKNavigationType { type }
+
+    init(url: URL, navigationType: WKNavigationType) {
+        self.urlRequest = URLRequest(url: url)
+        self.type = navigationType
+        super.init()
     }
 }

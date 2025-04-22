@@ -48,8 +48,14 @@ class MockTabManager: TabManager {
         return nil
     }
 
+    /* Ecosia: Allow overriding subscript
     subscript(webView: WKWebView) -> Tab? {
         return nil
+    }
+     */
+    var subscriptedTab: Tab?
+    subscript(webView: WKWebView) -> Tab? {
+        return subscriptedTab
     }
 
     func selectTab(_ tab: Tab?, previous: Tab?) {
