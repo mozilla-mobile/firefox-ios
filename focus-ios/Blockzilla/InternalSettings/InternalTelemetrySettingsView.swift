@@ -58,27 +58,7 @@ extension InternalTelemetrySettingsView: View {
             if #available(iOS 14, *) {
                 loggingSection
 
-                SwiftUI.Section(header: Text(verbatim: "Debug View")) {
-                    Toggle(isOn: $internalSettings.gleanEnableDebugView) {
-                        VStack(alignment: .leading) {
-                            Text(verbatim: "Enable Debug View")
-                            Text(verbatim: "Requires app restart").font(.caption)
-                        }
-                    }.disabled(internalSettings.gleanDebugViewTag.isEmpty)
-
-                    VStack(alignment: .leading) {
-                        TextField("Debug View Tag", text: $internalSettings.gleanDebugViewTag)
-                            .onChange(of: internalSettings.gleanDebugViewTag, perform: changeDebugViewTag)
-                    }
-
-                    Button(action: { UIApplication.shared.open(GleanDebugViewURL) }) {
-                        Text(verbatim: "Open Debug View (In Default Browser)")
-                    }
-
-                    Button(action: { UIPasteboard.general.url = GleanDebugViewURL }) {
-                        Text(verbatim: "Copy Debug View Link")
-                    }
-                }
+                debugViewSection
 
                 SwiftUI.Section {
                     Button(action: { sendPendingEventPings() }) {
