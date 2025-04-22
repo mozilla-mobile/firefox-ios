@@ -116,6 +116,26 @@ extension InternalTelemetrySettingsView: View {
             }
         }
     }
+
+    private var eventPingsSection: some View {
+        return SwiftUI.Section {
+            Button(action: { sendPendingEventPings() }) {
+                Text(verbatim: "Send Pending Event Pings")
+            }
+
+            Button(action: { sendPendingBaselinePings() }) {
+                Text(verbatim: "Send Baseline Event Pings")
+            }
+
+            Button(action: { sendPendingMetricsPings() }) {
+                Text(verbatim: "Send Metrics Event Pings")
+            }
+
+            Button(action: { sendPendingDeletionRequestPings() }) {
+                Text(verbatim: "Send Deletion Request Event Pings")
+            }
+        }
+    }
 }
 
 struct InternalTelemetrySettingsView_Previews: PreviewProvider {
