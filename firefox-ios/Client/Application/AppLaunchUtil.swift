@@ -123,9 +123,6 @@ class AppLaunchUtil {
                    level: .debug,
                    category: .setup)
 
-        logger.log("Prefs for migration is \(String(describing: profile.prefs.boolForKey(PrefsKeys.TabMigrationKey)))",
-                   level: .debug,
-                   category: .tabs)
         AppEventQueue.signal(event: .preLaunchDependenciesComplete)
     }
 

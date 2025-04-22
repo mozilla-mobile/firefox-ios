@@ -144,9 +144,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 )
             }
             sectionItems.append(jumpBackInSetting)
-        }
 
-        if let profile {
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
