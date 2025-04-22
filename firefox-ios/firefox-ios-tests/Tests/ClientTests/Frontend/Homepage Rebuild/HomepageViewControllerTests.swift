@@ -251,6 +251,55 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
+    func test_newState_forTriggeringImpression_triggersHomepageAction() throws {
+        let subject = createSubject()
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            GeneralBrowserAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+            )
+        )
+
+        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // used to check whether we should send dispatch action or not
+        // layoutIfNeeded() recalculates the collection view to have items
+        subject.loadViewIfNeeded()
+        XCTAssertTrue(newState.shouldTriggerImpression)
+        subject.newState(state: newState)
+        subject.view.layoutIfNeeded()
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.itemSeen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_newState_didSelectedTabChangeToHomepageAction_forScrollToTop_setsCollectionViewOffsetToZero() {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let subject = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            GeneralBrowserAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+            )
+        )
+
+        guard let collectionView = subject.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        subject.newState(state: newState)
+
+        XCTAssertEqual(collectionView.contentOffset, .zero)
+    }
+
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()

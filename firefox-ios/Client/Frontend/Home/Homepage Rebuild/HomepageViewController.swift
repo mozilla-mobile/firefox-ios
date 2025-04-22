@@ -169,7 +169,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        trackVisibleImpressions()
+        trackVisibleItemImpressions()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -212,7 +212,7 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        trackVisibleImpressions()
+        trackVisibleItemImpressions()
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -295,6 +295,12 @@ final class HomepageViewController: UIViewController,
             state: state,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
+        // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
+        if homepageState.shouldTriggerImpression {
+            alreadyTrackedItems.removeAll()
+            trackVisibleItemImpressions()
+            scrollToTop()
+        }
     }
 
     func unsubscribeFromRedux() {
@@ -763,12 +769,11 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchOpenTopSitesAction(at index: Int, tileType: String, urlString: String) {
+    private func dispatchOpenTopSitesAction(at index: Int, config: TopSiteConfiguration) {
         let config = TopSitesTelemetryConfig(
             isZeroSearch: homepageState.isZeroSearch,
             position: index,
-            tileType: tileType,
-            url: urlString
+            topSiteConfiguration: config
         )
         store.dispatch(
             TopSitesAction(
@@ -791,19 +796,15 @@ final class HomepageViewController: UIViewController,
         }
         dispatchDidSelectCardItemAction(with: item)
         switch item {
-        case .topSite(let state, _):
+        case .topSite(let config, _):
             let destination = NavigationDestination(
                 .link,
-                url: state.site.url.asURL,
-                isGoogleTopSite: state.isGoogleURL,
+                url: config.site.url.asURL,
+                isGoogleTopSite: config.isGoogleURL,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-            dispatchOpenTopSitesAction(
-                at: indexPath.item,
-                tileType: state.getTelemetrySiteType,
-                urlString: state.site.url
-            )
+            dispatchOpenTopSitesAction(at: indexPath.item, config: config)
         case .jumpBackIn(let config):
             store.dispatch(
                 JumpBackInAction(
@@ -847,8 +848,16 @@ final class HomepageViewController: UIViewController,
         sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
     }
 
-    private func sendItemActionWithTelemetryExtras(item: HomepageItem, actionType: HomepageActionType) {
-        let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryItemType)
+    /// Sends generic telemetry extras to middleware, sends additional extras `topSitesTelemetryConfig` for sponsored sites
+    private func sendItemActionWithTelemetryExtras(
+        item: HomepageItem,
+        actionType: HomepageActionType,
+        topSitesTelemetryConfig: TopSitesTelemetryConfig? = nil
+    ) {
+        let telemetryExtras = HomepageTelemetryExtras(
+            itemType: item.telemetryItemType,
+            topSitesTelemetryConfig: topSitesTelemetryConfig
+        )
         store.dispatch(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
@@ -866,12 +875,12 @@ final class HomepageViewController: UIViewController,
         forItemAt indexPath: IndexPath
     ) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else { return }
-        handleTrackingItemImpression(with: item)
+        handleTrackingItemImpression(with: item, at: indexPath.item)
     }
 
     /// Used to track item impressions. If the user has seen the item on the homepage, we only record the impression once.
     /// We want to track at initial seen as well as when users scrolls.
-    private func trackVisibleImpressions() {
+    private func trackVisibleItemImpressions() {
         guard let collectionView else {
             logger.log(
                 "Homepage collectionview should not have been nil, unable to track impression",
@@ -882,14 +891,26 @@ final class HomepageViewController: UIViewController,
         }
         for indexPath in collectionView.indexPathsForVisibleItems {
             guard let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
-            handleTrackingItemImpression(with: item)
+            handleTrackingItemImpression(with: item, at: indexPath.item)
         }
     }
 
-    private func handleTrackingItemImpression(with item: HomepageItem) {
+    private func handleTrackingItemImpression(with item: HomepageItem, at index: Int) {
         guard !alreadyTrackedItems.contains(item) else { return }
         alreadyTrackedItems.insert(item)
-        sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.itemSeen)
+        if case .topSite(let config, _) = item {
+            sendItemActionWithTelemetryExtras(
+                item: item,
+                actionType: HomepageActionType.itemSeen,
+                topSitesTelemetryConfig: TopSitesTelemetryConfig(
+                    isZeroSearch: homepageState.isZeroSearch,
+                    position: index,
+                    topSiteConfiguration: config
+                )
+            )
+        } else {
+            sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.itemSeen)
+        }
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)

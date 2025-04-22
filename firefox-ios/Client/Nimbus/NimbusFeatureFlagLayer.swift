@@ -86,9 +86,6 @@ final class NimbusFeatureFlagLayer {
         case .ratingPromptFeature:
             return checkRatingPromptFeature(from: nimbus)
 
-        case .reduxSearchSettings:
-            return checkReduxSearchSettingsFeature(from: nimbus)
-
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -139,6 +136,9 @@ final class NimbusFeatureFlagLayer {
 
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
+
+        case .updatedPasswordManager:
+            return checkUpdatedPasswordManagerFeature(from: nimbus)
         }
     }
 
@@ -377,11 +377,6 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
-    private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.reduxSearchSettingsFeature.value()
-        return config.enabled
-    }
-
     private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.menuRefactorFeature.value().enabled
     }
@@ -416,5 +411,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.rustKeychainRefactor.value().rustKeychainEnabled
+    }
+
+    private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.updatedPasswordManagerFeature.value()
+        return config.status
     }
 }

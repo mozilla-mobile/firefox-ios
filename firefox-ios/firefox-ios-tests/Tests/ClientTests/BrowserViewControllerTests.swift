@@ -11,10 +11,12 @@ import Shared
 
 @testable import Client
 
-class BrowserViewControllerTests: XCTestCase {
+class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     var tabManager: MockTabManager!
     var browserCoordinator: MockBrowserCoordinator!
+    var mockStore: MockStoreForMiddleware<AppState>!
+    var appState: AppState!
 
     override func setUp() {
         super.setUp()
@@ -30,6 +32,7 @@ class BrowserViewControllerTests: XCTestCase {
         tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        setupStore()
     }
 
     override func tearDown() {
@@ -38,6 +41,7 @@ class BrowserViewControllerTests: XCTestCase {
         tabManager = nil
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().reset()
+        resetStore()
         super.tearDown()
     }
 
@@ -119,6 +123,28 @@ class BrowserViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.toolbar.privateModeBadge.badge.isHidden)
     }
 
+    func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
+        let subject = createSubject()
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        testTab.url = URL(string: "internal://local/about/home")!
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusHomepageRebuildForTesting(isEnabled: true)
+
+        let expectation = XCTestExpectation(description: "General browser action is dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: testTab, isRestoring: false)
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[2] as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 5)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
+    }
+
     // MARK: - Handle PDF
 
     func testHandlePDF_showsDocumentLoadingView() {
@@ -155,5 +181,37 @@ class BrowserViewControllerTests: XCTestCase {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(enabled: isEnabled)
         }
+    }
+
+    private func setupNimbusHomepageRebuildForTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageRebuildFeature.with { _, _ in
+            return HomepageRebuildFeature(enabled: isEnabled)
+        }
+    }
+
+    // MARK: StoreTestUtility
+    func setupAppState() -> Client.AppState {
+        let appState = AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: .XCTestDefaultUUID
+                        )
+                    )
+                ]
+            )
+        )
+        self.appState = appState
+        return appState
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
