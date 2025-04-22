@@ -94,7 +94,7 @@ final class URLFormatterTests: XCTestCase {
         let initialUrl = "foo.bar/foo bar"
         let subject = DefaultURLFormatter()
 
-        let result = subject.getURL(entry: givenURL)
+        let result = subject.getURL(entry: initialUrl)
 
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
     }
@@ -103,7 +103,7 @@ final class URLFormatterTests: XCTestCase {
         let initialUrl = "http://foo.bar/foo bar"
         let subject = DefaultURLFormatter()
 
-        let result = subject.getURL(entry: givenURL)
+        let result = subject.getURL(entry: initialUrl)
 
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
     }
@@ -112,7 +112,7 @@ final class URLFormatterTests: XCTestCase {
         let initialUrl = "foo.bar/~/"
         let subject = DefaultURLFormatter()
 
-        let result = subject.getURL(entry: givenURL)
+        let result = subject.getURL(entry: initialUrl)
 
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
     }
@@ -121,7 +121,7 @@ final class URLFormatterTests: XCTestCase {
         let initialUrl = "http://foo.bar/~/"
         let subject = DefaultURLFormatter()
 
-        let result = subject.getURL(entry: givenURL)
+        let result = subject.getURL(entry: initialUrl)
 
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
     }
