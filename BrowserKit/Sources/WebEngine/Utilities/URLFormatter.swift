@@ -79,15 +79,7 @@ public class DefaultURLFormatter: URLFormatter {
             }
         }
 
-        guard let url = URL(string: escapedEntry) else { return nil }
-
-        // Only allow this URL if it's safe
-        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
-        if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
-            return url
-        } else {
-            return nil
-        }
+        return checkBrowsingSafety(with: escapedEntry)
     }
 
     // Handle the entry if it has no scheme
@@ -119,8 +111,12 @@ public class DefaultURLFormatter: URLFormatter {
             return nil
         }
 
+        return checkBrowsingSafety(with: entryPlusScheme)
+    }
+
+    private func checkBrowsingSafety(with entry: String) -> URL? {
         // Only proceed if there is a host
-        guard let url = URL(string: entryPlusScheme), url.host != nil else { return nil }
+        guard let url = URLComponents(url: entry, resolvingAgainstBaseURL: false)?.url, url?.host != nil else { return nil }
 
         // Only allow this URL if it's safe
         let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
