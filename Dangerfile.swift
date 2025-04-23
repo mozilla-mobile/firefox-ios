@@ -46,7 +46,6 @@ func checkCodeCoverage() {
     )
 
     xcov.failIfFilesHaveCoverageLessThan(threshold: 50, onlyFiles: newFiles)
-
 }
 
 // MARK: - PR guidelines
