@@ -5,7 +5,9 @@
 import Foundation
 import Common
 
-class TabsButton: UIButton, ThemeApplicable {
+class TabsButton: UIButton,
+                  ThemeApplicable,
+                  FeatureFlaggable {
     struct UX {
         static let cornerRadius: CGFloat = 2
         static let titleFont: UIFont = FXFontStyles.Bold.caption2.systemFont()
@@ -34,6 +36,12 @@ class TabsButton: UIButton, ThemeApplicable {
 
     // Re-entrancy guard to ensure the function is complete before starting another animation.
     private var isUpdatingTabCount = false
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+        && featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly)
+    }
 
     override var transform: CGAffineTransform {
         didSet {
@@ -173,7 +181,12 @@ class TabsButton: UIButton, ThemeApplicable {
             newTabsButton.centerYAnchor.constraint(equalTo: newTabsButton.centerYAnchor)
         ])
 
-        animateButton(newTabsButton: newTabsButton, animated: animated)
+        if isTabTrayUIExperimentsEnabled {
+            countLabel.text = countToBe
+            accessibilityValue = countToBe
+        } else {
+            animateButton(newTabsButton: newTabsButton, animated: animated)
+        }
     }
 
     private func animateButton(newTabsButton: TabsButton, animated: Bool) {
