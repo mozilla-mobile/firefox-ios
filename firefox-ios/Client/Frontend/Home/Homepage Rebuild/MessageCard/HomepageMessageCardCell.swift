@@ -48,6 +48,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var descriptionText: UILabel = .build { label in
