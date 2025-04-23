@@ -8,10 +8,11 @@ struct ToolbarTranslucencyHelper {
     }
 
     func backgroundAlpha(
+        isToolbarRefactorEnabled: Bool = FxNimbus.shared.features.toolbarRefactorFeature.value().enabled,
         isToolbarTranslucencyEnabled: Bool = FxNimbus.shared.features.toolbarRefactorFeature.value().translucency,
         isReduceTransparencyEnabled: Bool = UIAccessibility.isReduceTransparencyEnabled
     ) -> CGFloat {
-        let isTranslucent = isToolbarTranslucencyEnabled && !isReduceTransparencyEnabled
+        let isTranslucent = isToolbarRefactorEnabled && isToolbarTranslucencyEnabled && !isReduceTransparencyEnabled
         return isTranslucent ? UX.backgroundAlphaForBlur : 1.0
     }
 }
