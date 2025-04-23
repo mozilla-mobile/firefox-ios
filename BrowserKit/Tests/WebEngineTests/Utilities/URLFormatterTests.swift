@@ -108,22 +108,22 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
     }
 
-    func testGetURLGivenNoHttpsURLWithTildeThenValidEscapedURL() {
-        let initialUrl = "foo.bar/~/"
+    func testGetURLGivenNoHttpsURLWithInvalidCharThenValidEscapedURL() {
+        let initialUrl = "foo.bar/!/"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
 
-        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%21/")
     }
 
-    func testGetURLGivenHttpURLWithTildeThenValidEscapedURL() {
-        let initialUrl = "http://foo.bar/~/"
+    func testGetURLGivenHttpURLWithInvalidCharThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/!/"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
 
-        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%21/")
     }
 
     func testGetURLGivenDotURLThenValidURL() {
