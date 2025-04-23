@@ -1761,7 +1761,6 @@
 		E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */; };
 		E18BAB0028E4AEBB00098AE2 /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E18BAB0128E4AEF300098AE2 /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
-		E18CCC692DB7D7D60085451A /* ToolbarTranslucencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18CCC682DB7D7B40085451A /* ToolbarTranslucencyHelper.swift */; };
 		E18CE8DA2BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18CE8D92BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift */; };
 		E18CE8DC2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18CE8DB2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift */; };
 		E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */; };
@@ -9891,7 +9890,6 @@
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1877A822875DEDE00F5BDF2 /* LegacySyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacySyncedTabCell.swift; sourceTree = "<group>"; };
 		E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabFader.swift; sourceTree = "<group>"; };
-		E18CCC682DB7D7B40085451A /* ToolbarTranslucencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTranslucencyHelper.swift; sourceTree = "<group>"; };
 		E18CE8D92BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainer.swift; sourceTree = "<group>"; };
 		E18CE8DB2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainerModel.swift; sourceTree = "<group>"; };
 		E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
@@ -14309,7 +14307,6 @@
 				E14792A22C2C5C660058211C /* ToolbarHelper.swift */,
 				E19F86022D6F4B49007453A7 /* ToolbarLayoutStyle.swift */,
 				E1B9A2C12CAD91EF00F6A0E9 /* ToolbarTelemetry.swift */,
-				E18CCC682DB7D7B40085451A /* ToolbarTranslucencyHelper.swift */,
 			);
 			path = Toolbars;
 			sourceTree = "<group>";
@@ -17457,7 +17454,6 @@
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
-				E18CCC692DB7D7D60085451A /* ToolbarTranslucencyHelper.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
 				ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */,
 				8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */,

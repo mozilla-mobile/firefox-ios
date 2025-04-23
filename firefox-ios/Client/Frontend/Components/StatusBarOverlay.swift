@@ -75,7 +75,7 @@ class StatusBarOverlay: UIView,
         let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.hasImage && isBottomSearchBar
         scrollOffset = needsNoStatusBar ? 0 : 1
 
-        let translucencyBackgroundAlpha = ToolbarTranslucencyHelper().backgroundAlpha()
+        let translucencyBackgroundAlpha = ToolbarHelper().backgroundAlpha()
         let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
@@ -85,7 +85,7 @@ class StatusBarOverlay: UIView,
     func applyTheme(theme: Theme) {
         let isVersion1Layout = isToolbarRefactorEnabled && toolbarLayoutType == .version1
         savedBackgroundColor = (hasTopTabs || isVersion1Layout) ? theme.colors.layer3 : theme.colors.layer1
-        let translucencyBackgroundAlpha = ToolbarTranslucencyHelper().backgroundAlpha()
+        let translucencyBackgroundAlpha = ToolbarHelper().backgroundAlpha()
         let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }

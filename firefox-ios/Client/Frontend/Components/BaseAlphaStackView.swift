@@ -117,7 +117,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         let color: UIColor = toolbarLayoutType == .version1 ? theme.colors.layer3 : theme.colors.layer1
-        let backgroundAlpha = ToolbarTranslucencyHelper().backgroundAlpha()
+        let backgroundAlpha = ToolbarHelper().backgroundAlpha()
 
         backgroundColor = isClearBackground ? .clear : color
         keyboardSpacer?.backgroundColor = isSpacerClearBackground ? .clear : color.withAlphaComponent(backgroundAlpha)
