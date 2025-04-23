@@ -12,7 +12,7 @@ protocol Presenter {
                  completion: (() -> Void)?)
 }
 
- extension Presenter {
+extension Presenter {
     @MainActor
     func present(_ viewControllerToPresent: UIViewController,
                  animated flag: Bool,
