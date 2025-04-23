@@ -8,6 +8,7 @@ import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
 let danger = Danger()
+let coverage = DangerSwiftCoverage()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
@@ -25,7 +26,7 @@ func changedFiles() {
 
 func checkCodeCoverage() {
     guard let xcresult = ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"]?.escapeString() else {
-        fail("Could not get the BITRISE_XCRESULT_PATH to generate code coverage")
+        fail("❌ Could not get the BITRISE_XCRESULT_PATH to generate code coverage.")
         return
     }
 
@@ -33,6 +34,24 @@ func checkCodeCoverage() {
         .xcresultBundle(xcresult),
         minimumCoverage: 50
     )
+
+    // Find new Swift files that are not test files
+    let newSwiftFiles = danger.git.createdFiles.filter {
+        $0.hasSuffix(".swift") &&
+        !$0.contains("Tests") &&
+        !$0.contains("/Generated/") // adjust if you use codegen folders
+    }
+
+    for file in newSwiftFiles {
+        guard let fileCoverage = coverage.coverage(file) else {
+            fail("❌ New file `\(file)` is missing from the code coverage report. Please add tests.")
+            continue
+        }
+
+        if fileCoverage.percentage < 50 {
+            fail("⚠️ New file `\(file)` has low test coverage: \(fileCoverage.percentage)% (minimum required: 50%)")
+        }
+    }
 }
 
 // MARK: - PR guidelines
