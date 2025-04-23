@@ -107,11 +107,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
     }
 
-    var timerPerWebsite: [String: StopWatchTimer] = [:]
-
-    // Tab Groups
-    var metadataManager: LegacyTabMetadataManager?
-
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
     var pageMetadata: PageMetadata? {
@@ -481,7 +476,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.windowUUID = windowUUID
         self.noImageMode = false
         self.profile = profile
-        self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
@@ -867,7 +861,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
-            metadataManager?.updateObservationTitle(title)
+            // `Tab.toRemoteTab` was added for FXIOS-8241
             _ = Tab.toRemoteTab(self, inactive: false)
         }
     }

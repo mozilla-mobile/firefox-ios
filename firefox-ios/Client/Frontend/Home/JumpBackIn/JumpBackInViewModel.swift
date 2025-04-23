@@ -307,9 +307,8 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var isEnabled: Bool {
-        guard featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser) else { return false }
-
-        return !isPrivate
+        let isEnabled = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.JumpBackInSection) ?? true
+        return !isPrivate && isEnabled
     }
 
     func numberOfItemsInSection() -> Int {

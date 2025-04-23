@@ -22,8 +22,7 @@ final class NimbusFeatureFlagLayer {
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
-        case .bottomSearchBar,
-                .isToolbarCFREnabled:
+        case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .cleanupHistoryReenabled:
@@ -40,9 +39,6 @@ final class NimbusFeatureFlagLayer {
 
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
-
-        case .jumpBackIn:
-            return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
@@ -183,25 +179,8 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
-    }
-
-    private func checkHomescreenSectionsFeature(for featureID: NimbusFeatureFlagID,
-                                                from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        var nimbusID: HomeScreenSection
-
-        switch featureID {
-        case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
-        default: return false
-        }
-
-        guard let status = config.sectionsEnabled[nimbusID] else { return false }
-
-        return status
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {

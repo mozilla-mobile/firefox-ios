@@ -220,7 +220,7 @@ extension BrowserViewController: WKUIDelegate {
 
     private func contextMenuPreviewProvider(for url: URL, webView: WKWebView) -> UIContextMenuContentPreviewProvider? {
         let provider: UIContextMenuContentPreviewProvider = {
-            let previewViewController = UIViewController()
+            let previewViewController = ContextMenuPreviewViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
 
@@ -261,8 +261,6 @@ extension BrowserViewController: WKUIDelegate {
             tab.adsTelemetryRedirectUrlList = currentTab.adsTelemetryRedirectUrlList
         }
 
-        self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
-
         // We are showing the toast always now
         showToastBy(isPrivate: isPrivate, tab: tab)
     }
@@ -272,22 +270,6 @@ extension BrowserViewController: WKUIDelegate {
                !tab.adsTelemetryUrlList.isEmpty &&
                tab.adsTelemetryUrlList.contains(adUrl) &&
                !tab.adsProviderName.isEmpty
-    }
-
-    func recordObservationForSearchTermGroups(currentTab: Tab, addedTab: Tab) {
-        let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
-        let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
-        if !searchTerm.isEmpty,
-           !searchUrl.isEmpty {
-            let searchData = LegacyTabGroupData(searchTerm: searchTerm,
-                                                searchUrl: searchUrl,
-                                                nextReferralUrl: addedTab.url?.absoluteString ?? "")
-            addedTab.metadataManager?.updateTimerAndObserving(
-                state: .openInNewTab,
-                searchData: searchData,
-                isPrivate: addedTab.isPrivate
-            )
-        }
     }
 
     func showToastBy(isPrivate: Bool, tab: Tab) {
@@ -989,40 +971,15 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
-        guard let tab = tabManager[webView],
-              let metadataManager = tab.metadataManager
-        else { return }
+        guard let tab = tabManager[webView] else { return }
 
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
 
-        // Only update search term data with valid search term data
-        if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-            if !tab.adsTelemetryRedirectUrlList.isEmpty,
-               !tab.adsProviderName.isEmpty,
-               !tab.adsTelemetryUrlList.isEmpty,
-               !tab.adsProviderName.isEmpty,
-               let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
-               let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
-               lastRedirectHost != startingRedirectHost {
-                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
-                tab.adsTelemetryUrlList.removeAll()
-                tab.adsTelemetryRedirectUrlList.removeAll()
-                tab.adsProviderName = ""
-            }
-
-            updateObservationReferral(
-                metadataManager: metadataManager,
-                url: webView.url?.absoluteString,
-                isPrivate: tab.isPrivate
-            )
-        }
-
         // When tab url changes after web content starts loading on the page
         // We notify the content blocker change so that content blocker status
         // can be correctly shown on beside the URL bar
-
         // TODO: content blocking hasn't really changed, can we improve code clarity here? [FXIOS-10091]
         tab.contentBlocker?.notifyContentBlockingChanged()
 
@@ -1035,30 +992,14 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
+
         if isPDFRefactorEnabled {
             scrollController.configureRefreshControl()
             navigationHandler?.removeDocumentLoading()
         }
-        if let tab = tabManager[webView],
-           let metadataManager = tab.metadataManager {
-            navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
-            // Only update search term data with valid search term data
-            if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-                updateObservationReferral(
-                    metadataManager: metadataManager,
-                    url: webView.url?.absoluteString,
-                    isPrivate: tab.isPrivate
-                )
-            } else if !tab.isFxHomeTab {
-                let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                                    searchUrl: webView.url?.absoluteString ?? "",
-                                                    nextReferralUrl: "")
-                metadataManager.updateTimerAndObserving(state: .openURLOnly,
-                                                        searchData: searchData,
-                                                        tabTitle: webView.title,
-                                                        isPrivate: tab.isPrivate)
-            }
+        if let tab = tabManager[webView] {
+            navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // If this tab had previously crashed, wait 5 seconds before resetting
             // the consecutive crash counter. This allows a successful webpage load
@@ -1214,16 +1155,6 @@ private extension BrowserViewController {
                 completionHandler(.useCredential, URLCredential(trust: trust))
             }
         }
-    }
-
-    func updateObservationReferral(metadataManager: LegacyTabMetadataManager, url: String?, isPrivate: Bool) {
-        let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                            searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                            nextReferralUrl: url ?? "")
-        metadataManager.updateTimerAndObserving(
-            state: .tabNavigatedToDifferentUrl,
-            searchData: searchData,
-            isPrivate: isPrivate)
     }
 }
 

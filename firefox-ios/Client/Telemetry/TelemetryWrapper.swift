@@ -152,9 +152,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
 
-        // Set the metric configuration from Nimbus.
-        glean.applyServerKnobsConfig(FxNimbus.shared.features.gleanServerKnobs.value().toJSONString())
-
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
@@ -306,7 +303,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Homepage section preferences
-        let isJumpBackInEnabled = featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildAndUser)
+        let isJumpBackInEnabled = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.JumpBackInSection) ?? true
         GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
 
         let isBookmarksEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
@@ -1431,7 +1428,6 @@ extension TelemetryWrapper {
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
-            GleanMetrics.ServerKnobs.validation.record()
             // record the same event for Nimbus' internal event store
             Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         case(.action, .background, .app, _, _):

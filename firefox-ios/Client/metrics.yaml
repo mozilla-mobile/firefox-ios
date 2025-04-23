@@ -6099,6 +6099,22 @@ webview:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  process_did_terminate:
+    type: event
+    extra_keys:
+      consecutive_crash:
+        type: quantity
+        description: |
+          The number of consecutive times the webview has crashed.
+    description: |
+      Recorded when a webview process terminates and we attempt a reload of that webview.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25951
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-10-01"
 
 fx_suggest:
   ping_type:
@@ -6267,24 +6283,6 @@ windows:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
     unit: quantity of iPad windows
-
-# Server Knobs validation
-server_knobs:
-  validation:
-    disabled: true
-    type: event
-    description: |
-      Temporary metric recorded at the same time as
-      "app_cycle.foreground" to validate that the Glean Server Knobs
-      functionality is working correctly.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688#c2
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-      - brosa@mozilla.com
-    expires: "2025-07-01"
 
 nimbus_system:
   recorded_nimbus_context:

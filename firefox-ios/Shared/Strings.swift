@@ -308,21 +308,6 @@ extension String {
         }
 
         public struct Toolbar {
-            public static let SearchBarPlacementButtonText = MZLocalizedString(
-                key: "ContextualHints.SearchBarPlacement.CallToAction",
-                tableName: nil,
-                value: "Toolbar Settings",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.")
-            public static let SearchBarTopPlacement = MZLocalizedString(
-                key: "ContextualHints.Toolbar.Top.Description.v107",
-                tableName: "ToolbarLocation",
-                value: "Move the toolbar to the bottom if that’s more your style.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom.")
-            public static let SearchBarBottomPlacement = MZLocalizedString(
-                key: "ContextualHints.Toolbar.Bottom.Description.v107",
-                tableName: "ToolbarLocation",
-                value: "Move the toolbar to the top if that’s more your style.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
             public static let NavigationButtonsBody = MZLocalizedString(
                 key: "ContextualHints.Toolbar.Navigation.Description.v132",
                 tableName: "ToolbarLocation",
@@ -7229,6 +7214,21 @@ extension String {
                 tableName: nil,
                 value: "Recently Visited",
                 comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off")
+            public static let SearchBarPlacementButtonText = MZLocalizedString(
+                key: "ContextualHints.SearchBarPlacement.CallToAction",
+                tableName: nil,
+                value: "Toolbar Settings",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.")
+            public static let SearchBarTopPlacement = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Top.Description.v107",
+                tableName: "ToolbarLocation",
+                value: "Move the toolbar to the bottom if that’s more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom.")
+            public static let SearchBarBottomPlacement = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Bottom.Description.v107",
+                tableName: "ToolbarLocation",
+                value: "Move the toolbar to the top if that’s more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
             public static let RememberThisCard = MZLocalizedString(
                 key: "CreditCard.Settings.RememberThisCard.v122",
                 tableName: "Settings",
