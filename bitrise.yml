@@ -1624,7 +1624,7 @@ workflows:
     steps:
     - cache-pull@2.7.2:
         is_always_run: true
-    - xcode-test@6.0.0:
+    - xcode-test@6.0.1:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
