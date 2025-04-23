@@ -25,6 +25,14 @@ workers:
               by-level:
                 '3': mobile-{level}-bitrise
                 default: mobile-{level}-bitrise-dev
+        github:
+            provisioner: scriptworker-k8s
+            implementation: scriptworker-github
+            os: scriptworker
+            worker-type:
+              by-level:
+                '3': mobile-{level}-github
+                default: mobile-{level}-github-dev
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
@@ -35,6 +43,22 @@ workers:
             implementation: docker-worker
             os: linux
             worker-type: 'b-linux-gcp'
+        ship-it:
+            provisioner: scriptworker-k8s
+            implementation: scriptworker-shipit
+            os: scriptworker
+            worker-type:
+              by-level:
+                '3': mobile-{level}-shipit
+                default: mobile-{level}-shipit-dev
+        tree:
+            provisioner: scriptworker-k8s
+            implementation: scriptworker-tree
+            os: scriptworker
+            worker-type:
+              by-level:
+                '3': mobile-{level}-tree
+                default: mobile-{level}-tree-dev
 
 scriptworker:
     scope-prefix: project:mobile:firefox-ios:releng
@@ -45,3 +69,5 @@ release-promotion:
             target-tasks-method: promote
         push:
             target-tasks-method: push
+        ship:
+            target-tasks-method: ship

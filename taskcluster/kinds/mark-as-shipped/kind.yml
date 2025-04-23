@@ -1,0 +1,46 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - taskgraph.transforms.from_deps
+    - ffios_taskgraph.transforms.mark_as_shipped
+    - taskgraph.transforms.task
+
+kind-dependencies:
+    - version-bump
+
+tasks:
+  mark-as-shipped:
+    description: Mark Firefox iOS as shipped in ship-it
+    from-deps:
+      group-by:
+        attribute: release-type
+      unique-kinds: false
+      copy-attributes: true
+      with-attributes:
+        release-type:
+          - beta
+          - release
+    run-on-tasks-for: []
+    worker-type: ship-it
+    scopes:
+      by-level:
+        '3':
+          - project:mobile:releng:ship-it:action:mark-as-shipped
+          - project:mobile:releng:ship-it:server:production
+        default:
+          - project:mobile:releng:ship-it:action:mark-as-shipped
+          - project:mobile:releng:ship-it:server:staging
+    shipping-phase: ship
+
+    treeherder:
+      symbol:
+        by-release-type:
+          release: mark-shipped-release
+          beta: mark-shipped-beta
+      platform: ios/opt
+      kind: build
+      tier: 2

@@ -53,6 +53,17 @@ def target_tasks_push(full_task_graph, parameters, graph_config):
         full_task_graph, parameters, filtered_for_candidates, shipping_phase="push"
     )
 
+@register_target_task("ship")
+def target_tasks_ship(full_task_graph, parameters, graph_config):
+    filtered_for_candidates = target_tasks_push(
+        full_task_graph,
+        parameters,
+        graph_config,
+    )
+    return _filter_release_promotion(
+        full_task_graph, parameters, filtered_for_candidates, shipping_phase="ship"
+    )
+
 def does_task_match_release_type(task, release_type):
     return task.attributes.get("release-type") == release_type
 
