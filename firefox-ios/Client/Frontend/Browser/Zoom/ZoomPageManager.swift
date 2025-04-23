@@ -60,7 +60,6 @@ class ZoomPageManager: TabEventHandler {
         }
     }
 
-    // Check if guard is returning the proper thing
     func zoomOut() -> CGFloat {
         guard let tab = tab,
               let host = tab.url?.host,
@@ -89,7 +88,9 @@ class ZoomPageManager: TabEventHandler {
         }
     }
 
-    /// shouldSave: Only false when entering Reader mode where zoom reset is neccessary but we don't persist the value
+    /// Reset zoom level for a given host and saves new value
+    /// - Parameters:
+    ///   - shouldSave: Only false when entering reader mode where zoom resets but we don't persist the value
     func resetZoom(shouldSave: Bool = true) {
         guard let tab, let host = tab.url?.host else { return }
 
