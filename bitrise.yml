@@ -1658,14 +1658,6 @@ workflows:
             mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
-
-            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH --legacy
-            ls ..
-            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
-            cat data.txt
-            sed 's/.*=//;s/'\''/"/g' data.txt > test.json
-            cat test.json
-            python3 perfTestTransform.py
     - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
