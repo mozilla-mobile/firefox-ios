@@ -73,6 +73,27 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
     }
 
+    func testLaunchBrowser_withSavedRoute_firesAppEventQueue() {
+        let subject = createSubject()
+        setupNimbusDeeplinkOptimization(isEnabled: true)
+
+        subject.savedRoute = .defaultBrowser(section: .systemSettings)
+        subject.launchBrowser()
+
+        XCTAssertFalse(AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled))
+        XCTAssertTrue(AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete))
+    }
+
+    func testLaunchBrowser_withoutSavedRoute_doesNotFireAppEventQueue() {
+        let subject = createSubject()
+        setupNimbusDeeplinkOptimization(isEnabled: true)
+
+        subject.launchBrowser()
+
+        XCTAssertFalse(AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete))
+        XCTAssertFalse(AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled))
+    }
+
     func testChildLaunchCoordinatorIsDone_startsBrowser() throws {
         let subject = createSubject()
         subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
@@ -83,6 +104,8 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
     }
+
+    // MARK: - Handle route
 
     func testHandleRoute_launchNotFinished_routeSaved() {
         let subject = createSubject()
@@ -121,7 +144,16 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNil(subject.savedRoute)
     }
 
-    // MARK: - Handle route
+    func testFindAndHandle_whenDeeplinkOptimizationEnabled_returnsBrowserCoordinator() {
+        let subject = createSubject()
+        setupNimbusDeeplinkOptimization(isEnabled: true)
+        subject.launchBrowser()
+
+        let browserCoordinator = subject.findAndHandle(route: .search(url: nil, isPrivate: false, options: nil))
+
+        XCTAssertNotNil(browserCoordinator)
+        XCTAssertTrue(browserCoordinator is BrowserCoordinator)
+    }
 
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
         let subject = createSubject()
