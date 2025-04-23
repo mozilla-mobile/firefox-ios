@@ -190,6 +190,15 @@ class BrowserViewController: UIViewController,
         return toolbar.isHidden ? legacyUrlBar : toolbar
     }
 
+    // MARK: Blur views for translucent toolbars
+    private let topBlurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    }
+
+    private let bottomBlurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    }
+
     // MARK: Contextual Hints
 
     private lazy var toolbarContextHintVC: ContextualHintViewController = {
@@ -236,6 +245,10 @@ class BrowserViewController: UIViewController,
 
     var isOneTapNewTabEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+    }
+
+    var isToolbarTranslucencyEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarTranslucency, checking: .buildOnly)
     }
 
     var isSwipingTabsEnabled: Bool {
@@ -425,15 +438,19 @@ class BrowserViewController: UIViewController,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
               (!isToolbarRefactorEnabled && legacyUrlBar != nil) || isToolbarRefactorEnabled
         else { return }
+
         let searchBarView: TopBottomInterchangeable = urlBarView
         let newPositionIsBottom = newSearchBarPosition == .bottom
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
+
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
+
         if isSwipingTabsEnabled {
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
         }
+
         if let readerModeBar = readerModeBar {
             readerModeBar.removeFromParent()
             readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
@@ -445,6 +462,7 @@ class BrowserViewController: UIViewController,
         toolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
+        updateBlurViews()
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
@@ -452,6 +470,25 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
+    }
+
+    private func updateBlurViews() {
+        let enableBlur = isToolbarRefactorEnabled && isToolbarTranslucencyEnabled
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+
+        if isBottomSearchBar {
+            header.isClearBackground = false
+            overKeyboardContainer.isClearBackground = enableBlur
+        } else {
+            header.isClearBackground = enableBlur
+            overKeyboardContainer.isClearBackground = false
+        }
+
+        bottomContainer.isClearBackground = showNavToolbar && enableBlur
+        bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+
+        [header, overKeyboardContainer, bottomContainer].forEach { $0.applyTheme(theme: theme) }
     }
 
     @objc
@@ -536,6 +573,7 @@ class BrowserViewController: UIViewController,
 
         header.setNeedsLayout()
         view.layoutSubviews()
+        updateBlurViews()
 
         if let tab = tabManager.selectedTab,
            let webView = tab.webView,
@@ -1030,6 +1068,14 @@ class BrowserViewController: UIViewController,
 
         bottomContainer.addArrangedSubview(toolbarToShow)
         view.addSubview(bottomContainer)
+
+        guard isToolbarRefactorEnabled,
+              isToolbarTranslucencyEnabled,
+              !UIAccessibility.isReduceTransparencyEnabled
+        else { return }
+
+        view.insertSubview(topBlurView, aboveSubview: contentContainer)
+        view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
     }
 
     private func enqueueTabRestoration() {
@@ -1277,6 +1323,26 @@ class BrowserViewController: UIViewController,
         }
 
         updateHeaderConstraints()
+        setupBlurViews()
+    }
+
+    private func setupBlurViews() {
+        guard isToolbarRefactorEnabled,
+              isToolbarTranslucencyEnabled,
+              !UIAccessibility.isReduceTransparencyEnabled
+        else { return }
+
+        NSLayoutConstraint.activate([
+            topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
+            topBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topBlurView.bottomAnchor.constraint(equalTo: header.bottomAnchor),
+
+            bottomBlurView.topAnchor.constraint(equalTo: bottomContentStackView.bottomAnchor),
+            bottomBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
     }
 
     private func updateHeaderConstraints() {
@@ -1386,6 +1452,7 @@ class BrowserViewController: UIViewController,
         let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
+        overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     fileprivate func showQueuedAlertIfAvailable() {

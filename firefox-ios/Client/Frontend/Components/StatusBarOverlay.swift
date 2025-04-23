@@ -24,8 +24,13 @@ class StatusBarOverlay: UIView,
     private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
+
+    private var isToolbarRefactorEnabled: Bool {
+        FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
+    }
+
     private var toolbarLayoutType: ToolbarLayoutType? {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+        FxNimbus.shared.features.toolbarRefactorFeature.value().layout
     }
 
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
@@ -65,17 +70,24 @@ class StatusBarOverlay: UIView,
 
     func resetState(isHomepage: Bool) {
         savedIsHomepage = isHomepage
+
         // We only need no status bar for one edge case
         let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.hasImage && isBottomSearchBar
         scrollOffset = needsNoStatusBar ? 0 : 1
-        backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
+
+        let translucencyBackgroundAlpha = ToolbarTranslucencyHelper().backgroundAlpha()
+        let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
+        backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
 
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        savedBackgroundColor = (hasTopTabs || toolbarLayoutType == .version1) ? theme.colors.layer3 : theme.colors.layer1
-        backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
+        let isVersion1Layout = isToolbarRefactorEnabled && toolbarLayoutType == .version1
+        savedBackgroundColor = (hasTopTabs || isVersion1Layout) ? theme.colors.layer3 : theme.colors.layer1
+        let translucencyBackgroundAlpha = ToolbarTranslucencyHelper().backgroundAlpha()
+        let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
+        backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
 
     // MARK: - StatusBarScrollDelegate

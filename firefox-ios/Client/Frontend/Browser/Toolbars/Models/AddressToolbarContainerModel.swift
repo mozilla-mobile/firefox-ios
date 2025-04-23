@@ -34,10 +34,11 @@ final class AddressToolbarContainerModel: Equatable {
 
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let backgroundAlpha = ToolbarTranslucencyHelper().backgroundAlpha()
         let uxConfiguration: AddressToolbarUXConfiguration = if toolbarLayoutStyle == .version1 {
-            .experiment
+            .experiment(backgroundAlpha: backgroundAlpha)
         } else {
-            .default
+            .default(backgroundAlpha: backgroundAlpha)
         }
 
         var droppableUrl: URL?
