@@ -2155,9 +2155,9 @@ app:
     BITRISE_DESTINATION: 'platform=iOS Simulator,name=Bitrise iOS default,OS=latest'
 
 
-pipeline_build_and_testtrigger_map:
+pipeline_build_and_test:
 - push_branch: main
-  pipeline: 
+  pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - push_branch: release/*
