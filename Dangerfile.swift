@@ -8,7 +8,6 @@ import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
 let danger = Danger()
-let coverage = DangerSwiftCoverage()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
@@ -43,7 +42,8 @@ func checkCodeCoverage() {
     }
 
     for file in newSwiftFiles {
-        guard let fileCoverage = coverage.coverage(file) else {
+        print("------ \(file)")
+        guard let fileCoverage = Coverage.xcodeBuildCoverage(file., minimumCoverage: 0) else {
             fail("❌ New file `\(file)` is missing from the code coverage report. Please add tests.")
             continue
         }
