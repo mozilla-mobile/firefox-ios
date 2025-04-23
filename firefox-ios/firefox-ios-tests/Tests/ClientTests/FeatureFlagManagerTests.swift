@@ -36,30 +36,12 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
     }
 
     func testDefaultNimbusCustomFlags() {
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-    }
-
-    // Changing the prefs manually, to make sure settings are respected through
-    // the FFMs interface
-    func testManagerRespectsProfileChangesForBoolSettings() {
-        let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
-        mockProfile.prefs.clearAll()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
-        // Changing the prefs manually, to make sure settings are respected through
-        // the FFMs interface
-        mockProfile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.JumpBackInSection)
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
-        XCTAssertFalse(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
     }
 
     // Changing the prefs manually, to make sure settings are respected through
@@ -74,14 +56,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         mockProfile.prefs.setString(SearchBarPosition.bottom.rawValue,
                                     forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
-    }
-
-    func testManagerInterfaceForUpdatingBoolFlags() {
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
-        featureFlags.set(feature: .jumpBackIn, to: false)
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .buildOnly))
-        XCTAssertFalse(featureFlags.isFeatureEnabled(.jumpBackIn, checking: .userOnly))
     }
 
     func testManagerInterfaceForUpdatingCustomFlags() {
