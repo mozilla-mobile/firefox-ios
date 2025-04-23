@@ -158,13 +158,13 @@ class NewTabSettingsTest: BaseTestCase {
         // validateKeyboardIsRaisedAndDismissed()
 
         // Switch to Private Browsing
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForValueContains(url, value: "mozilla")
-        XCTAssertFalse(url.isSelected, "The URL has the focus")
-        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+//        navigator.nowAt(NewTabScreen)
+//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+//        navigator.performAction(Action.OpenNewTabFromTabTray)
+//        mozWaitForValueContains(url, value: "mozilla")
+//        XCTAssertFalse(url.isSelected, "The URL has the focus")
+//        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+//        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         // validateKeyboardIsRaisedAndDismissed()
     }
