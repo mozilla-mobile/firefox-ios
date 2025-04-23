@@ -1627,7 +1627,6 @@ workflows:
     - xcode-test@6.0.0:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
-        - config: Fennec_Testing
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - test_plan: UnitTest
