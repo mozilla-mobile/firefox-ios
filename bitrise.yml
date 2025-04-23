@@ -1621,6 +1621,10 @@ workflows:
             python3 perfTestTransform.py
 
   Firefox_Unit_Tests:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
     steps:
     - cache-pull@2.7.2:
         is_always_run: true
