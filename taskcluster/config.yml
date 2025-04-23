@@ -43,3 +43,5 @@ release-promotion:
     flavors:
         promote:
             target-tasks-method: promote
+        push:
+            target-tasks-method: push

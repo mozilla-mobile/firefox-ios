@@ -41,6 +41,18 @@ def target_tasks_promote(full_task_graph, parameters, graph_config):
         filtered_for_candidates=[],
         shipping_phase="promote",
     )
+
+@register_target_task("push")
+def target_tasks_push(full_task_graph, parameters, graph_config):
+    filtered_for_candidates = target_tasks_promote(
+        full_task_graph,
+        parameters,
+        graph_config,
+    )
+    return _filter_release_promotion(
+        full_task_graph, parameters, filtered_for_candidates, shipping_phase="push"
+    )
+
 def does_task_match_release_type(task, release_type):
     return task.attributes.get("release-type") == release_type
 
