@@ -4,6 +4,7 @@
 
 import Danger
 import DangerSwiftCoverage
+import DangerXCov
 import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
@@ -25,7 +26,7 @@ func changedFiles() {
 
 func checkCodeCoverage() {
     guard let xcresult = ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"]?.escapeString() else {
-        fail("❌ Could not get the BITRISE_XCRESULT_PATH to generate code coverage.")
+        fail("Could not get the BITRISE_XCRESULT_PATH to generate code coverage")
         return
     }
 
@@ -34,24 +35,18 @@ func checkCodeCoverage() {
         minimumCoverage: 50
     )
 
-    // Find new Swift files that are not test files
-    let newSwiftFiles = danger.git.createdFiles.filter {
-        $0.hasSuffix(".swift") &&
-        !$0.contains("Tests") &&
-        !$0.contains("/Generated/") // adjust if you use codegen folders
-    }
+    // Use DangerXCov to check per-file coverage and fail for new files under threshold
+    let xcov = XCov(danger: danger)
+    let newFiles = danger.git.createdFiles.filter { $0.hasSuffix(".swift") && !$0.contains("/Generated/") }
 
-    for file in newSwiftFiles {
-        print("------ \(file)")
-        guard let fileCoverage = Coverage.xcodeBuildCoverage(file., minimumCoverage: 0) else {
-            fail("❌ New file `\(file)` is missing from the code coverage report. Please add tests.")
-            continue
-        }
+    xcov.report(
+        withXcresultBundlePath: ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"] ?? "",
+        minimumCoverage: nil,
+        onlyFiles: newFiles
+    )
 
-        if fileCoverage.percentage < 50 {
-            fail("⚠️ New file `\(file)` has low test coverage: \(fileCoverage.percentage)% (minimum required: 50%)")
-        }
-    }
+    xcov.failIfFilesHaveCoverageLessThan(threshold: 50, onlyFiles: newFiles)
+
 }
 
 // MARK: - PR guidelines
