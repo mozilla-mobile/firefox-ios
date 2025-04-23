@@ -21,7 +21,10 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-bitrise
             os: scriptworker
-            worker-type: mobile-{level}-bitrise
+            worker-type:
+              by-level:
+                '3': mobile-{level}-bitrise
+                default: mobile-{level}-bitrise-dev
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
@@ -35,3 +38,8 @@ workers:
 
 scriptworker:
     scope-prefix: project:mobile:firefox-ios:releng
+
+release-promotion:
+    flavors:
+        promote:
+            target-tasks-method: promote

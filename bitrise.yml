@@ -2156,6 +2156,98 @@ workflows:
             focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
 
+# RelPro workflows
+  release_promotion_promote:
+    before_run:
+    - SPM_Common_Steps
+    steps:
+    - script@1.2.1:
+        title: Set staging environment variables
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            envman add --key BITRISE_SCHEME --value FirefoxStaging
+            envman add --key EXPORT_METHOD --value development
+        run_if: '{{envcontain "GIT_REPOSITORY_URL" "staging"}}'
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd firefox-ios/Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+        run_if: '{{getenv "BITRISE_SCHEME" | ne "FirefoxStaging"}}'
+    - script@1.2.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./bootstrap.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: "$EXPORT_METHOD"
+        - output_tool: xcodebuild
+        - distribution_method: "$EXPORT_METHOD"
+        - export_development_team: 43AQ936H96
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@2.9.2: {}
+    envs:
+    - opts:
+        is_expand: false
+      EXPORT_METHOD: app-store
+    description: This step is used during release promotion to build a firefox release
 app:
   envs:
   - opts:
