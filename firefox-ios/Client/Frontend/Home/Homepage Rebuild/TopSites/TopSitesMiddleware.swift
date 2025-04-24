@@ -52,7 +52,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         case HomepageActionType.initialize:
             self.getTopSitesDataAndUpdateState(for: action)
 
-        case HomepageActionType.itemSeen:
+        case TopSitesActionType.topSitesSeen:
             self.handleSponsoredImpressionTracking(for: action)
 
         case TopSitesActionType.fetchTopSites:
@@ -154,7 +154,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
 
     // MARK: Telemetry
     private func handleSponsoredImpressionTracking(for action: Action) {
-        guard let telemetryMetadata = (action as? HomepageAction)?.telemetryExtras?.topSitesTelemetryConfig else {
+        guard let telemetryMetadata = (action as? TopSitesAction)?.telemetryConfig else {
             self.logger.log(
                 "Unable to retrieve telemetryMetadata for \(action.actionType)",
                 level: .warning,
