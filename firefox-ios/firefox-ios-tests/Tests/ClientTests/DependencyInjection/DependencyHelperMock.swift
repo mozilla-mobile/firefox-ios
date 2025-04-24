@@ -20,6 +20,16 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
+        let searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
+        AppContainer.shared.register(service: searchEnginesManager)
+
+        let searchEngineManagerProvider: SearchEnginesManagerProvider = searchEnginesManager
+        AppContainer.shared.register(service: searchEngineManagerProvider)
+
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,
             namespace: TabManagerConstants.tabScreenshotNamespace,

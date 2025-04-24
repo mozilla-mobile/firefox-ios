@@ -18,6 +18,9 @@ class DependencyHelper {
         let searchEnginesManager = appDelegate.searchEnginesManager
         AppContainer.shared.register(service: searchEnginesManager)
 
+        let searchEnginesManagerProvider: SearchEnginesManagerProvider = searchEnginesManager
+        AppContainer.shared.register(service: searchEnginesManagerProvider)
+
         let diskImageStore: DiskImageStore =
         DefaultDiskImageStore(files: profile.files,
                               namespace: TabManagerConstants.tabScreenshotNamespace,

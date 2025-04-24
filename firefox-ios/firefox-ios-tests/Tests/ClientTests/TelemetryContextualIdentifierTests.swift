@@ -42,7 +42,13 @@ class TelemetryContextualIdentifierTests: XCTestCase {
     }
 
     func testTelemetryWrapper_setsContextId() {
-        TelemetryWrapper.shared.setup(profile: MockProfile())
+        let profile = MockProfile()
+        let searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
+        TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
         XCTAssertNotNil(TelemetryContextualIdentifier.contextId)
     }
 

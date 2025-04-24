@@ -334,7 +334,12 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
         let profile = MockProfile()
-        TelemetryWrapper.shared.setup(profile: profile)
+        let searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
+        TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         let defaultWallpaper = Wallpaper(id: "fxDefault",
@@ -355,8 +360,13 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
         let profile = MockProfile()
+        let searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        TelemetryWrapper.shared.setup(profile: profile)
+        TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
 
         let themedWallpaper = Wallpaper(id: "amethyst",
                                         textColor: nil,
