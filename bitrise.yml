@@ -2175,8 +2175,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -e
-            set -x
+            set -xe
 
             cd firefox-ios/Client.xcodeproj
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
@@ -2189,10 +2188,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
+            set -xe
 
             ./bootstrap.sh
     - set-xcode-build-number@1:
@@ -2223,12 +2219,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            # write your script here
+            set -xe
 
             echo "Setting Nimbus variables"
             /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
@@ -2289,7 +2280,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -x
+            set -xe
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$DSYM_PATH"
     - deploy-to-itunesconnect-application-loader@1:
