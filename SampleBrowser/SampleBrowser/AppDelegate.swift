@@ -14,26 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
         sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
     )
 
-<<<<<<< HEAD
     lazy var engineDependencyManager = EngineDependencyManager()
     var engineProvider: EngineProvider?
-=======
-    lazy var engineProvider: EngineProvider = {
-        let parameters = WKWebviewParameters(blockPopups: false,
-                                             isPrivate: false)
-        let sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
-                                                            readerModeDelegate: ReaderModeDelegate(),
-                                                            telemetryProxy: TelemetryHandler())
-
-        let readerModeConfig = ReaderModeConfiguration(loadingText: "Loading",
-                                                       loadingFailedText: "Loading failed",
-                                                       loadOriginalText: "Loading",
-                                                       readerModeErrorText: "Error")
-        let engineDependencies = EngineDependencies(readerModeConfiguration: readerModeConfig)
-        let engine = WKEngine.factory(engineDependencies: engineDependencies)
-        return EngineProvider(engine: engine, sessionDependencies: sessionDependencies)!
-    }()
->>>>>>> b7975dc676 (Fix sample browser)
 
     func application(
         _ application: UIApplication,
@@ -94,24 +76,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
 
         default: break
         }
-    }
-}
-
-class ReaderModeDelegate: WKReaderModeDelegate {
-    func readerMode(_ readerMode: ReaderModeStyleSetter,
-                    didChangeReaderModeState state: ReaderModeState,
-                    forSession session: EngineSession) {
-        print("Laurie - didChangeReaderModeState state: \(state)")
-    }
-
-    func readerMode(_ readerMode: ReaderModeStyleSetter,
-                    didDisplayReaderizedContentForSession session: EngineSession) {
-        print("Laurie - didDisplayReaderizedContentForSession")
-    }
-
-    func readerMode(_ readerMode: ReaderModeStyleSetter,
-                    didParseReadabilityResult readabilityResult: ReadabilityResult,
-                    forSession session: EngineSession) {
-        print("Laurie - didParseReadabilityResult readabilityResult: \(readabilityResult)")
     }
 }
