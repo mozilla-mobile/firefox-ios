@@ -118,7 +118,7 @@ public class DefaultURLFormatter: URLFormatter {
         guard let url = URL(url: entry) else { return nil }
 
         // Only proceed if the URL is correctly formed and there is a host
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false), 
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
             components?.host != nil else {
             return nil
         }
