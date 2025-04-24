@@ -50,7 +50,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         }
     }
 
-    private func stopDownload(buttonPressed: Bool) {
+    func stopDownload(buttonPressed: Bool) {
         // When this toast is dismissed, be sure to clear this so that any
         // subsequent downloads cause a new toast to be created.
         self.downloadToast = nil
