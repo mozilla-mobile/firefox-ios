@@ -8,17 +8,20 @@ import Common
 
 final class SceneCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
+        profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
     override func tearDown() {
         mockRouter = nil
-        AppContainer.shared.reset()
+        profile = nil
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
