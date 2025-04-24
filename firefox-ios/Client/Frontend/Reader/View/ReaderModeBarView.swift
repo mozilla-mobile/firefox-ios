@@ -58,6 +58,10 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     var settingsButton: UIButton?
     var listStatusButton: UIButton?
 
+    private var toolbarLayoutType: ToolbarLayoutType? {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+    }
+
     @objc dynamic var buttonTintColor = UIColor.clear {
         didSet {
             readStatusButton?.tintColor = self.buttonTintColor
@@ -164,7 +168,11 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
 extension ReaderModeBarView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        backgroundColor = colors.layer1
+
+        let color: UIColor = toolbarLayoutType == .version1 ? colors.layer3 : colors.layer1
+        let backgroundAlpha = ToolbarHelper().backgroundAlpha()
+
+        backgroundColor = color.withAlphaComponent(backgroundAlpha)
         buttonTintColor = colors.textPrimary
         contextStrokeColor = colors.textSecondary
     }
