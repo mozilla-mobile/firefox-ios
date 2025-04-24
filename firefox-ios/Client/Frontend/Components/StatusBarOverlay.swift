@@ -69,6 +69,7 @@ class StatusBarOverlay: UIView,
     }
 
     func resetState(isHomepage: Bool) {
+        print("WT ### resetState")
         savedIsHomepage = isHomepage
 
         // We only need no status bar for one edge case
@@ -86,8 +87,17 @@ class StatusBarOverlay: UIView,
         let isVersion1Layout = isToolbarRefactorEnabled && toolbarLayoutType == .version1
         savedBackgroundColor = (hasTopTabs || isVersion1Layout) ? theme.colors.layer3 : theme.colors.layer1
         let translucencyBackgroundAlpha = ToolbarHelper().backgroundAlpha()
-        let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
-        backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
+
+        // We only need no status bar for one edge case
+        let isWallpaperedHomepage = savedIsHomepage ?? false && wallpaperManager.currentWallpaper.hasImage
+        let needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
+
+        if needsNoStatusBar {
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
+        } else {
+            let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
+        }
     }
 
     // MARK: - StatusBarScrollDelegate
@@ -111,7 +121,7 @@ class StatusBarOverlay: UIView,
         // The scrollview content offset is automatically adjusted to account for the status bar.
         // We want to start showing the status bar background as soon as the user scrolls.
         var offset: CGFloat
-        offset = scrollView.contentOffset.y / statusBarHeight
+        offset = (scrollView.contentOffset.y + scrollView.contentInset.top) / statusBarHeight
 
         if offset > 1 {
             offset = 1

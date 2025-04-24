@@ -93,6 +93,8 @@ class BrowserViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var logger: Logger
 
+    private lazy var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
+
     // MARK: Optional UI elements
 
     var topTabsViewController: TopTabsViewController?
@@ -469,15 +471,21 @@ class BrowserViewController: UIViewController,
 
     private func updateBlurViews() {
         let enableBlur = isToolbarRefactorEnabled && isToolbarTranslucencyEnabled
+        guard enableBlur else { return }
+
         let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
         if isBottomSearchBar {
             header.isClearBackground = false
             overKeyboardContainer.isClearBackground = enableBlur
+
+            let isWallpaperedHomepage = contentContainer.hasHomepage && wallpaperManager.currentWallpaper.hasImage
+            topBlurView.isHidden = isWallpaperedHomepage
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
+            topBlurView.isHidden = false
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -1486,6 +1494,7 @@ class BrowserViewController: UIViewController,
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
+            updateBlurViews()
             return
         }
 
@@ -1513,6 +1522,8 @@ class BrowserViewController: UIViewController,
                 overlayManager: overlayManager
             )
         }
+
+        updateBlurViews()
     }
 
     func showEmbeddedWebview() {
@@ -1535,6 +1546,7 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
+        updateBlurViews()
     }
 
     // MARK: - Document Loading
