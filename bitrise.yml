@@ -1626,8 +1626,6 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - cache-pull@2.7.2:
-        is_always_run: true
     - xcode-test@6.0.1:
         timeout: 3000
         inputs:
@@ -1636,7 +1634,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 20
+        - maximum_test_repetitions: 10
     - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
