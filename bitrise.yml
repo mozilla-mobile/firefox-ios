@@ -1629,11 +1629,13 @@ workflows:
     - cache-pull@2.7.2:
         is_always_run: true
     - xcode-test@6.0.1:
+        timeout: 3000
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - test_plan: UnitTest
+        - maximum_test_repetitions: 20
     - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
