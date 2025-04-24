@@ -16,7 +16,7 @@ protocol ReaderModeNavigationDelegate: AnyObject {
     func didFinish()
 }
 
-// TODO: Laurie - test
+// TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
 class WKReadabilityOperation: Operation,
                               @unchecked Sendable,
                               ReaderModeNavigationDelegate,

@@ -80,8 +80,6 @@ class WKEngineSession: NSObject,
         )
     }
 
-    // Laurie
-    // readerModeDelegate: WKReaderModeDelegate? = nil
     @MainActor
     init?(userScriptManager: WKUserScriptManager,
           dependencies: EngineSessionDependencies,

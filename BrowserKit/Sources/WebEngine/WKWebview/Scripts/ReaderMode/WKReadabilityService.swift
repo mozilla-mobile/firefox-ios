@@ -4,7 +4,7 @@
 
 import Foundation
 
-// TODO: Laurie - test
+// TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
 final class WKReadabilityService {
     private let ReadabilityServiceDefaultConcurrency = 1
     var queue: OperationQueue

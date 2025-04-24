@@ -14,10 +14,8 @@ struct WKEngineSessionData {
     var pageMetadata: EnginePageMetadata?
     var hasOnlySecureContent: Bool?
 
+    // TODO: FXIOS-11373 - Finish handling reader mode in WebEngine - result and state should be used properly
     // Reader mode
     var readabilityResult: ReadabilityResult?
     var readerModeState: ReaderModeState?
-    // TODO: Laurie - reader mode state doit etre get set je pense
-    // readerMode.state GET
-    // readerMode.style SET
 }

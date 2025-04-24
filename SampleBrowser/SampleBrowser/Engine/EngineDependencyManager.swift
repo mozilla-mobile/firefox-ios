@@ -32,17 +32,17 @@ class ReaderModeDelegate: WKReaderModeDelegate {
     func readerMode(_ readerMode: ReaderModeStyleSetter,
                     didChangeReaderModeState state: ReaderModeState,
                     forSession session: EngineSession) {
-        // TODO
+        // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - Sample browser should react to reader mode
     }
 
     func readerMode(_ readerMode: ReaderModeStyleSetter,
                     didDisplayReaderizedContentForSession session: EngineSession) {
-        // TODO
+        // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - Sample browser should react to reader mode
     }
 
     func readerMode(_ readerMode: ReaderModeStyleSetter,
                     didParseReadabilityResult readabilityResult: ReadabilityResult,
                     forSession session: EngineSession) {
-        // TODO
+        // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - Sample browser should react to reader mode
     }
 }

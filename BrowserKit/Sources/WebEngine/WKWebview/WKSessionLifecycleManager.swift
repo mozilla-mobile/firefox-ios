@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-// TODO: Laurie - documentation
+/// Lifecycle manager purpose is to properly activate or deactive engine sessions whenever they are shown or removed from the engine view
 protocol WKSessionLifecycleManager {
     func activate(_ session: WKEngineSession)
     func deactivate(_ session: WKEngineSession)
@@ -17,17 +17,14 @@ struct DefaultWKSessionLifecycleManager: WKSessionLifecycleManager {
     func activate(_ session: WKEngineSession) {
         session.isActive = true
 
-        // TODO: Add JIRA
+        // TODO: FXIOS-11420 - Handle PDF loading view in WebEngine
 //        if selectedTab.isDownloadingDocument() {
 //            navigationHandler?.showDocumentLoading()
 //        } else {
 //            navigationHandler?.removeDocumentLoading()
 //        }
 
-        // TODO: Add JIRA
-//        // Theme is applied to the tab and webView in the else case
-//        // because in the if block is applied already to all the tabs and web views
-//        selectedTab.applyTheme(theme: currentTheme())
+        // TODO: FXIOS-12073 - Ensure newly selected session is properly themed
 //        selectedTab.webView?.applyTheme(theme: currentTheme())
 
         // When the newly selected tab is the homepage or another internal tab,
@@ -45,7 +42,7 @@ struct DefaultWKSessionLifecycleManager: WKSessionLifecycleManager {
                            EngineConstants.readerModeStateKey: readerModeState]
         )
 
-        // TODO: Add JIRA - Handle needs reload when selected tab changed
+        // TODO: FXIOS-12074 - Handle needs reload when selected tab changed
 //        if webView.url == nil {
 //            // The webView can go gray if it was zombified due to memory pressure.
 //            // When this happens, the URL is nil, so try restoring the page upon selection.
