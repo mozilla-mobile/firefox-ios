@@ -10,6 +10,18 @@ class ToolbarHelper {
         static let backgroundAlphaForBlur: CGFloat = 0.8
     }
 
+    lazy var isToolbarRefactorEnabled: Bool = {
+        FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
+    }()
+
+    lazy var isToolbarTranslucencyEnabled: Bool = {
+        FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
+    }()
+
+    lazy var isReduceTransparencyEnabled: Bool = {
+        UIAccessibility.isReduceTransparencyEnabled
+    }()
+
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass != .compact
                && traitCollection.horizontalSizeClass != .regular
@@ -20,11 +32,7 @@ class ToolbarHelper {
                && traitCollection.horizontalSizeClass == .regular
     }
 
-    func backgroundAlpha(
-        isToolbarRefactorEnabled: Bool = FxNimbus.shared.features.toolbarRefactorFeature.value().enabled,
-        isToolbarTranslucencyEnabled: Bool = FxNimbus.shared.features.toolbarRefactorFeature.value().translucency,
-        isReduceTransparencyEnabled: Bool = UIAccessibility.isReduceTransparencyEnabled
-    ) -> CGFloat {
+    func backgroundAlpha() -> CGFloat {
         guard isToolbarRefactorEnabled,
               isToolbarTranslucencyEnabled,
               !isReduceTransparencyEnabled
