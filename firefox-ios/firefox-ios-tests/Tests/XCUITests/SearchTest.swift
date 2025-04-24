@@ -34,7 +34,7 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: typeText)
 
         // In the search suggestion, "text" should be displayed
-        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "http://localhost:")
+        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "localhost")
         let elementQuery = app.staticTexts.containing(predicate)
         mozWaitForElementToExist(elementQuery.element)
     }
@@ -289,8 +289,6 @@ class SearchTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306989
     // Smoketest
-    // [FXIOS-12045] Currently failing on multiple PRs; needs investigation.
-    /*
     func testOpenTabsInSearchSuggestions() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Test fails intermittently for iOS 15")
@@ -309,7 +307,6 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")
     }
-     */
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest

@@ -3536,6 +3536,20 @@ extension String {
         comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name.")
 }
 
+// MARK: - Link Previews
+extension String {
+    public static let SettingsShowLinkPreviewsTitle = MZLocalizedString(
+        key: "Settings.ShowLinkPreviews.Title",
+        tableName: nil,
+        value: "Show Link Previews",
+        comment: "Title of setting to enable link previews when long-pressing links.")
+    public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
+        key: "Settings.ShowLinkPreviews.StatusV2",
+        tableName: nil,
+        value: "When long-pressing links",
+        comment: "Description displayed under the ”Show Link Previews” option")
+}
+
 // MARK: - Block Opening External Apps
 extension String {
     public static let SettingsBlockOpeningExternalAppsTitle = MZLocalizedString(
@@ -5408,6 +5422,11 @@ extension String {
         tableName: nil,
         value: "Add to Reading List",
         comment: "Action label on share extension to add page to the Firefox reading list.")
+    public static let ShareFileCopiedToClipboard = MZLocalizedString(
+        key: "ShareExtension.FileCopiedToClipboard.Title.v139",
+        tableName: "Share",
+        value: "File Copied To Clipboard",
+        comment: "The Toast message that appears when the user press copy on the share sheet with a file like a pdf")
     public static let ShareAddToReadingListDone = MZLocalizedString(
         key: "ShareExtension.AddToReadingListActionDone.Title",
         tableName: nil,
@@ -7182,16 +7201,6 @@ extension String {
                 tableName: nil,
                 value: "Last month",
                 comment: "This label is meant to signify the section containing a group of items from the past thirty days.")
-            public static let SettingsShowLinkPreviewsTitle = MZLocalizedString(
-                key: "Settings.ShowLinkPreviews.Title",
-                tableName: nil,
-                value: "Show Link Previews",
-                comment: "Title of setting to enable link previews when long-pressing links.")
-            public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
-                key: "Settings.ShowLinkPreviews.StatusV2",
-                tableName: nil,
-                value: "When long-pressing links",
-                comment: "Description displayed under the ”Show Link Previews” option")
         }
         struct v139 {
             public static let PagesCount = MZLocalizedString(
