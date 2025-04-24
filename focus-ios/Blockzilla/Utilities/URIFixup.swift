@@ -51,10 +51,16 @@ class URIFixup {
         let finalurl = escaped.hasPrefix("http://") || escaped.hasPrefix("https://") ? escaped : "http://\(escaped)"
 
         // Since this is strictly an "http://" URL, we also require a host.
-        if let url = URL(string: finalurl, invalidCharacters: false), url.host != nil {
-            return url
+        guard let url = URL(string: finalurl, invalidCharacters: false), url.host != nil else {
+            return nil
         }
 
-        return nil
+        // Check for malformed URLs
+        // (URL has less stringent checks than URLComponents pre- iOS 17)
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+
+        return url
     }
 }
