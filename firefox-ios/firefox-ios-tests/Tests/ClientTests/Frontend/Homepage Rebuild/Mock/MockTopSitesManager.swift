@@ -16,6 +16,8 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     var pinTopSiteCalledCount = 0
     var unpinTopSiteCalledCount = 0
 
+    private let lock = NSLock()
+
     func getOtherSites() async -> [TopSiteConfiguration] {
         getOtherSitesCalledCount += 1
         return createSites(count: 15, subtitle: ": otherSites")
@@ -29,6 +31,11 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     }
 
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
+        // We add this lock because while it is okay for production code to not happen synchronously,
+        // we need a way to mock and confirm that this method has been called three times.
+        // Without the lock then we two threads simultaneously setting `recalculateTopSitesCalledCount` to 1.
+        lock.lock()
+        defer { lock.unlock() }
         recalculateTopSitesCalledCount += 1
         return createSites(subtitle: ": total top sites")
     }

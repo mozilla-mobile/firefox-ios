@@ -406,6 +406,36 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Deleted “Example Domain”"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2784448
+    // Smoketest
+    func testBookmarksToggleIsAvailable() {
+        navigator.openURL(url_3)
+        waitForTabsButton()
+        bookmark()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        let bookmarksToggle = app.tables.cells.switches["Bookmarks"]
+        mozWaitForElementToExist(bookmarksToggle)
+        if bookmarksToggle.value! as? String == "1" {
+            bookmarksToggle.waitAndTap()
+        }
+        XCTAssertEqual(bookmarksToggle.value! as? String, "0", "Bookmark toogle is not disabled")
+        navigator.nowAt(HomeSettings)
+        navigator.goto(BrowserTab)
+        navigator.performAction(Action.GoToHomePage)
+        mozWaitForElementToNotExist(app.cells["BookmarksCell"])
+        navigator.nowAt(BrowserTab)
+        navigator.goto(HomeSettings)
+        mozWaitForElementToExist(bookmarksToggle)
+        if bookmarksToggle.value! as? String == "0" {
+            bookmarksToggle.waitAndTap()
+        }
+        XCTAssertEqual(bookmarksToggle.value! as? String, "1", "Bookmark toogle is not enabled")
+        navigator.nowAt(HomeSettings)
+        navigator.goto(BrowserTab)
+        mozWaitForElementToExist(app.cells["BookmarksCell"])
+    }
+
     private func validateLongTapOptionsFromBookmarkLink() {
         // Go to "Recently saved" section and long tap on one of the links
         navigator.openURL(path(forTestPage: url_2["url"]!))
