@@ -1194,6 +1194,9 @@ class BrowserViewController: UIViewController,
 
         if !showNavToolbar && isBottomSearchBar && !isKeyboardShowing {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+
+            // make sure the bottom inset spacer has the right color/translucency
+            overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
         }
@@ -1213,6 +1216,9 @@ class BrowserViewController: UIViewController,
         if !showNavToolbar && isBottomSearchBar &&
         !isKeyboardShowing && UIDevice.current.orientation.isLandscape {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+
+            // make sure the bottom inset spacer has the right color/translucency
+            overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
         }
@@ -4345,7 +4351,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
             options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
-        })
+            })
+
         updateBlurViews()
     }
 
@@ -4359,7 +4366,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
-        })
+            })
 
         cancelEditingMode()
         updateBlurViews()
