@@ -104,7 +104,15 @@ final class ASSearchEngineProvider: SearchEngineProvider {
         let localeCode = localeCode(from: locale)
         let region = regionCode(from: locale)
         let logger = self.logger
-        guard let iconPopulator = iconDataFetcher, let selector else { completion([]); return }
+        guard let iconPopulator = iconDataFetcher, let selector else {
+            let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"
+            let logExtra2 = selector == nil ? "nil" : "ok"
+            logger.log("Icon fetcher and/or selector are nil. (\(logExtra1), \(logExtra2)",
+                       level: .fatal,
+                       category: .remoteSettings)
+            completion([])
+            return
+        }
 
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
             if let error {
@@ -114,8 +122,8 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             }
 
             guard let result, !result.engines.isEmpty else {
-                logger.log("Search engine fetch returned empty results",
-                           level: .warning,
+                logger.log("AS search engine fetch returned empty results",
+                           level: .fatal,
                            category: .remoteSettings)
                 completion([])
                 return
@@ -123,9 +131,6 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
             // Per AS team, optional engines can be ignored. Currently only used on Android.
             let filteredEngines = result.engines.filter { $0.optional == false }
-
-            // TODO [FXIOS-11992]: can we parallelize this? We need the search engines before we can use the
-            // icon data but the initial icon fetch can be done concurrently with the search engine request
 
             iconPopulator.populateEngineIconData(filteredEngines) { enginesAndIcons in
                 var openSearchEngines: [OpenSearchEngine] = []
