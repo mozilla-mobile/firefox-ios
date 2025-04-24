@@ -69,7 +69,6 @@ class StatusBarOverlay: UIView,
     }
 
     func resetState(isHomepage: Bool) {
-        print("WT ### resetState")
         savedIsHomepage = isHomepage
 
         // We only need no status bar for one edge case

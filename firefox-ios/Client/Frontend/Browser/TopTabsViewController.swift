@@ -23,7 +23,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         static let topTabsBackgroundShadowWidth: CGFloat = 12
         static let faderPadding: CGFloat = 8
         static let animationSpeed: TimeInterval = 0.1
-        static let backgroundAlphaForBlur: CGFloat = 0.8
     }
 
     // MARK: - Properties
@@ -189,7 +188,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         if isToolbarRefactorEnabled,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.isTranslucent {
-            view.backgroundColor = colors.layer3.withAlphaComponent(UX.backgroundAlphaForBlur)
+            view.backgroundColor = colors.layer3.withAlphaComponent(ToolbarHelper().backgroundAlpha())
             collectionView.backgroundColor = .clear
         } else {
             view.backgroundColor = colors.layer3
