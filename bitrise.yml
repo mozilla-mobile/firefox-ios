@@ -2169,7 +2169,8 @@ workflows:
             set -ex
             envman add --key BITRISE_SCHEME --value FirefoxStaging
             envman add --key EXPORT_METHOD --value development
-        run_if: '{{envcontain "GIT_REPOSITORY_URL" "staging"}}'
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "staging-firefox-ios"}}
     - script@1.2.1:
         inputs:
         - content: |-
@@ -2181,7 +2182,8 @@ workflows:
             sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
             cd -
         title: Set xcodeproj code_sign_identity
-        run_if: '{{getenv "BITRISE_SCHEME" | ne "FirefoxStaging"}}'
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
     - script@1.2.1:
         title: NPM, ContentBlockerGen
         inputs:
