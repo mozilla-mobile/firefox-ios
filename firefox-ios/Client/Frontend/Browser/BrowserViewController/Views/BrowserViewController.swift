@@ -3993,7 +3993,6 @@ extension BrowserViewController: TabManagerDelegate {
            previousTab != nil && previousTab?.isPrivate != selectedTab.isPrivate {
             privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
         }
-
         readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.readerModeCache = readerModeCache
 

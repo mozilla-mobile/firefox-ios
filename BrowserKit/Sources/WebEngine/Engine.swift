@@ -23,6 +23,8 @@ public protocol Engine {
     /// Idle the `Engine` whenever we move the application to background
     func idleEngine()
 
+    // MARK: - Clearing data
+
     /// Clear caches whenever the user requests it's data to be cleared
     func clearCaches()
 

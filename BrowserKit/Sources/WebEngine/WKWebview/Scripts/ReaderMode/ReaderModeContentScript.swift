@@ -13,6 +13,7 @@ public protocol ReaderModeStyleSetter {
     var style: ReaderModeStyle { get set }
 }
 
+// TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
 class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
     weak var delegate: WKReaderModeDelegate?
 
