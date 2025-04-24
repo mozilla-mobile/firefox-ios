@@ -107,7 +107,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
         guard let iconPopulator = iconDataFetcher, let selector else {
             let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"
             let logExtra2 = selector == nil ? "nil" : "ok"
-            logger.log("Icon fetcher and/or selector are nil. (\(logExtra1), \(logExtra2)",
+            logger.log("Icon fetcher and/or selector are nil. (\(logExtra1), \(logExtra2))",
                        level: .fatal,
                        category: .remoteSettings)
             completion([])
