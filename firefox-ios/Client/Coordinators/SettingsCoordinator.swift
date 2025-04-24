@@ -183,7 +183,6 @@ class SettingsCoordinator: BaseCoordinator,
             contentBlockerVC.settingsDelegate = self
             contentBlockerVC.profile = profile
             contentBlockerVC.tabManager = tabManager
-            contentBlockerVC.searchEnginesManager = searchEnginesManager
             return contentBlockerVC
 
         case .browser:
@@ -322,7 +321,6 @@ class SettingsCoordinator: BaseCoordinator,
         viewController.settingsDelegate = self
         viewController.profile = profile
         viewController.tabManager = tabManager
-        viewController.searchEnginesManager = searchEnginesManager
         router.push(viewController)
     }
 
