@@ -115,10 +115,13 @@ public class DefaultURLFormatter: URLFormatter {
     }
 
     private func checkBrowsingSafety(with entry: String) -> URL? {
-        guard let url = URL(url: entry)
+        guard let url = URL(url: entry) else { return nil }
 
         // Only proceed if the URL is correctly formed and there is a host
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false), components?.host != nil else { return nil }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false), 
+            components?.host != nil else {
+            return nil
+        }
 
         // Only allow this URL if it's safe
         let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
