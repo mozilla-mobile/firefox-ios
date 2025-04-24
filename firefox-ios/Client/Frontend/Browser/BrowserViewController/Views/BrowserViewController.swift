@@ -475,10 +475,13 @@ class BrowserViewController: UIViewController,
 
         let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let isKeyboardShowing = keyboardState != nil
 
         if isBottomSearchBar {
             header.isClearBackground = false
-            overKeyboardContainer.isClearBackground = enableBlur
+
+            // we disable the translucency when the keyboard is getting displayed
+            overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
             let isWallpaperedHomepage = contentContainer.hasHomepage && wallpaperManager.currentWallpaper.hasImage
             topBlurView.isHidden = isWallpaperedHomepage
@@ -4342,7 +4345,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
             options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
-            })
+        })
+        updateBlurViews()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -4355,9 +4359,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
             options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
-            })
+        })
 
         cancelEditingMode()
+        updateBlurViews()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
