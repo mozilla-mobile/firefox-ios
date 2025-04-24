@@ -85,6 +85,7 @@
         "BaseTestCase",
         "BookmarksTests\/testBookmarkLibraryAddDeleteBookmark()",
         "BookmarksTests\/testBookmarksAwesomeBar()",
+        "BookmarksTests\/testBookmarksToggleIsAvailable()",
         "BookmarksTests\/testDesktopFoldersArePresent()",
         "BookmarksTests\/testUndoDeleteBookmark()",
         "BrowsingPDFTests\/testBookmarkPDF()",

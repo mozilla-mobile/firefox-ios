@@ -10,6 +10,12 @@ final class TabsTelemetry {
     /// how long it takes to switch to a new tab
     private var tabSwitchTimerId: GleanTimerId?
 
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func startTabSwitchMeasurement() {
         tabSwitchTimerId = GleanMetrics.Tabs.tabSwitch.start()
     }
@@ -44,5 +50,11 @@ final class TabsTelemetry {
                                      method: .background,
                                      object: .tabInactiveQuantity,
                                      extras: inactiveExtra)
+    }
+
+    func trackConsecutiveCrashTelemetry(attemptNumber: UInt) {
+        let extras = GleanMetrics.Webview.ProcessDidTerminateExtra(consecutiveCrash: Int32(attemptNumber))
+        gleanWrapper.recordEvent(for: GleanMetrics.Webview.processDidTerminate,
+                                 extras: extras)
     }
 }

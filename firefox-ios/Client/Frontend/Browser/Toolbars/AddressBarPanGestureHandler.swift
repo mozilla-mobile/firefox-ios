@@ -60,12 +60,26 @@ final class AddressBarPanGestureHandler: NSObject {
         panGestureRecognizer?.isEnabled = true
     }
 
+    // MARK: - Pan Gesture Availability
     func enablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = true
     }
 
     func disablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = false
+    }
+
+    /// Enables swiping gesture in overlay mode when no URL or text is in the address bar,
+    /// such as after dismissing the keyboard on the homepage.
+    func enablePanGestureOnHomepageIfNeeded() {
+        let addressToolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.addressToolbar
+        guard addressToolbarState?.didStartTyping == false,
+              addressToolbarState?.url == nil  else { return }
+        enablePanGestureRecognizer()
     }
 
     // MARK: - Pan Gesture Handling

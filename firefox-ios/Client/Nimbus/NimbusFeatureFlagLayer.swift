@@ -40,9 +40,6 @@ final class NimbusFeatureFlagLayer {
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
-        case .jumpBackIn:
-            return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
-
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
@@ -178,22 +175,6 @@ final class NimbusFeatureFlagLayer {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         default: return false
         }
-    }
-
-    private func checkHomescreenSectionsFeature(for featureID: NimbusFeatureFlagID,
-                                                from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        var nimbusID: HomeScreenSection
-
-        switch featureID {
-        case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
-        default: return false
-        }
-
-        guard let status = config.sectionsEnabled[nimbusID] else { return false }
-
-        return status
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
