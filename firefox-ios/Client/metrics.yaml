@@ -2352,7 +2352,7 @@ homepage:
   section_viewed:
     type: labeled_counter
     description: |
-      Records when an item has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to an item has been scrolled to or seen on an homepage that has been viewed.
+      Records when a section has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to a section that has been scrolled to or seen on an homepage that has been viewed. The labels matches the values in `HomepageTelemetry.ItemType` under `sectionName`
     labels:
       - top_sites
       - jump_back_in
