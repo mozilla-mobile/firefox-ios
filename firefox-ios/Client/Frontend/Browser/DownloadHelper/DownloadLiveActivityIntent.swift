@@ -14,7 +14,9 @@ struct DownloadLiveActivityIntent: LiveActivityIntent {
     var windowUUID: String
 
     func perform() async throws -> some IntentResult {
-        UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.set(windowUUID, forKey: "stopDownload")
+        NotificationCenter.default.post(name: Notification.Name.StopDownloads,
+                                        object: self,
+                                        userInfo: ["windowUUID": windowUUID])
 
         return .result()
     }

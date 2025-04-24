@@ -61,10 +61,10 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     }
 
     func updateCombinedBytesDownloaded(value: Int64) {
-//        update()
+        update()
     }
 
     func updateCombinedTotalBytesExpected(value: Int64?) {
-//        update()
+        update()
     }
 }

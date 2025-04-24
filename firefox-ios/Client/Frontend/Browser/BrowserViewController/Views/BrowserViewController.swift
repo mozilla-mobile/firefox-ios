@@ -921,22 +921,19 @@ class BrowserViewController: UIViewController,
         )
         notificationCenter.addObserver(
             self,
-            selector: #selector(onStopDownloadChanged),
-            name: UserDefaults.didChangeNotification,
+            selector: #selector(onStopDownloads(_:)),
+            name: .StopDownloads,
             object: nil
         )
     }
 
     @objc
-    private func onStopDownloadChanged() {
+    private func onStopDownloads(_ notification: Notification) {
         ensureMainThread {
-            guard UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?
-                .string(forKey: "stopDownload") == self.windowUUID.uuidString else {
-                return
-            }
+            guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
+                  notiWindowUUID == self.windowUUID.uuidString else {return}
             self.downloadToast?.dismiss(true)
             self.stopDownload(buttonPressed: true)
-            UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.set(nil, forKey: "stopDownload")
         }
     }
 
