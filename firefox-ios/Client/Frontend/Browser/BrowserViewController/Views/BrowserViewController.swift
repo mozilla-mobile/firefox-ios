@@ -1431,6 +1431,8 @@ class BrowserViewController: UIViewController,
         let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
+
+        // make sure the keyboard spacer has the right color/translucency
         overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
