@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
         let parameters = WKWebviewParameters(blockPopups: false,
                                              isPrivate: false)
         let sessionDependencies = EngineSessionDependencies(webviewParameters: parameters,
+                                                            readerModeDelegate: ReaderModeDelegate(),
                                                             telemetryProxy: TelemetryHandler())
 
         let readerModeConfig = ReaderModeConfiguration(loadingText: "Loading",
@@ -93,5 +94,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
 
         default: break
         }
+    }
+}
+
+class ReaderModeDelegate: WKReaderModeDelegate {
+    func readerMode(_ readerMode: ReaderModeStyleSetter,
+                    didChangeReaderModeState state: ReaderModeState,
+                    forSession session: EngineSession) {
+        print("Laurie - didChangeReaderModeState state: \(state)")
+    }
+
+    func readerMode(_ readerMode: ReaderModeStyleSetter,
+                    didDisplayReaderizedContentForSession session: EngineSession) {
+        print("Laurie - didDisplayReaderizedContentForSession")
+    }
+
+    func readerMode(_ readerMode: ReaderModeStyleSetter,
+                    didParseReadabilityResult readabilityResult: ReadabilityResult,
+                    forSession session: EngineSession) {
+        print("Laurie - didParseReadabilityResult readabilityResult: \(readabilityResult)")
     }
 }

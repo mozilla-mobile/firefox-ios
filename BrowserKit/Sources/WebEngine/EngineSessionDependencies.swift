@@ -11,6 +11,7 @@ public struct EngineSessionDependencies {
     weak var readerModeDelegate: WKReaderModeDelegate?
 
     public init(webviewParameters: WKWebViewParameters,
+                readerModeDelegate: WKReaderModeDelegate? = nil,
                 telemetryProxy: EngineTelemetryProxy? = nil) {
         self.webviewParameters = webviewParameters
         self.readerModeDelegate = readerModeDelegate

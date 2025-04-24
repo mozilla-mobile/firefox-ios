@@ -49,10 +49,14 @@ class WKReadabilityOperation: Operation,
 
         // Setup a new session and kick all this off on the main thread since UIKit
         // and WebKit are not safe from other threads.
-        mainQueue.async(execute: { () in
+        Task { @MainActor in
             let configProvider = DefaultWKEngineConfigurationProvider()
-            // Laurie - readerModeDelegate: self,
-            let session = WKEngineSession(configurationProvider: configProvider)
+            let parameters = WKWebViewParameters()
+            let dependencies = EngineSessionDependencies(webviewParameters: parameters)
+            let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
+                                                         dependencies: dependencies,
+                                                         configurationProvider: configProvider,
+                                                         readerModeDelegate: self)
             session?.navigationHandler.readerModeNavigationDelegate = self
             self.session = session
 
@@ -62,7 +66,7 @@ class WKReadabilityOperation: Operation,
             let context = BrowsingContext(type: .internalNavigation, url: self.url)
             guard let browserURL = BrowserURL(browsingContext: context) else { return }
             session?.load(browserURL: browserURL)
-        })
+        }
 
         let timeout = DispatchTime.now() + .seconds(10)
         if semaphore.wait(timeout: timeout) == .timedOut {

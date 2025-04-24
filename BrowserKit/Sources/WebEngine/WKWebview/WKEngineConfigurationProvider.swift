@@ -34,10 +34,13 @@ public struct WKWebViewParameters {
         self.pullRefreshType = pullRefreshType
     }
 
-    /// Default Webview parameters for internal WebEngine purpose
+    /// Default internal Webview parameters initializer for WebEngine reader mode purpose
     init() {
         self.blockPopups = false
         self.isPrivate = false
+        self.autoPlay = .all
+        self.schemeHandler = WKInternalSchemeHandler()
+        self.pullRefreshType = UIRefreshControl.self
     }
 }
 

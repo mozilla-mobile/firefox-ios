@@ -54,7 +54,8 @@ class WKEngineSession: NSObject,
     public static func sessionFactory(
         userScriptManager: WKUserScriptManager,
         dependencies: EngineSessionDependencies,
-        configurationProvider: WKEngineConfigurationProvider
+        configurationProvider: WKEngineConfigurationProvider,
+        readerModeDelegate: WKReaderModeDelegate? = nil
     ) -> WKEngineSession? {
         let webViewProvider = DefaultWKWebViewProvider()
         let logger = DefaultLogger.shared
@@ -74,11 +75,12 @@ class WKEngineSession: NSObject,
             scriptResponder: scriptResponder,
             metadataFetcher: metadataFetcher,
             navigationHandler: navigationHandler,
-            uiHandler: uiHandler
+            uiHandler: uiHandler,
+            readerModeDelegate: readerModeDelegate
         )
     }
 
-    // Laurie 
+    // Laurie
     // readerModeDelegate: WKReaderModeDelegate? = nil
     @MainActor
     init?(userScriptManager: WKUserScriptManager,
@@ -90,7 +92,8 @@ class WKEngineSession: NSObject,
           scriptResponder: EngineSessionScriptResponder,
           metadataFetcher: MetadataFetcherHelper,
           navigationHandler: DefaultNavigationHandler,
-          uiHandler: WKUIHandler) {
+          uiHandler: WKUIHandler,
+          readerModeDelegate: WKReaderModeDelegate?) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider,
                                                           parameters: dependencies.webviewParameters) else {
             logger.log("WKEngineWebView creation failed on configuration",
@@ -119,8 +122,6 @@ class WKEngineSession: NSObject,
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
         addContentScripts(readerModeDelegate: readerModeDelegate)
-
-        self.sessionData.isPrivate = configurationProvider.parameters.isPrivate
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
