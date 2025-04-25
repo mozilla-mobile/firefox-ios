@@ -58,7 +58,7 @@ class DownloadProgressManagerTests: XCTestCase {
         let download = MockDownload()
         let downloadProgressManager = createSubject(downloads: [download])
         var downloadLiveActivity: DownloadLiveActivityWrapper? = DownloadLiveActivityWrapper(
-            downloadProgressManager: downloadProgressManager)
+            downloadProgressManager: downloadProgressManager, windowUUID: WindowUUID.XCTestDefaultUUID.uuidString)
         var downloadToast: DownloadToast? = DownloadToast(
             downloadProgressManager: downloadProgressManager,
             theme: LightTheme(),
