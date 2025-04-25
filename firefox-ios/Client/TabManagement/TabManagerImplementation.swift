@@ -202,10 +202,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         // Use shared pool for regular mode, isolated pool for private mode
-        configuration.processPool = isPrivate ? WKProcessPool() : defaultProcessPool
-        configuration.websiteDataStore = isPrivate
-                ? WKWebsiteDataStore.nonPersistent()
-                : WKWebsiteDataStore.default()
+        if isPrivate {
+            configuration.processPool = WKProcessPool()
+            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        } else {
+            configuration.processPool = defaultProcessPool
+            configuration.websiteDataStore = WKWebsiteDataStore.default()
+        }
 
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
