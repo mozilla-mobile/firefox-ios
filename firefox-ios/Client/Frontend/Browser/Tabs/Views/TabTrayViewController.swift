@@ -289,6 +289,10 @@ class TabTrayViewController: UIViewController,
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateLayout()
         }
+
+        if isTabTrayUIExperimentsEnabled {
+            experimentSegmentControl.scrollToCenter()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -488,7 +492,7 @@ class TabTrayViewController: UIViewController,
         var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
-            experimentSegmentControl.scrollToItem(at: experimentConvertSelectedIndex(), animated: false)
+            experimentSegmentControl.scrollToCenter()
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
