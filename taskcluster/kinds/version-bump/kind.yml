@@ -30,7 +30,7 @@ tasks:
     worker:
       bump: true
       bump-files: ["version.txt"]
-      push: true # TODO: android didn't push on level != 3, not sure why since that would only be staging for us
+      push: true
     treeherder:
       symbol: vb
       tier: 1
