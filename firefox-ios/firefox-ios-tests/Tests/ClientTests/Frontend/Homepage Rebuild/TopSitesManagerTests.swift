@@ -415,6 +415,7 @@ final class TopSitesManagerTests: XCTestCase {
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
             dispatchQueue: mockQueue,
+            notification: MockNotificationCenter(),
             maxTopSites: maxCount
         )
         trackForMemoryLeaks(subject, file: file, line: line)

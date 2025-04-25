@@ -806,15 +806,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
                            category: .tabs)
             }
 
-            // FXIOS-11987 - TabGroupData is nil since it was part of the legacy tab metadata
             return TabData(id: tabId,
                            title: tab.lastTitle,
                            siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
                            lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),
-                           createdAtTime: Date.fromTimestamp(tab.firstCreatedTime),
-                           tabGroupData: nil)
+                           createdAtTime: Date.fromTimestamp(tab.firstCreatedTime))
         }
 
         let logInfo: String

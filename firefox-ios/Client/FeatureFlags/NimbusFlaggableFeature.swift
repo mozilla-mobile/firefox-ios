@@ -33,7 +33,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case pdfRefactor
     case downloadLiveActivities
-    case preferSwitchToOpenTabOverDuplicate
     case ratingPromptFeature
     case reportSiteIssue
     case searchEngineConsolidation
@@ -130,7 +129,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .pdfRefactor,
                 .downloadLiveActivities,
-                .preferSwitchToOpenTabOverDuplicate,
                 .ratingPromptFeature,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,

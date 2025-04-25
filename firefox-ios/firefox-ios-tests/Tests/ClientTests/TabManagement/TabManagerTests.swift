@@ -1692,8 +1692,7 @@ class TabManagerTests: XCTestCase {
                               faviconURL: "",
                               isPrivate: false,
                               lastUsedTime: Date(),
-                              createdAtTime: Date(),
-                              tabGroupData: TabGroupData())
+                              createdAtTime: Date())
             tabData.append(tab)
         }
         return tabData

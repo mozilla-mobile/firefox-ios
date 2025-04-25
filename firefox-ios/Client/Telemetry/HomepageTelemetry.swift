@@ -49,9 +49,8 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemTapped, extras: itemNameExtra)
     }
 
-    func sendItemImpressionTelemetryEvent(for itemType: ItemType) {
-        let itemNameExtra = GleanMetrics.Homepage.ItemViewedExtra(section: itemType.sectionName, type: itemType.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemViewed, extras: itemNameExtra)
+    func sendSectionLabeledCounter(for itemType: ItemType) {
+        gleanWrapper.recordLabel(for: GleanMetrics.Homepage.sectionViewed, label: itemType.sectionName)
     }
 
     // MARK: - Top Sites

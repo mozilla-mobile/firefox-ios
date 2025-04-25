@@ -5,9 +5,13 @@
 import Foundation
 import Common
 
+protocol ThrottleProtocol {
+    func throttle(completion: @escaping () -> Void)
+}
+
 /// For any work that needs to be delayed, you can wrap it inside a throttler
 /// and specify the delay time, in seconds, and queue.
-class Throttler {
+class Throttler: ThrottleProtocol {
     private let defaultDelay = 0.35
 
     private let threshold: Double
