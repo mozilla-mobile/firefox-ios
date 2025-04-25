@@ -13,7 +13,7 @@ struct FirefoxWidgets: WidgetBundle {
         SearchQuickLinksWidget()
         OpenTabsWidget()
         TopSitesWidget()
-        if #available(iOS 16.2, *) {
+        if #available(iOS 17, *) {
             DownloadLiveActivity()
         }
     }

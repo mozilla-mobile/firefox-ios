@@ -117,7 +117,7 @@ class BrowserViewController: UIViewController,
 
     private var _downloadLiveActivityWrapper: Any?
 
-    @available(iOS 16.2, *)
+    @available(iOS 17, *)
     var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
         get {
             return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
@@ -919,6 +919,22 @@ class BrowserViewController: UIViewController,
             name: .RemoteTabNotificationTapped,
             object: nil
         )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onStopDownloads(_:)),
+            name: .StopDownloads,
+            object: nil
+        )
+    }
+
+    @objc
+    private func onStopDownloads(_ notification: Notification) {
+        ensureMainThread {
+            guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
+                  notiWindowUUID == self.windowUUID.uuidString else {return}
+            self.downloadToast?.dismiss(true)
+            self.stopDownload(buttonPressed: true)
+        }
     }
 
     private func switchToolbarIfNeeded() {
