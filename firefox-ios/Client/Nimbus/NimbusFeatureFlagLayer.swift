@@ -76,9 +76,6 @@ final class NimbusFeatureFlagLayer {
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
-        case .preferSwitchToOpenTabOverDuplicate:
-            return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
-
         case .ratingPromptFeature:
             return checkRatingPromptFeature(from: nimbus)
 
@@ -315,10 +312,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.pdfRefactorFeature.value().enabled
-    }
-
-    private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
     private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {

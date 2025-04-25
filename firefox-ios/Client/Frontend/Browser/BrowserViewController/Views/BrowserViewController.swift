@@ -3239,10 +3239,6 @@ class BrowserViewController: UIViewController,
         view.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
     }
 
-    var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
-    }
-
     // MARK: - Telemetry
 
     private func logTelemetryForAppDidEnterBackground() {
@@ -3266,20 +3262,12 @@ class BrowserViewController: UIViewController,
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
-           let tab = tabManager.tabs.reversed().first(where: {
-               // URL for reading mode comes encoded and we need a separate case to check if it's equal with the tab url
-               ($0.url == url || $0.url == url.safeEncodedUrl) && $0.isPrivate == tab.isPrivate
-           }) {
-            tabManager.selectTab(tab)
-        } else {
-            // Handle keyboard shortcuts from homepage with url selection
-            // (ex: Cmd + Tap on Link; which is a cell in this case)
-            if navigateLinkShortcutIfNeeded(url: url) {
-                return
-            }
-            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        // Handle keyboard shortcuts from homepage with url selection
+        // (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
         }
+        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
@@ -3733,26 +3721,18 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
-           let tab = tabManager.tabs.reversed().first(where: {
-               // URL for reading mode comes encoded and we need a separate case to check if it's equal with the tab url
-               ($0.url == url || $0.url == url.safeEncodedUrl) && $0.isPrivate == tab.isPrivate
-           }) {
-            tabManager.selectTab(tab)
-        } else {
-            if isGoogleTopSite {
-                tab.urlType = .googleTopSite
-                searchTelemetry.shouldSetGoogleTopSiteSearch = true
-            }
-
-            // Handle keyboard shortcuts from homepage with url selection
-            // (ex: Cmd + Tap on Link; which is a cell in this case)
-            if navigateLinkShortcutIfNeeded(url: url) {
-                return
-            }
-
-            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        if isGoogleTopSite {
+            tab.urlType = .googleTopSite
+            searchTelemetry.shouldSetGoogleTopSiteSearch = true
         }
+
+        // Handle keyboard shortcuts from homepage with url selection
+        // (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
+        }
+
+        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
