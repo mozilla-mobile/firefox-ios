@@ -47,31 +47,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
-                                                           .FirefoxAccountChanged,
-                                                           .PrivateDataClearedHistory,
-                                                           .ProfileDidFinishSyncing,
-                                                           .TopSitesUpdated,
-                                                           .DefaultSearchEngineUpdated,
-                                                           .BookmarksUpdated,
-                                                           .RustPlacesOpened
-        ])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 0)
 
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
-                                                           .FirefoxAccountChanged,
-                                                           .PrivateDataClearedHistory,
-                                                           .ProfileDidFinishSyncing,
-                                                           .TopSitesUpdated,
-                                                           .DefaultSearchEngineUpdated,
-                                                           .BookmarksUpdated,
-                                                           .RustPlacesOpened,
-                                                           .ThemeDidChange
-        ])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.observers, [.ThemeDidChange])
     }
 
     // MARK: - Deinit State

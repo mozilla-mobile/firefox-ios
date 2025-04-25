@@ -49,17 +49,13 @@ final class TopSitesMiddleware: FeatureFlaggable {
 
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.initialize:
+        case HomepageActionType.initialize,
+            HomepageMiddlewareActionType.topSitesUpdated,
+            TopSitesActionType.toggleShowSponsoredSettings:
             self.getTopSitesDataAndUpdateState(for: action)
 
         case TopSitesActionType.topSitesSeen:
             self.handleSponsoredImpressionTracking(for: action)
-
-        case TopSitesActionType.fetchTopSites:
-            self.getTopSitesDataAndUpdateState(for: action)
-
-        case TopSitesActionType.toggleShowSponsoredSettings:
-            self.getTopSitesDataAndUpdateState(for: action)
 
         case TopSitesActionType.tapOnHomepageTopSitesCell:
             self.handleOpenTopSitesItemTelemetry(for: action)

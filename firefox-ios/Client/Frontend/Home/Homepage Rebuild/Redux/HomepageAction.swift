@@ -44,3 +44,11 @@ enum HomepageActionType: ActionType {
     case embeddedHomepage
     case sectionSeen
 }
+
+enum HomepageMiddlewareActionType: ActionType {
+    case topSitesUpdated
+    case jumpBackInLocalTabsUpdated
+    case jumpBackInRemoteTabsUpdated
+    case bookmarksUpdated
+    case enteredForeground
+}
