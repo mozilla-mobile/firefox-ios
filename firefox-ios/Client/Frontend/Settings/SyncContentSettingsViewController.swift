@@ -275,13 +275,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             attributedStatusText: nil,
             settingDidChange: engineSettingChanged(.addresses))
 
-        var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords]
-
-        if featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus,
-            checking: .buildOnly) {
-            engineSectionChildren.append(creditCards)
-        }
+        var engineSectionChildren: [Setting] = [bookmarks, history, tabs, passwords, creditCards]
 
         if AddressLocaleFeatureValidator.isValidRegion() {
             engineSectionChildren.append(addresses)

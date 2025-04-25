@@ -16,12 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
-    private let creditCardAutofillStatus = FxNimbus.shared
-        .features
-        .creditCardAutofill
-        .value()
-        .creditCardAutofillStatus
-
     private let rustKeychainEnabled = FxNimbus.shared
         .features
         .rustKeychainRefactor
@@ -37,7 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
-        creditCardAutofillEnabled: creditCardAutofillStatus,
         rustKeychainEnabled: rustKeychainEnabled,
         loginsVerificationEnabled: loginsVerificationEnabled)
 
