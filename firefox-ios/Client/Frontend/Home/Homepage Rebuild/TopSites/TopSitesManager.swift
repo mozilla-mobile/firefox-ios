@@ -52,6 +52,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private let searchEnginesManager: SearchEnginesManagerProvider
     private let unifiedAdsProvider: UnifiedAdsProviderInterface
     private let dispatchQueue: DispatchQueueInterface
+    private let notification: NotificationProtocol
 
     private let maxTopSites: Int
     private let maxNumberOfSponsoredTile = 2
@@ -65,6 +66,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         searchEnginesManager: SearchEnginesManagerProvider,
         logger: Logger = DefaultLogger.shared,
         dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
+        notification: NotificationProtocol = NotificationCenter.default,
         maxTopSites: Int = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
     ) {
         self.profile = profile
@@ -75,6 +77,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.searchEnginesManager = searchEnginesManager
         self.logger = logger
         self.dispatchQueue = dispatchQueue
+        self.notification = notification
         self.maxTopSites = maxTopSites
     }
 
@@ -247,7 +250,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         // We make sure to remove all history for URL so it doesn't show anymore in the
         // top sites, this is the approach that Android takes too.
         profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { [weak self] _ in
-            NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
+            self?.notification.post(name: .TopSitesUpdated, withObject: self)
         }
     }
 }
