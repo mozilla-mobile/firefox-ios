@@ -121,7 +121,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         gestureRecognizer.addTarget(self, action: #selector(didPressReset))
         zoomLevel.addGestureRecognizer(gestureRecognizer)
 
-        let zoomValue = zoomManager.getZoomValue()
+        let zoomValue = zoomManager.getZoomLevel()
         updateZoomLabel(zoomValue: zoomValue)
         updateZoomButtonEnabled(zoomValue: zoomValue)
 

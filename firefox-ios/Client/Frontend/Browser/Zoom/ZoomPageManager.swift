@@ -25,19 +25,18 @@ class ZoomPageManager: TabEventHandler {
         register(self, forTabEvents: .didGainFocus)
     }
 
-    func getZoomValue() -> CGFloat {
+    func getZoomLevel() -> CGFloat {
         guard let tab else { return ZoomConstants.defaultZoomLimit}
 
         return getZoomLevel(for: tab.url?.host)
     }
 
-    // Check if guard is returning the proper thing
     func zoomIn() -> CGFloat {
         guard let tab = tab,
               let host = tab.url?.host,
               tab.pageZoom < ZoomConstants.upperZoomLimit else { return ZoomConstants.upperZoomLimit}
 
-        let newZoom = getNewZoomInValue(value: tab.pageZoom)
+        let newZoom = getNewZoomInLevel(level: tab.pageZoom)
         tab.pageZoom = newZoom
         saveZoomLevel(for: host, zoomLevel: newZoom)
         return newZoom
@@ -45,8 +44,8 @@ class ZoomPageManager: TabEventHandler {
 
     // Regular step is 0.25 except for the cases close to regular zoom
     // where we provide smaller step
-    private func getNewZoomInValue(value: CGFloat) -> CGFloat {
-        switch value {
+    private func getNewZoomInLevel(level: CGFloat) -> CGFloat {
+        switch level {
         case 0.75:
             return 0.9
         case 0.9:
@@ -56,7 +55,7 @@ class ZoomPageManager: TabEventHandler {
         case 1.10:
             return 1.25
         default:
-            return value + 0.25
+            return level + 0.25
         }
     }
 
@@ -65,7 +64,7 @@ class ZoomPageManager: TabEventHandler {
               let host = tab.url?.host,
               tab.pageZoom > ZoomConstants.lowerZoomLimit else { return ZoomConstants.lowerZoomLimit}
 
-        let newZoom = getNewZoomOutValue(value: tab.pageZoom)
+        let newZoom = getNewZoomOutLevel(level: tab.pageZoom)
         tab.pageZoom = newZoom
         saveZoomLevel(for: host, zoomLevel: newZoom)
         return newZoom
@@ -73,8 +72,8 @@ class ZoomPageManager: TabEventHandler {
 
     // Regular step is 0.25 except for the cases close to regular zoom
     // where we provide smaller step
-    private func getNewZoomOutValue(value: CGFloat) -> CGFloat {
-        switch value {
+    private func getNewZoomOutLevel(level: CGFloat) -> CGFloat {
+        switch level {
         case 0.9:
             return 0.75
         case 1.0:
@@ -84,7 +83,7 @@ class ZoomPageManager: TabEventHandler {
         case 1.25:
             return 1.10
         default:
-            return value - 0.25
+            return level - 0.25
         }
     }
 
@@ -105,7 +104,7 @@ class ZoomPageManager: TabEventHandler {
     }
 
     func updateZoomChangedInOtherWindow() {
-        tab?.pageZoom = getZoomValue()
+        tab?.pageZoom = getZoomLevel()
     }
 
     func setZoomAfterLeavingReaderMode() {
@@ -152,7 +151,7 @@ class ZoomPageManager: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         self.tab = tab
-        if tab.pageZoom != getZoomValue() {
+        if tab.pageZoom != getZoomLevel() {
             updatePageZoom()
         }
     }

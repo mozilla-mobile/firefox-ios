@@ -74,7 +74,7 @@ extension BrowserViewController: ZoomPageBarDelegate {
               tab.pageZoom != zoom.zoomLevel else { return }
 
         zoomManager.updateZoomChangedInOtherWindow()
-        zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomValue())
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
     }
 
     // MARK: - ZoomPageBarDelegate

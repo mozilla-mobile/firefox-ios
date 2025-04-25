@@ -64,10 +64,9 @@ class ZoomPageManagerTests: XCTestCase {
         let subject = createSubject()
         let tab = createTab()
         subject.tabDidGainFocus(tab)
-        let newZoom = subject.zoomOut()
-        let expectedZoom = 0.9
+        subject.resetZoom()
+        let expectedZoom = ZoomConstants.defaultZoomLimit
 
-        XCTAssertEqual(newZoom, expectedZoom)
         XCTAssertEqual(tab.pageZoom, expectedZoom)
     }
 
@@ -108,7 +107,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(zoomStore.saveCalledCount, 1)
     }
 
-    func testZoomStoreSavedWhenZoomResetIsCalled() {
+    func testZoomStoreSaved_WhenZoomResetIsCalled() {
         let subject = createSubject()
         let tab = createTab()
         subject.tabDidGainFocus(tab)
