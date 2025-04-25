@@ -15,11 +15,7 @@ class DependencyHelper {
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile)
 
-        let searchEnginesManager = appDelegate.searchEnginesManager
-        AppContainer.shared.register(service: searchEnginesManager)
-
-        let searchEnginesManagerProvider: SearchEnginesManagerProvider = searchEnginesManager
-        AppContainer.shared.register(service: searchEnginesManagerProvider)
+        AppContainer.shared.register(service: appDelegate.searchEnginesManager as SearchEnginesManagerProvider)
 
         let diskImageStore: DiskImageStore =
         DefaultDiskImageStore(files: profile.files,

@@ -88,7 +88,7 @@ class URLBarView: UIView,
     }
 
     var parent: UIStackView?
-    let searchEnginesManager: SearchEnginesManager
+    let searchEnginesManager: SearchEnginesManagerProvider
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
     var helper: TabToolbarHelper?
@@ -241,10 +241,10 @@ class URLBarView: UIView,
         imageMask: ImageIdentifiers.menuWarningMask
     )
 
-    init(profile: Profile, searchEnginesManager: SearchEnginesManager, windowUUID: WindowUUID) {
+    init(profile: Profile, searchEnginesManager: SearchEnginesManagerProvider, windowUUID: WindowUUID) {
         self.profile = profile
         self.windowUUID = windowUUID
-        self.searchEnginesManager = SearchEnginesManager(prefs: profile.prefs, files: profile.files)
+        self.searchEnginesManager = searchEnginesManager
         super.init(frame: CGRect())
         commonInit()
     }

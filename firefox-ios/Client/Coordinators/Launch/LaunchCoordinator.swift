@@ -17,7 +17,7 @@ class LaunchCoordinator: BaseCoordinator,
                          QRCodeNavigationHandler,
                          ParentCoordinatorDelegate {
     private let profile: Profile
-    private let searchEnginesManager: SearchEnginesManager
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private let isIphone: Bool
     let windowUUID: WindowUUID
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -25,7 +25,7 @@ class LaunchCoordinator: BaseCoordinator,
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(),
          isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone

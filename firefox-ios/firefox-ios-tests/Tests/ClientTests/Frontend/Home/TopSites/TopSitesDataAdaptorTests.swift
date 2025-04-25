@@ -4,28 +4,26 @@
 
 @testable import Client
 
+import Common
 import Shared
 import Storage
 import XCTest
 
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
-    private var searchEnginesManager: SearchEnginesManager!
+    private var searchEnginesManager: SearchEnginesManagerProvider!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
 
         notificationCenter = MockNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
 
-        searchEnginesManager = SearchEnginesManager(
-            prefs: profile.prefs,
-            files: profile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
+        searchEnginesManager = AppContainer.shared.resolve()
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
@@ -33,13 +31,14 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         notificationCenter = nil
         contileProviderMock = nil
+        searchEnginesManager = nil
         profile.prefs.clearAll()
         profile.shutdown()
         profile = nil
+
+        super.tearDown()
     }
 
     func testData_whenNotLoaded() {
@@ -581,7 +580,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        searchEnginesManager.defaultEngine = searchEngine
+        (searchEnginesManager as? SearchEnginesManager)?.defaultEngine = searchEngine
     }
 }
 

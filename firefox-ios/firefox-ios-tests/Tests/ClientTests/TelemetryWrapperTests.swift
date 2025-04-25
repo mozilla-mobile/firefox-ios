@@ -4,12 +4,16 @@
 
 @testable import Client
 
+import Common
 import Glean
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
     typealias ValueKey = TelemetryWrapper.EventValue
+
+    var profile: Profile!
+    var searchEnginesManager: SearchEnginesManagerProvider!
 
     override func setUp() {
         super.setUp()
@@ -20,11 +24,16 @@ class TelemetryWrapperTests: XCTestCase {
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
+
+        profile = AppContainer.shared.resolve()
+        searchEnginesManager = AppContainer.shared.resolve()
     }
 
     override func tearDown() {
         Experiments.events.clearEvents()
         DependencyHelperMock().reset()
+        profile = nil
+        searchEnginesManager = nil
         super.tearDown()
     }
 
@@ -333,12 +342,6 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: Wallpapers
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
-        let profile = MockProfile()
-        let searchEnginesManager = SearchEnginesManager(
-            prefs: profile.prefs,
-            files: profile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
         TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
@@ -359,12 +362,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
-        let profile = MockProfile()
-        let searchEnginesManager = SearchEnginesManager(
-            prefs: profile.prefs,
-            files: profile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
 

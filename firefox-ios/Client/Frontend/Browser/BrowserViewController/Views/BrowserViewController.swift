@@ -281,7 +281,7 @@ class BrowserViewController: UIViewController,
     let ratingPromptManager: RatingPromptManager
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
-    let searchEnginesManager: SearchEnginesManager
+    let searchEnginesManager: SearchEnginesManagerProvider
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -327,7 +327,7 @@ class BrowserViewController: UIViewController,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -1688,7 +1688,8 @@ class BrowserViewController: UIViewController,
     }
 
     fileprivate func createSearchControllerIfNeeded() {
-        guard self.searchController == nil else { return }
+        guard self.searchController == nil,
+              let searchEnginesManager = searchEnginesManager as? SearchEnginesManager else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
@@ -3219,7 +3220,8 @@ class BrowserViewController: UIViewController,
             .searchScreenState
             .showSearchSugestionsView ?? false
 
-        let isSettingEnabled = searchEnginesManager.shouldShowPrivateModeSearchSuggestions
+        let isSettingEnabled = (searchEnginesManager as? SearchEnginesManager)?
+            .shouldShowPrivateModeSearchSuggestions ?? false
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
@@ -3865,6 +3867,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
+        guard let searchEnginesManager = searchEnginesManager as? SearchEnginesManager else { return }
         let searchSettingsTableViewController = SearchSettingsTableViewController(
             profile: profile,
             searchEnginesManager: searchEnginesManager,

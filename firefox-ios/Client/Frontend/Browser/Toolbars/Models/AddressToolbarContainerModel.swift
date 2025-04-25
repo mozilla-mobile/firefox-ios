@@ -15,7 +15,7 @@ final class AddressToolbarContainerModel: Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineName: String
     let searchEngineImage: UIImage
-    let searchEnginesManager: SearchEnginesManager
+    let searchEnginesManager: SearchEnginesManagerProvider
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool
     let safeListedURLImageName: String?
@@ -93,7 +93,7 @@ final class AddressToolbarContainerModel: Equatable {
             shouldAnimate: shouldAnimate)
     }
 
-    init(state: ToolbarState, profile: Profile, searchEnginesManager: SearchEnginesManager, windowUUID: UUID) {
+    init(state: ToolbarState, profile: Profile, searchEnginesManager: SearchEnginesManagerProvider, windowUUID: UUID) {
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          isShowingTopTabs: state.isShowingTopTabs,
@@ -132,14 +132,16 @@ final class AddressToolbarContainerModel: Equatable {
         self.toolbarLayoutStyle = state.toolbarLayout
     }
 
-    func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {
+    func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManagerProvider) -> String? {
         var searchURL: URL? = url
 
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
 
-        guard let query = searchEnginesManager.queryForSearchURL(searchURL) else { return nil }
+        guard
+            let searchEnginesManager = searchEnginesManager as? SearchEnginesManager,
+            let query = searchEnginesManager.queryForSearchURL(searchURL) else { return nil }
         return query
     }
 

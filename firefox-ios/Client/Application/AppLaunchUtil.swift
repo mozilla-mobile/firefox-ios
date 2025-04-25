@@ -14,14 +14,14 @@ class AppLaunchUtil {
     private var logger: Logger
 //    private var adjustHelper: AdjustHelper
     private var profile: Profile
-    private let searchEnginesManager: SearchEnginesManager
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
 
     init(
         logger: Logger = DefaultLogger.shared,
         profile: Profile,
-        searchEnginesManager: SearchEnginesManager
+        searchEnginesManager: SearchEnginesManagerProvider
     ) {
         self.logger = logger
         self.profile = profile

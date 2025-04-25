@@ -38,7 +38,7 @@ final class AddressToolbarContainer: UIView,
 
     private var windowUUID: WindowUUID?
     private var profile: Profile?
-    private var searchEnginesManager: SearchEnginesManager?
+    private var searchEnginesManager: SearchEnginesManagerProvider?
     private var model: AddressToolbarContainerModel?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
 
@@ -124,7 +124,7 @@ final class AddressToolbarContainer: UIView,
     func configure(
         windowUUID: WindowUUID,
         profile: Profile,
-        searchEnginesManager: SearchEnginesManager,
+        searchEnginesManager: SearchEnginesManagerProvider,
         delegate: AddressToolbarContainerDelegate,
         isUnifiedSearchEnabled: Bool
     ) {

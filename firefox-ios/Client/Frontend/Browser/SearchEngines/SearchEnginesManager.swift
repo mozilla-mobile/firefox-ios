@@ -7,9 +7,10 @@ import Common
 import Shared
 import Storage
 
-protocol SearchEnginesManagerProvider {
+protocol SearchEnginesManagerProvider: AnyObject {
     var defaultEngine: OpenSearchEngine? { get }
     var orderedEngines: [OpenSearchEngine] { get }
+    var delegate: SearchEngineDelegate? { get set }
     func getOrderedEngines(completion: @escaping SearchEngineCompletion)
 }
 

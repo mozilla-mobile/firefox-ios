@@ -25,10 +25,7 @@ class DependencyHelperMock {
             files: profile.files,
             engineProvider: MockSearchEngineProvider()
         )
-        AppContainer.shared.register(service: searchEnginesManager)
-
-        let searchEngineManagerProvider: SearchEnginesManagerProvider = searchEnginesManager
-        AppContainer.shared.register(service: searchEngineManagerProvider)
+        AppContainer.shared.register(service: searchEnginesManager as SearchEnginesManagerProvider)
 
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,

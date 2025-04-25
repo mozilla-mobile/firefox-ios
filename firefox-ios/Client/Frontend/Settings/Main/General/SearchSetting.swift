@@ -6,7 +6,7 @@ import Common
 import Foundation
 
 class SearchSetting: Setting {
-    private let searchEnginesManager: SearchEnginesManager
+    private let searchEnginesManager: SearchEnginesManagerProvider
     private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
@@ -27,7 +27,7 @@ class SearchSetting: Setting {
     }
 
     init(settingsDelegate: GeneralSettingsDelegate?,
-         searchEnginesManager: SearchEnginesManager,
+         searchEnginesManager: SearchEnginesManagerProvider,
          theme: Theme) {
         self.searchEnginesManager = searchEnginesManager
         self.settingsDelegate = settingsDelegate

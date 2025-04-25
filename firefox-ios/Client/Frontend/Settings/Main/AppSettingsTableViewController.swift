@@ -52,7 +52,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private let logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     private var hasAppearedBefore = false
-    private let searchEnginesManager: SearchEnginesManager
+    private let searchEnginesManager: SearchEnginesManagerProvider
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -72,7 +72,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         logger: Logger = DefaultLogger.shared,
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve()
     ) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
