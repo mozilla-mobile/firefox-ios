@@ -6,19 +6,29 @@ pipelines:
     workflows:
         determine_apps_affected: {}
         firefox_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         focus_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         klar_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         run_firefox_ui_tests:
+            run_if: 
+              expression: '{{ enveq "RUN_UI_TESTS" "true" }}'
             depends_on:
             - firefox_configure_build
             parallel: 5
         focus_ui_test:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - focus_configure_build
             parallel: 1
@@ -112,7 +122,6 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
 
   firefox_configure_build:
-    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
@@ -367,8 +376,12 @@ workflows:
             envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
             envman add --key BUILD_FOCUS_IOS --value "$BUILD_FOCUS_IOS"
             envman add --key BUILD_SAMPLE_BROWSER_IOS --value "$BUILD_SAMPLE_BROWSER_IOS"
-    - share-pipeline-variable@1.1.1:
-        title: Share which application(s) to base configuration off of
+
+            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
+            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
+            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
+
+    - share-pipeline-variable@1:
         inputs:
         - variables: |-
             BUILD_FIREFOX_IOS
@@ -1640,7 +1653,6 @@ workflows:
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
   focus_configure_build:
-    run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
     before_run:
     - focus-clone-and-build-dependencies
     steps:
