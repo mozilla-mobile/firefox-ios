@@ -291,7 +291,10 @@ class TabTrayViewController: UIViewController,
         }
 
         if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.scrollToCenter()
+            // Needs to execute the layout pass after the orientation has changed
+            DispatchQueue.main.async {
+                self.experimentSegmentControl.scrollToCenter()
+            }
         }
     }
 
