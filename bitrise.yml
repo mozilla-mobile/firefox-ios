@@ -247,7 +247,6 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
   run_firefox_ui_tests:
-    run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
     before_run:
     - 1_git_clone_and_post_clone
     steps:
@@ -1710,7 +1709,6 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
 
   klar_configure_build:
-    run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
     before_run:
     - focus-clone-and-build-dependencies
     steps:
