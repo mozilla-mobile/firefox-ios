@@ -27,6 +27,8 @@ class SettingsDataSource: NSObject, UITableViewDataSource {
                                   title: "Trigger zoom reset"),
             SettingsCellViewModel(settingType: .zoomSet,
                                   title: "Trigger zoom set"),
+            SettingsCellViewModel(settingType: .loadPopWebSource,
+                                  title: "Load pop up web source")
         ]
     }
 

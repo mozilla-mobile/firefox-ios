@@ -62,4 +62,6 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Allows delegate to provide custom permissions for requesting media capture (e.g. camera/microphone permissions)
     /// Returns a bool indicating whether media capture is allowed
     func requestMediaCapturePermission() -> Bool
+
+    func onRequestOpenPopupView(_ view: UIView)
 }

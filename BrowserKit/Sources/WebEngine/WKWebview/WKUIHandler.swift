@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+@preconcurrency
 import WebKit
 
 protocol WKUIHandler: WKUIDelegate {
@@ -60,8 +61,15 @@ class DefaultUIHandler: NSObject, WKUIHandler {
                  createWebViewWith configuration: WKWebViewConfiguration,
                  for navigationAction: WKNavigationAction,
                  windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // TODO: FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
-        return nil
+        // TODO: understand who is responsible to render the newly created WKWebView
+        // TODO: understand how to query WKWebViewConfiguration about `blockPopUps`
+
+        let popUpView = WKWebView(frame: .zero, configuration: configuration)
+        popUpView.load(navigationAction.request)
+
+        delegate?.onRequestOpenPopupView(popUpView)
+
+        return popUpView
     }
 
     func webView(

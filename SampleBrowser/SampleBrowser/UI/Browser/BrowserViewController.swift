@@ -271,6 +271,11 @@ class BrowserViewController: UIViewController,
         return .default
     }
 
+    func onRequestOpenPopupView(_ view: UIView) {
+        let popupViewController = PopupViewController(contentView: view)
+        present(popupViewController, animated: true)
+    }
+
     // MARK: - Ads Handling
 
     func adsSearchProviderModels() -> [WebEngine.EngineSearchProviderModel] {
