@@ -2263,16 +2263,16 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -xe
-            echo $IPA_PATH
-            file $IPA_PATH
+            echo "$IPA_PATH"
+            file "$IPA_PATH"
     - script@1.2.1:
         title: Check if symbols were downloaded
         inputs:
         - content: |-
             #!/usr/bin/env bash
             set -xe
-            echo $DSYM_PATH
-            file $DSYM_PATH
+            echo "$DSYM_PATH"
+            file "$DSYM_PATH"
     - script@1.2.1:
         title: Upload Firefox Prod Beta Symbols
         run_if: |-
