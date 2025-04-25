@@ -1638,7 +1638,7 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-     - xcode-build-for-test@3:
+    - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
         - configuration: Fennec_Testing
