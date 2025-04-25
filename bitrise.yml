@@ -2162,6 +2162,12 @@ workflows:
     - SPM_Common_Steps
     steps:
     - script@1.2.1:
+        # If the current bitrise application is `staging-firefox-ios`, then
+        # this is a test release made from the staging repository.
+        # Ignore the value passed by release promotion for `BITRISE_SCHEME` and
+        # force it to `FirefoxStaging`, which makes it use non production
+        # certs/profiles. Also override the export method since the scheme is
+        # using a developer ID, not a distribution one
         title: Set staging environment variables
         inputs:
         - content: |-
