@@ -2240,6 +2240,33 @@ extension String {
                 value: "Created by %@",
                 comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier.")
 
+            /// Names for the groupings of app icons on the App Icon Selection screen
+            public struct SectionNames {
+                public static let Basics = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.Basics.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Basics",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the basic variants of the app icon like the default, white, black, and legacy options.")
+
+                public static let Colors = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.Colors.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Colors",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the solid color background variants of the app icon, all of which apply different colored backgrounds (like blue, pink, or orange) to the regular app icon.")
+
+                public static let Gradients = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.Gradients.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Gradients",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the gradient color background variants of the app icon, all of which apply different gradient color backgrounds (like blue fading to yellow or black fading to purple) to the regular app icon.")
+
+                public static let More = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.More.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "More",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for all other miscellaneous variants of the app icon (like hand drawn or retro versions).")
+            }
+
             public struct Errors {
                 public static let SelectErrorMessage = MZLocalizedString(
                     key: "Settings.AppIconSelection.Errors.SelectErrorMessage.v136",
@@ -2276,8 +2303,8 @@ extension String {
                 public static let SystemAuto = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.SystemAuto.Title.v139",
                     tableName: "AppIconSelection",
-                    value: "System Auto",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon which automatically adjusts the white/black background according to the iOS system light/dark themes.")
+                    value: "System Theme",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon which automatically adjusts the white/black background according to the iOS 18+ system light/dark/tinted home screen themes.")
 
                 public static let DarkPurple = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136",
