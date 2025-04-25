@@ -2235,7 +2235,7 @@ extension String {
                 comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen.")
 
             public static let ContributorCreditSubtitle = MZLocalizedString(
-                key: "Settings.AppIconSelection.AppIconNames.ContributorCredit.Subtitle.v139",
+                key: "Settings.AppIconSelection.ContributorCredit.Subtitle.v139",
                 tableName: "AppIconSelection",
                 value: "Created by %@",
                 comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier.")
@@ -2430,9 +2430,9 @@ extension String {
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
 
                 /// Names and subtitles for approved icons added by contributors.
-                struct ContributorIconNames {
+                struct FromContributors {
                     public static let Momo = MZLocalizedString(
-                        key: "Settings.AppIconSelection.AppIconNames.Momo.Title.v139",
+                        key: "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139",
                         tableName: "AppIconSelection",
                         value: "Momo",
                         comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
