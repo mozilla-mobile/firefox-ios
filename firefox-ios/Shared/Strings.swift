@@ -2238,7 +2238,7 @@ extension String {
                 key: "Settings.AppIconSelection.AppIconNames.ContributorCredit.Subtitle.v139",
                 tableName: "AppIconSelection",
                 value: "Created by %@",
-                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter specifies the creator's name, @ handle, or other personal identifier.")
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier.")
 
             public struct Errors {
                 public static let SelectErrorMessage = MZLocalizedString(
