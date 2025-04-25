@@ -24,7 +24,7 @@ def replace_bitrise_scheme_for_release_task(config, tasks):
 
     for task in tasks:
         task.setdefault("attributes", {})["release-type"] = config.params.get("release_type")
-        for workflow in task.get('bitrise', {}).get('workflows', []):
+        for workflow in task.get('bitrise', {}).get('workflows', {}):
             if isinstance(workflow, str):
                 continue
             for name, params in workflow.items():
