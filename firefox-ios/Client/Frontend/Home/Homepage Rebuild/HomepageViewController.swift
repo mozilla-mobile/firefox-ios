@@ -43,7 +43,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
-    // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
+
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
@@ -356,7 +356,8 @@ final class HomepageViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -396,9 +397,10 @@ final class HomepageViewController: UIViewController,
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
-                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    "Section should not have been nil, something went wrong",
                     level: .fatal,
-                    category: .homepage
+                    category: .homepage,
+                    extra: ["Section Index": "\(sectionIndex)"]
                 )
                 return nil
             }
