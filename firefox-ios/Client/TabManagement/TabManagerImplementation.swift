@@ -130,6 +130,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         return TabManagerImplementation.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
+    private static let defaultProcessPool = WKProcessPool()
+
     init(profile: Profile,
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -187,7 +189,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
+
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
         configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
@@ -198,11 +200,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         if #available(iOS 15.4, *) {
             configuration.preferences.isElementFullscreenEnabled = true
         }
-        if isPrivate {
-            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
-        } else {
-            configuration.websiteDataStore = WKWebsiteDataStore.default()
-        }
+
+        // Use shared pool for regular mode, isolated pool for private mode
+        configuration.processPool = isPrivate ? WKProcessPool() : defaultProcessPool
+        configuration.websiteDataStore = isPrivate
+                ? WKWebsiteDataStore.nonPersistent()
+                : WKWebsiteDataStore.default()
 
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
@@ -940,6 +943,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         if selectedTab?.isPrivate ?? false {
             selectedIndex = -1
         }
+
         privateTabs.forEach { tab in
             tab.close()
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
