@@ -28,21 +28,34 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        waitForElementsToExist(
-            [
-                app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
-            ]
-        )
+        mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar])
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(
+                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        } else {
+            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        }
 
         // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Enter your email"
-        let defaultMailPlaceholder = app.webViews.textFields["Enter your email"].placeholderValue!
-        XCTAssertEqual(
-            mailPlaceholder,
-            defaultMailPlaceholder,
-            "The mail placeholder does not show the correct value"
-        )
+        var defaultMailPlaceholder: String
+        if #available(iOS 17, *) {
+            defaultMailPlaceholder = app.webViews.textFields["Enter your email"].label
+            XCTAssertEqual(
+                mailPlaceholder,
+                defaultMailPlaceholder,
+                "The mail placeholder does not show the correct value"
+            )
+        } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
+            defaultMailPlaceholder = self.app.webViews.textFields["Enter your email"].placeholderValue!
+            XCTAssertEqual(
+                mailPlaceholder,
+                defaultMailPlaceholder,
+                "The mail placeholder does not show the correct value"
+            )
+        } else {
+            mozWaitForElementToExist(app.staticTexts[mailPlaceholder])
+        }
         mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
@@ -78,6 +91,7 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePasswordNewAccount)
         // Switching to the next text field is required to determine if the message still appears or not
+        app.buttons["Done"].tapIfExists()
         app.webViews.secureTextFields.element(boundBy: 0).waitAndTap()
         mozWaitForElementToNotExist(app.webViews.staticTexts["At least 8 characters"])
     }
