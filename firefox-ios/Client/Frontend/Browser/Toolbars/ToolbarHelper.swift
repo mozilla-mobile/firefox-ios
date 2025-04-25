@@ -32,11 +32,14 @@ class ToolbarHelper {
                && traitCollection.horizontalSizeClass == .regular
     }
 
+    func shouldBlur() -> Bool {
+        return isToolbarRefactorEnabled &&
+            isToolbarTranslucencyEnabled &&
+            !isReduceTransparencyEnabled
+    }
+
     func backgroundAlpha() -> CGFloat {
-        guard isToolbarRefactorEnabled,
-              isToolbarTranslucencyEnabled,
-              !isReduceTransparencyEnabled
-        else { return 1.0 }
+        guard shouldBlur() else { return 1.0 }
 
         return UX.backgroundAlphaForBlur
     }
