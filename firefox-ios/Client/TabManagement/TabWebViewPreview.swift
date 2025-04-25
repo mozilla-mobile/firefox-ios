@@ -61,14 +61,14 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
 
             topStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topStackView.topAnchor.constraint(equalTo: topAnchor),
-            topStackView.rightAnchor.constraint(equalTo: rightAnchor),
+            topStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             webPageScreenshotImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             webPageScreenshotImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             bottomStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            bottomStackView.rightAnchor.constraint(equalTo: rightAnchor)
+            bottomStackView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
