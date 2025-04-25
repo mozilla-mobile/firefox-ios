@@ -22,7 +22,7 @@ pipelines:
             - determine_apps_affected
         run_firefox_ui_tests:
             run_if: 
-              expression: '{{ enveq "RUN_UI_TESTS" "true" }}'
+              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
             depends_on:
             - firefox_configure_build
             parallel: 5
