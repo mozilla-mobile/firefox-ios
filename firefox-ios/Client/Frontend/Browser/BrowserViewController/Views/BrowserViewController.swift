@@ -1249,8 +1249,10 @@ class BrowserViewController: UIViewController,
                 webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
             ])
 
-            addressBarBackgroundViewTopConstraint = addressBarBackgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-            addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
+            addressBarBackgroundViewTopConstraint = addressBarBackgroundView.topAnchor
+                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor
+                .constraint(equalTo: bottomContainer.topAnchor)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: searchBarPosition)
         }
 
@@ -1274,7 +1276,7 @@ class BrowserViewController: UIViewController,
 
     private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
         let isTop = (searchBarPosition == .top)
-        addressBarBackgroundView.constraints.forEach ({ $0.isActive = false })
+        addressBarBackgroundView.constraints.forEach { $0.isActive = false }
         addressBarBackgroundViewBottomConstraint?.isActive = !isTop
         addressBarBackgroundViewTopConstraint?.isActive = isTop
 
@@ -3260,7 +3262,8 @@ class BrowserViewController: UIViewController,
         guard isSwipingTabsEnabled else { return }
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let toolbarLayoutStyle = toolbarState?.toolbarLayout
-        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
+        let colors = theme.colors
+        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
     }
 
     // MARK: - Telemetry
