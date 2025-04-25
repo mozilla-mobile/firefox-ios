@@ -1492,6 +1492,13 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
         }
 
+        // To make sure the content views content is extending under the toolbars we disable clip to bounds
+        // for the first two layers of views
+        if ToolbarHelper().shouldBlur() {
+            viewController.view.clipsToBounds = false
+            viewController.view.subviews.forEach { $0.clipsToBounds = false }
+        }
+
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
     }
