@@ -11,7 +11,7 @@ import XCTest
 
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
-    private var searchEnginesManager: SearchEnginesManagerProvider!
+    private var searchEnginesManager: SearchEnginesManager!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
 
@@ -580,7 +580,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        (searchEnginesManager as? SearchEnginesManager)?.defaultEngine = searchEngine
+        searchEnginesManager.defaultEngine = searchEngine
     }
 }
 

@@ -27,14 +27,14 @@ class AddressToolbarContainerModelTests: XCTestCase {
 
     func testSearchWordFromURLWhenUrlIsNilThenSearchWordIsNil() {
         let viewModel = createSubject(withState: createBasicToolbarState())
-        XCTAssertNil(viewModel.searchTermFromURL(nil, searchEnginesManager: searchEnginesManager))
+        XCTAssertNil(viewModel.searchTermFromURL(nil))
     }
 
     func testSearchWordFromURLWhenUsingGoogleSearchThenSearchWordIsCorrect() {
         let viewModel = createSubject(withState: createBasicToolbarState())
         let searchTerm = "test"
         let url = URL(string: "http://firefox.com/find?q=\(searchTerm)")
-        let result = viewModel.searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let result = viewModel.searchTermFromURL(url)
         XCTAssertEqual(searchTerm, result)
     }
 
@@ -42,7 +42,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
         let viewModel = createSubject(withState: createBasicToolbarState())
         let searchTerm = "test"
         let url = URL(string: "internal://local?q=\(searchTerm)")
-        XCTAssertNil(viewModel.searchTermFromURL(url, searchEnginesManager: searchEnginesManager))
+        XCTAssertNil(viewModel.searchTermFromURL(url))
     }
 
     func testUsesDefaultSearchEngine_WhenNoSearchEngineSelected() {

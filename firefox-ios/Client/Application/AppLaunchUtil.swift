@@ -19,7 +19,7 @@ final class AppLaunchUtil {
 
     init(
         logger: Logger = DefaultLogger.shared,
-        profile: Profile,
+        profile: Profile
     ) {
         self.logger = logger
         self.profile = profile

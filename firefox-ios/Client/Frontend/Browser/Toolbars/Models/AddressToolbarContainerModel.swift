@@ -16,7 +16,7 @@ final class AddressToolbarContainerModel: Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineName: String
     let searchEngineImage: UIImage
-    let searchEnginesManager: SearchEnginesManagerProvider
+    let searchEnginesManager: SearchEnginesManager
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool
     let safeListedURLImageName: String?
@@ -34,7 +34,7 @@ final class AddressToolbarContainerModel: Equatable {
     let windowUUID: UUID
 
     var addressToolbarConfig: AddressToolbarConfiguration {
-        let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let term = searchTerm ?? searchTermFromURL(url)
         let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
         let uxConfiguration: AddressToolbarUXConfiguration = if isVersionLayout {
             .experiment
@@ -138,17 +138,14 @@ final class AddressToolbarContainerModel: Equatable {
         self.toolbarLayoutStyle = state.toolbarLayout
     }
 
-    func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManagerProvider) -> String? {
+    func searchTermFromURL(_ url: URL?) -> String? {
         var searchURL: URL? = url
 
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
 
-        guard
-            let searchEnginesManager = searchEnginesManager as? SearchEnginesManager,
-            let query = searchEnginesManager.queryForSearchURL(searchURL) else { return nil }
-        return query
+        return searchEnginesManager.queryForSearchURL(searchURL)
     }
 
     private static func mapActions(_ actions: [ToolbarActionConfiguration],
