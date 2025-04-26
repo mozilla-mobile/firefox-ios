@@ -10,6 +10,7 @@ import XCTest
 class TelemetryContextualIdentifierTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         clearTest()
     }
 
@@ -43,12 +44,7 @@ class TelemetryContextualIdentifierTests: XCTestCase {
 
     func testTelemetryWrapper_setsContextId() {
         let profile = MockProfile()
-        let searchEnginesManager = SearchEnginesManager(
-            prefs: profile.prefs,
-            files: profile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
-        TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
+        TelemetryWrapper.shared.setup(profile: profile)
         XCTAssertNotNil(TelemetryContextualIdentifier.contextId)
     }
 

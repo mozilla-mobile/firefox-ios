@@ -29,7 +29,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         bookmarksTelemetry: BookmarksTelemetry = BookmarksTelemetry(),
         unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry = DefaultUnifiedAdsCallbackTelemetry(),
         sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry(),
-        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(),
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
     ) {
         self.topSitesManager = topSitesManager ?? TopSitesManager(

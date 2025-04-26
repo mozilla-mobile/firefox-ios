@@ -89,8 +89,7 @@ extension BrowserViewController: URLBarDelegate {
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
-        if let searchEnginesManager = searchEnginesManager as? SearchEnginesManager,
-           let query = searchEnginesManager.queryForSearchURL(searchURL as URL?) {
+        if let query = searchEnginesManager.queryForSearchURL(searchURL as URL?) {
             return (query, true)
         } else {
             return (url?.absoluteString, false)

@@ -11,7 +11,7 @@ final class SearchEngineSelectionMiddleware {
     private let searchEnginesManager: SearchEnginesManagerProvider
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(),
+         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger

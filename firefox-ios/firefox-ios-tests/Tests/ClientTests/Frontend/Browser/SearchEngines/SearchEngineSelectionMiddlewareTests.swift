@@ -66,7 +66,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - Helpers
 
     private func createSubject(mockSearchEnginesManager: SearchEnginesManagerProvider) -> SearchEngineSelectionMiddleware {
-        return SearchEngineSelectionMiddleware(profile: mockProfile, searchEnginesManager: mockSearchEnginesManager)
+        return SearchEngineSelectionMiddleware(profile: mockProfile)
     }
 
     private func getAction(for actionType: SearchEngineSelectionActionType) -> SearchEngineSelectionAction {

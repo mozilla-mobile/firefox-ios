@@ -9,24 +9,17 @@ import Common
 
 class LegacyHomepageViewControllerTests: XCTestCase {
     var profile: MockProfile!
-    var searchEnginesManager: SearchEnginesManager!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        searchEnginesManager = SearchEnginesManager(
-            prefs: profile.prefs,
-            files: profile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
         AppContainer.shared.reset()
         profile = nil
-        searchEnginesManager = nil
         Experiments.events.clearEvents()
         super.tearDown()
     }
@@ -34,7 +27,7 @@ class LegacyHomepageViewControllerTests: XCTestCase {
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
         let tabManager = TabManagerImplementation(profile: profile,
                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
-        let urlBar = URLBarView(profile: profile, searchEnginesManager: searchEnginesManager, windowUUID: .XCTestDefaultUUID)
+        let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
@@ -52,7 +45,7 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         Experiments.events.clearEvents()
         let tabManager = TabManagerImplementation(profile: profile,
                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
-        let urlBar = URLBarView(profile: profile, searchEnginesManager: searchEnginesManager, windowUUID: .XCTestDefaultUUID)
+        let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 

@@ -72,7 +72,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         logger: Logger = DefaultLogger.shared,
-        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
     ) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper

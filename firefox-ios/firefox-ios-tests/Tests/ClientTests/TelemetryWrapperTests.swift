@@ -13,7 +13,6 @@ class TelemetryWrapperTests: XCTestCase {
     typealias ValueKey = TelemetryWrapper.EventValue
 
     var profile: Profile!
-    var searchEnginesManager: SearchEnginesManagerProvider!
 
     override func setUp() {
         super.setUp()
@@ -26,14 +25,12 @@ class TelemetryWrapperTests: XCTestCase {
         Experiments.events.clearEvents()
 
         profile = AppContainer.shared.resolve()
-        searchEnginesManager = AppContainer.shared.resolve()
     }
 
     override func tearDown() {
         Experiments.events.clearEvents()
         DependencyHelperMock().reset()
         profile = nil
-        searchEnginesManager = nil
         super.tearDown()
     }
 
@@ -342,7 +339,7 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: Wallpapers
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
-        TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
+        TelemetryWrapper.shared.setup(profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         let defaultWallpaper = Wallpaper(id: "fxDefault",
@@ -363,7 +360,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        TelemetryWrapper.shared.setup(profile: profile, searchEnginesManager: searchEnginesManager)
+        TelemetryWrapper.shared.setup(profile: profile)
 
         let themedWallpaper = Wallpaper(id: "amethyst",
                                         textColor: nil,

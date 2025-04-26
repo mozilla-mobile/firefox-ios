@@ -241,7 +241,11 @@ class URLBarView: UIView,
         imageMask: ImageIdentifiers.menuWarningMask
     )
 
-    init(profile: Profile, searchEnginesManager: SearchEnginesManagerProvider, windowUUID: WindowUUID) {
+    init(
+        profile: Profile,
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        windowUUID: WindowUUID
+    ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.searchEnginesManager = searchEnginesManager

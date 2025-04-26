@@ -13,24 +13,23 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator,
-                           SettingsDelegate,
-                           SettingsFlowDelegate,
-                           GeneralSettingsDelegate,
-                           PrivacySettingsDelegate,
-                           PasswordManagerCoordinatorDelegate,
-                           AccountSettingsDelegate,
-                           AboutSettingsDelegate,
-                           ParentCoordinatorDelegate,
-                           QRCodeNavigationHandler,
-                           BrowsingSettingsDelegate {
+final class SettingsCoordinator: BaseCoordinator,
+                                 SettingsDelegate,
+                                 SettingsFlowDelegate,
+                                 GeneralSettingsDelegate,
+                                 PrivacySettingsDelegate,
+                                 PasswordManagerCoordinatorDelegate,
+                                 AccountSettingsDelegate,
+                                 AboutSettingsDelegate,
+                                 ParentCoordinatorDelegate,
+                                 QRCodeNavigationHandler,
+                                 BrowsingSettingsDelegate {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
-    private let searchEnginesManager: SearchEnginesManagerProvider
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let settingsTelemetry: SettingsTelemetry
@@ -42,8 +41,7 @@ class SettingsCoordinator: BaseCoordinator,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve(),
-        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-        searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve()
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
@@ -51,7 +49,6 @@ class SettingsCoordinator: BaseCoordinator,
         self.themeManager = themeManager
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.settingsTelemetry = SettingsTelemetry(gleanWrapper: gleanWrapper)
-        self.searchEnginesManager = searchEnginesManager
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
@@ -133,10 +130,8 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .search:
-            guard let searchEnginesManager = searchEnginesManager as? SearchEnginesManager else { return nil }
             let viewController = SearchSettingsTableViewController(
                 profile: profile,
-                searchEnginesManager: searchEnginesManager,
                 windowUUID: windowUUID
             )
             return viewController
@@ -373,10 +368,8 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSearchEngine() {
-        guard let searchEnginesManager = searchEnginesManager as? SearchEnginesManager else { return }
         let viewController = SearchSettingsTableViewController(
             profile: profile,
-            searchEnginesManager: searchEnginesManager,
             windowUUID: windowUUID
         )
         router.push(viewController)

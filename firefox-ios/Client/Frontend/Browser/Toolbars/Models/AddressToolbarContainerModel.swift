@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import ToolbarKit
 import Shared
 
@@ -93,7 +94,12 @@ final class AddressToolbarContainerModel: Equatable {
             shouldAnimate: shouldAnimate)
     }
 
-    init(state: ToolbarState, profile: Profile, searchEnginesManager: SearchEnginesManagerProvider, windowUUID: UUID) {
+    init(
+        state: ToolbarState,
+        profile: Profile,
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        windowUUID: UUID
+    ) {
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          isShowingTopTabs: state.isShowingTopTabs,

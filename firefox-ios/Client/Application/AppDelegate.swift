@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 
-        appLaunchUtil = AppLaunchUtil(profile: profile, searchEnginesManager: searchEnginesManager)
+        appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
 
         // Set up a web server that serves us static content.

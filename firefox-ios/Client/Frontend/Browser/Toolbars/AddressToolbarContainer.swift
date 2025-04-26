@@ -38,7 +38,6 @@ final class AddressToolbarContainer: UIView,
 
     private var windowUUID: WindowUUID?
     private var profile: Profile?
-    private var searchEnginesManager: SearchEnginesManagerProvider?
     private var model: AddressToolbarContainerModel?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
 
@@ -130,7 +129,6 @@ final class AddressToolbarContainer: UIView,
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
-        self.searchEnginesManager = searchEnginesManager
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         subscribeToRedux()
@@ -200,10 +198,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func updateModel(toolbarState: ToolbarState) {
-        guard let windowUUID, let profile, let searchEnginesManager else { return }
+        guard let windowUUID, let profile else { return }
         let newModel = AddressToolbarContainerModel(state: toolbarState,
                                                     profile: profile,
-                                                    searchEnginesManager: searchEnginesManager,
                                                     windowUUID: windowUUID)
 
         shouldDisplayCompact = newModel.shouldDisplayCompact

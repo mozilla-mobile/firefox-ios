@@ -16,13 +16,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
 
         mockProfile = MockProfile()
-
-        // The MockProfile creates a SearchEnginesManager with a `MockSearchEngineProvider`
-        searchEnginesManager = SearchEnginesManager(
-            prefs: mockProfile.prefs,
-            files: mockProfile.files,
-            engineProvider: MockSearchEngineProvider()
-        )
+        searchEnginesManager = AppContainer.shared.resolve()
     }
 
     override func tearDown() {
@@ -82,7 +76,6 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
         return AddressToolbarContainerModel(state: state,
                                             profile: mockProfile,
-                                            searchEnginesManager: searchEnginesManager,
                                             windowUUID: windowUUID)
     }
 

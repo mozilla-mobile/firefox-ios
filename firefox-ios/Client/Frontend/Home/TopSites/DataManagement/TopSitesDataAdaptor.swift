@@ -53,7 +53,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
          contileProvider: ContileProviderInterface = ContileProvider(),
          unifiedAdsProvider: UnifiedAdsProviderInterface = UnifiedAdsProvider(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(),
+         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
         self.profile = profile
