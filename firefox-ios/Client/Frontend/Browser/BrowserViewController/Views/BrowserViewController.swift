@@ -2015,6 +2015,15 @@ class BrowserViewController: UIViewController,
             }
 
         case .URL:
+            if isSwipingTabsEnabled {
+                store.dispatch(
+                    ToolbarAction(
+                        shouldAnimate: true,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.animationStateChanged
+                    )
+                )
+            }
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
                 break

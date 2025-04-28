@@ -27,6 +27,7 @@ final class ToolbarAction: Action {
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
+    let shouldAnimate: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          toolbarLayout: ToolbarLayoutStyle? = nil,
@@ -48,6 +49,7 @@ final class ToolbarAction: Action {
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
+         shouldAnimate: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.toolbarPosition = toolbarPosition
@@ -70,6 +72,7 @@ final class ToolbarAction: Action {
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
+        self.shouldAnimate = shouldAnimate
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -87,6 +90,7 @@ enum ToolbarActionType: ActionType {
     case cancelEditOnHomepage
     case cancelEdit
     case hideKeyboard
+    case animationStateChanged
     case readerModeStateChanged
     case backForwardButtonStateChanged
     case traitCollectionDidChange
