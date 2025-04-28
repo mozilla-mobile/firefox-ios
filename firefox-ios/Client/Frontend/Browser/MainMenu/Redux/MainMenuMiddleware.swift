@@ -54,47 +54,42 @@ final class MainMenuMiddleware {
         guard let action = action as? MainMenuAction else { return }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
 
-        if self.handleMainMenuActionType(action: action, isHomepage: isHomepage) { return }
+        if let actionType = action.actionType as? MainMenuActionType {
+            self.handleMainMenuActionType(action: action,
+                                          mainMenuActionType: actionType,
+                                          isHomepage: isHomepage)
+        }
         if self.handleGeneralBrowserActionType(action: action) { return }
         if self.handleMainMenuDetailsActionType(action: action, isHomepage: isHomepage) { return }
     }
 
-    private func handleMainMenuActionType(action: MainMenuAction, isHomepage: Bool) -> Bool {
-        guard let mainMenuActionType = action.actionType as? MainMenuActionType else {
-            return false
-        }
-
+    private func handleMainMenuActionType(action: MainMenuAction,
+                                          mainMenuActionType: MainMenuActionType,
+                                          isHomepage: Bool) {
         switch mainMenuActionType {
         case .tapNavigateToDestination:
             handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
-            return true
 
         case .tapShowDetailsView:
             handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
-            return true
 
         case .tapToggleUserAgent:
             handleTapToggleUserAgentAction(action: action, isHomepage: isHomepage)
-            return true
 
         case .tapCloseMenu:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
-            return true
 
         case .didInstantiateView:
             handleDidInstantiateViewAction(action: action)
-            return true
 
         case .viewDidLoad:
             handleViewDidLoadAction(action: action)
-            return true
 
         case .menuDismissed:
             telemetry.menuDismissed(isHomepage: isHomepage)
-            return true
 
         default:
-            return false
+            break
         }
     }
 
