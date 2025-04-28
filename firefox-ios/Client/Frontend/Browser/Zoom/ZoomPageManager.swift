@@ -22,7 +22,7 @@ class ZoomPageManager: TabEventHandler {
          zoomStore: ZoomLevelStorage = ZoomLevelStore.shared) {
         self.windowUUID = windowUUID
         self.zoomStore = zoomStore
-        register(self, forTabEvents: .didGainFocus)
+        register(self, forTabEvents: .didGainFocus, .didChangeURL)
     }
 
     func getZoomLevel() -> CGFloat {
@@ -115,6 +115,14 @@ class ZoomPageManager: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         self.tab = tab
+        if tab.pageZoom != getZoomLevel() {
+            updatePageZoom()
+        }
+    }
+
+    func tab(_ tab: Tab, didChangeURL url: URL) {
+        guard tab == self.tab else { return }
+
         if tab.pageZoom != getZoomLevel() {
             updatePageZoom()
         }
