@@ -91,6 +91,9 @@ final class NimbusFeatureFlagLayer {
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
+        case .startAtHome:
+            return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
+
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
@@ -278,6 +281,17 @@ final class NimbusFeatureFlagLayer {
         from nimbus: FxNimbus
     ) -> Bool {
         return nimbus.features.splashScreen.value().enabled
+    }
+
+    private func checkStartAtHomeFeature(for featureID: NimbusFeatureFlagID, from nimbus: FxNimbus) -> StartAtHome {
+        let config = nimbus.features.startAtHomeFeature.value()
+        let nimbusSetting = config.setting
+
+        switch nimbusSetting {
+        case .afterFourHours: return .afterFourHours
+        case .always: return .always
+        case .disabled: return .disabled
+        }
     }
 
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
