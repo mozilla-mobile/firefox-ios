@@ -1054,8 +1054,9 @@ extension Tab: TabWebViewDelegate {
     }
 
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
-        // Hide the default WKWebView accessory view panel for PDF documents
-        return mimeType != MIMEType.PDF
+        // Hide the default WKWebView accessory view panel for PDF documents and
+        // there is no accessory view to display
+        return mimeType != MIMEType.PDF && tabWebView.accessoryView.hasAccessoryView
     }
 }
 
