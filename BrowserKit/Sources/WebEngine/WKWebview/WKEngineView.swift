@@ -40,13 +40,13 @@ class WKEngineView: UIView, EngineView, FullscreenDelegate {
     private func remove(session: WKEngineSession) {
         session.webView.removeFromSuperview()
         session.fullscreenDelegate = nil
-        sessionlifeCycleManager.activate(session)
+        sessionlifeCycleManager.deactivate(session)
     }
 
     private func add(session: WKEngineSession) {
         self.session = session
         session.fullscreenDelegate = self
-        sessionlifeCycleManager.deactivate(session)
+        sessionlifeCycleManager.activate(session)
         setupWebViewLayout()
     }
 

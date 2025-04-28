@@ -534,10 +534,11 @@ final class WKEngineSessionTests: XCTestCase {
     func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
         _ = createSubject()
 
-        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 3)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 3)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], FocusContentScript.name())
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[2], ReaderModeContentScript.name())
     }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
@@ -615,7 +616,8 @@ final class WKEngineSessionTests: XCTestCase {
                                             scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
                                             navigationHandler: DefaultNavigationHandler(),
-                                            uiHandler: uiHandler ?? DefaultUIHandler()) else {
+                                            uiHandler: uiHandler ?? DefaultUIHandler(),
+                                            readerModeDelegate: MockWKReaderModeDelegate()) else {
             return nil
         }
 
