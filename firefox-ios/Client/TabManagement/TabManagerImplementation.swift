@@ -578,7 +578,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func restoreTabs() {
         tabs = [Tab]()
-        Task { [windowUUID] in
+        Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
             await buildTabRestore(window: windowData)
