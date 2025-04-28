@@ -1643,10 +1643,12 @@ workflows:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
+        - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 10
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
