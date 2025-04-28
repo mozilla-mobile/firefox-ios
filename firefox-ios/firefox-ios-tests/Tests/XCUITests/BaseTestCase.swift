@@ -80,6 +80,10 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
+    func setUpExperimentVariables() {
+        /// To be overriden to setup experiment variables for `FeatureFlaggedTestSuite`
+    }
+
     func setUpApp() {
         setUpLaunchArguments()
         if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
@@ -100,6 +104,7 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
+        setUpExperimentVariables()
         setUpApp()
         setUpScreenGraph()
     }
