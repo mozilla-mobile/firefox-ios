@@ -32,7 +32,7 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
 
-    // TODO: FXIOS-XXXX this should be removed once we figure out screenshots
+    // TODO: FXIOS-12101 this should be removed once we figure out screenshots
     /// An interim solution to determining if the tab manager is there
     /// for the window without crashing so that we can fail from screenshots
     /// gracefully. This should never(!) be false and if it is something weird
