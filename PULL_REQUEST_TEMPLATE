@@ -6,16 +6,18 @@
 <!--- Describe your changes so the reviewer can understand the context and decisions made for your work -->
 
 ## :movie_camera: Demos
-<details>
-<summary>Before</summary>
-<!-- Upload screenshots or video demo here, if applicable -->
-<!-- <img height=400 src="<url here>" /> -->
-</details>
+<!-- Please upload screenshots or video demos of your work, if applicable -->
+<!-- You can either use a table (best for before/after screenshots) or the <details> disclosure -->
+
+| Before | After |
+| - | - |
+| <!--insert "before" image here--> | <!--insert "after" image here--> |
+| <!--insert "before" image here--> | <!--insert "after" image here--> |
+| <!--insert "before" image here--> | <!--insert "after" image here--> |
 
 <details>
-<summary>After</summary>
-<!-- Upload screenshots or video demo here, if applicable -->
-<!-- <img height=400 src="<url here>" /> -->
+<summary>Demo</summary>
+<!-- Shorthand image template: <img height=400 src="<URL>" /> -->
 </details>
 
 ## :pencil: Checklist
