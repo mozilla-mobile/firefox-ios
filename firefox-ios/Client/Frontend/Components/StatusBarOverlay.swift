@@ -92,10 +92,10 @@ class StatusBarOverlay: UIView,
         let needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
 
         if needsNoStatusBar {
-            backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
-        } else {
             let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
             backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
+        } else {
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
         }
     }
 
