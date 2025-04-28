@@ -11,6 +11,8 @@ final class MockWindowManager: WindowManager {
     private let tabManager: MockTabManager
 
     var closePrivateTabsMultiActionCalled = 0
+    var shouldTabManagerExist = true
+    var tabManagerExistsWasCalled = false
 
     init(
         wrappedManager: WindowManagerImplementation,
@@ -28,6 +30,11 @@ final class MockWindowManager: WindowManager {
 
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID) {
         wrappedManager.newBrowserWindowConfigured(windowInfo, uuid: uuid)
+    }
+
+    func tabManagerExists(for windowUUID: WindowUUID) -> Bool {
+        tabManagerExistsWasCalled = true
+        return shouldTabManagerExist
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {

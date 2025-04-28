@@ -556,9 +556,7 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
-        if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
-        }
+
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -592,6 +590,10 @@ class BrowserViewController: UIViewController,
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
+        }
+
+        if let tab = tabManager.selectedTab, let screenshotHelper {
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
         guard canShowPrivacyWindow else { return }

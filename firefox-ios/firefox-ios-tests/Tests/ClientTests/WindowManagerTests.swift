@@ -373,6 +373,18 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(result2_1, result2_2)
     }
 
+    func testTabManagerExists() {
+        let subject = createSubject()
+        let uuid = tabManager.windowUUID
+
+        // TabManager has not been connected to app window
+        XCTAssertFalse(subject.tabManagerExists(for: uuid))
+
+        // Connect TabManager and browser to app window
+        subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: uuid)
+        XCTAssertTrue(subject.tabManagerExists(for: uuid))
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {

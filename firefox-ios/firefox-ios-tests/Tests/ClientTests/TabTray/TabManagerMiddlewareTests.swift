@@ -51,6 +51,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
+        mockWindowManager.shouldTabManagerExist = true
+
         subject.tabsPanelProvider(appState, action)
         wait(for: [expectation])
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
@@ -58,6 +60,28 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
+    }
+
+    func test_screenshotAction_returnsEarlyIfTabManagerDoesNotExistForWindow() {
+        let subject = createSubject()
+        let action = ScreenshotAction(
+            windowUUID: .XCTestDefaultUUID,
+            tab: Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID),
+            actionType: ScreenshotActionType.screenshotTaken
+        )
+
+        let expectation = XCTestExpectation(description: "Recent tabs should be returned")
+        expectation.isInverted = true
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        mockWindowManager.shouldTabManagerExist = false
+
+        subject.tabsPanelProvider(appState, action)
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertTrue(mockWindowManager.tabManagerExistsWasCalled)
     }
 
     // MARK: - Recent Tabs
@@ -252,7 +276,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
-        return TabManagerMiddleware(profile: mockProfile)
+        return TabManagerMiddleware(profile: mockProfile, windowManager: mockWindowManager)
     }
 
     private func createTab(
