@@ -16,11 +16,6 @@ extension ASRemoteSettingsCollection {
     func makeClient() -> RemoteSettingsClient? {
         let profile: Profile = AppContainer.shared.resolve()
         guard let service = profile.remoteSettingsService else { return nil }
-        do {
-            return try service.makeClient(collectionName: rawValue)
-        } catch {
-            DefaultLogger.shared.log("Error creating RS client: \(error)", level: .warning, category: .remoteSettings)
-        }
-        return nil
+        return service.makeClient(collectionName: rawValue)
     }
 }
