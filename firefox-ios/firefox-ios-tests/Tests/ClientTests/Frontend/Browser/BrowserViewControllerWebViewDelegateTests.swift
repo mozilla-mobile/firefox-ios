@@ -12,31 +12,39 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     var subject: BrowserViewController!
     var profile: MockProfile!
     var tabManager: TabManager!
-    var tabManagerDelegate: TabManagerNavDelegate!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = TabManagerImplementation(profile: profile,
                                               uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         subject = BrowserViewController(profile: profile, tabManager: tabManager)
-        tabManagerDelegate = TabManagerNavDelegate()
     }
 
     override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+        // DependencyHelperMock().reset()
         profile = nil
         tabManager = nil
         subject = nil
-        tabManagerDelegate = nil
+        super.tearDown()
+    }
+
+    // MARK: - Decide policy
+
+    private let allowBlockingUniversalLinkPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2)
+
+    func testWebViewDecidePolicyForNavigationAction_shouldAllow() {
+        let subject = createSubject()
+
+        subject.webView(anyWebView(), decidePolicyFor: MockNavigationAction(type: .linkActivated)) { policy in
+            
+        }
     }
 
     func testWebViewDidReceiveChallenge_MethodServerTrust() {
-        tabManagerDelegate.insert(subject)
-
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
         ) { disposition, credential in
@@ -46,9 +54,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
-        tabManagerDelegate.insert(subject)
-
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
         ) { disposition, credential in
@@ -58,9 +64,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
-        tabManagerDelegate.insert(subject)
-
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
         ) { disposition, credential in
@@ -70,9 +74,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
-        tabManagerDelegate.insert(subject)
-
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
         ) { disposition, credential in
@@ -81,8 +83,16 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    private func anyWebView() -> WKWebView {
-        return WKWebView(frame: CGRect(width: 100, height: 100))
+    private func createSubject() -> BrowserViewController {
+        let subject = BrowserViewController(profile: profile, tabManager: tabManager)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    private func anyWebView(url: URL? = nil) -> WKWebView {
+        let tab = MockTabWebView(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        tab.loadedURL = url
+        return tab
     }
 
     private func anyAuthenticationChallenge(for authenticationMethod: String) -> URLAuthenticationChallenge {
@@ -103,6 +113,18 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let path = Bundle(for: type(of: self)).path(forResource: file, ofType: "pem")
         let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
         return SecCertificateCreateWithData(nil, data! as CFData)!
+    }
+}
+
+class MockNavigationAction: WKNavigationAction {
+    private var type: WKNavigationType?
+
+    override var navigationType: WKNavigationType {
+        return type ?? .other
+    }
+
+    init(type: WKNavigationType? = nil) {
+        self.type = type
     }
 }
 
