@@ -62,14 +62,10 @@ class DefaultUIHandler: NSObject, WKUIHandler {
                  for navigationAction: WKNavigationAction,
                  windowFeatures: WKWindowFeatures) -> WKWebView? {
         // TODO: understand who is responsible to render the newly created WKWebView
-        // TODO: understand how to query WKWebViewConfiguration about `blockPopUps`
+//        let popUpView = WKWebView(frame: .zero, configuration: configuration)
+//        delegate?.onRequestOpenPopupView(popUpView)
 
-        let popUpView = WKWebView(frame: .zero, configuration: configuration)
-        popUpView.load(navigationAction.request)
-
-        delegate?.onRequestOpenPopupView(popUpView)
-
-        return popUpView
+        return nil
     }
 
     func webView(

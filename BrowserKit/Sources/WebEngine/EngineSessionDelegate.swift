@@ -63,5 +63,5 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Returns a bool indicating whether media capture is allowed
     func requestMediaCapturePermission() -> Bool
 
-    func onRequestOpenPopupView(_ view: UIView)
+    func onRequestOpenNewSession(_ session: EngineSession)
 }
