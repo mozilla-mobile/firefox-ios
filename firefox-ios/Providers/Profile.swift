@@ -50,7 +50,6 @@ public protocol SyncManager {
     func onRemovedAccount() -> Success
     @discardableResult
     func onAddedAccount() -> Success
-    func updateCreditCardAutofillStatus(value: Bool)
 }
 
 /// This exists to pass in external context: e.g., the UIApplication can
@@ -260,7 +259,6 @@ open class BrowserProfile: Profile {
      */
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
-         creditCardAutofillEnabled: Bool = false,
          rustKeychainEnabled: Bool = false,
          loginsVerificationEnabled: Bool = false,
          clear: Bool = false,
@@ -324,7 +322,6 @@ open class BrowserProfile: Profile {
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
         self.syncManager = RustSyncManager(profile: self,
-                                           creditCardAutofillEnabled: creditCardAutofillEnabled,
                                            rustKeychainEnabled: rustKeychainEnabled,
                                            loginsVerificationEnabled: loginsVerificationEnabled)
 

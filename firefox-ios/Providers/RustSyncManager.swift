@@ -35,7 +35,6 @@ public class RustSyncManager: NSObject, SyncManager {
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
-    var creditCardAutofillEnabled = false
     var rustKeychainEnabled = false
     var loginsVerificationEnabled = false
 
@@ -80,7 +79,6 @@ public class RustSyncManager: NSObject, SyncManager {
         self.notificationCenter = notificationCenter
 
         super.init()
-        self.creditCardAutofillEnabled = creditCardAutofillEnabled
         self.rustKeychainEnabled = rustKeychainEnabled
         self.loginsVerificationEnabled = loginsVerificationEnabled
     }
@@ -100,10 +98,6 @@ public class RustSyncManager: NSObject, SyncManager {
                                     selector: selector,
                                     userInfo: nil,
                                     repeats: true)
-    }
-
-    public func updateCreditCardAutofillStatus(value: Bool) {
-        creditCardAutofillEnabled = value
     }
 
     func syncEverythingSoon() {
@@ -404,16 +398,14 @@ public class RustSyncManager: NSObject, SyncManager {
                       }
                  }
              case .creditcards:
-                 if self.creditCardAutofillEnabled {
-                    if let key = creditCardKey {
-                        // checking if autofill was already registered with addresses
-                        if !registeredAutofill {
-                            self.profile?.autofill.registerWithSyncManager()
-                            registeredAutofill = true
-                        }
-                        localEncryptionKeys[engine.rawValue] = key
-                        rustEngines.append(engine.rawValue)
-                     }
+                if let key = creditCardKey {
+                    // checking if autofill was already registered with addresses
+                    if !registeredAutofill {
+                        self.profile?.autofill.registerWithSyncManager()
+                        registeredAutofill = true
+                    }
+                    localEncryptionKeys[engine.rawValue] = key
+                    rustEngines.append(engine.rawValue)
                  }
              case .addresses:
                  // checking if autofill was already registered with credit cards
