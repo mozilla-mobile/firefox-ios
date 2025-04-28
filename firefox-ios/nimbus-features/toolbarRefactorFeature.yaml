@@ -48,7 +48,7 @@ features:
         value:
           enabled: true
           unified_search: false
-          one_tap_new_tab: false
+          one_tap_new_tab: falseg
           navigation_hint: true
           swiping_tabs: true
           layout: baseline

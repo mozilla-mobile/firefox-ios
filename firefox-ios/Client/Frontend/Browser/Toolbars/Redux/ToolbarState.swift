@@ -70,7 +70,7 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: false,
             canShowDataClearanceAction: false,
             canShowNavigationHint: false,
-            shouldAnimate: false
+            shouldAnimate: true
         )
     }
 
