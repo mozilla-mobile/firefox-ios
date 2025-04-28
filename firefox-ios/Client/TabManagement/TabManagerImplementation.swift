@@ -101,7 +101,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private let windowManager: WindowManager
     private let windowIsNew: Bool
     private let profile: Profile
-    private let navDelegate: TabManagerNavDelegate
+    private weak var navigationDelegate: WKNavigationDelegate?
     private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
@@ -151,7 +151,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         self.windowIsNew = uuid.isNew
         self.windowUUID = uuid.uuid
         self.profile = profile
-        self.navDelegate = TabManagerNavDelegate()
         self.logger = logger
         self.tabs = tabs
 
@@ -159,7 +158,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         GlobalTabEventHandlers.configure(with: profile)
 
-        addNavigationDelegate(self)
         setupNotifications(
             forObserver: self,
             observing: [
@@ -227,7 +225,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
-        self.navDelegate.insert(delegate)
+        navigationDelegate = delegate
     }
 
     // MARK: - Remove Tab
@@ -1210,7 +1208,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             }
             tab.createWebview(configuration: configuration)
         }
-        tab.navigationDelegate = self.navDelegate
+        tab.navigationDelegate = navigationDelegate
 
         if let request = request {
             tab.loadRequest(request)
@@ -1319,64 +1317,6 @@ extension TabManagerImplementation: Notifiable {
             autoPlayDidChange()
         default:
             break
-        }
-    }
-}
-
-// MARK: - WKNavigationDelegate
-extension TabManagerImplementation: WKNavigationDelegate {
-    // Note the main frame JSContext (i.e. document, window) is not available yet.
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
-        if let tab = self[webView], let blocker = tab.contentBlocker {
-            blocker.clearPageStats()
-        }
-    }
-
-    // The main frame JSContext is available, and DOM parsing has begun.
-    // Do not execute JS at this point that requires running prior to DOM parsing.
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
-        guard let tab = self[webView] else { return }
-
-        if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
-            webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))")
-        }
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-        // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
-        if let url = webView.url {
-            if InternalURL(url) != nil {
-                return
-            }
-
-            if let title = webView.title, selectedTab?.webView == webView {
-                selectedTab?.lastTitle = title
-                delegates.forEach { $0.get()?.tabManagerTabDidFinishLoading() }
-            }
-
-            storeChanges()
-        }
-    }
-
-    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
-    /// then we immediately reload it.
-    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        if let tab = selectedTab, tab.webView == webView {
-            tab.consecutiveCrashes += 1
-
-            // Only automatically attempt to reload the crashed
-            // tab three times before giving up.
-            if tab.consecutiveCrashes < 3 {
-                logger.log("The webview has crashed, trying to reload.",
-                           level: .warning,
-                           category: .webview,
-                           extra: ["Attempt number": "\(tab.consecutiveCrashes)"])
-                tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
-
-                webView.reload()
-            } else {
-                tab.consecutiveCrashes = 0
-            }
         }
     }
 }

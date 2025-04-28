@@ -215,6 +215,8 @@ class BrowserViewController: UIViewController,
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
     private(set) lazy var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     private(set) lazy var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
+    private(set) lazy var tabsTelemetry = TabsTelemetry()
+
     private lazy var appStartupTelemetry = AppStartupTelemetry()
 
     // location label actions

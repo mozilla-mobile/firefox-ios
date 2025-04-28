@@ -382,6 +382,32 @@ extension BrowserViewController: WKUIDelegate {
 
 // MARK: - WKNavigationDelegate
 extension BrowserViewController: WKNavigationDelegate {
+    // Note the main frame JSContext (i.e. document, window) is not available yet.
+
+    
+    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
+    /// then we immediately reload it.
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        if let tab = tabManager.selectedTab, tab.webView == webView {
+            tab.consecutiveCrashes += 1
+
+            // Only automatically attempt to reload the crashed
+            // tab three times before giving up.
+            if tab.consecutiveCrashes < 3 {
+                logger.log("The webview has crashed, trying to reload.",
+                           level: .warning,
+                           category: .webview,
+                           extra: ["Attempt number": "\(tab.consecutiveCrashes)"])
+
+                tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
+
+                webView.reload()
+            } else {
+                tab.consecutiveCrashes = 0
+            }
+        }
+    }
+
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation?) {
         guard let tab = tabManager[webView] else { return }
 
@@ -394,6 +420,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
         if tabManager.selectedTab?.webView !== webView { return }
+
+        // Note the main frame JSContext (i.e. document, window) is not available yet.
+        if let tab = tabManager[webView], let blocker = tab.contentBlocker {
+            blocker.clearPageStats()
+        }
 
         updateFindInPageVisibility(isVisible: false)
 
@@ -418,6 +449,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -575,15 +607,20 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            if navigationAction.navigationType == .linkActivated && url != webView.url {
-                if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
-                    decisionHandler(.cancel)
-                    webView.load(navigationAction.request)
-                    return
-                }
+            let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+            let isGoogleDomain = url.host?.contains("google") ?? false
+            let isPrivate = tab.isPrivate
+
+            if navigationAction.navigationType == .linkActivated,
+               !shouldBlockExternalApps,
+               url != webView.url,
+               !isPrivate,
+               !isGoogleDomain {
+                decisionHandler(.allow)
+                return
             }
 
-            decisionHandler(.allow)
+            decisionHandler(allowPolicy)
             return
         }
 
@@ -975,6 +1012,13 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
         guard let tab = tabManager[webView] else { return }
 
+        // The main frame JSContext is available, and DOM parsing has begun.
+        // Do not execute JS at this point that requires running prior to DOM parsing.
+        if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
+            let js = "window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))"
+            webView.evaluateJavascriptInDefaultContentWorld(js)
+        }
+
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
@@ -1015,6 +1059,19 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+
+        //        if let url = webView.url {
+        //            if InternalURL(url) != nil {
+        //                return
+        //            }
+        //
+        //            if let title = webView.title, selectedTab?.webView == webView {
+        //                selectedTab?.lastTitle = title
+        //                delegates.forEach { $0.get()?.tabManagerTabDidFinishLoading() }
+        //            }
+        //
+        //            storeChanges()
+        //        }
     }
 }
 
@@ -1048,7 +1105,9 @@ private extension BrowserViewController {
     }
 
     // Use for sms and mailto, which do not show a confirmation before opening.
-    func showExternalAlert(withText text: String, completion: @escaping (UIAlertAction) -> Void) {
+    func showExternalAlert(withText text: String,
+                           completion: @escaping (UIAlertAction) -> Void,
+                           onCancel: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: nil,
                                       message: text,
                                       preferredStyle: .alert)
@@ -1062,7 +1121,7 @@ private extension BrowserViewController {
         let cancelOption = UIAlertAction(
             title: .CancelString,
             style: .cancel,
-            handler: nil
+            handler: onCancel
         )
 
         alert.addAction(okOption)
