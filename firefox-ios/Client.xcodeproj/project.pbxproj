@@ -266,6 +266,7 @@
 		2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */; };
 		217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AEF75284666D4004EED37 /* IntroViewModelTests.swift */; };
 		219588942D6E519F00B8715E /* AutofillPasswordSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219588932D6E519F00B8715E /* AutofillPasswordSetting.swift */; };
+		219638EC2DBFBC56007C3893 /* ZoomLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219638EB2DBFBC56007C3893 /* ZoomLevel.swift */; };
 		2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2197DF89287624BF00215624 /* LibraryViewModelTests.swift */; };
 		219914052AF963F900153598 /* TabTrayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219914042AF963F900153598 /* TabTrayAction.swift */; };
 		219935E72B05447C00E5966F /* TabDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219935E62B05447C00E5966F /* TabDisplayModel.swift */; };
@@ -2741,6 +2742,7 @@
 		217AEF75284666D4004EED37 /* IntroViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModelTests.swift; sourceTree = "<group>"; };
 		2194437EA9B44A00EDC037FA /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/FindInPage.strings"; sourceTree = "<group>"; };
 		219588932D6E519F00B8715E /* AutofillPasswordSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillPasswordSetting.swift; sourceTree = "<group>"; };
+		219638EB2DBFBC56007C3893 /* ZoomLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevel.swift; sourceTree = "<group>"; };
 		2197DF89287624BF00215624 /* LibraryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModelTests.swift; sourceTree = "<group>"; };
 		219914042AF963F900153598 /* TabTrayAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayAction.swift; sourceTree = "<group>"; };
 		219935E62B05447C00E5966F /* TabDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayModel.swift; sourceTree = "<group>"; };
@@ -10755,6 +10757,7 @@
 		2142B12B2D9F1284003AA82F /* Zoom */ = {
 			isa = PBXGroup;
 			children = (
+				219638EB2DBFBC56007C3893 /* ZoomLevel.swift */,
 				2142B1292D9F1284003AA82F /* ZoomPageBar.swift */,
 				2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */,
 			);
@@ -17042,6 +17045,7 @@
 				2137785D297F1F2800D01309 /* DownloadedFile.swift in Sources */,
 				1DCEC4142D83B7EB00129966 /* ASSearchEngineIconDataFetcher.swift in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
+				219638EC2DBFBC56007C3893 /* ZoomLevel.swift in Sources */,
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
 				8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */,
 				80967F802D0A36890057F0C7 /* RecordedNimbusContext.swift in Sources */,

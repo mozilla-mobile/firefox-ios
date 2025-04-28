@@ -33,58 +33,22 @@ class ZoomPageManager: TabEventHandler {
 
     func zoomIn() -> CGFloat {
         guard let tab = tab,
-              let host = tab.url?.host,
-              tab.pageZoom < ZoomConstants.upperZoomLimit else { return ZoomConstants.upperZoomLimit}
+              let host = tab.url?.host else { return ZoomConstants.defaultZoomLimit}
 
-        let newZoom = getNewZoomInLevel(level: tab.pageZoom)
+        let newZoom = ZoomLevel.getNewZoomInLevel(for: tab.pageZoom)
         tab.pageZoom = newZoom
         saveZoomLevel(for: host, zoomLevel: newZoom)
         return newZoom
-    }
-
-    // Regular step is 0.25 except for the cases close to regular zoom
-    // where we provide smaller step
-    private func getNewZoomInLevel(level: CGFloat) -> CGFloat {
-        switch level {
-        case 0.75:
-            return 0.9
-        case 0.9:
-            return 1.0
-        case 1.0:
-            return 1.10
-        case 1.10:
-            return 1.25
-        default:
-            return level + 0.25
-        }
     }
 
     func zoomOut() -> CGFloat {
         guard let tab = tab,
-              let host = tab.url?.host,
-              tab.pageZoom > ZoomConstants.lowerZoomLimit else { return ZoomConstants.lowerZoomLimit}
+              let host = tab.url?.host else { return ZoomConstants.defaultZoomLimit}
 
-        let newZoom = getNewZoomOutLevel(level: tab.pageZoom)
+        let newZoom = ZoomLevel.getNewZoomOutLevel(for: tab.pageZoom)
         tab.pageZoom = newZoom
         saveZoomLevel(for: host, zoomLevel: newZoom)
         return newZoom
-    }
-
-    // Regular step is 0.25 except for the cases close to regular zoom
-    // where we provide smaller step
-    private func getNewZoomOutLevel(level: CGFloat) -> CGFloat {
-        switch level {
-        case 0.9:
-            return 0.75
-        case 1.0:
-            return 0.9
-        case 1.10:
-            return 1.0
-        case 1.25:
-            return 1.10
-        default:
-            return level - 0.25
-        }
     }
 
     /// Reset zoom level for a given host and saves new value
