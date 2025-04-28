@@ -441,14 +441,14 @@ private extension TabScrollController {
     /// - `.visible`: Toolbars are currently showing (`toolbarsShowing == true`).
     /// - `.animating`: In transition or partially visible state.
     func updateToolbarState() {
-        // bottom containers are collapsedd
+        // bottom containers are collapsed
         let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
         let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
 
         // top container
-        let headerContainerIsCollapesed = headerTopOffset == -headerHeight
+        let headerContainerIsCollapsed = headerTopOffset == -headerHeight
 
-        if headerContainerIsCollapesed && (bottomContainerCollapsed && overKeyboardContainerCollapsed) {
+        if headerContainerIsCollapsed && (bottomContainerCollapsed && overKeyboardContainerCollapsed) {
             setToolbarState(state: .collapsed)
         } else if toolbarsShowing {
             setToolbarState(state: .visible)
