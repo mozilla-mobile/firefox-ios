@@ -26,7 +26,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case isToolbarCFREnabled
     case jumpBackIn
-    case loginAutofill
     case menuRefactor
     case menuRefactorHint
     case microsurvey
@@ -123,7 +122,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
-                .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
                 .menuRefactorHint,
