@@ -59,7 +59,11 @@ final class MainMenuMiddleware {
                                           mainMenuActionType: actionType,
                                           isHomepage: isHomepage)
         }
-        if self.handleGeneralBrowserActionType(action: action) { return }
+
+        if let actionType = action.actionType as? GeneralBrowserActionType {
+            self.handleGeneralBrowserActionType(action: action, generalBrowserActionType: actionType)
+        }
+
         if self.handleMainMenuDetailsActionType(action: action, isHomepage: isHomepage) { return }
     }
 
@@ -93,18 +97,13 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func handleGeneralBrowserActionType(action: MainMenuAction) -> Bool {
-        guard let generalBrowserActionType = action.actionType as? GeneralBrowserActionType else {
-            return false
-        }
-
+    private func handleGeneralBrowserActionType(action: MainMenuAction, generalBrowserActionType: GeneralBrowserActionType) {
         switch generalBrowserActionType {
         case .showReaderMode:
             handleShowReaderModeAction(action: action)
-            return true
 
         default:
-            return false
+            break
         }
     }
 
