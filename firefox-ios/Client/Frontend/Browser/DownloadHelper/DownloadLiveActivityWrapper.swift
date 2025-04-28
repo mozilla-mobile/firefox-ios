@@ -19,7 +19,7 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         case delayed = 3_000_000_000 // Milliseconds to dismissal
     }
 
-    let throttler = Throttler(seconds: UX.updateCooldown)
+    let throttler = ConcurrencyThrottler(seconds: UX.updateCooldown)
 
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 

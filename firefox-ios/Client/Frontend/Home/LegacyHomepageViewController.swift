@@ -46,7 +46,7 @@ class LegacyHomepageViewController:
     private var collectionView: UICollectionView?
     private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
-    private let viewWillAppearEventThrottler = Throttler(seconds: 0.5)
+    private let viewWillAppearEventThrottler = GCDThrottler(seconds: 0.5)
 
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }

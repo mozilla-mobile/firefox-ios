@@ -11,7 +11,7 @@ protocol ThrottleProtocol {
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler
 /// and specify the delay time, in seconds, and queue.
-class Throttler: ThrottleProtocol {
+class GCDThrottler: ThrottleProtocol {
     private let defaultDelay = 0.35
 
     private let threshold: Double

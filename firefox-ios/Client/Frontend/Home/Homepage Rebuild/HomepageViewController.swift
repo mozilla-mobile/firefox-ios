@@ -77,7 +77,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         throttler: ThrottleProtocol = Throttler(seconds: 0.5)
+         throttler: ThrottleProtocol = GCDThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
