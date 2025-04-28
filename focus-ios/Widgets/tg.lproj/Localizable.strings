@@ -1,6 +1,9 @@
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "Миёнбури «%@»-ро ба экрани асосии худ илова намоед. Пас аз илова кардани виҷет, барои таҳрир ва илова кардани миёнбури дигар онро ламс карда, доред.";
 
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Ҷустуҷӯи хусусиро дар «%@» тавассути низоми ҷустуҷӯии пешфарз оғоз намоед.";
+
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Амалҳои зуд";
 
