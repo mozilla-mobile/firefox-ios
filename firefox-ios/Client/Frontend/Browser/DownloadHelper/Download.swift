@@ -85,7 +85,19 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
         return task?.state ?? .suspended
     }
 
-    fileprivate(set) var session: URLSession?
+    private lazy var session: URLSession = {
+            let config = URLSessionConfiguration.background(withIdentifier: "Firefox")
+            config.isDiscretionary = false
+            config.sessionSendsLaunchEvents = true
+
+            // Original Intialiser
+            return URLSession(
+                configuration: config,
+                delegate: self,
+                delegateQueue: .main
+            )
+        }()
+
     fileprivate(set) var task: URLSessionDownloadTask?
     fileprivate(set) var cookieStore: WKHTTPCookieStore
 
@@ -139,8 +151,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
             self.hasContentEncoding = false
         }
 
-        self.session = URLSession(configuration: .ephemeralMPTCP, delegate: self, delegateQueue: .main)
-        self.task = session?.downloadTask(with: self.request)
+        self.task = session.downloadTask(with: self.request)
     }
 
     override func cancel() {
@@ -156,7 +167,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
     override func resume() {
         cookieStore.getAllCookies { [self] cookies in
             cookies.forEach { cookie in
-                session?.configuration.httpCookieStorage?.setCookie(cookie)
+                session.configuration.httpCookieStorage?.setCookie(cookie)
             }
 
             guard let resumeData = self.resumeData else {
@@ -164,7 +175,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
                 return
             }
 
-            self.task = session?.downloadTask(withResumeData: resumeData)
+            self.task = session.downloadTask(withResumeData: resumeData)
             self.task?.resume()
         }
     }
