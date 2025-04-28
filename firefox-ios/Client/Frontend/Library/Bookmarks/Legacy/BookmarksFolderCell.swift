@@ -13,6 +13,7 @@ protocol BookmarksFolderCell: BookmarksRefactorFeatureFlagProvider {
     func getViewModel() -> OneLineTableViewCellViewModel
 
     func didSelect(profile: Profile,
+                   searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
@@ -44,6 +45,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
     }
 
     func didSelect(profile: Profile,
+                   searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
@@ -87,11 +89,11 @@ extension BookmarkItemData: BookmarksFolderCell {
     }
 
     func didSelect(profile: Profile,
+                   searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,
                    logger: Logger) {
-        let searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
         // If we can't get a real URL out of what should be a URL, we let the user's
         // default search engine give it a shot.
         // Typically we'll be in this state if the user has tapped a bookmarked search template

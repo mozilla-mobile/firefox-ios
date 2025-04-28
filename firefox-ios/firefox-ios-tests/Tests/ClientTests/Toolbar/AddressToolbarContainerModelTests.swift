@@ -8,7 +8,7 @@ import XCTest
 
 class AddressToolbarContainerModelTests: XCTestCase {
     private var mockProfile: MockProfile!
-    private var searchEnginesManager: SearchEnginesManager!
+    private var searchEnginesManager: SearchEnginesManagerProvider!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -16,7 +16,11 @@ class AddressToolbarContainerModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
 
         mockProfile = MockProfile()
-        searchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager = SearchEnginesManager(
+            prefs: mockProfile.prefs,
+            files: mockProfile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
     }
 
     override func tearDown() {

@@ -23,7 +23,11 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
 
-        searchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 

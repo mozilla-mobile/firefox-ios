@@ -24,7 +24,7 @@ class TelemetryWrapperTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
 
-        profile = AppContainer.shared.resolve()
+        profile = MockProfile()
     }
 
     override func tearDown() {
