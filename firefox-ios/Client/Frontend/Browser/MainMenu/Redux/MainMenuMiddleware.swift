@@ -64,7 +64,11 @@ final class MainMenuMiddleware {
             self.handleGeneralBrowserActionType(action: action, generalBrowserActionType: actionType)
         }
 
-        if self.handleMainMenuDetailsActionType(action: action, isHomepage: isHomepage) { return }
+        if let actionType = action.actionType as? MainMenuDetailsActionType {
+            self.handleMainMenuDetailsActionType(action: action,
+                                                 mainMenuDetailsActionType: actionType,
+                                                 isHomepage: isHomepage)
+        }
     }
 
     private func handleMainMenuActionType(action: MainMenuAction,
@@ -107,58 +111,45 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func handleMainMenuDetailsActionType(action: MainMenuAction, isHomepage: Bool) -> Bool {
-        guard let mainMenuDetailsActionType = action.actionType as? MainMenuDetailsActionType else {
-            return false
-        }
-
+    private func handleMainMenuDetailsActionType(action: MainMenuAction,
+                                                 mainMenuDetailsActionType: MainMenuDetailsActionType,
+                                                 isHomepage: Bool) {
         switch mainMenuDetailsActionType {
         case .tapZoom:
             telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
-            return true
 
         case .tapReportBrokenSite:
             telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.reportBrokenSite)
-            return true
 
         case .tapAddToBookmarks:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.bookmarkThisPage)
-            return true
 
         case .tapEditBookmark:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
-            return true
 
         case .tapAddToShortcuts:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.addToShortcuts)
-            return true
 
         case .tapRemoveFromShortcuts:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromShortcuts)
-            return true
 
         case .tapAddToReadingList:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.saveToReadingList)
-            return true
 
         case .tapRemoveFromReadingList:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
-            return true
 
         case .tapToggleNightMode:
             handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
-            return true
 
         case .tapBackToMainMenu:
             handleTapBackToMainMenuAction(action: action, isHomepage: isHomepage)
-            return true
 
         case .tapDismissView:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
-            return true
 
         @unknown default:
-            return false
+            break
         }
     }
 
