@@ -382,9 +382,6 @@ extension BrowserViewController: WKUIDelegate {
 
 // MARK: - WKNavigationDelegate
 extension BrowserViewController: WKNavigationDelegate {
-    // Note the main frame JSContext (i.e. document, window) is not available yet.
-
-    
     /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
     /// then we immediately reload it.
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
