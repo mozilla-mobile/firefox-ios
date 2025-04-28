@@ -115,6 +115,7 @@
 		0BF802E62CFF0951005633E5 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BF802E52CFF0951005633E5 /* Shared */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		0E12A3152CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E12A3142CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift */; };
+		0E1488232DAD99DA008978C4 /* DownloadLiveActivityIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECAA5F22DAD737700E27780 /* DownloadLiveActivityIntent.swift */; };
 		0E2E01DA2D77810D000BDBCF /* DownloadLiveActivityWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2E01D92D77810D000BDBCF /* DownloadLiveActivityWrapper.swift */; };
 		0E456F152C541CB300EE93BF /* PasswordGeneratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E456F142C541CB300EE93BF /* PasswordGeneratorViewController.swift */; };
 		0E4AF8612D763EB0002E4238 /* DownloadLiveActivityUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */; };
@@ -130,6 +131,7 @@
 		0EC57CE52CA31E59002E3F04 /* PasswordGeneratorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57CE42CA31E59002E3F04 /* PasswordGeneratorStateTests.swift */; };
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
 		0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */; };
+		0ECAA5F32DAD737700E27780 /* DownloadLiveActivityIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECAA5F22DAD737700E27780 /* DownloadLiveActivityIntent.swift */; };
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
@@ -2499,6 +2501,7 @@
 		0EC57CE42CA31E59002E3F04 /* PasswordGeneratorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorStateTests.swift; sourceTree = "<group>"; };
 		0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorHeaderView.swift; sourceTree = "<group>"; };
 		0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorPasswordFieldView.swift; sourceTree = "<group>"; };
+		0ECAA5F22DAD737700E27780 /* DownloadLiveActivityIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadLiveActivityIntent.swift; sourceTree = "<group>"; };
 		0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupedTableDataTests.swift; sourceTree = "<group>"; };
 		0EEE4B2AA4EEEF77B6F992F7 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		0F894AD0807E49799E2534E6 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Today.strings; sourceTree = "<group>"; };
@@ -10794,6 +10797,7 @@
 				D04D1B852097859B0074B35F /* DownloadToast.swift */,
 				0E4AF8642D764046002E4238 /* DownloadProgressManager.swift */,
 				0E2E01D92D77810D000BDBCF /* DownloadLiveActivityWrapper.swift */,
+				0ECAA5F22DAD737700E27780 /* DownloadLiveActivityIntent.swift */,
 			);
 			path = DownloadHelper;
 			sourceTree = "<group>";
@@ -16512,6 +16516,7 @@
 				DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */,
 				1DF426CF251BDF6A0086386A /* photon-colors.swift in Sources */,
 				E1B18C782B5FFFA9009CD968 /* UIView+extension.swift in Sources */,
+				0E1488232DAD99DA008978C4 /* DownloadLiveActivityIntent.swift in Sources */,
 				4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */,
 				1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */,
 				DA9FD88424E213B500168D1E /* SmallQuickLink.swift in Sources */,
@@ -17795,6 +17800,7 @@
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
+				0ECAA5F32DAD737700E27780 /* DownloadLiveActivityIntent.swift in Sources */,
 				E13C072D2C2189B80087E404 /* ToolbarActionConfiguration.swift in Sources */,
 				43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */,
 				E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */,

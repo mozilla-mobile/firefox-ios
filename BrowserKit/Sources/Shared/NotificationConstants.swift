@@ -67,6 +67,8 @@ extension Notification.Name {
 
     public static let ShowHomepage = Notification.Name("ShowHomepage")
 
+    public static let StopDownloads = Notification.Name("StopDownloads")
+
     public static let TabsTrayDidClose = Notification.Name("TabsTrayDidClose")
 
     public static let TabsTrayDidSelectHomeTab = Notification.Name("TabsTrayDidSelectHomeTab")

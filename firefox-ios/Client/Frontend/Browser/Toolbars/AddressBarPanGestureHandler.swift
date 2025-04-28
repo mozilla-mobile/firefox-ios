@@ -9,8 +9,8 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
         static let offset: CGFloat = 24
-        static let swipingDuration: TimeInterval = 0.15
-        static let swipingVelocity: CGFloat = 150
+        static let swipingDuration: TimeInterval = 0.25
+        static let swipingVelocity: CGFloat = 250
     }
 
     // MARK: - UI Properties
