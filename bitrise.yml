@@ -135,6 +135,9 @@ workflows:
         is_always_run: true
     - script@1.2.1:
         - content: 
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
             envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value ""
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value ""
             envman add --key BITRISE_TEST_SHARDS_PATH_FIREFOX --value ""
