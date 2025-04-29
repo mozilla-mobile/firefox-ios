@@ -92,6 +92,7 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    var zoomManager: ZoomPageManager
 
     // MARK: Optional UI elements
 
@@ -336,6 +337,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
+        self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -2358,6 +2360,7 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
+            updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
