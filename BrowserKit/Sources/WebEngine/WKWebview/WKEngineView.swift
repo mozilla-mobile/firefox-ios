@@ -8,9 +8,12 @@ import UIKit
 class WKEngineView: UIView, EngineView, FullscreenDelegate {
     private var session: WKEngineSession?
     private var logger: Logger
+    private var sessionlifeCycleManager: WKSessionLifecycleManager
 
     init(frame: CGRect,
+         sessionlifeCycleManager: WKSessionLifecycleManager = DefaultWKSessionLifecycleManager(),
          logger: Logger = DefaultLogger.shared) {
+        self.sessionlifeCycleManager = sessionlifeCycleManager
         self.logger = logger
         super.init(frame: frame)
     }
@@ -36,15 +39,14 @@ class WKEngineView: UIView, EngineView, FullscreenDelegate {
 
     private func remove(session: WKEngineSession) {
         session.webView.removeFromSuperview()
-        session.isActive = false
         session.fullscreenDelegate = nil
+        sessionlifeCycleManager.deactivate(session)
     }
 
     private func add(session: WKEngineSession) {
         self.session = session
-        session.isActive = true
         session.fullscreenDelegate = self
-
+        sessionlifeCycleManager.activate(session)
         setupWebViewLayout()
     }
 

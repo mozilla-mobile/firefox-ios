@@ -23,7 +23,8 @@ class MockWKEngineSession: WKEngineSession {
                          scriptResponder: EngineSessionScriptResponder(),
                          metadataFetcher: DefaultMetadataFetcherHelper(),
                          navigationHandler: DefaultNavigationHandler(),
-                         uiHandler: DefaultUIHandler())!
+                         uiHandler: DefaultUIHandler(),
+                         readerModeDelegate: MockWKReaderModeDelegate())!
     }
 
     override func callJavascriptMethod(_ method: String, scope: String?) {

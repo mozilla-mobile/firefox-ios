@@ -44,7 +44,7 @@ final class WKInternalURL: InternalURL {
     }
 
     static func isValid(url: URL) -> Bool {
-        let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(WKEngineInfo.webserverPort)/")
+        let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(EngineConstants.webserverPort)/")
         if isWebServerUrl, url.path.hasPrefix("/test-fixture/") {
             // internal test pages need to be treated as external pages
             return false
