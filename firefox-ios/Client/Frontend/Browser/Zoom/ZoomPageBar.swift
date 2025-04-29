@@ -10,7 +10,6 @@ import Shared
 
 protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
-    func didChangeZoomLevel()
 }
 
 final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
@@ -40,7 +39,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private var stepperCompactConstraints = [NSLayoutConstraint]()
     private var stepperDefaultConstraints = [NSLayoutConstraint]()
     private var gradientViewHeightConstraint = NSLayoutConstraint()
-    private let tab: Tab
+    private let zoomManager: ZoomPageManager
 
     // MARK: - UI Elements
 
@@ -97,8 +96,8 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     // MARK: - Initializers
 
-    init(tab: Tab) {
-        self.tab = tab
+    init(zoomManager: ZoomPageManager) {
+        self.zoomManager = zoomManager
         super.init(frame: .zero)
 
         setupViews()
@@ -122,8 +121,9 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         gestureRecognizer.addTarget(self, action: #selector(didPressReset))
         zoomLevel.addGestureRecognizer(gestureRecognizer)
 
-        updateZoomLabel()
-        checkPageZoomLimits()
+        let zoomValue = zoomManager.getZoomLevel()
+        updateZoomLabel(zoomValue: zoomValue)
+        updateZoomButtonEnabled(zoomValue: zoomValue)
 
         [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
@@ -213,25 +213,17 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         gradient.frame = gradientView.bounds
     }
 
-    func updateZoomLabel() {
-        zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
-        zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
-        gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
+    func updateZoomLabel(zoomValue: CGFloat) {
+        zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: zoomValue), number: .percent)
+        zoomLevel.isEnabled = zoomValue == ZoomConstants.defaultZoomLimit ? false : true
+        gestureRecognizer.isEnabled = !(zoomValue == ZoomConstants.defaultZoomLimit)
         zoomLevel.accessibilityLabel = String(format: .LegacyAppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel,
                                               zoomLevel.text ?? "")
     }
 
-    private func enableZoomButtons() {
-        zoomInButton.isEnabled = true
-        zoomOutButton.isEnabled = true
-    }
-
-    private func checkPageZoomLimits() {
-        if tab.pageZoom <= ZoomConstants.lowerZoomLimit {
-            zoomOutButton.isEnabled = false
-        } else if tab.pageZoom >= ZoomConstants.upperZoomLimit {
-            zoomInButton.isEnabled = false
-        } else { enableZoomButtons() }
+    private func updateZoomButtonEnabled(zoomValue: CGFloat) {
+        zoomInButton.isEnabled = zoomValue < ZoomConstants.upperZoomLimit
+        zoomOutButton.isEnabled = zoomValue > ZoomConstants.lowerZoomLimit
     }
 
     private func updateStepperConstraintsBasedOnSizeClass() {
@@ -255,33 +247,24 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     @objc
     private func didPressZoomIn(_ sender: UIButton) {
-        tab.zoomIn()
-        updateZoomLabel()
-        delegate?.didChangeZoomLevel()
-        zoomOutButton.isEnabled = true
-        if tab.pageZoom >= ZoomConstants.upperZoomLimit {
-            zoomInButton.isEnabled = false
-        }
+        let zoomValue = zoomManager.zoomIn()
+        updateZoomLabel(zoomValue: zoomValue)
+        updateZoomButtonEnabled(zoomValue: zoomValue)
     }
 
     @objc
     private func didPressZoomOut(_ sender: UIButton) {
-        tab.zoomOut()
-        updateZoomLabel()
-        delegate?.didChangeZoomLevel()
-        zoomInButton.isEnabled = true
-        if tab.pageZoom <= ZoomConstants.lowerZoomLimit {
-            zoomOutButton.isEnabled = false
-        }
+        let zoomValue = zoomManager.zoomOut()
+        updateZoomLabel(zoomValue: zoomValue)
+        updateZoomButtonEnabled(zoomValue: zoomValue)
     }
 
     @objc
     private func didPressReset(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
-            tab.resetZoom()
-            updateZoomLabel()
-            delegate?.didChangeZoomLevel()
-            enableZoomButtons()
+            zoomManager.resetZoom()
+            updateZoomLabel(zoomValue: ZoomConstants.defaultZoomLimit)
+            updateZoomButtonEnabled(zoomValue: ZoomConstants.defaultZoomLimit)
         }
     }
 

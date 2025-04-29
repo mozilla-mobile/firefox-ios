@@ -12,9 +12,7 @@ extension BrowserViewController: ZoomPageBarDelegate {
     }
 
     private func setupZoomPageBar() {
-        guard let tab = tabManager.selectedTab else { return }
-
-        let zoomPageBar = ZoomPageBar(tab: tab)
+        let zoomPageBar = ZoomPageBar(zoomManager: zoomManager)
         self.zoomPageBar = zoomPageBar
         scrollController.zoomPageBar = zoomPageBar
         zoomPageBar.delegate = self
@@ -61,42 +59,27 @@ extension BrowserViewController: ZoomPageBarDelegate {
     }
 
     func zoomPageHandleEnterReaderMode() {
-        guard let tab = tabManager.selectedTab else { return }
         updateZoomPageBarVisibility(visible: false)
-        tab.resetZoom()
+        zoomManager.resetZoom(shouldSave: false)
     }
 
     func zoomPageHandleExitReaderMode() {
-        guard let tab = tabManager.selectedTab else { return }
-        tab.setZoomLevelforDomain()
+        zoomManager.setZoomAfterLeavingReaderMode()
     }
 
+    // The zoom level was updated on another iPad window, but the host matches
+    // this window's selected tab, so we need to ensure we update also.
     func updateForZoomChangedInOtherIPadWindow(zoom: DomainZoomLevel) {
         guard let tab = tabManager.selectedTab,
-              let currentHost = tab.url?.host,
-              currentHost.caseInsensitiveCompare(zoom.host) == .orderedSame,
               tab.pageZoom != zoom.zoomLevel else { return }
 
-        // The zoom level was updated on another iPad window, but the host matches
-        // this window's selected tab, so we need to ensure we update also.
-        if tab.pageZoom < zoom.zoomLevel { tab.zoomIn() } else { tab.zoomOut() }
-        zoomPageBar?.updateZoomLabel()
+        zoomManager.updateZoomChangedInOtherWindow()
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
     }
 
     // MARK: - ZoomPageBarDelegate
 
-    func didChangeZoomLevel() {
-        saveZoomLevel()
-    }
-
     func zoomPageDidPressClose() {
         updateZoomPageBarVisibility(visible: false)
-    }
-
-    private func saveZoomLevel() {
-        guard let tab = tabManager.selectedTab, let host = tab.url?.host else { return }
-
-        let zoomPageManager = ZoomPageManager(windowUUID: tab.windowUUID)
-        zoomPageManager.saveZoomLevel(for: host, zoomLevel: tab.pageZoom)
     }
 }

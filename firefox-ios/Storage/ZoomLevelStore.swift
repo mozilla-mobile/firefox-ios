@@ -15,7 +15,12 @@ public struct DomainZoomLevel: Codable, Equatable {
     }
 }
 
-public class ZoomLevelStore {
+public protocol ZoomLevelStorage {
+    func save(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)?)
+    func findZoomLevel(forDomain host: String) -> DomainZoomLevel?
+}
+
+public class ZoomLevelStore: ZoomLevelStorage {
     public static let shared = ZoomLevelStore()
 
     private(set) var domainZoomLevels = [DomainZoomLevel]()
