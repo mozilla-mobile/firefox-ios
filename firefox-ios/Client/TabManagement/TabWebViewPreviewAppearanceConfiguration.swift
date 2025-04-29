@@ -25,8 +25,7 @@ struct TabWebViewPreviewAppearanceConfiguration {
         switch layoutStyle {
         case .baseline:
             UX.baselineAddressBarCornerRadius
-        case .version1:
-            UX.version1AddressBarCornerRadius
+        case .version1, .version2:
         }
     }
 
@@ -43,7 +42,7 @@ struct TabWebViewPreviewAppearanceConfiguration {
                 containerStackViewBackgroundColor: colors.layer1,
                 addressBarBackgroundColor: colors.layerSearch
             )
-        case .version1:
+        case .version1, .version2:
             return Self(
                 containerStackViewBackgroundColor: colors.layer3,
                 addressBarBackgroundColor: colors.layer2
