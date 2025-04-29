@@ -2,17 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-
-struct OnboardingButtons {
-    let primary: OnboardingButtonInfoModel
-    let secondary: OnboardingButtonInfoModel?
-
-    init(
-        primary: OnboardingButtonInfoModel,
-        secondary: OnboardingButtonInfoModel? = nil
-    ) {
-        self.primary = primary
-        self.secondary = secondary
-    }
-}
+//import Foundation
+//
+//struct OnboardingButtons {
+//    let primary: OnboardingButtonInfoModel
+//    let secondary: OnboardingButtonInfoModel?
+//
+//    init(
+//        primary: OnboardingButtonInfoModel,
+//        secondary: OnboardingButtonInfoModel? = nil
+//    ) {
+//        self.primary = primary
+//        self.secondary = secondary
+//    }
+//}
