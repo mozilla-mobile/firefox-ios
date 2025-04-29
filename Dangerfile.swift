@@ -81,8 +81,6 @@ func failOnNewFilesWithoutCoverage() {
     }
 }
 
-
-
 // MARK: - PR guidelines
 
 // swiftlint:disable line_length
