@@ -105,6 +105,7 @@
         "NavigationTest",
         "NewTabSettingsTest",
         "NightModeTests",
+        "O_AddressesTests",
         "OnboardingTests",
         "OpeningScreenTests",
         "PerformanceTests\/testPerfTabs_3_20tabTray()",
