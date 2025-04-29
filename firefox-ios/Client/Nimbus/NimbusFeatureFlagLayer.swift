@@ -28,9 +28,6 @@ final class NimbusFeatureFlagLayer {
         case .cleanupHistoryReenabled:
             return checkCleanupHistoryReenabled(from: nimbus)
 
-        case .contextualHintForToolbar:
-            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
-
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -177,22 +174,6 @@ final class NimbusFeatureFlagLayer {
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homepageRebuildFeature.value()
         return config.enabled
-    }
-
-    private func checkNimbusForContextualHintsFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.contextualHintFeature.value()
-        var nimbusID: ContextualHint
-
-        switch featureID {
-        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarHint
-        default: return false
-        }
-
-        guard let status = config.featuresEnabled[nimbusID] else { return false }
-        return status
     }
 
     private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {

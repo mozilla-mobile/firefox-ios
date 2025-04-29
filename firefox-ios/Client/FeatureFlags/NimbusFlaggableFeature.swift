@@ -15,7 +15,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressBarMenu
     case bookmarksRefactor
     case bottomSearchBar
-    case contextualHintForToolbar
     case cleanupHistoryReenabled
     case deeplinkOptimizationRefactor
     case feltPrivacySimplifiedUI
@@ -111,7 +110,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .appearanceMenu,
                 .addressBarMenu,
-                .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
