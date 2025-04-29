@@ -80,9 +80,8 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
-    func setUpExperimentVariables() {
-        /// To be overriden to setup experiment variables for `FeatureFlaggedTestSuite`
-    }
+    /// To be overriden to setup experiment variables for `FeatureFlaggedTestSuite`
+    func setUpExperimentVariables() {}
 
     func setUpApp() {
         setUpLaunchArguments()
