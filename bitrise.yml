@@ -168,6 +168,7 @@ workflows:
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun
         - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
+        run_if: '{{getenv "BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" | ne ""}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - shard_count: 5
