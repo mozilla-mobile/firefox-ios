@@ -137,7 +137,7 @@ workflows:
         inputs:
         - scheme: Fennec
         - configuration: Fennec_Testing
-        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodepro
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
