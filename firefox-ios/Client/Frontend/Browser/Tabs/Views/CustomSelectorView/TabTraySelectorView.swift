@@ -32,7 +32,7 @@ final class TabTraySelectorView: UIView,
     var items: [String] = [] {
         didSet {
             collectionView.reloadData()
-            scrollToItem(at: selectedIndex, animated: false)
+            scrollToCenter()
         }
     }
 
@@ -99,9 +99,11 @@ final class TabTraySelectorView: UIView,
     }
 
     // MARK: - Public Methods
-    func scrollToItem(at index: Int, animated: Bool) {
-        let indexPath = IndexPath(item: index, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+    func scrollToCenter() {
+        // Force it to always be centered on the center item,
+        // temporary until this component is replaced with a simpler one
+        let indexPath = IndexPath(item: 1, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
     }
 
     // MARK: - UICollectionViewDataSource
@@ -131,7 +133,7 @@ final class TabTraySelectorView: UIView,
         guard selectedIndex != newIndex else { return }
         selectedIndex = newIndex
         collectionView.reloadData()
-        scrollToItem(at: selectedIndex, animated: true)
+        scrollToCenter()
 
         var panelType: TabTrayPanelType = .tabs
         if selectedIndex == 0 {
