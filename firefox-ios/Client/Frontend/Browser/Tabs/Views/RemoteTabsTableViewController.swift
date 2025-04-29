@@ -173,6 +173,8 @@ class RemoteTabsTableViewController: UITableViewController,
     private func show(toast: Toast,
                       afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
                       duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+        guard !isTabTrayUIExperimentsEnabled else { return }
+
         if let buttonToast = toast as? ButtonToast {
             self.buttonToast = buttonToast
         }
