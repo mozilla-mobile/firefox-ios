@@ -44,7 +44,7 @@ final class TabErrorTelemetryHelper {
     private func recordTabCount(_ window: WindowUUID) {
         guard self.tabManagerAvailable(for: window) else { return }
         var tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int] ?? [String: Int]()
-        let tabCount = getTabCount(window: window)
+        let tabCount = getTotalTabCount(window: window)
         tabCounts[window.uuidString] = tabCount
         defaults.set(tabCounts, forKey: defaultsKey)
     }
@@ -53,11 +53,16 @@ final class TabErrorTelemetryHelper {
         guard tabManagerAvailable(for: window) else { return }
         guard let tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
-        let currentTabCount = getTabCount(window: window)
+        let currentTabCount = getTotalTabCount(window: window)
+        let currentActiveTabCount = getNormalActiveTabCount(window: window)
 
         if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
             // Potential tab loss bug detected. Log a MetricKit error.
-            sendTelemetryTabLossDetectedEvent(expected: expectedTabCount, actual: currentTabCount)
+            sendTelemetryTabLossDetectedEvent(
+                expected: expectedTabCount,
+                actual: currentTabCount,
+                actualNormalActive: currentActiveTabCount
+            )
         }
 
         // After validating the tab count, we make sure to remove the count
@@ -83,15 +88,30 @@ final class TabErrorTelemetryHelper {
         return true
     }
 
-    private func getTabCount(window: WindowUUID) -> Int {
+    private func getTotalTabCount(window: WindowUUID) -> Int {
         assert(tabManagerAvailable(for: window), "getTabCount() should not be called prior to TabManager config.")
         return windowManager.tabManager(for: window).normalTabs.count
     }
 
-    private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int) {
-        logger.log("Tab loss detected. Expected: \(expected). Actual: \(actual). Windows: \(windowManager.windows.count)",
+    private func getNormalActiveTabCount(window: WindowUUID) -> Int {
+        assert(
+            tabManagerAvailable(for: window),
+            "getNormalActiveTabCount() should not be called prior to TabManager config."
+        )
+        return windowManager.tabManager(for: window).normalActiveTabs.count
+    }
+
+    private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int, actualNormalActive: Int) {
+        logger.log("Tab loss detected",
                    level: .fatal,
-                   category: .tabs)
+                   category: .tabs,
+                   extra: [
+                    "expected": String(expected),
+                    "actual": String(actual),
+                    "actualNormalActive": String(actualNormalActive),
+                    "windows": String(windowManager.windows.count)
+                   ]
+        )
         telemetryWrapper.recordEvent(category: .information,
                                      method: .error,
                                      object: .app,
