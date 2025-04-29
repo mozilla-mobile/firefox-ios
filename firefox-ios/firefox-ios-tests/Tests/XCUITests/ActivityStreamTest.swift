@@ -228,8 +228,37 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     }
 
     // Smoketest
-    func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
+    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
+        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        // Open one of the sites from Topsites and wait until page is loaded
+        // Long tap on apple top site, second cell
+        mozWaitForElementToExist(app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!])
+        app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        selectOptionFromContextMenu(option: "Open in a Private Tab")
+        // Check that two tabs are open and one of them is the default top site one
+        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
+        if iPad() {
+            navigator.goto(TabTray)
+        }
+        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
+        let numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
+        XCTAssertEqual(numTabsOpen, 1, "New tab not open")
+    }
+
+    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
