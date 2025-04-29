@@ -46,11 +46,13 @@ class MockTabManager: TabManager {
     }
 
     subscript(index: Int) -> Tab? {
-        return nil
+        return tabs[index]
     }
 
     subscript(webView: WKWebView) -> Tab? {
-        return nil
+        return tabs.first {
+            $0.webView === webView
+        }
     }
 
     func selectTab(_ tab: Tab?, previous: Tab?) {

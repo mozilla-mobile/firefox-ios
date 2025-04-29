@@ -1036,6 +1036,16 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
 
+        if let url = webView.url, InternalURL(url) == nil {
+            if let title = webView.title,
+               tabManager.selectedTab?.webView == webView {
+                tabManager.selectedTab?.lastTitle = title
+                tabManager.notifyCurrentTabDidFinishLoading()
+            }
+
+            tabManager.saveCurrentTabSession()
+        }
+
         if isPDFRefactorEnabled {
             scrollController.configureRefreshControl()
             navigationHandler?.removeDocumentLoading()
@@ -1056,19 +1066,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
-
-        //        if let url = webView.url {
-        //            if InternalURL(url) != nil {
-        //                return
-        //            }
-        //
-        //            if let title = webView.title, selectedTab?.webView == webView {
-        //                selectedTab?.lastTitle = title
-        //                delegates.forEach { $0.get()?.tabManagerTabDidFinishLoading() }
-        //            }
-        //
-        //            storeChanges()
-        //        }
     }
 }
 
@@ -1103,8 +1100,7 @@ private extension BrowserViewController {
 
     // Use for sms and mailto, which do not show a confirmation before opening.
     func showExternalAlert(withText text: String,
-                           completion: @escaping (UIAlertAction) -> Void,
-                           onCancel: ((UIAlertAction) -> Void)? = nil) {
+                           completion: @escaping (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: nil,
                                       message: text,
                                       preferredStyle: .alert)
@@ -1117,8 +1113,7 @@ private extension BrowserViewController {
 
         let cancelOption = UIAlertAction(
             title: .CancelString,
-            style: .cancel,
-            handler: onCancel
+            style: .cancel
         )
 
         alert.addAction(okOption)

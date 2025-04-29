@@ -829,6 +829,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         saveSessionData(forTab: selectedTab)
     }
 
+    func saveCurrentTabSession() {
+        storeChanges()
+    }
+
+    func notifyCurrentTabDidFinishLoading() {
+        delegates.forEach {
+            $0.get()?.tabManagerTabDidFinishLoading()
+        }
+    }
+
     private func saveSessionData(forTab tab: Tab?) {
         guard let tab = tab,
               let tabSession = tab.webView?.interactionState as? Data,
