@@ -1283,6 +1283,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
+        guard isToolbarRefactorEnabled else { return }
+
         let isTop = (searchBarPosition == .top)
         addressBarBackgroundView.constraints.forEach { $0.isActive = false }
         addressBarBackgroundViewBottomConstraint?.isActive = !isTop
