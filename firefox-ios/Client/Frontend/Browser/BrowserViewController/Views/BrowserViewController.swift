@@ -954,6 +954,7 @@ class BrowserViewController: UIViewController,
             overKeyboardContainer.removeArrangedView(legacyUrlBar, animated: false)
             header.removeArrangedView(legacyUrlBar, animated: false)
             bottomContainer.removeArrangedView(toolbar, animated: false)
+
             addAddressToolbar()
         } else if !isToolbarRefactorEnabled && (legacyUrlBar == nil || legacyUrlBar?.superview == nil) {
             // Show legacy toolbars
@@ -962,6 +963,7 @@ class BrowserViewController: UIViewController,
             overKeyboardContainer.removeArrangedView(addressToolbarContainer, animated: false)
             header.removeArrangedView(addressToolbarContainer, animated: false)
             bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
+
             if isSwipingTabsEnabled { addressBarPanGestureHandler?.disablePanGestureRecognizer() }
             createLegacyUrlBar()
 
