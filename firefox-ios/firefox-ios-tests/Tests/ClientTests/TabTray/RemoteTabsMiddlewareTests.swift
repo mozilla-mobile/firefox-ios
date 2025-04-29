@@ -27,11 +27,11 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    func test_jumpBackInAction_returnsMostRecentTab() throws {
+    func test_homepageMiddlewareAction_returnsMostRecentTab() throws {
         let subject = createSubject()
-        let action = JumpBackInAction(
+        let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: JumpBackInActionType.fetchRemoteTabs
+            actionType: HomepageMiddlewareActionType.jumpBackInRemoteTabsUpdated
         )
 
         let expectation = XCTestExpectation(description: "Most recent tab should be returned")

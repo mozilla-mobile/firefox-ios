@@ -28,17 +28,11 @@ final class NimbusFeatureFlagLayer {
         case .cleanupHistoryReenabled:
             return checkCleanupHistoryReenabled(from: nimbus)
 
-        case .contextualHintForToolbar:
-            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
-
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
-
-        case .creditCardAutofillStatus:
-            return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
@@ -185,22 +179,6 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkNimbusForContextualHintsFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.contextualHintFeature.value()
-        var nimbusID: ContextualHint
-
-        switch featureID {
-        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarHint
-        default: return false
-        }
-
-        guard let status = config.featuresEnabled[nimbusID] else { return false }
-        return status
-    }
-
     private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.animationFeature
@@ -267,17 +245,6 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled && config.simplifiedUiEnabled
         default: return false
         }
-    }
-
-    public func checkNimbusForCreditCardAutofill(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.creditCardAutofill.value()
-
-            switch featureID {
-            case .creditCardAutofillStatus: return config.creditCardAutofillStatus
-            default: return false
-            }
     }
 
     public func checkNimbusForLoginAutofill(

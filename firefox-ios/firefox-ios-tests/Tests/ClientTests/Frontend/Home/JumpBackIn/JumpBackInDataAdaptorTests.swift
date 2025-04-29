@@ -140,7 +140,11 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     private func loadNewData(for subject: JumpBackInDataAdaptorImplementation) async {
         let delegate = MockJumpBackInDelegate()
         await subject.setDelegate(delegate: delegate)
-        await delegate.waitForNewData()
+        let expectation = XCTestExpectation(description: "Wait for didLoadNewData to be called")
+        delegate.didLoadNewDataHandler = {
+            expectation.fulfill()
+        }
+        await fulfillment(of: [expectation], timeout: 10.0)
     }
 
     private func createTab(profile: MockProfile, urlString: String? = "www.website.com") -> Tab {

@@ -86,11 +86,11 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
     }
 
-    func test_jumpBackInAction_returnsRecentTabs() throws {
+    func test_homepageAction_returnsRecentTabs() throws {
         let subject = createSubject()
         let action = JumpBackInAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: JumpBackInActionType.fetchLocalTabs
+            actionType: HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated
         )
 
         let expectation = XCTestExpectation(description: "Recent tabs should be returned")

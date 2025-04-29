@@ -5,12 +5,26 @@
 ## :bulb: Description
 <!--- Describe your changes so the reviewer can understand the context and decisions made for your work -->
 
-## :pencil: Checklist
-You have to check all boxes before merging
-- [ ] Filled in the above information (tickets numbers and description of your work)
-- [ ] Updated the PR name to follow our [PR naming guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
-- [ ] Wrote unit tests and/or ensured the tests suite is passing
-- [ ] When working on UI, I checked and implemented accessibility (minimum Dynamic Text and VoiceOver)
-- [ ] If needed, I updated documentation / comments for complex code and public methods
-- [ ] If needed, added a backport comment (example `@Mergifyio backport release/v120`)
+## :movie_camera: Demos
+<!-- Please upload screenshots or video demos of your work, if applicable -->
+<!-- You can either use a table (best for before/after screenshots) or the <details> disclosure -->
 
+| Before | After |
+| - | - |
+| <!--insert "before" image here--> | <!--insert "after" image here--> |
+| <!--insert "before" image here--> | <!--insert "after" image here--> |
+| <!--insert "before" image here--> | <!--insert "after" image here--> |
+
+<details>
+<summary>Demo</summary>
+<!-- Shorthand image template: <img height=400 src="<URL>" /> -->
+</details>
+
+## :pencil: Checklist
+- [ ] I filled in the ticket numbers and a description of my work
+- [ ] I updated the PR name to follow our [PR naming guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
+- [ ] I ensured unit tests pass and wrote tests for new code
+- [ ] If working on UI, I checked and implemented accessibility (Dynamic Text and VoiceOver)
+- [ ] If adding telemetry, I read the [data stewardship requirements](https://github.com/mozilla-mobile/firefox-ios/wiki/Adding-Glean-Telemetry-Events) and will request a data review
+- [ ] If needed, I updated documentation and added comments to complex code
+- [ ] If needed, I added a backport comment (example `@Mergifyio backport release/v120`)

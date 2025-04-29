@@ -22,7 +22,6 @@ final class BookmarksAction: Action {
 }
 
 enum BookmarksActionType: ActionType {
-    case fetchBookmarks
     case toggleShowSectionSetting
 }
 

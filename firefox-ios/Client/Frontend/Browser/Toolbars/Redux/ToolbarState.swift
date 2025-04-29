@@ -72,7 +72,7 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: false,
             canShowDataClearanceAction: false,
             canShowNavigationHint: false,
-            shouldAnimate: false,
+            shouldAnimate: true,
             isTranslucent: false
         )
     }
@@ -133,7 +133,8 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.hideKeyboard, ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
-            ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping:
+            ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
+            ToolbarActionType.animationStateChanged:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -201,8 +202,6 @@ struct ToolbarState: ScreenState, Equatable {
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let shouldAnimate = action.actionType as? ToolbarActionType == .urlDidChange ? true : state.shouldAnimate
-
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -219,7 +218,7 @@ struct ToolbarState: ScreenState, Equatable {
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: shouldAnimate,
+            shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
             isTranslucent: state.isTranslucent
         )
     }
