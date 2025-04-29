@@ -36,6 +36,8 @@ class MockTabManager: TabManager {
     var removeTabsByURLCalled = 0
 
     var addTabWasCalled = false
+    var notifyCurrentTabDidFinishLoadingCalled = 0
+    var saveCurrentTabSessionCalled = 0
 
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
@@ -164,6 +166,14 @@ class MockTabManager: TabManager {
     func removeAllInactiveTabs() async {}
 
     func undoCloseInactiveTabs() async {}
+
+    func saveCurrentTabSession() {
+        saveCurrentTabSessionCalled += 1
+    }
+
+    func notifyCurrentTabDidFinishLoading() {
+        notifyCurrentTabDidFinishLoadingCalled += 1
+    }
 
     func tabDidSetScreenshot(_ tab: Client.Tab) {}
 }
