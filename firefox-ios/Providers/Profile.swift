@@ -50,7 +50,6 @@ public protocol SyncManager {
     func onRemovedAccount() -> Success
     @discardableResult
     func onAddedAccount() -> Success
-    func updateCreditCardAutofillStatus(value: Bool)
 }
 
 /// This exists to pass in external context: e.g., the UIApplication can
@@ -232,6 +231,7 @@ open class BrowserProfile: Profile {
         }
     }()
     private var rustKeychainEnabled = false
+    private var loginsVerificationEnabled = false
     fileprivate let name: String
     fileprivate let keychain: RustKeychain
     fileprivate let legacyKeychain: MZKeychainWrapper
@@ -259,8 +259,8 @@ open class BrowserProfile: Profile {
      */
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
-         creditCardAutofillEnabled: Bool = false,
          rustKeychainEnabled: Bool = false,
+         loginsVerificationEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -269,6 +269,7 @@ open class BrowserProfile: Profile {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.rustKeychainEnabled = rustKeychainEnabled
+        self.loginsVerificationEnabled = loginsVerificationEnabled
         self.keychain = KeychainManager.shared
         self.legacyKeychain = KeychainManager.legacyShared
         self.logger = logger
@@ -321,8 +322,8 @@ open class BrowserProfile: Profile {
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
         self.syncManager = RustSyncManager(profile: self,
-                                           creditCardAutofillEnabled: creditCardAutofillEnabled,
-                                           rustKeychainEnabled: rustKeychainEnabled)
+                                           rustKeychainEnabled: rustKeychainEnabled,
+                                           loginsVerificationEnabled: loginsVerificationEnabled)
 
         let notificationCenter = NotificationCenter.default
 

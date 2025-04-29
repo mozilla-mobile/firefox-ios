@@ -24,10 +24,7 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController, Featu
         var sectionItems = [Setting]()
 
         sectionItems.append(PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator))
-
-        if featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly) {
-            sectionItems.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
-        }
+        sectionItems.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
 
         let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
         if autofillAddressStatus, let profile {

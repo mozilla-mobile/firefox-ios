@@ -45,6 +45,103 @@ final class TabFileManagerTests: XCTestCase {
         XCTAssertEqual(retrievedSessionData, sessionData)
     }
 
+    // MARK: - Legacy tab group data checks
+    // Tab group data was removed as part of FXIOS-11987, but we still want to properly decode TabData() that
+    // include `tabGroupData`.
+
+    func testGetWindowDataFromPath_withLegacyTabDataIncludingTabGroupData_succeeds() throws {
+        let now = Date()
+        let timestamp = now.timeIntervalSince1970
+
+        let legacyTabJSON = """
+    {
+        "id": "\(UUID())",
+        "title": "Legacy Tab",
+        "siteUrl": "https://example.com",
+        "faviconURL": null,
+        "isPrivate": false,
+        "lastUsedTime": \(timestamp),
+        "createdAtTime": \(timestamp),
+        "tabGroupData": {
+            "searchTerm": "firefox",
+            "searchUrl": "https://search.com?q=firefox",
+            "nextUrl": "https://mozilla.org",
+            "tabHistoryCurrentState": "newTab"
+        }
+    }
+    """
+
+        let windowID = defaultTestTabWindowUUID
+        let activeTabID = UUID()
+        let windowJSON = """
+    {
+        "id": "\(windowID)",
+        "activeTabId": "\(activeTabID)",
+        "tabData": [\(legacyTabJSON)]
+    }
+    """.data(using: .utf8)!
+
+        // Create manager and path
+        let subject = DefaultTabFileManager()
+        let windowDataDirectory = subject.windowDataDirectory(isBackup: false)!
+        subject.createDirectoryAtPath(path: windowDataDirectory)
+
+        let windowPath = windowDataDirectory.appendingPathComponent("window-\(windowID.uuidString)")
+        try windowJSON.write(to: windowPath, options: .atomicWrite)
+
+        // Try to decode legacy data through real decoding pipeline
+        let result = try subject.getWindowDataFromPath(path: windowPath)
+
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.id, windowID)
+        XCTAssertEqual(result?.tabData.count, 1)
+        XCTAssertEqual(result?.tabData.first?.title, "Legacy Tab")
+    }
+
+    func testGetWindowDataFromPath_withLegacyTabDataIncludingNullTabGroupData_succeeds() throws {
+        let now = Date()
+        let timestamp = now.timeIntervalSince1970
+
+        let legacyTabJSON = """
+    {
+        "id": "\(UUID())",
+        "title": "Legacy Tab",
+        "siteUrl": "https://example.com",
+        "faviconURL": null,
+        "isPrivate": false,
+        "lastUsedTime": \(timestamp),
+        "createdAtTime": \(timestamp),
+        "tabGroupData": null
+    }
+    """
+
+        let windowID = defaultTestTabWindowUUID
+        let activeTabID = UUID()
+        let windowJSON = """
+    {
+        "id": "\(windowID)",
+        "activeTabId": "\(activeTabID)",
+        "tabData": [\(legacyTabJSON)]
+    }
+    """.data(using: .utf8)!
+
+        // Create manager and path
+        let subject = DefaultTabFileManager()
+        let windowDataDirectory = subject.windowDataDirectory(isBackup: false)!
+        subject.createDirectoryAtPath(path: windowDataDirectory)
+
+        let windowPath = windowDataDirectory.appendingPathComponent("window-\(windowID.uuidString)")
+        try windowJSON.write(to: windowPath, options: .atomicWrite)
+
+        // Try to decode legacy data through real decoding pipeline
+        let result = try subject.getWindowDataFromPath(path: windowPath)
+
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.id, windowID)
+        XCTAssertEqual(result?.tabData.count, 1)
+        XCTAssertEqual(result?.tabData.first?.title, "Legacy Tab")
+    }
+
     // MARK: Helper functions
 
     func createMockTabs() -> [TabData] {

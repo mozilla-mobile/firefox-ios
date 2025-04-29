@@ -42,7 +42,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: false
-          swiping_tabs: false
+          swiping_tabs: true
           layout: baseline
       - channel: developer
         value:
@@ -50,7 +50,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          swiping_tabs: false
+          swiping_tabs: true
           layout: baseline
 
 enums:

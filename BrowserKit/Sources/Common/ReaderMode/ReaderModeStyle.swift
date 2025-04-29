@@ -18,11 +18,10 @@ public struct ReaderModeStyle {
 
     /// Encode the style to a dictionary that can be stored in the profile
     public func encodeAsDictionary() -> [String: Any] {
-        let fontAttributes = fontType.attributes()
         return [
             "theme": theme.rawValue,
-            "fontType": fontAttributes["fontType"],
-            "fontWeight": fontAttributes["fontWeight"],
+            "fontType": fontType.fontFamily,
+            "fontWeight": fontType.fontWeight,
             "fontSize": fontSize.rawValue
         ]
     }

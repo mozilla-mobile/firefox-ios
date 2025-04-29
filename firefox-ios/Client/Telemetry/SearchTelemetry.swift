@@ -93,7 +93,6 @@ enum SearchTelemetryValues {
     enum Groups: String {
         case heuristic
         case adaptiveHistory = "adaptive_history"
-        case searchHistory = "search_history"
         case searchSuggest = "search_suggest"
         case topPick = "top_pick"
         case topSite = "top_site"
@@ -156,7 +155,6 @@ class SearchTelemetry {
     var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     var visibleSuggestions = [String]()
     var visibleFirefoxSuggestions = [RustFirefoxSuggestion]()
-    var visibleSearchHighlights = [HighlightItem]()
     var visibleData = [Site]()
 
     var searchQuery = ""
@@ -427,7 +425,7 @@ class SearchTelemetry {
     }
 
     func numberOfSearchResults() -> Int {
-        return visibleSuggestions.count + visibleData.count + visibleSearchHighlights.count
+        return visibleSuggestions.count + visibleData.count
         + visibleFilteredOpenedTabs.count + visibleFirefoxSuggestions.count
         + visibleFilteredRemoteClientTabs.count
     }
@@ -435,7 +433,6 @@ class SearchTelemetry {
     func clearVisibleResults() {
         visibleSuggestions.removeAll()
         visibleData.removeAll()
-        visibleSearchHighlights.removeAll()
         visibleFilteredOpenedTabs.removeAll()
         visibleFirefoxSuggestions.removeAll()
         visibleFilteredRemoteClientTabs.removeAll()
@@ -466,11 +463,6 @@ class SearchTelemetry {
                                    ? SearchTelemetryValues.Results.bookmark.rawValue
                                    : SearchTelemetryValues.Results.history.rawValue)
             }
-        }
-
-        if !visibleSearchHighlights.isEmpty {
-            resultTypes += Array(repeating: SearchTelemetryValues.Results.searchHistory.rawValue,
-                                 count: visibleSearchHighlights.count)
         }
 
         for suggestion in visibleFirefoxSuggestions {
@@ -506,11 +498,6 @@ class SearchTelemetry {
         if !visibleRemoteClientTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.general.rawValue,
                                 count: visibleRemoteClientTabs.count)
-        }
-
-        if !visibleSearchHighlights.isEmpty {
-            groupTypes += Array(repeating: SearchTelemetryValues.Groups.searchHistory.rawValue,
-                                count: visibleSearchHighlights.count)
         }
 
         if !visibleFirefoxSuggestions.isEmpty {

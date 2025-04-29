@@ -38,7 +38,15 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                     prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
                     defaultValue: true,
                     titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
-                ),
+                ) { isOn in
+                    store.dispatch(
+                        TopSitesAction(
+                            isEnabled: isOn,
+                            windowUUID: self.windowUUID,
+                            actionType: TopSitesActionType.toggleShowSectionSetting
+                        )
+                    )
+                },
                 BoolSetting(
                     prefs: profile.prefs,
                     theme: themeManager.getCurrentTheme(for: windowUUID),

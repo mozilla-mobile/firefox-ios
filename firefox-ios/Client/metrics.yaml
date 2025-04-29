@@ -2294,82 +2294,6 @@ firefox_home_page:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-  history_highlights_show_all:
-    type: counter
-    description: |
-      Counts the number of times a user taps the
-      Show All button in the History section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_item_opened:
-    type: event
-    description: |
-      Counts the number of times a user taps to open an
-      existing tab from the History Highlights section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9563
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_impressions:
-    type: event
-    description: |
-      Records the number of times a user views
-      history highlights section
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/18088
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18068
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_group_open:
-    type: event
-    description: |
-      Records the event where a user taps on a group item
-      within the History Highlights (Recently Visited) section.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10516
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  history_highlights_context:
-    type: event
-    description: |
-        Records when a user clicks on a contextual
-        menu option on a history highlight
-    extra_keys:
-      type:
-        type: string
-        description: |
-          Type of contextual action
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11003
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   pocket_stories_visible:
     type: boolean
     description: |
@@ -2389,7 +2313,7 @@ homepage:
   viewed:
     type: event
     description: |
-      Records when the Firefox homepage is viewed.
+      Records when the Firefox homepage is viewed. We consider a `view` to be if a user navigates to a new homepage whether through opening a new tab, navigating from a webpage, or after selecting the address bar. Seeing the homepage again after viewing a modal that is not full screen does not trigger a view.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/25082
     data_reviews:
@@ -2409,11 +2333,11 @@ homepage:
       section:
        type: string
        description: |
-        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.TappedItemType` under `sectionName`.
+        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.ItemType` under `sectionName`.
       type:
        type: string
        description: |
-        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.TappedItemType`.
+        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.ItemType`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/25086
     data_reviews:
@@ -2424,6 +2348,28 @@ homepage:
     metadata:
       tags:
         - Homepage
+
+  section_viewed:
+    type: labeled_counter
+    description: |
+      Records when a section has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to a section that has been scrolled to or seen on an homepage that has been viewed. The labels matches the values in `HomepageTelemetry.ItemType` under `sectionName`
+    labels:
+      - top_sites
+      - jump_back_in
+      - bookmarks
+      - stories
+      - customize_homepage
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/26216
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26234
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
 
 # Metrics related to the history panel of the library
 library:
@@ -6150,6 +6096,22 @@ webview:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  process_did_terminate:
+    type: event
+    extra_keys:
+      consecutive_crash:
+        type: quantity
+        description: |
+          The number of consecutive times the webview has crashed.
+    description: |
+      Recorded when a webview process terminates and we attempt a reload of that webview.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25951
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-10-01"
 
 fx_suggest:
   ping_type:
@@ -6318,24 +6280,6 @@ windows:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
     unit: quantity of iPad windows
-
-# Server Knobs validation
-server_knobs:
-  validation:
-    disabled: true
-    type: event
-    description: |
-      Temporary metric recorded at the same time as
-      "app_cycle.foreground" to validate that the Glean Server Knobs
-      functionality is working correctly.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688#c2
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-      - brosa@mozilla.com
-    expires: "2025-07-01"
 
 nimbus_system:
   recorded_nimbus_context:

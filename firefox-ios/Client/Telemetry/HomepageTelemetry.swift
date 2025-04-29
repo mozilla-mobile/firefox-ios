@@ -6,7 +6,7 @@ import Foundation
 import Glean
 
 struct HomepageTelemetry {
-    enum TappedItemType: String {
+    enum ItemType: String {
         case topSite = "top_site"
         case jumpBackInTab = "jump_back_in_tab"
         case jumpBackInSyncedTab = "jump_back_in_synced_tab"
@@ -44,9 +44,13 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.viewed)
     }
 
-    func sendItemTappedTelemetryEvent(for itemType: TappedItemType) {
+    func sendItemTappedTelemetryEvent(for itemType: ItemType) {
         let itemNameExtra = GleanMetrics.Homepage.ItemTappedExtra(section: itemType.sectionName, type: itemType.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemTapped, extras: itemNameExtra)
+    }
+
+    func sendSectionLabeledCounter(for itemType: ItemType) {
+        gleanWrapper.recordLabel(for: GleanMetrics.Homepage.sectionViewed, label: itemType.sectionName)
     }
 
     // MARK: - Top Sites

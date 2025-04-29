@@ -8,7 +8,7 @@ import ActivityKit
 import Common
 import Shared
 
-@available(iOS 16.2, *)
+@available(iOS 17, *)
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     enum DurationToDismissal: Double {
         case none = 0
@@ -18,12 +18,15 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
 
     var downloadProgressManager: DownloadProgressManager
 
-    init(downloadProgressManager: DownloadProgressManager) {
+    let windowUUID: String
+
+    init(downloadProgressManager: DownloadProgressManager, windowUUID: String) {
         self.downloadProgressManager = downloadProgressManager
+        self.windowUUID = windowUUID
     }
 
     func start() -> Bool {
-        let attributes = DownloadLiveActivityAttributes()
+        let attributes = DownloadLiveActivityAttributes(windowUUID: windowUUID)
 
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)

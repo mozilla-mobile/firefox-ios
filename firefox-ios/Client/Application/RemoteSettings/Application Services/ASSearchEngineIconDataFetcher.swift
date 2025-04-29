@@ -38,7 +38,6 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
         // Reminder: client creation must happen before sync() or the sync won't pull data for that client's collection
-        if SearchEngineFlagManager.temp_dbg_forceASSync { _ = try? service.sync() }
         guard let client, let records = client.getRecords() else {
             // If we can't fetch icons, return the input engines list with blank icons
             // This should never happen, but we need to make sure we handle it regardless
@@ -83,8 +82,10 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
 
             let iconImage = {
                 guard let maybeIconImage else {
-                    logger.log("No icon available for search engine.", level: .warning, category: .remoteSettings)
-                    return UIImage() // TODO: How do we handle this? Default icon? Blank icon?
+                    logger.log("No icon available for search engine '\(engineIdentifier)'.",
+                               level: .warning,
+                               category: .remoteSettings)
+                    return UIImage()
                 }
                 return maybeIconImage
             }()
@@ -110,7 +111,7 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
                 return UIImage(data: data)
             }
         } catch {
-            logger.log("Error fetching engine icon attachment.", level: .warning, category: .remoteSettings)
+            logger.log("Error fetching engine icon attachment (\(iconRecord.id)).", level: .warning, category: .remoteSettings)
         }
         return nil
     }

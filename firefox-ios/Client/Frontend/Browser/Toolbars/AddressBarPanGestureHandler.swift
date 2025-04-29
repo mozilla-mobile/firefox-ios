@@ -9,8 +9,8 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
         static let offset: CGFloat = 24
-        static let swipingDuration: TimeInterval = 0.15
-        static let swipingVelocity: CGFloat = 150
+        static let swipingDuration: TimeInterval = 0.25
+        static let swipingVelocity: CGFloat = 250
     }
 
     // MARK: - UI Properties
@@ -60,12 +60,26 @@ final class AddressBarPanGestureHandler: NSObject {
         panGestureRecognizer?.isEnabled = true
     }
 
+    // MARK: - Pan Gesture Availability
     func enablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = true
     }
 
     func disablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = false
+    }
+
+    /// Enables swiping gesture in overlay mode when no URL or text is in the address bar,
+    /// such as after dismissing the keyboard on the homepage.
+    func enablePanGestureOnHomepageIfNeeded() {
+        let addressToolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.addressToolbar
+        guard addressToolbarState?.didStartTyping == false,
+              addressToolbarState?.url == nil  else { return }
+        enablePanGestureRecognizer()
     }
 
     // MARK: - Pan Gesture Handling
@@ -82,6 +96,9 @@ final class AddressBarPanGestureHandler: NSObject {
             originalPosition = contentContainer.frame.origin
             // Set the initial position of webPagePreview with the offset
             webPagePreview.frame.origin.x = calculateX(width: originalPosition.x)
+            // Set to true to deactivate Auto Layout because we manipulate the rect of
+            // the view directly and want to avoid conflicts such as flickering.
+            webPagePreview.translatesAutoresizingMaskIntoConstraints = true
         case .changed:
             updateWebPagePreview(translation: translation, index: index, tabs: tabs)
         case .ended:
@@ -141,6 +158,8 @@ final class AddressBarPanGestureHandler: NSObject {
         }) { [self] _ in
             // Hide the webPagePreview after the animation.
             webPagePreview.isHidden = true
+            // Reactivate Auto Layout after the animation.
+            webPagePreview.translatesAutoresizingMaskIntoConstraints = false
             if shouldCompleteTransition && isValidIndex {
                 // Reset the positions and select the new tab if the transition was completed.
                 contentContainer.frame.origin.x = 0

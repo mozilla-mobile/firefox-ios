@@ -1,0 +1,17 @@
+features:
+  revert-unsafe-continuations-refactor:
+    description: >
+      A feature flag to wrap reverting the unsafe continuations usage in the app. Unsafe continuations were used in response to an early 2025 incident when iOS 18.0 (possibly beta only) crashed on checked continuations (both regular and throwing).
+    variables:
+      enabled:
+        description: >
+          If true, revert unsafe continuations usage back to normal checked continuations usage.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true

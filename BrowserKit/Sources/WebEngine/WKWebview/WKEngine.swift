@@ -11,18 +11,33 @@ public class WKEngine: Engine {
     private let userScriptManager: WKUserScriptManager
     private let webServerUtil: WKWebServerUtil
     private let engineDependencies: EngineDependencies
+    private let configProvider: WKEngineConfigurationProvider
 
+    // TODO: With Swift 6 we can use default params in the init
+    @MainActor
     public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
-        return WKEngine(engineDependencies: engineDependencies)
+        let configProvider = DefaultWKEngineConfigurationProvider()
+        let userScriptManager = DefaultUserScriptManager()
+        let webServerUtil = DefaultWKWebServerUtil.factory()
+        return WKEngine(
+            userScriptManager: userScriptManager,
+            webServerUtil: webServerUtil,
+            sourceTimerFactory: DefaultDispatchSourceTimerFactory(),
+            configProvider: configProvider,
+            engineDependencies: engineDependencies
+        )
     }
 
-    init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager(),
-         webServerUtil: WKWebServerUtil = DefaultWKWebServerUtil(),
-         sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory(),
+    @MainActor
+    init(userScriptManager: WKUserScriptManager,
+         webServerUtil: WKWebServerUtil,
+         sourceTimerFactory: DispatchSourceTimerFactory,
+         configProvider: WKEngineConfigurationProvider,
          engineDependencies: EngineDependencies) {
         self.userScriptManager = userScriptManager
         self.webServerUtil = webServerUtil
         self.sourceTimerFactory = sourceTimerFactory
+        self.configProvider = configProvider
         self.engineDependencies = engineDependencies
 
         InternalUtil().setUpInternalHandlers()
@@ -32,11 +47,11 @@ public class WKEngine: Engine {
         return WKEngineView(frame: .zero)
     }
 
+    @MainActor
     public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
-        let configProvider = DefaultWKEngineConfigurationProvider(parameters: dependencies.webviewParameters)
-        guard let session = WKEngineSession(userScriptManager: userScriptManager,
-                                            telemetryProxy: dependencies.telemetryProxy,
-                                            configurationProvider: configProvider) else {
+        guard let session = WKEngineSession.sessionFactory(userScriptManager: userScriptManager,
+                                                           dependencies: dependencies,
+                                                           configurationProvider: configProvider) else {
             throw EngineError.sessionNotCreated
         }
 

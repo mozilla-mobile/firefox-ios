@@ -14,7 +14,7 @@ class SearchDataProvider: SearchDataProviderProtocol {
             case .suggestions:
                 return "https://api.bing.com/osjson.aspx"
             case .searchTerm:
-                return "https://www.bing.com/search?q="
+                return "https://duckduckgo.com/?q="
             }
         }
     }

@@ -398,6 +398,45 @@ public class RustLogins: LoginsProtocol, KeyManager {
         return error
     }
 
+    // `verifyLogins` iterates through the stored logins of sync users checking if each record
+    // can be decrypted. If the record cannot be decrypted, it is locally deleted to potentially
+    // be overwritten by a previously synced server record.
+    //
+    // This function is meant to be executed only once (which is enforced via the
+    // `LoginsHaveBeenVerified` pref) and is called before a logins sync in `RustSyncManager`.
+    //
+    // NOTE: This function is for a very specific purpose and should not be used for general
+    // purposes.
+    public func verifyLogins(completionHandler: @escaping (Bool) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                self.logger.log("Logins verification failed as database is closed",
+                                level: .warning,
+                                category: .storage)
+                completionHandler(false)
+                return
+            }
+
+            self.getStoredKey { result in
+                switch result {
+                case .success:
+                    do {
+                        try self.storage?.deleteUndecryptableRecordsForRemoteReplacement()
+                        completionHandler(true)
+                    } catch let err as NSError {
+                        self.logger.log("Error verifying logins",
+                                        level: .warning,
+                                        category: .storage,
+                                        description: err.localizedDescription)
+                        completionHandler(false)
+                    }
+                case .failure:
+                    completionHandler(false)
+                }
+            }
+        }
+    }
+
     public func getLogin(id: String, completionHandler: @escaping (Result<Login?, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {

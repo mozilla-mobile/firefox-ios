@@ -14,7 +14,7 @@ class LibraryViewModelTests: XCTestCase {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        profile = MockProfile(databasePrefix: "libraryViewModel_tests")
         profile.reopen()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }

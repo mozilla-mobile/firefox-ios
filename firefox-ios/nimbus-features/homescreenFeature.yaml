@@ -9,38 +9,25 @@ features:
         type: Map<HomeScreenSection, Boolean>
         default:
           {
-            "jump-back-in": true,
             "recent-explorations": false,
           }
-      prefer-switch-to-open-tab:
-        description: >
-           Enables the feature to automatically switch to an existing tab
-           with the same content instead of opening a new one.
-        type: Boolean
-        default: false
     defaults:
       - channel: developer
         value: {
           "sections-enabled": {
-            "jump-back-in": true,
             "recent-explorations": false,
           },
-          "prefer-switch-to-open-tab": true
         }
       - channel: beta
         value: {
           "sections-enabled": {
-            "jump-back-in": true,
             "recent-explorations": false,
           },
-          "prefer-switch-to-open-tab": false
         }
 
 enums:
   HomeScreenSection:
     description: The identifiers for the sections of the homescreen.
     variants:
-      jump-back-in:
-        description: The tabs the user was looking immediately before being interrupted.
       recent-explorations:
         description: The tab groups

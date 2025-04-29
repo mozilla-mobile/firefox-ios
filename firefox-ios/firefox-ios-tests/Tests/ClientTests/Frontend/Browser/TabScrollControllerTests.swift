@@ -34,33 +34,6 @@ final class TabScrollControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testIsAbleToScrollTrue_ForIpadWhenAutoHideSettingIsEnabled() {
-        let subject = createSubject()
-        setupTabScroll(with: subject)
-        mockProfile.prefs.setBool(true,
-                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
-
-        XCTAssertTrue(subject.isAbleToScroll)
-    }
-
-    func testIsAbleToScrollTrue_ForIpadWhenAutoHideSettingIsDisabled() {
-        let subject = createSubject(deviceType: .pad)
-        setupTabScroll(with: subject)
-        mockProfile.prefs.setBool(false,
-                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
-
-        XCTAssertFalse(subject.isAbleToScroll)
-    }
-
-    func testIsAbleToScrollTrue_WhenDeviceisIphone() {
-        let subject = createSubject()
-        setupTabScroll(with: subject)
-        mockProfile.prefs.setBool(false,
-                                  forKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide)
-
-        XCTAssertTrue(subject.isAbleToScroll)
-    }
-
     func testHandlePan_ScrollingUp() {
         let subject = createSubject()
         setupTabScroll(with: subject)
@@ -171,9 +144,8 @@ final class TabScrollControllerTests: XCTestCase {
         subject.header = header
     }
 
-    private func createSubject(deviceType: UIUserInterfaceIdiom = .phone) -> TabScrollController {
-        let subject = TabScrollController(windowUUID: .XCTestDefaultUUID,
-                                          deviceType: deviceType)
+    private func createSubject() -> TabScrollController {
+        let subject = TabScrollController(windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
     }

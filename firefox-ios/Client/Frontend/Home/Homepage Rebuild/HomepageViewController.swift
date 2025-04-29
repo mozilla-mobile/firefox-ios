@@ -43,7 +43,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
-    // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
+
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
@@ -64,6 +64,11 @@ final class HomepageViewController: UIViewController,
     private let logger: Logger
     private let toastContainer: UIView
 
+    // Telemetry related
+    private var alreadyTrackedSections = Set<HomepageSection>()
+    private var alreadyTrackedTopSites = Set<HomepageItem>()
+    private let trackingImpressionsThrottler: ThrottleProtocol
+
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
@@ -72,7 +77,8 @@ final class HomepageViewController: UIViewController,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         throttler: ThrottleProtocol = Throttler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -81,6 +87,7 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+        self.trackingImpressionsThrottler = throttler
 
         // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(
@@ -166,9 +173,19 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackVisibleItemImpressions()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopCFRsTimer()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        resetTrackedObjects()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -198,6 +215,10 @@ final class HomepageViewController: UIViewController,
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
         handleToolbarStateOnScroll()
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        trackVisibleItemImpressions()
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -280,6 +301,12 @@ final class HomepageViewController: UIViewController,
             state: state,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
+        // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
+        if homepageState.shouldTriggerImpression {
+            scrollToTop()
+            resetTrackedObjects()
+            trackVisibleItemImpressions()
+        }
     }
 
     func unsubscribeFromRedux() {
@@ -329,7 +356,8 @@ final class HomepageViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -369,9 +397,10 @@ final class HomepageViewController: UIViewController,
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
-                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    "Section should not have been nil, something went wrong",
                     level: .fatal,
-                    category: .homepage
+                    category: .homepage,
+                    extra: ["Section Index": "\(sectionIndex)"]
                 )
                 return nil
             }
@@ -480,7 +509,7 @@ final class HomepageViewController: UIViewController,
                 onOpenSyncedTabAction: { [weak self] url in
                     guard let self else { return }
                     self.navigateToNewTab(with: url)
-                    self.sendTappedItemAction(item: item)
+                    self.sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
                 }
             )
             prepareSyncedTabContextualHint(onCell: syncedTabCell)
@@ -620,7 +649,7 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // MARK: Tap Geasutre Recognizer
+    // MARK: Tap Gesture Recognizer
     private func addTapGestureRecognizerToDismissKeyboard() {
         // We want any interaction with the homepage to dismiss the keyboard, including taps
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -748,18 +777,17 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchOpenTopSitesAction(at index: Int, tileType: String, urlString: String) {
+    private func dispatchTopSitesAction(at index: Int, config: TopSiteConfiguration, actionType: ActionType) {
         let config = TopSitesTelemetryConfig(
             isZeroSearch: homepageState.isZeroSearch,
             position: index,
-            tileType: tileType,
-            url: urlString
+            topSiteConfiguration: config
         )
         store.dispatch(
             TopSitesAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
-                actionType: TopSitesActionType.tapOnHomepageTopSitesCell
+                actionType: actionType
             )
         )
     }
@@ -776,18 +804,18 @@ final class HomepageViewController: UIViewController,
         }
         dispatchDidSelectCardItemAction(with: item)
         switch item {
-        case .topSite(let state, _):
+        case .topSite(let config, _):
             let destination = NavigationDestination(
                 .link,
-                url: state.site.url.asURL,
-                isGoogleTopSite: state.isGoogleURL,
+                url: config.site.url.asURL,
+                isGoogleTopSite: config.isGoogleURL,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-            dispatchOpenTopSitesAction(
+            dispatchTopSitesAction(
                 at: indexPath.item,
-                tileType: state.getTelemetrySiteType,
-                urlString: state.site.url
+                config: config,
+                actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .jumpBackIn(let config):
             store.dispatch(
@@ -829,18 +857,75 @@ final class HomepageViewController: UIViewController,
     /// is handled differently due to how tapping is handled for the cell. See `onOpenSyncedTabAction` in this file.
     private func dispatchDidSelectCardItemAction(with item: HomepageItem) {
         if case .jumpBackInSyncedTab = item { return }
-        sendTappedItemAction(item: item)
+        sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
     }
 
-    private func sendTappedItemAction(item: HomepageItem) {
-        let telemetryExtras = HomepageTelemetryExtras(itemType: item.telemetryTappedItemType)
+    /// Sends generic telemetry extras to middleware, sends additional extras `topSitesTelemetryConfig` for sponsored sites
+    private func sendItemActionWithTelemetryExtras(
+        item: HomepageItem,
+        actionType: HomepageActionType,
+        topSitesTelemetryConfig: TopSitesTelemetryConfig? = nil
+    ) {
+        let telemetryExtras = HomepageTelemetryExtras(
+            itemType: item.telemetryItemType,
+            topSitesTelemetryConfig: topSitesTelemetryConfig
+        )
         store.dispatch(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
                 windowUUID: windowUUID,
-                actionType: HomepageActionType.didSelectItem
+                actionType: actionType
             )
         )
+    }
+
+    /// Used to track impressions. If the user has already seen the item on the homepage, we only record the impression once.
+    /// We want to track at initial seen as well as when users scrolls.
+    /// A throttle is added in order to capture what the users has seen. When we scroll to top programmatically,
+    /// the impressions were being tracked, but to match user's perspective, we add a throttle to delay.
+    /// Time complexity: O(n) due to iterating visible items.
+    private func trackVisibleItemImpressions() {
+        trackingImpressionsThrottler.throttle { [weak self] in
+            guard let self else { return }
+            guard let collectionView else {
+                logger.log(
+                    "Homepage collectionview should not have been nil, unable to track impression",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
+            for indexPath in collectionView.indexPathsForVisibleItems {
+                guard let section = dataSource?.sectionIdentifier(for: indexPath.section),
+                      let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
+                handleTrackingImpressions(for: section, with: item, at: indexPath.item)
+            }
+        }
+    }
+
+    /// We want to capture generic section impressions,
+    /// but we also need to handle capturing individual sponsored tiles impressions
+    private func handleTrackingImpressions(for section: HomepageSection, with item: HomepageItem, at index: Int) {
+        handleTrackingTopSitesImpression(for: item, at: index)
+        handleTrackingSectionImpression(for: section, with: item)
+    }
+
+    private func handleTrackingTopSitesImpression(for item: HomepageItem, at index: Int) {
+        guard !alreadyTrackedTopSites.contains(item) else { return }
+        alreadyTrackedTopSites.insert(item)
+        guard case .topSite(let config, _) = item else { return }
+        dispatchTopSitesAction(at: index, config: config, actionType: TopSitesActionType.topSitesSeen)
+    }
+
+    private func handleTrackingSectionImpression(for section: HomepageSection, with item: HomepageItem) {
+        guard !alreadyTrackedSections.contains(section) else { return }
+        alreadyTrackedSections.insert(section)
+        sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.sectionSeen)
+    }
+
+    private func resetTrackedObjects() {
+        alreadyTrackedSections.removeAll()
+        alreadyTrackedTopSites.removeAll()
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)

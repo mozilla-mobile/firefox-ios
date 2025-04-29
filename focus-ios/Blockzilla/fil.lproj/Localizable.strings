@@ -85,6 +85,9 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Mga Site";
 
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Autocomplete.mySitesDesc" = "I-enable para i-autocomplete ng %@ ang iyong mga paboritong URL.";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Bagong Session";
 
@@ -122,7 +125,7 @@
 "Error.tryAgainButton" = "Subukang muli";
 
 /* Button label used for cancelling to open another app from Focus */
-"ExternalAppLink.cancelTitle" = "Kanselahin";
+"ExternalAppLink.cancelTitle" = "Ikansela";
 
 /* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ gustong buksan ang isa pang App";

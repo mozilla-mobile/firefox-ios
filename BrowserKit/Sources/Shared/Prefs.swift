@@ -12,6 +12,7 @@ public struct PrefsKeys {
 
     // Global sync state for rust sync manager
     public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
+    public static let LoginsHaveBeenVerified = "loginsHaveBeenVerified"
 
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -30,6 +31,7 @@ public struct PrefsKeys {
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
+    public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
     public static let ShowClipboardBar = "showClipboardBar"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
@@ -78,9 +80,7 @@ public struct PrefsKeys {
     public struct FeatureFlags {
         public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
-        public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
-        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
     }
@@ -109,10 +109,10 @@ public struct PrefsKeys {
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
+        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
-        public static let TabsAndAddressBarAutoHide = "TabsAndAddressBarAutoHidePrefsKey"
     }
 
     // Firefox contextual hint
@@ -123,7 +123,6 @@ public struct PrefsKeys {
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
         case inactiveTabsKey = "ContextualHintInactiveTabs"
-        case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
         case mainMenuKey = "MainMenuHintKey"
         case navigationKey = "ContextualHintNavigation"
     }
@@ -154,7 +153,6 @@ public struct PrefsKeys {
 
     // Tabs Tray
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
-    public static let TabMigrationKey = "TabMigrationKey"
     public static let TabSyncEnabled = "sync.engine.tabs.enabled"
 
     // Widgetkit Key
@@ -205,6 +203,9 @@ public struct PrefsKeys {
 
     // The timestamp where the app was last opened as default browser
     public static let LastOpenedAsDefaultBrowser = "LastOpenedAsDefaultBrowser"
+
+    // Used to only show the felt deletion alert confirmation once, used for private mode
+    public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
     public struct Usage {
         public static let profileId = "profileId"

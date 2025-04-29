@@ -80,26 +80,6 @@ class RootViewControllerModel {
 
     // MARK: - Address toolbar
     func addressToolbarContainerModel(url: URL?) -> AddressToolbarContainerModel {
-        let pageActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.qrCode,
-            isEnabled: true,
-            a11yLabel: "Read QR Code",
-            a11yHint: nil,
-            a11yId: "qrCodeButton",
-            hasLongPressAction: false,
-            onSelected: nil)]
-
-        let browserActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.appMenu,
-            isEnabled: true,
-            a11yLabel: "Open Menu",
-            a11yHint: nil,
-            a11yId: "appMenuButton",
-            hasLongPressAction: false,
-            onSelected: { _ in
-                self.addressToolbarDelegate?.didTapMenu()
-            })]
-
         let locationViewConfig = LocationViewConfiguration(
             searchEngineImageViewA11yId: "searchEngine",
             searchEngineImageViewA11yLabel: "Search engine icon",
@@ -107,7 +87,7 @@ class RootViewControllerModel {
             lockIconButtonA11yLabel: "Tracking Protection",
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTestField",
-            searchEngineImage: UIImage(named: "bingSearchEngine"),
+            searchEngineImage: UIImage(named: "duckduckgoSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Large.lock,
             lockIconNeedsTheming: false,
             safeListedURLImageName: StandardImageIdentifiers.Small.notificationDotFill,
@@ -127,7 +107,8 @@ class RootViewControllerModel {
             isPrivate: false,
             locationViewConfiguration: locationViewConfig,
             navigationActions: [],
-            pageActions: pageActions,
-            browserActions: browserActions)
+            leadingPageActions: [],
+            trailingPageActions: [],
+            browserActions: [])
     }
 }

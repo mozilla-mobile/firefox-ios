@@ -34,7 +34,6 @@ open class ClientSyncManagerSpy: ClientSyncManager {
     open func syncTabs() -> Deferred<Maybe<SyncResult>> { return emptySyncResult }
     open func syncHistory() -> Deferred<Maybe<SyncResult>> { return emptySyncResult }
     open func syncEverything(why: SyncReason) -> Success { return succeed() }
-    open func updateCreditCardAutofillStatus(value: Bool) {}
 
     var syncNamedCollectionsCalled = 0
     open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {

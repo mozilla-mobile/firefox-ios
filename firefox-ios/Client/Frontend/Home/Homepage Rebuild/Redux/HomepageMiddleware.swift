@@ -7,13 +7,14 @@ import Redux
 
 final class HomepageMiddleware {
     private let homepageTelemetry: HomepageTelemetry
+
     init(homepageTelemetry: HomepageTelemetry = HomepageTelemetry()) {
         self.homepageTelemetry = homepageTelemetry
     }
 
     lazy var homepageProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.viewWillAppear:
+        case HomepageActionType.viewWillAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             self.homepageTelemetry.sendHomepageImpressionEvent()
 
         case NavigationBrowserActionType.tapOnCustomizeHomepageButton:
@@ -36,6 +37,12 @@ final class HomepageMiddleware {
                 return
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
+
+        case HomepageActionType.sectionSeen:
+            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
+                return
+            }
+            self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
         default:
             break

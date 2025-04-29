@@ -393,7 +393,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
 
         updatePanelState(newState: .bookmarks(state: .inFolder))
         if let itemData = bookmarkCell as? BookmarkItemData,
-           let url = URL(string: itemData.url, invalidCharacters: false) {
+           let url = URL(string: itemData.url) {
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         } else {
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }

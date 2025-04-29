@@ -3,36 +3,36 @@ default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: ios
 pipelines:
   pipeline_build_and_test:
-    stages:
-    - pre_configuration: {}
-    - build_applications: {}
-    - run_tests: {}
-stages:
-  pre_configuration:
     workflows:
-    - determine_apps_affected: {}
-  build_applications:
-    workflows:
-    - firefox_configure_build:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - focus_configure_build:
-        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
-  run_tests:
-    workflows:
-    - build_and_test_1_SmokeTest1:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - build_and_test_2_SmokeTest2:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - build_and_test_3_SmokeTest3:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - build_and_test_4_SmokeTest4:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - focus_ui_test:
-        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
-    - focus_unit_test:
-        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
-    - klar_unit_test:
-        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
+        determine_apps_affected: {}
+        firefox_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
+            depends_on:
+            - determine_apps_affected
+        focus_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+            depends_on:
+            - determine_apps_affected
+        klar_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+            depends_on:
+            - determine_apps_affected
+        run_firefox_ui_tests:
+            run_if: 
+              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
+            depends_on:
+            - firefox_configure_build
+            parallel: 5
+        focus_ui_test:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+            depends_on:
+            - focus_configure_build
+            parallel: 1
+
 workflows:
   firefox_accessibility_test:
     before_run:
@@ -133,61 +133,58 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@2.1.1:
         is_always_run: true
-    - script@1.2.1:
-        title: Build for Testing
+    - xcode-build-for-test@3:
         inputs:
-        - content: |
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+    - script@1.2.1:
+        title: Override xctestrun file to UnitTests
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
             set -euxo pipefail
-            echo "-- build-for-testing --"
-            mkdir DerivedData
 
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+            # Point to the Unit tests plan instead of Accessibility
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.2-arm64.xctestrun"
 
-            ls /Users/vagrant/git/DerivedData/Build/Products
-            ls /Users/vagrant/git/DerivedData
+            if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
+              echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
+              exit 1
+            fi
+
+            echo "Found UnitTest .xctestrun: $UNIT_TESTS_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
+
     - xcode-test-without-building@0.4.0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun
         - maximum_test_repetitions: 2
+    - xcode-test-shard-calculation@0:
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        - shard_count: 5
+        - destination: $BITRISE_DESTINATION
+        outputs:
+        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX 
+        is_always_run: true
     - save-spm-cache@1.3.1:
         is_always_run: true
-    - script@1.2.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Compress Derived Data
-        is_always_run: true
-        inputs:
-        - content: |
-            set -euxo pipefail
-            ls /Users/vagrant/git/DerivedData
-            ls /Users/vagrant/git/DerivedData/Build/Products
-
-            echo "-- compress --"
-            # Add Fennec-iphonesimulator folder
-            # Add All .xctestrun files
-            # Add firefox-ios-test files and test plans
-
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/firefox-ios/Client.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/" \
-            "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
-            "$BITRISE_SOURCE_DIR/xcodebuild.log"
     - deploy-to-bitrise-io@2.10.0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests" | and (getenv "BITRISE_XCRESULT_PATH" | ne "")}}'
         inputs:
-        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: |-
-            $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
-            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
+            BITRISE_TEST_SHARDS_PATH_FIREFOX
+            BITRISE_TEST_BUNDLE_PATH
+            BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         is_always_run: true
     - script@1.1.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
         timeout: 360
         inputs:
@@ -249,56 +246,23 @@ workflows:
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
-  build_and_test_1_SmokeTest1:
-    envs:
-    - opts:
-        is_expand: false
-      SHARD: '1'
-    after_run:
-    - _build_and_test
-
-  build_and_test_2_SmokeTest2:
-    envs:
-    - opts:
-        is_expand: false
-      SHARD: '2'
-    after_run:
-    - _build_and_test
-
-  build_and_test_3_SmokeTest3:
-    envs:
-    - opts:
-        is_expand: false
-      SHARD: '3'
-    after_run:
-    - _build_and_test
-
-  build_and_test_4_SmokeTest4:
-    envs:
-    - opts:
-        is_expand: false
-      SHARD: '4'
-    after_run:
-    - _build_and_test
-
-  _build_and_test:
+  run_firefox_ui_tests:
     before_run:
-    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
-    - decision_to_run_UI_Tests
-    - firefox_pull_and_unzip_dependencies
     steps:
-    - xcode-test-without-building@0.4.0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
-        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator18.2-arm64.xctestrun"
-    - deploy-to-bitrise-io@2.10.0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_${SHARD}_XCRESULT_PATH'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.2-arm64.xctestrun
+    - deploy-to-bitrise-io@2.10.0: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.2.x
+        machine_type_id: g2.mac.4x-large
   determine_apps_affected:
     steps:
     - git-clone@6.2: {}
@@ -411,8 +375,12 @@ workflows:
             envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
             envman add --key BUILD_FOCUS_IOS --value "$BUILD_FOCUS_IOS"
             envman add --key BUILD_SAMPLE_BROWSER_IOS --value "$BUILD_SAMPLE_BROWSER_IOS"
-    - share-pipeline-variable@1.1.1:
-        title: Share which application(s) to base configuration off of
+
+            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
+            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
+            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
+
+    - share-pipeline-variable@1:
         inputs:
         - variables: |-
             BUILD_FIREFOX_IOS
@@ -429,26 +397,6 @@ workflows:
             echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
-  firefox_pull_and_unzip_dependencies:
-    steps:
-    - pull-intermediate-files@1.2.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - verbose: true
-        - artifact_sources: build_applications.firefox_configure_build
-    - script@1.2.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Unzip
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "$DERIVED_DATA_DIR"
-
-            echo "-- unzip -- "
-            exec unzip "$DERIVED_DATA_DIR"
-
-            echo "show dir"
-            ls
   send_slack_notification:
     steps:
     - slack@4.2.1:
@@ -1690,59 +1638,18 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - restore-spm-cache@1:
-        is_always_run: true
-    - script@1.1:
-        title: Build for Testing
+    - xcode-test@6.0.1:
+        timeout: 3000
         inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing --"
-            mkdir DerivedData
-
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
-
-            ls /Users/vagrant/git/DerivedData/Build/Products
-            ls /Users/vagrant/git/DerivedData
-    - xcode-test-without-building@0:
-        timeout: 2400
-        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - scheme: Fennec
+        - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
+        - test_plan: UnitTest
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 10
-    - script@1.2.1:
-        title: Compress Derived Data
-        is_always_run: true
-        inputs:
-        - content: |
-            set -euxo pipefail
-            ls /Users/vagrant/git/DerivedData
-            ls /Users/vagrant/git/DerivedData/Build/Products
-
-            echo "-- compress --"
-            # Add Fennec-iphonesimulator folder
-            # Add All .xctestrun files
-            # Add firefox-ios-test files and test plans
-
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/firefox-ios/Client.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/" \
-            "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
-            "$BITRISE_SOURCE_DIR/xcodebuild.log"
-    - deploy-to-bitrise-io@2.10.0:
-        inputs:
-        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        - pipeline_intermediate_files: |-
-            $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
-            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
-        is_always_run: true
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
@@ -1760,57 +1667,85 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - script@1.2.1:
-        title: Build for Testing Focus
+    - xcode-build-for-test@3:
         inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing --"
-            mkdir DerivedData
-            #xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+        - scheme: Focus
+        - configuration: FocusDebug
+        - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
-        title: Build for Testing Klar
+        title: Override xctestrun Focus env variables
         inputs:
-        - content: |
+        - content: |-
+            #!/usr/bin/env bash
             set -euxo pipefail
-            echo "-- build-for-testing --"
-            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
-    - script@1.2.1:
-        title: Compress Derived Data
-        is_always_run: true
+            # Point to the Unit tests plan instead of Accessibility
+            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator18.2-arm64.xctestrun"
+
+            echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
+    - xcode-test-without-building@0.4.2:
+        timeout: 1200
         inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- compress --"
-            # Add FocusDebug-iphonesimulator folder
-            # Add All .xctestrun files
-            # Add focuos-ios-test files and test plans
-            # Add KlarDebug-iphonesimulator folder
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
-            "${BITRISE_SOURCE_DIR}/focus-ios/Blockzilla.xcodeproj" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
-            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/" \
-            "$BITRISE_SOURCE_DIR/focus-ios/xcodebuild.log" \
-            "$BITRISE_SOURCE_DIR/focus-ios/Blockzilla/"
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator18.2-arm64.xctestrun
+    - xcode-test-shard-calculation@0:
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH
+        - shard_count: 1
+        - destination: $BITRISE_DESTINATION
     - deploy-to-bitrise-io@2.10.0:
         inputs:
-        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: |-
-            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
+            BITRISE_TEST_BUNDLE_PATH
+            BITRISE_TEST_SHARDS_PATH
+            BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH
     - slack@4.2.1:
         run_if: ".IsBuildFailed"
         inputs:
         - channel: "#mobile-alerts-ios"
         - message: "The build failed to build"
         - webhook_url: "$SLACK_WEBHOOK"
-  focus_ui_test:
+
+  klar_configure_build:
     before_run:
-    - focus-pull-and-unzip-dependencies
+    - focus-clone-and-build-dependencies
+    steps:
+    - cache-pull@2.7.2: {}
+    #- swiftlint-extended@1:
+    #    inputs:
+    #    - linting_path: "$BITRISE_SOURCE_DIR"
+    - script@1.2.1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements  
+    - xcode-build-for-test@3:
+        inputs:
+        - scheme: Klar
+        - configuration: KlarDebug
+        - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+    - xcode-test-without-building@0.4.2:
+        timeout: 1200
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Klar_UnitTests_iphonesimulator18.2-arm64.xctestrun
+    - deploy-to-bitrise-io@2.10.0: {}
+    - slack@4.2.1:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "The build run the Klar testPlan: UnitTests"
+        - webhook_url: "$SLACK_WEBHOOK"
+  focus_ui_test:
     steps:
     - script@1.2.1:
         inputs:
@@ -1832,23 +1767,14 @@ workflows:
                 envman add --key TEST_PLAN_NAME --value SmokeTest
             fi
         - title: Check if build is scheduled or regular to set the test plan
-    - script@1.2.1:
-        title: Test without Building
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.4.2:
+        timeout: 1200
         inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -ex
-            ls ./Users/vagrant/git/focus-ios/focus-ios-tests/XCUITest/
-            ls ./Users/vagrant/git/DerivedData/Build/Products
-            cp -r ./Users/vagrant/git/focus-ios/focus-ios-tests/XCUITest/* .
-            mv ./Users/vagrant/git/* .
-            ls -la
-            echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator18.2-arm64.xctestrun"
-    - custom-test-results-export@1.0.0:
-        inputs:
-        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
-        - test_name: SmokeTest
+        - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator18.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
     - github-status@3.0.1:
         inputs:
@@ -1858,61 +1784,6 @@ workflows:
         inputs:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: $TEST_PLAN_NAME"
-        - webhook_url: "$SLACK_WEBHOOK"
-  klar_unit_test:
-    before_run:
-    - focus-pull-and-unzip-dependencies
-    steps:
-    - script@1.2.1:
-        title: Test without Building
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -ex
-            ls ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/
-            cp -r ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/* .
-            mv ./Users/vagrant/git/* .
-            ls -la
-            echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator18.2-arm64.xctestrun"
-    - custom-test-results-export@1.0.0:
-        inputs:
-        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
-        - test_name: UnitTestsKlar
-    - deploy-to-bitrise-io@2.10.0: {}
-    - slack@4.2.1:
-        run_if: ".IsBuildFailed"
-        inputs:
-        - channel: "#mobile-alerts-ios"
-        - message: "The build run the Klar testPlan: UnitTests"
-        - webhook_url: "$SLACK_WEBHOOK"
-
-  focus_unit_test:
-    before_run:
-    - focus-pull-and-unzip-dependencies
-    steps:
-    - script@1.2.1:
-        title: Test without Building
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -ex
-            ls ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/
-            cp -r ./Users/vagrant/git/focus-ios/Blockzilla.xcodeproj/* .
-            mv ./Users/vagrant/git/* .
-            ls -la
-            echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 16,OS=18.2" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator18.2-arm64.xctestrun"
-    - custom-test-results-export@1.0.0:
-        inputs:
-        - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
-        - test_name: UnitTests
-    - deploy-to-bitrise-io@2.10.0: {}
-    - slack@4.2.1:
-        run_if: ".IsBuildFailed"
-        inputs:
-        - channel: "#mobile-alerts-ios"
-        - message: "The build run the Focus testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
 
   # # FOCUS UTILITIES WORKFLOWS
@@ -1927,24 +1798,6 @@ workflows:
             #!/usr/bin/env bash
             ./checkout.sh
         title: ContentBlockerGen
-
-  focus-pull-and-unzip-dependencies:
-    description: Pulls and unzip the dependencies from previous stage
-    steps:
-    - pull-intermediate-files@1.2.1:
-        inputs:
-        - verbose: true
-        - artifact_sources: build_applications.focus_configure_build
-    - script@1.2.1:
-        title: Unzip
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "$DERIVED_DATA_DIR"
-            echo "-- unzip -- "
-            exec unzip "${DERIVED_DATA_DIR}"
-            echo "show dir"
-            ls
 
   focus-set-project-version:
     steps:
@@ -2272,6 +2125,150 @@ workflows:
             focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
 
+# RelPro workflows
+  release_promotion_promote:
+    before_run:
+    - SPM_Common_Steps
+    steps:
+    - script@1.2.1:
+        # If the current bitrise application is `staging-firefox-ios`, then
+        # this is a test release made from the staging repository.
+        # Ignore the value passed by release promotion for `BITRISE_SCHEME` and
+        # force it to `FirefoxStaging`, which makes it use non production
+        # certs/profiles. Also override the export method since the scheme is
+        # using a developer ID, not a distribution one
+        title: Set staging environment variables
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            envman add --key BITRISE_SCHEME --value FirefoxStaging
+            envman add --key EXPORT_METHOD --value development
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "staging-firefox-ios"}}
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+
+            cd firefox-ios/Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+    - script@1.2.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+
+            ./bootstrap.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: "$EXPORT_METHOD"
+        - output_tool: xcodebuild
+        - distribution_method: "$EXPORT_METHOD"
+        - export_development_team: 43AQ936H96
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@2.9.2: {}
+    envs:
+    - opts:
+        is_expand: false
+      EXPORT_METHOD: app-store
+    description: This step is used during release promotion to build a firefox release
+
+  release_promotion_push:
+    envs:
+    - IPA_PATH: /tmp/Client.ipa
+    - DSYM_PATH: /tmp/symbols.zip
+    steps:
+    - file-downloader@1:
+        title: Download Artifact
+        inputs:
+        - destination: $IPA_PATH
+        - source: https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/$BUILD_TASK_ID/artifacts/public%2Frelease_promotion_promote%2FClient.ipa
+    - file-downloader@1:
+        title: Download symbols
+        inputs:
+        - destination: $DSYM_PATH
+        - source: https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/$BUILD_TASK_ID/artifacts/public%2Frelease_promotion_promote%2FClient.dSYM.zip
+    - script@1.2.1:
+        title: Check if IPA was downloaded
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            echo "$IPA_PATH"
+            file "$IPA_PATH"
+    - script@1.2.1:
+        title: Check if symbols were downloaded
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            echo "$DSYM_PATH"
+            file "$DSYM_PATH"
+    - script@1.2.1:
+        title: Upload Firefox Prod Beta Symbols
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
+              --org mozilla --project firefox-ios "$DSYM_PATH"
+    - deploy-to-itunesconnect-application-loader@1:
+        title: Deploy to AppStoreConnect
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        - ipa_path: $IPA_PATH
+        - retries: 5
+
 app:
   envs:
   - opts:
@@ -2280,6 +2277,15 @@ app:
   - opts:
       is_expand: false
     BITRISE_NIGHTLY_VERSION: '9000'
+  - opts:
+      is_expand: false
+    BITRISE_PROJECT_PATH: './firefox-ios/Client.xcodeproj'
+  - opts:
+      is_expand: false
+    BITRISE_SCHEME: 'Fennec'
+  - opts:
+      is_expand: false
+    BITRISE_DESTINATION: 'platform=iOS Simulator,name=Bitrise iOS default,OS=latest'
 
 
 trigger_map:
@@ -2299,4 +2305,4 @@ trigger_map:
 meta:
   bitrise.io:
     stack: osx-xcode-16.2.x
-    machine_type_id: g2.mac.large
+    machine_type_id: g2.mac.4large

@@ -40,7 +40,7 @@ struct URLScanner {
         guard let scheme = urlComponents.scheme, urlSchemes.contains(scheme) else { return nil }
         self.scheme = scheme
         self.host = urlComponents.host ?? ""
-        self.components = URL(string: urlComponents.path, invalidCharacters: false)?.pathComponents ?? []
+        self.components = URL(string: urlComponents.path)?.pathComponents ?? []
         self.queries = urlComponents.queryItems ?? []
     }
 

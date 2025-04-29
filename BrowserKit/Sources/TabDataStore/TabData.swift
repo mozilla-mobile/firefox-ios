@@ -12,7 +12,6 @@ public struct TabData: Codable {
     public let isPrivate: Bool
     public let lastUsedTime: Date
     public let createdAtTime: Date
-    public var tabGroupData: TabGroupData?
 
     public init(id: UUID,
                 title: String?,
@@ -20,8 +19,7 @@ public struct TabData: Codable {
                 faviconURL: String?,
                 isPrivate: Bool,
                 lastUsedTime: Date,
-                createdAtTime: Date,
-                tabGroupData: TabGroupData? = nil) {
+                createdAtTime: Date) {
         self.id = id
         self.title = title
         self.siteUrl = siteUrl
@@ -29,6 +27,5 @@ public struct TabData: Codable {
         self.isPrivate = isPrivate
         self.lastUsedTime = lastUsedTime
         self.createdAtTime = createdAtTime
-        self.tabGroupData = tabGroupData
     }
 }

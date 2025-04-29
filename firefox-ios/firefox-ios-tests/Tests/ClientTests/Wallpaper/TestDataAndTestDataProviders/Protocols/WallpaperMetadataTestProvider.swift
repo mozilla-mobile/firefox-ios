@@ -26,6 +26,7 @@ extension WallpaperMetadataTestProvider {
         case .noLocales: return getNoLocalesMetadata()
         case .availabilityStart: return getAvailabilityStartMetadata()
         case .availabilityEnd: return getAvailabilityEndMetadata()
+        case .newUpdates: return getNewUpdatesMetadata()
         default:
             fatalError("No such expected data exists")
         }
@@ -173,6 +174,28 @@ extension WallpaperMetadataTestProvider {
                         end: endDate),
                     wallpapers: [
                         Wallpaper(id: "beachVibes",
+                                  textColor: textColor,
+                                  cardColor: textColor,
+                                  logoTextColor: textColor)
+                    ],
+                description: nil,
+                heading: nil)
+            ])
+    }
+
+    private func getNewUpdatesMetadata() -> WallpaperMetadata {
+        return WallpaperMetadata(
+            lastUpdated: lastUpdatedDate,
+            collections: [
+                WallpaperCollection(
+                    id: "firefox",
+                    learnMoreURL: learnMoreURL,
+                    availableLocales: ["en-US", "es-US", "en-CA", "fr-CA"],
+                    availability: WallpaperCollectionAvailability(
+                        start: startDate,
+                        end: endDate),
+                    wallpapers: [
+                        Wallpaper(id: "northenLightsUpdates",
                                   textColor: textColor,
                                   cardColor: textColor,
                                   logoTextColor: textColor)

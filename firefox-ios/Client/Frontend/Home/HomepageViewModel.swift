@@ -102,7 +102,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var topSiteViewModel: TopSitesViewModel
     var bookmarksViewModel: BookmarksViewModel
     var jumpBackInViewModel: JumpBackInViewModel
-    var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
@@ -147,18 +146,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         self.bookmarksViewModel = BookmarksViewModel(profile: profile,
                                                      theme: theme,
                                                      wallpaperManager: wallpaperManager)
-        let deletionUtility = HistoryDeletionUtility(with: profile)
-        let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
-            profile: profile,
-            tabManager: tabManager,
-            deletionUtility: deletionUtility)
-        self.historyHighlightsViewModel = HistoryHighlightsViewModel(
-            with: profile,
-            isPrivate: isPrivate,
-            theme: theme,
-            historyHighlightsDataAdaptor: historyDataAdaptor,
-            wallpaperManager: wallpaperManager)
-
         let pocketDataAdaptor = PocketDataAdaptorImplementation(pocketAPI: PocketProvider(prefs: profile.prefs))
         self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor,
                                                theme: theme,
@@ -172,14 +159,12 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 bookmarksViewModel,
-                                historyHighlightsViewModel,
                                 pocketViewModel,
                                 customizeButtonViewModel]
         self.isPrivate = isPrivate
 
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
-        historyHighlightsViewModel.delegate = self
         bookmarksViewModel.delegate = self
         pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self

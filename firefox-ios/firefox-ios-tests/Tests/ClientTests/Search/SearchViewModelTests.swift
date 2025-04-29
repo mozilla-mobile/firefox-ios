@@ -54,7 +54,6 @@ final class SearchViewModelTests: XCTestCase {
         subject.filteredOpenedTabs = []
         subject.filteredRemoteClientTabs = []
         searchEnginesManager.shouldShowSyncedTabsSuggestions = false
-        subject.searchHighlights = []
         subject.firefoxSuggestions = []
         searchEnginesManager.shouldShowFirefoxSuggestions = false
         searchEnginesManager.shouldShowSponsoredSuggestions = false

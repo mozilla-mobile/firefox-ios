@@ -12,7 +12,8 @@ struct AddressToolbarContainerModel {
     let isPrivate: Bool
     let locationViewConfiguration: LocationViewConfiguration
     let navigationActions: [ToolbarElement]
-    let pageActions: [ToolbarElement]
+    let leadingPageActions: [ToolbarElement]
+    let trailingPageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
     var manager: ToolbarManager = DefaultToolbarManager()
 
@@ -20,7 +21,8 @@ struct AddressToolbarContainerModel {
         return AddressToolbarConfiguration(
             locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
-            pageActions: pageActions,
+            leadingPageActions: leadingPageActions,
+            trailingPageActions: trailingPageActions,
             browserActions: browserActions,
             borderPosition: borderPosition,
             uxConfiguration: AddressToolbarUXConfiguration.default,

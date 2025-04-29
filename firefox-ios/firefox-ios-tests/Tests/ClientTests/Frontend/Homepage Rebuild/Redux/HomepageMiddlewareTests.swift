@@ -44,6 +44,24 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    func test_shouldShowImpressionTriggeredAction_sendsTelemetryData() throws {
+        let subject = createSubject()
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
     func test_tapOnCustomizeHomepageAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = NavigationBrowserAction(
@@ -151,7 +169,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_didSelectItemAction_sendTelemetryData() throws {
         let subject = createSubject()
         let action = HomepageAction(
-            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite),
+            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite, topSitesTelemetryConfig: nil),
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.didSelectItem
         )
@@ -172,6 +190,26 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(savedExtras.type, "top_site")
         XCTAssertEqual(savedExtras.section, "top_sites")
+    }
+
+    func test_sectionSeenAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            telemetryExtras: HomepageTelemetryExtras(itemType: .topSite, topSitesTelemetryConfig: nil),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.sectionSeen
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? LabeledMetricType<CounterMetricType>)
+        let expectedMetricType = type(of: GleanMetrics.Homepage.sectionViewed)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(mockGleanWrapper?.savedLabel as? String, "top_sites")
     }
 
     // MARK: - Helpers

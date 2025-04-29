@@ -8,11 +8,11 @@ features:
         description: >
             Enables the feature
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
-          status: false
+          status: true
       - channel: developer
         value:
           status: false

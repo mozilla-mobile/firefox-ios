@@ -149,7 +149,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         switch topSite.type {
         case .sponsoredSite(let siteInfo):
-            if let url = URL(string: siteInfo.imageURL, invalidCharacters: false) {
+            if let url = URL(string: siteInfo.imageURL) {
                 imageResource = .remoteURL(url: url)
             }
         case .pinnedSite, .suggestedSite:

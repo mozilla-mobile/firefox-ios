@@ -24,7 +24,7 @@ extension UIPasteboard {
 
     private var syncURL: URL? {
         return UIPasteboard.general.string.flatMap {
-            guard let url = URL(string: $0, invalidCharacters: false),
+            guard let url = URL(string: $0),
                     url.isWebPage()
             else { return nil }
             return url

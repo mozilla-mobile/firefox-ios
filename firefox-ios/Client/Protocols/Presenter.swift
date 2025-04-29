@@ -6,12 +6,14 @@ import Foundation
 
 /// Protocol to present a view controller
 protocol Presenter {
+    @MainActor
     func present(_ viewControllerToPresent: UIViewController,
                  animated flag: Bool,
                  completion: (() -> Void)?)
 }
 
 extension Presenter {
+    @MainActor
     func present(_ viewControllerToPresent: UIViewController,
                  animated flag: Bool,
                  completion: (() -> Void)? = nil) {

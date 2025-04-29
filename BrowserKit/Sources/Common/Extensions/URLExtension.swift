@@ -5,13 +5,6 @@
 import Foundation
 
 extension URL {
-    /// Temporary init that will be removed with the update to XCode 15 where this URL API is available
-    public init?(string: String, invalidCharacters: Bool) {
-        // FXIOS-8107: Removed 'encodingInvalidCharacters' init for
-        // compatibility reasons that is available for iOS 17+ only
-        self.init(string: string)
-    }
-
     /// Returns a shorter displayable string for a domain
     /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
     /// https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo

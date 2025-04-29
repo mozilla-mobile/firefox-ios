@@ -14,18 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
         sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
     )
 
-    lazy var engineProvider: EngineProvider = {
-        let parameters = WKWebviewParameters(blockPopups: false, isPrivate: false)
-        let dependencies = EngineSessionDependencies(webviewParameters: parameters,
-                                                     telemetryProxy: TelemetryHandler())
-        return EngineProvider(sessionDependencies: dependencies)!
-    }()
+    lazy var engineDependencyManager = EngineDependencyManager()
+    var engineProvider: EngineProvider?
 
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        engineProvider.warmEngine()
+        Task {
+            self.engineProvider = await EngineProviderManager.shared.getProvider()
+            engineProvider?.warmEngine()
+        }
 
         return true
     }
@@ -42,11 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        engineProvider.idleEngine()
+        engineProvider?.idleEngine()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        engineProvider.warmEngine()
+        engineProvider?.warmEngine()
     }
 
     // MARK: UISceneSession Lifecycle

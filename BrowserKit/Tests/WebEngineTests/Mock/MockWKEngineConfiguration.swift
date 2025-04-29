@@ -7,6 +7,7 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineConfiguration: WKEngineConfiguration {
+    var webViewConfiguration: WKWebViewConfiguration
     var scriptNameAdded: String?
     var addUserScriptCalled = 0
     var addInDefaultContentWorldCalled = 0
@@ -14,6 +15,10 @@ class MockWKEngineConfiguration: WKEngineConfiguration {
     var addInCustomContentWorldCalled = 0
     var removeScriptMessageHandlerCalled = 0
     var removeAllUserScriptsCalled = 0
+
+    init(webViewConfiguration: WKWebViewConfiguration) {
+        self.webViewConfiguration = webViewConfiguration
+    }
 
     func addUserScript(_ userScript: WKUserScript) {
         addUserScriptCalled += 1

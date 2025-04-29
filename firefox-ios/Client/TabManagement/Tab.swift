@@ -107,11 +107,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
     }
 
-    var timerPerWebsite: [String: StopWatchTimer] = [:]
-
-    // Tab Groups
-    var metadataManager: LegacyTabMetadataManager?
-
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
     var pageMetadata: PageMetadata? {
@@ -166,13 +161,13 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             return url
         }
         if let string = pageMetadata?.siteURL,
-           let siteURL = URL(string: string, invalidCharacters: false) {
+           let siteURL = URL(string: string) {
             // If the canonical URL from the page metadata doesn't contain the
             // "#" fragment, check if the tab's URL has a fragment and if so,
             // append it to the canonical URL.
             if siteURL.fragment == nil,
                let fragment = self.url?.fragment,
-               let siteURLWithFragment = URL(string: "\(string)#\(fragment)", invalidCharacters: false) {
+               let siteURLWithFragment = URL(string: "\(string)#\(fragment)") {
                 return siteURLWithFragment
             }
 
@@ -285,7 +280,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         didSet {
             guard let url = url,
                   let faviconURLString = faviconURL,
-                  let faviconUrl = URL(string: faviconURLString, invalidCharacters: false)
+                  let faviconUrl = URL(string: faviconURLString)
             else { return }
             faviconHelper.cacheFaviconURL(
                 siteURL: url,
@@ -301,7 +296,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 url = sourceURL
             }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
-                url = URL(string: internalUrl.stripAuthorization, invalidCharacters: false)
+                url = URL(string: internalUrl.stripAuthorization)
             }
         }
     }
@@ -481,7 +476,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.windowUUID = windowUUID
         self.noImageMode = false
         self.profile = profile
-        self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
@@ -867,7 +861,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
-            metadataManager?.updateObservationTitle(title)
+            // `Tab.toRemoteTab` was added for FXIOS-8241
             _ = Tab.toRemoteTab(self, inactive: false)
         }
     }

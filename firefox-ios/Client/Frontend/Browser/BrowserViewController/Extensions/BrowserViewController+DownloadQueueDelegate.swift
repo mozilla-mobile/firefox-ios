@@ -15,6 +15,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         guard download.mimeType != MIMEType.Passbook else { return }
 
         if let downloadProgressManager = self.downloadProgressManager {
+            if tabManager.selectedTab?.isPrivate == true {
+                dismissDownloadLiveActivity()
+            }
             downloadProgressManager.addDownload(download)
             return
         }
@@ -22,8 +25,12 @@ extension BrowserViewController: DownloadQueueDelegate {
         let downloadProgressManager = DownloadProgressManager(downloads: [download])
         self.downloadProgressManager = downloadProgressManager
 
-        if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
-            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
+        if #available(iOS 17, *),
+            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+            tabManager.selectedTab?.isPrivate == false {
+            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(
+                downloadProgressManager: downloadProgressManager,
+                windowUUID: windowUUID.uuidString)
             downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
             self.downloadLiveActivityWrapper = downloadLiveActivityWrapper
             guard downloadLiveActivityWrapper.start() else {
@@ -34,16 +41,20 @@ extension BrowserViewController: DownloadQueueDelegate {
         presentDownloadProgressToast(download: download, windowUUID: uuid)
     }
 
-    func stopDownload(buttonPressed: Bool) {
-        // When this toast is dismissed, be sure to clear this so that any
-        // subsequent downloads cause a new toast to be created.
-        self.downloadToast = nil
-        if #available(iOS 16.2, *),
+    private func dismissDownloadLiveActivity() {
+        if #available(iOS 17, *),
            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(durationToDismissal: .none)
             self.downloadLiveActivityWrapper = nil
         }
+    }
+
+    func stopDownload(buttonPressed: Bool) {
+        // When this toast is dismissed, be sure to clear this so that any
+        // subsequent downloads cause a new toast to be created.
+        self.downloadToast = nil
+        dismissDownloadLiveActivity()
         self.downloadProgressManager = nil
 
         // Handle download cancellation
@@ -83,7 +94,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
         DispatchQueue.main.async { [weak self] in
             downloadToast.dismiss(false)
-            if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
+            if #available(iOS 17, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
                 self?.downloadLiveActivityWrapper = nil
             }
@@ -102,7 +113,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         // We only care about download errors specific to our window's downloads
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
-            if #available(iOS 16.2, *),
+            if #available(iOS 17, *),
                let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
                 self.downloadLiveActivityWrapper = nil

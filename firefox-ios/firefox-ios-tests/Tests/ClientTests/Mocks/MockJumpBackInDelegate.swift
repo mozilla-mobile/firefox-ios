@@ -6,18 +6,11 @@ import XCTest
 @testable import Client
 
 final class MockJumpBackInDelegate: JumpBackInDelegate {
-    private var continuation: CheckedContinuation<Void, Never>?
-    var didLoadNewDataCount = 0
+    var didLoadNewDataCalled = 0
+    var didLoadNewDataHandler: (() -> Void)?
 
     func didLoadNewData() {
-        didLoadNewDataCount += 1
-        continuation?.resume()
-        continuation = nil
-    }
-
-    func waitForNewData() async {
-        await withCheckedContinuation { continuation in
-            self.continuation = continuation
-        }
+        didLoadNewDataCalled += 1
+        didLoadNewDataHandler?()
     }
 }

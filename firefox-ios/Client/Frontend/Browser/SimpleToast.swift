@@ -73,7 +73,16 @@ struct SimpleToast: ThemeApplicable {
         animate(containerView)
 
         if UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .announcement, argument: text)
+            let announcementString = NSMutableAttributedString(string: text)
+
+            // FXIOS-10766/10767 Prevents toast messages from being interrupted
+            if #available(iOS 17, *) {
+                let fullRange = NSRange(location: 0, length: announcementString.length)
+                announcementString.addAttribute(NSAttributedString.Key.accessibilitySpeechAnnouncementPriority,
+                                                value: UIAccessibilityPriority.high.rawValue,
+                                                range: fullRange)
+            }
+            UIAccessibility.post(notification: .announcement, argument: announcementString)
         }
     }
 

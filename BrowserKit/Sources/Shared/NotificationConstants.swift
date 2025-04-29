@@ -67,6 +67,8 @@ extension Notification.Name {
 
     public static let ShowHomepage = Notification.Name("ShowHomepage")
 
+    public static let StopDownloads = Notification.Name("StopDownloads")
+
     public static let TabsTrayDidClose = Notification.Name("TabsTrayDidClose")
 
     public static let TabsTrayDidSelectHomeTab = Notification.Name("TabsTrayDidSelectHomeTab")
@@ -111,7 +113,6 @@ extension Notification.Name {
     public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
-    public static let HistoryUpdated = Notification.Name("HistoryUpdated")
     public static let PageZoomLevelUpdated = Notification.Name("PageZoomLevelUpdated")
 
     // Search

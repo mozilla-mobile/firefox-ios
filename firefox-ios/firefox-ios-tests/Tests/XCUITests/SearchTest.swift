@@ -34,7 +34,7 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: typeText)
 
         // In the search suggestion, "text" should be displayed
-        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "http://localhost:")
+        let predicate = NSPredicate(format: "label CONTAINS[c] %@", "localhost")
         let elementQuery = app.staticTexts.containing(predicate)
         mozWaitForElementToExist(elementQuery.element)
     }

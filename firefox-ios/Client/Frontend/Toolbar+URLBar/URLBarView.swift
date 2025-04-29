@@ -800,7 +800,7 @@ extension URLBarView: TabLocationViewDelegate {
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible
         // for extracting out search terms when on a search page
         if let text = locationText,
-            let url = URL(string: text, invalidCharacters: false),
+            let url = URL(string: text),
             let host = url.host,
             AppConstants.punyCode {
             overlayText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())

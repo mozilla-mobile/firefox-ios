@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
+import WebEngine
 
 enum InternalPageSchemeHandlerError: Error {
     case badURL
@@ -15,7 +16,8 @@ protocol InternalSchemeResponse {
     func response(forRequest: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)?
 }
 
-class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
+class InternalSchemeHandler: NSObject, SchemeHandler {
+    public let scheme = "internal"
     private var shouldUseOldErrorPage = false
 
     static func response(forUrl url: URL) -> URLResponse {

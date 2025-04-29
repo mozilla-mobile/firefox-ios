@@ -16,12 +16,13 @@ final class NimbusFeatureFlagLayer {
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
+        case .addressBarMenu:
+            return checkAddressBarMenuFeature(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
-        case .bottomSearchBar,
-                .searchHighlights,
-                .isToolbarCFREnabled:
+        case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .cleanupHistoryReenabled:
@@ -35,13 +36,6 @@ final class NimbusFeatureFlagLayer {
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
-
-        case .creditCardAutofillStatus:
-            return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
-
-        case .jumpBackIn,
-                .historyHighlights:
-            return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
@@ -64,26 +58,20 @@ final class NimbusFeatureFlagLayer {
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
+        case .loginsVerificationEnabled:
+            return checkLoginsVerificationFeature(from: nimbus)
+
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
-        case .nightMode:
-            return checkNightModeFeature(from: nimbus)
-
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
-        case .preferSwitchToOpenTabOverDuplicate:
-            return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
-
         case .ratingPromptFeature:
             return checkRatingPromptFeature(from: nimbus)
-
-        case .reduxSearchSettings:
-            return checkReduxSearchSettingsFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -130,8 +118,14 @@ final class NimbusFeatureFlagLayer {
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
 
+        case .revertUnsafeContinuationsRefactor:
+            return checkRevertUnsafeContinuationsRefactor(from: nimbus)
+
         case .useRustKeychain:
             return checkUseRustKeychainFeature(from: nimbus)
+
+        case .updatedPasswordManager:
+            return checkUpdatedPasswordManagerFeature(from: nimbus)
         }
     }
 
@@ -173,27 +167,8 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        case .searchHighlights: return config.searchHighlights
-        case .isToolbarCFREnabled: return config.position.isToolbarCfrOn
         default: return false
         }
-    }
-
-    private func checkHomescreenSectionsFeature(for featureID: NimbusFeatureFlagID,
-                                                from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.homescreenFeature.value()
-        var nimbusID: HomeScreenSection
-
-        switch featureID {
-        case .jumpBackIn: nimbusID = HomeScreenSection.jumpBackIn
-        case .historyHighlights: nimbusID = HomeScreenSection.recentExplorations
-        default: return false
-        }
-
-        guard let status = config.sectionsEnabled[nimbusID] else { return false }
-
-        return status
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
@@ -280,17 +255,6 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    public func checkNimbusForCreditCardAutofill(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.creditCardAutofill.value()
-
-            switch featureID {
-            case .creditCardAutofillStatus: return config.creditCardAutofillStatus
-            default: return false
-            }
-    }
-
     private func checkSearchEngineConsolidationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.searchEngineConsolidationFeature.value()
         return config.enabled
@@ -323,10 +287,6 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.pdfRefactorFeature.value().enabled
     }
 
-    private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
-    }
-
     private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.ratingPromptFeature.value().enabled
     }
@@ -339,6 +299,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
+        return config.status
+    }
+
+    private func checkAddressBarMenuFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressBarMenuFeature.value()
         return config.status
     }
 
@@ -357,11 +322,6 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
-    private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.reduxSearchSettingsFeature.value()
-        return config.enabled
-    }
-
     private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.menuRefactorFeature.value().enabled
     }
@@ -377,10 +337,8 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkNightModeFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.nightModeFeature.value()
-
-        return config.enabled
+    private func checkLoginsVerificationFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.loginsVerification.value().loginsVerificationEnabled
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
@@ -391,7 +349,17 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
     }
 
+    private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
+        return config.enabled
+    }
+
     private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.rustKeychainRefactor.value().rustKeychainEnabled
+    }
+
+    private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.updatedPasswordManagerFeature.value()
+        return config.status
     }
 }

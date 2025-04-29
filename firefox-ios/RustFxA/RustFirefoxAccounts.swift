@@ -196,7 +196,7 @@ open class RustFirefoxAccounts {
     private func update() {
         guard let accountManager = RustFirefoxAccounts.shared.accountManager else { return}
         let avatarUrl = accountManager.accountProfile()?.avatar
-        if let str = avatarUrl, let url = URL(string: str, invalidCharacters: false) {
+        if let str = avatarUrl, let url = URL(string: str) {
             avatar = Avatar(url: url)
         }
 

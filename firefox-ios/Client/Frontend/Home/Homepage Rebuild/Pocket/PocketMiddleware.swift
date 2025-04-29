@@ -28,7 +28,6 @@ final class PocketMiddleware {
         case PocketActionType.tapOnHomepagePocketCell:
             self.sendOpenPocketItemTelemetry(for: action)
         case PocketActionType.viewedSection:
-            // TODO: FXIOS-11551 - need to add impression call
             self.homepageTelemetry.sendPocketSectionCounter()
         case ContextMenuActionType.tappedOnOpenNewPrivateTab:
             self.sendOpenInPrivateTelemetry(for: action)

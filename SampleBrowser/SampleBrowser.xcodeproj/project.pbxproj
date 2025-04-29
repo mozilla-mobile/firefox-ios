@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B3B69D42DAD3A33005BFAAF /* PullRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */; };
 		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
 		1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */; };
 		21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */; };
@@ -46,6 +47,8 @@
 		8ADF72C92B73DB9700530E7A /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */; };
 		8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */; };
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
+		8AF6DABC2DAF21E20074C496 /* EngineDependencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6DABB2DAF21E20074C496 /* EngineDependencyManager.swift */; };
+		8AF6DABE2DAF24770074C496 /* EngineProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6DABD2DAF24770074C496 /* EngineProviderManager.swift */; };
 		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
 		E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */; };
 		E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */; };
@@ -55,6 +58,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullRefreshView.swift; sourceTree = "<group>"; };
 		1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHandler.swift; sourceTree = "<group>"; };
 		1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAdsTrackerDefinitions.swift; sourceTree = "<group>"; };
 		21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
@@ -96,6 +100,8 @@
 		8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
 		8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
+		8AF6DABB2DAF21E20074C496 /* EngineDependencyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineDependencyManager.swift; sourceTree = "<group>"; };
+		8AF6DABD2DAF24770074C496 /* EngineProviderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProviderManager.swift; sourceTree = "<group>"; };
 		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
 		E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerModel.swift; sourceTree = "<group>"; };
 		E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
@@ -127,8 +133,10 @@
 		8A0F44692B56EDC000438589 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				8ADF72C02B73D6F600530E7A /* Scripts */,
+				8AF6DABD2DAF24770074C496 /* EngineProviderManager.swift */,
+				8AF6DABB2DAF21E20074C496 /* EngineDependencyManager.swift */,
 				8A0F446A2B56EDC900438589 /* EngineProvider.swift */,
+				8ADF72C02B73D6F600530E7A /* Scripts */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -247,6 +255,7 @@
 		8A4602152B0FE42300FFD17F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */,
 				8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */,
 				E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */,
 				E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */,
@@ -391,6 +400,7 @@
 			files = (
 				8A0F447B2B56FD8300438589 /* SearchDataProviderProtocol.swift in Sources */,
 				8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */,
+				8AF6DABE2DAF24770074C496 /* EngineProviderManager.swift in Sources */,
 				8A0F44712B56FD3600438589 /* SearchViewController.swift in Sources */,
 				8A3DB3352B5AD47500F89705 /* SettingsType.swift in Sources */,
 				8A0F44832B56FE1300438589 /* UIAlertController+Error.swift in Sources */,
@@ -410,6 +420,7 @@
 				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
+				8AF6DABC2DAF21E20074C496 /* EngineDependencyManager.swift in Sources */,
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
 				E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
@@ -424,6 +435,7 @@
 				21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */,
 				E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
+				0B3B69D42DAD3A33005BFAAF /* PullRefreshView.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

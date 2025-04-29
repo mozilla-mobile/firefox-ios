@@ -126,7 +126,7 @@ private extension TopSitesProviderImplementation {
         // How sites are merged together. We compare against the url's base domain.
         // Example m.youtube.com is compared against `youtube.com`
         let unionOnURL = { (site: Site) -> String in
-            return URL(string: site.url, invalidCharacters: false)?.normalizedHost ?? ""
+            return URL(string: site.url)?.normalizedHost ?? ""
         }
 
         // Fetch the default sites
@@ -144,7 +144,7 @@ private extension TopSitesProviderImplementation {
             if case SiteType.pinnedSite = site.type {
                 return site
             }
-            let domain = URL(string: site.url, invalidCharacters: false)?.shortDisplayString
+            let domain = URL(string: site.url)?.shortDisplayString
             return defaultSites.first(where: { $0.title.lowercased() == domain }) ?? site
         }
 

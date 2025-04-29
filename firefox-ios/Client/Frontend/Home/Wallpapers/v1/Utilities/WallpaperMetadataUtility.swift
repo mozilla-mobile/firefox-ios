@@ -26,16 +26,19 @@ class WallpaperMetadataUtility {
 
     private let userDefaults: UserDefaultsInterface
     private let networkingModule: WallpaperNetworking
+    private let storageUtility: WallpaperStorageProtocol
     private var logger: Logger
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking,
         and userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        storageUtility: WallpaperStorageProtocol = WallpaperStorageUtility(),
         logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
         self.userDefaults = userDefaults
+        self.storageUtility = storageUtility
         self.logger = logger
     }
 
@@ -89,7 +92,6 @@ class WallpaperMetadataUtility {
 
     private func oldMetadataIsDifferentThanNew(_ metadata: WallpaperMetadata) -> Bool {
         do {
-            let storageUtility = WallpaperStorageUtility()
             guard let oldMetadata = try storageUtility.fetchMetadata() else { return true }
 
             if oldMetadata.collections == metadata.collections { return false }

@@ -341,7 +341,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
     }
 
     private func isBookmarkItemURLValid() -> Bool {
-        let url = URL(string: bookmarkItemURL ?? "", invalidCharacters: false)
+        let url = URL(string: bookmarkItemURL ?? "")
         return url?.schemeIsValid == true && url?.host != nil
     }
 

@@ -164,7 +164,6 @@ class LegacyHomepageViewController:
         }
 
         notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
-        notificationCenter.post(name: .HistoryUpdated)
 
         applyTheme()
         reloadView()
@@ -360,13 +359,15 @@ class LegacyHomepageViewController:
 
     // MARK: - Helpers
 
-    /// Configure isZeroSearch
+    /// Configure isZeroSearch & isPrivate
     /// - Parameter isZeroSearch: IsZeroSearch is true when the homepage is created from the tab tray, a long press
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
+    /// We need also to set isPrivate value when this configure method is being called
     func configure(isZeroSearch: Bool) {
         viewModel.isZeroSearch = isZeroSearch
+        viewModel.isPrivate = currentTab?.isPrivate ?? false
     }
 
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation is
@@ -746,29 +747,6 @@ private extension LegacyHomepageViewController {
             self?.prepareSyncedTabContextualHint(onCell: syncedTabCell)
         }
 
-        // History highlights
-        viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
-            guard let url = highlight.siteUrl else {
-                self?.openHistoryHighlightsSearchGroup(item: highlight)
-                return
-            }
-
-            self?.homePanelDelegate?.homePanel(didSelectURL: url,
-                                               visitType: .link,
-                                               isGoogleTopSite: false)
-        }
-
-        viewModel.historyHighlightsViewModel
-            .historyHighlightLongPressHandler = { [weak self] (highlightItem, sourceView) in
-                self?.contextMenuHelper.presentContextMenu(for: highlightItem,
-                                                           with: sourceView,
-                                                           sectionType: .historyHighlights)
-            }
-
-        viewModel.historyHighlightsViewModel.headerButtonAction = { [weak self] button in
-            self?.openHistory(button)
-        }
-
         // Pocket
         viewModel.pocketViewModel.onTapTileAction = { [weak self] url in
             self?.showSiteWithURLHandler(url)
@@ -782,41 +760,6 @@ private extension LegacyHomepageViewController {
         viewModel.customizeButtonViewModel.onTapAction = { [weak self] _ in
             self?.openCustomizeHomeSettings()
         }
-    }
-
-    private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
-        guard let groupItem = item.group else { return }
-
-        var groupedSites = [Site]()
-        for item in groupItem {
-            groupedSites.append(buildSite(from: item))
-        }
-        let groupSite = ASGroup<Site>(searchTerm: item.displayTitle, groupedItems: groupedSites, timestamp: Date.now())
-
-        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
-        let asGroupListVC = SearchGroupedItemsViewController(
-            viewModel: asGroupListViewModel,
-            profile: viewModel.profile,
-            windowUUID: windowUUID
-        )
-
-        let dismissableController: DismissableNavigationViewController
-        dismissableController = DismissableNavigationViewController(rootViewController: asGroupListVC)
-
-        self.present(dismissableController, animated: true, completion: nil)
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .historyHighlightsGroupOpen,
-                                     extras: nil)
-
-        asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
-    }
-
-    private func buildSite(from highlight: HighlightItem) -> Site {
-        let itemURL = highlight.urlString ?? ""
-        return Site.createBasicSite(url: itemURL, title: highlight.displayTitle)
     }
 
     func openTabTray(_ sender: UIButton) {
@@ -840,17 +783,6 @@ private extension LegacyHomepageViewController {
                                          object: .firefoxHomepage,
                                          value: .bookmarkSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
-        }
-    }
-
-    func openHistory(_ sender: UIButton) {
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
-
-        if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .historyHighlightsShowAll)
         }
     }
 

@@ -1,8 +1,14 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Тамоми таърихи ҷаласаи тамошобинии худ, ниҳонвожаҳо ва кукиҳоро бо зер кардани танҳо як тугма дар вақти дилхоҳ тоза намоед.";
+
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "Таърихи шумо - ин таърихи шумо аст";
 
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "Навбатӣ";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Дар ҷустуҷӯи чизи дигар қарор доред? Низоми ҷустуҷӯии дигареро интихоб намоед.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "Ҷустуҷӯи шумо, Интернети шумо";

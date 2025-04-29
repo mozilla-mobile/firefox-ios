@@ -49,7 +49,7 @@ class WKEngineView: UIView, EngineView, FullscreenDelegate {
     }
 
     private func setupWebViewLayout() {
-        guard let session = session else { return }
+        guard let session else { return }
 
         let webView = session.webView
         addSubview(webView)
@@ -63,7 +63,7 @@ class WKEngineView: UIView, EngineView, FullscreenDelegate {
     }
 
     func enteringFullscreen() {
-        guard let session = session else { return }
+        guard let session else { return }
 
         let webView = session.webView
         webView.translatesAutoresizingMaskIntoConstraints = true

@@ -95,7 +95,7 @@ public struct InternalURL {
 
     public var extractedUrlParam: URL? {
         if let nestedUrl = url.getQuery()[InternalURL.Param.url.rawValue]?.unescape() {
-            return URL(string: nestedUrl, invalidCharacters: false)
+            return URL(string: nestedUrl)
         }
         return nil
     }
@@ -114,7 +114,7 @@ public struct InternalURL {
     /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let url = URL(string: stripAuthorization, invalidCharacters: false) else { return nil }
+        guard let url = URL(string: stripAuthorization) else { return nil }
 
         if url.path.hasPrefix(aboutPath) {
             return String(url.path.dropFirst(aboutPath.count))

@@ -15,7 +15,7 @@ class NewTabHomePageAccessors {
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(PrefsKeys.NewTabCustomUrlPrefKey) ?? getDefaultHomePageString(prefs)
         guard let urlString = string else { return nil }
-        return URL(string: urlString, invalidCharacters: false)
+        return URL(string: urlString)
     }
 
     static func getDefaultHomePageString(_ prefs: Prefs) -> String? {
@@ -27,6 +27,6 @@ class HomeButtonHomePageAccessors {
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(PrefsKeys.HomeButtonHomePageURL)
         guard let urlString = string else { return nil }
-        return URL(string: urlString, invalidCharacters: false)
+        return URL(string: urlString)
     }
 }

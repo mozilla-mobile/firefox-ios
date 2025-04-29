@@ -8,8 +8,10 @@ import SwiftUI
 import Foundation
 import Common
 import Shared
+import AppIntents
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
+    let windowUUID: String
     struct ContentState: Codable, Hashable {
         struct Download: Codable, Hashable {
             var fileName: String
@@ -54,7 +56,7 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         }
     }
 }
-@available(iOS 16.2, *)
+@available(iOS 17, *)
 struct DownloadLiveActivity: Widget {
     struct UX {
         static let downloadColor: UIColor = .orange
@@ -142,26 +144,31 @@ struct DownloadLiveActivity: Widget {
         }
     }
     private func lockScreenView (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
-        return ZStack {
-            Rectangle()
-                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-                .foregroundStyle(LinearGradient(
-                    gradient: Gradient(colors: [UX.LockScreen.gradient1, UX.LockScreen.gradient2]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing))
-            HStack(spacing: UX.LockScreen.horizontalSpacing) {
-                ZStack {
-                    Image(UX.firefoxIcon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: UX.LockScreen.iconSize, height: UX.LockScreen.iconSize)
+        let intent = DownloadLiveActivityIntent()
+        intent.windowUUID = liveDownload.attributes.windowUUID
+        return
+            ZStack {
+                Rectangle()
+                    .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+                    .foregroundStyle(LinearGradient(
+                        gradient: Gradient(colors: [UX.LockScreen.gradient1, UX.LockScreen.gradient2]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing))
+                HStack(spacing: UX.LockScreen.horizontalSpacing) {
+                    ZStack {
+                        Image(UX.firefoxIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: UX.LockScreen.iconSize, height: UX.LockScreen.iconSize)
+                    }
+                    lockScreenTexts(liveDownload: liveDownload)
+                    Spacer()
+                    Button(intent: intent) {
+                        lockScreenDownloadProgress(liveDownload: liveDownload)
+                    }.buttonStyle(.plain)
                 }
-                lockScreenTexts(liveDownload: liveDownload)
-                Spacer()
-                lockScreenDownloadProgress(liveDownload: liveDownload)
+                .padding()
             }
-            .padding()
-        }
     }
 
     private func lockScreenTexts(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
@@ -187,7 +194,7 @@ struct DownloadLiveActivity: Widget {
     private func lockScreenDownloadProgress(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
         let totalCompletion = liveDownload.state.completedDownloads == liveDownload.state.downloads.count
         let circleProgressPercentage = min(
-          liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
+            liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
         )
         return ZStack {
             Circle()
@@ -210,94 +217,99 @@ struct DownloadLiveActivity: Widget {
 
     private func leadingExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
-      DynamicIslandExpandedRegion(.leading) {
-        ZStack {
-            RoundedRectangle(cornerRadius: DownloadLiveActivity.UX.DynamicIsland.iconEdgeRounding)
-            .fill(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
-            .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
-                   height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
-          Image(DownloadLiveActivity.UX.firefoxIcon)
-            .resizable()
-            .scaledToFit()
-            .frame(width: DownloadLiveActivity.UX.DynamicIsland.firefoxIconSize,
-                   height: DownloadLiveActivity.UX.DynamicIsland.firefoxIconSize)
-        }.padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.iconTopPadding,
-                             leading: DownloadLiveActivity.UX.DynamicIsland.iconLeftPadding,
-                             bottom: DownloadLiveActivity.UX.DynamicIsland.iconBottomPadding,
-                             trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
-      }
+        DynamicIslandExpandedRegion(.leading) {
+            ZStack {
+                RoundedRectangle(cornerRadius: DownloadLiveActivity.UX.DynamicIsland.iconEdgeRounding)
+                    .fill(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
+                    .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
+                           height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
+                Image(DownloadLiveActivity.UX.firefoxIcon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: DownloadLiveActivity.UX.DynamicIsland.firefoxIconSize,
+                           height: DownloadLiveActivity.UX.DynamicIsland.firefoxIconSize)
+            }.padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.iconTopPadding,
+                                 leading: DownloadLiveActivity.UX.DynamicIsland.iconLeftPadding,
+                                 bottom: DownloadLiveActivity.UX.DynamicIsland.iconBottomPadding,
+                                 trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
+        }
     }
     private func centerExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
-      DynamicIslandExpandedRegion(.center) {
-          Text(liveDownload.state.downloads.count == 1 ?
-               String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
-                  String(format: .LiveActivity.Downloads.FileCountText, String(liveDownload.state.downloads.count)))
-          .font(.headline)
-          .frame(maxWidth: .infinity,
-                 alignment: .leading)
-          .padding(EdgeInsets(top: liveDownload.state.containsOnlyEncodedFiles ?
-                              DownloadLiveActivity.UX.DynamicIsland.wordsTopPaddingNoSubtitle :
-                              DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
-                              leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
-                              bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
-                              trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
-        let bytesDownloaded = ByteCountFormatter.string(
-          fromByteCount: liveDownload.state.totalBytesDownloaded,
-          countStyle: .file
-        )
-        let bytesExpected = ByteCountFormatter.string(
-          fromByteCount: liveDownload.state.totalBytesExpected,
-          countStyle: .file
-        )
-        if !liveDownload.state.containsOnlyEncodedFiles {
-          Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
-            .font(.subheadline)
-            .foregroundColor(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
+        DynamicIslandExpandedRegion(.center) {
+            Text(liveDownload.state.downloads.count == 1 ?
+                 String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
+                    String(format: .LiveActivity.Downloads.FileCountText, String(liveDownload.state.downloads.count)))
+            .font(.headline)
             .frame(maxWidth: .infinity,
                    alignment: .leading)
-            .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
+            .padding(EdgeInsets(top: liveDownload.state.containsOnlyEncodedFiles ?
+                                DownloadLiveActivity.UX.DynamicIsland.wordsTopPaddingNoSubtitle :
+                                    DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
                                 leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
                                 bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
                                 trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
-            .contentTransition(.identity)
+            let bytesDownloaded = ByteCountFormatter.string(
+                fromByteCount: liveDownload.state.totalBytesDownloaded,
+                countStyle: .file
+            )
+            let bytesExpected = ByteCountFormatter.string(
+                fromByteCount: liveDownload.state.totalBytesExpected,
+                countStyle: .file
+            )
+            if !liveDownload.state.containsOnlyEncodedFiles {
+                Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
+                    .font(.subheadline)
+                    .foregroundColor(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
+                    .frame(maxWidth: .infinity,
+                           alignment: .leading)
+                    .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
+                                        leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
+                                        bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
+                                        trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
+                    .contentTransition(.identity)
+            }
         }
-      }
     }
     private func trailingExpandedRegion(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
-      let circleProgressPercentage = min(
-        liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
-      )
-      return DynamicIslandExpandedRegion(.trailing) {
-        ZStack {
-          Circle()
-            .stroke(UX.DynamicIsland.circleStrokeColor, lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
-            .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
-                   height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
-          Circle()
-            .trim(from: 0.0, to: circleProgressPercentage)
-            .stroke(style: StrokeStyle(lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth))
-            .rotationEffect(.degrees(DownloadLiveActivity.UX.DynamicIsland.rotation))
-            .animation(.linear, value: 0.5)
-          Image(
-            liveDownload.state.completedDownloads == liveDownload.state.downloads.count
-            ? DownloadLiveActivity.UX.checkmarkIcon
-            : DownloadLiveActivity.UX.mediaStopIcon
-          )
-          .renderingMode(.template)
-          .resizable()
-          .scaledToFit()
-          .foregroundStyle(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
-          .frame(width: DownloadLiveActivity.UX.DynamicIsland.stateIconSize,
-                 height: DownloadLiveActivity.UX.DynamicIsland.stateIconSize)
-        }.frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
-                height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
-          .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.iconTopPadding,
-                              leading: DownloadLiveActivity.UX.DynamicIsland.iconLeftPadding,
-                              bottom: DownloadLiveActivity.UX.DynamicIsland.iconBottomPadding,
-                              trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
-      }
+        let circleProgressPercentage = min(
+            liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
+        )
+        let intent = DownloadLiveActivityIntent()
+        intent.windowUUID = liveDownload.attributes.windowUUID
+        return DynamicIslandExpandedRegion(.trailing) {
+            Button(intent: intent) {
+                ZStack {
+                    Circle()
+                        .stroke(UX.DynamicIsland.circleStrokeColor,
+                                lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
+                        .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
+                               height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
+                    Circle()
+                        .trim(from: 0.0, to: circleProgressPercentage)
+                        .stroke(style: StrokeStyle(lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth))
+                        .rotationEffect(.degrees(DownloadLiveActivity.UX.DynamicIsland.rotation))
+                        .animation(.linear, value: 0.5)
+                    Image(
+                        liveDownload.state.completedDownloads == liveDownload.state.downloads.count
+                        ? DownloadLiveActivity.UX.checkmarkIcon
+                        : DownloadLiveActivity.UX.mediaStopIcon
+                    )
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
+                    .frame(width: DownloadLiveActivity.UX.DynamicIsland.stateIconSize,
+                           height: DownloadLiveActivity.UX.DynamicIsland.stateIconSize)
+                }.frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
+                        height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
+                .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.iconTopPadding,
+                                    leading: DownloadLiveActivity.UX.DynamicIsland.iconLeftPadding,
+                                    bottom: DownloadLiveActivity.UX.DynamicIsland.iconBottomPadding,
+                                    trailing: DownloadLiveActivity.UX.DynamicIsland.iconRightPadding))
+            }.buttonStyle(.plain)
+        }
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { liveDownload in
@@ -317,7 +329,7 @@ struct DownloadLiveActivity: Widget {
                     .padding([.leading, .trailing], 2)
             } compactTrailing: {
                 let circleProgressPercentage = min(
-                  liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
+                    liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
                 )
                 ZStack {
                     Circle()
@@ -339,7 +351,8 @@ struct DownloadLiveActivity: Widget {
                 .padding(.trailing, UX.DynamicIsland.downloadPaddingTrailing)
             } minimal: {
                 minimalViewBuilder(liveDownload: liveDownload)
-            }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+            }
+            .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }
     }
 }

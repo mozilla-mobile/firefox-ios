@@ -117,7 +117,7 @@ class BrowserViewController: UIViewController,
 
     private var _downloadLiveActivityWrapper: Any?
 
-    @available(iOS 16.2, *)
+    @available(iOS 17, *)
     var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
         get {
             return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
@@ -168,6 +168,10 @@ class BrowserViewController: UIViewController,
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build()
 
+    // A view used as the background for the address bar, designed to look nice
+    // when swiping between tabs, similar to Safari.
+    private lazy var addressBarBackgroundView: UIView = .build()
+
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
@@ -190,11 +194,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: Contextual Hints
-
-    private lazy var toolbarContextHintVC: ContextualHintViewController = {
-        let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation, with: profile)
-        return ContextualHintViewController(with: contextualViewProvider, windowUUID: tabManager.windowUUID)
-    }()
 
     private(set) lazy var dataClearanceContextHintVC: ContextualHintViewController = {
         let dataClearanceViewProvider = ContextualHintViewProvider(
@@ -432,6 +431,7 @@ class BrowserViewController: UIViewController,
         if isSwipingTabsEnabled {
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
+            updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
         if let readerModeBar = readerModeBar {
             readerModeBar.removeFromParent()
@@ -628,7 +628,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
-        nightModeUpdates()
+        NightModeHelper.cleanNightModeDefaults()
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab, !isToolbarRefactorEnabled {
@@ -640,16 +640,6 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
-    }
-
-    private func nightModeUpdates() {
-        if NightModeHelper.isActivated(),
-           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff()
-            themeManager.applyThemeUpdatesToWindows()
-        }
-
-        NightModeHelper.cleanNightModeDefaults()
     }
 
     private func dismissModalsIfStartAtHome() {
@@ -791,10 +781,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled {
-            webPagePreview.applyTheme(theme: theme)
-            view.backgroundColor = theme.colors.layer1
-        }
+        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -820,14 +807,6 @@ class BrowserViewController: UIViewController,
         // links into the view from other apps.
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
-
-        // Feature flag for credit card until we fully enable this feature
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
-        // We need to update autofill status on sync manager as there could be delay from nimbus
-        // in getting the value. When the delay happens the credit cards might not sync
-        // as the default value is false
-        profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
     }
 
     private func setupTopTabsViewController() {
@@ -937,6 +916,22 @@ class BrowserViewController: UIViewController,
             name: .RemoteTabNotificationTapped,
             object: nil
         )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onStopDownloads(_:)),
+            name: .StopDownloads,
+            object: nil
+        )
+    }
+
+    @objc
+    private func onStopDownloads(_ notification: Notification) {
+        ensureMainThread {
+            guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
+                  notiWindowUUID == self.windowUUID.uuidString else {return}
+            self.downloadToast?.dismiss(true)
+            self.stopDownload(buttonPressed: true)
+        }
     }
 
     private func switchToolbarIfNeeded() {
@@ -1019,8 +1014,8 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
+        if isSwipingTabsEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
         view.addSubviews(contentContainer)
-        view.addSubview(webPagePreview)
 
         view.addSubview(topTouchArea)
 
@@ -1089,34 +1084,10 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
-        prepareURLOnboardingContextualHint()
-
         if !isDeeplinkOptimizationRefactorEnabled {
             browserDelegate?.browserHasLoaded()
         }
         AppEventQueue.signal(event: .browserIsReady)
-    }
-
-    private func prepareURLOnboardingContextualHint() {
-        guard toolbarContextHintVC.shouldPresentHint(),
-              featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
-        else { return }
-
-        toolbarContextHintVC.configure(
-            anchor: urlBarView,
-            withArrowDirection: isBottomSearchBar ? .down : .up,
-            andDelegate: self,
-            presentedUsing: { [weak self] in self?.presentContextualHint() },
-            andActionForButton: { [weak self] in self?.homePanelDidRequestToOpenSettings(at: .toolbar) },
-            overlayState: overlayManager
-        )
-    }
-
-    private func presentContextualHint() {
-        if IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen { return }
-        present(toolbarContextHintVC, animated: true)
-
-        UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
     func willNavigateAway(from tab: Tab?) {
@@ -1261,25 +1232,8 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
-
-    private var contentStackViewBottomConstraint: NSLayoutConstraint?
-
-    private func updateContentStackViewBottomConstraint() {
-        guard isSwipingTabsEnabled else {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            contentStackViewBottomConstraint?.isActive = true
-            return
-        }
-        contentStackViewBottomConstraint?.isActive = false
-        if isBottomSearchBar {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        } else {
-            contentStackViewBottomConstraint = contentContainer.bottomAnchor.constraint(
-                equalTo: overKeyboardContainer.topAnchor
-            )
-        }
-        contentStackViewBottomConstraint?.isActive = true
-    }
+    private var addressBarBackgroundViewTopConstraint: NSLayoutConstraint?
+    private var addressBarBackgroundViewBottomConstraint: NSLayoutConstraint?
 
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
@@ -1292,6 +1246,7 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
         if isSwipingTabsEnabled {
@@ -1301,8 +1256,13 @@ class BrowserViewController: UIViewController,
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
             ])
+
+            addressBarBackgroundViewTopConstraint = addressBarBackgroundView.topAnchor
+                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor
+                .constraint(equalTo: bottomContainer.topAnchor)
+            updateAddressBarBackgroundViewConstraints(searchBarPosition: searchBarPosition)
         }
-        updateContentStackViewBottomConstraint()
 
         updateHeaderConstraints()
     }
@@ -1320,6 +1280,19 @@ class BrowserViewController: UIViewController,
                 make.left.right.equalTo(view)
             }
         }
+    }
+
+    private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
+        let isTop = (searchBarPosition == .top)
+        addressBarBackgroundView.constraints.forEach { $0.isActive = false }
+        addressBarBackgroundViewBottomConstraint?.isActive = !isTop
+        addressBarBackgroundViewTopConstraint?.isActive = isTop
+
+        NSLayoutConstraint.activate([
+            addressBarBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            addressBarBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            addressBarBackgroundView.heightAnchor.constraint(equalTo: addressToolbarContainer.heightAnchor)
+        ])
     }
 
     override func updateViewConstraints() {
@@ -1366,7 +1339,6 @@ class BrowserViewController: UIViewController,
             adjustBottomSearchBarForKeyboard()
         }
 
-        updateContentStackViewBottomConstraint()
         super.updateViewConstraints()
     }
 
@@ -1757,6 +1729,12 @@ class BrowserViewController: UIViewController,
         ])
 
         searchController.didMove(toParent: self)
+
+        // We need to hide the Homepage content
+        // from accessibility, otherwise it will
+        // be read by VoiceOver when reading in the
+        // Search Controller
+        contentContainer.accessibilityElementsHidden = true
     }
 
     func hideSearchController() {
@@ -1768,6 +1746,8 @@ class BrowserViewController: UIViewController,
 
         keyboardBackdrop?.removeFromSuperview()
         keyboardBackdrop = nil
+
+        contentContainer.accessibilityElementsHidden = false
     }
 
     func destroySearchController() {
@@ -1776,6 +1756,8 @@ class BrowserViewController: UIViewController,
         searchController = nil
         searchSessionState = nil
         searchLoader = nil
+
+        contentContainer.accessibilityElementsHidden = false
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
@@ -1953,7 +1935,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
-        let showDataClearanceFlow = browserViewControllerState?.showDataClearanceFlow ?? false
+        let showDataClearanceFlow = browserViewControllerState?.browserViewType == .privateHomepage
         let showFireButton = featureFlags.isFeatureEnabled(
             .feltPrivacyFeltDeletion,
             checking: .buildOnly
@@ -2213,17 +2195,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if tab == tabManager.selectedTab,
-            let displayUrl = tab.url?.displayURL,
-            let legacyUrlBar, legacyUrlBar.currentURL != displayUrl {
-            let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
-            searchData.tabAssociatedNextUrl = displayUrl.absoluteString
-            tab.metadataManager?.updateTimerAndObserving(
-                state: .tabNavigatedToDifferentUrl,
-                searchData: searchData,
-                isPrivate: tab.isPrivate)
-        }
-
         legacyUrlBar?.currentURL = tab.url?.displayURL
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
@@ -2256,7 +2227,7 @@ class BrowserViewController: UIViewController,
                let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString, invalidCharacters: false) {
+                if let url = URL(string: urlString) {
                     self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }
@@ -2880,7 +2851,6 @@ class BrowserViewController: UIViewController,
         }
 
         let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
-        freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
@@ -2897,17 +2867,6 @@ class BrowserViewController: UIViewController,
         }
 
         openURLInNewTab(searchURL, isPrivate: isPrivate)
-
-        if let tab = tabManager.selectedTab {
-            let searchData = LegacyTabGroupData(searchTerm: text,
-                                                searchUrl: searchURL.absoluteString,
-                                                nextReferralUrl: "")
-            tab.metadataManager?.updateTimerAndObserving(
-                state: .navSearchLoaded,
-                searchData: searchData,
-                isPrivate: tab.isPrivate
-            )
-        }
     }
 
     fileprivate func popToBVC() {
@@ -3036,10 +2995,6 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    private func autofillCreditCardNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-    }
-
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -3122,8 +3077,6 @@ class BrowserViewController: UIViewController,
                                          method: .tap,
                                          object: .creditCardFormDetected)
         }
-
-        guard autofillCreditCardNimbusFeatureFlag() else { return }
 
         // Handle different types of credit card interactions
         switch type {
@@ -3284,6 +3237,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        updateAddressBarBackgroundViewColor(theme: currentTheme)
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -3302,8 +3256,12 @@ class BrowserViewController: UIViewController,
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 
-    var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
+    private func updateAddressBarBackgroundViewColor(theme: Theme) {
+        guard isSwipingTabsEnabled else { return }
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let toolbarLayoutStyle = toolbarState?.toolbarLayout
+        let colors = theme.colors
+        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
     }
 
     // MARK: - Telemetry
@@ -3329,20 +3287,12 @@ class BrowserViewController: UIViewController,
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
-           let tab = tabManager.tabs.reversed().first(where: {
-               // URL for reading mode comes encoded and we need a separate case to check if it's equal with the tab url
-               ($0.url == url || $0.url == url.safeEncodedUrl) && $0.isPrivate == tab.isPrivate
-           }) {
-            tabManager.selectTab(tab)
-        } else {
-            // Handle keyboard shortcuts from homepage with url selection
-            // (ex: Cmd + Tap on Link; which is a cell in this case)
-            if navigateLinkShortcutIfNeeded(url: url) {
-                return
-            }
-            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        // Handle keyboard shortcuts from homepage with url selection
+        // (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
         }
+        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
@@ -3399,7 +3349,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .some(.phoneNumber(let phoneNumber)):
-            if let url = URL(string: "tel:\(phoneNumber)", invalidCharacters: false) {
+            if let url = URL(string: "tel:\(phoneNumber)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 defaultAction()
@@ -3795,26 +3745,18 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if isPreferSwitchToOpenTabOverDuplicateFeatureEnabled,
-           let tab = tabManager.tabs.reversed().first(where: {
-               // URL for reading mode comes encoded and we need a separate case to check if it's equal with the tab url
-               ($0.url == url || $0.url == url.safeEncodedUrl) && $0.isPrivate == tab.isPrivate
-           }) {
-            tabManager.selectTab(tab)
-        } else {
-            if isGoogleTopSite {
-                tab.urlType = .googleTopSite
-                searchTelemetry.shouldSetGoogleTopSiteSearch = true
-            }
-
-            // Handle keyboard shortcuts from homepage with url selection
-            // (ex: Cmd + Tap on Link; which is a cell in this case)
-            if navigateLinkShortcutIfNeeded(url: url) {
-                return
-            }
-
-            finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        if isGoogleTopSite {
+            tab.urlType = .googleTopSite
+            searchTelemetry.shouldSetGoogleTopSiteSearch = true
         }
+
+        // Handle keyboard shortcuts from homepage with url selection
+        // (ex: Cmd + Tap on Link; which is a cell in this case)
+        if navigateLinkShortcutIfNeeded(url: url) {
+            return
+        }
+
+        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
@@ -3876,14 +3818,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
     ) {
         guard let tab = tabManager.selectedTab else { return }
 
-        let searchData = LegacyTabGroupData(searchTerm: searchTerm ?? "",
-                                            searchUrl: url.absoluteString,
-                                            nextReferralUrl: "")
-        tab.metadataManager?.updateTimerAndObserving(
-            state: .navSearchLoaded,
-            searchData: searchData,
-            isPrivate: tab.isPrivate
-        )
         searchTelemetry.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
@@ -4066,7 +4000,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityElementsHidden = false
 
             if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView)
+                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
             } else {
                 browserDelegate?.show(webView: webView)
             }
@@ -4106,10 +4040,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
             if isToolbarRefactorEnabled {
-                // We want to show the progress update only when swiping between tabs feature is not enabled.
-                if !isSwipingTabsEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: selectedTab.estimatedProgress)
-                }
+                addressToolbarContainer.hideProgressBar()
             } else {
                 legacyUrlBar?.updateProgressBar(Float(selectedTab.estimatedProgress))
             }
@@ -4135,7 +4066,7 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
-       /// If the selectedTab is showing an error page trigger a reload
+        /// If the selectedTab is showing an error page trigger a reload
         if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
             needsReload = true
         }
@@ -4145,10 +4076,22 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    /// Updates the content in BVC depending on whether its a home page or web page
-    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView) {
+    /// Updates the embedded content in the browser view controller (BVC) based on whether its a home page or web page.
+    /// - Parameters:
+    ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
+    ///   - webView: The `WKWebView` instance to be displayed.
+    ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
+    ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
+    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
+            guard previousTab?.isFxHomeTab ?? false else { return }
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                )
+            )
         } else {
             browserDelegate?.show(webView: webView)
         }
@@ -4339,6 +4282,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
+        guard isSwipingTabsEnabled else { return }
+        addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
