@@ -583,15 +583,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func restoreTabs() {
         tabs = [Tab]()
-        Task { [weak self, windowUUID] in
+        Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
-            let windowIsNew = self?.windowIsNew ?? false
-            let windowData: WindowData? = windowIsNew ? nil : await self?.tabDataStore.fetchWindowData(uuid: windowUUID)
-            await self?.buildTabRestore(window: windowData)
-            Task { @MainActor in
+            let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
+            await buildTabRestore(window: windowData)
+            await MainActor.run {
                 // Log on main thread, where computed `tab` properties can be accessed without risk of races
-                self?.logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-                self?.logger.log("Normal tabs count; \(self?.normalTabs.count ?? 0), Inactive tabs count; \(self?.inactiveTabs.count ?? 0), Private tabs count; \(self?.privateTabs.count ?? 0)", level: .debug, category: .tabs)
+                logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
+                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
             }
         }
     }
@@ -714,9 +713,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
 
         if newTab.url == nil {
-            logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
+            logger.log("Tab restored has empty URL",
                        level: .debug,
-                       category: .tabs)
+                       category: .tabs,
+                       extra: [
+                        "tabID": tabData.id.uuidString,
+                        "lastUsedTime": tabData.lastUsedTime.description
+                       ]
+            )
         }
 
         // Restore screenshot
