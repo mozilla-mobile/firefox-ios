@@ -1326,6 +1326,7 @@
 		BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
+		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
@@ -8943,6 +8944,7 @@
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
+		BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcher.swift; sourceTree = "<group>"; };
 		BAF14FEC94CB9DA4E08BA60C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Storage.strings; sourceTree = "<group>"; };
 		BAF74394B38CDAE36910B788 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Shared.strings; sourceTree = "<group>"; };
 		BAFB47EE839E6EE784CA9C34 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -10727,6 +10729,7 @@
 		1DCEC3EF2D5C1BA700129966 /* Application Services */ = {
 			isa = PBXGroup;
 			children = (
+				BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */,
 				1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */,
 				1DCEC40F2D822F1500129966 /* ASRemoteSettingsCollection.swift */,
 				1DCEC3F12D5D1FDD00129966 /* ASSearchEngineSelector.swift */,
@@ -16993,6 +16996,7 @@
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */,
 				5A96FB622D97076200917B12 /* CenterSnappingFlowLayout.swift in Sources */,
+				BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */,
 				8A62B15D2CED408B0045F46E /* ContextMenuState.swift in Sources */,
 				C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
