@@ -11,7 +11,7 @@ import Shared
 @available(iOS 17, *)
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     private struct UX {
-        static let updateCooldown: Double = 0.75 // Update Cooldown in Seconds
+        static let updateCooldown = 0.75 // Update Cooldown in Seconds
     }
 
     enum DurationToDismissal: UInt64 {
