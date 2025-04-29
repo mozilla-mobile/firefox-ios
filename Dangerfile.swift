@@ -58,8 +58,12 @@ func failOnNewFilesWithoutCoverage() {
         }
     }
 
-    // Get new Swift files in the PR
-    let newSwiftFiles = danger.git.createdFiles.filter { $0.hasSuffix(".swift") }
+    // Get new files filtering Test and Generated
+    let newSwiftFiles = danger.git.createdFiles.filter {
+        $0.hasSuffix(".swift") &&
+        !$0.contains("Tests") &&
+        !$0.contains("/Generated/") // adjust if you use codegen folders
+    }
 
     for file in newSwiftFiles {
         // Adjust path if needed to match coverage.json format
