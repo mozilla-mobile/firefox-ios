@@ -74,7 +74,8 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        savedBackgroundColor = (hasTopTabs || toolbarLayoutType == .version1) ? theme.colors.layer3 : theme.colors.layer1
+        let isVersionLayout = toolbarLayoutType == .version1 || toolbarLayoutType == .version2
+        savedBackgroundColor = (hasTopTabs || isVersionLayout) ? theme.colors.layer3 : theme.colors.layer1
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }
 

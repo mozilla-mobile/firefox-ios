@@ -889,7 +889,7 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
-        let isEditingBaseLayout = isEditing && layout != .version1
+        let isEditingBaseLayout = isEditing && layout == .baseline
 
         guard !isEditingBaseLayout else {
             // back caret when in edit mode
@@ -926,12 +926,13 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+        let isVersionLayout = layout == .version1 || layout == .version2
 
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
 
         var shareAction = shareAction
-        if layout == .version1 {
+        if isVersionLayout {
             shareAction.iconName = StandardImageIdentifiers.Medium.share
             shareAction.hasCustomColor = true
         }
@@ -944,14 +945,14 @@ struct AddressBarState: StateType, Equatable {
                 actions.append(dataClearanceAction)
             }
 
-            if !isHomepage, layout == .version1 {
+            if !isHomepage, isVersionLayout {
                 var shareAction = shareAction
                 shareAction.isEnabled = isLoading == false
                 shareAction.iconName = StandardImageIdentifiers.Medium.share
                 shareAction.hasCustomColor = true
                 actions.append(shareAction)
             }
-        } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
+        } else if !isHomepage, isShowingNavigationToolbar, isVersionLayout {
             var shareAction = shareAction
             shareAction.isEnabled = isLoading == false
             shareAction.hasCustomColor = true
@@ -985,9 +986,9 @@ struct AddressBarState: StateType, Equatable {
             guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
             else { break }
             let isSelected = readerModeState == .active
-            let isVersion1Layout = toolbarState.toolbarLayout == .version1
+            let isVersionLayout = toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2
             let iconName: String
-            if isVersion1Layout {
+            if isVersionLayout {
                 iconName = StandardImageIdentifiers.Medium.readerView
             } else {
                 iconName = isSelected ?
@@ -1000,7 +1001,7 @@ struct AddressBarState: StateType, Equatable {
                 iconName: iconName,
                 isEnabled: true,
                 isSelected: isSelected,
-                hasCustomColor: isVersion1Layout,
+                hasCustomColor: isVersionLayout,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
@@ -1023,14 +1024,14 @@ struct AddressBarState: StateType, Equatable {
 
         if isLoading == true {
             var stopLoadingAction = stopLoadingAction
-            if layout == .version1 {
+            if layout == .version1 || layout == .version2 {
                 stopLoadingAction.iconName = StandardImageIdentifiers.Medium.cross
                 stopLoadingAction.hasCustomColor = true
             }
             actions.append(stopLoadingAction)
         } else if isLoading == false {
             var reloadAction = reloadAction
-            if layout == .version1 {
+            if layout == .version1 || layout == .version2 {
                 reloadAction.iconName = StandardImageIdentifiers.Medium.arrowClockwise
                 reloadAction.hasCustomColor = true
             }
@@ -1058,8 +1059,9 @@ struct AddressBarState: StateType, Equatable {
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+        let isVersionLayout = layout == .version1 || layout == .version2
 
-        if isEditing, layout == .version1 {
+        if isEditing, isVersionLayout {
             // cancel button when in edit mode
             actions.append(cancelEditTextAction)
         }
@@ -1077,15 +1079,16 @@ struct AddressBarState: StateType, Equatable {
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
-        let menuIcon = layout == .version1 ? StandardImageIdentifiers.Large.moreHorizontalRound
-                                           : StandardImageIdentifiers.Large.appMenu
+        let menuIcon = isVersionLayout ? StandardImageIdentifiers.Large.moreHorizontalRound
+                                        : StandardImageIdentifiers.Large.appMenu
 
-        if layout == .version1 {
+        switch layout {
+        case .version1:
             actions.append(contentsOf: [
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
             ])
-        } else {
+        case .version2, .baseline, .none:
             actions.append(contentsOf: [
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
@@ -1133,7 +1136,7 @@ struct AddressBarState: StateType, Equatable {
     -> ToolbarActionConfiguration {
         let iconName: String
         switch layout {
-        case .version1:
+        case .version1, .version2:
             iconName = StandardImageIdentifiers.Large.chevronLeft
         default:
             iconName = StandardImageIdentifiers.Large.back
@@ -1155,7 +1158,7 @@ struct AddressBarState: StateType, Equatable {
     -> ToolbarActionConfiguration {
         let iconName: String
         switch layout {
-        case .version1:
+        case .version1, .version2:
             iconName = StandardImageIdentifiers.Large.chevronRight
         default:
             iconName = StandardImageIdentifiers.Large.forward

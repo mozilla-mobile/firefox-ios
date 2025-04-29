@@ -32,7 +32,6 @@ final class AddressToolbarContainer: UIView,
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
         static let toolbarIsEditingLeadingPadding: CGFloat = 0
-        static let toolbarIsEditingLeadingPaddingVersion1: CGFloat = 8
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -53,7 +52,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     private var toolbar: BrowserAddressToolbar {
-        guard model?.toolbarLayoutStyle != .version1 else {
+        guard model?.toolbarLayoutStyle != .version1, model?.toolbarLayoutStyle != .version2 else {
             return regularToolbar
         }
 
@@ -234,7 +233,8 @@ final class AddressToolbarContainer: UIView,
             animated: newModel.shouldAnimate)
 
         // For the experiment we are using the regular toolbar only, which by default is not displayed
-        let shouldDisplayExperimentalToolbar = newModel.toolbarLayoutStyle == .version1 &&
+        let shouldDisplayExperimentalToolbar = (newModel.toolbarLayoutStyle == .version1 ||
+                                                newModel.toolbarLayoutStyle == .version2) &&
                                                 compactToolbar.superview != nil &&
                                                 regularToolbar.superview == nil
 
@@ -261,7 +261,7 @@ final class AddressToolbarContainer: UIView,
             )
         }
 
-        if newModel.toolbarLayoutStyle == .version1 {
+        if newModel.toolbarLayoutStyle == .version1 || newModel.toolbarLayoutStyle == .version2 {
             self.maximumContentSizeCategory = .extraExtraExtraLarge
         }
     }
