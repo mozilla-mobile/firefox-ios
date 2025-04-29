@@ -110,10 +110,11 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
+        let isVersionLayout = toolbarLayoutType == .version1 || toolbarLayoutType == .version2
         let color: UIColor = if isClearBackground {
             .clear
         } else {
-            toolbarLayoutType == .version1 ? theme.colors.layer3 : theme.colors.layer1
+            isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
         }
         backgroundColor = color
         keyboardSpacer?.backgroundColor = color

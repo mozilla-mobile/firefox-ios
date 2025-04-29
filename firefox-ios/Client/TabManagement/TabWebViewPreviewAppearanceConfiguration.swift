@@ -8,7 +8,7 @@ import Common
 struct TabWebViewPreviewAppearanceConfiguration {
     private struct UX {
         static let baselineAddressBarCornerRadius: CGFloat = 8
-        static let version1AddressBarCornerRadius: CGFloat = 12
+        static let versionAddressBarCornerRadius: CGFloat = 12
     }
     let containerStackViewBackgroundColor: UIColor
     let addressBarBackgroundColor: UIColor
@@ -26,6 +26,7 @@ struct TabWebViewPreviewAppearanceConfiguration {
         case .baseline:
             UX.baselineAddressBarCornerRadius
         case .version1, .version2:
+            UX.versionAddressBarCornerRadius
         }
     }
 

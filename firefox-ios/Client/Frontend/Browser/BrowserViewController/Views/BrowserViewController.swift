@@ -2160,7 +2160,7 @@ class BrowserViewController: UIViewController,
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
                     lockIconImageName = hasSecureContent ?
                         StandardImageIdentifiers.Small.shieldCheckmarkFill :
                         StandardImageIdentifiers.Small.shieldSlashFill

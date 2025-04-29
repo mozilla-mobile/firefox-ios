@@ -612,7 +612,7 @@ final class LocationView: UIView,
         let colors = theme.colors
         // Get the appearance based on `isURLTextFieldCentered`
         let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
-            .getAppearanceForVersion1(theme: theme)
+            .getAppearanceForVersion(theme: theme)
         } else {
             .getAppearanceForBaseline(theme: theme)
         }
