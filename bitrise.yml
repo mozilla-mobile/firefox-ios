@@ -134,6 +134,8 @@ workflows:
     - restore-spm-cache@2.1.1:
         is_always_run: true
     - script@1.2.1:
+        title: Set default BITRISE variables
+        inputs:
         - content: 
             #!/usr/bin/env bash
             set -euxo pipefail
