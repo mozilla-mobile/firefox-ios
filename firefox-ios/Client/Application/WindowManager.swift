@@ -32,14 +32,6 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
 
-    // TODO: FXIOS-12101 this should be removed once we figure out screenshots
-    /// An interim solution to determining if the tab manager is there
-    /// for the window without crashing so that we can fail from screenshots
-    /// gracefully. This should never(!) be false and if it is something weird
-    /// is happening.
-    /// - Parameter windowUUID: the window's unique ID.
-    func tabManagerExists(for windowUUID: WindowUUID) -> Bool
-
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
 
@@ -133,10 +125,6 @@ final class WindowManagerImplementation: WindowManager {
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID) {
         updateWindow(windowInfo, for: uuid)
         clearReservedUUID(uuid)
-    }
-
-    func tabManagerExists(for windowUUID: WindowUUID) -> Bool {
-        return window(for: windowUUID)?.tabManager != nil
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {

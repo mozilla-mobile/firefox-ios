@@ -51,7 +51,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        mockWindowManager.shouldTabManagerExist = true
+        mockWindowManager.overrideWindows = true
 
         subject.tabsPanelProvider(appState, action)
         wait(for: [expectation])
@@ -77,11 +77,9 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
-        mockWindowManager.shouldTabManagerExist = false
-
         subject.tabsPanelProvider(appState, action)
         wait(for: [expectation], timeout: 0.1)
-        XCTAssertTrue(mockWindowManager.tabManagerExistsWasCalled)
+        XCTAssertTrue(mockWindowManager.windowsWereAccessed)
     }
 
     // MARK: - Recent Tabs

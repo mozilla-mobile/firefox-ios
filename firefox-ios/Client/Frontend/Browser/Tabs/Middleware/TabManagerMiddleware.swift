@@ -60,7 +60,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         guard let tabsState = state.screenState(TabsPanelState.self,
                                                 for: .tabsPanel,
                                                 window: action.windowUUID) else { return }
-        guard windowManager.tabManagerExists(for: action.windowUUID) else {
+        // TODO: FXIOS-12101 this should be removed once we figure out screenshots
+        guard windowManager.windows[action.windowUUID]?.tabManager != nil else {
             logger.log("Tab manager does not exist for this window, bailing from taking a screenshot.", level: .fatal, category: .tabs, extra: ["windowUUID": "\(action.windowUUID)"])
             return
         }
