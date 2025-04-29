@@ -164,7 +164,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-
     func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsite_andBlockUniversalLinksWithPrivateTab() {
         let subject = createSubject()
         let tab = createTab(isPrivate: true)
