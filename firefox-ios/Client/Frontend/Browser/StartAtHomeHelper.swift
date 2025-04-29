@@ -37,12 +37,10 @@ class StartAtHomeHelper: FeatureFlaggable {
 
     var startAtHomeSetting: StartAtHomeSetting {
         get {
-            if let prefs = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) {
-                return StartAtHomeSetting(rawValue: prefs) ?? .afterFourHours
-            }
-            return .afterFourHours
+            let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+            return StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
         }
-        set { prefs.setString(newValue.rawValue, forKey: PrefsKeys.UserFeatureFlagPrefs.StartAtHome) }
+        set { prefs.setString(newValue.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome) }
     }
 
     /// Determines whether the Start at Home feature is enabled, how long it has been since
