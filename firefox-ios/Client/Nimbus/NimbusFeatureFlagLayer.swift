@@ -46,9 +46,6 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .loginAutofill:
-            return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
-
         case .menuRefactor:
             return checkMenuRefactor(from: nimbus)
 
@@ -238,16 +235,6 @@ final class NimbusFeatureFlagLayer {
         default: return false
         }
     }
-
-    public func checkNimbusForLoginAutofill(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.loginAutofill.value()
-            switch featureID {
-            case .loginAutofill: return config.loginAutofillStatus
-            default: return false
-            }
-        }
 
     private func checkSearchEngineConsolidationFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.searchEngineConsolidationFeature.value()

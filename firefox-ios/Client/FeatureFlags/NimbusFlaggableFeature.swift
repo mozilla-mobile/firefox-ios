@@ -22,7 +22,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxSuggestFeature
     case homepageRebuild
     case inactiveTabs
-    case loginAutofill
     case menuRefactor
     case menuRefactorHint
     case microsurvey
@@ -115,7 +114,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .cleanupHistoryReenabled,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
-                .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
                 .menuRefactorHint,
