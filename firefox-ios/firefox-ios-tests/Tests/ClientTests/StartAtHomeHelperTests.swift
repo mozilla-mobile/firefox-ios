@@ -21,6 +21,7 @@ class StartAtHomeHelperTests: XCTestCase {
                                               uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
 
         DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {

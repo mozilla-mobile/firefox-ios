@@ -36,6 +36,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case splashScreen
+    case startAtHome
     case unifiedAds
     case unifiedSearch
     case tabAnimation
@@ -87,6 +88,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
     case searchBarPosition
+    case startAtHome
 }
 
 struct NimbusFlaggableFeature: HasNimbusSearchBar {
@@ -106,6 +108,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
+        case .startAtHome:
+            return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting.
         case .appearanceMenu,
                 .addressBarMenu,
@@ -201,6 +205,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return nimbusSearchBar.getDefaultPosition().rawValue
         case .splashScreen:
             return nimbusSearchBar.getDefaultPosition().rawValue
+        case .startAtHome:
+            return FxNimbus.shared.features.startAtHomeFeature.value().setting.rawValue
         default: return nil
         }
     }
