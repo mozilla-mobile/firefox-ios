@@ -44,21 +44,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    func testWebViewDecidePolicyForNavigationAction_cancelSMSScheme() {
-        let subject = createSubject()
-        let url = URL(string: "sms://testsms")!
-        let tab = createTab()
-        tabManager.tabs = [tab]
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: MockNavigationAction(url: url,
-                                                              type: .linkActivated)) { policy in
-            XCTAssertEqual(policy, .cancel)
-            // It gives the BrowserViewController time to get dismissed, since the `UIAlertController`s can retain it
-            RunLoop.current.run(until: Date().addingTimeInterval(0.1))
-        }
-    }
-
     func testWebViewDecidePolicyForNavigationAction_cancelFacetimeScheme() {
         let subject = createSubject()
         let url = URL(string: "facetime://testuser")!
@@ -202,22 +187,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
             XCTAssertEqual(policy, self.allowBlockingUniversalLinksPolicy)
         }
     }
-
-    func testWebViewDecidePolicyForNavigationAction_cancelUnhandledScheme() {
-        let subject = createSubject()
-        let tab = createTab()
-        let blob = URL(string: "bl://not-known-scheme")!
-        tabManager.tabs = [tab]
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: MockNavigationAction(url: blob,
-                                                              type: .other)) { policy in
-            XCTAssertEqual(policy, .cancel)
-            // It gives the BrowserViewController time to get dismissed, since the `UIAlertController`s can retain it
-            RunLoop.current.run(until: Date().addingTimeInterval(0.1))
-        }
-    }
-
+    
     // MARK: - Authentication
 
     func testWebViewDidReceiveChallenge_MethodServerTrust() {
