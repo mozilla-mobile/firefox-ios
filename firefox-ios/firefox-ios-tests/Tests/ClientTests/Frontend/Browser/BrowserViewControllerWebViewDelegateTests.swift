@@ -187,7 +187,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
             XCTAssertEqual(policy, self.allowBlockingUniversalLinksPolicy)
         }
     }
-    
+
     // MARK: - Authentication
 
     func testWebViewDidReceiveChallenge_MethodServerTrust() {
