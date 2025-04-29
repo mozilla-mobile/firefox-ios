@@ -15,12 +15,12 @@ struct TranslatorFieldsRecord: Codable {
 /// For more context, See schema in
 /// https://firefox.settings.services.mozilla.com/v1/buckets/main/collections/translations-models/records
 struct ModelFieldsRecord: Codable {
-  let fileType: String
-  let fromLang: String
+    let fileType: String
+    let fromLang: String
     let toLang: String
-  let version: String
-  let name: String
-  let schema: Int64
+    let version: String
+    let name: String
+    let schema: Int64
 }
 
 struct TranslationRecord: Codable {
@@ -71,9 +71,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching {
 
     /// Decodes a RemoteSettingsRecord into a specific type.
     private func decodeRecord<T: Codable>(_ record: RemoteSettingsRecord) -> T? {
-        guard
-            let data = record.fields.data(using: .utf8)
-        else { return nil }
+        guard let data = record.fields.data(using: .utf8) else { return nil }
         return try? decoder.decode(T.self, from: data)
     }
 
