@@ -1082,12 +1082,13 @@ struct AddressBarState: StateType, Equatable {
         let menuIcon = isVersionLayout ? StandardImageIdentifiers.Large.moreHorizontalRound
                                         : StandardImageIdentifiers.Large.appMenu
 
-        if isVersionLayout {
+        switch layout {
+        case .version1:
             actions.append(contentsOf: [
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
             ])
-        } else {
+        case .version2, .baseline, .none:
             actions.append(contentsOf: [
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
