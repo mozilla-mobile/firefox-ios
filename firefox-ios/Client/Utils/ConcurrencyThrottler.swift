@@ -6,6 +6,7 @@ import Foundation
 class ConcurrencyThrottler: ThrottleProtocol {
     private var lastUpdateTime = Date.distantPast
     private var delay: Double
+    private var taskComplete = true
 
     init(
         seconds delay: Double = 0.35
@@ -16,13 +17,15 @@ class ConcurrencyThrottler: ThrottleProtocol {
     func throttle(completion: @escaping () -> Void) {
         let currentTime = Date()
 
-        guard lastUpdateTime.timeIntervalSinceNow < -delay else { return }
-        lastUpdateTime = currentTime
+        guard taskComplete && (lastUpdateTime.timeIntervalSinceNow < -delay) else { return }
+        taskComplete = false
 
         Task {
             await MainActor.run {
                 completion()
             }
+            lastUpdateTime = currentTime
+            taskComplete = true
         }
     }
 }
