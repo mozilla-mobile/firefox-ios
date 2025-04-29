@@ -231,7 +231,8 @@ class PullRefreshView: UIView,
 
     func applyTheme(theme: any Theme) {
         currentTheme = theme
-        backgroundColor = toolbarLayoutStyle == .version1 ? theme.colors.layer3 : theme.colors.layer1
+        let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
+        backgroundColor = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
         progressView.tintColor = theme.colors.iconPrimary
     }
 
