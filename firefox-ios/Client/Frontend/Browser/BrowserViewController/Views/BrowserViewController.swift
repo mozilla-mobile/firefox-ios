@@ -36,7 +36,8 @@ class BrowserViewController: UIViewController,
                              BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
-                             CanRemoveQuickActionBookmark {
+                             CanRemoveQuickActionBookmark,
+                             BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
@@ -474,7 +475,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    private func updateBlurViews() {
+    private func updateBlurViews(scrollOffset: CGFloat? = nil) {
         let enableBlur = isToolbarRefactorEnabled && isToolbarTranslucencyEnabled
         guard enableBlur else { return }
 
@@ -489,11 +490,12 @@ class BrowserViewController: UIViewController,
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
             let isWallpaperedHomepage = contentContainer.hasHomepage && wallpaperManager.currentWallpaper.hasImage
-            topBlurView.isHidden = isWallpaperedHomepage
+            let offset = scrollOffset ?? 0
+            topBlurView.alpha = isWallpaperedHomepage ? offset : 1
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
-            topBlurView.isHidden = false
+            topBlurView.alpha = 1
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -836,6 +838,7 @@ class BrowserViewController: UIViewController,
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
+        statusBarOverlay.scrollDelegate = self
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
