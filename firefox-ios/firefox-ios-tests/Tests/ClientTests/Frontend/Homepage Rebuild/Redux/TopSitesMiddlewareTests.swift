@@ -117,9 +117,9 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_fetchTopSitesAction_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let action = TopSitesAction(
+        let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: TopSitesActionType.fetchTopSites
+            actionType: HomepageMiddlewareActionType.topSitesUpdated
         )
 
         let expectation = XCTestExpectation(description: "All top sites middleware actions are dispatched")

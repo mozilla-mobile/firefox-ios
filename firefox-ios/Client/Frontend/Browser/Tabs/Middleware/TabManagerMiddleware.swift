@@ -909,7 +909,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
         case HomepageActionType.viewWillAppear,
-            JumpBackInActionType.fetchLocalTabs,
+            HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated,
             TopTabsActionType.didTapNewTab,
             TopTabsActionType.didTapCloseTab:
             dispatchRecentlyAccessedTabs(action: action)

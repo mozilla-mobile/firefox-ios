@@ -34,7 +34,6 @@ final class TopSitesAction: Action {
 }
 
 enum TopSitesActionType: ActionType {
-    case fetchTopSites
     case updatedNumberOfRows
     case toggleShowSectionSetting
     case toggleShowSponsoredSettings

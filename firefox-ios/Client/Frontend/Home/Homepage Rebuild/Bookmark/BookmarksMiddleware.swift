@@ -18,7 +18,7 @@ final class BookmarksMiddleware {
         let windowUUID = action.windowUUID
 
         switch action.actionType {
-        case HomepageActionType.initialize, BookmarksActionType.fetchBookmarks:
+        case HomepageActionType.initialize, HomepageMiddlewareActionType.bookmarksUpdated:
             self.handleInitializeBookmarksAction(windowUUID: windowUUID)
         default:
            break
