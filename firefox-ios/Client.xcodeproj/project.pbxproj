@@ -828,6 +828,8 @@
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
 		8A36BE2929EDBC6900AC1C5C /* ContentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */; };
 		8A36BE2C29EDE16C00AC1C5C /* ContentContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36BE2A29EDE16700AC1C5C /* ContentContainerTests.swift */; };
+		8A3709E12DC128EA004B9350 /* defaultEnabledOff.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3709E02DC128EA004B9350 /* defaultEnabledOff.json */; };
+		8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */; };
 		8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewProviderTests.swift */; };
 		8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A395551299AF83300B2AFBB /* UIControl+Extension.swift */; };
 		8A3EAFE52D5F9AA40060AB87 /* TabManagerMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EAFE42D5F9AA40060AB87 /* TabManagerMiddlewareTests.swift */; };
@@ -8066,6 +8068,8 @@
 		8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabManager.swift; sourceTree = "<group>"; };
 		8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentContainer.swift; sourceTree = "<group>"; };
 		8A36BE2A29EDE16700AC1C5C /* ContentContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentContainerTests.swift; sourceTree = "<group>"; };
+		8A3709E02DC128EA004B9350 /* defaultEnabledOff.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultEnabledOff.json; sourceTree = "<group>"; };
+		8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultEnabledOn.json; sourceTree = "<group>"; };
 		8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewProviderTests.swift; sourceTree = "<group>"; };
 		8A395551299AF83300B2AFBB /* UIControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extension.swift"; sourceTree = "<group>"; };
 		8A3EAFE42D5F9AA40060AB87 /* TabManagerMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerMiddlewareTests.swift; sourceTree = "<group>"; };
@@ -14356,6 +14360,8 @@
 		E1AF27422A17BCF700CE5991 /* TestData */ = {
 			isa = PBXGroup;
 			children = (
+				8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */,
+				8A3709E02DC128EA004B9350 /* defaultEnabledOff.json */,
 				E1AF27432A17BCF700CE5991 /* engagementNotificationWithoutConditions.json */,
 				E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */,
 			);
@@ -16178,6 +16184,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */,
 				BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
@@ -16203,6 +16210,7 @@
 				E1AF3563286DE5F800960045 /* FullFunctionalTestPlan.xctestplan in Resources */,
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
 				8A1A935A2B757C7C0069C190 /* portrait.json in Resources */,
+				8A3709E12DC128EA004B9350 /* defaultEnabledOff.json in Resources */,
 				23BEA76A251A99ED00A014BF /* NewYorkMedium-RegularItalic.otf in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
 				E1AF27442A17BCF700CE5991 /* engagementNotificationWithoutConditions.json in Resources */,
