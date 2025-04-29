@@ -14,7 +14,6 @@ final class HomepageViewController: UIViewController,
                                     FeatureFlaggable,
                                     ContentContainable,
                                     Themeable,
-                                    Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -110,17 +109,6 @@ final class HomepageViewController: UIViewController,
 
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
-
-        setupNotifications(forObserver: self, observing: [
-            UIApplication.didBecomeActiveNotification,
-            .FirefoxAccountChanged,
-            .PrivateDataClearedHistory,
-            .ProfileDidFinishSyncing,
-            .TopSitesUpdated,
-            .DefaultSearchEngineUpdated,
-            .BookmarksUpdated,
-            .RustPlacesOpened
-        ])
 
         subscribeToRedux()
     }
@@ -996,57 +984,5 @@ final class HomepageViewController: UIViewController,
         traitCollection: UITraitCollection
     ) -> UIModalPresentationStyle {
         .none
-    }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.willEnterForegroundNotification:
-            store.dispatch(
-                PocketAction(
-                    windowUUID: self.windowUUID,
-                    actionType: PocketActionType.enteredForeground
-                )
-            )
-        case .PrivateDataClearedHistory,
-                .TopSitesUpdated,
-                .DefaultSearchEngineUpdated:
-            dispatchActionToFetchTopSites()
-        case .BookmarksUpdated, .RustPlacesOpened:
-            store.dispatch(
-                BookmarksAction(
-                    windowUUID: self.windowUUID,
-                    actionType: BookmarksActionType.fetchBookmarks
-                )
-            )
-        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
-            dispatchActionToFetchTopSites()
-            dispatchActionToFetchTabs()
-        default: break
-        }
-    }
-
-    private func dispatchActionToFetchTopSites() {
-        store.dispatch(
-            TopSitesAction(
-                windowUUID: self.windowUUID,
-                actionType: TopSitesActionType.fetchTopSites
-            )
-        )
-    }
-
-    private func dispatchActionToFetchTabs() {
-        store.dispatch(
-            JumpBackInAction(
-                windowUUID: self.windowUUID,
-                actionType: JumpBackInActionType.fetchLocalTabs
-            )
-        )
-        store.dispatch(
-            JumpBackInAction(
-                windowUUID: self.windowUUID,
-                actionType: JumpBackInActionType.fetchRemoteTabs
-            )
-        )
     }
 }

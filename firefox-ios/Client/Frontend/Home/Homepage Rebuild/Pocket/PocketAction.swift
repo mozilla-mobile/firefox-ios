@@ -31,7 +31,6 @@ final class PocketAction: Action {
 }
 
 enum PocketActionType: ActionType {
-    case enteredForeground
     case toggleShowSectionSetting
     case tapOnHomepagePocketCell
     case viewedSection

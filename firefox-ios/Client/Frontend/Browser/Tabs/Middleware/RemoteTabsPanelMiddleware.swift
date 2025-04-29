@@ -56,7 +56,7 @@ class RemoteTabsPanelMiddleware {
     private func resolveHomepageActions(action: Action, state: AppState) {
         switch action.actionType {
         case HomepageActionType.viewWillAppear,
-            JumpBackInActionType.fetchRemoteTabs,
+            HomepageMiddlewareActionType.jumpBackInRemoteTabsUpdated,
             TabTrayActionType.dismissTabTray,
             TopTabsActionType.didTapNewTab,
             TopTabsActionType.didTapCloseTab:

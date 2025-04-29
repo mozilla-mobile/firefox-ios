@@ -46,6 +46,30 @@ final class BookmarksMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
     }
 
+    func test_homepageMiddlewareAction_getBookmarksData() throws {
+        let subject = createSubject()
+
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.bookmarksUpdated
+        )
+        let expectation = XCTestExpectation(description: "Homepage action initialize dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.bookmarksProvider(AppState(), action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? BookmarksAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? BookmarksMiddlewareActionType)
+
+        XCTAssertEqual(actionType, BookmarksMiddlewareActionType.initialize)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> BookmarksMiddleware {
         return BookmarksMiddleware(profile: mockProfile)
