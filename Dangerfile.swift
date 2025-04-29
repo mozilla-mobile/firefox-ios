@@ -4,7 +4,6 @@
 
 import Danger
 import DangerSwiftCoverage
-import DangerXCov
 import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
@@ -14,6 +13,7 @@ let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/Standa
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
 checkCodeCoverage()
+failOnNewFilesWithoutCoverage()
 checkForPRDescription()
 checkForWebEngineFileChange()
 checkForCodeUsage()
@@ -34,19 +34,54 @@ func checkCodeCoverage() {
         .xcresultBundle(xcresult),
         minimumCoverage: 50
     )
-
-    // Use DangerXCov to check per-file coverage and fail for new files under threshold
-    let xcov = XCov(danger: danger)
-    let newFiles = danger.git.createdFiles.filter { $0.hasSuffix(".swift") && !$0.contains("/Generated/") }
-
-    xcov.report(
-        withXcresultBundlePath: ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"] ?? "",
-        minimumCoverage: nil,
-        onlyFiles: newFiles
-    )
-
-    xcov.failIfFilesHaveCoverageLessThan(threshold: 50, onlyFiles: newFiles)
 }
+
+func failOnNewFilesWithoutCoverage() {
+    let jsonPath = "coverage.json"
+
+    guard let data = FileManager.default.contents(atPath: jsonPath),
+          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let targets = json["targets"] as? [[String: Any]] else {
+        fail("Could not parse coverage.json for per-file coverage")
+        return
+    }
+
+    // Build a dictionary of file coverage: [file path: coverage %]
+    var coverageByFile: [String: Double] = [:]
+    for target in targets {
+        if let files = target["files"] as? [[String: Any]] {
+            for file in files {
+                guard let path = file["name"] as? String,
+                      let coverage = file["lineCoverage"] as? Double else { continue }
+                coverageByFile[path] = coverage * 100.0 // Convert from 0.0–1.0 to percent
+            }
+        }
+    }
+
+    // Get new Swift files in the PR
+    let newSwiftFiles = danger.git.createdFiles.filter { $0.hasSuffix(".swift") }
+
+    for file in newSwiftFiles {
+        // Adjust path if needed to match coverage.json format
+        // Strip "./" and match suffixes
+        let cleanedFile = file.replacingOccurrences(of: "./", with: "")
+
+        // Try to find a file in coverage report that ends with this file
+        let matching = coverageByFile.first { (coveragePath, _) in
+            coveragePath.hasSuffix(cleanedFile)
+        }
+
+        if let (_, coveragePercent) = matching {
+            if coveragePercent == 0 {
+                fail("New file `\(file)` has 0% test coverage. Please add unit tests.")
+            }
+        } else {
+            fail("New file `\(file)` is missing from coverage report. Please add unit tests.")
+        }
+    }
+}
+
+
 
 // MARK: - PR guidelines
 

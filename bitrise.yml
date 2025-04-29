@@ -191,8 +191,17 @@ workflows:
             #!/usr/bin/env bash
             # Fail if any command fails
             set -e
+            # Extract .xcresult using xcrun xccov
+            xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > coverage.json
+
             echo "Run danger"
             swift run danger-swift ci
+
+            echo "Remove coverage.json"
+            if [ -f coverage.json ]; then
+              echo "Removing coverage.json"
+              rm coverage.json
+            fi
     - cache-push@2.7.1:
         is_always_run: true
     - script@1.2.1:
