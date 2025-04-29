@@ -174,7 +174,6 @@ workflows:
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX 
-        is_always_run: true
     - save-spm-cache@1.3.1:
         is_always_run: true
     - deploy-to-bitrise-io@2.10.0:
