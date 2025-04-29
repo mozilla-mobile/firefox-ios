@@ -11,52 +11,33 @@ protocol TabTraySelectorDelegate: AnyObject {
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
-    static let cellSpacing: CGFloat = 4
-    static let cellHorizontalPadding: CGFloat = 12
+    static let horizontalPadding: CGFloat = 40
     static let cellVerticalPadding: CGFloat = 8
     static let estimatedCellWidth: CGFloat = 100
     static let cornerRadius: CGFloat = 12
     static let verticalInsets: CGFloat = 4
 }
 
-final class TabTraySelectorView: UIView,
-                                 UICollectionViewDelegateFlowLayout,
-                                 UICollectionViewDataSource,
-                                 UIScrollViewDelegate,
-                                 ThemeApplicable {
+class TabTraySelectorView: UIView,
+                           ThemeApplicable {
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
-    private var selectedIndex: Int
-
-    var items: [String] = [] {
+    private var selectedIndex: Int {
         didSet {
-            collectionView.reloadData()
-            scrollToCenter()
+            if oldValue != selectedIndex {
+                selectNewSection()
+            }
+        }
+    }
+    private var buttons: [UIButton] = []
+
+    var items: [String] = ["", "", ""] {
+        didSet {
+            updateLabels()
         }
     }
 
-    // MARK: - Layout & Views
-    private lazy var layout: CenterSnappingFlowLayout = {
-        let layout = CenterSnappingFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = TabTraySelectorUX.cellSpacing
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        return layout
-    }()
-
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TabTraySelectorCell.self, forCellWithReuseIdentifier: TabTraySelectorCell.cellIdentifier)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.decelerationRate = .fast
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.isScrollEnabled = false
-        return collectionView
-    }()
-
-    // MARK: - Init
     init(selectedIndex: Int,
          theme: Theme) {
         self.selectedIndex = selectedIndex
@@ -70,71 +51,54 @@ final class TabTraySelectorView: UIView,
     }
 
     private func setup() {
-        addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = TabTraySelectorUX.horizontalPadding
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: -TabTraySelectorUX.verticalInsets),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: TabTraySelectorUX.verticalInsets),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
+
+        for (index, title) in items.enumerated() {
+            let button = UIButton()
+            button.setTitle(title, for: .normal)
+            button.tag = index
+            button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
+
+            buttons.append(button)
+            stackView.addArrangedSubview(button)
+
+            button.titleLabel?.font = index == selectedIndex ?
+                FXFontStyles.Bold.body.scaledFont() :
+                FXFontStyles.Regular.body.scaledFont()
+
+            button.titleLabel?.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
+            button.titleLabel?.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                                                          NSNumber(value: index + 1),
+                                                          NSNumber(value: items.count + 1))
+        }
 
         applyTheme(theme: theme)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let estimatedCellWidth = TabTraySelectorUX.estimatedCellWidth
-        let horizontalInset = (bounds.width - estimatedCellWidth) / 2
-
-        collectionView.contentInset = UIEdgeInsets(
-            top: 0,
-            left: horizontalInset,
-            bottom: 0,
-            right: horizontalInset
-        )
-        collectionView.contentOffset.x = -horizontalInset
-    }
-
-    // MARK: - Public Methods
-    func scrollToCenter() {
-        // Force it to always be centered on the center item,
-        // temporary until this component is replaced with a simpler one
-        let indexPath = IndexPath(item: 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-    }
-
-    // MARK: - UICollectionViewDataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabTraySelectorCell.cellIdentifier,
-                                                            for: indexPath) as? TabTraySelectorCell else {
-            return UICollectionViewCell()
+    private func updateLabels() {
+        for (index, title) in items.enumerated() {
+            buttons[index].setTitle(title, for: .normal)
         }
-        cell.configure(title: items[indexPath.item],
-                       selected: indexPath.item == selectedIndex,
-                       theme: theme,
-                       position: indexPath.item,
-                       total: indexPath.count)
-        return cell
     }
 
-    // MARK: - UICollectionViewDelegate
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectNewSection(newIndex: indexPath.item)
+    @objc
+    private func sectionSelected(_ sender: UIButton) {
+        selectedIndex = sender.tag
     }
 
-    func selectNewSection(newIndex: Int) {
-        guard selectedIndex != newIndex else { return }
-        selectedIndex = newIndex
-        collectionView.reloadData()
-        scrollToCenter()
-
+    private func selectNewSection() {
         var panelType: TabTrayPanelType = .tabs
         if selectedIndex == 0 {
             panelType = .privateTabs
@@ -143,13 +107,26 @@ final class TabTraySelectorView: UIView,
         } else if selectedIndex == 2 {
             panelType = .syncedTabs
         }
+
+        for (index, button) in buttons.enumerated() {
+            if index == selectedIndex {
+                button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
+            } else {
+                button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+            }
+        }
+
         delegate?.didSelectSection(panelType: panelType)
     }
 
-    // MARK: - Themeable
+    // MARK: - ThemeApplicable
+
     func applyTheme(theme: Theme) {
         self.theme = theme
-        collectionView.backgroundColor = theme.colors.layer1
         backgroundColor = theme.colors.layer1
+
+        for button in buttons {
+            button.setTitleColor(theme.colors.textPrimary, for: .normal)
+        }
     }
 }

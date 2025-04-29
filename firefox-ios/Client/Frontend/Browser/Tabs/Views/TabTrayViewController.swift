@@ -288,13 +288,6 @@ class TabTrayViewController: UIViewController,
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateLayout()
         }
-
-        if isTabTrayUIExperimentsEnabled {
-            // Needs to execute the layout pass after the orientation has changed
-            DispatchQueue.main.async {
-                self.experimentSegmentControl.scrollToCenter()
-            }
-        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -511,7 +504,6 @@ class TabTrayViewController: UIViewController,
         var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
-            experimentSegmentControl.scrollToCenter()
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
