@@ -91,7 +91,8 @@ class StatusBarOverlay: UIView,
         // Status bar height can be 0 on iPhone in landscape mode.
         guard isBottomSearchBar,
               let statusBarHeight: CGFloat = statusBarFrame?.height,
-              statusBarHeight > 0
+              statusBarHeight > 0,
+              savedIsHomepage ?? false
         else {
             scrollOffset = 1
             return
