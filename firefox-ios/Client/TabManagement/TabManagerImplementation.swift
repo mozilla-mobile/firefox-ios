@@ -224,7 +224,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         self.delegates.append(WeakTabManagerDelegate(value: delegate))
     }
 
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
+    func setNavigationDelegate(_ delegate: WKNavigationDelegate) {
         navigationDelegate = delegate
     }
 

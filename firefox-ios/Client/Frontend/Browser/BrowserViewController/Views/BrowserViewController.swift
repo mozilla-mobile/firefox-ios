@@ -376,7 +376,7 @@ class BrowserViewController: UIViewController,
 
     fileprivate func didInit() {
         tabManager.addDelegate(self)
-        tabManager.addNavigationDelegate(self)
+        tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in

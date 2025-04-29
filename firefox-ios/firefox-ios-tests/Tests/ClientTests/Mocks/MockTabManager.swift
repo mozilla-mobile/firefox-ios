@@ -74,7 +74,7 @@ class MockTabManager: TabManager {
 
     func addDelegate(_ delegate: TabManagerDelegate) {}
 
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {}
+    func setNavigationDelegate(_ delegate: WKNavigationDelegate) {}
 
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
 

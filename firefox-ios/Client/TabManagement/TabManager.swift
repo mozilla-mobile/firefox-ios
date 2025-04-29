@@ -32,7 +32,7 @@ protocol TabManager: AnyObject {
 
     // MARK: - Add/Remove Delegate
     func addDelegate(_ delegate: TabManagerDelegate)
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate)
+    func setNavigationDelegate(_ delegate: WKNavigationDelegate)
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
 
     // MARK: - Select Tab
