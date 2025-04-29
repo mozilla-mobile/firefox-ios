@@ -26,6 +26,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
     override func tearDown() {
         mockProfile = nil
         searchEnginesManager = nil
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
