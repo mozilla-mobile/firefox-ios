@@ -3665,44 +3665,6 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-  close:
-    type: labeled_counter
-    description: |
-      The count of tabs closed by the user. Increments the
-      appropriate label when either a normal or private tab
-      is closed.
-    labels:
-      - normal-tab
-      - private-tab
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  close_all:
-    type: labeled_counter
-    description: |
-      The count of times the user closes all tabs. Increments the
-      appropriate label when either a normal or private tab
-      is closed.
-    labels:
-      - normal-tab
-      - private-tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   close_tab_tray:
     type: event
     description: |
@@ -3873,6 +3835,33 @@ tabs:
 
 # Tabs Panel
 tabs_panel:
+  tab_closed:
+    type: event
+    description: |
+      Recorded when a user closes an open tab via tapping the x or
+      swiping closed.
+    extra_keys:
+      method:
+        type: string
+        description: |
+          The method used to close the tab (tapping x or swipe)
+      mode:
+        type: string
+        description: |
+          The tab mode you are in when you press the new tab 
+          button (normal or private).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
   tab_selected:
     type: event
     description: |
@@ -3882,6 +3871,11 @@ tabs_panel:
         type: quantity
         description: |
           The index of the open tab that the user selects
+      mode:
+        type: string
+        description: |
+          The tab mode you are in when you press the new tab 
+          button (normal, private and sync).
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7526
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
@@ -3890,6 +3884,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -3933,6 +3928,38 @@ tabs_panel:
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
+
+tabs_panel.close_all_tabs_sheet:
+  option_selected:
+    type: event
+    description: | 
+      Records the option selected after a user has opened the 
+      close all tabs sheet.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option selected from the close all tabs sheet, either
+          all or cancel.
+      mode:
+        type: string
+        description: |
+          The tab mode the user is switching to (normal or private).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25296
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"

@@ -395,6 +395,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     @MainActor
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
+        tabsPanelTelemetry.tabClosed(mode: isPrivate ? .private : .normal)
         let tabManager = tabManager(for: uuid)
         // In non-private mode, if:
         //      A) the last normal active tab is closed, or
@@ -513,6 +514,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+
+        tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
         Task {
             let normalCount = tabManager.normalTabs.count
             let privateCount = tabManager.privateTabs.count

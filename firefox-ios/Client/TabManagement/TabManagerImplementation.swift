@@ -249,13 +249,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         self.removeTab(tab, flushToDisk: true)
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
@@ -267,13 +260,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     func removeTabs(_ tabs: [Tab]) {

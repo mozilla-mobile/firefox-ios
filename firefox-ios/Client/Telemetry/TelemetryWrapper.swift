@@ -859,10 +859,6 @@ extension TelemetryWrapper {
             GleanMetrics.QrCode.scanned.add()
 
         // MARK: Tabs
-        case (.action, .close, .tab, let privateOrNormal?, _):
-            GleanMetrics.Tabs.close[privateOrNormal.rawValue].add()
-        case (.action, .closeAll, .tab, let privateOrNormal?, _):
-            GleanMetrics.Tabs.closeAll[privateOrNormal.rawValue].add()
         case (.action, .close, .tabTray, _, _):
             GleanMetrics.Tabs.closeTabTray.record()
         case (.action, .press, .tabToolbar, .tabView, _):

@@ -22,6 +22,11 @@ struct TabsPanelTelemetry {
         }
     }
 
+    enum CloseAllPanelOption: String {
+        case all
+        case cancel
+    }
+
     private let gleanWrapper: GleanWrapper
     private let logger: Logger
 
@@ -48,5 +53,18 @@ struct TabsPanelTelemetry {
     func tabSelected(at index: Int) {
         let extras = GleanMetrics.TabsPanel.TabSelectedExtra(selectedTabIndex: Int32(index))
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabSelected, extras: extras)
+    }
+
+    func closeAllTabsSheetOptionSelected(option: CloseAllPanelOption, mode: Mode) {
+        let extras = GleanMetrics.TabsPanelCloseAllTabsSheet.OptionSelectedExtra(
+            mode: mode.rawValue,
+            option: option.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanelCloseAllTabsSheet.optionSelected, extras: extras)
+    }
+
+    func tabClosed(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.TabClosedExtra(mode: mode.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabClosed, extras: extras)
     }
 }
