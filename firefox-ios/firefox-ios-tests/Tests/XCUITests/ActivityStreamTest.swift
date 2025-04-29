@@ -241,14 +241,14 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.links[TopSites.itemCell])
         app.collectionViews.links.element(boundBy: 3).press(forDuration: 1)
         // Verify options given
-        let ContextMenuTable = app.tables["Context Menu"]
+        let contextMenuTable = app.tables["Context Menu"]
         waitForElementsToExist(
             [
-                ContextMenuTable,
-                ContextMenuTable.cells.otherElements["pinLarge"],
-                ContextMenuTable.cells.otherElements["plusLarge"],
-                ContextMenuTable.cells.otherElements["privateModeLarge"],
-                ContextMenuTable.cells.otherElements["crossLarge"]
+                contextMenuTable,
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.pin],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.cross]
             ]
         )
     }
