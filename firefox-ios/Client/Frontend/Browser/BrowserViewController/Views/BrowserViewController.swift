@@ -1954,6 +1954,22 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func updateToolbarAnimationStateIfNeeded() {
+        guard isSwipingTabsEnabled,
+        store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.shouldAnimate == false else { return }
+        store.dispatch(
+            ToolbarAction(
+                shouldAnimate: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged
+            )
+        )
+    }
+
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -2015,6 +2031,7 @@ class BrowserViewController: UIViewController,
             }
 
         case .URL:
+            updateToolbarAnimationStateIfNeeded()
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
                 break

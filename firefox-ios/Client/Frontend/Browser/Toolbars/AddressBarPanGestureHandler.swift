@@ -161,6 +161,13 @@ final class AddressBarPanGestureHandler: NSObject {
             // Reactivate Auto Layout after the animation.
             webPagePreview.translatesAutoresizingMaskIntoConstraints = false
             if shouldCompleteTransition && isValidIndex {
+                store.dispatch(
+                    ToolbarAction(
+                        shouldAnimate: false,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.animationStateChanged
+                    )
+                )
                 // Reset the positions and select the new tab if the transition was completed.
                 contentContainer.frame.origin.x = 0
                 addressBarContainer.frame.origin.x = 0
