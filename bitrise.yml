@@ -133,17 +133,6 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@2.1.1:
         is_always_run: true
-    - script@1.2.1:
-        title: Set default BITRISE variables
-        inputs:
-        - content: 
-            #!/usr/bin/env bash
-            set -euxo pipefail
-
-            envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value ""
-            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value ""
-            envman add --key BITRISE_TEST_SHARDS_PATH_FIREFOX --value ""
-            envman add --key BITRISE_TEST_BUNDLE_PATH --value ""
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -189,12 +178,20 @@ workflows:
     - save-spm-cache@1.3.1:
         is_always_run: true
     - deploy-to-bitrise-io@2.10.0:
+        run-if: '{{getenv "BITRISE_TEST_SHARDS_PATH_FIREFOX" | ne ""}}'
         inputs:
         - pipeline_intermediate_files: |-
             BITRISE_TEST_SHARDS_PATH_FIREFOX
+    - deploy-to-bitrise-io@2.10.0:
+        run-if: '{{getenv "BITRISE_TEST_BUNDLE_PATH" | ne ""}}'
+        inputs:
+        - pipeline_intermediate_files: |-
             BITRISE_TEST_BUNDLE_PATH
+    - deploy-to-bitrise-io@2.10.0:
+        run-if: '{{getenv "BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" | ne ""}}'
+        inputs:
+        - pipeline_intermediate_files: |-
             BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        is_always_run: true
     - script@1.1.1:
         title: Run Danger 2
         timeout: 360
