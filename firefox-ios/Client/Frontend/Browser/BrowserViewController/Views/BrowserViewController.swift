@@ -2995,10 +2995,6 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    private func autofillLoginNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
-    }
-
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -3579,7 +3575,6 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(logins, name: LoginsHelper.name())
         logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
             Task {
-                guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
