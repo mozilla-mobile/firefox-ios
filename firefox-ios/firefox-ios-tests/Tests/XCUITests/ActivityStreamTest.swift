@@ -245,7 +245,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Check that two tabs are open and one of them is the default top site one
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
         if iPad() {
             navigator.goto(TabTray)
