@@ -372,7 +372,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(dismissAction)
 
-        if isTabTrayUIExperimentsEnabled == false {
+        if !isTabTrayUIExperimentsEnabled {
             let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
                                                      windowUUID: uuid,
                                                      actionType: GeneralBrowserActionType.showOverlay)
