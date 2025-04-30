@@ -207,9 +207,14 @@ class BrowserViewController: UIViewController,
         view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
 
+    // Mask for the content view so the content is only extending top and bottom
     private let contentMaskView: UIView = .build { view in
         view.backgroundColor = .black
     }
+
+    // background view is placed behind content view so view scrolled to top or bottom shows
+    // correct background for translucent toolbars
+    private let backgroundView: UIView = .build()
 
     // MARK: Contextual Hints
 
@@ -1360,6 +1365,9 @@ class BrowserViewController: UIViewController,
         view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
         view.insertSubview(contentMaskView, belowSubview: contentContainer)
 
+        view.insertSubview(backgroundView,
+                           belowSubview: isSwipingTabsEnabled ? webPagePreview : contentContainer)
+
         NSLayoutConstraint.activate([
             topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
             topBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
@@ -1375,6 +1383,11 @@ class BrowserViewController: UIViewController,
             contentMaskView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             contentMaskView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             contentMaskView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 
@@ -3386,6 +3399,16 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         updateAddressBarBackgroundViewColor(theme: currentTheme)
+
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        if isToolbarRefactorEnabled,
+            let toolbarState,
+            toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
+            backgroundView.backgroundColor = currentTheme.colors.layer3
+        } else {
+            backgroundView.backgroundColor = currentTheme.colors.layer1
+        }
+
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
