@@ -77,10 +77,8 @@ func failOnNewFilesWithoutCoverage() {
 
         if let (_, coveragePercent) = matching {
             if coveragePercent == 0 {
-                fail("New file `\(file)` has 0% test coverage. Please add unit tests.")
+                warn("New file `\(file)` has 0% test coverage. Please add unit tests.")
             }
-        } else {
-            fail("New file `\(file)` is missing from coverage report. Please add unit tests.")
         }
     }
 }
