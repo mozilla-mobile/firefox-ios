@@ -2682,6 +2682,82 @@ extension String {
 // MARK: - Tabs Tray
 extension String {
     public struct TabsTray {
+        public static let TabTrayV2Title = MZLocalizedString(
+            key: "TabTray.Title",
+            tableName: nil,
+            value: "Open Tabs",
+            comment: "The title for the tab tray")
+        public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
+            key: "TabTray.SegmentedControlTitles.Tabs",
+            tableName: nil,
+            value: "Tabs",
+            comment: "The title on the button to look at regular tabs.")
+        public static let TabTraySegmentedControlTitlesPrivateTabs = MZLocalizedString(
+            key: "TabTray.SegmentedControlTitles.PrivateTabs",
+            tableName: nil,
+            value: "Private",
+            comment: "The title on the button to look at private tabs.")
+        public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
+            key: "PrivateBrowsing.Toggle.A11y.Label.v132",
+            tableName: "PrivateBrowsing",
+            value: "Private browsing",
+            comment: "Accessibility label for toggling on/off private mode")
+        public static let TabTrayToggleAccessibilityValueOn = MZLocalizedString(
+            key: "On",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Toggled ON accessibility value")
+        public static let TabTrayToggleAccessibilityValueOff = MZLocalizedString(
+            key: "Off",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Toggled OFF accessibility value")
+        public static let TabTrayViewAccessibilityLabel = MZLocalizedString(
+            key: "Tabs Tray",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label for the Tabs Tray view.")
+        public static let TabTrayClosingTabAccessibilityMessage =  MZLocalizedString(
+            key: "Closing tab",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed.")
+        public static let TabTrayCloseAllTabsPromptCancel = MZLocalizedString(
+            key: "Cancel",
+            tableName: nil,
+            value: nil,
+            comment: "Label for Cancel button")
+        public static let TabTrayPrivateBrowsingTitle = MZLocalizedString(
+            key: "Private Browsing",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Title displayed for when there are no open tabs while in private mode")
+        public static let TabTrayPrivateBrowsingDescription =  MZLocalizedString(
+            key: "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Description text displayed when there are no open tabs while in private mode")
+        public static let TabTrayAddTabAccessibilityLabel = MZLocalizedString(
+            key: "Add Tab",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString(
+            key: "Close",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
+        public static let TabTraySwipeToCloseAccessibilityHint = MZLocalizedString(
+            key: "Swipe right or left with three fingers to close the tab.",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility hint for tab tray's displayed tab.")
+        public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString(
+            key: "TabTray.CurrentSelectedTab.A11Y",
+            tableName: nil,
+            value: "Currently selected tab.",
+            comment: "Accessibility label for the currently selected tab.")
+
         public struct InactiveTabs {
             public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
                 key: "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
@@ -3561,32 +3637,6 @@ extension String {
         tableName: nil,
         value: "URL",
         comment: "The label for the URL field when editing a bookmark")
-}
-
-// MARK: - Tab tray (chronological tabs)
-extension String {
-    public static let TabTrayV2Title = MZLocalizedString(
-        key: "TabTray.Title",
-        tableName: nil,
-        value: "Open Tabs",
-        comment: "The title for the tab tray")
-
-    // Segmented Control tites for iPad
-    public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
-        key: "TabTray.SegmentedControlTitles.Tabs",
-        tableName: nil,
-        value: "Tabs",
-        comment: "The title on the button to look at regular tabs.")
-    public static let TabTraySegmentedControlTitlesPrivateTabs = MZLocalizedString(
-        key: "TabTray.SegmentedControlTitles.PrivateTabs",
-        tableName: nil,
-        value: "Private",
-        comment: "The title on the button to look at private tabs.")
-    public static let TabTraySegmentedControlTitlesSyncedTabs = MZLocalizedString(
-        key: "TabTray.SegmentedControlTitles.SyncedTabs",
-        tableName: nil,
-        value: "Synced",
-        comment: "The title on the button to look at synced tabs.")
 }
 
 // MARK: - Clipboard Toast
@@ -6219,70 +6269,6 @@ extension String {
         comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
 }
 
-// MARK: - Tab Tray v1
-extension String {
-    public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
-        key: "PrivateBrowsing.Toggle.A11y.Label.v132",
-        tableName: "PrivateBrowsing",
-        value: "Private browsing",
-        comment: "Accessibility label for toggling on/off private mode")
-    public static let TabTrayToggleAccessibilityValueOn = MZLocalizedString(
-        key: "On",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Toggled ON accessibility value")
-    public static let TabTrayToggleAccessibilityValueOff = MZLocalizedString(
-        key: "Off",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Toggled OFF accessibility value")
-    public static let TabTrayViewAccessibilityLabel = MZLocalizedString(
-        key: "Tabs Tray",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the Tabs Tray view.")
-    public static let TabTrayClosingTabAccessibilityMessage =  MZLocalizedString(
-        key: "Closing tab",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed.")
-    public static let TabTrayCloseAllTabsPromptCancel = MZLocalizedString(
-        key: "Cancel",
-        tableName: nil,
-        value: nil,
-        comment: "Label for Cancel button")
-    public static let TabTrayPrivateBrowsingTitle = MZLocalizedString(
-        key: "Private Browsing",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Title displayed for when there are no open tabs while in private mode")
-    public static let TabTrayPrivateBrowsingDescription =  MZLocalizedString(
-        key: "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Description text displayed when there are no open tabs while in private mode")
-    public static let TabTrayAddTabAccessibilityLabel = MZLocalizedString(
-        key: "Add Tab",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-    public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString(
-        key: "Close",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
-    public static let TabTraySwipeToCloseAccessibilityHint = MZLocalizedString(
-        key: "Swipe right or left with three fingers to close the tab.",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility hint for tab tray's displayed tab.")
-    public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString(
-        key: "TabTray.CurrentSelectedTab.A11Y",
-        tableName: nil,
-        value: "Currently selected tab.",
-        comment: "Accessibility label for the currently selected tab.")
-}
-
 // MARK: - URL Bar
 extension String {
     public static let URLBarLocationAccessibilityLabel = MZLocalizedString(
@@ -7801,6 +7787,11 @@ extension String {
                 tableName: "PasswordGenerator",
                 value: "Password Generator",
                 comment: "Accessibility label describing a feature that generates a password when the password field of a signup form is interacted with.")
+            public static let TabTraySegmentedControlTitlesSyncedTabs = MZLocalizedString(
+                key: "TabTray.SegmentedControlTitles.SyncedTabs",
+                tableName: nil,
+                value: "Synced",
+                comment: "The title on the button to look at synced tabs.")
         }
     }
 }

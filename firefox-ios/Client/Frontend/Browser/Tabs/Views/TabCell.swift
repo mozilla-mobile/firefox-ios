@@ -92,7 +92,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         backgroundHolder.addSubviews(screenshotView, faviconBG, headerView)
 
         accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction,
+            UIAccessibilityCustomAction(name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
                                         target: animator,
                                         selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
@@ -121,7 +121,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         titleText.text = tabModel.tabTitle
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
         isAccessibilityElement = true
-        accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
+        accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
         accessibilityIdentifier = a11yId
 
         let identifier = StandardImageIdentifiers.Large.globe
@@ -312,9 +312,9 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         let baseName = tabModel.tabTitle
 
         if isSelectedTab, !baseName.isEmpty {
-            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
+            return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
-            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
+            return String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else {
             return baseName
         }

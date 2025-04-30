@@ -13,9 +13,9 @@ enum TabTrayPanelType: Int, CaseIterable {
     var navTitle: String {
         switch self {
         case .tabs:
-            return .TabTrayV2Title
+            return .TabsTray.TabTrayV2Title
         case .privateTabs:
-            return .TabTrayPrivateBrowsingTitle
+            return .TabsTray.TabTrayPrivateBrowsingTitle
         case .syncedTabs:
             return .LegacyAppMenu.AppMenuSyncedTabsTitleString
         }
@@ -24,9 +24,9 @@ enum TabTrayPanelType: Int, CaseIterable {
     var label: String {
         switch self {
         case .tabs:
-            return String.TabTraySegmentedControlTitlesTabs
+            return .TabsTray.TabTraySegmentedControlTitlesTabs
         case .privateTabs:
-            return String.TabTraySegmentedControlTitlesPrivateTabs
+            return .TabsTray.TabTraySegmentedControlTitlesPrivateTabs
         case .syncedTabs:
             return String.Settings.Notifications.SyncNotificationsTitle
         }

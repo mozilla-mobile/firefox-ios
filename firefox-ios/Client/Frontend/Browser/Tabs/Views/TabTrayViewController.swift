@@ -163,7 +163,7 @@ class TabTrayViewController: UIViewController,
         return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(newTabButtonTapped),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
-                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+                                a11yLabel: .TabsTray.TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var flexibleSpace: UIBarButtonItem = {
@@ -672,7 +672,7 @@ class TabTrayViewController: UIViewController,
                                            style: .default,
                                            handler: { _ in self.confirmCloseAll() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
+        controller.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: nil),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
