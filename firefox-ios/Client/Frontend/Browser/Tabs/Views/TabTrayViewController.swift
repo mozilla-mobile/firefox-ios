@@ -685,18 +685,13 @@ class TabTrayViewController: UIViewController,
     private func showCloseAllConfirmation() {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-        controller.addAction(UIAlertAction(title: "Close Tabs Older Than...",
+        controller.addAction(UIAlertAction(title: "Close Old Tabs…",
                                            style: .default,
                                            handler: { _ in
             // Delay to allow current sheet to dismiss
             DispatchQueue.main.async {
                 self.showTimeRangePicker()
             }
-        }))
-
-        controller.addAction(UIAlertAction(title: "Close Duplicate Tabs",
-                                           style: .default,
-                                           handler: { _ in
         }))
 
         controller.addAction(UIAlertAction(title: "Close All Tabs",
@@ -710,11 +705,11 @@ class TabTrayViewController: UIViewController,
     }
 
     private func showTimeRangePicker() {
-        let alert = UIAlertController(title: "Delete tabs older than...",
-                                      message: "Tabs older than the selected time range will be closed.",
+        let alert = UIAlertController(title: "Close tabs older than…",
+                                      message: nil,
                                       preferredStyle: .actionSheet)
 
-        ["24 hours ago", "7 days ago", "2 weeks ago", "4 weeks ago"].forEach { title in
+        ["1 Day Ago", "1 Week Ago", "1 Month Ago"].forEach { title in
             alert.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
                 print("Selected: \(String(describing: title))")
             }))
