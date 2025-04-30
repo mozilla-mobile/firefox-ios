@@ -221,11 +221,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
-        // Record the open tab count
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        let tabCount = windowManager.allWindowTabManagers().map({ $0.count }).reduce(0, +)
-        GleanMetrics.Tabs.cumulativeCount.add(Int32(tabCount))
-
         // Record other preference settings.
         // If the setting exists at the key location, use that value. Otherwise record the default
         // value for that preference to ensure it makes it into the metrics ping.

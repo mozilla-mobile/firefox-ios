@@ -27,6 +27,13 @@ struct TabsPanelTelemetry {
         case cancel
     }
 
+    private enum TabType: String {
+        case normal
+        case `private`
+        case inactive
+        case total
+    }
+
     private let gleanWrapper: GleanWrapper
     private let logger: Logger
 
@@ -66,5 +73,34 @@ struct TabsPanelTelemetry {
     func tabClosed(mode: Mode) {
         let extras = GleanMetrics.TabsPanel.TabClosedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabClosed, extras: extras)
+    }
+
+    func doneButtonTapped(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.DoneButtonTappedExtra(mode: mode.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.doneButtonTapped, extras: extras)
+    }
+
+    func trackTabsQuantity(normalTabsCount: Int64, privateTabsCount: Int64, inactiveTabsCount: Int64) {
+        let totalNumberOfTabs: Int64 = normalTabsCount + privateTabsCount + inactiveTabsCount
+        gleanWrapper.recordLabeledQuantity(
+            for: GleanMetrics.UserTabs.tabCounts,
+            label: TabType.normal.rawValue,
+            value: normalTabsCount
+        )
+        gleanWrapper.recordLabeledQuantity(
+            for: GleanMetrics.UserTabs.tabCounts,
+            label: TabType.private.rawValue,
+            value: privateTabsCount
+        )
+        gleanWrapper.recordLabeledQuantity(
+            for: GleanMetrics.UserTabs.tabCounts,
+            label: TabType.inactive.rawValue,
+            value: inactiveTabsCount
+        )
+        gleanWrapper.recordLabeledQuantity(
+            for: GleanMetrics.UserTabs.tabCounts,
+            label: TabType.total.rawValue,
+            value: totalNumberOfTabs
+        )
     }
 }

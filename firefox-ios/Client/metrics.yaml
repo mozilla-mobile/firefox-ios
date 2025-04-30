@@ -1036,6 +1036,31 @@ usage:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+user.tabs:
+  tab_counts:
+    type: labeled_quantity
+    description: |
+      the number of tabs that a user has (normal, private, inactive, and total)
+    labels:
+      - normal_count
+      - private_count
+      - inactive_count
+      - total_count
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01" 
+    unit: quantity of inactive tabs
+    metadata:
+      tags:
+        - TabsPanel
 # Downloads
 downloads:
   download_now_button_tapped:
@@ -3643,28 +3668,6 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
     unit: quantity of inactive tabs
-  cumulative_count:
-    type: counter
-    description: |
-      Measures the current open tab count as the application
-      goes to background. Each background event adds to this
-      metric, making it the cumulative sum of all open tabs
-      when the app goes to background during the period of
-      time covered by a single metrics ping. This can be
-      divided by the number of baseline pings with
-      `ping_info.reason="inactive"` from the `start_time` to
-      the `end_time` of the metrics ping to determine the
-      average open tabs per foreground "session".
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   close_tab_tray:
     type: event
     description: |
@@ -3835,6 +3838,31 @@ tabs:
 
 # Tabs Panel
 tabs_panel:
+  done_button_tapped:
+    type: event
+    description: |
+      Recorded when a user taps the done button on the tab tray
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The tab mode you are in when you press the done 
+          button (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
   tab_closed:
     type: event
     description: |
@@ -3862,6 +3890,9 @@ tabs_panel:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
   tab_selected:
     type: event
     description: |
@@ -3888,6 +3919,9 @@ tabs_panel:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
   new_tab_button_tapped:
     type: event
     description: | 

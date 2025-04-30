@@ -130,7 +130,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         // FXIOS-11740 - This is relate to homepage actions, so if we want to break up this middleware
         // then this action should go to the homepage specific middleware.
-        case TabTrayActionType.dismissTabTray, TabTrayActionType.modalSwipedToClose, TabTrayActionType.doneButtonTapped:
+        case TabTrayActionType.dismissTabTray, TabTrayActionType.modalSwipedToClose:
+            dispatchRecentlyAccessedTabs(action: action)
+        case TabTrayActionType.doneButtonTapped:
+            tabsPanelTelemetry.doneButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
             dispatchRecentlyAccessedTabs(action: action)
         default:
             break

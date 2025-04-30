@@ -17,14 +17,15 @@ class TabTrayCoordinator: BaseCoordinator,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
     var tabTrayViewController: TabTrayViewController?
+    weak var parentCoordinator: TabTrayCoordinatorDelegate?
     private let profile: Profile
     private let tabManager: TabManager
-    weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
     init(router: Router,
          tabTraySection: TabTrayPanelType,
          profile: Profile,
-         tabManager: TabManager) {
+         tabManager: TabManager
+    ) {
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)

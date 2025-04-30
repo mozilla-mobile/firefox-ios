@@ -3307,7 +3307,11 @@ class BrowserViewController: UIViewController,
 
     private func logTelemetryForAppDidEnterBackground() {
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
+        tabsPanelTelemetry.trackTabsQuantity(
+            normalTabsCount: Int64(tabManager.normalTabs.count),
+            privateTabsCount: Int64(tabManager.privateTabs.count),
+            inactiveTabsCount: Int64(tabManager.inactiveTabs.count)
+        )
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             let windowManager: WindowManager = AppContainer.shared.resolve()
