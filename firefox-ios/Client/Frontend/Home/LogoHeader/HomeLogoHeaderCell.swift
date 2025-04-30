@@ -114,7 +114,13 @@ extension HomeLogoHeaderCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         // TODO: FXIOS-10851 This can be moved to the new homescreen wallpaper fetching redux
         let wallpaperManager = WallpaperManager()
-        if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor {
+        let browserViewType = store.state.screenState(
+            BrowserViewControllerState.self,
+            for: .browserViewController,
+            window: currentWindowUUID
+        )?.browserViewType
+
+        if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor, browserViewType != .privateHomepage {
             logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
                 .withRenderingMode(.alwaysTemplate)
             logoTextImage.tintColor = logoTextColor
