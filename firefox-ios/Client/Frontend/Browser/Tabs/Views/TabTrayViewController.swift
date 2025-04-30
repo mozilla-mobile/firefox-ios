@@ -666,18 +666,68 @@ class TabTrayViewController: UIViewController,
         store.dispatch(action)
     }
 
+//    private func showCloseAllConfirmation() {
+//        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
+//                                           style: .default,
+//                                           handler: { _ in self.confirmCloseAll() }),
+//                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
+//        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
+//                                           style: .cancel,
+//                                           handler: nil),
+//                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+//        controller.popoverPresentationController?.barButtonItem = deleteButton
+//        present(controller, animated: true, completion: nil)
+//    }
+
+    // TODO: Laurie - Add new strings
+    // TODO: Laurie - Add actions
     private func showCloseAllConfirmation() {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
+
+        controller.addAction(UIAlertAction(title: "Close Tabs Older Than...",
                                            style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
-                                           style: .cancel,
-                                           handler: nil),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+                                           handler: { _ in
+            // Delay to allow current sheet to dismiss
+            DispatchQueue.main.async {
+                self.showTimeRangePicker()
+            }
+        }))
+
+        controller.addAction(UIAlertAction(title: "Close Duplicate Tabs",
+                                           style: .default,
+                                           handler: { _ in
+        }))
+
+        controller.addAction(UIAlertAction(title: "Close All Tabs",
+                                           style: .destructive,
+                                           handler: { _ in
+        }))
+
+        controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         controller.popoverPresentationController?.barButtonItem = deleteButton
         present(controller, animated: true, completion: nil)
+    }
+
+    private func showTimeRangePicker() {
+        let alert = UIAlertController(title: "Delete tabs older than...",
+                                      message: "Tabs older than the selected time range will be closed.",
+                                      preferredStyle: .actionSheet)
+
+        ["24 hours ago", "7 days ago", "2 weeks ago", "4 weeks ago"].forEach { title in
+            alert.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
+                print("Selected: \(String(describing: title))")
+            }))
+        }
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        // On iPad: you need to set a sourceView or barButtonItem
+        if let popover = alert.popoverPresentationController {
+            popover.barButtonItem = deleteButton
+        }
+
+        present(alert, animated: true, completion: nil)
     }
 
     private func confirmCloseAll() {
