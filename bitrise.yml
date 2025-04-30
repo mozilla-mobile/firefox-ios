@@ -184,23 +184,19 @@ workflows:
             #!/usr/bin/env bash
             set -euo pipefail
             echo "Preparing artifacts for deployment..."
-            echo "What is in the paths stored in the variables?"
-            echo "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-noshard}$"
-            echo "${BITRISE_TEST_BUNDLE_PATH:-nobundle}"
-            echo "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-nosmoke}"
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
-            if [ -n "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$'\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH_FIREFOX not available, skipping."
             fi
-            if [ -n "$BITRISE_TEST_BUNDLE_PATH" ] && [ -d "$BITRISE_TEST_BUNDLE_PATH" ]; then
+            if [ -n "$BITRISE_TEST_BUNDLE_PATH:-}" ] && [ -d "$BITRISE_TEST_BUNDLE_PATH" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$'\n'
             else
                 echo ":warning: BITRISE_TEST_BUNDLE_PATH not available, skipping."
             fi
-            if [ -n "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
+            if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:}" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
                 DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$'\n'
             else
                 echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
@@ -211,7 +207,7 @@ workflows:
     - deploy-to-bitrise-io@2.10.0:
         inputs:
         - pipeline_intermediate_files: |-
-            {{ cat /tmp/pipeline_deploy_list.txt }}
+            '{{ cat /tmp/pipeline_deploy_list.txt }}'
         is_always_run: true
     - script@1.1.1:
         title: Run Danger 2
