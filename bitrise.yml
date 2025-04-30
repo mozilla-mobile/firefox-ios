@@ -176,7 +176,7 @@ workflows:
             BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         is_always_run: true
     - xcode-test-shard-calculation@0:
-        run_if: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        run_if: '{{getenv "BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" | ne ""}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - shard_count: 5
@@ -184,7 +184,7 @@ workflows:
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX 
     - deploy-to-bitrise-io@2.12.0:
-        run_if: BITRISE_TEST_SHARDS_PATH_FIREFOX
+        run_if: '{{getenv "BITRISE_TEST_SHARDS_PATH_FIREFOX" | ne ""}}'
         inputs:
         - pipeline_intermediate_files: |-
             BITRISE_TEST_SHARDS_PATH_FIREFOX 
