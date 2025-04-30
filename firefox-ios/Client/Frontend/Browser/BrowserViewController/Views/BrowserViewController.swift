@@ -479,7 +479,14 @@ class BrowserViewController: UIViewController,
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
         let enableBlur = isToolbarRefactorEnabled && isToolbarTranslucencyEnabled
-        guard enableBlur else { return }
+        guard ToolbarHelper().shouldBlur() else {
+            topBlurView.alpha = 0
+            bottomBlurView.isHidden = true
+            header.isClearBackground = false
+            overKeyboardContainer.isClearBackground = false
+            bottomContainer.isClearBackground = false
+            return
+        }
 
         let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -1094,14 +1101,6 @@ class BrowserViewController: UIViewController,
 
         bottomContainer.addArrangedSubview(toolbarToShow)
         view.addSubview(bottomContainer)
-
-        guard isToolbarRefactorEnabled,
-              isToolbarTranslucencyEnabled,
-              !UIAccessibility.isReduceTransparencyEnabled
-        else { return }
-
-        view.insertSubview(topBlurView, aboveSubview: contentContainer)
-        view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
     }
 
     private func enqueueTabRestoration() {
@@ -1344,9 +1343,11 @@ class BrowserViewController: UIViewController,
 
     private func setupBlurViews() {
         guard isToolbarRefactorEnabled,
-              isToolbarTranslucencyEnabled,
-              !UIAccessibility.isReduceTransparencyEnabled
+              isToolbarTranslucencyEnabled
         else { return }
+
+        view.insertSubview(topBlurView, aboveSubview: contentContainer)
+        view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
 
         NSLayoutConstraint.activate([
             topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
