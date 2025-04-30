@@ -191,23 +191,22 @@ workflows:
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH_FIREFOX not available, skipping."
             fi
-            if [ -n "$BITRISE_TEST_BUNDLE_PATH:-}" ] && [ -d "$BITRISE_TEST_BUNDLE_PATH" ]; then
+            if [ -n "${BITRISE_TEST_BUNDLE_PATH:-}" ] && [ -d "$BITRISE_TEST_BUNDLE_PATH" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$'\n'
             else
                 echo ":warning: BITRISE_TEST_BUNDLE_PATH not available, skipping."
             fi
-            if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:}" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
+            if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-}" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
                 DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$'\n'
             else
                 echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
             fi
-            echo "$DEPLOY_LIST" > /tmp/pipeline_deploy_list.txt
-            cat /tmp/pipeline_deploy_list.txt
+            envman add --key BITRISE_DEPLOY_LIST --value "$DEPLOY_LIST"
         is_always_run: true
     - deploy-to-bitrise-io@2.10.0:
         inputs:
         - pipeline_intermediate_files: |-
-            '{{ cat /tmp/pipeline_deploy_list.txt }}'
+            $BITRISE_DEPLOY_LIST
         is_always_run: true
     - script@1.1.1:
         title: Run Danger 2
