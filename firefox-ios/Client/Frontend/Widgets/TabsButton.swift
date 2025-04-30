@@ -37,12 +37,6 @@ class TabsButton: UIButton,
     // Re-entrancy guard to ensure the function is complete before starting another animation.
     private var isUpdatingTabCount = false
 
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-        && featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly)
-    }
-
     override var transform: CGAffineTransform {
         didSet {
             clonedTabsButton?.transform = transform
@@ -181,12 +175,7 @@ class TabsButton: UIButton,
             newTabsButton.centerYAnchor.constraint(equalTo: newTabsButton.centerYAnchor)
         ])
 
-        if isTabTrayUIExperimentsEnabled {
-            countLabel.text = countToBe
-            accessibilityValue = countToBe
-        } else {
-            animateButton(newTabsButton: newTabsButton, animated: animated)
-        }
+        animateButton(newTabsButton: newTabsButton, animated: animated)
     }
 
     private func animateButton(newTabsButton: TabsButton, animated: Bool) {
