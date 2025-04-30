@@ -15,8 +15,8 @@ features:
     defaults:
       - channel: beta
         value:
-          simplified-ui-enabled: false
-          felt-deletion-enabled: false
+          simplified-ui-enabled: true
+          felt-deletion-enabled: true
       - channel: developer
         value:
           simplified-ui-enabled: true
