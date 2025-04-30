@@ -2687,16 +2687,6 @@ extension String {
             tableName: nil,
             value: "Open Tabs",
             comment: "The title for the tab tray")
-        public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
-            key: "TabTray.SegmentedControlTitles.Tabs",
-            tableName: nil,
-            value: "Tabs",
-            comment: "The title on the button to look at regular tabs.")
-        public static let TabTraySegmentedControlTitlesPrivateTabs = MZLocalizedString(
-            key: "TabTray.SegmentedControlTitles.PrivateTabs",
-            tableName: nil,
-            value: "Private",
-            comment: "The title on the button to look at private tabs.")
         public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
             key: "PrivateBrowsing.Toggle.A11y.Label.v132",
             tableName: "PrivateBrowsing",
@@ -2757,6 +2747,21 @@ extension String {
             tableName: nil,
             value: "Currently selected tab.",
             comment: "Accessibility label for the currently selected tab.")
+        public static let TabsSelectorNormalTabsTitle = MZLocalizedString(
+            key: "TabTray.TabsSelectorNormalTabsTitle",
+            tableName: "TabsTray",
+            value: "%@ Tabs",
+            comment: "The title on the button to look at regular tabs. %@ is the number of regular tabs.")
+        public static let TabsSelectorSyncedTabsTitle = MZLocalizedString(
+            key: "TabTray.TabsSelectorSyncedTabsTitle",
+            tableName: "TabsTray",
+            value: "Sync",
+            comment: "The title on the button to look at synced tabs.")
+        public static let TabsSelectorPrivateTabsTitle = MZLocalizedString(
+            key: "TabTray.SegmentedControlTitles.PrivateTabs",
+            tableName: nil,
+            value: "Private",
+            comment: "The title on the button to look at private tabs.")
 
         public struct InactiveTabs {
             public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
@@ -7792,6 +7797,11 @@ extension String {
                 tableName: nil,
                 value: "Synced",
                 comment: "The title on the button to look at synced tabs.")
+            public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
+                key: "TabTray.SegmentedControlTitles.Tabs",
+                tableName: nil,
+                value: "Tabs",
+                comment: "The title on the button to look at regular tabs.")
         }
     }
 }

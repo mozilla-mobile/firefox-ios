@@ -24,11 +24,11 @@ enum TabTrayPanelType: Int, CaseIterable {
     var label: String {
         switch self {
         case .tabs:
-            return .TabsTray.TabTraySegmentedControlTitlesTabs
+            return .TabsTray.TabsSelectorNormalTabsTitle
         case .privateTabs:
-            return .TabsTray.TabTraySegmentedControlTitlesPrivateTabs
+            return .TabsTray.TabsSelectorPrivateTabsTitle
         case .syncedTabs:
-            return String.Settings.Notifications.SyncNotificationsTitle
+            return .TabsTray.TabsSelectorSyncedTabsTitle
         }
     }
 
