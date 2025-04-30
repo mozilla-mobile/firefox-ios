@@ -275,7 +275,7 @@ struct AccessibilityIdentifiers {
         static let learnMoreButton = "learnMoreButton"
         static let collectionView = "TabDisplayView.collectionView"
         static let tabCell = "TabDisplayView.tabCell"
-        static let closeButton = "badge mask"
+        static let closeButton = "tabCloseButton"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
