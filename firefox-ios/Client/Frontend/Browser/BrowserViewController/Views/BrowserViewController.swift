@@ -1071,10 +1071,13 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
 
+        let blurView = isToolbarTranslucencyEnabled ? isBottomSearchBar ? bottomBlurView : topBlurView : nil
+
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
             contentContainer: contentContainer,
             addressBarContainer: isBottomSearchBar ? overKeyboardContainer : header,
+            blurView: blurView,
             webPagePreview: webPagePreview,
             tabManager: tabManager,
             windowUUID: windowUUID,
