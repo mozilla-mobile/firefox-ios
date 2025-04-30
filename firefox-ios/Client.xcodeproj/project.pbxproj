@@ -16451,7 +16451,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\nVERSION_FILE=\"${SRCROOT}/../version.txt\"\nXCCONFIG_FILE=\"${SRCROOT}/Client/Configuration/version.xcconfig\"\n\n# Read version from file\nif [ -f \"$VERSION_FILE\" ]; then\n    VERSION_NUMBER=$(cat \"$VERSION_FILE\" | tr -d '[:space:]')\nelse\n    echo \"Error: version.txt not found!\"\n    exit 1\nfi\n\n# Update the xcconfig file with the version number\necho \"APP_VERSION = $VERSION_NUMBER\" > \"$XCCONFIG_FILE\"\n\necho \"Updated Version.xcconfig with version: $VERSION_NUMBER\"\n";
+			shellScript = "#!/bin/sh\n\nVERSION_FILE=\"${SRCROOT}/../version.txt\"\nXCCONFIG_FILE=\"${SRCROOT}/Client/Configuration/version.xcconfig\"\n\n# Read version from file\nif [ -f \"$VERSION_FILE\" ]; then\n    FULL_VERSION=$(tr -d '[:space:]' < \"$VERSION_FILE\")\nelse\n    echo \"Error: version.txt not found!\"\n    exit 1\nfi\n\n# Extract only numeric parts (e.g., \"123.0\" from \"123.0b2\")\nVERSION_NUMBER=$(echo \"$FULL_VERSION\" | sed -E 's/^([0-9]+(\\.[0-9]+)*).*/\\1/')\n\n# Update the xcconfig file with the version number\necho \"APP_VERSION = $VERSION_NUMBER\" > \"$XCCONFIG_FILE\"\n\necho \"Updated Version.xcconfig with version: $VERSION_NUMBER\"\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
