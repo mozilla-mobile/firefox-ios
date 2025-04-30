@@ -207,6 +207,10 @@ class BrowserViewController: UIViewController,
         view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
 
+    private let contentMaskView: UIView = .build { view in
+        view.backgroundColor = .black
+    }
+
     // MARK: Contextual Hints
 
     private(set) lazy var dataClearanceContextHintVC: ContextualHintViewController = {
@@ -485,6 +489,7 @@ class BrowserViewController: UIViewController,
             header.isClearBackground = false
             overKeyboardContainer.isClearBackground = false
             bottomContainer.isClearBackground = false
+            contentMaskView.isHidden = true
             return
         }
 
@@ -509,6 +514,7 @@ class BrowserViewController: UIViewController,
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
         bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
+        contentMaskView.isHidden = false
 
         [header, overKeyboardContainer, bottomContainer].forEach { $0.applyTheme(theme: theme) }
     }
@@ -1348,6 +1354,7 @@ class BrowserViewController: UIViewController,
 
         view.insertSubview(topBlurView, aboveSubview: contentContainer)
         view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
+        view.insertSubview(contentMaskView, belowSubview: contentContainer)
 
         NSLayoutConstraint.activate([
             topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -1359,6 +1366,11 @@ class BrowserViewController: UIViewController,
             bottomBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             bottomBlurView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             bottomBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            contentMaskView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentMaskView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+            contentMaskView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
+            contentMaskView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 
@@ -1541,6 +1553,9 @@ class BrowserViewController: UIViewController,
         if ToolbarHelper().shouldBlur() {
             viewController.view.clipsToBounds = false
             viewController.view.subviews.forEach { $0.clipsToBounds = false }
+            contentContainer.mask = contentMaskView
+        } else {
+            contentContainer.mask = nil
         }
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
