@@ -194,6 +194,7 @@ workflows:
                 echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
             fi
             echo "$DEPLOY_LIST" > /tmp/pipeline_deploy_list.txt
+        is_always_run: true
     - deploy-to-bitrise-io@2.10.0:
         inputs:
         - pipeline_intermediate_files: |-
