@@ -12,6 +12,8 @@ class MockThemeManager: ThemeManager {
     var getCurrentThemeCallCount = 0
     private var currentThemeStorage: Theme = LightTheme()
 
+    var resolvedThemeCalled = 0
+
     func getCurrentTheme(for window: UUID?) -> Theme {
         getCurrentThemeCallCount += 1
         return currentThemeStorage
@@ -25,6 +27,11 @@ class MockThemeManager: ThemeManager {
     var automaticBrightnessIsOn: Bool { return false}
 
     var automaticBrightnessValue: Float { return 0.4}
+
+    func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {
+        resolvedThemeCalled += 1
+        return currentThemeStorage
+    }
 
     func getInterfaceStyle() -> UIUserInterfaceStyle {
         return .light

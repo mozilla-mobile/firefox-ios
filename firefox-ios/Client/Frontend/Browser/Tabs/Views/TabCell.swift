@@ -162,6 +162,9 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
+
+        let isPrivate = tabModel?.isPrivate ?? false
+        layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
     }
 
     // MARK: - Configuration
