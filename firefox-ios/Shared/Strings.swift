@@ -2748,12 +2748,12 @@ extension String {
             value: "Currently selected tab.",
             comment: "Accessibility label for the currently selected tab.")
         public static let TabsSelectorNormalTabsTitle = MZLocalizedString(
-            key: "TabTray.TabsSelectorNormalTabsTitle",
+            key: "TabTray.TabsSelectorNormalTabsTitle.v140",
             tableName: "TabsTray",
             value: "%@ Tabs",
             comment: "The title on the button to look at regular tabs. %@ is the number of regular tabs.")
         public static let TabsSelectorSyncedTabsTitle = MZLocalizedString(
-            key: "TabTray.TabsSelectorSyncedTabsTitle",
+            key: "TabTray.TabsSelectorSyncedTabsTitle.v140",
             tableName: "TabsTray",
             value: "Sync",
             comment: "The title on the button to look at synced tabs.")
