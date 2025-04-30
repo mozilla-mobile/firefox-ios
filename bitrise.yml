@@ -187,17 +187,17 @@ workflows:
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
             if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
-                DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$' '
+                DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$':BITRISE_TEST_SHARD_PATH\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH_FIREFOX not available, skipping."
             fi
             if [ -n "${BITRISE_TEST_BUNDLE_PATH:-}" ] && [ -d "$BITRISE_TEST_BUNDLE_PATH" ]; then
-                DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$' '
+                DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$':BITRISE_TEST_RESULT_JSON \n'
             else
                 echo ":warning: BITRISE_TEST_BUNDLE_PATH not available, skipping."
             fi
             if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-}" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
-                DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$' '
+                DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$':BITRISE_XCTESTRUN_PATH\n'
             else
                 echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
             fi
