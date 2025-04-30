@@ -54,7 +54,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Check their names so that test is added to Smoketest
         waitForElementsToExist(
             [
-                app.collectionViews.links.staticTexts["X"],
+                app.collectionViews.links.staticTexts["X",
                 app.collectionViews.links.staticTexts["Amazon"],
                 app.collectionViews.links.staticTexts["Wikipedia"],
                 app.collectionViews.links.staticTexts["YouTube"],
