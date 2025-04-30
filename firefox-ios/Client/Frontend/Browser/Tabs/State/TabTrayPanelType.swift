@@ -28,7 +28,7 @@ enum TabTrayPanelType: Int, CaseIterable {
         case .privateTabs:
             return String.TabTraySegmentedControlTitlesPrivateTabs
         case .syncedTabs:
-            return String.TabTraySegmentedControlTitlesSyncedTabs
+            return String.Settings.Notifications.SyncNotificationsTitle
         }
     }
 
