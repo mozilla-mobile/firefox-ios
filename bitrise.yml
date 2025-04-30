@@ -185,9 +185,9 @@ workflows:
             set -euo pipefail
             echo "Preparing artifacts for deployment..."
             echo "What is in the paths stored in the variables?"
-            echo $BITRISE_TEST_SHARDS_PATH_FIREFOX
-            echo $BITRISE_TEST_BUNDLE_PATH
-            echo $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+            echo "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-noshard}$"
+            echo "${BITRISE_TEST_BUNDLE_PATH:-nobundle}"
+            echo "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-nosmoke}"
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
             if [ -n "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
