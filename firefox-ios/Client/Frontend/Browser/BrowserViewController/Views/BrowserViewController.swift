@@ -430,7 +430,7 @@ class BrowserViewController: UIViewController,
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
@@ -491,7 +491,9 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = false
                 navigationToolbarContainer.applyTheme(theme: currentTheme())
                 updateTabCountUsingTabManager(self.tabManager)
-                if isSwipingTabsEnabled {
+                if isSwipingTabsEnabled,
+                   let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+                   !toolbarState.addressToolbar.isEditing {
                     addressBarPanGestureHandler?.enablePanGestureRecognizer()
                 }
             } else {
@@ -785,7 +787,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -962,6 +964,7 @@ class BrowserViewController: UIViewController,
             header.removeArrangedView(addressToolbarContainer, animated: false)
             bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
 
+            if isSwipingTabsEnabled { addressBarPanGestureHandler?.disablePanGestureRecognizer() }
             createLegacyUrlBar()
 
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1018,7 +1021,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        if isSwipingTabsEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
@@ -1253,7 +1256,7 @@ class BrowserViewController: UIViewController,
             contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             NSLayoutConstraint.activate([
                 webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1962,6 +1965,7 @@ class BrowserViewController: UIViewController,
 
     private func updateToolbarAnimationStateIfNeeded() {
         guard isSwipingTabsEnabled,
+              isToolbarRefactorEnabled,
         store.state.screenState(
             ToolbarState.self,
             for: .toolbar,
@@ -3281,7 +3285,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressBarBackgroundViewColor(theme: Theme) {
-        guard isSwipingTabsEnabled else { return }
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let toolbarLayoutStyle = toolbarState?.toolbarLayout
         let colors = theme.colors
@@ -3446,7 +3450,7 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
         }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
@@ -3466,7 +3470,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
         }
         if searchSessionState == .active {
@@ -4306,7 +4310,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
-        guard isSwipingTabsEnabled else { return }
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
 
