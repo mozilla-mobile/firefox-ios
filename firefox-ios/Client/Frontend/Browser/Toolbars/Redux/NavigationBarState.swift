@@ -199,6 +199,11 @@ struct NavigationBarState: StateType, Equatable {
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
                                       showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+        case .version2:
+            actions.append(middleAction)
+            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+            actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
+                                      showWarningBadge: showWarningBadge))
         default:
             actions.append(middleAction)
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
@@ -231,7 +236,7 @@ struct NavigationBarState: StateType, Equatable {
     -> ToolbarActionConfiguration {
         let iconName: String
         switch layout {
-        case .version1:
+        case .version1, .version2:
             iconName = StandardImageIdentifiers.Large.chevronLeft
         default:
             iconName = StandardImageIdentifiers.Large.back
@@ -253,7 +258,7 @@ struct NavigationBarState: StateType, Equatable {
     -> ToolbarActionConfiguration {
         let iconName: String
         switch layout {
-        case .version1:
+        case .version1, .version2:
             iconName = StandardImageIdentifiers.Large.chevronRight
         default:
             iconName = StandardImageIdentifiers.Large.forward

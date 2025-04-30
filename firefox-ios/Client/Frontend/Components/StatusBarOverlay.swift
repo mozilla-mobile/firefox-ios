@@ -90,8 +90,8 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        let isVersion1Layout = isToolbarRefactorEnabled && toolbarLayoutType == .version1
-        savedBackgroundColor = (hasTopTabs || isVersion1Layout) ? theme.colors.layer3 : theme.colors.layer1
+        let isVersionLayout = isToolbarRefactorEnabled && (toolbarLayoutType == .version1 || toolbarLayoutType == .version2)
+        savedBackgroundColor = (hasTopTabs || isVersionLayout) ? theme.colors.layer3 : theme.colors.layer1
         let translucencyBackgroundAlpha = ToolbarHelper().backgroundAlpha()
 
         // We only need no status bar for one edge case
@@ -119,7 +119,8 @@ class StatusBarOverlay: UIView,
         // Status bar height can be 0 on iPhone in landscape mode.
         guard isBottomSearchBar,
               let statusBarHeight: CGFloat = statusBarFrame?.height,
-              statusBarHeight > 0
+              statusBarHeight > 0,
+              savedIsHomepage ?? false
         else {
             scrollOffset = 1
             return

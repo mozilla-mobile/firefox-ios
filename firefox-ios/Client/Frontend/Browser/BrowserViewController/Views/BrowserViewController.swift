@@ -93,6 +93,7 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    var zoomManager: ZoomPageManager
 
     private lazy var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
 
@@ -353,6 +354,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
+        self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -613,9 +615,7 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
-        if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
-        }
+
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -649,6 +649,10 @@ class BrowserViewController: UIViewController,
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
+        }
+
+        if let tab = tabManager.selectedTab, let screenshotHelper {
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
         guard canShowPrivacyWindow else { return }
@@ -1373,6 +1377,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
+        guard isToolbarRefactorEnabled else { return }
+
         let isTop = (searchBarPosition == .top)
         addressBarBackgroundView.constraints.forEach { $0.isActive = false }
         addressBarBackgroundViewBottomConstraint?.isActive = !isTop
@@ -2279,7 +2285,7 @@ class BrowserViewController: UIViewController,
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
                     lockIconImageName = hasSecureContent ?
                         StandardImageIdentifiers.Small.shieldCheckmarkFill :
                         StandardImageIdentifiers.Small.shieldSlashFill
@@ -2458,6 +2464,7 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
+            updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
@@ -3116,10 +3123,6 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    private func autofillLoginNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
-    }
-
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -3700,7 +3703,6 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(logins, name: LoginsHelper.name())
         logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
             Task {
-                guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,

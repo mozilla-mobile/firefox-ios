@@ -8,6 +8,8 @@ import Common
 /// Defines a specific Remote Settings collection fetched through Application Services
 enum ASRemoteSettingsCollection: String {
     case searchEngineIcons = "search-config-icons"
+    case translationsModels = "translations-models"
+    case translationsWasm = "translations-wasm"
 }
 
 extension ASRemoteSettingsCollection {

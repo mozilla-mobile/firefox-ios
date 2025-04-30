@@ -6,14 +6,14 @@ import XCTest
 
 @testable import Client
 
-class ThrottlerTests: XCTestCase {
+class GCDThrottlerTests: XCTestCase {
     struct Timing {
         static let veryLongDelay: Double = 100_000
         static let defaultTestMaxWaitTime: Double = 2
     }
 
     private var testQueue: DispatchQueue!
-    private var throttler: Throttler!
+    private var throttler: GCDThrottler!
     private var expectation: XCTestExpectation!
     private var testValue = 0
 
@@ -73,7 +73,7 @@ class ThrottlerTests: XCTestCase {
     private func prepareTest(timeout: Double) {
         testValue = 0
         expectation = XCTestExpectation(description: "Throttle value expectation")
-        throttler = Throttler(seconds: timeout, on: testQueue)
+        throttler = GCDThrottler(seconds: timeout, on: testQueue)
     }
 
     private func expect(value expected: Int) {

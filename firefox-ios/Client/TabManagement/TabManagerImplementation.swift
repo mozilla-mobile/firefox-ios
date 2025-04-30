@@ -34,6 +34,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -578,15 +583,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func restoreTabs() {
         tabs = [Tab]()
-        Task { [weak self, windowUUID] in
+        Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
-            let windowIsNew = self?.windowIsNew ?? false
-            let windowData: WindowData? = windowIsNew ? nil : await self?.tabDataStore.fetchWindowData(uuid: windowUUID)
-            await self?.buildTabRestore(window: windowData)
-            Task { @MainActor in
+            let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
+            await buildTabRestore(window: windowData)
+            await MainActor.run {
                 // Log on main thread, where computed `tab` properties can be accessed without risk of races
-                self?.logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-                self?.logger.log("Normal tabs count; \(self?.normalTabs.count ?? 0), Inactive tabs count; \(self?.inactiveTabs.count ?? 0), Private tabs count; \(self?.privateTabs.count ?? 0)", level: .debug, category: .tabs)
+                logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
+                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
             }
         }
     }
@@ -709,9 +713,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
 
         if newTab.url == nil {
-            logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
+            logger.log("Tab restored has empty URL",
                        level: .debug,
-                       category: .tabs)
+                       category: .tabs,
+                       extra: [
+                        "tabID": tabData.id.uuidString,
+                        "lastUsedTime": tabData.lastUsedTime.description
+                       ]
+            )
         }
 
         // Restore screenshot
@@ -924,7 +933,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            tab.setZoomLevelforDomain()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
@@ -1026,8 +1034,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {
-        let inactiveTabsEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs)
-        guard inactiveTabsEnabled ?? true else { return [] }
+        let inactiveTabsPrefEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs) ?? true
+        let inactiveTabsEnabled = inactiveTabsPrefEnabled && !isTabTrayUIExperimentsEnabled
+        guard inactiveTabsEnabled else { return [] }
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
     }
 

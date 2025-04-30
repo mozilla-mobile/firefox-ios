@@ -33,10 +33,10 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
     private var bottomToolbarHeight: CGFloat { return UX.toolbarHeight + UIConstants.BottomInset }
 
     private var theme: Theme?
-    private var isVersion1Layout = false {
+    private var isVersionLayout = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme, isVersion1Layout != oldValue else { return }
+            guard let theme, isVersionLayout != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
@@ -79,14 +79,14 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
     private func updateModel(toolbarState: ToolbarState) {
         guard let windowUUID else { return }
-        isVersion1Layout = toolbarState.toolbarLayout == .version1
+        isVersionLayout = toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2
         let model = NavigationToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
 
         if self.model != model {
             self.model = model
             toolbar.configure(
                 config: model.navigationToolbarConfiguration,
-                isVersion1Layout: isVersion1Layout,
+                isVersionLayout: isVersionLayout,
                 toolbarDelegate: self
             )
         }
@@ -113,7 +113,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         let isTranslucent = model?.isTranslucent ?? false
         let backgroundAlpha: CGFloat = isTranslucent ? UX.backgroundAlphaForBlur : 1.0
 
-        let backgroundColorWithoutAlpha = isVersion1Layout ? theme.colors.layer3 : theme.colors.layer1
+        let backgroundColorWithoutAlpha = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
         backgroundColor = backgroundColorWithoutAlpha.withAlphaComponent(backgroundAlpha)
     }
 }

@@ -85,10 +85,10 @@ final class PrivateHomepageViewController:
         return messageCard
     }()
 
-    private lazy var homepageHeaderCell: LegacyHomepageHeaderCell = {
-        let header = LegacyHomepageHeaderCell()
+    private lazy var homepageHeaderCell: HomepageHeaderCell = {
+        let header = HomepageHeaderCell()
         header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        header.configure(with: headerViewModel)
+        header.configure(headerState: HeaderState(windowUUID: windowUUID))
         return header
     }()
 
@@ -125,7 +125,7 @@ final class PrivateHomepageViewController:
         updateConstraintsForMultitasking()
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            homepageHeaderCell.configure(with: headerViewModel)
+            homepageHeaderCell.configure(headerState: HeaderState(windowUUID: windowUUID))
         }
         applyTheme()
     }

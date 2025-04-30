@@ -24,17 +24,17 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     private lazy var toolbarBorderView: UIView = .build()
     private var toolbarBorderHeightConstraint: NSLayoutConstraint?
     private var theme: Theme?
-    private var isVersion1Layout = false {
+    private var isVersionLayout = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme, isVersion1Layout != oldValue else { return }
+            guard let theme, isVersionLayout != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
     private var isTranslucent = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the translucency changes.
-            guard let theme, isVersion1Layout != oldValue else { return }
+            guard let theme, isVersionLayout != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
@@ -50,11 +50,11 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
 
     public func configure(
         config: NavigationToolbarConfiguration,
-        isVersion1Layout: Bool,
+        isVersionLayout: Bool,
         toolbarDelegate: BrowserNavigationToolbarDelegate
     ) {
         self.toolbarDelegate = toolbarDelegate
-        self.isVersion1Layout = isVersion1Layout
+        self.isVersionLayout = isVersionLayout
         self.isTranslucent = config.isTranslucencyEnabled
         updateActionStack(toolbarElements: config.actions)
 
@@ -113,10 +113,10 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        let version1BackgroundColor = isTranslucent ? .clear : theme.colors.layer3
+        let versionBackgroundColor = isTranslucent ? .clear : theme.colors.layer3
         let baselineBackgroundColor = isTranslucent ? .clear : theme.colors.layer1
 
-        backgroundColor = isVersion1Layout ? version1BackgroundColor : baselineBackgroundColor
+        backgroundColor = isVersionLayout ? versionBackgroundColor : baselineBackgroundColor
         toolbarBorderView.backgroundColor = theme.colors.borderPrimary
 
         actionStack.arrangedSubviews.forEach { element in

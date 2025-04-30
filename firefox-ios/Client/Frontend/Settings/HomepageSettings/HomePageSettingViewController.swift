@@ -203,18 +203,17 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
-        let defaultSetting = StartAtHomeSetting.afterFourHours.rawValue
-        let prefsSetting = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? defaultSetting
-        currentStartAtHomeSetting = StartAtHomeSetting(rawValue: prefsSetting) ?? .afterFourHours
+        let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
 
         let onOptionSelected: (Bool, StartAtHomeSetting) -> Void = { [weak self] state, option in
-            self?.prefs.setString(option.rawValue, forKey: PrefsKeys.UserFeatureFlagPrefs.StartAtHome)
+            self?.prefs.setString(option.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
             self?.tableView.reloadData()
 
             let extras = [
-                TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.UserFeatureFlagPrefs.StartAtHome,
+                TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.StartAtHome,
                 TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
             ]
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)

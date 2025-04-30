@@ -12,7 +12,7 @@ struct LocationViewAppearanceConfiguration {
     let etpIconTintColor: UIColor
     let gradientColors: [CGColor]
 
-    static func getAppearanceForVersion1(theme: Theme) -> Self {
+    static func getAppearanceForVersion(theme: Theme) -> Self {
         let colors = theme.colors
         return Self(
             backgroundColor: colors.layer2,

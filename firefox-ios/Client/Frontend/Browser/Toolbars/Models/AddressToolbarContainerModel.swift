@@ -34,8 +34,9 @@ final class AddressToolbarContainerModel: Equatable {
 
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
         let backgroundAlpha = ToolbarHelper().backgroundAlpha()
-        let uxConfiguration: AddressToolbarUXConfiguration = if toolbarLayoutStyle == .version1 {
+        let uxConfiguration: AddressToolbarUXConfiguration = if isVersionLayout {
             .experiment(backgroundAlpha: backgroundAlpha)
         } else {
             .default(backgroundAlpha: backgroundAlpha)

@@ -56,9 +56,9 @@ class WKEngineWebServer: WKEngineWebServerProtocol {
     func start() throws -> Bool {
         if !server.isRunning {
             try server.start(options: [
-                GCDWebServerOption_Port: WKEngineInfo.webserverPort,
+                GCDWebServerOption_Port: EngineConstants.webserverPort,
                 GCDWebServerOption_BindToLocalhost: true,
-                GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
+                GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app through AppDelegate
                 GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
                 GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
             ])
