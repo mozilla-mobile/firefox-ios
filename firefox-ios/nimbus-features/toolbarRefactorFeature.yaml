@@ -43,13 +43,13 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
           unified_search: false
           one_tap_new_tab: false
-          navigation_hint: false
+          navigation_hint: true
           swiping_tabs: true
           translucency: false
-          layout: baseline
+          layout: version1
       - channel: developer
         value:
           enabled: true

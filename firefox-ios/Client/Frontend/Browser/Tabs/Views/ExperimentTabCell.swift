@@ -86,6 +86,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         var configuration = UIButton.Configuration.plain()
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.closeButton
     }
 
     private lazy var closeButtonOverlay: UIImageView = .build { imageView in
