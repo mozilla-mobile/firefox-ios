@@ -169,11 +169,35 @@ workflows:
         - maximum_test_repetitions: 2
     - save-spm-cache@1.3.1:
         is_always_run: true
-    - deploy-to-bitrise-io@2.12.0:
+    - script@1.2.1:
+        title: Conditionally prepare deploy artifacts
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+            echo "Preparing artifacts for deployment..."
+            # Create a temporary list of deployable files
+            DEPLOY_LIST=""
+            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+                DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$'\n'
+            else
+                echo ":warning: BITRISE_TEST_SHARDS_PATH_FIREFOX not available, skipping."
+            fi
+            if [ -n "${BITRISE_TEST_BUNDLE_PATH:-}" ] && [ -d "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$'\n'
+            else
+                echo ":warning: BITRISE_TEST_BUNDLE_PATH not available, skipping."
+            fi
+            if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-}" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
+                DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$'\n'
+            else
+                echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
+            fi
+            echo "$DEPLOY_LIST" > /tmp/pipeline_deploy_list.txt
+    - deploy-to-bitrise-io@2.10.0:
         inputs:
         - pipeline_intermediate_files: |-
-            BITRISE_TEST_BUNDLE_PATH
-            BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+            $(cat /tmp/pipeline_deploy_list.txt)
         is_always_run: true
     - xcode-test-shard-calculation@0:
         run_if: '{{getenv "BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" | ne ""}}'
