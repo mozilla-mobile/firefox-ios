@@ -1350,13 +1350,13 @@ class BrowserViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
-            topBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+            topBlurView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             topBlurView.bottomAnchor.constraint(equalTo: header.bottomAnchor),
 
-            bottomBlurView.topAnchor.constraint(equalTo: bottomContentStackView.bottomAnchor),
-            bottomBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomBlurView.topAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+            bottomBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+            bottomBlurView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             bottomBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
