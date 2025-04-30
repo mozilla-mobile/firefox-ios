@@ -3935,6 +3935,11 @@ extension BrowserViewController: HomePanelDelegate {
             self.notificationCenter.post(name: .OpenRecentlyClosedTabs)
         }
      }
+
+    // MARK: - BrowserStatusBarScrollDelegate
+    func homepageScrollViewDidScroll(scrollOffset: CGFloat) {
+        updateBlurViews(scrollOffset: scrollOffset)
+    }
 }
 
 // MARK: - SearchViewController
