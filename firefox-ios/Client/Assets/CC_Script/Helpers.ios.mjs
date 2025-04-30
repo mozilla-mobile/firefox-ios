@@ -5,8 +5,6 @@
 import { IOSAppConstants } from "resource://gre/modules/shared/Constants.ios.mjs";
 import Overrides from "resource://gre/modules/Overrides.ios.js";
 
-const EMPTY_MODULE_PATH = "EmptyModule.sys.mjs";
-
 /* eslint mozilla/use-isInstance: 0 */
 HTMLSelectElement.isInstance = element => element instanceof HTMLSelectElement;
 HTMLInputElement.isInstance = element => element instanceof HTMLInputElement;
@@ -26,13 +24,6 @@ HTMLElement.prototype.ownerGlobal = window;
 Object.defineProperty(HTMLInputElement.prototype, "hasBeenTypePassword", {
   get() {
     return this.type === "password";
-  },
-  configurable: true,
-});
-
-Object.defineProperty(HTMLInputElement.prototype, "nodePrincipal", {
-  get() {
-    return { isNullPrincipal: false };
   },
   configurable: true,
 });
@@ -109,15 +100,13 @@ const internalModuleResolvers = {
     const moduleName = moduleURI.split("/").pop();
     const modulePath =
       "./" + (Overrides.ModuleOverrides[moduleName] ?? moduleName);
-    return { module: moduleResolver(modulePath), path: modulePath };
+    return moduleResolver(modulePath);
   },
 
   resolveModules(obj, modules) {
     for (const [exportName, moduleURI] of Object.entries(modules)) {
       const resolvedModule = this.resolveModule(moduleURI);
-      obj[exportName] = resolvedModule.path.includes(EMPTY_MODULE_PATH)
-        ? resolvedModule.module?.default
-        : resolvedModule.module?.[exportName];
+      obj[exportName] = resolvedModule?.[exportName];
     }
   },
 };
@@ -158,7 +147,7 @@ export const ChromeUtils = withNotImplementedError({
     internalModuleResolvers.resolveModules(obj, modules);
   },
   importESModule(moduleURI) {
-    return internalModuleResolvers.resolveModule(moduleURI)?.module;
+    return internalModuleResolvers.resolveModule(moduleURI);
   },
 });
 window.ChromeUtils = ChromeUtils;
