@@ -455,8 +455,9 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled {
+            let blurView = isToolbarTranslucencyEnabled ? newPositionIsBottom ? bottomBlurView : topBlurView : nil
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-            addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
+            addressBarPanGestureHandler?.updateAddressBarContainer(newParent, blurView: blurView)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
 

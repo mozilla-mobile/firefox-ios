@@ -38,23 +38,27 @@ final class AddressBarPanGestureHandler: NSObject {
     ) {
         self.contentContainer = contentContainer
         self.addressBarContainer = addressBarContainer
-        self.blurView = blurView
         self.webPagePreview = webPagePreview
         self.tabManager = tabManager
         self.windowUUID = windowUUID
         self.screenshotHelper = screenshotHelper
         super.init()
-        updateAddressBarContainer(addressBarContainer)
+        updateAddressBarContainer(addressBarContainer, blurView: blurView)
     }
 
     /// Updates the address bar container with a new container view and reattaches the pan gesture recognizer.
     ///
-    /// - Parameter newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
-    func updateAddressBarContainer(_ newContainer: BaseAlphaStackView) {
+    /// - Parameters:
+    ///   - newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
+    ///   - blurView: The new blur view is shown behind the address bar container.
+    ///
+    func updateAddressBarContainer(_ newContainer: BaseAlphaStackView,
+                                   blurView: UIVisualEffectView?) {
         if let panGestureRecognizer {
             addressBarContainer.removeGestureRecognizer(panGestureRecognizer)
         }
         addressBarContainer = newContainer
+        self.blurView = blurView
 
         let newPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressBarContainer.addGestureRecognizer(newPanGesture)
