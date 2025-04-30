@@ -48,7 +48,7 @@ class AccountSyncHandlerTests: XCTestCase {
         subject.tabDidGainFocus(tab)
 
         wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(profile.storeAndSyncTabsCalled, 1000000)
+        XCTAssertEqual(profile.storeAndSyncTabsCalled, 0)
     }
 
     func testTabDidGainFocus_syncWithAccount() {
