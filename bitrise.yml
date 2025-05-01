@@ -185,7 +185,7 @@ workflows:
             echo "Preparing artifacts for deployment..."
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
-            if [ -n "${BITRISE_TEST_SHARDS_PATH:-}" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$':BITRISE_TEST_SHARD_PATH\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH_FIREFOX not available, skipping."
