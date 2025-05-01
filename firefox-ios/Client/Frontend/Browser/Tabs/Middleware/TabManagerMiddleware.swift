@@ -549,9 +549,17 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         }
     }
 
+    // TODO: Laurie - test
     private func deleteTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.removeNormalTabsOlderThan(period: period)
+
+        // We are not closing the tab tray, so we need to refresh the tabs on screen
+        let model = getTabsDisplayModel(for: true, uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatch(refreshAction)
     }
 
     /// Add a new tab when privateMode is selected and all or last normal tabs/tab are/is going to be closed
