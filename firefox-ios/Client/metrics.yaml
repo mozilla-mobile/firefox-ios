@@ -1056,7 +1056,7 @@ user.tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/25569
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01" 
+    expires: "2025-12-01" 
     unit: quantity of inactive tabs
     metadata:
       tags:
@@ -3624,64 +3624,6 @@ sync:
 
 # Tab metrics
 tabs:
-  normal_tabs_quantity:
-    type: quantity
-    description: |
-      A snapshot of how many normal tabs a user has opened when he
-      closes the application.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    unit: quantity of normal tabs
-  private_tabs_quantity:
-    type: quantity
-    description: |
-      A snapshot of how many private tabs a user has opened when he
-      closes the application.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    unit: quantity of private tabs
-  inactive_tabs_count:
-    type: quantity
-    description: |
-      A quantity that indicates how many INACTIVE tabs a user
-      currently has open. This is reported when the user backgrounds
-      the app.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15511
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    unit: quantity of inactive tabs
-  close_tab_tray:
-    type: event
-    description: |
-      Recorded when a user closes the tab tray
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   pull_to_refresh:
     type: event
     description: |
@@ -3859,7 +3801,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
+    expires: "2025-12-01"
     metadata:
       tags:
         - TabsPanel
@@ -3889,7 +3831,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
+    expires: "2025-12-01"
     metadata:
       tags:
         - TabsPanel
@@ -3918,7 +3860,7 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
+    expires: "2025-12-01"
     metadata:
       tags:
         - TabsPanel
@@ -3996,7 +3938,7 @@ tabs_panel.close_all_tabs_sheet:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26131
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
+    expires: "2025-12-01"
     metadata:
       tags:
         - TabsPanel
