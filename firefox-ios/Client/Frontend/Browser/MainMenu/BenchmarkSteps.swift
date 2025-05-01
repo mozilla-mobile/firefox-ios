@@ -31,6 +31,6 @@ final class BenchmarkSteps {
             }
             total += msTime
         }
-        print("[End]")
+        print("[End] Total: \(total) ms")
     }
 }
