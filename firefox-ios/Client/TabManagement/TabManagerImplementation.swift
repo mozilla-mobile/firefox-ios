@@ -364,7 +364,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
     }
 
-    // TODO: Laurie - add tests for removeTabsOlderThan and removeTabs
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod) {
         let calendar = Calendar.current
         let now = Date()
@@ -384,6 +383,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             return lastUsed < cutoffDate
         }
 
+        guard !tabsToRemove.isEmpty else { return }
         removeTabs(tabsToRemove)
     }
 

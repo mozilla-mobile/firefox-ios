@@ -1513,6 +1513,98 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "Index of new normal active tab")
     }
 
+    // MARK: - Remove Tabs Older than
+
+    func testRemoveNormalTabsOlderThan_whenNotOldNormalTabs_thenNoTabsRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalActive, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+
+        XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
+    }
+
+    func testRemoveNormalTabsOlderThan_whenInactiveNormalTabs_thenTabsRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactive, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 0)
+    }
+
+    func testRemoveNormalTabsOlderThan_whenPrivateTabs_thenNoTabsRemoved() {
+        let numberPrivateTabs = 3
+        let tabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+
+        XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
+    }
+
+    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabs_thenTabsRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 0)
+    }
+
+    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneWeek_thenTabsNotRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek)
+
+        XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
+    }
+
+    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneMonth_thenTabsNotRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneMonth)
+
+        XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
+    }
+
+    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabs_thenTabsRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 0)
+    }
+
+    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneWeek_thenTabsRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 0)
+    }
+
+    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneMonth_thenTabsNotRemoved() {
+        let numberTabs = 3
+        let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
+        let tabManager = createSubject(tabs: tabs)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneMonth)
+
+        XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
+    }
+
     // MARK: - removeAllInactiveTabs (removing unselected tabs at array bounds)
 
     @MainActor
@@ -1658,6 +1750,8 @@ class TabManagerTests: XCTestCase {
     enum TabType {
         case normalActive
         case normalInactive
+        case normalInactive2Weeks
+        case normalInactiveYesterday
         case privateAny // `private` alone is a reserved compiler keyword
     }
 
@@ -1674,6 +1768,12 @@ class TabManagerTests: XCTestCase {
                 tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: lastMonthDate)
             case .privateAny:
                 tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: tabWindowUUID)
+            case .normalInactive2Weeks:
+                let twoWeeksDate = Date().lastTwoWeek
+                tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: twoWeeksDate)
+            case .normalInactiveYesterday:
+                let yesterdayDate = Date.yesterday
+                tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: yesterdayDate)
             }
 
             tab.url = testURL(count: i)
