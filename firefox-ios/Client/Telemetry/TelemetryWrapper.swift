@@ -854,8 +854,6 @@ extension TelemetryWrapper {
             GleanMetrics.QrCode.scanned.add()
 
         // MARK: Tabs
-        case (.action, .close, .tabTray, _, _):
-            GleanMetrics.Tabs.closeTabTray.record()
         case (.action, .press, .tabToolbar, .tabView, _):
             GleanMetrics.Tabs.pressTabToolbar.record()
         case (.action, .press, .tab, _, _):
@@ -877,24 +875,6 @@ extension TelemetryWrapper {
         case(.information, .background, .iPadWindowCount, _, let extras):
             if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
                 GleanMetrics.Windows.ipadWindowCount.set(quantity)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case(.information, .background, .tabNormalQuantity, _, let extras):
-            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
-                GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case(.information, .background, .tabPrivateQuantity, _, let extras):
-            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
-                GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case(.information, .background, .tabInactiveQuantity, _, let extras):
-            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
-                GleanMetrics.Tabs.inactiveTabsCount.set(quantity)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

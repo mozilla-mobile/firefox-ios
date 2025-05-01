@@ -95,18 +95,12 @@ class TabTrayCoordinator: BaseCoordinator,
 
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .tabTray)
         remove(child: childCoordinator)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 
     // MARK: - TabTrayViewControllerDelegate
     func didFinish() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .tabTray)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 }
