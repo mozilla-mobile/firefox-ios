@@ -2,9 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+typealias BenchmarkStep = (label: String?, time: UInt64)
+
+/// Simple benchmarking utility for measuring runtime of code performed in sequential steps.
+/// Note: this is a very basic tool and incurs a small amount of overhead for its own
+/// processing. It can be used to measure multi-threaded code but you must ensure that your
+/// step() calls are not made concurrently as there are no internal locks provided.
 final class BenchmarkSteps {
     private var last: DispatchTime
-    private var steps: [(String?, UInt64)] = []
+    private var steps: [BenchmarkStep] = []
 
     init() {
         last = DispatchTime.now()
@@ -22,8 +28,8 @@ final class BenchmarkSteps {
         print("[Benchmark Completed]")
         var total: UInt64 = 0
         for step in steps {
-            let label = step.0
-            let msTime = step.1
+            let label = step.label
+            let msTime = step.time
             if let label, !label.isEmpty {
                 print("\t[Step: '\(label)'] \(msTime) ms")
             } else {
