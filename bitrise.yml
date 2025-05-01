@@ -193,8 +193,8 @@ workflows:
             else
                 echo "NOPE!"
             fi
-            echo "if -f [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then"
-            if [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+            echo "if [ -d "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then"
+            if [ -d "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
                 echo "YEAH!!!"
             else
                 echo "NOPE!"
@@ -206,7 +206,7 @@ workflows:
             echo "Preparing artifacts for deployment..."
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
-            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -d "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$':BITRISE_TEST_SHARD_PATH\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH not available, skipping."
