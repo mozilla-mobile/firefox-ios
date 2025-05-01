@@ -11412,6 +11412,7 @@
 				E11C0E3C2CEF328B00D884D3 /* TermsOfServiceManager.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
 				E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */,
+				1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -11999,7 +12000,6 @@
 		81A3F6EE2C2DAED500BDD86B /* MainMenu */ = {
 			isa = PBXGroup;
 			children = (
-				1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */,
 				81F617C72C875583003799BF /* Views */,
 				81F617C52C875564003799BF /* Redux */,
 				81A3F6EF2C2DAEE200BDD86B /* MainMenuCoordinator.swift */,
