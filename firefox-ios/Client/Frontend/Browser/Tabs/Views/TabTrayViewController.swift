@@ -112,7 +112,7 @@ class TabTrayViewController: UIViewController,
                                            theme: themeManager.getCurrentTheme(for: windowUUID))
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
-                          "0 \(TabTrayPanelType.tabs.label)",
+                          String(format: TabTrayPanelType.tabs.label, "0"),
                           TabTrayPanelType.syncedTabs.label]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
@@ -386,7 +386,7 @@ class TabTrayViewController: UIViewController,
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
         if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = "\(count) \(TabTrayPanelType.tabs.label)"
+            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
         }
     }
 
