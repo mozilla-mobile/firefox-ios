@@ -187,16 +187,22 @@ workflows:
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
             if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
+                echo "Content of bitrise test shards path"
+                ls -la $BITRISE_TEST_SHARDS_PATH_FIREFOX
                 DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$':BITRISE_TEST_SHARD_PATH\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH not available, skipping."
             fi
             if [ -n "${BITRISE_TEST_BUNDLE_PATH:-}" ]; then
+                echo "Content of bitrise test bundle path"
+                ls -la $BITRISE_TEST_BUNDLE_PATH
                 DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$':BITRISE_TEST_RESULT_JSON \n'
             else
                 echo ":warning: BITRISE_TEST_BUNDLE_PATH not available, skipping."
             fi
             if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-}" ]; then
+                echo "Content of bitrise xctestrun smoke test file path"
+                ls -la $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
                 DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$':BITRISE_XCTESTRUN_PATH\n'
             else
                 echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
