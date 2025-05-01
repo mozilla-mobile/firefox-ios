@@ -184,45 +184,19 @@ workflows:
             set -euo pipefail
             # List all Bitrise related variables
             env | grep 'BITRISE_' | sort
-            echo "************* What we get? *************"
-            echo "$BITRISE_TEST_SHARDS_PATH_FIREFOX: "
-            echo $BITRISE_TEST_SHARDS_PATH_FIREFOX
-            echo "if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then"
-            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
-                echo "YEAH!!!"
-            else
-                echo "NOPE!"
-            fi
-            echo "if [ -d "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then"
-            if [ -d "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
-                echo "YEAH!!!"
-            else
-                echo "NOPE!"
-            fi
-            echo "if [ -f "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then"
-            if [ -f "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
-                echo "YEAH!!!"
-            else
-                echo "NOPE!"
-            fi
-            echo "$BITRISE_TEST_BUNDLE_PATH"
-            echo $BITRISE_TEST_BUNDLE_PATH
-            echo "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"
-            echo $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-            echo "Preparing artifacts for deployment..."
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
-            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ] && [ -d "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+            if [ -z "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$':BITRISE_TEST_SHARD_PATH\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH not available, skipping."
             fi
-            if [ -n "${BITRISE_TEST_BUNDLE_PATH:-}" ] && [ -f "$BITRISE_TEST_BUNDLE_PATH" ]; then
+            if [ -z "${BITRISE_TEST_BUNDLE_PATH:-}" ]; then
                 DEPLOY_LIST+="$BITRISE_TEST_BUNDLE_PATH"$':BITRISE_TEST_RESULT_JSON \n'
             else
                 echo ":warning: BITRISE_TEST_BUNDLE_PATH not available, skipping."
             fi
-            if [ -n "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-}" ] && [ -f "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH" ]; then
+            if [ -z "${BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH:-}" ]; then
                 DEPLOY_LIST+="$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"$':BITRISE_XCTESTRUN_PATH\n'
             else
                 echo ":warning: BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH not available, skipping."
