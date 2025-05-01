@@ -74,7 +74,8 @@ class CreditCardSettingsViewModel {
                 completionHandler(nil)
                 return
             }
-            self.updateCreditCardsList(creditCards: cards)
+            let sortedCards = cards.sorted { $0.timeCreated > $1.timeCreated }
+            self.updateCreditCardsList(creditCards: sortedCards)
             completionHandler(creditCards)
         })
     }
