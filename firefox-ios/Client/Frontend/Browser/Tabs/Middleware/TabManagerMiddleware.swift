@@ -183,6 +183,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.confirmCloseAllTabs:
             closeAllTabs(state: state, uuid: action.windowUUID)
 
+        case TabPanelViewActionType.deleteTabsOlderThan:
+            guard let period = action.deleteTabPeriod else { return }
+            deleteTabsOlderThan(period: period, uuid: action.windowUUID)
+
         case TabPanelViewActionType.undoCloseAllTabs:
             undoCloseAllTabs(uuid: action.windowUUID)
 
@@ -543,6 +547,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
         }
+    }
+
+    private func deleteTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        tabManager.removeNormalTabsOlderThan(period: period)
     }
 
     /// Add a new tab when privateMode is selected and all or last normal tabs/tab are/is going to be closed
