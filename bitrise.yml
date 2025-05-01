@@ -189,7 +189,7 @@ workflows:
             if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
                 echo "Content of bitrise test shards path"
                 ls -la $BITRISE_TEST_SHARDS_PATH_FIREFOX
-                DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$':BITRISE_TEST_SHARDS_PATH\n'
+                DEPLOY_LIST+="$BITRISE_TEST_SHARDS_PATH_FIREFOX"$'\n'
             else
                 echo ":warning: BITRISE_TEST_SHARDS_PATH not available, skipping."
             fi
