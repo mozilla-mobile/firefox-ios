@@ -3,13 +3,19 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 protocol CredentialWelcomeViewControllerDelegate: AnyObject {
     func credentialWelcomeViewControllerDidCancel()
     func credentialWelcomeViewControllerDidProceed()
 }
 
-class CredentialWelcomeViewController: UIViewController {
+class CredentialWelcomeViewController: UIViewController, Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+    var currentWindowUUID: Common.WindowUUID?
+
     weak var delegate: CredentialWelcomeViewControllerDelegate?
 
     private lazy var logoImageView: UIImageView = {
@@ -49,7 +55,6 @@ class CredentialWelcomeViewController: UIViewController {
     private lazy var proceedButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setTitle(String.LoginsWelcomeTurnOnAutoFillButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -57,9 +62,32 @@ class CredentialWelcomeViewController: UIViewController {
         return button
     }()
 
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         themeObserver: NSObjectProtocol? = nil,
+         notificationCenter: NotificationCenter = .default) {
+        self.themeManager = themeManager
+        self.themeObserver = themeObserver
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+        applyTheme()
+    }
 
+    func applyTheme() {
+        proceedButton.backgroundColor = currentTheme().colors.actionPrimary
+    }
+}
+
+private extension CredentialWelcomeViewController {
+    func setupView() {
         view.backgroundColor = CredentialProvider.welcomeScreenBackgroundColor
 
         view.addSubviews(cancelButton, logoImageView, titleLabel, taglineLabel, proceedButton)
@@ -122,8 +150,11 @@ class CredentialWelcomeViewController: UIViewController {
                     priority: .defaultHigh
                 ),
                 proceedButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
-            ]
-        )
+            ])
+    }
+
+    func currentTheme() -> Theme {
+        themeManager.windowNonspecificTheme()
     }
 
     @objc
