@@ -184,6 +184,25 @@ workflows:
             set -euo pipefail
             # List all Bitrise related variables
             env | grep 'BITRISE_' | sort
+            echo "************* What we get? *************"
+            echo "$BITRISE_TEST_SHARDS_PATH_FIREFOX: "
+            echo $BITRISE_TEST_SHARDS_PATH_FIREFOX
+            echo "if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then"
+            if [ -n "${BITRISE_TEST_SHARDS_PATH_FIREFOX:-}" ]; then
+                echo "YEAH!!!"
+            else
+                echo "NOPE!"
+            fi
+            echo "if -f [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then"
+            if [ -f "$BITRISE_TEST_SHARDS_PATH_FIREFOX" ]; then
+                echo "YEAH!!!"
+            else
+                echo "NOPE!"
+            fi
+            echo "$BITRISE_TEST_BUNDLE_PATH"
+            echo $BITRISE_TEST_BUNDLE_PATH
+            echo "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"
+            echo $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
             echo "Preparing artifacts for deployment..."
             # Create a temporary list of deployable files
             DEPLOY_LIST=""
