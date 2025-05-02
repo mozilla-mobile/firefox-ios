@@ -214,6 +214,16 @@ workflows:
         - pipeline_intermediate_files: |-
             $BITRISE_DEPLOY_LIST
         is_always_run: true
+    - script@1:
+        title: Verify test files
+        inputs:
+        - content: |
+            echo "SHARDS: $BITRISE_TEST_SHARDS_PATH_FIREFOX"
+            echo "BUNDLE: $BITRISE_TEST_BUNDLE_PATH"
+            echo "XCTESTRUN: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"
+
+            ls -lh "$BITRISE_TEST_SHARDS_PATH_FIREFOX"
+            ls -lh "$BITRISE_TEST_BUNDLE_PATH"
     - script@1.1.1:
         title: Run Danger 2
         timeout: 360
@@ -297,6 +307,14 @@ workflows:
     - 1_git_clone_and_post_clone
     steps:
     - pull-intermediate-files@1: {}
+    - script@1:
+        title: Verify pulled test artifacts
+        inputs:
+        - content: |
+            echo "Pulled files:"
+            ls -lh "$BITRISE_TEST_SHARDS_PATH_FIREFOX"
+            ls -lh "$BITRISE_TEST_BUNDLE_PATH"
+            ls -lh "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
