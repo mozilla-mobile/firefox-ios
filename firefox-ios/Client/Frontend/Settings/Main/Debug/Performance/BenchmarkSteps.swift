@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-typealias BenchmarkStep = (label: String?, time: UInt64)
+typealias BenchmarkStep = (label: String?, time: Double)
 
 /// Simple benchmarking utility for measuring runtime of code performed in sequential steps.
 /// Note: this is a very basic tool and incurs a small amount of overhead for its own
@@ -18,7 +18,7 @@ final class BenchmarkSteps {
 
     func step(_ label: String? = nil) {
         let time = DispatchTime.now()
-        let interval = time.uptimeNanoseconds - last.uptimeNanoseconds
+        let interval = Double(time.uptimeNanoseconds - last.uptimeNanoseconds)
         let ms = interval / 1_000_000
         steps.append((label, ms))
         last = DispatchTime.now()
@@ -26,14 +26,14 @@ final class BenchmarkSteps {
 
     func finish() {
         print("[Benchmark Completed]")
-        var total: UInt64 = 0
+        var total: Double = 0
         for step in steps {
             let label = step.label
             let msTime = step.time
             if let label, !label.isEmpty {
-                print("\t[Step: '\(label)'] \(msTime) ms")
+                print("\t[Step: '\(label)'] \(String(format: "%.02f", msTime)) ms")
             } else {
-                print("\t[Step] \(msTime) ms")
+                print("\t[Step] \(String(format: "%.02f", msTime)) ms")
             }
             total += msTime
         }
