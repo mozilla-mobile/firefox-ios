@@ -37,7 +37,7 @@ class MockTabManager: TabManager {
 
     var addTabWasCalled = false
     var notifyCurrentTabDidFinishLoadingCalled = 0
-    var saveCurrentTabSessionCalled = 0
+    var commitChangesCalled = 0
 
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
@@ -103,6 +103,10 @@ class MockTabManager: TabManager {
 
     func clearAllTabsHistory() {}
 
+    func commitChanges() {
+        commitChangesCalled += 1
+    }
+
     func willSwitchTabMode(leavingPBM: Bool) {}
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
@@ -166,10 +170,6 @@ class MockTabManager: TabManager {
     func removeAllInactiveTabs() async {}
 
     func undoCloseInactiveTabs() async {}
-
-    func saveCurrentTabSession() {
-        saveCurrentTabSessionCalled += 1
-    }
 
     func notifyCurrentTabDidFinishLoading() {
         notifyCurrentTabDidFinishLoadingCalled += 1
