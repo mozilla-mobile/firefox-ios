@@ -562,7 +562,7 @@ class TabTrayViewController: UIViewController,
 
     internal func retrieveTheme() -> Theme {
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            return themeManager.resolvedTheme(for: windowUUID, with: tabTrayState.isPrivateMode)
+            return themeManager.resolvedTheme(with: tabTrayState.isPrivateMode)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
         }

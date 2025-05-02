@@ -15,10 +15,9 @@ public protocol ThemeManager {
     /// by explicitly specifying whether the private theme should be shown, regardless of the window’s technical private
     /// state. The user is in private mode when the tab they selected is a private tab. This method is used in tab tray view.
     /// - Parameters:
-    ///   - window: The unique identifier for a particular window in Firefox iOS.
     ///   - shouldUsePrivateTheme: A boolean indicating whether to force the use of the private theme or not.
     /// - Returns: The resolved theme—either the private or default user theme depending on context.
-    func resolvedTheme(for uuid: WindowUUID, with shouldShowPrivateTheme: Bool) -> Theme
+    func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme
 
     /// TODO(FXIOS-11655): Making this a prop of ThemeManager since it's easier to get the flag value this way
     /// instead of having to call the nimbus API each time. This should be removed once experiment is over.

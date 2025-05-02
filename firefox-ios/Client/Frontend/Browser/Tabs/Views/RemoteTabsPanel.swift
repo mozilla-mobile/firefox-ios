@@ -130,7 +130,7 @@ class RemoteTabsPanel: UIViewController,
 
     private func retrieveTheme() -> Theme {
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            return themeManager.resolvedTheme(for: windowUUID, with: false)
+            return themeManager.resolvedTheme(with: false)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
         }

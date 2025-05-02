@@ -96,7 +96,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return getThemeFrom(type: determineThemeType(for: window))
     }
 
-    public func resolvedTheme(for windowUUID: WindowUUID, with shouldShowPrivateTheme: Bool) -> Theme {
+    public func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {
         return shouldShowPrivateTheme ? PrivateModeTheme() : getThemeFrom(type: determineUserTheme())
     }
 

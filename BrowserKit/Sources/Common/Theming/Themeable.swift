@@ -53,7 +53,7 @@ extension Themeable {
         let theme: Theme
 
         if shouldUsePrivateOverride {
-            theme = themeManager.resolvedTheme(for: uuid, with: shouldBeInPrivateTheme)
+            theme = themeManager.resolvedTheme(with: shouldBeInPrivateTheme)
         } else {
             theme = themeManager.getCurrentTheme(for: uuid)
         }

@@ -182,7 +182,7 @@ class TabDisplayPanelViewController: UIViewController,
 
     private func retrieveTheme() -> Theme {
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            return themeManager.resolvedTheme(for: windowUUID, with: tabsState.isPrivateMode)
+            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
         }
