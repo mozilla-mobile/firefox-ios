@@ -1947,6 +1947,10 @@
 		ED7A08E12CF679CE0035EC8F /* MockShareTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */; };
 		ED80541B2DAD967000484080 /* ContinuationsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */; };
 		ED8B49B92D6CF72700743444 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8B49B82D6CF72700743444 /* AppIcon.swift */; };
+		ED9DB41F2DC57DF80072FF5F /* metrics.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED9DB41A2DC57DF80072FF5F /* metrics.yaml */; };
+		ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED9DB41B2DC57DF80072FF5F /* pings.yaml */; };
+		ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED9DB41D2DC57DF80072FF5F /* tags.yaml */; };
+		ED9DB4222DC57DF80072FF5F /* settings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED9DB41C2DC57DF80072FF5F /* settings.yaml */; };
 		ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */; };
 		EDADF77A2D70BD3E00C39295 /* AppIconSelectionTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF7792D70BD3E00C39295 /* AppIconSelectionTelemetry.swift */; };
 		EDADF77C2D70C58200C39295 /* SettingsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF77B2D70C58200C39295 /* SettingsTelemetry.swift */; };
@@ -10258,6 +10262,10 @@
 		ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuationsChecker.swift; sourceTree = "<group>"; };
 		ED84423D8666C751BBFC76AC /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Storage.strings; sourceTree = "<group>"; };
 		ED8B49B82D6CF72700743444 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
+		ED9DB41A2DC57DF80072FF5F /* metrics.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
+		ED9DB41B2DC57DF80072FF5F /* pings.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
+		ED9DB41C2DC57DF80072FF5F /* settings.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = settings.yaml; sourceTree = "<group>"; };
+		ED9DB41D2DC57DF80072FF5F /* tags.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = tags.yaml; sourceTree = "<group>"; };
 		ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFromFirefoxSetting.swift; sourceTree = "<group>"; };
 		EDA240A8BBFD0A19FB2C3D7E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		EDADF7792D70BD3E00C39295 /* AppIconSelectionTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectionTelemetry.swift; sourceTree = "<group>"; };
@@ -14934,6 +14942,17 @@
 			path = AppIconSelection;
 			sourceTree = "<group>";
 		};
+		ED9DB41E2DC57DF80072FF5F /* Glean */ = {
+			isa = PBXGroup;
+			children = (
+				ED9DB41A2DC57DF80072FF5F /* metrics.yaml */,
+				ED9DB41B2DC57DF80072FF5F /* pings.yaml */,
+				ED9DB41C2DC57DF80072FF5F /* settings.yaml */,
+				ED9DB41D2DC57DF80072FF5F /* tags.yaml */,
+			);
+			path = Glean;
+			sourceTree = "<group>";
+		};
 		EDADF7822D70D59900C39295 /* AppIconSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -15060,6 +15079,7 @@
 				8A590C6228C13E1D0032F1AA /* TabManagement */,
 				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
+				ED9DB41E2DC57DF80072FF5F /* Glean */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -16348,6 +16368,10 @@
 				BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
+				ED9DB41F2DC57DF80072FF5F /* metrics.yaml in Resources */,
+				ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */,
+				ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */,
+				ED9DB4222DC57DF80072FF5F /* settings.yaml in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
 				EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */,
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
