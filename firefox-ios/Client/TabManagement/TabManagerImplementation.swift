@@ -279,7 +279,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
         }
-        storeChanges()
+        commitChanges()
     }
 
     @MainActor
@@ -315,7 +315,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
 
-        storeChanges()
+        commitChanges()
     }
 
     /// Remove a tab, will notify delegate of the tab removal
@@ -357,7 +357,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         if flushToDisk {
-            storeChanges()
+            commitChanges()
         }
     }
 
@@ -402,7 +402,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
 
         // Flush.
-        storeChanges()
+        commitChanges()
     }
 
     private func addTab(_ request: URLRequest? = nil,
@@ -453,13 +453,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
-        storeChanges()
+        commitChanges()
     }
 
     func undoCloseAllTabs() {
         guard !backupCloseTabs.isEmpty else { return }
         tabs = backupCloseTabs
-        storeChanges()
+        commitChanges()
         backupCloseTabs = [Tab]()
         if backupCloseTab != nil {
             selectTab(backupCloseTab?.tab)
@@ -1050,13 +1050,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
-        storeChanges()
+        commitChanges()
     }
 
     @MainActor
     func undoCloseInactiveTabs() async {
         tabs.append(contentsOf: backupCloseTabs)
-        storeChanges()
+        commitChanges()
         backupCloseTabs = [Tab]()
     }
 
@@ -1099,7 +1099,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             selectedIndex = previousSelectedIndex
         }
 
-        storeChanges()
+        commitChanges()
     }
 
     func startAtHomeCheck() -> Bool {
@@ -1251,7 +1251,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if flushToDisk {
-            storeChanges()
+            commitChanges()
         }
     }
 
