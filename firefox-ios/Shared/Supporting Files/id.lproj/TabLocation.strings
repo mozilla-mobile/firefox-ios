@@ -1,0 +1,36 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Ketuk ganda dan tahan untuk opsi lainnya";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Sambungan tidak aman. Perlindungan Pelacakan yang Ditingkatkan tidak aktif.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Sambungan aman. Perlindungan Pelacakan yang Ditingkatkan tidak aktif.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Sambungan tidak aman";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Sambungan aman";
+
+/* Accessibility label for the lock / tracking protection button on the URL bar */
+"TabLocation.LockButton.AccessibilityLabel.v122" = "Perlindungan Pelacakan";
+
+/* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
+"TabLocation.LockButton.LargeContentTitle.v122" = "Perlindungan Pelacakan";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Bagikan laman ini";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "Bagikan";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v120" = "Pemeriksa Ulasan";
+
+/* Large content title for the tabs button. %@ is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "Tampilkan Tab: %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Hapus laman";
+

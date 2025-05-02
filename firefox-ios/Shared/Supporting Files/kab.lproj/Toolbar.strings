@@ -1,6 +1,18 @@
+/* Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu */
+"Toolbar.Menu.Button.A11y.Label.v135" = "Umuɣ agejdan";
+
 /* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
 "Toolbar.NewTab.Button.v130" = "Iccer amaynut";
 
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Mdel iccer-a";
+
+/* Accessibility label for the tabs button in the toolbar, specifing the number of tabs open. */
+"Toolbar.Tabs.Button.A11y.Label.v135" = "Accaren yeldin";
+
+/* Large content title for the tabs button in the toolbar, specifying the number of tabs open. %@ is the number of open tabs. */
+"Toolbar.Tabs.Button.A11y.LargeContentTitle.v137" = "Accaren yeldin: %@";
+
+/* Large content title for the tabs button in the toolbar, specifying that more than 99 tabs are open. */
+"Toolbar.Tabs.Button.A11y.OverflowLargeContentTitle.v137" = "Accaren yeldin: 99+";
 

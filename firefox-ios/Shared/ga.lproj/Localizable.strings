@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "Tá ainm úsáideora agus focal faire á n-iarraidh ag %@.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "Tá ainm úsáideora agus focal faire á n-iarraidh ag %1$@. Deir an suíomh: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -136,7 +136,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Seans go bhfuil cumraíocht mhícheart ar an suíomh, nó go bhfuil duine éigin ag déanamh ionsaí air. Lean ar aghaidh má tá tú sásta dul sa bhearna bhaoil.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "Níor chumraigh úinéir %@ an suíomh mar is ceart. Níor cheangail Firefox leis an suíomh seo, chun do chuid faisnéise a chosaint.";
 
 /* Title on the certificate error page */
@@ -258,12 +258,6 @@
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Ná Sábháil";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "An bhfuil fonn ort an focal faire do %1$@ ar %2$@ a shábháil?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "An bhfuil fonn ort focal faire do %@ a shábháil?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Sábháil an Focal Faire";
@@ -532,10 +526,10 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Sioncronú as líne";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Cluaisín %1$@ as %2$@";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Cluaisíní %1$@ go %2$@ as %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -543,9 +537,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Cealaigh";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "Dúnadh %d cluaisín";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Níorbh fhéidir an leathanach seo a thaispeáint san Amharc Léitheoireachta.";
@@ -562,13 +553,13 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Inniu";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "inniu ag %@";
 
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "Roghchlár";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Bain an leathanach - %@";
 
 /* Tile title for Twitter */

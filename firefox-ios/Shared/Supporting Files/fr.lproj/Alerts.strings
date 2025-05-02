@@ -25,15 +25,15 @@
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
 "Alerts.FeltDeletion.Title.v122" = "Mettre fin à votre session privée ?";
 
-/* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
+/* The title for the negative action of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
 "Alerts.RestoreTabs.Button.No.v109" = "Non";
 
-/* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
+/* The title for the affirmative action of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed, and will restore existing tabs. */
 "Alerts.RestoreTabs.Button.Yes.v109" = "Restaurer les onglets";
 
-/* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
+/* The body of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "Oups ! Restaurez les onglets pour reprendre là où vous en étiez.";
 
-/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+/* The title of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. %@ is the name of the app (e.g. Firefox). */
 "Alerts.RestoreTabs.Title.v109.v2" = "%@ a planté. Restaurer vos onglets ?";
 

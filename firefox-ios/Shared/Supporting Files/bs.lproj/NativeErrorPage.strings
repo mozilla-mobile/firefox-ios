@@ -1,7 +1,7 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Učitaj ponovo";
 
-/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+/* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Vlasnik %@ ga nije ispravno podesio i ne može se stvoriti sigurna veza.";
 
 /* On error page, this is the title for generic error. */

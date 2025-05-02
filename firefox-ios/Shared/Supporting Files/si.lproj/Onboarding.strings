@@ -1,7 +1,7 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "සැකසුම් වෙත යන්න";
 
-/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.DescriptionFooter.v124" = "*%@ දැනටමත් පෙරනිමි ද?* මෙම පණිවිඩය වසා මඟහරින්න මත තට්ටු කරන්න.";
 
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
@@ -10,13 +10,13 @@
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.SecondLabel.v114" = "2. *පෙරනිමි අතිරික්සු යෙදුම* ඔබන්න";
 
-/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. *%@* තෝරන්න";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "පෙරනිමි අතිරික්සුව මාරු කරන්න";
 
-/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "%@ අභිරුචිකරණය";
 
 /* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
@@ -64,13 +64,13 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "ඉදිරියට";
 
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Notification.Description.v120" = "ඔබගේ උපාංග අතර ආරක්‍ෂිතව පටිති යවන්න සහ වෙනත් %@ රහස්‍යතා විශේෂාංග සොයා ගන්න.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "මඟහරින්න";
 
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Notification.Title.v120" = "%@ සමඟ ආරක්‍ෂිතව සිටීමට දැනුම්දීම් උපකාරී වේ";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
@@ -84,6 +84,9 @@
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "ඔබ උපාංග අතර පනින විට සංකේතිතව සිටින්න";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "රහස්‍යතා දැන්වීම";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "සම්භාව්‍ය බිතුපත";
@@ -100,7 +103,7 @@
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.SelectorTitle.v114" = "වර්ණ කැලතීමක් බලන්න";
 
-/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox). */
 "Onboarding.Wallpaper.Title.v114" = "%@ බිතුපතක් තෝරන්න";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
@@ -112,7 +115,7 @@
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "අපගේ ලාභ නොලබන පිටුබලයක් සහිත අතිරික්සුව අන්තර්ජාලය පුරා ඔබව රහසින් ලුහුබඳින සමාගම් ස්වයංක්‍රීයව නවත්වයි.";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Welcome.Description.v120" = "අපගේ ලාභ නොලබන පිටුබලයක් සහිත අතිරික්සුව අන්තර්ජාලය පුරා ඔබව රහසින් ලුහුබඳින සමාගම් ස්වයංක්‍රීයව නවත්වයි.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
