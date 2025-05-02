@@ -360,13 +360,15 @@ class LegacyHomepageViewController:
 
     // MARK: - Helpers
 
-    /// Configure isZeroSearch
+    /// Configure isZeroSearch & isPrivate
     /// - Parameter isZeroSearch: IsZeroSearch is true when the homepage is created from the tab tray, a long press
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
+    /// We need also to set isPrivate value when this configure method is being called
     func configure(isZeroSearch: Bool) {
         viewModel.isZeroSearch = isZeroSearch
+        viewModel.isPrivate = currentTab?.isPrivate ?? false
     }
 
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation is
