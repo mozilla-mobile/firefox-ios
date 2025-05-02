@@ -1,7 +1,7 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
 
-/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.DescriptionFooter.v124" = "*ਕੀ%@ ਪਹਿਲਾਂ ਹੀ ਤੁਹਾਡਾ ਮੂਲ ਹੈ?* ਇਹ ਸੁਨੇਹੇ ਨੂੰ ਬੰਦ ਕਰੋ ਅਤੇ ਛੱਡੋ ਨੂੰ ਛੂਹੋ।";
 
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
@@ -10,13 +10,13 @@
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.SecondLabel.v114" = "2. Default Browser App ਨੂੰ ਛੂਹੋ";
 
-/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. *%@* ਨੂੰ ਚੁਣੋ";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "ਆਪਣੇ ਮੂਲ ਬਰਾਊਜ਼ਰ ਨੂੰ ਬਦਲੋ";
 
-/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "%@ ਨੂੰ ਕਸਟਮਾਈਜ਼ ਕਰੋ";
 
 /* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
@@ -25,7 +25,7 @@
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "ਬਰਾਊਜ਼ ਕਰਨਾ ਸ਼ੁਰੂ ਕਰੋ";
 
-/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Title.v123" = "%@ ਤੁਹਾਨੂੰ ਕੰਟਰੋਲ ਵਿੱਚ ਰੱਖਦਾ ਹੈ";
 
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
@@ -79,19 +79,19 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "ਜਾਰੀ ਰੱਖੋ";
 
-/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Notification.Description.v120" = "ਟੈਬਾਂ ਨੂੰ ਸੁਰੱਖਿਅਤ ਰੂਪ ਵਿੱਚ ਆਪਣੇ ਡਿਵਾਈਸਾਂ ਉੱਤੇ ਭੇਜੋ ਅਤੇ %@ ਵਿੱਚ ਹੋਰ ਪਰਦੇਦਾਰੀ ਫ਼ੀਚਰ ਬਾਰੇ ਜਾਣੋ।";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "ਛੱਡੋ";
 
-/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Notification.Title.v120" = "ਨੋਟੀਫ਼ਿਕੇਸ਼ਨ %@ ਨਾਲ ਤੁਹਾਨੂੰ ਸੁਰੱਖਿਅਤ ਰਹਿਣ ਲਈ ਮਦਦ ਕਰਦੇ ਹਨ";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "ਸੂਚਨਾਵਾਂ ਚਾਲੂ ਕਰੋ";
 
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Sync.Description.v123" = "%@ ਤੁਹਾਡੇ ਪਾਸਵਰਡਾਂ, ਬੁੱਕਮਾਰਕਾਂ ਅਤੇ ਹੋਰਾਂ ਨੂੰ ਤੁਹਾਡੇ ਵਲੋਂ ਸਿੰਕ ਕਰਨ ਦੌਰਾਨ ਇੰਕ੍ਰਿਪਟ ਕਰਦਾ ਹੈ।";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
@@ -112,10 +112,10 @@
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "ਬੰਦੋਬਸਤ";
 
-/* Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "ਬਰਾਊਜ਼ਰ ਵਿੱਚ ਸੁਧਾਰ ਕਰਨ ਲਈ ਮਦਦ ਵਾਸਤੇ %1$@ ਪੜਤਾਲ ਅਤੇ ਤਾਲਮੇ ਡਾਟਾ %2$@ ਨੂੰ ਭੇਜਦਾ ਹੈ। %3$@";
 
-/* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ ਦੀ ਪਰਵਾਹ ਕਰਦਾ ਹੈ। ਸਾਡੀ %2$@ ਵਿੱਚ ਹੋਰ ਪੜ੍ਹੋ।";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
@@ -133,28 +133,28 @@
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "ਕਰੈਸ਼ ਰਿਪੋਰਟਾਂ ਨੂੰ ਆਪਣੇ-ਆਪ ਭੇਜੋ";
 
-/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "ਤੁਹਾਡੇ ਡਿਵਾਈਸ, ਹਾਰਡਵੇਅਰ ਸੰਰਚਨਾ ਅਤੇ %1$@ ਨੂੰ ਤੁਸੀਂ ਕਿਵੇਂ ਵਰਤਦੇ ਹੋ, ਦੇ ਬਾਰੇ ਡਾਟਾ ਹਰ ਥਾਂ ਦੇ ਵਰਤੋਂਕਾਰਾਂ ਲਈ ਫ਼ੀਚਰਾਂ, ਕਾਰਗੁਜ਼ਾਰੀ ਅਤੇ ਸਥਿਰਤਾਂ ਵਿੱਚ ਸੁਧਾਰ ਕਰਨ ਲਈ ਮਦਦ ਕਰਦਾ ਹੈ। %2$@";
 
-/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "%@ ਨੂੰ ਤਕਨੀਕੀ ਅਤੇ ਤਾਲਮੇਲ ਡਾਟਾ ਭੇਜੋ";
 
-/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "%@ ਨੂੰ ਵਧੀਆ ਬਣਾਉਣ ਲਈ ਸਾਡੀ ਮਦਦ ਕਰੋ";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. */
 "Onboarding.TermsOfService.Subtitle.v136" = "ਤੇਜ਼ ਅਤੇ ਸੁਰੱਖਿਅਤ ਵੈੱਬ ਬਰਾਊਜ਼ਿੰਗ";
 
-/* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "ਜਾਰੀ ਰੱਖ ਕੇ ਤੁਸੀਂ %@ ਨਾਲ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ";
 
-/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ";
 
-/* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
+/* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "%@ ਵਲੋਂ ਜੀ ਆਇਆਂ ਨੂੰ";
 
-/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name. */
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ ਹਨ।";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
@@ -172,7 +172,7 @@
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.SelectorTitle.v114" = "ਰੰਗ ਪਾ ਕੇ ਵੇਖੋ";
 
-/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox). */
 "Onboarding.Wallpaper.Title.v114" = "%@ ਵਾਲਪੇਪਰ ਚੁਣੋ";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
@@ -181,13 +181,13 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ";
 
-/* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
+/* Accessibility label for close button that dismisses the welcome onboarding screen. %@ is the app name (e.g. Firefox). */
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "ਬੰਦ ਕਰਕੇ %@ ਆਨਬੋਰਡਿੰਗ ਨੂੰ ਬੰਦ ਕਰੋ";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Description.TreatementA.v120" = "ਕੰਪਨੀਆਂ ਨੂੰ ਚੋਰੀ ਚੋਰੀ ਵੈੱਬ ਉੱਤੇ ਤੁਹਾਡਾ ਪਿੱਛਾ ਕਰਨ ਤੋਂ ਸਾਡਾ ਗ਼ੈਰ-ਫਾਇਦਾ ਸਮਰੱਥ ਬਰਾਊਜ਼ਰ ਆਪਣੇ-ਆਪ ਹੀ ਰੋਕਦਾ ਹੈ।";
 
-/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Welcome.Description.v120" = "ਕੰਪਨੀਆਂ ਨੂੰ ਚੋਰੀ ਚੋਰੀ ਵੈੱਬ ਉੱਤੇ ਤੁਹਾਡਾ ਪਿੱਛਾ ਕਰਨ ਤੋਂ ਸਾਡਾ ਗ਼ੈਰ-ਫਾਇਦਾ ਸਮਰੱਥ ਬਰਾਊਜ਼ਰ ਆਪਣੇ-ਆਪ ਹੀ ਰੋਕਦਾ ਹੈ।";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */

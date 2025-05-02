@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "Hinihingi ang username at password ng %@.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "Hinihingi ang username at password ng %1$@. Ang sabi ng site: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -28,7 +28,7 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Balikan Ang Naiwan";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Mga Tabs: %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
@@ -137,7 +137,7 @@
 "Brightness" = "Tinkad";
 
 /* Label for Cancel button */
-"Cancel" = "Kanselahin";
+"Cancel" = "Ikansela";
 
 /* Accessibility hint for the color theme setting buttons in reader mode display settings */
 "Changes color theme." = "Papalit ng color theme.";
@@ -245,7 +245,7 @@
 "Downloads.Alert.DownloadNow" = "I-download Na";
 
 /* Button confirming the cancellation of the download. */
-"Downloads.CancelDialog.Cancel" = "Kanselahin";
+"Downloads.CancelDialog.Cancel" = "Ikansela";
 
 /* Alert dialog body when the user taps the cancel download icon. */
 "Downloads.CancelDialog.Message" = "Gusto mo bang ikansela ang pag download?";
@@ -263,15 +263,15 @@
 "Downloads.Toast.Failed.LabelText" = "Hindi natuloy ang Download";
 
 /* The button to open a new tab with the Downloads home panel */
-"Downloads.Toast.GoToDownloads.Button" = "Mga Downloads";
+"Downloads.Toast.GoToDownloads.Button" = "Mga download";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "1 ng %d files";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@%2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -295,7 +295,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Maaari ito ay isang maling pag-configure o pakikialam ng isang nang-aatake. Magpatuloy kung tatanggapin mo ang mga potensyal na panganib.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "Ang may-ari ng %@ ay maling nai-configure ang kanilang website. Upang maprotektahan and iyong impormasyon at hindi manakaw, Hindi kumonekta ang Firefox sa website.";
 
 /* Title on the certificate error page */
@@ -557,7 +557,7 @@
 "LibraryPanel.Accessibility.History.v106" = "Kasaysayan";
 
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
-"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Kanselahin";
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Ikansela";
 
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Burahin";
@@ -622,18 +622,6 @@
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "Huwag i-update";
 
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "I-save and login %1$@ para sa %2$@?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "I-save and password para sa %@?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "i-Update ang pag-login para sa %@?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "i-Update ang login %1$@ ng %2$@?";
-
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "I-save ang Login";
 
@@ -647,7 +635,7 @@
 "LoginsList.NoMatchingResult.Subtitle" = "Walang resultang tumugma sa iyong hinahanap.";
 
 /* Title for cancel button for user to stop searching for a particular login */
-"LoginsList.Search.Cancel" = "Kanselahin";
+"LoginsList.Search.Cancel" = "Ikansela";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SAVED LOGINS";
@@ -692,7 +680,7 @@
 "Menu.CustomizeHomePage.v99" = "Ipasadya ang Homepage";
 
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "Mga Download";
+"Menu.Downloads.Label" = "Mga download";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Naka-OFF ang Enhanced Tracking Protection para sa site na ito";
@@ -872,7 +860,7 @@
 "Remove from Reading List" = "Alisin mula sa Reading List";
 
 /* Cancel button text shown in reopen-alert at home page. */
-"ReopenAlert.Actions.Cancel" = "Kanselahin";
+"ReopenAlert.Actions.Cancel" = "Ikansela";
 
 /* Reopen button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Reopen" = "Muling buksan";
@@ -1061,7 +1049,7 @@
 "Settings.Disconnect.Button" = "Idiskonekta ang Pag-sync";
 
 /* Cancel action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.CancelButton" = "Kanselahin";
+"Settings.Disconnect.CancelButton" = "Ikansela";
 
 /* Destructive action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.DestructiveButton" = "Diskonekta";
@@ -1122,6 +1110,9 @@
 
 /* General settings section title */
 "Settings.General.SectionName" = "Pangkalahatan";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Baguhin ang wallpaper sa pamamagitan ng pag-tap sa Firefox homepage logo";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Homepage";
@@ -1261,6 +1252,9 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Hanapin sa Firefox";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Kopyahin";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Ipakita ang Search Suggestions";
 
@@ -1285,13 +1279,13 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Ang Sync ay offline";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Tab %1$@ ng %2$@";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Ipakita ang lahat na Tab";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Mga Tab %1$@ hanggang %2$@ ng %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1299,9 +1293,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "I-undo";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d tab(s) closed";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Magdagdag ng Tab";
@@ -1348,7 +1339,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Ngayon";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "ngayong %@";
 
 /* Accessibility label for the Menu button. */
@@ -1357,7 +1348,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Isara ang Lahat na mga Tab";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Alisin ang pahina - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1366,7 +1357,7 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "Oo";
 
-/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "This page appears to be in %1$@. Translate to %2$@ with %3$@?";
 
 /* Tile title for Twitter */

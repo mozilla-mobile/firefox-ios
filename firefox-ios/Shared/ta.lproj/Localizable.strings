@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "ஒரு பயனர்பெயரையும் கடவுச்சொல்லையும் %@ கேட்கிறது.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "ஒரு பயனர்பெயரையும் கடவுச்சொல்லையும் %1$@ கோருகிறது. இது ஒரு: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -211,13 +211,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "பதிவிறக்கங்கள்";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "%d கோப்புகளில் 1";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -241,7 +241,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "இது தவறிய கட்டமைப்பாலோ அல்லது தாக்கியதாலோ ஏற்பட்டிருக்கலாம். ஆபத்தை உணர்ந்து ஏற்றால் தொடருங்கள்.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "உரிமையாளர் %@ தளத்தை முறையின்றி கட்டமைத்துள்ளார். உங்கள் தகவல் திருடப்படாமல் இருக்க, வலைத்தளத்துடனான இணைப்பைப் பயர்பாஃசு துண்டித்தது.";
 
 /* Title on the certificate error page */
@@ -441,18 +441,6 @@
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "புதுப்பிக்க வேண்டாம்";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "%2$@ தளத்தின் %1$@ பயனர்பெயரைச் சேமிக்கவா?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "%@ கடவுச்சொல்லை சேமிக்கவா?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ உள்நுழைவைப் புதுப்பிக்கவா?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ தளத்தின் %1$@ பயனரைப் புதுப்பிக்கவா?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "ஆம்";
@@ -1063,13 +1051,13 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "ஒத்திசைவு இல்லை";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "%1$@ இல் %2$@ கீற்று";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "எல்லா கீற்றுகளையும் காட்டு";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "%3$@ இல் %2$@ இலிருந்து %1$@ கீற்றுகள்";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1077,9 +1065,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "மீளமை";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d கீற்று(கள்) மூடப்பட்டது";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "கீற்றைச் சேர்";
@@ -1114,7 +1099,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "இன்று";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "இன்று %@";
 
 /* Accessibility label for the Menu button. */
@@ -1123,7 +1108,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "எல்லா கீற்றுக்களையும் மூடு";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "%@ - பக்கத்தை நீக்கு";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1132,7 +1117,7 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "ஆம்";
 
-/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "இந்தப் பக்கம் %1$@ இல் தோன்றுகிறது. %3$@ உள்ளடக்கங்களை %2$@ மொழிக்கு மொழிபெயர்க்கவா?";
 
 /* Tile title for Twitter */

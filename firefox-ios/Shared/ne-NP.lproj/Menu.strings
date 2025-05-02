@@ -13,22 +13,22 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "नयाँ ट्याब खोल्नुहोस्";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "बुकमार्कहरु";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "डाउनलोडहरु";
 
-/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "इतिहास";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "पढ्ने सूची";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "सेटिङ्गहरू";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "सिङ्क गरिएका ट्याबहरु";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */

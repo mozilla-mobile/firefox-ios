@@ -1,20 +1,83 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option. */
 "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136" = "선택됨";
 
-/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name. */
+/* On the app icon customization screen, where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. %@ is the app name. */
 "Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136" = "%@ 앱 아이콘 선택";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option. */
 "Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136" = "선택 해제";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background. */
+"Settings.AppIconSelection.AppIconNames.Blue.Title.v136" = "파란색";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple. */
+"Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "블루 아워";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background. */
+"Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "시안";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
 "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "진보라";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
+"Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "골든 아워";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background. */
+"Settings.AppIconSelection.AppIconNames.Green.Title.v136" = "녹색";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo. */
 "Settings.AppIconSelection.AppIconNames.Hug.Title.v136" = "허그";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe. */
+"Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "게으름";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to light purple. */
+"Settings.AppIconSelection.AppIconNames.Midday.Title.v137" = "정오";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to dark purple. */
+"Settings.AppIconSelection.AppIconNames.Midnight.Title.v137" = "자정";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green. */
+"Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137" = "오로라";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a orange background. */
+"Settings.AppIconSelection.AppIconNames.Orange.Title.v137" = "주황";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background. */
+"Settings.AppIconSelection.AppIconNames.Pink.Title.v136" = "분홍색";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon. */
+"Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136" = "픽셀화";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo. */
+"Settings.AppIconSelection.AppIconNames.Pride.Title.v136" = "자부심";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a purple background. */
+"Settings.AppIconSelection.AppIconNames.Purple.Title.v137" = "보라";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red background. */
+"Settings.AppIconSelection.AppIconNames.Red.Title.v137" = "빨강";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
 "Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "기본";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow. */
+"Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "일출";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of purple fading to pink. */
+"Settings.AppIconSelection.AppIconNames.Sunset.Title.v137" = "일몰";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of dark blue fading to light blue. */
+"Settings.AppIconSelection.AppIconNames.Twilight.Title.v137" = "석양";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a yellow background. */
+"Settings.AppIconSelection.AppIconNames.Yellow.Title.v137" = "노랑";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred. */
+"Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "확인";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon. */
+"Settings.AppIconSelection.Errors.SelectErrorMessage.v136" = "앱 아이콘을 설정하는 중에 오류가 발생했습니다.";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
 "Settings.AppIconSelection.ScreenTitle.v136" = "앱 아이콘";
