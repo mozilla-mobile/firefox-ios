@@ -185,7 +185,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         case TabPanelViewActionType.deleteTabsOlderThan:
             guard let period = action.deleteTabPeriod else { return }
-            deleteTabsOlderThan(period: period, uuid: action.windowUUID)
+            deleteNormalTabsOlderThan(period: period, uuid: action.windowUUID)
 
         case TabPanelViewActionType.undoCloseAllTabs:
             undoCloseAllTabs(uuid: action.windowUUID)
@@ -550,12 +550,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     // TODO: Laurie - test
-    private func deleteTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
+    private func deleteNormalTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.removeNormalTabsOlderThan(period: period)
 
         // We are not closing the tab tray, so we need to refresh the tabs on screen
-        let model = getTabsDisplayModel(for: true, uuid: uuid)
+        let model = getTabsDisplayModel(for: false, uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
                                                      windowUUID: uuid,
                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
