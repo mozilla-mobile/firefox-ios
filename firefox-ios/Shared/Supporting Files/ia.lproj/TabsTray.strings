@@ -4,7 +4,7 @@
 /* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
 "CloseTabsToast.SingleTabTitle.v113" = "Scheda claudite";
 
-/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. */
 "CloseTabsToast.Title.v113" = "Schedas claudite: %d";
 
 /* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
@@ -15,4 +15,7 @@
 
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Synchronisar schedas";
+
+/* Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total. */
+"TabTraySelectorAccessibilityHint.v139" = "%1$@ de %2$@";
 

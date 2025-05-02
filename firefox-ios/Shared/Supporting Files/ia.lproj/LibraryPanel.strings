@@ -1,3 +1,15 @@
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Plus ancian";
+
+/* Section title that, when expanded, shows all web browsing history entries for the last 4 weeks beneath it (not including entries from the less inclusive sections) */
+"LibraryPanel.Sections.LastFourWeeks.v138" = "Le ultime 4 septimanas";
+
 /* This label is meant to signify the section containing a group of items from the past hour. This is primarily used in the history library panel when grouping sites that have been visited in the last hour. */
 "LibraryPanel.Sections.LastHour.v134" = "Ultime hora";
+
+/* Section title that, when expanded, shows all web browsing history entries for the last 7 days beneath it (not including entries from the less inclusve sections) */
+"LibraryPanel.Sections.LastSevenDays.v138" = "Le ultime 7 dies";
+
+/* Section title that, when expanded, shows all web browsing history entries for the last 24 hours beneath it (not including entries from the less inclusive sections) */
+"LibraryPanel.Sections.LastTwentyFourHours.v138" = "Le ultime 24 horas";
 

@@ -61,7 +61,7 @@
 /* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Configuración";
 
-/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Novo en %@";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
@@ -73,7 +73,7 @@
 /* On the main menu, the title for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.Settings.Title.v131" = "Configuración";
 
-/* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+/* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Novo en %@";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
@@ -193,7 +193,7 @@
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Zoom";
 
-/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. %@ is the current zoom level percentage. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "Zoom (%@)";
 
 /* On the main menu, the title for the action that will turn Night Mode off in the application. */
@@ -235,7 +235,7 @@
 /* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
 "MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "Zoom";
 
-/* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. %@ is the current zoom level percentage. */
 "MainMenu.Submenus.Tools.Zoom.Title.v131" = "Zoom (%@)";
 
 /* The accessibility label for the Main Menu. */

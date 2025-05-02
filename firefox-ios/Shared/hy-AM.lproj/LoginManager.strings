@@ -10,7 +10,7 @@
 /* Copy password text selection menu item */
 "Copy" = "Պատճենել";
 
-/* Label describing when the current login was created with the timestamp as the parameter. */
+/* Label describing when the current login was created. %@ is the timestamp. */
 "Created %@" = "Ստեղծվել է %@";
 
 /* Label for the button used to delete the current login. */
@@ -49,7 +49,7 @@
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "Մուտքագրումները կհեռացվեն կապակցված բոլոր սարքերից:";
 
-/* Label describing when the current login was last modified with the timestamp as the parameter. */
+/* Label describing when the current login was last modified. %@ is the timestamp. */
 "Modified %@" = "Փոփոխված է %@";
 
 /* Label displayed when no logins are found after searching. */
@@ -59,7 +59,7 @@
 "NoLoginsFound.Title.v122" = "Գաղտնաբառեր չեն գտնվել";
 
 /* Open and Fill website text selection menu item */
-"Open & Fill" = "Բացել և լցնել";
+"Open & Fill" = "Բացել և լրացնել";
 
 /* Label displayed above the password row in Login Detail View. */
 "Password" = "Գաղտնաբառ";
@@ -80,7 +80,7 @@
 "Select All" = "Ընտրել բոլորը";
 
 /* Label displayed above the username row in Login Detail View. */
-"Username" = "Օգտվողի անուն";
+"Username" = "Օգտանուն";
 
 /* Label displayed above the website row in Login Detail View. */
 "Website" = "Կայք";
