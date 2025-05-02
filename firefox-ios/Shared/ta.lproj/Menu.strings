@@ -10,22 +10,22 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "புதிய கீற்று";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "புத்தகக்குறிகள்";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "பதிவிறக்கங்கள்";
 
-/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "வரலாறு";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "வாசிப்பு பட்டியல்";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "அமைவுகள்";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "ஒத்திசைவு கீற்றுகள்";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */

@@ -22,22 +22,22 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "Agor Tab Newydd";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Nodau Tudalen";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Llwythi";
 
-/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Hanes";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Rhestr Ddarllen";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "Gosod­iadau";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Tabiau wedi'u Cydweddu";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
