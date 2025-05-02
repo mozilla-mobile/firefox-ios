@@ -10830,6 +10830,14 @@
 			path = OpenTabs;
 			sourceTree = "<group>";
 		};
+		1DC598B52DC53CED0037D263 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */,
+			);
+			path = Performance;
+			sourceTree = "<group>";
+		};
 		1DCEC3EF2D5C1BA700129966 /* Application Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -11412,7 +11420,6 @@
 				E11C0E3C2CEF328B00D884D3 /* TermsOfServiceManager.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
 				E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */,
-				1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -12259,6 +12266,7 @@
 		8A3EF7EE2A2FCF0000796E3A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				1DC598B52DC53CED0037D263 /* Performance */,
 				8ABCBE622C485CAA00480A21 /* FeatureFlags */,
 				8A3EF7FC2A2FCFAC00796E3A /* AppReviewPromptSetting.swift */,
 				1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */,
