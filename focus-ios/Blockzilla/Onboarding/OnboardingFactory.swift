@@ -60,7 +60,7 @@ class OnboardingFactory {
                     privacyText: String(format: .privacyNoticeText, String.privacyLinkText),
                     termsLinkText: .termsLinkText,
                     privacyLinkText: .privacyLinkText,
-                    buttonText: .termsOfUseButtonText,
+                    buttonText: .termsOfUseButtonTextV2,
                     doneButton: .doneButtonText,
                     errorMessage: .errorMessage,
                     retryButtonText: .retryButtonText
@@ -183,6 +183,11 @@ fileprivate extension String {
     static let termsOfUseButtonText = NSLocalizedString(
         "Onboarding.TermsOfUse.ButtonText",
         value: "Agree and Continue",
+        comment: "Label for the agreement button in the Terms of Use screen."
+    )
+    static let termsOfUseButtonTextV2 = NSLocalizedString(
+        "Onboarding.TermsOfUse.ButtonTextV2",
+        value: "Continue",
         comment: "Label for the agreement button in the Terms of Use screen."
     )
     static let doneButtonText = NSLocalizedString(
