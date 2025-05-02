@@ -42,5 +42,5 @@ enum HomepageActionType: ActionType {
     case viewWillAppear
     case didSelectItem
     case embeddedHomepage
-    case itemSeen
+    case sectionSeen
 }
