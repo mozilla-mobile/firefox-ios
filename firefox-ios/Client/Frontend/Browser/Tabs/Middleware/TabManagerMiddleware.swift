@@ -549,7 +549,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         }
     }
 
-    // TODO: Laurie - test
     private func deleteNormalTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.removeNormalTabsOlderThan(period: period)
