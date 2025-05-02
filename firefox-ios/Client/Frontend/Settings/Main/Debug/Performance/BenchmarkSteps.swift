@@ -31,9 +31,9 @@ final class BenchmarkSteps {
             let label = step.label
             let msTime = step.time
             if let label, !label.isEmpty {
-                print("\t[Step: '\(label)'] \(String(format: "%.02f", msTime)) ms")
+                print("\t[Step: '\(label)'] \(String(format: "%.04f", msTime)) ms")
             } else {
-                print("\t[Step] \(String(format: "%.02f", msTime)) ms")
+                print("\t[Step] \(String(format: "%.04f", msTime)) ms")
             }
             total += msTime
         }
