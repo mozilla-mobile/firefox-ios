@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "პირადი ძიება";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ Firefox-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ, დიდხანს შეეხეთ, ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
+"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ Firefox-მალსახმობი მთავარ ეკრანზე. ჩადგმის შემდგომ დიდხანს შეეხეთ ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "სწრაფი მოქმედებები";

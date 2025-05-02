@@ -10,7 +10,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Бу бәяләмәлер ышанычлымы? Төзәтелгән рейтингны карау өчен хәзер тикшерегез.";
 
-/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. %@ is the Fakespot. */
 "Shopping.AdCard.Footer.v121" = "%@ тарафыннан реклама";
 
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
@@ -85,16 +85,16 @@
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.MainButton.Title.v120" = "Әйе, кулланып карау";
 
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). %@ is the app name (e.g. Firefox). */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "%@ хосусыйлык аңлатмасы";
 
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Хәзер түгел";
 
-/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). %@ is the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "%@-ның куллану шартлары";
 
-/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. %@ is a grade letter from A to F (e.g. A). */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Билге %@";
 
 /* Title of the reliability card displayed in the shopping review quality bottom sheet. */

@@ -4,7 +4,7 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ ಇಂದ ಒಂದು ಬಳಕೆದಾರ ಪದ ಹಾಗು ಗುಪ್ತಪದಕ್ಕಾಗಿ ಮನವಿ ಸಲ್ಲಿಸಲಾಗಿದೆ. ತಾಣವು ಹೀಗೆ ಹೇಳುತ್ತದೆ: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -193,10 +193,10 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ಡೌನ್‌ಲೋಡ್‌ಗಳು";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
@@ -208,7 +208,7 @@
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "ಸುಧಾರಿತ";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "%@ ನ ಮಾಲಿಕ ಅವರ ಜಾಲತಾಣವನ್ನು ಸರಿಯಾಗಿ ಸಂರಚಿಸಿಲ್ಲ. ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ಕಳ್ಳತನದಿಂದ ಸುರಕ್ಷಿತವಾಗಿರಿಸಲು, Firefox ಈ ಜಾಲತಾಣದೊಂದಿಗೆ ಸಂಪರ್ಕವನ್ನು ಹೊಂದಿಲ್ಲ.";
 
 /* Title on the certificate error page */
@@ -360,12 +360,6 @@
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "ಪರಿಷ್ಕರಿಸಬೇಡ";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "%2$@ ಗೆ ಲಾಗಿನ್ %1$@ ಉಳಿಸಬೇಕೆ?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "%@ ಗಾಗಿ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸಬೇಕೆ?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "ಲಾಗಿನ್‌ ಉಳಿಸು";
@@ -754,7 +748,7 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "ಸಿಂಕ್ ಆಫ್ಲೈನ್ ​​ಆಗಿದೆ";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "%2$@ ನಲ್ಲಿ %1$@";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
@@ -784,7 +778,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "ಇಂದು";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "ಇಂದು %@ ನಲ್ಲಿ";
 
 /* Accessibility label for the Menu button. */
@@ -793,7 +787,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "ಎಲ್ಲ ಟ್ಯಾಬ್‍ಗಳನ್ನು ಮುಚ್ಚು";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "ಪುಟವನ್ನು ತೆಗೆದುಹಾಕಿ — %@";
 
 /* Button to disallow the page to be translated to the user locale language */

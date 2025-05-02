@@ -61,7 +61,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
-    func test_homepageItemSeenAction_sendTelemetryData() {
+    func test_topSitesSeenAction_sendTelemetryData() {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
         let sponsoredTelemetry = MockSponsoredTileTelemetry()
         let subject = createSubject(
@@ -73,17 +73,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let config = TopSiteConfiguration(
             site: Site.createSponsoredSite(fromContile: MockSponsoredProvider.defaultSuccessData.first!)
         )
-        let action = HomepageAction(
-            telemetryExtras: HomepageTelemetryExtras(
-                itemType: .topSite,
-                topSitesTelemetryConfig: TopSitesTelemetryConfig(
+        let action = TopSitesAction(
+            telemetryConfig: TopSitesTelemetryConfig(
                     isZeroSearch: false,
                     position: 0,
                     topSiteConfiguration: config
-                )
             ),
             windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.itemSeen
+            actionType: TopSitesActionType.topSitesSeen
         )
 
         subject.topSitesProvider(AppState(), action)
@@ -91,7 +88,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
     }
 
-    func test_homepageItemSeenAction_withUnifiedAds_sendTelemetryData() {
+    func test_homepageSectionSeenAction_withUnifiedAds_sendTelemetryData() {
         let unifiedAdsTelemetry = MockUnifiedAdsCallbackTelemetry()
         let sponsoredTelemetry = MockSponsoredTileTelemetry()
         let subject = createSubject(
@@ -103,17 +100,14 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         let config = TopSiteConfiguration(
             site: Site.createSponsoredSite(fromContile: MockSponsoredProvider.defaultSuccessData.first!)
         )
-        let action = HomepageAction(
-            telemetryExtras: HomepageTelemetryExtras(
-                itemType: .topSite,
-                topSitesTelemetryConfig: TopSitesTelemetryConfig(
+        let action = TopSitesAction(
+            telemetryConfig: TopSitesTelemetryConfig(
                     isZeroSearch: false,
                     position: 0,
                     topSiteConfiguration: config
-                )
             ),
             windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.itemSeen
+            actionType: TopSitesActionType.topSitesSeen
         )
 
         subject.topSitesProvider(AppState(), action)

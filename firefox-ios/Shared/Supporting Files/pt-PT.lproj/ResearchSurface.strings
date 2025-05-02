@@ -1,4 +1,4 @@
-/* On the Research Survey popup, the text that explains what the screen is about. Placeholder is for the app name. */
+/* On the Research Survey popup, the text that explains what the screen is about. %@ is the app name (e.g. Firefox). */
 "Body.Text.v112" = "Por favor, ajude a melhorar o %@, respondendo a um breve inquérito.";
 
 /* On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey. */

@@ -1,7 +1,7 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "Көйләүләргә күчү";
 
-/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.DescriptionFooter.v124" = "*%@ инде сезнең төп браузерыгызмы?* Бу хәбәрне ябып, \"Калдырып тору\" дигәнгә басыгыз.";
 
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
@@ -10,13 +10,13 @@
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.SecondLabel.v114" = "2. *Төп браузер кушымтасына* басыгыз";
 
-/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. *%@-ны* сайлагыз";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "Башка браузерны төп браузер итү";
 
-/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "%@ браузерын көйләү";
 
 /* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
@@ -25,7 +25,7 @@
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "Гизүне башлау";
 
-/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Title.v123" = "%@ идарәне Сезгә тапшыра";
 
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
@@ -103,10 +103,10 @@
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Күбрәк белү";
 
-/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ Куллану Шартлары.";
 
-/* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
+/* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "%@ кушымтасына рәхим итегез";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
@@ -124,7 +124,7 @@
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.SelectorTitle.v114" = "Төрле төсләрне кулланып карагыз";
 
-/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox). */
 "Onboarding.Wallpaper.Title.v114" = "%@ фон рәсемен сайлау";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
@@ -133,7 +133,7 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Стандарт браузер итеп билгеләү";
 
-/* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
+/* Accessibility label for close button that dismisses the welcome onboarding screen. %@ is the app name (e.g. Firefox). */
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Ябу һәм %@ таныштыру экраныннан чыгу";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */

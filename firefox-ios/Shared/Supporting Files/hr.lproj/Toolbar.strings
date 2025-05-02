@@ -10,7 +10,7 @@
 /* Accessibility label for the tabs button in the toolbar, specifing the number of tabs open. */
 "Toolbar.Tabs.Button.A11y.Label.v135" = "Otvorene kartice";
 
-/* Large content title for the tabs button in the toolbar, specifying the number of tabs open. The placeholder is getting replaced with the number of open tabs. */
+/* Large content title for the tabs button in the toolbar, specifying the number of tabs open. %@ is the number of open tabs. */
 "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137" = "Otvorene kartice: %@";
 
 /* Large content title for the tabs button in the toolbar, specifying that more than 99 tabs are open. */
