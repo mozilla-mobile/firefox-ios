@@ -2,7 +2,7 @@
 "Browsing History" = "തിരയൽ നാള്‍വഴി";
 
 /* Settings item for clearing the cache */
-"Cache" = "കാഷ്";
+"Cache" = "കാഷെ";
 
 /* Settings item for clearing cookies */
 "Cookies" = "കുക്കികള്‍";
@@ -16,6 +16,6 @@
 /* Settings item for clearing passwords and login data */
 "Saved Logins" = "സൂക്ഷിച്ചുവച്ച പ്രവേശനങ്ങള്‍";
 
-/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+/* A settings item that allows a user to use Apple's “Spotlight Search” in Data Management's Website Data option to search for and select an item to delete. */
 "Spotlight Index" = "സ്പോട്ട്ലൈറ്റ് സൂചിക";
 

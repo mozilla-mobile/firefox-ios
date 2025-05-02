@@ -4,11 +4,11 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "Օգտանունը և գաղտնաբառը հայցվում են %@-ի կողմից։";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "Օգտանունը և գաղտնաբառը հայցվում են %1$@-ի կողմից։ Կայքը ասում է․ %2$@";
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
+"A username and password are being requested by %@. The site says: %@" = "Օգտանունը և գաղտնաբառը հայցվում են %1$@-ի կողմից։ Կայքը հաղորդում է․ %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Աա";
@@ -28,7 +28,7 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Վերադառնալ";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Ներդիրներ՝ %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
@@ -74,13 +74,13 @@
 "Amazon" = "Amazon";
 
 /* Authentication prompt title */
-"Authentication required" = "Պահանջվում է իսկորոշում";
+"Authentication required" = "Պահանջվում է նույնականացում";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Հետ";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "Վերադառնալ ելնող պատուհանին";
+"Block Pop-up Windows" = "Արգելափակել թռուցիկ պատուհանները";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Վերնագիր";
@@ -128,7 +128,7 @@
 "BreachAlerts.LearnMoreButton" = "Իմանալ ավելին";
 
 /* Leads to a link to the breached website */
-"BreachAlerts.Link" = "Անցնել";
+"BreachAlerts.Link" = "Գնալ";
 
 /* Title for the Breached Login Detail View. */
 "BreachAlerts.Title" = "Վեբ կայքի խախտում";
@@ -146,10 +146,10 @@
 "Changes font type." = "Փոխում է տառատեսակի տեսակը:";
 
 /* The button to open a new tab with the copied link */
-"ClipboardToast.GoToCopiedLink.Button" = "Անցնել";
+"ClipboardToast.GoToCopiedLink.Button" = "Գնալ";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Անցնե՞լ պատճենված հղումով:";
+"ClipboardToast.GoToCopiedLink.Title" = "Գնա՞լ դեպի պատճենված հղում";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Փակել";
@@ -161,10 +161,10 @@
 "ContextMenu.BookmarkLinkButtonTitle" = "Էջանշանի հղում";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Նոր Գաղտնի ներդիր է բացվել";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Նոր գաղտնի ներդիրը բացվեց";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Նոր Գաղտնի ներդիր է բացվել";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Նոր գաղտնի ներդիրը բացվեց";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Փոխարկել";
@@ -191,7 +191,7 @@
 "ContextMenu.OpenInNewTabButtonTitle" = "Բացել նոր ներդիրում";
 
 /* Context menu item for saving an image */
-"ContextMenu.SaveImageButtonTitle" = "Պահել պատկերը";
+"ContextMenu.SaveImageButtonTitle" = "Պահել նկարը";
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Կիսվել հղումով";
@@ -221,7 +221,7 @@
 "CoverSheet.v24.ETP.Description" = "Ներկառուցված Ընդլայնված Հետագծման պաշտպանությունն օգնում է դադարեցնել ձեր շուրջը գովազդները: Միացրեք Խստությունը `ավելի շատ հետքեր, գովազդներ և թռուցիկներ արգելափակելու համար:";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "Անցնել Կարգավորումներին";
+"CoverSheet.v24.ETP.Settings.Button" = "Գնալ կարգավորումներին";
 
 /* Title for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Title" = "Պաշտպանություն գովազդի հետևման դեմ";
@@ -277,13 +277,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Ներբեռնումներ";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "1-ը %d ֆայլերից";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -307,29 +307,29 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Դա կարող է լինել հարցակվողի կողմից սխալ կազմաձևում կամ խախտում։ Առաջ անցեք, եթե դուք ընդունում եք հնարավոր վտանգը։";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "%@-ի սեփականատերը սխալ է տեղադրել իր կայքը։ Ձեր տեղեկատվությունը գողությունից պաշտպանելու համար Firefox֊ը չի միացել այս վեբ կայքին։";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "Այս կապակցումն անվստահելի է";
+"ErrorPages.CertWarning.Title" = "Այս միացումն անվստահելի է";
 
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "Վերադառնալ";
 
 /* Button label to temporarily continue to the site from the certificate error page */
-"ErrorPages.VisitOnce.Button" = "Այդուհանդերձ, այցելել";
+"ErrorPages.VisitOnce.Button" = "Այցելել կայք այնուամենայնիվ";
 
 /* Question shown to user when tapping a link that opens the App Store app */
 "ExternalLink.AppStore.ConfirmationTitle" = "Բացե՞լ այս հղումը App Store-ում։";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "Բացե՞լ այս հղումը արտաքին գործադրում։";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Բացե՞լ այս հղումը արտաքին հավելվածում։";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
 
 /* Title for firefox about:home page in tab history list */
-"Firefox.HomePage.Title" = "Firefox-ի Տնային էջը";
+"Firefox.HomePage.Title" = "Firefox-ի տնէջ";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Հարմարեցնել տնէջը";
@@ -356,10 +356,10 @@
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Մեր հովանավորները և ձեր գաղտնիությունը";
 
 /* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
-"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Բացեք համաժամացված ներդիրը";
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Բացել համաժամացված ներդիրը";
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
-"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Դիտեք բոլոր համաժամացված ներդիրները";
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Դիտել բոլոր համաժամացված ներդիրները";
 
 /* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Ներդիրի հավաքում";
@@ -371,7 +371,7 @@
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Հովանավորված";
 
 /* Accessibility Label for the tab toolbar Forward button */
-"Forward" = "Փոխանցել";
+"Forward" = "Առաջ";
 
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox հաշիվ";
@@ -392,7 +392,7 @@
 "fxa.signin.ready-to-scan" = "Պատրաստել սկանավորման";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Փոխարենը օգտագործեք էլ. փոստ";
+"fxa.signin.use-email-instead" = "Փոխարենը օգտագործել էլ. փոստ";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Համաժամեցնել";
@@ -401,22 +401,22 @@
 "FxAPush_DeviceConnected_body" = "Firefox֊ի համաժամեցումը միացվել է %@-ին";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "ՍԻնքը ավարտվեց";
+"FxAPush_DeviceConnected_title" = "Համաժամեցումը միացվեց";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
-"FxAPush_DeviceDisconnected_body" = "%@-ը հաջողությամբ կապախզվել է:";
+"FxAPush_DeviceDisconnected_body" = "%@-ը հաջողությամբ անջատված է։";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "ԱՅս սարքը հաջողությամբ կապախզվել է Firefox Սինքից:";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Այս սարքը հաջողությամբ անջատվեց Firefox Sync-ից։";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Համաժամեցումը կապախզված է";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Համաժամեցումն անջատված է";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Համաժամեցումը կապախզված է";
+"FxAPush_DeviceDisconnected_title" = "Համաժամեցումն անջատված է";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Սարքը կապախզվել է Firefox Սինքից";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Սարքն անջատվեց Firefox Sync-ից";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox լոգո, փոխել պաստառը";
@@ -434,7 +434,7 @@
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Ամեն ինչ";
 
 /* Button to perform action to clear history for the last hour */
-"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Վերջին ժամը";
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Վերջին ժամում";
 
 /* Button to perform action to clear history for today only */
 "HistoryPanel.ClearHistoryMenuOptionToday" = "Այսօր";
@@ -458,7 +458,7 @@
 "HistoryPanel.HistoryBackButton.Title" = "Պատմություն";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "Վերջին փակվածները";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Վերջերս փակված";
 
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Տուն";
@@ -467,10 +467,10 @@
 "HomePanel.ContextMenu.Bookmark" = "Էջանիշ";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Ջնջել Պատմությունից";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Ջնջել պատմությունից";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Բացել Գաղտնի դիտարկմամբ";
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Բացել գաղտնի ներդիրում";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Բացել նոր ներդիրում";
@@ -497,16 +497,16 @@
 "Hotkeys.Forward.DiscoveryTitle" = "Փոխանցել";
 
 /* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Նեոր Գաղտնի Ներդիր";
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Նոր գաղտնի ներդիր";
 
 /* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NewTab.DiscoveryTitle" = "Նոր Ներդիր";
+"Hotkeys.NewTab.DiscoveryTitle" = "Նոր ներդիր";
 
 /* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NormalMode.DiscoveryTitle" = "Սովորական զննարկման աշխատատեսակ";
+"Hotkeys.NormalMode.DiscoveryTitle" = "Դիտարկման սովորական աշխատատեսակ";
 
 /* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Անձնական զննարկման աշխատատեսակ";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Դիտարկման գաղտնի աշխատատեսակ";
 
 /* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Կրկին բեռնել էջը";
@@ -629,13 +629,13 @@
 "Light" = "Լուսավոր";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"Load original page" = "Բեռնել սկզբնական էջը";
+"Load original page" = "Բեռնել բնօրինակ էջը";
 
 /* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
 "Loading content…" = "Բովանդակության բեռնում…";
 
 /* Authentication prompt log in button */
-"Log in" = "Մուտք գորխել";
+"Log in" = "Մուտք գործել";
 
 /* Toggle logins syncing setting */
 "Logins" = "Մուտքագրումներ";
@@ -666,18 +666,6 @@
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "Չթարմացնել";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Պահպանե՞լ %1$@ մուտքագրումը %2$@-ի համար:";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Պահպանե՞լ գաղտնաբառը %@-ի համար:";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Թարմացնե՞լ մուտքագրումը %@-ի համար:";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Թարմացնե՞լ %1$@ մուտքագրումը %2$@-ի համար:";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Պահպանել մուտքագրումը";
@@ -758,7 +746,7 @@
 "Menu.NewPrivateTab.Label" = "Նոր գաղտնի ներդիր";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
-"Menu.NewTab.v99" = "Նոր Ներդիր";
+"Menu.NewTab.v99" = "Նոր ներդիր";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
 "Menu.NightModeTurnOff.Label2" = "Անջատել Գիշերային ռեժիմը";
@@ -779,10 +767,10 @@
 "Menu.ReadingList.Label" = "Ընթերցացուցակ";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
-"Menu.ReloadWithoutTrackingProtection.Title" = "Կրկին բեռնել առանց Հետագծման պաշտպանության";
+"Menu.ReloadWithoutTrackingProtection.Title" = "Վերաբեռնել առանց հետևման պաշտպանության";
 
 /* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
-"Menu.ReloadWithTrackingProtection.Title" = "Կրկին բեռնել Հետագծման Պաշտպանությամբ";
+"Menu.ReloadWithTrackingProtection.Title" = "Վերաբեռնել հետևման պաշտպանությամբ";
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Էջանիշը հեռացված է";
@@ -817,7 +805,7 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Տուն";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Հաստատել է %@-ի կողմից";
 
 /* The title for tracking protection settings */
@@ -833,7 +821,7 @@
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Միջակայքային հետագծիչներ";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Կրիպտոարժույթներ";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Գաղտնահանքափորներ";
 
 /* Description of content trackers. */
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Վեբ կայքերը կարող են ներբեռնել արտաքին գովազդներ, տեսանյութեր և այլ նյութեր, որոնք պարունակում են թաքնված հետքեր։ Նման բովանդակության արգելափակումը կարող է օգնել կայքերին ավելի արագ բեռնելու, բայց որոշ կոճակներ, ձևեր և մուտքի դաշտեր կարող են չաշխատել։";
@@ -856,8 +844,8 @@
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Ինչն է նոր";
 
-/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
-"Menu.ZoomPage.Title.v113" = "Մեծացնել (%@)";
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "Դիտափոխել (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "բջջային սարք";
@@ -899,7 +887,7 @@
 "Open Settings" = "Բացել կարգավորումները";
 
 /* Toggle tabs syncing setting */
-"Open Tabs" = "Բացել ներդիրները";
+"Open Tabs" = "Բաց ներդիրներ";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
 "OpenURL.Error.Message" = "Firefox-ը չի կարող բացել էջը, որովհետև այս ունի անվավեր հասցե։";
@@ -926,22 +914,22 @@
 "Privacy Policy" = "Գաղտնիության Դրույթներ";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Կապակցումն անվտանգ չէ";
+"ProtectionStatus.NotSecure" = "Միացումն ապահով չէ";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Կապակցումն ապահով է";
+"ProtectionStatus.Secure" = "Միացումն ապահով է";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Արագ-որոնիչներ";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
-"Ratings.Settings.RateOnAppStore" = "Գնահատեք App Store-ում";
+"Ratings.Settings.RateOnAppStore" = "Գնահատել App Store-ում";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "կարդալ";
 
 /* Accessibility label for the Reader View button */
-"Reader View" = "Ընթերցելու եղանակ";
+"Reader View" = "Ընթերցողի տեսք";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Ընթերցելու կերպը հասանելի է";
@@ -1100,10 +1088,10 @@
 "SentTab_TabArrivingNotification_NoDevice_title" = "Ներդիր է ստացվել";
 
 /* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
-"SentTab_TabArrivingNotification_WithDevice_body" = "Նոր ներդիր է հասել %@-ում";
+"SentTab_TabArrivingNotification_WithDevice_body" = "Նոր ներդիր եկավ %@";
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
-"SentTab_TabArrivingNotification_WithDevice_title" = "Ներդիրը հասել է %@-ից";
+"SentTab_TabArrivingNotification_WithDevice_title" = "%@-ից ներդիր է ստացվել";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Հպեք՝ սկսելու համար";
@@ -1142,13 +1130,40 @@
 "Settings.AddCustomEngine.URLLabel" = "URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (հարցումը վերատեղադրեք %s-ով)";
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (հարցումը փոխարինեք %s-ով)";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Ներքևում";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Հասցեների բարի տեղադրում";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Հասցեագոտի";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Վերևում";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Դիտարկիչի ոճ";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Տեսք";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Կայքի տեսքը";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Կայքերին տալիս է մուգ տեսք: Որոշ կայքեր կարող են ճիշտ տեսք չունենալ:";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Կայքի մուգ ռեժիմ";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Արգելափակել արտաքին հավելվածների բացումը";
 
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Մաքրել ողջ կայքի տվյալները";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Մաքրել կայքի ողջ տվյալները";
 
 /* Button in settings that clears private data for the selected items. */
 "Settings.ClearPrivateData.Clear.Button" = "Մաքրել անձնական տվյալները";
@@ -1156,7 +1171,7 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Մաքրել անձնական տվյալները";
 
-/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+/* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Մաքրել տարրերը. %1$@";
 
 /* Copy app version alert shown in settings. */
@@ -1328,10 +1343,10 @@
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Փոխեք պաստառը՝ կտտացնելով Firefox-ի գլխավոր էջի պատկերանշանին";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.Title" = "Պաստառներ";
+"Settings.Home.Option.Wallpaper.Title" = "Պաստառ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
-"Settings.Home.Option.Wallpaper.UpdatedToast" = "Պաստառն արդիացվեց:";
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Պաստառն արդիացվե՛ց:";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
 "Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Տեսք";
@@ -1379,7 +1394,7 @@
 "Settings.NewTab.Option.Custom" = "Հարմարեցված";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox֊-ի սկիզբ";
+"Settings.NewTab.Option.FirefoxHome" = "Firefox-ի տնէջ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Տնէջ";
@@ -1402,14 +1417,14 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox-ը բացելիս";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "%@-ը բացելիս";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Title" = "Առաջարկեք բացել պատճենված հղումները";
+"Settings.OfferClipboardBar.Title" = "Պատճենված հղումները բացելու առաջարկ";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Բացել էլ. փոստի հղումները՝";
+"Settings.OpenWith.PageTitle" = "Բացել էլ. փոստի հղումները հետևյալում";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Փոստային հավելված";
@@ -1624,13 +1639,13 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Համաժամեցումը անցանց է";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Ներդիր՝ %1$@-ը %2$@-ից";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Ցուցադրել բոլոր ներդիրները";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Ներդիրներ՝ %1$@-%2$@՝ %3$@-ից";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1638,9 +1653,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Հետարկել";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d ներդիր է փակվել";
 
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Դիտեք ոչ ակտիվ ներդիրները";
@@ -1660,7 +1672,7 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Ներկայումս ընտրված ներդիրը:";
 
-/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
 "TabTray.Header.FilteredTabs.SectionHeader" = "Այլ";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
@@ -1711,7 +1723,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Այսօր";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "այսօր %@-ին";
 
 /* Accessibility label for the Menu button. */
@@ -1720,7 +1732,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Փակել բոլոր ներդիրները";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Հեռացնել էջը՝ %@";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1729,7 +1741,7 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "Այո";
 
-/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "Այս էջը հայտնվել է %1$@-ում լինելու համար։ Թարգմանե՞լ %3$@-ով %2$@-ի։";
 
 /* Tile title for Twitter */

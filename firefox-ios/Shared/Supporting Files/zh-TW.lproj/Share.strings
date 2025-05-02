@@ -4,3 +4,6 @@
 /* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
 "SendTo.NotSignedIn.Title.v119" = "您尚未登入帳號。";
 
+/* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "已將檔案複製至剪貼簿";
+

@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "ທ່ານບໍ່ມີອຸປະກອນອື່ນໃດທີ່ເຊື່ອມຕໍ່ກັບບັນຊີນີ້ເພື່ອຊິງຄ໌ໄດ້.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "ທ່ານຍັງບໍ່ໄດ້ເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານ.";
+

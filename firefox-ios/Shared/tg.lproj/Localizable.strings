@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "Номи корбар ва ниҳонвожа аз ҷониби «%@» дархост карда шуданд.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "Номи корбар ва ниҳонвожа аз ҷониби «%1$@» дархост карда шуданд. Сомона хабар медиҳад: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -28,7 +28,7 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "Бозгашт ба";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Варақаҳо: %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
@@ -149,7 +149,7 @@
 "ClipboardToast.GoToCopiedLink.Button" = "Гузариш";
 
 /* Message displayed when the user has a copied link on the clipboard */
-"ClipboardToast.GoToCopiedLink.Title" = "Ба пайванди нусхабардоришуда ворид мешавед?";
+"ClipboardToast.GoToCopiedLink.Title" = "Ба пайванди нусхабардошташуда ворид мешавед?";
 
 /* Accessibility label for action denoting closing a tab in tab list (tray) */
 "Close" = "Пӯшидан";
@@ -277,13 +277,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Боргириҳо";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "1 аз %d файл";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -307,7 +307,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Эҳтимол аст, ки ин ба сабаби танзимоти нодуруст ё дахолати ҳамлакунанда ба миён меояд. Шумо метавонед хатари эҳтимолиро ба зимма гирифта, идома диҳед.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "Соҳиби %@ сомонаи худро нодуруст танзим кардааст. Барои муҳофизат кардани маълумоти шумо аз дуздӣ, браузери «Firefox» ба ин сомона пайваст нашуд.";
 
 /* Title on the certificate error page */
@@ -667,18 +667,6 @@
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "Навсозӣ карда нашавад";
 
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Воридшавии «%1$@»-ро барои «%2$@» нигоҳ медоред?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Ниҳонвожаро барои «%@» нигоҳ медоред?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Воридшавиро барои «%@» аз нав нигоҳ медоред?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Воридшавии «%1$@»-ро барои «%2$@» аз нав нигоҳ медоред?";
-
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Нигоҳ доштани воридшавӣ";
 
@@ -817,7 +805,7 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Саҳифаи асосӣ";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Аз ҷониби «%@» тасдиқ карда шудааст";
 
 /* The title for tracking protection settings */
@@ -847,13 +835,16 @@
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Танзимоти браузер ва компютери шумо беназир аст. Технологияи хонандаи нақши ангуштон метавонад як қатор ин танзимоти беназиреро ҷамъоварӣ карда, профили шуморо эҷод кунад, ки минбаъд метавонад барои пайгирӣ кардани фаъолияти шумо дар Интернет истифода бурда шавад.";
 
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Шабакаҳои иҷтимоӣ васоити пайгириро дар сомонаҳои дигар ҷойгир мекунанд, то тавонанд профили ҳаматарафа ва мақсаднокии шуморо эҷод кунанд. Ҳангоми манъкунии он васоити пайгирӣ, имкониятҳои ҷамъоравии ҳаҷми фаъолияти шумо, ки дар онлайн аз ҷониби ширкатҳои шабақаҳои иҷтимоӣ дида мешавад, кам карда мешаванд.";
+
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Хонандаи нақши ангуштон";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Чӣ нав аст";
 
-/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
 "Menu.ZoomPage.Title.v113" = "Танзими андоза (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
@@ -888,6 +879,9 @@
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Оҳ! Браузери «Firefox» вайрон шуд";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Вақте ки нишони китоб дар навори сарлавҳа пайдо мешавад, онро зер кунед, то тавонед мақолаҳоро дар реҷаи «Намоиши хонанда» кушоед.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Кушодани танзимот";
@@ -982,6 +976,9 @@
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
 
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Вақте ки шумо ба нишони китоб бо аломати ҷамъ дар унсурҳои идоракунии реҷаи «Намоиши хониш» зер мекунед, саҳифаҳо ба «Рӯйхати хониши шумо» нигоҳ дошта мешаванд.";
+
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "ХУБ";
 
@@ -1042,6 +1039,9 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "ХУБ";
 
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Гузоришеро дар бораи вайронӣ ирсол мекунед, то ки «Mozilla» тавонад мушкилиро ислоҳ намояд?";
+
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Фиристодани изҳои назар";
 
@@ -1068,6 +1068,9 @@
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Фиристодани варақа";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Шумо ягон дастгоҳе надоред, ки ба ин ҳисоби «Firefox» пайваст карда шудааст ва барои ҳамоҳангсозӣ дастрасӣ дорад.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Лутфан браузенри «Firefox»-ро кушоед, ба «Танзимот» гузаред ва барои идомаи раванд ворид шавед.";
@@ -1129,6 +1132,18 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Нишонии «URL» (Дархостро бо «%s» иваз намоед)";
 
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Поён";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Ҷойгиршавии навори нишонӣ";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Навори нишонӣ";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Боло";
+
 /* Browser theme settings section title in Appearance settings */
 "Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Мавзуи браузер";
 
@@ -1137,6 +1152,9 @@
 
 /* Website Appearance settings section title in Appearance settings */
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Намуди зоҳирии сомона";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Ин имкон ба сомонаҳо намуди зоҳирии торикро медиҳад. Ба баъзе сомонаҳо ин намуди зоҳирӣ мувофиқат намекунад.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Реҷаи торики сомона";
@@ -1153,7 +1171,7 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Пок кардани маълумоти хусусӣ";
 
-/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+/* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Пок кардани унсурҳо: %1$@";
 
 /* Copy app version alert shown in settings. */
@@ -1200,6 +1218,9 @@
 
 /* Option choice in display theme settings for light theme */
 "Settings.DisplayTheme.OptionLight" = "Равшан";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "Мавзуъ мувофиқи равшании экрани шумо ба таври худкор иваз карда мешавад. Шумо метавонед ҳаддеро танзим кунед, ки мувофиқи он мавзуъ тағйир меёбад. Нишондиҳандаи доирашакл сатҳи равшании ҷории экрани шуморо нишон медиҳад.";
 
 /* Display (theme) settings label to show if automatically switch theme is enabled. */
 "Settings.DisplayTheme.StatusTitle" = "Ба таври худкор";
@@ -1278,6 +1299,27 @@
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Тасвири замина";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Тасвири заминаи «Firefox», ангораи лаъли кабуд.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Тасвири заминаи «Firefox», ангораи теппаҳои соҳил.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Тасвири заминаи «Firefox», ангораи лоҷувардӣ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Тасвири заминаи дурахшони пешфарз.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Тасвири заминаи «Firefox», ангораи шафақи субҳ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Қатъу васли давраи тасвирҳои заминаи саҳифаи асосӣ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Тасвири заминаи «Firefox», ангораи теппаҳо дар нимторикӣ.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Классикӣ - %@";
@@ -1366,14 +1408,20 @@
 /* Label at the top of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionName" = "Намоиш додан";
 
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "Интихоб намоед, ки ҳангоми кушоиши варақаи нав чӣ бояд бор карда шавад";
+
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "Манъ кардани тасвирҳо";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Ҳангоми кушодани «Firefox»";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Ҳангоми кушодани «%@»";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "Пешниҳод барои кушодани пайвандҳои нусхабардошташуда";
 
 /* Title for Open With Settings */
 "Settings.OpenWith.PageTitle" = "Кушодани пайвандҳои почта тавассути";
@@ -1426,6 +1474,9 @@
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "Кушодани варақаи нав";
 
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "Истифодаи миёнбурҳои «Siri» барои зуд кушодани браузери «Firefox» тавассути «Siri»";
+
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Миёнбурҳои «Siri»";
 
@@ -1474,6 +1525,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Хуб, фаҳмидам";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Агар сомона ба таври лозимӣ кор накунад, дар навори нишонӣ аломати қулфро зер кунед ва барои ин саҳифа имкони «Муҳофизати такмилёфта аз пайгирӣ»-ро ғайрифаъол созед.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Диққат!";
 
@@ -1482,6 +1536,15 @@
 
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Маълумоти бештар";
+
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Ин имкон намоиши ҳар гуна реклама ва таблиғро кам мекунад ва ҳангоми тамошобинӣ барои манъ кардани имкони пайгирии шумо аз тарафи ҳар гуна рекламадеҳ кумак мерасонад.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Агар сомона ба таври лозимӣ кор накунад, дар навори нишонӣ аломати қулфро зер кунед ва барои ин саҳифа имкони «Муҳофизати такмилёфта аз пайгирӣ»-ро ғайрифаъол созед.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Агар сомона ба таври лозимӣ кор накунад, дар навори нишонӣ аломати қулфро зер кунед ва барои ин саҳифа имкони «Муҳофизати такмилёфта аз пайгирӣ»-ро ғайрифаъол созед.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Барои фаъолияти баъзе васоити пайгирии рекламавӣ иҷозат медиҳад, то ки сомонаҳо тавонанд дуруст кор кунанд.";
@@ -1567,19 +1630,22 @@
 /* Support section title */
 "Support" = "Дастгирӣ";
 
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Барои пӯшидани варақа бо се ангушт акбора ба тарафи рост ва ба тарафи чап молед.";
+
 /* Message displayed when the user's account is syncing with ellipsis at the end */
 "Sync.SyncingEllipsis.Label" = "Ҳамоҳангсозӣ…";
 
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Ҳамоҳангсозӣ офлайн аст";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Варақаи %1$@ аз %2$@";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Намоиш додани ҳамаи варақаҳо";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Ҳудуди варақаҳо аз %1$@ то %2$@ аз %3$@ дар умум";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1587,9 +1653,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Бекор кардан";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d варақа пӯшида шуд";
 
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Нишон додани варақаҳои ғайрифаъол";
@@ -1609,7 +1672,7 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "Варақаи ҷории интихобшуда.";
 
-/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
 "TabTray.Header.FilteredTabs.SectionHeader" = "Дигарон";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
@@ -1636,6 +1699,9 @@
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Ин саҳифа дар реҷаи «Намоиши хонанда» намоиш дода намешавад.";
 
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Ҳангоми пайдо кардани дастрасӣ ба варақаҳои шумо аз дастгоҳҳои дигар мушкилӣ ба миён омад. Пас аз чанд лаҳза аз нав кӯшиш кунед.";
+
 /* Error displayed when reader mode cannot be enabled */
 "There was an error converting the page" = "Ҳангоми табдил додани саҳифа хато ба миён омад";
 
@@ -1657,7 +1723,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Имрӯз";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "имрӯз дар %@";
 
 /* Accessibility label for the Menu button. */
@@ -1666,7 +1732,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Пӯшидани ҳамаи варақаҳо";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Тоза кардани саҳифа — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1674,6 +1740,9 @@
 
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "Ҳа";
+
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Чунин менамояд, ки ин саҳифа бо забони «%1$@» кушода шудааст. Онро ба забони «%2$@» ба воситаи «%3$@» тарҷума мекунед?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
@@ -1687,8 +1756,14 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "хонданашуда";
 
+/* Debug option */
+"Use stage servers" = "Истифодаи серверҳои санҷишӣ";
+
 /* Username textbox in Authentication prompt */
 "Username" = "Номи корбар";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Ҳангоми истифодаи ин тасвири замина чизе нодуруст иҷро шуд.";
 
 /* The title of the error displayed when changing wallpaper fails. */
 "Wallpaper.Change.Error.Title.v106" = "Тасвири замина иваз карда нашуд";
