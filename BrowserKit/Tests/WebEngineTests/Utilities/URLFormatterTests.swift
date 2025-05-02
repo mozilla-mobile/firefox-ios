@@ -108,22 +108,22 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
     }
 
-    func testGetURLGivenNoHttpsURLWithInvalidCharThenValidEscapedURL() {
-        let initialUrl = "foo.bar/!/"
+    func testGetURLGivenNoHttpsURLWithInvalidCharPathThenValidEscapedURL() {
+        let initialUrl = "foo.bar/</"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
 
-        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%21/")
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%3C/")
     }
 
-    func testGetURLGivenHttpURLWithInvalidCharThenValidEscapedURL() {
-        let initialUrl = "http://foo.bar/!/"
+    func testGetURLGivenHttpURLWithInvalidCharPathThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/</"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
 
-        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%21/")
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%3C/")
     }
 
     func testGetURLGivenDotURLThenValidURL() {
@@ -400,6 +400,24 @@ final class URLFormatterTests: XCTestCase {
 
     func testGetURLGivenHTTPURLWithSpaceInDomainThenInvalidURL() {
         let initialUrl = "http://fire fox.com"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertNil(result)
+    }
+
+    func testGetURLGivenInvalidCharacterInDomainThenInvalidURL() {
+        let initialUrl = "mo<zilla.com"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertNil(result)
+    }
+
+    func testGetURLGivenHTTPURLWithInvalidCharacterInDomainThenInvalidURL() {
+        let initialUrl = "http://mo<zilla.com"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
