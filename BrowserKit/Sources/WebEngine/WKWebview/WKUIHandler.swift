@@ -53,19 +53,82 @@ protocol WKUIHandler: WKUIDelegate {
     )
 }
 
+protocol Application {
+    func open(url: URL)
+
+    func canOpen(url: URL) -> Bool
+}
+
+extension UIApplication: Application {
+    func open(url: URL) {
+        open(url, options: [:])
+    }
+
+    func canOpen(url: URL) -> Bool {
+        return canOpenURL(url)
+    }
+}
+
 class DefaultUIHandler: NSObject, WKUIHandler {
     weak var delegate: EngineSessionDelegate?
     public var isActive = false
+    private let application: Application
+    private let policyDeciders: [PolicyDecider]
+
+    init(application: Application = UIApplication.shared,
+         policyDeciders: [PolicyDecider] = []) {
+        self.policyDeciders = policyDeciders
+        self.application = application
+    }
 
     func webView(_ webView: WKWebView,
                  createWebViewWith configuration: WKWebViewConfiguration,
                  for navigationAction: WKNavigationAction,
                  windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // TODO: understand who is responsible to render the newly created WKWebView
-//        let popUpView = WKWebView(frame: .zero, configuration: configuration)
-//        delegate?.onRequestOpenPopupView(popUpView)
+
+        guard !navigationAction.isInternalUnprivileged,
+              shouldRequestBeOpenedAsPopup(navigationAction.request) else {
+
+            guard let url = navigationAction.request.url else { return nil }
+
+            if url.scheme == "whatsapp" && application.canOpen(url: url) {
+                application.open(url: url)
+            }
+            return nil
+        }
+
+        guard !isPayPalPopUp(navigationAction) else { return nil }
+
+        if navigationAction.canOpenExternalApp,  let url = navigationAction.request.url {
+            application.open(url: url)
+            return nil
+        }
+
 
         return nil
+    }
+
+    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
+        // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
+        // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
+        // so we will block the creation of a new Webview with this check
+        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
+    }
+
+    private func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        // Treat `window.open("")` the same as `window.open("about:blank")`.
+        if request.url?.absoluteString.isEmpty ?? false {
+            return true
+        }
+
+        /// List of schemes that are allowed to be opened in new tabs.
+        let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
+
+        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
+            return true
+        }
+
+        return false
     }
 
     func webView(
@@ -118,5 +181,28 @@ class DefaultUIHandler: NSObject, WKUIHandler {
             return
         }
         decisionHandler(.prompt)
+    }
+}
+
+extension WKNavigationAction {
+    /// Allow local requests only if the request is privileged.
+    var isInternalUnprivileged: Bool {
+        guard let url = request.url else { return true }
+
+        if let url = WKInternalURL(url) {
+            return !url.isAuthorized
+        } else {
+            return false
+        }
+    }
+
+    var canOpenExternalApp: Bool {
+        guard let urlShortDomain = request.url?.shortDomain else { return false }
+
+        if let url = URL(string: "\(urlShortDomain)://"), UIApplication.shared.canOpenURL(url) {
+            return true
+        }
+
+        return false
     }
 }
