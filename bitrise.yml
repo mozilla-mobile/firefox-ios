@@ -224,6 +224,7 @@ workflows:
 
             ls -lh "$BITRISE_TEST_SHARDS_PATH_FIREFOX"
             ls -lh "$BITRISE_TEST_BUNDLE_PATH"
+            ls -lh "$BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH"
     - script@1.1.1:
         title: Run Danger 2
         timeout: 360
@@ -306,7 +307,9 @@ workflows:
     before_run:
     - 1_git_clone_and_post_clone
     steps:
-    - pull-intermediate-files@1: {}
+    - pull-intermediate-files@1:
+        inputs:
+        - verbose: true
     - script@1:
         title: Verify pulled test artifacts
         inputs:
