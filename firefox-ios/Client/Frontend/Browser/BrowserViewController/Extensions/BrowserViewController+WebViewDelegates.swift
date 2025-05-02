@@ -1045,7 +1045,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 tabManager.notifyCurrentTabDidFinishLoading()
             }
 
-            tabManager.saveCurrentTabSession()
+            tabManager.commitChanges()
         }
 
         if isPDFRefactorEnabled {
