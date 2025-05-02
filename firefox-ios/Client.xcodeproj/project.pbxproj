@@ -1228,7 +1228,6 @@
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
 		8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
-		8CDA04872D351783004C333C /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 8CDA04862D351783004C333C /* pings.yaml */; };
 		8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4312B8C76AE0026530B /* LoginStorage.swift */; };
 		8CE1E4372B8C76C80026530B /* LoginAutofillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4332B8C76C80026530B /* LoginAutofillView.swift */; };
 		8CE1E4382B8C76C80026530B /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4342B8C76C80026530B /* LoginListViewModel.swift */; };
@@ -8598,7 +8597,6 @@
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModelTests.swift; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
-		8CDA04862D351783004C333C /* pings.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CE1E4312B8C76AE0026530B /* LoginStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStorage.swift; sourceTree = "<group>"; };
 		8CE1E4332B8C76C80026530B /* LoginAutofillView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutofillView.swift; sourceTree = "<group>"; };
@@ -8933,7 +8931,6 @@
 		ACA54F0AB310BBB89A78FEE6 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		ACAB474AA6DD8BA9A621CB94 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		ACCB429B86B8D1BC8BF2FDE0 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
-		ACD605D124B35EEE00EE4454 /* metrics.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
 		AD0048BFB828C49A0E82F1E0 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		AD2C4ABAB9762CB3F2E77E92 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		AD494D0E9BB55086064EB864 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
@@ -15057,8 +15054,6 @@
 				F84B22431A09165600AAB793 /* Info.plist */,
 				7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */,
 				74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */,
-				ACD605D124B35EEE00EE4454 /* metrics.yaml */,
-				8CDA04862D351783004C333C /* pings.yaml */,
 				C87D8B7E2818331900A6307D /* Nimbus */,
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				216A0D6F2A40D0E4008077BA /* Redux */,
@@ -16395,7 +16390,6 @@
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
-				8CDA04872D351783004C333C /* pings.yaml in Resources */,
 				8A5CDEED27E510F500CC60FF /* pocketglobalfeed.json in Resources */,
 				8A1A93582B757C7C0069C190 /* gradient.json in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
@@ -16611,9 +16605,9 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Client/metrics.yaml",
-				"$(SRCROOT)/Client/pings.yaml",
-				"$(SRCROOT)/Client/tags.yaml",
+				"$(SRCROOT)/Client/Glean/metrics.yaml",
+				"$(SRCROOT)/Client/Glean/pings.yaml",
+				"$(SRCROOT)/Client/Glean/tags.yaml",
 			);
 			name = "Glean SDK Generator Script";
 			outputFileListPaths = (
