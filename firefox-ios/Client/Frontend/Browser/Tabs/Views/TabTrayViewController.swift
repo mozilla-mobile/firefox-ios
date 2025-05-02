@@ -688,7 +688,7 @@ class TabTrayViewController: UIViewController,
         }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton
         )
 
-        alert.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
                         accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
@@ -724,7 +724,7 @@ class TabTrayViewController: UIViewController,
             alert.addAction(action, accessibilityIdentifier: option.accessibilityID)
         }
 
-        alert.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
                         accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
 
         alert.popoverPresentationController?.barButtonItem = deleteButton
