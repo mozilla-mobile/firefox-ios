@@ -10,11 +10,8 @@ protocol CredentialWelcomeViewControllerDelegate: AnyObject {
     func credentialWelcomeViewControllerDidProceed()
 }
 
-class CredentialWelcomeViewController: UIViewController, Themeable {
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
-    var currentWindowUUID: Common.WindowUUID?
+class CredentialWelcomeViewController: UIViewController {
+    let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     weak var delegate: CredentialWelcomeViewControllerDelegate?
 
@@ -61,19 +58,6 @@ class CredentialWelcomeViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(proceedButtonTapped), for: .touchUpInside)
         return button
     }()
-
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
-         themeObserver: NSObjectProtocol? = nil,
-         notificationCenter: NotificationCenter = .default) {
-        self.themeManager = themeManager
-        self.themeObserver = themeObserver
-        self.notificationCenter = notificationCenter
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
