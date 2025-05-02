@@ -58,22 +58,22 @@
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Күзәтүчеләр табылмады";
 
-/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+/* Text to let users know how many analytics trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Күзәтүче эчтәлек: %@";
 
-/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Сайт-ара күзәтүче сookie файллары: %@";
 
-/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+/* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Бармак эзләрен җыючылар: %@";
 
-/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+/* Text to let users know how many social media trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Социаль челтәр күзәтүчеләре: %@";
 
-/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked */
+/* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Блокланган күзәтүчеләр: %@";
 
-/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+/* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Раслаучы: %@";
 
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
@@ -82,7 +82,7 @@
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Бу сайтта сак булыгыз";
 
-/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ сакта тора";
 
 /* The title for the privacy settings button inside the enhanced tracking protection screen. */

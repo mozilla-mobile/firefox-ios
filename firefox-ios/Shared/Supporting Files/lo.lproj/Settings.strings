@@ -31,7 +31,7 @@
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "ບັນທຶກບັດໃສ່ %@";
 
-/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+/* Accessibility label for a credit card list item in autofill settings screen. %1$@ is the credit card issuer (e.g. Visa), %2$@ is the name of the credit card holder, %3$@ is the last 4 digits of the credit card, %4$@ is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%1$@, ອອກໃຫ້ %2$@, ລົງທ້າຍດ້ວຍ %3$@, ໝົດອາຍຸ %4$@";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
@@ -64,8 +64,38 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "ທີ່ຢູ່";
 
+/* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
+"Settings.AutofillAndPassword.Title.v137" = "ການຕື່ມຂໍ້ມູນ ແລະ ລະຫັດຜ່ານອັດຕະໂນມັດ";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "ວິທີການຊໍາລະເງິນ";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "ອະນຸຍາດສຽງ ແລະ ວິດີໂອ";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
+"Settings.Autoplay.BlockAudio.v137" = "ບລັອກສຽງ";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "ບລັອກສຽງ ແລະ ວິດີໂອ";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.Footer.v137" = "ການຕັ້ງຄ່າການຫຼິ້ນອັດຕະໂນມັດຈະນຳໃຊ້ກັບແຖບທີ່ເປີດໃໝ່ເທົ່ານັ້ນ. ການ​ປ່ຽນ​ແປງ​ບໍ່​ສາ​ມາດ​ຖືກ​ນໍາ​ໃຊ້​ກັບ​ແຖບ​ທີ່​ມີ​ຢູ່​ແລ້ວ​ເວັ້ນ​ເສຍ​ແຕ່​ວ່າ​ຄໍາ​ຮ້ອງ​ສະ​ຫມັກ​ຈະ​ເລີ່ມ​ຕົ້ນ​ໃຫມ່​.";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
+"Settings.Autoplay.SettingsTitle.v137" = "ຫຼີ້ນອັດຕະໂນມັດ";
+
+/* This is the title for Links customization under the Browsing settings section. */
+"Settings.Browsing.Links.v137" = "ລີ້ງ";
+
+/* This is the title for Media customization under the Browsing settings section. */
+"Settings.Browsing.Media.v137" = "ມີເດຍ";
+
+/* This is the title for Tabs customization under the Browsing settings section. */
+"Settings.Browsing.Tabs.v137" = "ແທັບ";
+
+/* In the settings menu, in the General section, this is the title for Browsing customization section. */
+"Settings.Browsing.Title.v137" = "ການທ່ອງເວັບ";
 
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
@@ -88,7 +118,7 @@
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
 "Settings.DailyUsagePing.Message.v135" = "ອັນນີ້ຊ່ວຍໃຫ້ %@ ຄາດຄະເນຜູ້ໃຊ້ທີ່ເຄື່ອນໄຫວຢູ່.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
@@ -103,10 +133,10 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "ຊິງຄ໌";
 
-/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "ທ່ານໄດ້ປິດການແຈ້ງເຕືອນທັງໝົດ %1$@ ແລ້ວ. ເປີດພວກມັນໂດຍການໄປທີ່ການຕັ້ງຄ່າອຸປະກອນ > ການແຈ້ງເຕືອນ > %2$@";
 
-/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "ສຶກສາກ່ຽວກັບຄຸນສົມບັດທີ່ເປັນປະໂຫຍດ ແລະວິທີໃຊ້ປະໂຫຍດສູງສຸດຈາກ %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
@@ -115,14 +145,17 @@
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "ແຈ້ງເຕືອນ";
 
-/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+/* This is the title informing the user that they need to turn on notifications in iOS Settings. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TurnOnNotificationsMessage.v112" = "ໄປທີ່ການຕັ້ງຄ່າອຸປະກອນຂອງທ່ານເພື່ອເປີດການແຈ້ງເຕືອນໃນ %@";
 
-/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+/* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "ເປີດການແຈ້ງເຕືອນ";
 
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ";
+
+/* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
+"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "ເລື່ອນໄປທີ່ແຖບເຊື່ອງ ແລະ ແຖບທີ່ຢູ່";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "ເຄື່ອງມືການຄົ້ນຫາເລີ່ມຕົ້ນ";
@@ -142,6 +175,9 @@
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "ຄົ້ນຫາ";
 
+/* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Description.v125" = "ສະແດງຄໍາແນະນໍາຈາກເຄື່ອງມືການຄົ້ນຫາໃນໜ້າຕ່າງສ່ວນຕົວ";
+
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "ສະແດງໃນພາກສ່ວນທີ່ເປັນສ່ວນຕົວ";
 
@@ -154,11 +190,38 @@
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "ສຶກສາເພີ່ມເຕີມກ່ຽວກັບການແນະນຳ Firefox";
 
+/* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "ສະແດງຄໍາແນະນໍາຈາກ Firefox Suggest ໃນໜ້າຕ່າງສ່ວນຕົວ";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "ຄົ້ນຫາປະຫວັດການທ່ອງເວັບ";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "ຄົ້ນຫາບຸກມາກ";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "ຄົ້ນຫາແຖບທີ່ຊິ້ງແລ້ວ";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. %@ is the app name (e.g. Firefox). - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "ຮັບຄຳແນະນຳຈາກ %@ ທີ່ກ່ຽວຂ້ອງກັບການຄົ້ນຫາຂອງທ່ານ";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "ຄຳແນະນຳຈາກເວັບ";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "ຊັບພອດ %@ ພ້ອມກັບ​ຄໍາ​ແນະ​ນໍາ​ສະ​ຫນັບ​ສະ​ຫນູນ​ເປັນ​ບາງ​ຄັ້ງ​ຄາວ​";
+
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "ຄຳແນະນຳຈາກສະປອນເຊີ";
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "ລອງໃຊ້ຄຸນສົມບັດ ແລະ ແນວຄວາມຄິດກ່ອນທີ່ພວກມັນຈະຖືກເປີດເຜີຍໃຫ້ທຸກຄົນຮູ້.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "ຕິດຕັ້ງ ແລະ ດໍາເນີນການສຶກສາ";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
@@ -166,14 +229,17 @@
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v135" = "%1$@ ພະຍາຍາມເກັບເອົາແຕ່ສິ່ງທີ່ພວກເຮົາຕ້ອງການເພື່ອສະໜອງ ແລະ ປັບປຸງ %2$@ ສໍາລັບທຸກຄົນ.";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "ຂໍ້​ມູນ​ກ່ຽວ​ກັບ​ອຸ​ປະ​ກອນ​ຂອງ​ທ່ານ​, ການ​ຕັ້ງ​ຄ່າ​ຮາດ​ແວ​, ແລະ ​ການ​ນໍາ​ໃຊ້​ຊ່ວຍ​ໃຫ້​ພວກ​ເຮົາ​ປັບ​ປຸງ %@ ຄຸນ​ນະ​ສົມ​ບັດ​, ປະ​ສິດ​ທິ​ພາບ​ ແລະ​ ຄວາມ​ສະຖຽນ.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "ຂໍ້ມູນດ້ານເຕັກນິກ ແລະ ການໂຕ້ຕອບ";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "ສົ່ງຂໍ້ມູນດ້ານວິຊາການ ແລະ ການໂຕ້ຕອບ";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "ເງື່ອນໄຂການນໍາໃຊ້";

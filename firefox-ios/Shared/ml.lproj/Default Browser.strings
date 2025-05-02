@@ -1,28 +1,28 @@
-/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Description.v108" = "ഫയർഫോക്സു് താങ്ങളുടെ തനതായ അന്വേഷിയന്ത്രം ആക്കി വയ്ക്കുന്നതു് ഒരു എള്ളുപ്പം എത്താവുന്ന ഗോളന്തരവലക്കു്  ഒരു തിരഞ്ഞെടുപ്പാണു്.";
 
-/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "ഒരു മികച്ച ഗോളന്തരവലയിലേക്കു് വരുക";
 
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "എങ്ങനെ എന്നു അറിയുക";
 
-/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ഫയർ‌ഫോക്സിൽ‌ തന്നെതാനെ തുറക്കുന്നതിന് വെബ്‌സൈറ്റുകൾ‌, ഇ-തപാലുകൾ, സന്ദേശങ്ങൾ‌ എന്നിവയിൽ‌ നിന്നും കണ്ണികൾ സജ്ജമാക്കുക.";
 
-/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "വേഗത, സുരക്ഷ, സ്വകാര്യത എന്നിവ യാന്ത്രികമാക്കുന്നതിന് താങ്ങളുടെ സ്ഥിരസ്ഥിതി അന്വേഷിയന്ത്രമായി Firefox-നെ തിരഞ്ഞെടുക്കുക.";
 
-/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ദിവസേന തിരച്ചിലിന്റെ നില ഉയർത്തുക";
 
-/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Description.v108" = "ഓരോ ഉപയോക്താവിനു് ഫയർഫോക്സു് ശരാശരി 3,000-ൽ കൂടുതൽ പിന്തുടർച്ചയന്ത്രങ്ങളെ പ്രതിമാസം തടയാരുണ്ടു്. മനസ്സിനൊരു സമാധാനത്തിനു് വേണ്ടി ഞങ്ങളെ താങ്ങളുടെ തനതു അന്വേഷിയന്ത്രമായി ആക്കുക.";
 
-/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "ഫയർഫോക്സിൽ സ്വകാര്യതൊരു എളുപ്പമുള്ളകാര്യമാണു്";
 
-/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "താങ്ങൾ  സ്ഥിരമായി  ഉപയോഗിക്കുന്ന അന്വേഷിയന്ത്രത്തിനെ  തുറക്കുക ";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

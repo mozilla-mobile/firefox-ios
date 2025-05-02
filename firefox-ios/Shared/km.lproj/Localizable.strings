@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "ឈ្មោះ​អ្នក​ប្រើ និង​ពាក្យ​សម្ងាត់​​បាន​កំពុង​ស្នើ​ដោយ %@ ។";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "ឈ្មោះ​អ្នក​ប្រើ និង​ពាក្យ​សម្ងាត់​កំពុង​ត្រូវ​បាន​ស្នើ​ដោយ %1$@ ។ តំបន់បណ្ដាញ​​ប្រាប់​ថា៖ %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -28,7 +28,7 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "រំលង​ត្រឡប់វិញ";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ផ្ទាំង៖ %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
@@ -250,13 +250,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ទាញយក";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "ឯកសារ​ 1 នៃ %d";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -280,7 +280,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "វា​អាច​ជា​ការ​កំណត់​រចនាសម្ព័ន្ធ​ខុស ឬ​​​ការ​លួច​ផ្លាស់ប្ដូរ​ដោយ​អ្នក​វាយប្រហារ។ ចាប់ផ្ដើម​ដំណើរការ បើ​អ្នក​ព្រម​ទទួល​ហានិភ័យ​ដ៏​ខ្លាំង​នេះ។";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "ម្ចាស់​នៃ %@ បាន​កំណត់​រចនាសម្ព័ន្ធ​​វេបសាយ​​របស់​ពួកគេ​មិន​សមរម្យ។ ដើម្បី​ការពារ​ព័ត៌មាន​របស់​អ្នក​ពី​ការ​លួច Firefox មិន​បាន​ភ្ជាប់​ទៅ​វេបសាយ​នេះ​ទេ។";
 
 /* Title on the certificate error page */
@@ -486,18 +486,6 @@
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "កុំ​ធ្វើ​បច្ចុប្បន្នភាព";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "រក្សាទុក​ការ​ចូល %1$@ សម្រាប់ %2$@ ដែរ ឬ​ទេ?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "រក្សាទុក​ពាក្យ​សម្ងាត់​សម្រាប់ %@ ដែរ ឬ​ទេ?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "ធ្វើបច្ចុប្បន្នភាពការចូលសម្រាប់ %@ ដែរ​ឬ​ទេ?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "ធ្វើ​បច្ចុប្បន្នភាព​ការ​ចូល %1$@ សម្រាប់ %2$@ ដែរឬ​ទេ?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "រក្សាទុក​ការ​ចូល";
@@ -1135,13 +1123,13 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "សមកាលកម្ម​គ្មាន​អ៊ីនធឺណិត";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "ផ្ទាំង %1$@ នៃ %2$@";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "បង្ហាញ​ផ្ទាំង​ទាំងអស់";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "ផ្ទាំង %1$@ ដល់ %2$@ នៃ %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1149,9 +1137,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "មិន​ធ្វើ​វិញ​";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "បាន​បិទ​ផ្ទាំង %d";
 
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "បិទ​ផ្ទាំង​ទាំងអស់";
@@ -1180,7 +1165,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "ថ្ងៃ​នេះ";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "ថ្ងៃ​នេះ​នៅ %@";
 
 /* Accessibility label for the Menu button. */
@@ -1189,7 +1174,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "បិទ​ផ្ទាំង​ទាំងអស់";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "យក​ទំព័រ​ចេញ - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1198,7 +1183,7 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "បាទ/ចាស";
 
-/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "ទំព័រនេះបង្ហាញជា %1$@ តើចង់បកប្រែទៅជា %2$@ ជាមួយ %3$@ ដែរឫទេ?";
 
 /* Tile title for Twitter */

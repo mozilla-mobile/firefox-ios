@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "%@ ye solicitando un nombre d'usuario y una clau.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ ye solicitando un nombre d'usuario y una clau. Lo puesto diz: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -226,13 +226,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "Descargas";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "1 de %d fichers";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -256,7 +256,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Puede estar una mala configuración u una falsificación d'un atacant. Sigue enta debant si acceptas lo risgo potencial.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "Lo duenyo de %@ ha configurau lo suyo puesto web incorrectament. Pa privar que furten la tuya información, Firefox no s'ha connectau a este puesto web.";
 
 /* Title on the certificate error page */
@@ -456,18 +456,6 @@
 
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "No actualizar";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Alzar inicio de sesión %1$@ pa %2$@?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Alzar clau pa %@?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Actualizar inicio de sesión pa %@?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Esviellar inicio de sesión %1$@ pa %2$@?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Alzar";
@@ -1081,13 +1069,13 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "Lo Sync ye sin connexión";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Pestanya %1$@ de %2$@";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Amostrar totas las pestanyas";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "Pestanyas %1$@ a %2$@ de %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1095,9 +1083,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Desfer";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d pestanya(s) zarrada(s)";
 
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Anyadir pestanya";
@@ -1132,7 +1117,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Hue";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "hue a las %@";
 
 /* Accessibility label for the Menu button. */
@@ -1141,7 +1126,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "Zarrar todas las pestanyas";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Eliminar la pachina - %@";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1150,7 +1135,7 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "Sí";
 
-/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "Pareix que esta ye en %1$@. La quiers traducir ta %2$@ con %3$@?";
 
 /* Tile title for Twitter */

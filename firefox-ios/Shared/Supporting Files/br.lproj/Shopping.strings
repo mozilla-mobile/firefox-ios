@@ -4,7 +4,7 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
 "ContextualHints.Shopping.OptedInAction.v120" = "Digeriñ ar gwirier alioù";
 
-/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. %@ is the Fakespot. */
 "Shopping.AdCard.Footer.v121" = "Bruderezh gant %@";
 
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
@@ -64,7 +64,7 @@
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Gallout a ra padout tro-dro 60 eilenn.";
 
-/* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
+/* Title for info card when the product is in analysis mode. %@ is the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "O wiriañ perzhded an alioù (%@)";
 
 /* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
@@ -76,7 +76,7 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Titour ebet diwar-benn an alioù-se c’hoazh";
 
-/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the website the user is coming from when viewing this screen (default Amazon). %2$@ is the app name (e.g. Firefox). %3$@ and %4$@ are the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Sellit pegen fizius eo alioù ar produ war%1$@ a-raok prenañ. Ar gwirier alioù a zo ur c’heweriuster arnodel gant %2$@ enkorfet er merdeer. Mont a-ra en-dro e %3$@ ha %4$@ ivez.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
@@ -88,19 +88,19 @@
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.MainButton.Title.v120" = "Ya, esaeañ anezhañ";
 
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). %@ is the app name (e.g. Firefox). */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Evezhiadennoù a-fet buhez prevez %@";
 
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Ket bremañ";
 
-/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the Fakespot, %2$@ is the company name (e.g. Mozilla). */
 "Shopping.OptInCard.SecondParagraph.Description.v120" = "A-drugarez da c'halloud %1$@ gant %2$@ e sikouromp ac’hanoc’h da chom hep lenn alioù n’int ket neptu. Hor patrom NA a glask bepred gwareziñ ac’hanoc’h pa rit prenadennoù.";
 
-/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). %@ is the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Termenoù implij %@";
 
-/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. %@ is a grade letter from A to F (e.g. A). */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Notenn %@";
 
 /* Title of the reliability card displayed in the shopping review quality bottom sheet. */
@@ -124,16 +124,16 @@
 /* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Brasaat ar gartenn \"Penaos e wiriekaomp perzhded an alioù\"";
 
-/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. %1$@ is the Fakespot and %2$@ is the company (e.g. Mozilla). */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "Ober a reomp gant teknologiezh an naouegezh alvezel savet gant %1$@ evit %2$@ evit gwiriañ eo fizius an alioù war ar produioù. Kement-se a sikouro ac’hanoc’h da gompren gwelloc’h perzhded an alioù, met ket hini ar produioù.";
 
-/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. %@ is the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v126" = "Ar *poentoù pouezus* a zeu eus alioù %@ er 80 devezh diwezhañ a soñj deomp int fizius. ";
 
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Penaos e priziomp perzhded an alioù";
 
-/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. %@ is the Fakespot. */
 "Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Gouzout hiroc’h diwar-benn an doare ma vez priziet perzhded an alioù gant %@";
 
 /* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
@@ -157,16 +157,16 @@
 /* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Stokit div wech evit cheñch an arventenn";
 
-/* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
+/* Accessibility label for the recommended products label and switch, grouped together. %1$@ is the recommended products label, %2$@ is the state of the switch: On/Off. */
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, trec’haoler, %2$@";
 
-/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. %1$@ is the Fakespot, %2$@ is the company name (e.g. Mozilla). */
 "Shopping.SettingsCard.Footer.Action.v120" = "Ar gwirier alioù a zo lusket gant %1$@ gant %2$@";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "Arventennoù";
 
-/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. %@ is the app name (e.g. Firefox). */
 "Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Diskouez produioù erbeded gant %@";
 
 /* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */

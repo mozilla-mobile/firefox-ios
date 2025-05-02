@@ -1,10 +1,10 @@
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "کیسے  سیکھیں ";
 
-/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ویب سائٹ، ای میل اور میسج کے لنک Firefox میں خود بخود کھلنے کے لئے سیٹ کریں۔";
 
-/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "اپنا طے شدہ  براؤزر سوئچ کریں";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
