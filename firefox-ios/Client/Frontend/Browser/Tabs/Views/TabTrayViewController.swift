@@ -669,6 +669,7 @@ class TabTrayViewController: UIViewController,
     private func showCloseAllConfirmation() {
         let alert = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
+        // We only show the potion to delete old tabs with normal tabs tray
         if tabTrayState.isNormalTabsPanel {
             alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseOldTabsTitle,
                                           style: .default,
