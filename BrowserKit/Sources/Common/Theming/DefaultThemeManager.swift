@@ -96,6 +96,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return getThemeFrom(type: determineThemeType(for: window))
     }
 
+    public func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme {
+        return shouldShowPrivateTheme ? PrivateModeTheme() : getThemeFrom(type: determineUserTheme())
+    }
+
     public func applyThemeUpdatesToWindows() {
         allWindowUUIDs.forEach {
             applyThemeChanges(for: $0, using: determineThemeType(for: $0))
@@ -196,6 +200,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
         if getPrivateThemeIsOn(for: window) { return .privateMode }
+        return determineUserTheme()
+    }
+
+    private func determineUserTheme() -> ThemeType {
         // Check if a migration override should be applied. This is mainly done because the new behaviour splits
         // dark theme appearance of the app and web content. Once FXIOS-11655, both this check and nightMode
         // in general will be removed.

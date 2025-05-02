@@ -108,8 +108,7 @@ class TabTrayViewController: UIViewController,
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
-        let selector = TabTraySelectorView(selectedIndex: selectedIndex,
-                                           theme: themeManager.getCurrentTheme(for: windowUUID))
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
                           String(format: TabTrayPanelType.tabs.label, "0"),
@@ -193,10 +192,10 @@ class TabTrayViewController: UIViewController,
     private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        syncingLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        syncingLabel.textColor = retrieveTheme().colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        activityIndicator.color = retrieveTheme().colors.textPrimary
         activityIndicator.startAnimating()
 
         stackView.addArrangedSubview(syncingLabel)
@@ -379,6 +378,7 @@ class TabTrayViewController: UIViewController,
                 self.shownToast = nil
             }
         }
+        applyTheme()
     }
 
     func updateTabCountImage(count: String) {
@@ -391,14 +391,30 @@ class TabTrayViewController: UIViewController,
     }
 
     // MARK: Themeable
+    var shouldUsePrivateOverride: Bool {
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        return tabTrayState?.isPrivateMode ?? false
+    }
+
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = retrieveTheme()
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
         doneButton.tintColor = theme.colors.iconPrimary
         syncTabButton.tintColor = theme.colors.iconPrimary
+
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            experimentSegmentControl.applyTheme(theme: theme)
+
+            let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
+            navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
+        }
     }
 
     // MARK: Private
@@ -544,8 +560,12 @@ class TabTrayViewController: UIViewController,
         return button
     }
 
-    internal func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+    internal func retrieveTheme() -> Theme {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            return themeManager.resolvedTheme(with: tabTrayState.isPrivateMode)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
     }
 
     private func presentToast(toastType: ToastType, completion: @escaping (Bool) -> Void) {
@@ -556,7 +576,7 @@ class TabTrayViewController: UIViewController,
         if toastType.reduxAction(for: windowUUID) != nil {
             let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme(),
+                                    theme: retrieveTheme(),
                                     completion: { buttonPressed in
                                         completion(buttonPressed)
             })
@@ -587,7 +607,7 @@ class TabTrayViewController: UIViewController,
             let toast = SimpleToast()
             toast.showAlertWithText(toastType.title,
                                     bottomContainer: view,
-                                    theme: currentTheme(),
+                                    theme: retrieveTheme(),
                                     bottomConstraintPadding: -toolbarHeight)
         }
     }
