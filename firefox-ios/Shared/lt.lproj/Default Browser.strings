@@ -1,10 +1,10 @@
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Sužinoti kaip";
 
-/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Leiskite saitams iš svetainių, el. laiškų, ir „Messages“ būti automatiškai atvertiems per „Firefox“.";
 
-/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Pakeiskite numatytąją naršyklę";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */

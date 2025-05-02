@@ -31,7 +31,7 @@
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "Simpan Kartu ke %@";
 
-/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+/* Accessibility label for a credit card list item in autofill settings screen. %1$@ is the credit card issuer (e.g. Visa), %2$@ is the name of the credit card holder, %3$@ is the last 4 digits of the credit card, %4$@ is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%1$@, diterbitkan untuk %2$@, berakhiran %3$@, kedaluwarsa pada %4$@";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
@@ -64,8 +64,38 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Alamat";
 
+/* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
+"Settings.AutofillAndPassword.Title.v137" = "Isi-otomatis & Sandi";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Metode Pembayaran";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "Izinkan Audio dan Video";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
+"Settings.Autoplay.BlockAudio.v137" = "Blokir Audio";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "Blokir Audio dan Video";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.Footer.v137" = "Pengaturan putar otomatis hanya akan berlaku untuk tab yang baru dibuka. Perubahan tidak dapat diterapkan pada tab yang ada kecuali aplikasi dimulai ulang.";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
+"Settings.Autoplay.SettingsTitle.v137" = "Putar Otomatis";
+
+/* This is the title for Links customization under the Browsing settings section. */
+"Settings.Browsing.Links.v137" = "Tautan";
+
+/* This is the title for Media customization under the Browsing settings section. */
+"Settings.Browsing.Media.v137" = "Media";
+
+/* This is the title for Tabs customization under the Browsing settings section. */
+"Settings.Browsing.Tabs.v137" = "Tab";
+
+/* In the settings menu, in the General section, this is the title for Browsing customization section. */
+"Settings.Browsing.Title.v137" = "Meramban";
 
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "Pelajari Lebih Lanjut.";
@@ -88,7 +118,7 @@
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Pelajari Lebih Lanjut";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
 "Settings.DailyUsagePing.Message.v135" = "Ini membantu %@ untuk memperkirakan pengguna aktif.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
@@ -100,10 +130,13 @@
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Ini harus diaktifkan untuk menerima tab dan mendapatkan pemberitahuan saat Anda masuk di perangkat lain.";
 
-/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+/* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsTitle.v112" = "Penyelarasan";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Anda menonaktifkan semua pemberitahuan %1$@. Aktifkan dengan membuka Setelan > Notifikasi > %2$@ perangkat";
 
-/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Pelajari tentang fitur yang berguna dan cara memaksimalkan %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
@@ -112,11 +145,17 @@
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Notifikasi";
 
-/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+/* This is the title informing the user that they need to turn on notifications in iOS Settings. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TurnOnNotificationsMessage.v112" = "Buka Pengaturan perangkat Anda untuk mengaktifkan notifikasi di %@";
 
-/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+/* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Aktifkan Notifikasi";
+
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "Pemberitahuan Privasi";
+
+/* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
+"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Gulir untuk Sembunyikan Tab dan Bilah Alamat";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Mesin Pencari Baku";
@@ -163,13 +202,13 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Cari Tab yang Disinkronkan";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Dapatkan saran dari %@ yang terkait dengan pencarian Anda";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Saran dari Web";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Dukung %@ dengan saran bersponsor sesaat";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
@@ -190,10 +229,10 @@
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Pelajari Lebih Lanjut";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v135" = "%1$@ berusaha untuk hanya mengumpulkan apa yang kami butuhkan untuk menyediakan dan meningkatkan %2$@ untuk semua orang.";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Data tentang perangkat, konfigurasi perangkat keras, dan penggunaan Anda membantu kami meningkatkan fitur, kinerja, dan stabilitas %@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
@@ -201,4 +240,7 @@
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Kirim Data Teknis dan Interaksi";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "Syarat Penggunaan";
 

@@ -10,6 +10,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Apakah ulasan ini dapat diandalkan? Periksa sekarang untuk melihat peringkat yang disesuaikan.";
 
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. %@ is the Fakespot. */
+"Shopping.AdCard.Footer.v121" = "Iklan oleh %@";
+
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
 "Shopping.AdCard.Title.v121" = "Yang lain lagi untuk dipertimbangkan";
 
@@ -94,20 +97,62 @@
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Ini bisa memakan waktu sekitar 60 detik.";
 
-/* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
+/* Title for info card when the product is in analysis mode. %@ is the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Memeriksa kualitas tinjauan (%@)";
 
 /* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "Kami akan memiliki info tentang ulasan produk ini dalam waktu 24 jam. Silakan periksa kembali.";
 
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "Terima Kasih Telah Melaporkan!";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Periksa Kualitas Ulasan";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "Untuk mengetahui apakah ulasan produk ini dapat diandalkan, periksa kualitas ulasan. Ini hanya membutuhkan sekitar 60 detik.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Belum ada informasi tentang ulasan ini";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "Dengan memilih “Ya, Coba” Anda menyetujui butir-butir berikut:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the website the user is coming from when viewing this screen (default Amazon). %2$@ is the app name (e.g. Firefox). This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Lihat seberapa andal ulasan produk di %1$@ sebelum Anda membeli. Pemeriksa ulasan, fitur eksperimental dari %2$@, dibangun langsung ke dalam peramban.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the website the user is coming from when viewing this screen (default Amazon). %2$@ is the app name (e.g. Firefox). %3$@ and %4$@ are the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Lihat seberapa andal ulasan produk di %1$@ sebelum Anda membeli. Pemeriksa Ulasan, fitur eksperimental dari %2$@, dibangun langsung ke dalam peramban. Ini juga berfungsi pada %3$@ dan %4$@.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "Coba panduan tepercaya kami untuk ulasan produk";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Pelajari lebih lanjut";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "Ya, Coba";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). %@ is the app name (e.g. Firefox). */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Pemberitahuan privasi %@";
+
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Jangan sekarang";
 
-/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the Fakespot, %2$@ is the company name (e.g. Mozilla). */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Menggunakan kekuatan %1$@ oleh %2$@, kami membantu Anda menghindari ulasan yang bias dan tidak autentik. Model AI kami selalu berkembang untuk melindungi Anda saat berbelanja.";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). %@ is the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Ketentuan penggunaan %@";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. %@ is a grade letter from A to F (e.g. A). */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Nilai %@";
 
 /* Title of the reliability card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Seberapa andalkah ulasan ini?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "Ulasan tepercaya";
 
 /* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "Campuran ulasan yang dapat diandalkan dan tidak dapat diandalkan";
@@ -117,6 +162,57 @@
 
 /* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*Peringkat yang disesuaikan* hanya didasarkan pada ulasan yang kami yakini dapat diandalkan.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Ciutkan Kartu Bagaimana kami menentukan kualitas ulasan";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Bentangkan Kartu Bagaimana kami menentukan kualitas ulasan";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. %1$@ is the Fakespot and %2$@ is the company (e.g. Mozilla). */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Kami menggunakan teknologi AI dari %1$@ oleh %2$@ untuk memeriksa keandalan ulasan produk. Ini hanya akan membantu Anda menilai kualitas ulasan, bukan kualitas produk.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. %@ is the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "*Sorotan* berasal dari %@ ulasan dalam 80 hari terakhir yang kami yakini dapat diandalkan.";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Bagaimana kami menentukan kualitas ulasan";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. %@ is the Fakespot. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Pelajari lebih lanjut tentang bagaimana %@ menentukan kualitas ulasan";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Kami percaya ada campuran ulasan yang dapat diandalkan dan tidak dapat diandalkan";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Ulasan terpercaya. Kami yakin ulasan tersebut boleh jadi berasal dari pelanggan tulen yang meninggalkan ulasan yang jujur dan tidak bias.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Kami menetapkan setiap ulasan produk sebuah *nilai huruf* dari A hingga F.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Ulasan yang tidak dapat diandalkan. Kami yakin ulasan tersebut kemungkinan palsu atau dari pengulas yang bias.";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Ciutkan Kartu Pengaturan";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Bentangkan Kartu Pengaturan";
+
+/* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Ketuk ganda untuk menjungkitkan pengaturan.";
+
+/* Accessibility label for the recommended products label and switch, grouped together. %1$@ is the recommended products label, %2$@ is the state of the switch: On/Off. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, tombol alih, %2$@.";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. %1$@ is the Fakespot, %2$@ is the company name (e.g. Mozilla). */
+"Shopping.SettingsCard.Footer.Action.v120" = "Pemeriksa Ulasan ditenagai oleh %1$@ oleh %2$@";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "Pengaturan";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. %@ is the app name (e.g. Firefox). */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Tampilkan produk yang direkomendasikan oleh %@";
 
 /* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Mati";
@@ -129,4 +225,16 @@
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BETA";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Tutup Pemeriksa Ulasan";
+
+/* Label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Title.v120" = "Pemeriksa Ulasan";
+
+/* Text for body of error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Periksa sambungan jaringan Anda lalu coba muat ulang laman.";
+
+/* Title for error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Tidak Ada Sambungan Jaringan";
 

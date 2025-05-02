@@ -7,3 +7,6 @@
 /* The call to action button for a user to open an external link. */
 "ExternalLink.ExternalOpenMessage.v136" = "തുറക്കുക";
 
+/* Question shown to user when tapping an SMS link that opens the external app for those. */
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "പുറത്തുള്ള പ്രയോഗത്തിൽ സ.മ.സ തുറക്കട്ടെ?";
+

@@ -1,19 +1,19 @@
-/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Body.v135" = "Add bookmarks as you browse so you can find your favourite sites later.";
 
-/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "This folder is empty";
 
-/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Body.v135" = "Save sites as you browse. We’ll also grab bookmarks from other synced devices.";
 
-/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.BodySignedOut.v135" = "Save sites as you browse. Sign in to grab bookmarks from other synced devices.";
 
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
 "Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Sign in to Sync";
 
-/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Title.v135" = "No bookmarks yet";
 
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
@@ -52,7 +52,7 @@
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Saved in “Bookmarks”";
 
-/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Saved in “%@”";
 
 /* The title for the Edit context menu action for sites in Home Panels */

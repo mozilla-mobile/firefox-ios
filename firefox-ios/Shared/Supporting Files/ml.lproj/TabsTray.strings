@@ -4,12 +4,18 @@
 /* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
 "CloseTabsToast.SingleTabTitle.v113" = "ടാബു് അടച്ചു";
 
-/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. */
 "CloseTabsToast.Title.v113" = "ടാബുകൾ അടച്ചതു്: %d";
 
 /* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
 "InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "അടയ്ക്കുക";
 
+/* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
+"TabsTray.Sync.SyncTabsDisabled.v116" = "മറ്റുള്ള ഉപകരണങ്ങളില്‍ നിന്നുള്ള ടാബുകള്‍ കാണുവാന്‍ ടാബ് സമന്വയം തുടങ്ങിവയ്ക്കുക.";
+
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "ടാബുകൾ സമന്വയിപ്പിക്കുക";
+
+/* Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total. */
+"TabTraySelectorAccessibilityHint.v139" = "%2$@-ൽ %1$@-മത്തെ";
 
