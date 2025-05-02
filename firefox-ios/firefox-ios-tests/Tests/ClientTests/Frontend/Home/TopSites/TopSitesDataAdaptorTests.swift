@@ -573,6 +573,7 @@ extension TopSitesDataAdaptorTests {
                                                         contileProvider: contileProviderMock,
                                                         unifiedAdsProvider: contileProviderMock,
                                                         notificationCenter: notificationCenter,
+                                                        searchEnginesManager: searchEnginesManager,
                                                         dispatchGroup: dispatchGroup)
 
         trackForMemoryLeaks(subject, file: file, line: line)
