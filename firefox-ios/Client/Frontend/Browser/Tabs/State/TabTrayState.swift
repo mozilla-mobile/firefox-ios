@@ -29,6 +29,10 @@ struct TabTrayState: ScreenState, Equatable {
         return selectedPanel == .syncedTabs
     }
 
+    var isNormalTabsPanel: Bool {
+        return selectedPanel == .tabs
+    }
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let panelState = store.state.screenState(TabTrayState.self,
                                                        for: .tabsTray,
