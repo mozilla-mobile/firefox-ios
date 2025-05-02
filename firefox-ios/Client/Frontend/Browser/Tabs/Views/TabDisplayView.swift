@@ -365,7 +365,7 @@ class TabDisplayView: UIView,
                                         actionType: TabPanelViewActionType.closeTab)
         store.dispatch(action)
         UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
-                             argument: String.TabTrayClosingTabAccessibilityMessage)
+                             argument: String.TabsTray.TabTrayClosingTabAccessibilityMessage)
     }
 
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {

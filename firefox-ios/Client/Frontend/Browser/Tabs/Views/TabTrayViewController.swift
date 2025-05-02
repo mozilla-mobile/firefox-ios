@@ -112,7 +112,7 @@ class TabTrayViewController: UIViewController,
                                            theme: themeManager.getCurrentTheme(for: windowUUID))
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
-                          "0 \(TabTrayPanelType.tabs.label)",
+                          String(format: TabTrayPanelType.tabs.label, "0"),
                           TabTrayPanelType.syncedTabs.label]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
@@ -163,7 +163,7 @@ class TabTrayViewController: UIViewController,
         return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(newTabButtonTapped),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
-                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+                                a11yLabel: .TabsTray.TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var flexibleSpace: UIBarButtonItem = {
@@ -386,7 +386,7 @@ class TabTrayViewController: UIViewController,
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
         if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = "\(count) \(TabTrayPanelType.tabs.label)"
+            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
         }
     }
 
@@ -672,7 +672,7 @@ class TabTrayViewController: UIViewController,
                                            style: .default,
                                            handler: { _ in self.confirmCloseAll() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
+        controller.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: nil),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
