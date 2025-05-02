@@ -183,7 +183,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.reloadData()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
-        let theme = currentTheme()
+        let theme = retrieveTheme()
 
         if let indexPath = dataSource.indexPath(for: item) {
             // This is needed otherwise the collection views content offset is incorrect
