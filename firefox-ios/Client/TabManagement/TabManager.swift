@@ -94,7 +94,10 @@ protocol TabManager: AnyObject {
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
-    func saveCurrentTabSession()
+
+    /// Commits the pending changes to the persistent store.
+    func commitChanges()
+
     func notifyCurrentTabDidFinishLoading()
     func restoreTabs(_ forced: Bool)
     func startAtHomeCheck() -> Bool
