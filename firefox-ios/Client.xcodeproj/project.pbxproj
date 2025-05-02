@@ -16608,6 +16608,7 @@
 				"$(SRCROOT)/Client/Glean/metrics.yaml",
 				"$(SRCROOT)/Client/Glean/pings.yaml",
 				"$(SRCROOT)/Client/Glean/tags.yaml",
+				"$(SRCROOT)/Client/Glean/settings.yaml",
 			);
 			name = "Glean SDK Generator Script";
 			outputFileListPaths = (
