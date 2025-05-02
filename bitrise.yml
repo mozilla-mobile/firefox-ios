@@ -315,13 +315,13 @@ workflows:
         inputs:
         - content: |
             echo "Pulled files:"
-            ls -lh "$BITRISE_TEST_SHARDS_PATH"
+            ls -lh "$BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX"
             ls -lh "$BITRISE_TEST_BUNDLE_PATH"
             ls -lh "$BITRISE_XCTESTRUN_PATH"
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
-        - only_testing: $BITRISE_TEST_SHARDS_PATH
+        - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: $BITRISE_XCTESTRUN_PATH
