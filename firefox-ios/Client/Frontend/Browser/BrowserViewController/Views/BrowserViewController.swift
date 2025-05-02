@@ -70,7 +70,8 @@ class BrowserViewController: UIViewController,
         .URL,
         .title,
         .hasOnlySecureContent,
-        .fullscreenState
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
@@ -2129,16 +2130,17 @@ class BrowserViewController: UIViewController,
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
             }
-        case .fullscreenState:
-            if #available(iOS 16.0, *) {
-                guard webView.fullscreenState == .enteringFullscreen ||
-                        webView.fullscreenState == .exitingFullscreen else { return }
-                if webView.fullscreenState == .enteringFullscreen {
-                    fullscreenDelegate?.enteringFullscreen()
-                } else {
-                    fullscreenDelegate?.exitingFullscreen()
-                }
-            }
+            // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        case .fullscreenState:
+//            if #available(iOS 16.0, *) {
+//                guard webView.fullscreenState == .enteringFullscreen ||
+//                        webView.fullscreenState == .exitingFullscreen else { return }
+//                if webView.fullscreenState == .enteringFullscreen {
+//                    fullscreenDelegate?.enteringFullscreen()
+//                } else {
+//                    fullscreenDelegate?.exitingFullscreen()
+//                }
+//            }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
