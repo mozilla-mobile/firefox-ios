@@ -37,6 +37,6 @@ final class BenchmarkSteps {
             }
             total += msTime
         }
-        print("[End] Total: \(total) ms")
+        print("[End] Total: \(String(format: "%.04f", total)) ms")
     }
 }
