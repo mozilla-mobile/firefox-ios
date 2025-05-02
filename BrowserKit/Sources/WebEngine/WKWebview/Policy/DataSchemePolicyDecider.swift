@@ -2,26 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import WebKit
 
-protocol PolicyDecider {
-    func decidePolicyFor(action: WKNavigationAction) -> Policy
-}
-
-enum Policy {
-    case allow
-    case cancel
-}
-
-class HTTPSchemePolicyDecider: PolicyDecider {
-    func decidePolicyFor(action: WKNavigationAction) -> Policy {
+class DataSchemePolicyDecider: WKPolicyDecider {
+    func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
         return .allow
     }
-}
-
-class DataSchemePolicyDecider: PolicyDecider {
-    func decidePolicyFor(action: WKNavigationAction) -> Policy {
+    
+    func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.
         guard action.targetFrame?.isMainFrame ?? true else {
@@ -29,6 +17,10 @@ class DataSchemePolicyDecider: PolicyDecider {
         }
 
         return shouldAllowDataScheme(for: action.request.url) ? .allow : .cancel
+    }
+
+    func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
+        return .allow
     }
 
     func shouldAllowDataScheme(for url: URL?) -> Bool {

@@ -73,10 +73,10 @@ class DefaultUIHandler: NSObject, WKUIHandler {
     weak var delegate: EngineSessionDelegate?
     public var isActive = false
     private let application: Application
-    private let policyDeciders: [PolicyDecider]
+    private let policyDeciders: [WKPolicyDecider]
 
     init(application: Application = UIApplication.shared,
-         policyDeciders: [PolicyDecider] = []) {
+         policyDeciders: [WKPolicyDecider] = []) {
         self.policyDeciders = policyDeciders
         self.application = application
     }
@@ -90,21 +90,21 @@ class DefaultUIHandler: NSObject, WKUIHandler {
               shouldRequestBeOpenedAsPopup(navigationAction.request) else {
 
             guard let url = navigationAction.request.url else { return nil }
-
+            
             if url.scheme == "whatsapp" && application.canOpen(url: url) {
                 application.open(url: url)
             }
             return nil
         }
 
+        // HTTPS policy
         guard !isPayPalPopUp(navigationAction) else { return nil }
 
+        // APPLauncherPolicy
         if navigationAction.canOpenExternalApp,  let url = navigationAction.request.url {
             application.open(url: url)
             return nil
         }
-
-
         return nil
     }
 
