@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 class PocketTests: BaseTestCase {
     enum SwipeDirection {
@@ -88,5 +89,42 @@ class PocketTests: BaseTestCase {
         waitUntilPageLoad()
         mozWaitForElementToExist(url)
         XCTAssertEqual(url.value as? String, "getpocket.com", "The url textField is empty")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2855360
+    func testValidatePocketContextMenu() {
+        navigator.goto(NewTabScreen)
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        // Long tap on one of the stories
+        let pocketCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
+        app.collectionViews.cells.matching(identifier: pocketCell).staticTexts.firstMatch.press(forDuration: 1.5)
+        // Validate Context menu
+        let contextMenuTable = app.tables["Context Menu"]
+        waitForElementsToExist(
+            [
+                contextMenuTable.otherElements.staticTexts.firstMatch,
+                contextMenuTable.otherElements.staticTexts.elementContainingText(".co"),
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+            ]
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2855361
+    func testValidateLearnMoreButton() {
+        navigator.goto(NewTabScreen)
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        // Learn more link is displayed under the stories
+        app.swipeUp()
+        let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
+        let learnMoreLink = app.collectionViews[collectionView].staticTexts["Learn more"]
+        let pocketTitle = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
+        let addressBar = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+        mozWaitForElementToExist(learnMoreLink)
+        XCTAssertTrue(learnMoreLink.isBelow(element: app.staticTexts[pocketTitle]))
+        learnMoreLink.waitAndTap()
+        mozWaitForValueContains(app.textFields[addressBar], value: "mozilla.org")
     }
 }

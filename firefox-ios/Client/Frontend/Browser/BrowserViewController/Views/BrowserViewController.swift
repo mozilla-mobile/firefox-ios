@@ -92,6 +92,7 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    var zoomManager: ZoomPageManager
 
     // MARK: Optional UI elements
 
@@ -338,6 +339,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
+        self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -430,7 +432,7 @@ class BrowserViewController: UIViewController,
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
@@ -491,7 +493,9 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = false
                 navigationToolbarContainer.applyTheme(theme: currentTheme())
                 updateTabCountUsingTabManager(self.tabManager)
-                if isSwipingTabsEnabled {
+                if isSwipingTabsEnabled,
+                   let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+                   !toolbarState.addressToolbar.isEditing {
                     addressBarPanGestureHandler?.enablePanGestureRecognizer()
                 }
             } else {
@@ -563,9 +567,7 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
-        if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
-        }
+
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -599,6 +601,10 @@ class BrowserViewController: UIViewController,
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
+        }
+
+        if let tab = tabManager.selectedTab, let screenshotHelper {
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
         guard canShowPrivacyWindow else { return }
@@ -783,7 +789,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -809,14 +815,6 @@ class BrowserViewController: UIViewController,
         // links into the view from other apps.
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
-
-        // Feature flag for credit card until we fully enable this feature
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
-        // We need to update autofill status on sync manager as there could be delay from nimbus
-        // in getting the value. When the delay happens the credit cards might not sync
-        // as the default value is false
-        profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
     }
 
     private func setupTopTabsViewController() {
@@ -968,6 +966,7 @@ class BrowserViewController: UIViewController,
             header.removeArrangedView(addressToolbarContainer, animated: false)
             bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
 
+            if isSwipingTabsEnabled { addressBarPanGestureHandler?.disablePanGestureRecognizer() }
             createLegacyUrlBar()
 
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1024,7 +1023,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        if isSwipingTabsEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
@@ -1259,7 +1258,7 @@ class BrowserViewController: UIViewController,
             contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             NSLayoutConstraint.activate([
                 webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1293,6 +1292,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
+        guard isToolbarRefactorEnabled else { return }
+
         let isTop = (searchBarPosition == .top)
         addressBarBackgroundView.constraints.forEach { $0.isActive = false }
         addressBarBackgroundViewBottomConstraint?.isActive = !isTop
@@ -1964,6 +1965,23 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func updateToolbarAnimationStateIfNeeded() {
+        guard isSwipingTabsEnabled,
+              isToolbarRefactorEnabled,
+        store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.shouldAnimate == false else { return }
+        store.dispatch(
+            ToolbarAction(
+                shouldAnimate: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged
+            )
+        )
+    }
+
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -2025,6 +2043,7 @@ class BrowserViewController: UIViewController,
             }
 
         case .URL:
+            updateToolbarAnimationStateIfNeeded()
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
                 break
@@ -2168,7 +2187,7 @@ class BrowserViewController: UIViewController,
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
                     lockIconImageName = hasSecureContent ?
                         StandardImageIdentifiers.Small.shieldCheckmarkFill :
                         StandardImageIdentifiers.Small.shieldSlashFill
@@ -2347,6 +2366,7 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
+            updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
@@ -3005,14 +3025,6 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    private func autofillCreditCardNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-    }
-
-    private func autofillLoginNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
-    }
-
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -3095,8 +3107,6 @@ class BrowserViewController: UIViewController,
                                          method: .tap,
                                          object: .creditCardFormDetected)
         }
-
-        guard autofillCreditCardNimbusFeatureFlag() else { return }
 
         // Handle different types of credit card interactions
         switch type {
@@ -3277,7 +3287,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressBarBackgroundViewColor(theme: Theme) {
-        guard isSwipingTabsEnabled else { return }
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let toolbarLayoutStyle = toolbarState?.toolbarLayout
         let colors = theme.colors
@@ -3442,7 +3452,7 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
         }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
@@ -3462,7 +3472,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
         }
         if searchSessionState == .active {
@@ -3595,7 +3605,6 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(logins, name: LoginsHelper.name())
         logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
             Task {
-                guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
@@ -4303,7 +4312,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
-        guard isSwipingTabsEnabled else { return }
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
 

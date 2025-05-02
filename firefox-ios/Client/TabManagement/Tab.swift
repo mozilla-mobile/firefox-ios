@@ -403,7 +403,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    fileprivate(set) var pageZoom: CGFloat = 1.0 {
+    var pageZoom: CGFloat = 1.0 {
         didSet {
             webView?.setValue(pageZoom, forKey: "viewScale")
         }
@@ -432,7 +432,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var profile: Profile
-    var zoomPageManager: ZoomPageManager
 
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
     /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
@@ -480,7 +479,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
-        self.zoomPageManager = ZoomPageManager(windowUUID: windowUUID)
         super.init()
         self.isPrivate = isPrivate
 
@@ -882,28 +880,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return .none
     }
 
-    // MARK: - Zoom
-
-    @objc
-    func zoomIn() {
-        let newValue = zoomPageManager.zoomIn(value: pageZoom)
-        pageZoom = newValue
-    }
-
-    @objc
-    func zoomOut() {
-        let newValue = zoomPageManager.zoomOut(value: pageZoom)
-        pageZoom = newValue
-    }
-
-    func resetZoom() {
-        pageZoom = 1.0
-    }
-
-    func setZoomLevelforDomain() {
-        pageZoom = zoomPageManager.setZoomLevelforDomain(for: url?.host)
-    }
-
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
@@ -1054,8 +1030,13 @@ extension Tab: TabWebViewDelegate {
     }
 
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool {
-        // Hide the default WKWebView accessory view panel for PDF documents
-        return mimeType != MIMEType.PDF
+        // Hide the default WKWebView accessory view panel for PDF documents and
+        // there is no accessory view to display (but only for iPad cases)
+        let isPDF = mimeType == MIMEType.PDF
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return !isPDF && tabWebView.accessoryView.hasAccessoryView
+        }
+        return !isPDF
     }
 }
 

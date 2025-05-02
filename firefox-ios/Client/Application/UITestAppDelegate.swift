@@ -305,7 +305,7 @@ class UITestAppDelegate: AppDelegate {
         let experimentFileName = argumentExperimentFile.replacingOccurrences(of: LaunchArguments.LoadExperiment,
                                                                              with: "")
         let fileURL = Bundle.main.url(forResource: experimentFileName, withExtension: "json")
-        if let fileURL = fileURL {
+        if let fileURL {
             do {
                 let fileContent = try String(contentsOf: fileURL)
                 let features = HardcodedNimbusFeatures(with: [experimentFeatureName: fileContent])

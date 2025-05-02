@@ -312,10 +312,9 @@ extension FxAWebViewModel {
     /// user info (for settings), or by passing CWTS setup info (in case the user is
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         let addressAutofillStatus = AddressLocaleFeatureValidator.isValidRegion()
 
-        let creditCardCapability =  autofillCreditCardStatus ? ", \"creditcards\"" : ""
+        let creditCardCapability = ", \"creditcards\""
         let addressAutofillCapability =  addressAutofillStatus ? ", \"addresses\"" : ""
 
         guard let fxa = profile.rustFxA.accountManager else { return }

@@ -10,11 +10,15 @@ enum ToolbarLayoutStyle: String {
     /// share button is displayed in the address toolbar.
     case version1
 
+    /// Like version1 but the menu and tabs buttons are inverted.
+    case version2
+
     static func style(from type: ToolbarLayoutType?) -> ToolbarLayoutStyle {
         guard let type else { return .baseline }
         switch type {
         case .baseline: return .baseline
         case .version1: return .version1
+        case .version2: return .version2
         }
     }
 }

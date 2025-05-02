@@ -101,10 +101,17 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(
-            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: TIMEOUT_LONG
-        )
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(
+                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
+                timeout: TIMEOUT_LONG
+            )
+        } else {
+            mozWaitForElementToExist(
+                app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
+                timeout: TIMEOUT_LONG
+            )
+        }
         userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
@@ -118,10 +125,12 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        mozWaitForElementToExist(
-            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: TIMEOUT_LONG
-        )
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(
+                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        } else {
+            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        }
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)

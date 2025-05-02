@@ -243,9 +243,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     }
 
     /// Determines whether a given button is the selected button based on the toolbar layout, button properties,
-    /// and the `version1` experiment.
+    /// and the `version1` or `version2 experiment.
     ///
-    /// - Description: For the `version1` experiment, the bottom toolbar button is set as the default selected button.
+    /// - Description: For the `version1` or `version2` experiment, the bottom toolbar button is set as
+    ///   the default selected button.
     ///   For other layouts, the first button in the multiple choice buttons list is used as the default.
     private func isSelectedButton<T: OnboardingCardInfoModelProtocol>(
         buttonModel: OnboardingMultipleChoiceButtonModel,
@@ -256,7 +257,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             .layout
 
         switch toolbarLayout {
-        case .version1:
+        case .version1, .version2:
             let isToolbarBottomAction = buttonModel.action == .toolbarBottom
             let isToolbarTopAction = buttonModel.action == .toolbarTop
             if isToolbarBottomAction {

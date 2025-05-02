@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import WebKit
 
 public class WKEngine: Engine {
     private let sourceTimerFactory: DispatchSourceTimerFactory
@@ -76,5 +77,41 @@ public class WKEngine: Engine {
         }
         timer.resume()
         shutdownWebServerTimer = timer
+    }
+
+    // MARK: - Clearing data
+
+    public func clearCaches() {
+        DiskReaderModeCache.shared.clear()
+        MemoryReaderModeCache.shared.clear()
+
+        let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+    }
+
+    public func clearCookies() {
+        let dataTypes = Set(
+            [
+                WKWebsiteDataTypeCookies,
+                WKWebsiteDataTypeLocalStorage,
+                WKWebsiteDataTypeSessionStorage,
+                WKWebsiteDataTypeWebSQLDatabases,
+                WKWebsiteDataTypeIndexedDBDatabases
+            ]
+        )
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+    }
+
+    public func clearOfflineWebsiteData() {
+        let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+    }
+
+    public func clearTrackingProtection() {
+        // TODO: FXIOS-8088 - Handle content blocking in WebEngine
+//        let result = Success()
+//        ContentBlocker.shared.clearSafelist {
+//            result.fill(Maybe(success: ()))
+//        }
     }
 }

@@ -22,4 +22,18 @@ public protocol Engine {
 
     /// Idle the `Engine` whenever we move the application to background
     func idleEngine()
+
+    // MARK: - Clearing data
+
+    /// Clear caches whenever the user requests it's data to be cleared
+    func clearCaches()
+
+    /// Clear cookies whenever the user requests it's data to be cleared
+    func clearCookies()
+
+    /// Clear offline website data whenever the user requests it's data to be cleared
+    func clearOfflineWebsiteData()
+
+    /// Clear tracking protection whenever the user requests it's data to be cleared
+    func clearTrackingProtection()
 }

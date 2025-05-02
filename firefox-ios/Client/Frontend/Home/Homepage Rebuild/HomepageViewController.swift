@@ -14,7 +14,6 @@ final class HomepageViewController: UIViewController,
                                     FeatureFlaggable,
                                     ContentContainable,
                                     Themeable,
-                                    Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -43,7 +42,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
-    // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
+
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
@@ -78,7 +77,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         throttler: ThrottleProtocol = Throttler(seconds: 0.5)
+         throttler: ThrottleProtocol = GCDThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -110,17 +109,6 @@ final class HomepageViewController: UIViewController,
 
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
-
-        setupNotifications(forObserver: self, observing: [
-            UIApplication.didBecomeActiveNotification,
-            .FirefoxAccountChanged,
-            .PrivateDataClearedHistory,
-            .ProfileDidFinishSyncing,
-            .TopSitesUpdated,
-            .DefaultSearchEngineUpdated,
-            .BookmarksUpdated,
-            .RustPlacesOpened
-        ])
 
         subscribeToRedux()
     }
@@ -356,7 +344,8 @@ final class HomepageViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -396,9 +385,10 @@ final class HomepageViewController: UIViewController,
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
-                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    "Section should not have been nil, something went wrong",
                     level: .fatal,
-                    category: .homepage
+                    category: .homepage,
+                    extra: ["Section Index": "\(sectionIndex)"]
                 )
                 return nil
             }
@@ -994,57 +984,5 @@ final class HomepageViewController: UIViewController,
         traitCollection: UITraitCollection
     ) -> UIModalPresentationStyle {
         .none
-    }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.willEnterForegroundNotification:
-            store.dispatch(
-                PocketAction(
-                    windowUUID: self.windowUUID,
-                    actionType: PocketActionType.enteredForeground
-                )
-            )
-        case .PrivateDataClearedHistory,
-                .TopSitesUpdated,
-                .DefaultSearchEngineUpdated:
-            dispatchActionToFetchTopSites()
-        case .BookmarksUpdated, .RustPlacesOpened:
-            store.dispatch(
-                BookmarksAction(
-                    windowUUID: self.windowUUID,
-                    actionType: BookmarksActionType.fetchBookmarks
-                )
-            )
-        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
-            dispatchActionToFetchTopSites()
-            dispatchActionToFetchTabs()
-        default: break
-        }
-    }
-
-    private func dispatchActionToFetchTopSites() {
-        store.dispatch(
-            TopSitesAction(
-                windowUUID: self.windowUUID,
-                actionType: TopSitesActionType.fetchTopSites
-            )
-        )
-    }
-
-    private func dispatchActionToFetchTabs() {
-        store.dispatch(
-            JumpBackInAction(
-                windowUUID: self.windowUUID,
-                actionType: JumpBackInActionType.fetchLocalTabs
-            )
-        )
-        store.dispatch(
-            JumpBackInAction(
-                windowUUID: self.windowUUID,
-                actionType: JumpBackInActionType.fetchRemoteTabs
-            )
-        )
     }
 }

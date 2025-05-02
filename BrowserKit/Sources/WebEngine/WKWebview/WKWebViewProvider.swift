@@ -32,8 +32,10 @@ struct DefaultWKWebViewProvider: WKWebViewProvider {
             return nil
         }
 
-        // TODO: FXIOS-7898 #17643 Handle WebView a11y label
+        // TODO: FXIOS-7898 #17643 Handle WebView a11y label and identifier
         //        webView.accessibilityLabel = .WebViewAccessibilityLabel
+        //        webView.accessibilityIdentifier = "contentView"
+        webView.accessibilityElementsHidden = false
         webView.allowsBackForwardNavigationGestures = true
         webView.allowsLinkPreview = true
 

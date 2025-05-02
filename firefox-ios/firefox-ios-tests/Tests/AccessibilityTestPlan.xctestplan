@@ -256,6 +256,7 @@
         "NewTabSettingsTest\/testNewTabCustomURLKeyboardNotRaised()",
         "NightModeTests",
         "NightModeTests\/testNightModeUI()",
+        "O_AddressesTests",
         "OnboardingTests",
         "OnboardingTests\/testCloseOptionToolbarCard()",
         "OnboardingTests\/testCloseTour()",

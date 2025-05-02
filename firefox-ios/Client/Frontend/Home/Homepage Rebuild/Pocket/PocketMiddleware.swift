@@ -23,12 +23,11 @@ final class PocketMiddleware {
     lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize,
-            PocketActionType.enteredForeground:
+            HomepageMiddlewareActionType.enteredForeground:
             self.getPocketDataAndUpdateState(for: action)
         case PocketActionType.tapOnHomepagePocketCell:
             self.sendOpenPocketItemTelemetry(for: action)
         case PocketActionType.viewedSection:
-            // TODO: FXIOS-11551 - need to add impression call
             self.homepageTelemetry.sendPocketSectionCounter()
         case ContextMenuActionType.tappedOnOpenNewPrivateTab:
             self.sendOpenInPrivateTelemetry(for: action)

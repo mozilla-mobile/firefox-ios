@@ -114,7 +114,6 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemoveTopSite)
-            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
@@ -124,7 +123,6 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnPinTopSite)
-            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
@@ -136,7 +134,6 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnUnpinTopSite)
-            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
@@ -247,7 +244,6 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             bookmarkDelegate.removeBookmark(urlString: site.url, title: site.title, site: site)
-            // TODO: FXIOS-10171 - Add telemetry
         })
     }
 
@@ -258,7 +254,6 @@ struct ContextMenuState {
                                      tapHandler: { _ in
             // The method in BVC also handles the toast for this use case
             bookmarkDelegate.addBookmark(urlString: site.url, title: site.title, site: site)
-            // TODO: FXIOS-10171 - Add telemetry
         })
     }
 

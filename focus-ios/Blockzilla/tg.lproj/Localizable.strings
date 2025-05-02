@@ -1,6 +1,18 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Маълумоти бештар";
 
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"About.missionLabel" = "Браузери «%@» аз ҷониби «Mozilla» таҳия шудааст. Мо барои рушди Интернети солим, шаффоф ва дастрас саҳм мегузорем.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Ба воситаи барнома дар Интернет ҷустуҷӯ кунед ва тамошо намоед";
+
+/* Label on About screen */
+"About.privateBullet2" = "Васоити пайгириро манъ кунед (ё барои бозсозии васоити пайгирӣ дар Танзимот иҷозат диҳед)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Барои нест кардани кукиҳо, аз он ҷумла таърихи ҷустуҷӯ ва тамошобинӣ, аз тугмаи «Пок кардан» истифода баред";
+
 /* Label on About screen */
 "About.privateBulletHeader" = "Онро ҳамчун браузери хусусӣ истифода баред:";
 
@@ -15,6 +27,12 @@
 
 /* Label for row in About screen */
 "About.rowTerms" = "Шартҳои истифода";
+
+/* Label on About screen */
+"About.safariBullet1" = "Барои тақвияти махфияти худ, васоити пайгириро манъ кунед";
+
+/* Label on About screen */
+"About.safariBullet2" = "Барои кам кардани андозаи саҳифа ҳарфҳои интернетиро манъ кунед";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Онро ҳамчун васеъшавии «Safari» истифода баред:";
@@ -36,6 +54,9 @@
 
 /* Title of the 'Add Pass Failed' alert. */
 "AddPass.Error.Title" = "Ниҳонвожа илова карда нашуд";
+
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Барои бозгашт ба «%@», лутфан, ҳаққонияти худро тасдиқ кунед";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Илова кардани нишонии URL-и фармоишӣ";
@@ -66,6 +87,9 @@
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
 "Autocomplete.duplicateUrl" = "Нишонии URL аллакай вуҷуд дорад";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Ягон нишонии фармоишии «URL» барои намоиш нест";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Фаъол аст";
@@ -124,8 +148,14 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "Бекор кардан";
 
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"ExternalAppLink.messageTitle" = "«%@» мехоҳад, ки барномаи дигареро кушояд";
+
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Кушодан";
+
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "«%1$@» мехоҳад, ки «%2$@»-ро кушояд";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.cancelButton" = "Бекор кардан";
@@ -145,8 +175,14 @@
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Хуб, фаҳмидам!";
 
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Гӯё, ки касе шуморо пайгирӣ намекунад, аз Интернет истифода баред.";
+
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Пӯшидан";
+
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Чунин ба назар мерасад, ки Интернет дар хати алоқа нест.";
 
 /* Button text for retrying network connection */
 "Network.Offline.RetryButton" = "Аз нав кӯшиш кардан";
@@ -175,8 +211,32 @@
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Гузоштан ҳамчун браузери пешфарз";
 
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Бо зер кардани танҳо як тугма таърихи тамошобинӣ, ниҳонвожаҳо ва кукиҳоро пок созед ва имкон надиҳед, ки рекламаи номутлуб шуморо пайгирӣ кунад!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Таърихи шумо шуморо пайгирӣ намекунад";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.Incognito.Description" = "«%@» — ин браузерест, ки бо ҳадафи ҳифзи махфияти шумо сохта шудааст ва дорои муҳофизати дарунсохт бар зидди васоити пайгирӣ ва бастани муҳтаво мебошад.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Ин на танҳо реҷаи хусусӣ аст — ин як сатҳи махфияти нав аст";
+
 /* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
 "Onboarding.PrivacyNotice.LinkText" = "Огоҳномаи махфият";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Браузери «Firefox» ба махфияти шумо ғамхорӣ мекунад. Маълумоти бештар дар «%@» хонед.";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Танзимотро интихоб кунед ва худатон муайян намоед, ки чӣ қадар зиёд ё кам маълумот бояд мубодила шавад.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Муҳофизат, ки ба ниёзҳои шумо мувофиқ мебошад";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Реҷаи тамошобинии хусусии худро ба сатҳи дигар баланд бардоред.";
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Розӣ шавед ва идома диҳед";
@@ -199,8 +259,14 @@
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Хуш омадед ба «Firefox %@»";
 
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Ба «Safari» пахш карда, «Манъкунии муҳтаво»-ро интихоб намоед";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Фаъол кардани «%@»";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Ба «Safari» пахш карда, «Васеъшавиҳо»-ро интихоб намоед";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "«%@» фаъол намебошад.";
@@ -214,11 +280,17 @@
 /* Save button label */
 "Save" = "Нигоҳ доштан";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Ин амал иҷро нашуд. Кӯшиш кунед, ки дархости ҷустуҷӯиро бо калидвожаи зерин иваз намоед: %s.";
+
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "Не";
 
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Ҳа";
+
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Барои намоиш додани пешниҳодҳои ҷустуҷӯ, «%@» бояд он чизеро, ки шумо дар навори нишонӣ менависед ба низоми ҷустуҷӯӣ ирсол кунад.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Пешниҳодҳои ҷустуҷӯ нишон дода шаванд?";
@@ -226,8 +298,14 @@
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Нишонии URL-и пуркунии худкор";
 
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Амали манъ кардани дигар васоити пайгирии муҳтаво метавонад баъзе видеоҳо ва саҳифаҳои сомонаро вайрон кунад.";
+
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "Бекор кардан";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Манъ кардани васоити пайгирии муҳтаво";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
 "Settings.DailyUsagePing.Message" = "Ин ба «Mozilla» кумак мекунад, ки корбарони фаъолро ҳисоб кунад.";
@@ -295,6 +373,12 @@
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Сатри ҷустуҷӯ барои истифода";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Масалан: searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Ба сатри ҷустуҷӯӣ матни дархостро гузоред ё ворид кунед. Агар лозим бошад, калидвожаи ҷустуҷӯиро бо «%s» иваз кунед.";
+
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Низоми ҷустуҷӯӣ";
 
@@ -343,6 +427,12 @@
 /* Label for Crash Reports toggle on settings screen */
 "Settings.toggleCrashReports" = "Ба таври худкор фиристодани гузоришҳо дар бораи вайронӣ";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Истифодаи «Face ID» барои кушодани қулфи барнома";
+
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Агар нишонии «URL» аллакай дар барнома кушода бошад, «Face ID» метавонад қулфи «%@»-ро кушояд";
+
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Нишон додани маслиҳатҳо дар экрани асосӣ";
 
@@ -354,6 +444,12 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Омӯзишҳо";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Истифодаи «Touch ID» барои кушодани қулфи барнома";
+
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Агар нишонии «URL» аллакай дар барнома кушода бошад, «Touch ID» метавонад қулфи «%@»-ро кушояд";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "Ғайрифаъол";
@@ -427,6 +523,15 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Тайёр";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "То оғози ларзиши нишонаҳо, ба рӯи экрани асосӣ бардавом пахш кунед.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Барномаи «%@»-ро ёбед. Сипас, виҷети онро интихоб намоед.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Ба аломати ҷамъ зер кунед.";
+
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.Title.V2" = "Илова кардани виҷети «%@»";
 
@@ -435,6 +540,9 @@
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Илова кардан ба «Siri»";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Аз нав сабт кардан ё нест кардани миёнбур";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Пок кардан";
@@ -451,14 +559,56 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Нишонии «URL» барои кушодани сомона";
 
+/* Text for a label that indicates the title for biometric tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Tip.Biometric.Title" = "Вақте ки ин сомона кушода мешавад, «%@»-ро қулф кунед:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Фаъол кардани «Face ID»";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Фаъол кардани «Touch ID»";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Амалҳо дар саҳифа > Дархост кардани версияи мизи кории сомона";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Мехоҳед версияи пурраи мизи кории сомонаро бинед?";
+
+/* Text for a label that indicates the description for share trackers tip. %@ is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Шумораи васоити пайгирии манъшуда: %@";
+
+/* Text for a label that indicates the title for share trackers tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Tip.ShareTrackers.Title" = "Шумо сомонаҳоро меҷӯед. «%@» шуморо муҳофизат мекунад.";
+
+/* Text for a label that indicates the description for shortcuts tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Tip.Shortcuts.Description" = "Дар менюи «%@» имкони «Илова кардан ба миёнбурҳо»-ро интихоб намоед";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Миёнбурҳоро барои сомонаҳое, ки шумо бештар боздид мекунед, эҷод намоед:";
+
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Илова кардани миёнбури «Siri»";
+
+/* Text for a label that indicates the title for siri erase tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Tip.SiriErase.Title" = "«Сири, ҷаласаи маро дар %@ пок кунед.»";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "Илова кардани миёнбури «Siri»";
 
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "«Сири, сомонаи дӯстдоштаи маро кушоед.»";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Кӯшиш кунед, ки «Муҳофизат аз пайгирӣ»-ро ғайрифаъол созед";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Сомона муҳтаворо дар бар намегирад ё ғайриоддӣ кор мекунад?";
+
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TodayWidget.SearchInApp.Instruction" = "Ҷустуҷӯ дар %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Барои идора кардани имконоти махсуси махфият ва амният, ба «Танзимот» гузаред.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Ҳамин танзимоти пешфарз муҳофизати пурқувватро пешниҳод мекунанд. Аммо шумо метавонед танзимоти пешниҳодшударо мувофиқи ниёзҳои хусусии худ ба осони иваз намоед.";
@@ -466,8 +616,14 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Ҷаласаи тамошобинии хусусиро оғоз намоед ва мо васоити пайгирӣ ва дигар чизҳои зарароварро аз роҳи шумо тоза мекунем.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"TooltipBodyText.ShieldIcon" = "«%@» ин сомонаро аз пайгирии шумо манъ кард. Барои маълумот дар бораи манъ кардани сомонаҳо, ба аломати сипар зер кунед.";
+
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
 "TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Қапидем! Мо ин сомонаро манъ кардем, то ки аз қафои шумо ҷосусӣ накунад. Барои дидани он чизеро, ки мо манъ карда истодаем, дар вақти дилхоҳ ба сипар зер кунед.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Барои нест кардани ҳамаи пайгириҳо аз ҷаласаи ҳозираи шумо, нишонаи «Сабад»-ро пахш кунед.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon.V2" = "Дар ин ҷо зер кунед, то ки ҳамааш нест карда шавад — таърих, кукиҳо, ҳама чиз — ва пас бо варақаи нав тамошои тозаи худро оғоз намоед.";
@@ -493,6 +649,9 @@
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Муҳофизати такмилёфта аз пайгирӣ";
 
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. %@ is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Шумораи васоити пайгирии манъшуда аз санаи %@";
+
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "Васоити пайгирӣ ва скриптҳое, ки манъ карда мешаванд";
 
@@ -516,6 +675,9 @@
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Нишониеро ҷустуҷӯ кунед ё ворид намоед";
+
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
+"URL.searchLabel" = "Ҷустуҷӯи «%@»";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Васоити пайгирии манъшуда";

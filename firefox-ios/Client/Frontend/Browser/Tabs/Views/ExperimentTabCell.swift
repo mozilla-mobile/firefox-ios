@@ -17,7 +17,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconSize = CGSize(width: 16, height: 16)
         static let fallbackFaviconSize = CGSize(width: 24, height: 24)
-        static let closeButtonSize: CGFloat = 32
+        static let closeButtonSize: CGFloat = 24
         static let textBoxHeight: CGFloat = 32
         static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 12,
                                                                   leading: 12,
@@ -25,7 +25,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                                                   trailing: 12)
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
-        static let closeButtonOverlaySpacing: CGFloat = 16
+        static let closeButtonOverlaySpacing: CGFloat = 6
         static let tabViewFooterSpacing: CGFloat = 4
         static let shadowRadius: CGFloat = 4
         static let shadowOffset = CGSize(width: 0, height: 2)
@@ -83,13 +83,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.badgeMask), for: [])
-        button.imageView?.contentMode = .scaleAspectFit
-        button.contentMode = .center
         var configuration = UIButton.Configuration.plain()
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
-        button.alpha = 0.5
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.closeButton
     }
 
     private lazy var closeButtonOverlay: UIImageView = .build { imageView in
@@ -106,6 +103,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             roundedRect: self.backgroundHolder.bounds,
             cornerRadius: self.backgroundHolder.layer.cornerRadius
         ).cgPath
+
+        closeButton.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
+        closeButton.layer.cornerRadius = closeButton.frame.height / 2
     }
 
     // MARK: - Initializer
@@ -137,6 +137,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
+
     func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate, a11yId: String) {
         self.tabModel = tabModel
         self.delegate = delegate
@@ -185,8 +186,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
-        closeButton.tintColor = theme.colors.iconPrimary
-        closeButtonOverlay.tintColor = theme.colors.textInverted
+        closeButtonOverlay.tintColor = theme.colors.textOnDark
         titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
@@ -265,6 +265,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         layer.shadowPath = nil
         layer.shadowOpacity = 0
         isHidden = false
+        closeButton.removeVisualEffectView()
     }
 
     // MARK: - Auto Layout

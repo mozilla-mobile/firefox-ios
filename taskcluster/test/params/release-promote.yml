@@ -1,0 +1,36 @@
+base_ref: origin/main
+base_repository: https://github.com/mozilla-mobile/staging-firefox-ios
+base_rev: 2a56c4b0e6e7737816147da950196f99895ff3d3
+build_date: 1740597206
+build_number: 3
+commit_message: 'test'
+do_not_optimize: []
+enable_always_target: true
+existing_tasks:
+  docker-image-alpine: GpLk29sRR6SXETKedu08Ow
+  docker-image-screenshots: c5_5iKmoQ929DgVROD3FMw
+  test-taskgraph-definition: IbHNWG25ShO_oXg1MR6ipw
+files_changed: []
+filters:
+- target_tasks_method
+head_ref: refs/heads/main
+head_repository: https://github.com/mozilla-mobile/staging-firefox-ios
+head_rev: 2a56c4b0e6e7737816147da950196f99895ff3d3
+head_tag: v137.0
+level: '1'
+moz_build_date: '20250226191326'
+next_version: '137.1'
+optimize_strategies: null
+optimize_target_tasks: true
+owner: nobody@mozilla.com
+project: staging-firefox-ios
+pull_request_number: null
+pushdate: 0
+pushlog_id: '0'
+release_type: release
+repository_type: git
+shipping_phase: promote
+target_tasks_method: promote
+tasks_for: action
+version: '137.0'
+
