@@ -271,7 +271,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test2", cardNumber: cards[1], expirationDate: "0640")
-        mozWaitForElementToExist(app.staticTexts [creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test3", cardNumber: cards[2], expirationDate: "0740")
         // The cards are saved and displayed in Saved cards
