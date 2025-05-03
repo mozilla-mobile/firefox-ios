@@ -161,7 +161,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         selectOptionFromContextMenu(option: "Pin")
         waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         // waitForExistence(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
+        // navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(ClearPrivateDataSettings)
