@@ -19,7 +19,6 @@ public struct BottomSheetViewModel {
     public var shouldDismissForTapOutside: Bool
     public var shadowOpacity: Float
     public var closeButtonA11yLabel: String
-    public var closeButtonA11yIdentifier: String
 
     public init(
         cornerRadius: CGFloat = BottomSheetViewModel.UX.cornerRadius,
@@ -27,8 +26,7 @@ public struct BottomSheetViewModel {
         backgroundColor: UIColor = .clear,
         shouldDismissForTapOutside: Bool = true,
         shadowOpacity: Float = BottomSheetViewModel.UX.shadowOpacity,
-        closeButtonA11yLabel: String,
-        closeButtonA11yIdentifier: String
+        closeButtonA11yLabel: String
     ) {
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
@@ -36,6 +34,5 @@ public struct BottomSheetViewModel {
         self.shouldDismissForTapOutside = shouldDismissForTapOutside
         self.shadowOpacity = shadowOpacity
         self.closeButtonA11yLabel = closeButtonA11yLabel
-        self.closeButtonA11yIdentifier = closeButtonA11yIdentifier
     }
 }

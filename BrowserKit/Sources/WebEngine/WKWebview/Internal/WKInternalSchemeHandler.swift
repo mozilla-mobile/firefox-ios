@@ -20,8 +20,8 @@ public protocol SchemeHandler: WKURLSchemeHandler {
 }
 
 /// Will load resources with URL schemes that WebKit doesn’t handle like homepage and error page.
-public class WKInternalSchemeHandler: NSObject, SchemeHandler {
-    public let scheme = "internal"
+final class WKInternalSchemeHandler: NSObject, SchemeHandler {
+    let scheme = "internal"
 
     override public init() {}
 
@@ -33,7 +33,7 @@ public class WKInternalSchemeHandler: NSObject, SchemeHandler {
     // responder["about/home"] is used for 'internal://local/about/home'
     static var responders = [String: WKInternalSchemeResponse]()
 
-    public func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         guard let url = urlSchemeTask.request.url else {
             urlSchemeTask.didFailWithError(WKInternalPageSchemeHandlerError.badURL)
             return
@@ -62,5 +62,5 @@ public class WKInternalSchemeHandler: NSObject, SchemeHandler {
         urlSchemeTask.didFinish()
     }
 
-    public func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {}
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {}
 }

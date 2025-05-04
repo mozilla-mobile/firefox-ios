@@ -1082,8 +1082,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         let bottomSheetVM = BottomSheetViewModel(
             shouldDismissForTapOutside: true,
-            closeButtonA11yLabel: .PasswordGenerator.CloseButtonA11yLabel,
-            closeButtonA11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.closeButton
+            closeButtonA11yLabel: .PasswordGenerator.CloseButtonA11yLabel
         )
 
         let bottomSheetVC = BottomSheetViewController(

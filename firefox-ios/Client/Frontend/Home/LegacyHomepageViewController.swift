@@ -495,8 +495,7 @@ class LegacyHomepageViewController:
         let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
         var bottomSheetViewModel = BottomSheetViewModel(
-            closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton
+            closeButtonA11yLabel: .CloseButtonTitle
         )
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(

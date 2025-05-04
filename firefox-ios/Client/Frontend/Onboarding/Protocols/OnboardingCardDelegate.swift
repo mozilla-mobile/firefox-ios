@@ -107,9 +107,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             }
         )
         var bottomSheetViewModel = BottomSheetViewModel(
-            closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
+            closeButtonA11yLabel: .CloseButtonTitle
         )
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(

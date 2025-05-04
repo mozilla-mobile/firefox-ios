@@ -6,7 +6,7 @@ import Foundation
 
 /// The engine used to create an `EngineView` and `EngineSession`.
 /// There is only when engine view to be created, but multiple sessions can exists.
-public protocol Engine {
+protocol Engine {
     /// Creates a new view for rendering web content.
     /// - Returns: The created `EngineView`
     func createView() -> EngineView

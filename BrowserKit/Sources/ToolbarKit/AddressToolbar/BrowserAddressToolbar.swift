@@ -13,7 +13,6 @@ import Common
 /// +-------------+--------------------------------------------------------+----------+
 public class BrowserAddressToolbar: UIView,
                                     Notifiable,
-                                    AddressToolbar,
                                     ThemeApplicable,
                                     LocationViewDelegate,
                                     UIDragInteractionDelegate {
