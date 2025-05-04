@@ -39,6 +39,7 @@ enum TopSitesActionType: ActionType {
     case toggleShowSectionSetting
     case toggleShowSponsoredSettings
     case tapOnHomepageTopSitesCell
+    case topSitesSeen
 }
 
 enum TopSitesMiddlewareActionType: ActionType {

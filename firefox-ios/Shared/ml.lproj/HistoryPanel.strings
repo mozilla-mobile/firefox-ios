@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "കളയുക";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "എപ്പോഴും";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "കഴിഞ്ഞ 4 ആഴ്ചകൾ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "കഴിഞ്ഞ മണിക്കൂര്‍";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "കഴിഞ്ഞ 7 നാൾ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "കഴിഞ്ഞ 24 മണിക്കൂര്‍";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "നാൾവഴി (മറ്റ് ഉപകരണങ്ങളിൽ നിന്ന് സമന്വയിപ്പിച്ച നാൾവഴി ഉൾപ്പെടെ), കുക്കികൾ, മറ്റ് തിരയൽദത്ത എല്ലാം മായ്ക്കും.";
+

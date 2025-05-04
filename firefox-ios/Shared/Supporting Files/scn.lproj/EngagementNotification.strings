@@ -1,18 +1,18 @@
-/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+/* Body of notification sent to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Body.v112" = "Attrova cosi agghiri di tia. O scopri quarchi cosa pi sbarijàriti.";
 
-/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+/* Title of notification sent to user after inactivity to encourage them to use the search feature. */
 "Engagement.Notification.Title.v112" = "Accumincia câ to prima risciduta";
 
-/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
 "Engagement.Notification.Treatment.A.Body.v114" = "A navicazzioni privata di %@ nun sarba i to nfurmazzioni e blocca i trazzatura ammucciati.";
 
-/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.A.Title.v114" = "Nàvica senza lassari trazzi";
 
-/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
 "Engagement.Notification.Treatment.B.Body.v114" = "Nàvica senza sarbari viscotta o crunuluggìa cu %@.";
 
-/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.B.Title.v114" = "Prova a navicazzioni privata";
 

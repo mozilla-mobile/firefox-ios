@@ -1,0 +1,21 @@
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136" = "තේරූ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136" = "නොතේරූ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background. */
+"Settings.AppIconSelection.AppIconNames.Blue.Title.v136" = "නිල්";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
+"Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "තද දම්";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background. */
+"Settings.AppIconSelection.AppIconNames.Green.Title.v136" = "කොළ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background. */
+"Settings.AppIconSelection.AppIconNames.Pink.Title.v136" = "රෝස";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
+"Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "පෙරනිමි";
+

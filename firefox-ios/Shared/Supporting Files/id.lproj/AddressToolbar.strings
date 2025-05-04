@@ -1,3 +1,6 @@
+/* Label for button in the address toolbar, that cancels editing the address field when tapped. */
+"AddressToolbar.CancelEdit.Label.v138" = "Batal";
+
 /* Accessibility label for the address field in the address toolbar. */
 "AddressToolbar.Location.A11y.Label.v128" = "Cari atau masukkan alamat";
 
@@ -10,6 +13,6 @@
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does. */
 "AddressToolbar.SearchEngine.A11y.Hint.v133" = "Buka pilihan mesin pencari";
 
-/* Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google). */
+/* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
 "AddressToolbar.SearchEngine.A11y.Label.v128" = "Mesin Pencari: %@";
 

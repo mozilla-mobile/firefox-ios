@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "’n Gebruikernaam en wagwoord word deur %@ aangevra.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "’n Gebruikernaam en wagwoord word deur %1$@ aangevra. Die werf sê: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -109,7 +109,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Dit kan ’n opstellingsfout wees, of ’n gepeuter deur ’n aanvaller. Gaan voort op eie risiko.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "Die eienaar van %@ het hul webwerf verkeerd opgestel. Om u inligting van diefstal te beskerm, het Firefox nie aan dié webwerf verbind nie.";
 
 /* Title on the certificate error page */
@@ -204,12 +204,6 @@
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Moenie stoor nie";
-
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Stoor aanmelding %1$@ vir %2$@?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Stoor wagwoord vir %@?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Stoor aanmelding";
@@ -436,9 +430,6 @@
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Ontdoen";
 
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d oortjie(s) gesluit";
-
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Die bladsy kon nie in leesaansig gewys word nie.";
 
@@ -454,13 +445,13 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Vandag";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "vandag om %@";
 
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "Kieslys";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Verwyder bladsy - %@";
 
 /* Tile title for Twitter */

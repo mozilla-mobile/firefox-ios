@@ -67,9 +67,6 @@
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
 "LibraryPanel.History.DeleteGroupedItem.v104" = "ⴽⴽⵙ";
 
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "ⵃⴹⵓ ⵜⴰⴳⵓⵔⵉ ⵏ ⵓⵣⵔⴰⵢ ⵉ %@?";
-
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "ⵙⴷⵖⵉ";
 
