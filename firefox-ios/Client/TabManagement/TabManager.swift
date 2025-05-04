@@ -98,7 +98,7 @@ protocol TabManager: AnyObject {
     func getMostRecentHomepageTab() -> Tab?
 
     // MARK: Other Tab Actions
-    func clearAllTabsHistory()
+    func clearAllTabsHistory() async
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
 
@@ -112,7 +112,7 @@ protocol TabManager: AnyObject {
     @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
-    func tabDidSetScreenshot(_ tab: Tab)
+    func tabDidSetScreenshot(_ tab: Tab) async
 }
 
 extension TabManager {

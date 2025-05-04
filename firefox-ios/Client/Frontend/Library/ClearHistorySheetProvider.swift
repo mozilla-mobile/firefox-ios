@@ -92,9 +92,11 @@ class ClearHistorySheetProvider {
                                       style: .destructive) { _ in
             let deletionUtilitiy = HistoryDeletionUtility(with: self.profile)
             deletionUtilitiy.deleteHistoryFrom(.allTime) { dateOption in
-                DispatchQueue.main.async {
+                Task {
                     // Clear and reset tab history for all windows / tab managers
-                    self.windowManager.allWindowTabManagers().forEach { $0.clearAllTabsHistory() }
+                    for manager in self.windowManager.allWindowTabManagers() {
+                        await manager.clearAllTabsHistory()
+                    }
                 }
                 NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
                 didComplete?(dateOption)

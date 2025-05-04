@@ -57,7 +57,9 @@ class HistoryClearable: Clearable {
                    level: .debug,
                    category: .storage)
 
-        self.tabManager.clearAllTabsHistory()
+        Task {
+            await tabManager.clearAllTabsHistory()
+        }
 
         return Deferred(value: success)
     }

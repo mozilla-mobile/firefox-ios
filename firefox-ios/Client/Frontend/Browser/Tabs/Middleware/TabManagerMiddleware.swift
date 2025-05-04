@@ -67,7 +67,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         }
 
         let manager = tabManager(for: action.windowUUID)
-        manager.tabDidSetScreenshot(action.tab)
+        Task {
+            await manager.tabDidSetScreenshot(action.tab)
+        }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
