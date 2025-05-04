@@ -15,6 +15,8 @@ class ForceRSSyncSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let profile: Profile = AppContainer.shared.resolve()
-        (profile as? BrowserProfile)?.serviceSyncCoordinator?.forceImmediateSync()
+        Task {
+            await (profile as? BrowserProfile)?.serviceSyncCoordinator?.forceImmediateSync()
+        }
     }
 }

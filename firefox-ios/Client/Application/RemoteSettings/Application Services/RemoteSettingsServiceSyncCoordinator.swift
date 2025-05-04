@@ -35,8 +35,8 @@ final class RemoteSettingsServiceSyncCoordinator {
     }
 
     // This is primarily for internal testing or QA purposes.
-    func forceImmediateSync() {
-        Task { await performSync() }
+    func forceImmediateSync() async {
+        await performSync()
     }
 
     // MARK: - Private API
