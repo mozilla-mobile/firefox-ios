@@ -191,6 +191,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
         setupShadow(theme: theme)
+        guard let tabModel else { return }
+        updateUIForSelectedState(tabModel.isSelected,
+                                 isPrivate: tabModel.isPrivate,
+                                 theme: theme)
     }
 
     func setupShadow(theme: Theme) {
