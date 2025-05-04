@@ -11,7 +11,6 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
-    case appearanceMenu
     case addressBarMenu
     case bookmarksRefactor
     case bottomSearchBar
@@ -54,8 +53,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appearanceMenu,
-                .addressBarMenu,
+        case    .addressBarMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
@@ -111,8 +109,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting.
-        case .appearanceMenu,
-                .addressBarMenu,
+        case    .addressBarMenu,
                 .bookmarksRefactor,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,

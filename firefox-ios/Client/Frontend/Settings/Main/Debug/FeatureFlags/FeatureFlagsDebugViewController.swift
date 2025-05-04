@@ -34,13 +34,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .appearanceMenu,
-                    titleText: format(string: "Enable New Appearance Menu"),
-                    statusText: format(string: "Toggle to show the new apperance menu")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .tabTrayUIExperiments,
                     titleText: format(string: "Enable Tab Tray UI Experiment"),
                     statusText: format(string: "Toggle to use the new tab tray UI")
