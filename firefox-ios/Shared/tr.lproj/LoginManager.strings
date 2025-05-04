@@ -10,7 +10,7 @@
 /* Copy password text selection menu item */
 "Copy" = "Kopyala";
 
-/* Label describing when the current login was created with the timestamp as the parameter. */
+/* Label describing when the current login was created. %@ is the timestamp. */
 "Created %@" = "Oluşturma: %@";
 
 /* Label for the button used to delete the current login. */
@@ -49,7 +49,7 @@
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "Hesaplar tüm bağlı cihazlardan silinecektir.";
 
-/* Label describing when the current login was last modified with the timestamp as the parameter. */
+/* Label describing when the current login was last modified. %@ is the timestamp. */
 "Modified %@" = "Değişiklik: %@";
 
 /* Label displayed when no logins are found after searching. */

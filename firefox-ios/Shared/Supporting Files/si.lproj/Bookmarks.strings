@@ -1,3 +1,15 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Body.v135" = "ඔබ පිරික්සන පරිදි පොත්යොමු එක් කරන්න. එවිට ඔබගේ ප්‍රියතම අඩවි පසුව ද බැලීමට හැකිය.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Title.v135" = "මෙම බහාලුම හිස්ය";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "සමමුහූර්තයට පිවිසෙන්න";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Title.v135" = "මෙහි පොත්යොමු නැත";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "සියල්ල";
 
@@ -27,6 +39,9 @@
 
 /* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
 "Bookmarks.Menu.EditFolder.v131" = "බහාලුම සංස්කරණය";
+
+/* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
+"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "තව විකල්ප";
 
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "සංස්කරණය";

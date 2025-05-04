@@ -2837,23 +2837,20 @@ homepage:
       tags:
         - Homepage
 
-  item_viewed:
-    type: event
+  section_viewed:
+    type: labeled_counter
     description: |
-      Records when an item has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to an item has been scrolled to or seen on an homepage that has been viewed.
-    extra_keys:
-      section:
-       type: string
-       description: |
-        The section that the item belongs to on the homepage. This section name is found in `HomepageTelemetry.ItemType` under `sectionName`.
-      type:
-       type: string
-       description: |
-        The type of item that was tapped on the homepage. This name is found in `HomepageTelemetry.ItemType`.
+      Records when a section has been viewed on the homepage. See `homepage.viewed` for more details on what is considered a homepage view. This event refers to a section that has been scrolled to or seen on an homepage that has been viewed. The labels matches the values in `HomepageTelemetry.ItemType` under `sectionName`
+    labels:
+      - top_sites
+      - jump_back_in
+      - bookmarks
+      - stories
+      - customize_homepage
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/25083
+      - https://github.com/mozilla-mobile/firefox-ios/issues/26216
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/26144
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26234
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"

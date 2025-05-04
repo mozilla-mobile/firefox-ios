@@ -1,4 +1,4 @@
-/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+/* Label for search engine buttons. %@ is the name of the search engine. */
 "%@ search" = "Buscar con %@";
 
 /* Label for search settings button. */

@@ -34,6 +34,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -1070,8 +1075,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {
-        let inactiveTabsEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs)
-        guard inactiveTabsEnabled ?? true else { return [] }
+        let inactiveTabsPrefEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs) ?? true
+        let inactiveTabsEnabled = inactiveTabsPrefEnabled && !isTabTrayUIExperimentsEnabled
+        guard inactiveTabsEnabled else { return [] }
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
     }
 

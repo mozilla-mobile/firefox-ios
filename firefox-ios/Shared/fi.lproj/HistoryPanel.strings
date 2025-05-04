@@ -1,3 +1,6 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "Poista";
 
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Poistaa historian (mukaan lukien synkronoitu historia muista laitteista), evästeet ja muut selaustiedot.";
+

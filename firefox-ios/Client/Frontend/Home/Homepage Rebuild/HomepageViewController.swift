@@ -63,7 +63,11 @@ final class HomepageViewController: UIViewController,
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
-    private var alreadyTrackedItems = Set<HomepageItem>()
+
+    // Telemetry related
+    private var alreadyTrackedSections = Set<HomepageSection>()
+    private var alreadyTrackedTopSites = Set<HomepageItem>()
+    private let trackingImpressionsThrottler: ThrottleProtocol
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -73,7 +77,8 @@ final class HomepageViewController: UIViewController,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         throttler: ThrottleProtocol = Throttler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -82,6 +87,7 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+        self.trackingImpressionsThrottler = throttler
 
         // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(
@@ -179,7 +185,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        alreadyTrackedItems.removeAll()
+        resetTrackedObjects()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -297,9 +303,9 @@ final class HomepageViewController: UIViewController,
         )
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if homepageState.shouldTriggerImpression {
-            alreadyTrackedItems.removeAll()
-            trackVisibleItemImpressions()
             scrollToTop()
+            resetTrackedObjects()
+            trackVisibleItemImpressions()
         }
     }
 
@@ -769,7 +775,7 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchOpenTopSitesAction(at index: Int, config: TopSiteConfiguration) {
+    private func dispatchTopSitesAction(at index: Int, config: TopSiteConfiguration, actionType: ActionType) {
         let config = TopSitesTelemetryConfig(
             isZeroSearch: homepageState.isZeroSearch,
             position: index,
@@ -779,7 +785,7 @@ final class HomepageViewController: UIViewController,
             TopSitesAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
-                actionType: TopSitesActionType.tapOnHomepageTopSitesCell
+                actionType: actionType
             )
         )
     }
@@ -804,7 +810,11 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-            dispatchOpenTopSitesAction(at: indexPath.item, config: config)
+            dispatchTopSitesAction(
+                at: indexPath.item,
+                config: config,
+                actionType: TopSitesActionType.tapOnHomepageTopSitesCell
+            )
         case .jumpBackIn(let config):
             store.dispatch(
                 JumpBackInAction(
@@ -867,50 +877,53 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    /// Want to handle tracking here to capture any cells about to viewed,
-    /// but some cells do not get reconfigured so we add additional tracking detection with `trackVisibleImpressions`
-    func collectionView(
-        _ collectionView: UICollectionView,
-        willDisplay cell: UICollectionViewCell,
-        forItemAt indexPath: IndexPath
-    ) {
-        guard let item = dataSource?.itemIdentifier(for: indexPath) else { return }
-        handleTrackingItemImpression(with: item, at: indexPath.item)
-    }
-
-    /// Used to track item impressions. If the user has seen the item on the homepage, we only record the impression once.
+    /// Used to track impressions. If the user has already seen the item on the homepage, we only record the impression once.
     /// We want to track at initial seen as well as when users scrolls.
+    /// A throttle is added in order to capture what the users has seen. When we scroll to top programmatically,
+    /// the impressions were being tracked, but to match user's perspective, we add a throttle to delay.
+    /// Time complexity: O(n) due to iterating visible items.
     private func trackVisibleItemImpressions() {
-        guard let collectionView else {
-            logger.log(
-                "Homepage collectionview should not have been nil, unable to track impression",
-                level: .warning,
-                category: .homepage
-            )
-            return
-        }
-        for indexPath in collectionView.indexPathsForVisibleItems {
-            guard let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
-            handleTrackingItemImpression(with: item, at: indexPath.item)
+        trackingImpressionsThrottler.throttle { [weak self] in
+            guard let self else { return }
+            guard let collectionView else {
+                logger.log(
+                    "Homepage collectionview should not have been nil, unable to track impression",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
+            for indexPath in collectionView.indexPathsForVisibleItems {
+                guard let section = dataSource?.sectionIdentifier(for: indexPath.section),
+                      let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
+                handleTrackingImpressions(for: section, with: item, at: indexPath.item)
+            }
         }
     }
 
-    private func handleTrackingItemImpression(with item: HomepageItem, at index: Int) {
-        guard !alreadyTrackedItems.contains(item) else { return }
-        alreadyTrackedItems.insert(item)
-        if case .topSite(let config, _) = item {
-            sendItemActionWithTelemetryExtras(
-                item: item,
-                actionType: HomepageActionType.itemSeen,
-                topSitesTelemetryConfig: TopSitesTelemetryConfig(
-                    isZeroSearch: homepageState.isZeroSearch,
-                    position: index,
-                    topSiteConfiguration: config
-                )
-            )
-        } else {
-            sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.itemSeen)
-        }
+    /// We want to capture generic section impressions,
+    /// but we also need to handle capturing individual sponsored tiles impressions
+    private func handleTrackingImpressions(for section: HomepageSection, with item: HomepageItem, at index: Int) {
+        handleTrackingTopSitesImpression(for: item, at: index)
+        handleTrackingSectionImpression(for: section, with: item)
+    }
+
+    private func handleTrackingTopSitesImpression(for item: HomepageItem, at index: Int) {
+        guard !alreadyTrackedTopSites.contains(item) else { return }
+        alreadyTrackedTopSites.insert(item)
+        guard case .topSite(let config, _) = item else { return }
+        dispatchTopSitesAction(at: index, config: config, actionType: TopSitesActionType.topSitesSeen)
+    }
+
+    private func handleTrackingSectionImpression(for section: HomepageSection, with item: HomepageItem) {
+        guard !alreadyTrackedSections.contains(section) else { return }
+        alreadyTrackedSections.insert(section)
+        sendItemActionWithTelemetryExtras(item: item, actionType: HomepageActionType.sectionSeen)
+    }
+
+    private func resetTrackedObjects() {
+        alreadyTrackedSections.removeAll()
+        alreadyTrackedTopSites.removeAll()
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)

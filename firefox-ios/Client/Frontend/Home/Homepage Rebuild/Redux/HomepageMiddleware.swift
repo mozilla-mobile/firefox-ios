@@ -38,11 +38,11 @@ final class HomepageMiddleware {
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
 
-        case HomepageActionType.itemSeen:
+        case HomepageActionType.sectionSeen:
             guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
                 return
             }
-            self.homepageTelemetry.sendItemImpressionTelemetryEvent(for: type)
+            self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
         default:
             break
