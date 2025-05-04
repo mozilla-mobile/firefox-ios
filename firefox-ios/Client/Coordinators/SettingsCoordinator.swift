@@ -154,14 +154,10 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .theme:
-            if themeManager.isNewAppearanceMenuOn {
-                let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                            shouldShowPageZoom: true,
-                                                            delegate: self)
-                return UIHostingController(rootView: appearanceView)
-            } else {
-                return ThemeSettingsController(windowUUID: windowUUID)
-            }
+            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
+                                                        shouldShowPageZoom: true,
+                                                        delegate: self)
+            return UIHostingController(rootView: appearanceView)
 
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
@@ -409,17 +405,12 @@ final class SettingsCoordinator: BaseCoordinator,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
         store.dispatch(action)
-
-        if themeManager.isNewAppearanceMenuOn {
-            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                        shouldShowPageZoom: true,
-                                                        delegate: self)
-            let viewController = UIHostingController(rootView: appearanceView)
-            viewController.title = .SettingsAppearanceTitle
-            router.push(viewController)
-        } else {
-            router.push(ThemeSettingsController(windowUUID: windowUUID))
-        }
+        let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
+                                                    shouldShowPageZoom: true,
+                                                    delegate: self)
+        let viewController = UIHostingController(rootView: appearanceView)
+        viewController.title = .SettingsAppearanceTitle
+        router.push(viewController)
     }
 
     func pressedBrowsing() {

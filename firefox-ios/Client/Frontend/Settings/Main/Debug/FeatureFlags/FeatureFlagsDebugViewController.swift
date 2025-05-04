@@ -35,13 +35,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .appearanceMenu,
-                    titleText: format(string: "Appearance Menu"),
-                    statusText: format(string: "Toggle to show the new apperance menu")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .bookmarksRefactor,
                     titleText: format(string: "Bookmarks Redesign"),
                     statusText: format(string: "Toggle to use the bookmarks redesign")

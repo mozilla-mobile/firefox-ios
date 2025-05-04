@@ -39,11 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         files: profile.files
     )
 
-    lazy var themeManager: ThemeManager = DefaultThemeManager(
-        sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
-    )
     lazy var documentLogger = DocumentLogger(logger: logger)
+    lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()

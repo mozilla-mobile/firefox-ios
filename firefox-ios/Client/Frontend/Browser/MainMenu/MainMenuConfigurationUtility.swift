@@ -50,10 +50,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
     }
 
-    private var isNewAppearanceMenuOn: Bool {
-        featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
-    }
-
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
@@ -491,15 +487,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
-        if isNewAppearanceMenuOn {
-            return isNightModeOn
-                ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
-                : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
-        } else {
-            return isNightModeOn
-                ? .MainMenu.Submenus.Tools.NightModeOff
-                : .MainMenu.Submenus.Tools.NightModeOn
-        }
+        return isNightModeOn
+            ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+            : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
     }
 
     private func configureNightModeItem(with uuid: WindowUUID, and tabInfo: MainMenuTabInfo) -> MenuElement {
