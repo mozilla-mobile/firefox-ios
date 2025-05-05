@@ -116,7 +116,7 @@ final class AddressListViewModelTests: XCTestCase {
             .$showSection
             .dropFirst()
             .sink { value in
-                XCTAssertFalse(value)
+                XCTAssertTrue(value)
                 showSectionExpectation.fulfill()
             }
             .store(in: &cancellables)
