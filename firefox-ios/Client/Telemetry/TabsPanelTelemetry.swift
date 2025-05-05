@@ -82,4 +82,12 @@ struct TabsPanelTelemetry {
         let extras = GleanMetrics.TabsPanel.DoneButtonTappedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.doneButtonTapped, extras: extras)
     }
+
+    func deleteNormalTabsSheetOptionSelected(period: TabsDeletionPeriod) {
+        // Laurie
+//        let extras = GleanMetrics.DeleteNormalTabsSheetOptionSelected.OptionSelectedExtra(
+//            period: period.rawValue,
+//        )
+//        gleanWrapper.recordEvent(for: GleanMetrics.DeleteNormalTabsSheetOptionSelected.optionSelected, extras: extras)
+    }
 }
