@@ -63,6 +63,11 @@ extension BrowserViewController: WKUIDelegate {
             newTab.url = URL(string: "about:blank")
         }
 
+        if isPDFRefactorEnabled, navigationUrl?.pathExtension == "pdf" {
+            // Stop the WebView to load the PDF since we are responsible to download it
+            newTab.webView?.stopLoading()
+        }
+
         return newTab.webView
     }
 
