@@ -183,6 +183,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.undoClose:
             undoCloseTab(state: state, uuid: action.windowUUID)
 
+        case TabPanelViewActionType.cancelCloseAllTabs:
+            tabsPanelTelemetry.closeAllTabsSheetOptionSelected(
+                option: .cancel,
+                mode: (action.panelType ?? .tabs).modeForTelemetry
+            )
+
         case TabPanelViewActionType.confirmCloseAllTabs:
             closeAllTabs(state: state, uuid: action.windowUUID)
 
@@ -195,7 +201,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         case TabPanelViewActionType.selectTab:
             guard let tabUUID = action.tabUUID else { return }
-            selectTab(for: tabUUID, uuid: action.windowUUID, isInactiveTab: action.isInactiveTab ?? false)
+            selectTab(
+                for: tabUUID,
+                uuid: action.windowUUID,
+                isInactiveTab: action.isInactiveTab ?? false,
+                panelType: action.panelType ?? .tabs,
+                selectedTabIndex: action.selectedTabIndex
+            )
 
         case TabPanelViewActionType.closeAllInactiveTabs:
             closeAllInactiveTabs(state: state, uuid: action.windowUUID)
@@ -682,12 +694,19 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
 
-    private func selectTab(for tabUUID: TabUUID, uuid: WindowUUID, isInactiveTab: Bool) {
+    private func selectTab(
+        for tabUUID: TabUUID,
+        uuid: WindowUUID,
+        isInactiveTab: Bool,
+        panelType: TabTrayPanelType,
+        selectedTabIndex: Int?
+    ) {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
 
-        tabsPanelTelemetry.tabSelected(at: tabManager.selectedIndex)
         tabManager.selectTab(tab)
+
+        tabsPanelTelemetry.tabSelected(at: selectedTabIndex, mode: panelType.modeForTelemetry)
 
         let action = TabTrayAction(windowUUID: uuid,
                                    actionType: TabTrayActionType.dismissTabTray)

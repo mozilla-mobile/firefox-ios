@@ -1036,31 +1036,6 @@ usage:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
-user.tabs:
-  tab_counts:
-    type: labeled_quantity
-    description: |
-      the number of tabs that a user has (normal, private, inactive, and total)
-    labels:
-      - normal_count
-      - private_count
-      - inactive_count
-      - total_count
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-12-01" 
-    unit: quantity of inactive tabs
-    metadata:
-      tags:
-        - TabsPanel
 # Downloads
 downloads:
   download_now_button_tapped:
