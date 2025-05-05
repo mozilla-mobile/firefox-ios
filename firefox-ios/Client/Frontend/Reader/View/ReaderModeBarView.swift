@@ -169,7 +169,8 @@ extension ReaderModeBarView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
 
-        let color: UIColor = toolbarLayoutType == .version1 ? colors.layer3 : colors.layer1
+        let isVersionLayout = toolbarLayoutType == .version1 || toolbarLayoutType == .version2
+        let color: UIColor = isVersionLayout ? colors.layer3 : colors.layer1
         let backgroundAlpha = ToolbarHelper().backgroundAlpha()
 
         backgroundColor = color.withAlphaComponent(backgroundAlpha)
