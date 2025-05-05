@@ -1785,14 +1785,6 @@ class TabManagerTests: XCTestCase {
         return tabs
     }
 
-    /// Returns yesterday test date minus one hour
-    private func yesterdayDate() -> Date {
-        var components = DateComponents()
-        components.day = -1
-        components.hour = -1
-        return Calendar.current.date(byAdding: components, to: testDate)!
-    }
-
     private func getMockTabData(count: Int) -> [TabData] {
         var tabData = [TabData]()
         for i in 0..<count {
