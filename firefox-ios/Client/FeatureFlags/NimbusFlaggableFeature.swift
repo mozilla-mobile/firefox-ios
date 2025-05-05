@@ -112,7 +112,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
-        // Cases where users do not have the option to manipulate a setting.
+        // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
                 .addressAutofillEdit,
                 .addressBarMenu,

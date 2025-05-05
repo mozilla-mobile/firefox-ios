@@ -9,6 +9,7 @@ final class NimbusFeatureFlagLayer {
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
+        // For better code readability, please keep in alphabetical order by NimbusFeatureFlagID
         switch featureID {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)

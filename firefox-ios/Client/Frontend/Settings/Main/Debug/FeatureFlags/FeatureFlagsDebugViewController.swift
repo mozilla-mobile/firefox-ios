@@ -23,6 +23,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagToggleSettings() -> SettingSection {
+        // For better code readability and parsability in-app, please keep in alphabetical order by title
         return SettingSection(
             title: nil,
             children: [
