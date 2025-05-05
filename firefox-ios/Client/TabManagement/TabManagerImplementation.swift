@@ -378,7 +378,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         let tabsToRemove = normalTabs.filter { tab in
             let lastUsed = Date.fromTimestamp(tab.lastExecutedTime)
-            return lastUsed < cutoffDate
+            return lastUsed <= cutoffDate
         }
 
         guard !tabsToRemove.isEmpty else { return }
