@@ -1023,6 +1023,14 @@ class BrowserViewController: UIViewController,
     @objc
     private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
         updateBlurViews()
+
+        store.dispatch(
+            ToolbarAction(
+                isTranslucent: ToolbarHelper().shouldBlur(),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.translucencyDidChange
+            )
+        )
     }
 
     private func switchToolbarIfNeeded() {

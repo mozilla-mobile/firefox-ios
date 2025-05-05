@@ -134,7 +134,7 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
-            ToolbarActionType.animationStateChanged:
+            ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -219,7 +219,7 @@ struct ToolbarState: ScreenState, Equatable {
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent
         )
     }
 

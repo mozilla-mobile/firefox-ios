@@ -106,6 +106,7 @@ enum ToolbarActionType: ActionType {
     case didEnterSearchTerm
     case didSetSearchTerm
     case didStartTyping
+    case translucencyDidChange
 }
 
 class ToolbarMiddlewareAction: Action {
