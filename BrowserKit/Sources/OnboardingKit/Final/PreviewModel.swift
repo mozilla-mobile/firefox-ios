@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
 #if DEBUG
 import SwiftUI
 
@@ -14,7 +13,7 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
             compatibleWith: nil
         )
     }
-    
+
     // MARK: Protocol properties
     var cardType: OnboardingCardType
     var name: String
@@ -65,23 +64,23 @@ public enum OnboardingType: String, Codable {
 }
 
 public enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable {
-    
+
     /// Will will set the theme to dark mode
     ///
     case themeDark = "theme-dark"
-    
+
     /// Will set the theme to light mode
     ///
     case themeLight = "theme-light"
-    
+
     /// Will set the theme to use the system theme
     ///
     case themeSystemDefault = "theme-system-default"
-    
+
     /// Will set the toolbar on the bottom
     ///
     case toolbarBottom = "toolbar-bottom"
-    
+
     /// Will set the toolbar on the top
     ///
     case toolbarTop = "toolbar-top"
@@ -89,7 +88,7 @@ public enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable {
 
 extension OnboardingMultipleChoiceAction {
     public var id: String { rawValue }
-    
+
     public var displayName: String {
         switch self {
         case .themeDark:
@@ -116,52 +115,52 @@ extension OnboardingInstructionsPopupActions {
     public var displayName: String {
         return self.rawValue
     }
-    
+
     public var id: String {
         return self.rawValue
     }
 }
 
 public enum OnboardingActions: String, CaseIterable, Codable {
-    
+
     /// Will end the onboarding on a set card
     ///
     case endOnboarding = "end-onboarding"
-    
+
     /// Will take the user to the next card
     ///
     case forwardOneCard = "forward-one-card"
-    
+
     /// Will take the user to the next card
     ///
     case forwardThreeCard = "forward-three-card"
-    
+
     /// Will take the user to the next card
     ///
     case forwardTwoCard = "forward-two-card"
-    
+
     /// Will open up a popup with instructions for something
     ///
     case openInstructionsPopup = "open-instructions-popup"
-    
+
     /// Will take the user to the default browser settings in the iOS system
     /// settings
     ///
     case openIosFxSettings = "open-ios-fx-settings"
-    
+
     /// Will open a webview where the user can read the privacy policy
     ///
     case readPrivacyPolicy = "read-privacy-policy"
-    
+
     /// Will request to allow notifications from the user
     ///
     case requestNotifications = "request-notifications"
-    
+
     /// Will send the user to settings to set Firefox as their default browser and
     /// advance to next card
     ///
     case setDefaultBrowser = "set-default-browser"
-    
+
     /// Will take the user to the sync sign in flow
     ///
     case syncSignIn = "sync-sign-in"
@@ -171,7 +170,7 @@ extension OnboardingActions {
     public var displayName: String {
         return self.rawValue
     }
-    
+
     public var id: String {
         return self.rawValue
     }
@@ -255,8 +254,8 @@ extension PreviewModel {
         ),
         multipleChoiceButtons: [
             .init(title: "System Default", action: OnboardingMultipleChoiceAction.themeSystemDefault, imageID: "themeSystem"),
-            .init(title: "Light",          action: OnboardingMultipleChoiceAction.themeLight,         imageID: "themeLight"),
-            .init(title: "Dark",           action: OnboardingMultipleChoiceAction.themeDark,          imageID: "themeDark"),
+            .init(title: "Light", action: OnboardingMultipleChoiceAction.themeLight, imageID: "themeLight"),
+            .init(title: "Dark", action: OnboardingMultipleChoiceAction.themeDark, imageID: "themeDark")
         ],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_customizationTheme",
@@ -276,8 +275,8 @@ extension PreviewModel {
             secondary: nil
         ),
         multipleChoiceButtons: [
-            .init(title: "Top",    action: OnboardingMultipleChoiceAction.toolbarTop,    imageID: "toolbarTop"),
-            .init(title: "Bottom", action: OnboardingMultipleChoiceAction.toolbarBottom, imageID: "toolbarBottom"),
+            .init(title: "Top", action: OnboardingMultipleChoiceAction.toolbarTop, imageID: "toolbarTop"),
+            .init(title: "Bottom", action: OnboardingMultipleChoiceAction.toolbarBottom, imageID: "toolbarBottom")
         ],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_customizationToolbar",
@@ -329,7 +328,7 @@ extension PreviewModel {
 //        .notificationPermissions,
 //        .customizationTheme,
         .customizationToolbar,
-        .signToSync,
+        .signToSync
 //        .updateWelcome,
 //        .updateSignToSync
     ]
@@ -346,9 +345,9 @@ struct OnboardingUI_Previews: PreviewProvider {
         Group {
             Card(
                 viewModel: PreviewModel.welcome,
-                onPrimary:   { print("Next tapped") },
+                onPrimary: { print("Next tapped") },
                 onSecondary: { print("Skip tapped") },
-                onLink:      { print("Learn more tapped") }//,
+                onLink: { print("Learn more tapped") }// ,
 //                onChoice:    { choice in print("Chose \(choice.title)") }
             )
             .previewDisplayName("Basic – iPhone 12")
@@ -356,9 +355,9 @@ struct OnboardingUI_Previews: PreviewProvider {
 
             Card(
                 viewModel: PreviewModel.customizationTheme,
-                onPrimary:   { print("Done tapped") },
+                onPrimary: { print("Done tapped") },
                 onSecondary: { /* no secondary here */ },
-                onLink:      { print("Learn more tapped") }//,
+                onLink: { print("Learn more tapped") }// ,
 //                onChoice:    { choice in print("Chose \(choice.title)") }
             )
             .previewDisplayName("Multiple Choice – SE1")
@@ -379,13 +378,13 @@ struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
             MilkyWayMetalView()
                 .edgesIgnoringSafeArea(.all)
             TabView(selection: $currentPage) {
-                ForEach(onboardingCards, id: \.name)  { card in
+                ForEach(onboardingCards, id: \.name) { card in
                     VStack {
                         OnboardingCardView(
                             viewModel: card,
-                            onPrimary:   { print("Done tapped") },
+                            onPrimary: { print("Done tapped") },
                             onSecondary: { /* no secondary here */ },
-                            onLink:      { print("Learn more tapped") }//,
+                            onLink: { print("Learn more tapped") }// ,
 //                            onChoice:    { choice in print("Chose \(choice.title)") }
                         )
                     }

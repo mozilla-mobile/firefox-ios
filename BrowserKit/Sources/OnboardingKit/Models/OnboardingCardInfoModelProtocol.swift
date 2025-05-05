@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
 import UIKit
 
 public enum OnboardingCardType: String, Codable {
@@ -29,7 +28,7 @@ public struct OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>: O
     var a11yIdRoot: String
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
-        return []//instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
+        return []// instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
     }
 }
 

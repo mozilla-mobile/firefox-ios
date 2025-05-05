@@ -17,7 +17,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
         viewModel: VM,
         onPrimary: @escaping () -> Void,
         onSecondary: @escaping () -> Void,
-        onLink: @escaping () -> Void//,
+        onLink: @escaping () -> Void// ,
 //        onChoice: @escaping (OnboardingMultipleChoiceButtonModel) -> Void
     ) {
         self.viewModel = viewModel
@@ -41,7 +41,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
                 OnboardingMultipleChoiceCardView(
                     viewModel: viewModel,
                     onPrimary: onPrimary,
-                    onSecondary: onSecondary//,
+                    onSecondary: onSecondary// ,
 //                    onChoice: onChoice
                 )
             }
@@ -112,7 +112,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     private var stackSpacing: CGFloat {
         viewModel.link != nil ? 15 : 24
     }
-    
+
     var titleView: some View {
         Text(viewModel.title)
             .font(UIDevice.isSmall ? .title3 : .title)
@@ -121,7 +121,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
     }
-    
+
     var bodyView: some View {
         Text(viewModel.body)
             .font(.subheadline)
@@ -196,7 +196,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
 
     @Environment(\.theme) private var theme
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    
+
     @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
 
     public init(
@@ -246,25 +246,25 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
     public var body: some View {
         ScrollView {
             VStack {
-                
+
                 Spacer()
-                
+
                 Text(viewModel.title)
                     .font(UIDevice.isSmall ? .title3 : .title)
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
                     .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
                     .accessibility(addTraits: .isHeader)
-                
+
                 Spacer()
-                
+
                 OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
                     selection: $selectedAction,
                     items: viewModel.multipleChoiceButtons
                 )
-                
+
                 Spacer()
-                
+
                 Button(viewModel.buttons.primary.title) {
                     // primary action
                 }
@@ -364,13 +364,13 @@ public struct LinkButton: View {
 
 fileprivate extension UIDevice {
     static var isPad: Bool { current.userInterfaceIdiom == .pad }
-    static var isTiny: Bool  { UIScreen.main.bounds.height <= 568 }   // ~SE1
+    static var isTiny: Bool { UIScreen.main.bounds.height <= 568 }   // ~SE1
     static var isSmall: Bool { UIScreen.main.bounds.height <= 667 || isPad }
 }
 
 // MARK: - Shared UX Constants
 
-fileprivate struct SharedUX {
+private struct SharedUX {
     static let topStackSpacing: CGFloat      = 24
     static let smallStackSpacing: CGFloat    = 8
     static let smallScrollPadding: CGFloat   = 20

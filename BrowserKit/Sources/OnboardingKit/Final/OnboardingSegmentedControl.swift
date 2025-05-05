@@ -2,13 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
 import SwiftUI
 
 struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
     @Binding var selection: Action
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
-    
+
     var body: some View {
         HStack {
             ForEach(items, id: \.action) { item in
@@ -27,7 +26,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 150)
                             .foregroundColor(isSelected ? .accentColor : .secondary)
-                        
+
                         VStack(spacing: 6) {
                             Text(item.title)
                                 .font(.footnote)
@@ -41,7 +40,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                                              ? .accentColor
                                              : .secondary)
                         }
-                        
+
                     }
                     .padding(.vertical, 10)
                     .frame(maxWidth: .infinity)
@@ -51,7 +50,6 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
         }
     }
 }
-
 
 struct OnboardingMultipleChoiceButtonModelExampleView: View {
   @State private var selectedAction: OnboardingMultipleChoiceAction = .toolbarBottom
@@ -66,7 +64,7 @@ struct OnboardingMultipleChoiceButtonModelExampleView: View {
     OnboardingMultipleChoiceButtonModel(
       title: "Top",
       action: .toolbarTop,
-      imageID:    "rectangle.topthird.inset.filled"
+      imageID: "rectangle.topthird.inset.filled"
     )
   ]
 
