@@ -42,6 +42,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307300
     func testEmptyHistoryListFirstTime() {
+        launchApp()
         navigator.nowAt(NewTabScreen)
 
         // Go to History List from Top Sites and check it is empty
@@ -57,6 +58,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307301
     func testOpenSyncDevices() {
+        launchApp()
+
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
@@ -71,6 +74,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
     func testClearHistoryFromSettings() throws {
+        launchApp()
+
         XCTExpectFailure("The app was not launched", strict: false) {
             navigator.nowAt(NewTabScreen)
             // Browse to have an item in history list
@@ -106,6 +111,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2307014
     // Smoketest
     func testClearPrivateData() throws {
+        launchApp()
+
         XCTExpectFailure("The app was not launched", strict: false) {
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -130,6 +137,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
     func testRecentlyClosedWebsiteOpen() {
+        launchApp()
+
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -143,6 +152,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307463
     func testRecentlyClosedWebsiteClosed() {
+        launchApp()
+
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -172,6 +183,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307475
     func testRecentlyClosedPrivateMode() {
+        launchApp()
+
         // Open "Book of Mozilla" on private mode and close the tab
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -196,6 +209,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307479
     func testRemoveAllTabsButtonRecentlyClosedHistory() {
+        launchApp()
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -219,6 +233,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307482
     func testClearRecentlyClosedHistory() {
+        launchApp()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -253,6 +268,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307483
     func testLongTapOptionsRecentlyClosedItem() {
+        launchApp()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -278,6 +294,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307484
     func testOpenInNewTabRecentlyClosedItem() {
+        launchApp()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -316,6 +333,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307485
     func testOpenInNewPrivateTabRecentlyClosedItem() {
+        launchApp()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -354,6 +372,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307486
     func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
+        launchApp()
         navigator.nowAt(NewTabScreen)
 
         // Open the two tabs in private mode. It is necessary to open two sites.
@@ -400,6 +419,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2307025
     // Smoke
     func testTabHistory() {
+        launchApp()
         navigator.nowAt(NewTabScreen)
         openBookOfMozilla()
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
@@ -473,7 +493,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2306894
     // Smoke
     func testClearRecentHistory() {
-        app.launch()
+        launchApp()
         // Visit a page to create a recent history entry.
         navigateToPage()
         navigator.performAction(Action.ClearRecentHistory)
@@ -528,6 +548,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2306890
     // Smoketest
     func testDeleteHistoryEntryBySwiping() {
+        launchApp()
         navigateToPage()
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
