@@ -1268,7 +1268,9 @@ workflows:
             #!/usr/bin/env bash
             pwd
             ls
-            version=$(cat /Users/vagrant/git/version.txt)
+            # Read and trim version string
+            full_version=$(tr -d '[:space:]' < /Users/vagrant/git/version.txt)
+            version=$(echo "$full_version" | sed -E 's/^([0-9]+(\.[0-9]+)*).*/\1/')
             echo "Version: $version"
             # Save version in BITRISE_RELEASE_VERSION
             envman add --key BITRISE_RELEASE_VERSION --value "$version"
