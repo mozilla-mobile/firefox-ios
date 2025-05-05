@@ -687,19 +687,6 @@ class TabTrayViewController: UIViewController,
     }
 
     private func showCloseAllConfirmation() {
-<<<<<<< HEAD
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
-                                           style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
-                                           style: .cancel,
-                                           handler: nil),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
-        controller.popoverPresentationController?.barButtonItem = deleteButton
-        present(controller, animated: true, completion: nil)
-=======
         let alert = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         // We only show the potion to delete old tabs with normal tabs tray
@@ -722,7 +709,7 @@ class TabTrayViewController: UIViewController,
         }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton
         )
 
-        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+        alert.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
                         accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
@@ -758,12 +745,11 @@ class TabTrayViewController: UIViewController,
             alert.addAction(action, accessibilityIdentifier: option.accessibilityID)
         }
 
-        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+        alert.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
                         accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
 
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
->>>>>>> 4e3086b57 (Add FXIOS-12149 [Tab tray UI experiment] new trash can options (#26474))
     }
 
     private func confirmCloseAll() {
