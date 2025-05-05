@@ -812,11 +812,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
 
-            self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
-                guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .LegacyAppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage)
-            }
-
+            _ = self.profile.pinnedSites.addPinnedTopSite(site)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
         }
     }
@@ -829,14 +825,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
 
-            self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
-                if result.isSuccess {
-                    self.delegate?.showToast(
-                        message: .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage,
-                        toastAction: .removePinPage
-                    )
-                }
-            }
+            _ = self.profile.pinnedSites.removeFromPinnedTopSites(site)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
     }

@@ -1054,17 +1054,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
-        profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-
-            store.dispatch(
-                GeneralBrowserAction(
-                    toastType: .addShortcut,
-                    windowUUID: uuid,
-                    actionType: GeneralBrowserActionType.showToast
-                )
-            )
-        }
+        _ = profile.pinnedSites.addPinnedTopSite(site)
     }
 
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
@@ -1076,16 +1066,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
-        profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            store.dispatch(
-                GeneralBrowserAction(
-                    toastType: .removeShortcut,
-                    windowUUID: uuid,
-                    actionType: GeneralBrowserActionType.showToast
-                )
-            )
-        }
+        _ = profile.pinnedSites.removeFromPinnedTopSites(site)
     }
 
     private func preserveTabs(uuid: WindowUUID) {
