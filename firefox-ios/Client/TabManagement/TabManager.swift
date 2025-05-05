@@ -10,6 +10,10 @@ enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"
 }
 
+enum TabsDeletionPeriod {
+    case oneDay, oneWeek, oneMonth
+}
+
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
@@ -65,6 +69,9 @@ protocol TabManager: AnyObject {
     /// Removes all tabs matching the urls, used when other clients request to close tabs on this device.
     func removeTabs(by urls: [URL]) async
     func removeTabs(_ tabs: [Tab])
+
+    /// Remove normal tabs older than a certain period of time
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod)
 
     // MARK: - Undo Close
     func undoCloseTab()

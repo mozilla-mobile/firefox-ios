@@ -1,7 +1,7 @@
-/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "Goullo eo an teuliad-mañ";
 
-/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Title.v135" = "N’eus tamm sined ebet c’hoazh";
 
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */

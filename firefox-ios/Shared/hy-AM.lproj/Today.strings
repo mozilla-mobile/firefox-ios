@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Արագ դիտում";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Որոնել Firefox֊ում";
+"TodayWidget.SearchInFirefoxV2" = "Որոնել\nFirefox֊ում";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Որոնել\nգաղտնի ներդիրում";

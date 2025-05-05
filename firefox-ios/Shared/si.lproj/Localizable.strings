@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "%@ වෙතින් පරිශ්‍රීලක නාමයක් හා මුරපදයක් ඉල්ලා සිටියි.";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ විසින් පරිශ්‍රීලක නාමයක් සහ මුරපදයක් ඉල්ලා සිටියි. අඩවිය පවසන්නේ: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -28,7 +28,7 @@
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
 "ActivityStream.JumpBackIn.SectionTitle" = "ආපසු පනින්න";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "පටිති: %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
@@ -277,13 +277,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "බාගැනීම්";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "ගොනු %d න් 1ක්";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -307,7 +307,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "එය වැරදි වින්‍යාස කිරීමක් හෝ ප්‍රහාරකයෙකුගේ අපවේශනයක් විය හැකිය. ඔබ අවදානම පිළිගන්නේ නම් ඉදිරියට යන්න.";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "%@ හි අයිතිකරු ඔවුන්ගේ වියමන අඩවිය නිසි ලෙස සකස් කර නැත. ඔබගේ තොරතුරු සොරෙන් ගැනීම වැළැක්වීමට, ෆයර්ෆොක්ස් මෙම අඩවියට සම්බන්ධ වී නැත.";
 
 /* Title on the certificate error page */
@@ -667,18 +667,6 @@
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "යාවත්කාල නොකරන්න";
 
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "%2$@ සඳහා %1$@ පිවිසුම සුරකින්නද?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "%@ සඳහා මුරපදය සුරකින්නද?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "%@ සඳහා පිවිසුම යාවත්කාල කරන්නද?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "%2$@ සඳහා %1$@ පිවිසුම යාවත්කාල කරන්නද?";
-
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "පිවිසුම සුරකින්න";
 
@@ -817,7 +805,7 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "මුල";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "සත්‍යාපනය: %@";
 
 /* The title for tracking protection settings */
@@ -850,7 +838,7 @@
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "මොනවාද අළුත්";
 
-/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
 "Menu.ZoomPage.Title.v113" = "විශාලනය (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
@@ -1138,6 +1126,18 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "ඒ.ස.නි. (විමසුම %s සමඟ ප්‍රතිස්ථාපනය)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "අතිරික්සුවේ තේමාව";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "පෙනුම";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "අඩවි වල පෙනුම";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "අඩවි වලට අඳුරු ප්‍රකාරය";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "බාහිර යෙදුම් ඇරීම අවහිර කරන්න";
 
@@ -1150,7 +1150,7 @@
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "පෞද්ගලික දත්ත මකන්න";
 
-/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+/* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "අථක මකන්න: %1$@";
 
 /* Copy app version alert shown in settings. */
@@ -1396,7 +1396,7 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "ෆයර්ෆොක්ස් විවෘත කරන විට";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "%@ විවෘත කරන විට";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
@@ -1618,13 +1618,13 @@
 /* Title for Sync status message when Sync failed due to being offline */
 "SyncState.Offline.Title" = "සමමුහූර්තය මාර්ගඅපගතයි";
 
-/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "%2$@ න් %1$@ පටිත්ත";
 
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "සියළු පටිති පෙන්වන්න";
 
-/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray (%1$@ to %2$@), along with the total number of tabs (%3$@). E.g. “Tabs 8 to 10 of 15” says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
 "Tabs %@ to %@ of %@" = "%3$@ න් පටිති %1$@ සිට %2$@ දක්වා";
 
 /* Accessibility label for the Tabs Tray view. */
@@ -1632,9 +1632,6 @@
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "පෙරසේ";
-
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "පටිති %d ක් වැසිණි";
 
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "අක්‍රිය පටිති බලන්න";
@@ -1654,7 +1651,7 @@
 /* Accessibility label for the currently selected tab. */
 "TabTray.CurrentSelectedTab.A11Y" = "දැනට තේරූ පටිත්ත.";
 
-/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
 "TabTray.Header.FilteredTabs.SectionHeader" = "වෙනත්";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
@@ -1705,7 +1702,7 @@
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "අද";
 
-/* Relative date for date older than a minute. */
+/* Relative date for date older than a minute. %@ is the time. */
 "today at %@" = "අද %@ ට";
 
 /* Accessibility label for the Menu button. */
@@ -1714,7 +1711,7 @@
 /* Accessibility label for the Close All Tabs menu button. */
 "Toolbar.Menu.CloseAllTabs" = "සියළු පටිති වසන්න";
 
-/* Button shown in editing mode to remove this site from the top sites panel. */
+/* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "%@ — පිටුව ඉවත් කරන්න";
 
 /* Button to disallow the page to be translated to the user locale language */
@@ -1723,7 +1720,7 @@
 /* Button to allow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.OK" = "ඔව්";
 
-/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
 "TranslationToastHandler.PromptTranslate.Title" = "මෙම පිටුව %1$@ න් ඇති බව පෙනේ. %3$@ සමඟින් %2$@ වෙත පරිවර්තනය කරන්නද?";
 
 /* Tile title for Twitter */

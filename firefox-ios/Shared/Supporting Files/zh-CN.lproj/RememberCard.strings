@@ -1,4 +1,4 @@
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+/* This value is used as the header for the remember card page. %@ is the app name (e.g. Firefox). */
 "CreditCard.RememberCard.Header.v122" = "%@ 会将卡号加密保存。安全码不会被保存。";
 
 /* This value is used as the title for the Yes button in the remember credit card page */

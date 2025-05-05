@@ -21,7 +21,7 @@ jobs:
       max-parallel: 4
       matrix:
         xcode:
-          - "16.2"
+          - "16.3"
     steps:
       - name: Clone code repository
         uses: actions/checkout@v4

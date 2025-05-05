@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "താങ്ങളുടെ അക്കൗണ്ടു് സമന്വയിപ്പിക്കാൻ വേണ്ടി ഈ ഉപകരണമോടു് ബന്ധപ്പെട്ടിട്ട മറ്റു ഉപകരണങ്ങളില്ല.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "താങ്കള്‍ താങ്കളുടെ അക്കൗണ്ടിലെക്ക് പ്രവേശിച്ചിട്ടില്ല.";
+

@@ -1,6 +1,54 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option. */
 "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136" = "Valgt";
 
-/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name. */
+/* On the app icon customization screen, where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. %@ is the app name. */
 "Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136" = "Velg %@ app-ikonet";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136" = "Ikke valgt";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background. */
+"Settings.AppIconSelection.AppIconNames.Blue.Title.v136" = "Blå";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple. */
+"Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "Blå time";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
+"Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "Mørkelilla";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
+"Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "Morgenrøde";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background. */
+"Settings.AppIconSelection.AppIconNames.Green.Title.v136" = "Grønn";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo. */
+"Settings.AppIconSelection.AppIconNames.Hug.Title.v136" = "Klem";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe. */
+"Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "Lat";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background. */
+"Settings.AppIconSelection.AppIconNames.Pink.Title.v136" = "Rosa";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon. */
+"Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136" = "Pikselert";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo. */
+"Settings.AppIconSelection.AppIconNames.Pride.Title.v136" = "Pride";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
+"Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "Standard";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred. */
+"Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "OK";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon. */
+"Settings.AppIconSelection.Errors.SelectErrorMessage.v136" = "Beklager, det oppsto en feil ved endring av ditt app-ikon.";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
+"Settings.AppIconSelection.ScreenTitle.v136" = "App-ikon";
+
+/* On the Settings screen, the name of the row that opens app icon selection options. */
+"Settings.AppIconSelection.SettingsOptionName.v136" = "App-ikon";
 
