@@ -551,7 +551,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     private func deleteNormalTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        tabManager.removeNormalTabsOlderThan(period: period)
+        tabManager.removeNormalTabsOlderThan(period: period, currentDate: .now)
 
         // We are not closing the tab tray, so we need to refresh the tabs on screen
         let model = getTabsDisplayModel(for: false, uuid: uuid)

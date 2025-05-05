@@ -22,6 +22,8 @@ class TabManagerTests: XCTestCase {
     var mockDiskImageStore: MockDiskImageStore!
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    /// 9 Sep 2001 8:00 pm GMT + 0
+    let testDate = Date(timeIntervalSince1970: 1_000_065_600)
 
     override func setUp() {
         super.setUp()
@@ -1520,7 +1522,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalActive, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
@@ -1530,7 +1532,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactive, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneWeek)
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
@@ -1540,7 +1542,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
     }
@@ -1550,7 +1552,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
@@ -1560,7 +1562,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneWeek)
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
@@ -1570,7 +1572,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneMonth)
+        tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
@@ -1580,7 +1582,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneDay)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
@@ -1590,7 +1592,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneWeek)
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
@@ -1600,7 +1602,7 @@ class TabManagerTests: XCTestCase {
         let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        tabManager.removeNormalTabsOlderThan(period: .oneMonth)
+        tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
@@ -1764,15 +1766,15 @@ class TabManagerTests: XCTestCase {
             case .normalActive:
                 tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
             case .normalInactive:
-                let lastMonthDate = Date().lastMonth
+                let lastMonthDate = testDate.lastMonth
                 tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: lastMonthDate)
             case .privateAny:
                 tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: tabWindowUUID)
             case .normalInactive2Weeks:
-                let twoWeeksDate = Date().lastTwoWeek
+                let twoWeeksDate = testDate.lastTwoWeek
                 tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: twoWeeksDate)
             case .normalInactiveYesterday:
-                let yesterdayDate = Date.yesterday
+                let yesterdayDate = testDate.dayBefore
                 tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: yesterdayDate)
             }
 
