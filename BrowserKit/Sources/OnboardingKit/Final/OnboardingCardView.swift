@@ -129,6 +129,39 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
+    
+    var imageView: some View {
+        viewModel.image.map {
+            Image(uiImage: $0)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 150)
+                .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
+            
+        }
+    }
+    
+    var linkView: some View {
+        viewModel.link.map {
+            LinkButton(
+                viewModel: $0,
+                action: onLink
+            )
+        }
+    }
+
+    var secondaryButton: some View {
+        viewModel.buttons.secondary.map {
+            Button($0.title) {
+                // secondary action
+            }
+            .font(.subheadline)
+            .foregroundColor(.white)
+            .padding(.top, 8)
+            .padding(.bottom, 24)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+        }
+    }
 
     public var body: some View {
         ScrollView {
@@ -136,20 +169,9 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 VStack(spacing: 24) {
                     Spacer()
                     titleView
-                    if let uiImage = viewModel.image {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 150)
-                            .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
-                    }
+                    imageView
                     bodyView
-                    if let link = viewModel.link {
-                        LinkButton(
-                            viewModel: link,
-                            action: onLink
-                        )
-                    }
+                    linkView
                     Spacer()
                     Button(viewModel.buttons.primary.title) {
                         // primary action
@@ -170,17 +192,8 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                         )
                 )
                 .padding(.horizontal, 24)
-                if let sec = viewModel.buttons.secondary {
-                    Button(sec.title) {
-                        // secondary action
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .padding(.top, 8)
-                    .padding(.bottom, 24)
-                    .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
-                    Spacer()
-                }
+                secondaryButton
+                Spacer()
             }
         }
     }
@@ -281,61 +294,6 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
             )
             .padding(.horizontal, 24)
         }
-    }
-}
-
-// MARK: - Helper Button Views
-
-public struct PrimaryRoundedButton: View {
-    let title: String
-    let accessibilityID: String
-    let action: () -> Void
-    @Environment(\.theme) private var theme
-
-    public init(title: String, accessibilityID: String, action: @escaping () -> Void) {
-        self.title = title
-        self.accessibilityID = accessibilityID
-        self.action = action
-    }
-
-    public var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(theme.colors.buttonPrimaryBackground)
-                .foregroundColor(theme.colors.buttonPrimaryText)
-                .cornerRadius(8)
-        }
-        .accessibility(identifier: accessibilityID)
-    }
-}
-
-public struct SecondaryRoundedButton: View {
-    let title: String?
-    let accessibilityID: String
-    let action: () -> Void
-    @Environment(\.theme) private var theme
-
-    public init(title: String?, accessibilityID: String, action: @escaping () -> Void) {
-        self.title = title
-        self.accessibilityID = accessibilityID
-        self.action = action
-    }
-
-    public var body: some View {
-        Button(action: action) {
-            Text(title ?? "")
-                .font(.body)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(theme.colors.buttonSecondaryBorder, lineWidth: 1)
-                )
-        }
-        .accessibility(identifier: accessibilityID)
     }
 }
 
