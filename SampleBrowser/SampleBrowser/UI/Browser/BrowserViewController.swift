@@ -271,9 +271,9 @@ class BrowserViewController: UIViewController,
         return .default
     }
 
-    func onRequestOpenPopupView(_ view: UIView) {
-        let popupViewController = PopupViewController(contentView: view)
-        present(popupViewController, animated: true)
+    func onRequestOpenNewSession(_ session: EngineSession) {
+        engineSession = session
+        engineView.render(session: session)
     }
 
     // MARK: - Ads Handling

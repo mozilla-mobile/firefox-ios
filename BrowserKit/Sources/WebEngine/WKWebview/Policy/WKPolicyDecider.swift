@@ -6,6 +6,8 @@ import Foundation
 import WebKit
 
 protocol WKPolicyDecider {
+    var next: WKPolicyDecider? { get set }
+
     func policyForNavigation(action: WKNavigationAction) -> WKPolicy
 
     func policyForNavigation(response: WKNavigationResponse) -> WKPolicy

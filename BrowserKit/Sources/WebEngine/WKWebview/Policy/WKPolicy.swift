@@ -4,8 +4,8 @@
 
 import Foundation
 
-enum WKPolicy {
+enum WKPolicy: Equatable {
     case allow
-    case openApp(url: URL)
+    case openApp
     case cancel
 }

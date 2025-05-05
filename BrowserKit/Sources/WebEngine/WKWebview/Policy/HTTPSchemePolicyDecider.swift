@@ -5,6 +5,8 @@
 import WebKit
 
 struct HTTPSchemePolicyDecider: WKPolicyDecider {
+    var next: (any WKPolicyDecider)?
+
     func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
         guard isHTTPScheme(action.request.url) else { return .cancel }
         return .allow
@@ -15,6 +17,15 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
     }
 
     func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
+        guard shouldRequestBeOpenedAsPopup(action.request) else {
+            return next?.policyForPopupNavigation(action: action) ?? .cancel
+        }
+
+        // Check if we want to open 
+        if action.sourceFrame.request.url?.baseDomain == "paypal.com" {
+            return .cancel
+        }
+
         return .allow
     }
 
@@ -24,21 +35,39 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
         }
         return false
     }
+
+    private func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        // Treat `window.open("")` the same as `window.open("about:blank")`.
+        if request.url?.absoluteString.isEmpty ?? false {
+            return true
+        }
+
+        /// List of schemes that are allowed to be opened in new tabs.
+        let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
+
+        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
+            return true
+        }
+
+        return false
+    }
 }
 
 struct AppLaunchPolicyDecider: WKPolicyDecider {
+    var next: (any WKPolicyDecider)?
+
     // We should add marketplace kit schemes
     // Should we consider doing like for popup to check if we can open the app trough the application and just
     // open the app in that case ?
-    private let supportedSchemes = ["sms", "tel", "facetime", "facetime-audio", "itms-apps", "itms-appss"]
+    private let supportedSchemes = ["sms", "tel", "facetime", "facetime-audio", "itms-apps", "itms-appss", "whatsapp"]
     private let appStoreHosts = ["itunes.apple.com", "apps.apple.com", "appsto.re"]
 
     func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
         guard let url = action.request.url else { return .cancel }
         if isSupportedHost(url) || isSupportedScheme(url) {
-            return .openApp(url: url)
+            return .openApp
         }
-        return .allow
+        return .cancel
     }
     
     func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
@@ -46,7 +75,12 @@ struct AppLaunchPolicyDecider: WKPolicyDecider {
     }
 
     func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
-        return .allow
+        guard let url = action.request.url,
+              (isSupportedHost(url) || isSupportedScheme(url)) else {
+            return next?.policyForPopupNavigation(action: action) ?? .cancel
+        }
+
+        return .openApp
     }
 
     private func isSupportedHost(_ url: URL) -> Bool {
@@ -60,7 +94,37 @@ struct AppLaunchPolicyDecider: WKPolicyDecider {
     }
 }
 
+struct LocalRequestPolicyDecider: WKPolicyDecider {
+    var next: (any WKPolicyDecider)?
+    
+    func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
+        return .allow
+    }
+    
+    func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
+        return .allow
+    }
+
+    func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
+        guard isRequestInternalPrivileged(action.request) else {
+            return next?.policyForPopupNavigation(action: action) ?? .cancel
+        }
+        return .allow
+    }
+
+    private func isRequestInternalPrivileged(_ request: URLRequest) -> Bool {
+        guard let url = request.url else { return true }
+
+        if let url = WKInternalURL(url) {
+            return !url.isAuthorized
+        }
+        return false
+    }
+}
+
 struct DeeplinkPolicyDecider: WKPolicyDecider {
+    var next: (any WKPolicyDecider)?
+
     func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
         return .allow
     }

@@ -7,6 +7,10 @@ import UIKit.UIContextMenuConfiguration
 @testable import WebEngine
 
 class MockEngineSessionDelegate: EngineSessionDelegate {
+    func onRequestOpenNewSession(_ session: any WebEngine.EngineSession) {
+        
+    }
+    
     var onTitleChangeCalled = 0
     var onProgressCalled = 0
     var onHideProgressCalled = 0

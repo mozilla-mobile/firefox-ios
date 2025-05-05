@@ -4,7 +4,9 @@
 
 import WebKit
 
-class DataSchemePolicyDecider: WKPolicyDecider {
+struct DataSchemePolicyDecider: WKPolicyDecider {
+    var next: (any WKPolicyDecider)?
+
     func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
         return .allow
     }
