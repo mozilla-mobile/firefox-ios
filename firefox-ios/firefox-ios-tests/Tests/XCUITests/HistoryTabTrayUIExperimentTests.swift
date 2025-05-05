@@ -63,7 +63,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
-        navigator.performAction(Action.ToggleSyncMode)
+        navigator.performAction(Action.ToggleExperimentSyncMode)
         waitForElementsToExist(
             [
                 app.otherElements.staticTexts["Firefox Sync"],
@@ -405,7 +405,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
 
         // On regular mode, the "Recently Closed Tabs List" is empty, too
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         navigator.goto(NewTabScreen)
         closeKeyboard()
         navigator.goto(LibraryPanel_History)
