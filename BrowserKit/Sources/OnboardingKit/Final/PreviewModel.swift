@@ -21,10 +21,10 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
     var order: Int
     var title: String
     var body: String
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel?
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
     var link: OnboardingLinkInfoModel?
-    var buttons: OnboardingButtons
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel]
+    var buttons: OnboardingButtons<OnboardingActions>
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     var onboardingType: OnboardingType
     var a11yIdRoot: String
     var imageID: String
@@ -37,12 +37,12 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
         title: String,
         body: String,
         link: OnboardingLinkInfoModel? = nil,
-        buttons: OnboardingButtons,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel] = [],
+        buttons: OnboardingButtons<OnboardingActions>,
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] = [],
         onboardingType: OnboardingType = .freshInstall,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel? = nil
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil
     ) {
         self.cardType = cardType
         self.name = name
@@ -59,6 +59,124 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
     }
 }
 
+public enum OnboardingType: String, Codable {
+    case freshInstall = "fresh-install"
+    case upgrade
+}
+
+public enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable {
+    
+    /// Will will set the theme to dark mode
+    ///
+    case themeDark = "theme-dark"
+    
+    /// Will set the theme to light mode
+    ///
+    case themeLight = "theme-light"
+    
+    /// Will set the theme to use the system theme
+    ///
+    case themeSystemDefault = "theme-system-default"
+    
+    /// Will set the toolbar on the bottom
+    ///
+    case toolbarBottom = "toolbar-bottom"
+    
+    /// Will set the toolbar on the top
+    ///
+    case toolbarTop = "toolbar-top"
+}
+
+extension OnboardingMultipleChoiceAction {
+    public var id: String { rawValue }
+    
+    public var displayName: String {
+        switch self {
+        case .themeDark:
+            return "Dark"
+        case .themeLight:
+            return "Light"
+        case .themeSystemDefault:
+            return "System Default"
+        case .toolbarBottom:
+            return "Bottom"
+        case .toolbarTop:
+            return "Top"
+        }
+    }
+}
+
+public enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable {
+    case dismiss = "dismiss"
+    case dismissAndNextCard = "dismiss-and-next-card"
+    case openIosFxSettings = "open-ios-fx-settings"
+}
+
+extension OnboardingInstructionsPopupActions {
+    public var displayName: String {
+        return self.rawValue
+    }
+    
+    public var id: String {
+        return self.rawValue
+    }
+}
+
+public enum OnboardingActions: String, CaseIterable, Codable {
+    
+    /// Will end the onboarding on a set card
+    ///
+    case endOnboarding = "end-onboarding"
+    
+    /// Will take the user to the next card
+    ///
+    case forwardOneCard = "forward-one-card"
+    
+    /// Will take the user to the next card
+    ///
+    case forwardThreeCard = "forward-three-card"
+    
+    /// Will take the user to the next card
+    ///
+    case forwardTwoCard = "forward-two-card"
+    
+    /// Will open up a popup with instructions for something
+    ///
+    case openInstructionsPopup = "open-instructions-popup"
+    
+    /// Will take the user to the default browser settings in the iOS system
+    /// settings
+    ///
+    case openIosFxSettings = "open-ios-fx-settings"
+    
+    /// Will open a webview where the user can read the privacy policy
+    ///
+    case readPrivacyPolicy = "read-privacy-policy"
+    
+    /// Will request to allow notifications from the user
+    ///
+    case requestNotifications = "request-notifications"
+    
+    /// Will send the user to settings to set Firefox as their default browser and
+    /// advance to next card
+    ///
+    case setDefaultBrowser = "set-default-browser"
+    
+    /// Will take the user to the sync sign in flow
+    ///
+    case syncSignIn = "sync-sign-in"
+}
+
+extension OnboardingActions {
+    public var displayName: String {
+        return self.rawValue
+    }
+    
+    public var id: String {
+        return self.rawValue
+    }
+}
+
 extension PreviewModel {
     static let welcome = PreviewModel(
         cardType: .basic,
@@ -68,8 +186,8 @@ extension PreviewModel {
         body: "One tap helps stop companies spying on your clicks.",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Get Started", action: .forwardOneCard),
-            secondary: .init(title: "Not Now", action: .forwardOneCard)
+            primary: .init(title: "Get Started", action: OnboardingActions.forwardOneCard),
+            secondary: .init(title: "Not Now", action: OnboardingActions.forwardOneCard)
         ),
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
@@ -83,7 +201,7 @@ extension PreviewModel {
                 "Select Firefox"
             ],
             buttonTitle: "Open Settings",
-            buttonAction: .openIosFxSettings,
+            buttonAction: OnboardingInstructionsPopupActions.openIosFxSettings,
             a11yIdRoot: "onboarding_welcomeInstructionsPopup"
         )
     )
@@ -96,8 +214,8 @@ extension PreviewModel {
         body: "Get bookmarks, tabs, and passwords on any device. All protected with encryption.",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Sign In", action: .syncSignIn),
-            secondary: .init(title: "Skip", action: .forwardOneCard)
+            primary: .init(title: "Sign In", action: OnboardingActions.syncSignIn),
+            secondary: .init(title: "Skip", action: OnboardingActions.forwardOneCard)
         ),
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
@@ -114,8 +232,8 @@ extension PreviewModel {
         body: "Stay up to date with alerts.",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Turn On", action: .requestNotifications),
-            secondary: .init(title: "Skip", action: .forwardOneCard)
+            primary: .init(title: "Turn On", action: OnboardingActions.requestNotifications),
+            secondary: .init(title: "Skip", action: OnboardingActions.forwardOneCard)
         ),
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
@@ -132,13 +250,13 @@ extension PreviewModel {
         body: "Choose light, dark, or system default.",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Continue", action: .forwardOneCard),
+            primary: .init(title: "Continue", action: OnboardingActions.forwardOneCard),
             secondary: nil
         ),
         multipleChoiceButtons: [
-            .init(title: "System Default", action: .themeSystemDefault, imageID: "themeSystem"),
-            .init(title: "Light",          action: .themeLight,         imageID: "themeLight"),
-            .init(title: "Dark",           action: .themeDark,          imageID: "themeDark"),
+            .init(title: "System Default", action: OnboardingMultipleChoiceAction.themeSystemDefault, imageID: "themeSystem"),
+            .init(title: "Light",          action: OnboardingMultipleChoiceAction.themeLight,         imageID: "themeLight"),
+            .init(title: "Dark",           action: OnboardingMultipleChoiceAction.themeDark,          imageID: "themeDark"),
         ],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_customizationTheme",
@@ -154,12 +272,12 @@ extension PreviewModel {
         body: "Where should the toolbar appear?",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Continue", action: .forwardOneCard),
+            primary: .init(title: "Continue", action: OnboardingActions.forwardOneCard),
             secondary: nil
         ),
         multipleChoiceButtons: [
-            .init(title: "Top",    action: .toolbarTop,    imageID: "toolbarTop"),
-            .init(title: "Bottom", action: .toolbarBottom, imageID: "toolbarBottom"),
+            .init(title: "Top",    action: OnboardingMultipleChoiceAction.toolbarTop,    imageID: "toolbarTop"),
+            .init(title: "Bottom", action: OnboardingMultipleChoiceAction.toolbarBottom, imageID: "toolbarBottom"),
         ],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_customizationToolbar",
@@ -175,7 +293,7 @@ extension PreviewModel {
         body: "Here's what's new in this update.",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Next", action: .forwardOneCard),
+            primary: .init(title: "Next", action: OnboardingActions.forwardOneCard),
             secondary: nil
         ),
         multipleChoiceButtons: [],
@@ -193,8 +311,8 @@ extension PreviewModel {
         body: "Sign in again to keep syncing.",
         link: nil,
         buttons: .init(
-            primary: .init(title: "Sign In", action: .syncSignIn),
-            secondary: .init(title: "Later", action: .forwardOneCard)
+            primary: .init(title: "Sign In", action: OnboardingActions.syncSignIn),
+            secondary: .init(title: "Later", action: OnboardingActions.forwardOneCard)
         ),
         multipleChoiceButtons: [],
         onboardingType: .upgrade,
@@ -230,8 +348,8 @@ struct OnboardingUI_Previews: PreviewProvider {
                 viewModel: PreviewModel.welcome,
                 onPrimary:   { print("Next tapped") },
                 onSecondary: { print("Skip tapped") },
-                onLink:      { print("Learn more tapped") },
-                onChoice:    { choice in print("Chose \(choice.title)") }
+                onLink:      { print("Learn more tapped") }//,
+//                onChoice:    { choice in print("Chose \(choice.title)") }
             )
             .previewDisplayName("Basic – iPhone 12")
             .previewDevice("iPhone 12")
@@ -240,8 +358,8 @@ struct OnboardingUI_Previews: PreviewProvider {
                 viewModel: PreviewModel.customizationTheme,
                 onPrimary:   { print("Done tapped") },
                 onSecondary: { /* no secondary here */ },
-                onLink:      { print("Learn more tapped") },
-                onChoice:    { choice in print("Chose \(choice.title)") }
+                onLink:      { print("Learn more tapped") }//,
+//                onChoice:    { choice in print("Chose \(choice.title)") }
             )
             .previewDisplayName("Multiple Choice – SE1")
             .previewDevice("iPhone SE (1st generation)")
@@ -267,8 +385,8 @@ struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
                             viewModel: card,
                             onPrimary:   { print("Done tapped") },
                             onSecondary: { /* no secondary here */ },
-                            onLink:      { print("Learn more tapped") },
-                            onChoice:    { choice in print("Chose \(choice.title)") }
+                            onLink:      { print("Learn more tapped") }//,
+//                            onChoice:    { choice in print("Chose \(choice.title)") }
                         )
                     }
                     .tag(card.name)

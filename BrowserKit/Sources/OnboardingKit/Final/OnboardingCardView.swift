@@ -9,7 +9,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
     public let onPrimary: () -> Void
     public let onSecondary: () -> Void
     public let onLink: () -> Void
-    public let onChoice: (OnboardingMultipleChoiceButtonModel) -> Void
+//    public let onChoice: (OnboardingMultipleChoiceButtonModel) -> Void
 
     @Environment(\.theme) private var theme
 
@@ -17,14 +17,14 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
         viewModel: VM,
         onPrimary: @escaping () -> Void,
         onSecondary: @escaping () -> Void,
-        onLink: @escaping () -> Void,
-        onChoice: @escaping (OnboardingMultipleChoiceButtonModel) -> Void
+        onLink: @escaping () -> Void//,
+//        onChoice: @escaping (OnboardingMultipleChoiceButtonModel) -> Void
     ) {
         self.viewModel = viewModel
         self.onPrimary = onPrimary
         self.onSecondary = onSecondary
         self.onLink = onLink
-        self.onChoice = onChoice
+//        self.onChoice = onChoice
     }
 
     public var body: some View {
@@ -41,8 +41,8 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
                 OnboardingMultipleChoiceCardView(
                     viewModel: viewModel,
                     onPrimary: onPrimary,
-                    onSecondary: onSecondary,
-                    onChoice: onChoice
+                    onSecondary: onSecondary//,
+//                    onChoice: onChoice
                 )
             }
         }
@@ -112,45 +112,45 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     private var stackSpacing: CGFloat {
         viewModel.link != nil ? 15 : 24
     }
+    
+    var titleView: some View {
+        Text(viewModel.title)
+            .font(UIDevice.isSmall ? .title3 : .title)
+            .fontWeight(.semibold)
+            .multilineTextAlignment(.center)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
+            .accessibility(addTraits: .isHeader)
+    }
+    
+    var bodyView: some View {
+        Text(viewModel.body)
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
+    }
 
     public var body: some View {
         ScrollView {
             VStack {
                 VStack(spacing: 24) {
-                    
                     Spacer()
-                    
-                    Text(viewModel.title)
-                        .font(UIDevice.isSmall ? .title3 : .title)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.center)
-                        .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
-                        .accessibility(addTraits: .isHeader)
-
+                    titleView
                     if let uiImage = viewModel.image {
                         Image(uiImage: uiImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 150)
                             .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
-
                     }
-
-                    Text(viewModel.body)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-                    
+                    bodyView
                     if let link = viewModel.link {
                         LinkButton(
                             viewModel: link,
                             action: onLink
                         )
                     }
-                    
                     Spacer()
-                    
                     Button(viewModel.buttons.primary.title) {
                         // primary action
                     }
@@ -162,11 +162,14 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 .background(
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color(.systemBackground))
-                        .shadow(color: Color.black.opacity(0.1),
-                                radius: 8, x: 0, y: 4)
+                        .shadow(
+                            color: Color.black.opacity(0.1),
+                            radius: 8,
+                            x: 0,
+                            y: 4
+                        )
                 )
                 .padding(.horizontal, 24)
-
                 if let sec = viewModel.buttons.secondary {
                     Button(sec.title) {
                         // secondary action
@@ -189,21 +192,23 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
     public let viewModel: VM
     public let onPrimary: () -> Void
     public let onSecondary: () -> Void
-    public let onChoice: (OnboardingMultipleChoiceButtonModel) -> Void
+//    public let onChoice: (OnboardingMultipleChoiceButtonModel) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.horizontalSizeClass) private var hSizeClass
+    
+    @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
 
     public init(
         viewModel: VM,
         onPrimary: @escaping () -> Void,
         onSecondary: @escaping () -> Void,
-        onChoice: @escaping (OnboardingMultipleChoiceButtonModel) -> Void
+//        onChoice: @escaping (OnboardingMultipleChoiceButtonModel) -> Void
     ) {
         self.viewModel = viewModel
         self.onPrimary = onPrimary
         self.onSecondary = onSecondary
-        self.onChoice = onChoice
+//        self.onChoice = onChoice
         self._selectedAction = State(initialValue: viewModel.multipleChoiceButtons.first!.action)
     }
 
@@ -237,8 +242,6 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
         }
         return 24
     }
-    
-    @State private var selectedAction: OnboardingMultipleChoiceAction
 
     public var body: some View {
         ScrollView {
@@ -255,7 +258,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
                 
                 Spacer()
                 
-                OnboardingSegmentedControl(
+                OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
                     selection: $selectedAction,
                     items: viewModel.multipleChoiceButtons
                 )
@@ -354,37 +357,6 @@ public struct LinkButton: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibility(identifier: viewModel.title)
-    }
-}
-
-public struct ChoiceButton: View {
-    let model: OnboardingMultipleChoiceButtonModel
-    let isSelected: Bool
-    let theme: Theme
-    let action: () -> Void
-
-    public init(
-        model: OnboardingMultipleChoiceButtonModel,
-        isSelected: Bool,
-        theme: Theme,
-        action: @escaping () -> Void
-    ) {
-        self.model = model
-        self.isSelected = isSelected
-        self.theme = theme
-        self.action = action
-    }
-
-    public var body: some View {
-        Button(action: action) {
-            Text(model.title)
-                .font(.body)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
-                .background(isSelected ? theme.colors.buttonPrimaryBackground : Color.clear)
-                .foregroundColor(isSelected ? theme.colors.buttonPrimaryText : theme.colors.textPrimary)
-                .cornerRadius(8)
-        }
     }
 }
 

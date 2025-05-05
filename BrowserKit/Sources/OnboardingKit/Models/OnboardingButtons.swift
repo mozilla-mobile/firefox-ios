@@ -5,13 +5,13 @@
 
 import Foundation
 
-public struct OnboardingButtons {
-    let primary: OnboardingButtonInfoModel
-    let secondary: OnboardingButtonInfoModel?
+public struct OnboardingButtons<OnboardingActionType> {
+    let primary: OnboardingButtonInfoModel<OnboardingActionType>
+    let secondary: OnboardingButtonInfoModel<OnboardingActionType>?
 
     init(
-        primary: OnboardingButtonInfoModel,
-        secondary: OnboardingButtonInfoModel? = nil
+        primary: OnboardingButtonInfoModel<OnboardingActionType>,
+        secondary: OnboardingButtonInfoModel<OnboardingActionType>? = nil
     ) {
         self.primary = primary
         self.secondary = secondary

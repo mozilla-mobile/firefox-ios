@@ -5,16 +5,64 @@
 
 import UIKit
 
+public enum OnboardingCardType: String, Codable {
+    case basic
+    case multipleChoice = "multiple-choice"
+}
+
+public struct OnboardingButtonInfoModel<OnboardingActionType> {
+    let title: String
+    let action: OnboardingActionType
+    
+    public init(title: String, action: OnboardingActionType) {
+        self.title = title
+        self.action = action
+    }
+}
+
+protocol OnboardingDefaultBrowserModelProtocol {
+    associatedtype OnboardingPopupActionType
+    var title: String { get set }
+    var instructionSteps: [String] { get set }
+    var buttonTitle: String { get set }
+    var buttonAction: OnboardingPopupActionType { get set }
+    var a11yIdRoot: String { get set }
+
+    func getAttributedStrings(with font: UIFont) -> [NSAttributedString]
+}
+
+public struct OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>: OnboardingDefaultBrowserModelProtocol {
+    var title: String
+    var instructionSteps: [String]
+    var buttonTitle: String
+    var buttonAction: OnboardingPopupActionType
+    var a11yIdRoot: String
+
+    func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
+        return []//instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
+    }
+}
+
+public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType> {
+    let title: String
+    let action: OnboardingMultipleChoiceActionType
+    var imageID: String
+}
+
 public protocol OnboardingCardInfoModelProtocol {
+    associatedtype OnboardingType
+    associatedtype OnboardingPopupActionType
+    associatedtype OnboardingMultipleChoiceActionType: Hashable
+    associatedtype OnboardingActionType
     var cardType: OnboardingCardType { get set }
     var name: String { get set }
     var order: Int { get set }
     var title: String { get set }
     var body: String { get set }
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel? { get set }
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>? { get set }
     var link: OnboardingLinkInfoModel? { get set }
-    var buttons: OnboardingButtons { get set }
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel] { get set }
+    var buttons: OnboardingButtons<OnboardingActionType> { get set }
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>] { get set }
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
@@ -28,11 +76,11 @@ public protocol OnboardingCardInfoModelProtocol {
         title: String,
         body: String,
         link: OnboardingLinkInfoModel?,
-        buttons: OnboardingButtons,
-        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
+        buttons: OnboardingButtons<OnboardingActionType>,
+        multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>],
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel?
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>?
     )
 }

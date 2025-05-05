@@ -5,9 +5,9 @@
 
 import SwiftUI
 
-struct OnboardingSegmentedControl: View {
-    @Binding var selection: OnboardingMultipleChoiceAction
-    let items: [OnboardingMultipleChoiceButtonModel]
+struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
+    @Binding var selection: Action
+    let items: [OnboardingMultipleChoiceButtonModel<Action>]
     
     var body: some View {
         HStack {
@@ -58,7 +58,7 @@ struct OnboardingMultipleChoiceButtonModelExampleView: View {
 
   // configure these however you like—titles, SF Symbol names, etc.
   private let toolbarOptions = [
-    OnboardingMultipleChoiceButtonModel(
+    OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
       title: "Bottom",
       action: .toolbarBottom,
       imageID: "rectangle.bottomthird.inset.filled"
