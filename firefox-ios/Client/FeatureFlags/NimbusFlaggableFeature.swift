@@ -15,8 +15,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressBarMenu
     case bookmarksRefactor
     case bottomSearchBar
-    case contextualHintForToolbar
-    case creditCardAutofillStatus
     case cleanupHistoryReenabled
     case deeplinkOptimizationRefactor
     case feltPrivacySimplifiedUI
@@ -24,7 +22,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxSuggestFeature
     case homepageRebuild
     case inactiveTabs
-    case loginAutofill
     case menuRefactor
     case menuRefactorHint
     case microsurvey
@@ -39,6 +36,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case splashScreen
+    case startAtHome
     case unifiedAds
     case unifiedSearch
     case tabAnimation
@@ -90,6 +88,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
     case searchBarPosition
+    case startAtHome
 }
 
 struct NimbusFlaggableFeature: HasNimbusSearchBar {
@@ -109,17 +108,16 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
+        case .startAtHome:
+            return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting.
         case .appearanceMenu,
                 .addressBarMenu,
-                .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
-                .creditCardAutofillStatus,
                 .deeplinkOptimizationRefactor,
                 .homepageRebuild,
-                .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
                 .menuRefactorHint,
@@ -207,6 +205,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return nimbusSearchBar.getDefaultPosition().rawValue
         case .splashScreen:
             return nimbusSearchBar.getDefaultPosition().rawValue
+        case .startAtHome:
+            return FxNimbus.shared.features.startAtHomeFeature.value().setting.rawValue
         default: return nil
         }
     }

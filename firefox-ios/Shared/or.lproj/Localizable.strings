@@ -4,10 +4,10 @@
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
-/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+/* Authentication prompt message with no realm. %@ is the hostname of the site. */
 "A username and password are being requested by %@." = "%@ଙ୍କ ଦ୍ୱାରା ଏକ ଇଉଜରନାମ ଓ ପାସୱାର୍ଡ଼ ବ୍ୟବହାର ହେଉଛି ।";
 
-/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+/* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ଙ୍କ ଦେଇ ଏକ ଇଉଜରନାମ ଓ ପାସୱାର୍ଡ଼ ଅନୁରୋଧ କରାଯାଇଛି । ସାଇଟରେ ଲେଖାଯାଇଛି: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
@@ -25,7 +25,7 @@
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "ଅସଂଲଘ୍ନ";
 
-/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "ଟ୍ୟାବଗୁଡିକ: %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
@@ -274,13 +274,13 @@
 /* The button to open a new tab with the Downloads home panel */
 "Downloads.Toast.GoToDownloads.Button" = "ଡାଉନଲୋଡ଼ସମୂହ";
 
-/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
 "Downloads.Toast.MultipleFiles.DescriptionText" = "%d ଫାଇଲର 1";
 
-/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+/* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
 
-/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+/* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
@@ -304,7 +304,7 @@
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "ଏହା ଏକ ଭୁଲ୍ ବିନ୍ୟାସ କିମ୍ବା ଆକ୍ରମଣକାରୀଙ୍କ ଦ୍ୱାରା ଟ୍ୟାମ୍ପରିଂ ହୋଇପାରେ | ଯଦି ଆପଣ ସମ୍ଭାବ୍ୟ ବିପଦକୁ ଗ୍ରହଣ କରନ୍ତି ତେବେ ଅଗ୍ରଗତି କରନ୍ତୁ";
 
-/* Warning text on the certificate error page */
+/* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "%@ ର ମାଲିକ ସେମାନଙ୍କର ୱେବସାଇଟ୍ କୁ ଭୁଲ୍ ଭାବରେ ବିନ୍ୟାସ କରିଛନ୍ତି | ଆପଣଙ୍କର ସୂଚନା ଚୋରି ହେବାରୁ ରକ୍ଷା କରିବା ପାଇଁ, ଫାୟାରଫକ୍ସ ଏହି ୱେବସାଇଟ୍ ସହିତ ସଂଯୋଗ ହୋଇନାହିଁ";
 
 /* Title on the certificate error page */
@@ -733,7 +733,7 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "ମୂଳ ସ୍ଥାନ";
 
-/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "%@ ଦ୍ୱାରା ଯାଞ୍ଚକରାଯାଇଛି";
 
 /* The title for tracking protection settings */

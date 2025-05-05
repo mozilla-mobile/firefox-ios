@@ -8,22 +8,32 @@ import ActivityKit
 import Common
 import Shared
 
-@available(iOS 16.2, *)
+@available(iOS 17, *)
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
-    enum DurationToDismissal: Double {
-        case none = 0
-        case delayed = 2
+    private struct UX {
+        static let updateCooldown = 0.75 // Update Cooldown in Seconds
     }
+
+    enum DurationToDismissal: UInt64 {
+        case none = 0
+        case delayed = 3_000_000_000 // Milliseconds to dismissal
+    }
+
+    let throttler = ConcurrencyThrottler(seconds: UX.updateCooldown)
+
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
     var downloadProgressManager: DownloadProgressManager
 
-    init(downloadProgressManager: DownloadProgressManager) {
+    let windowUUID: String
+
+    init(downloadProgressManager: DownloadProgressManager, windowUUID: String) {
         self.downloadProgressManager = downloadProgressManager
+        self.windowUUID = windowUUID
     }
 
     func start() -> Bool {
-        let attributes = DownloadLiveActivityAttributes()
+        let attributes = DownloadLiveActivityAttributes(windowUUID: windowUUID)
 
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
@@ -40,28 +50,35 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         }
     }
 
-    private func update() {
-        let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
-        let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
+    func end(durationToDismissal: DurationToDismissal) {
         Task {
-            await downloadLiveActivity?.update(using: contentState)
+            let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
+            let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
+            await update()
+            try await Task.sleep(nanoseconds: durationToDismissal.rawValue)
+            await downloadLiveActivity?.end(using: contentState, dismissalPolicy: .immediate)
         }
     }
 
-    func end(durationToDismissal: DurationToDismissal) {
+    private func update() async {
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
-        Task {
-            await downloadLiveActivity?.end(using: contentState,
-                                            dismissalPolicy: .after(.now.addingTimeInterval(durationToDismissal.rawValue)))
-        }
+        await self.downloadLiveActivity?.update(using: contentState)
     }
 
     func updateCombinedBytesDownloaded(value: Int64) {
-        update()
+        throttler.throttle {
+            Task {
+                await self.update()
+            }
+        }
     }
 
     func updateCombinedTotalBytesExpected(value: Int64?) {
-        update()
+        throttler.throttle {
+            Task {
+                await self.update()
+            }
+        }
     }
 }

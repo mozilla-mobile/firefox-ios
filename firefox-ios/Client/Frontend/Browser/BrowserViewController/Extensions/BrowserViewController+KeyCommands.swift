@@ -341,29 +341,25 @@ extension BrowserViewController {
 
     @objc
     func zoomIn() {
-        guard let currentTab = tabManager.selectedTab else { return }
+        guard contentContainer.hasAnyHomepage else { return }
 
-        if !contentContainer.hasAnyHomepage {
-            currentTab.zoomIn()
-        }
+        let zoomValue = zoomManager.zoomIn()
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomValue)
     }
 
     @objc
     func zoomOut() {
-        guard let currentTab = tabManager.selectedTab else { return }
+        guard contentContainer.hasAnyHomepage else { return }
 
-        if !contentContainer.hasAnyHomepage {
-            currentTab.zoomOut()
-        }
+        let zoomValue = zoomManager.zoomOut()
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomValue)
     }
 
     @objc
     func resetZoom() {
-        guard let currentTab = tabManager.selectedTab else { return }
+        guard contentContainer.hasAnyHomepage else { return }
 
-        if !contentContainer.hasAnyHomepage {
-            currentTab.resetZoom()
-        }
+        zoomManager.resetZoom()
     }
 
     // MARK: - KeyCommands

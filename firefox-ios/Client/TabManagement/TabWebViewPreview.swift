@@ -10,8 +10,9 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
     private struct UX {
         static let addressBarCornerRadius: CGFloat = 8
         static let addressBarBorderHeight: CGFloat = 1
-        static let addressBarHeight: CGFloat = 43
-        static let addressBarMaxHeight: CGFloat = 53
+        static let addressBarHeight: CGFloat = 44
+        static let addressBarMaxHeight: CGFloat = 54
+        static let edgePadding: CGFloat = 7
         static let addressBarOnTopLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         static let addressBarOnBottomLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
@@ -48,7 +49,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
 
     // MARK: - Layout
     private func setupLayout() {
-        addSubviews(webPageScreenshotImageView, addressBarBorderView, topStackView, bottomStackView)
+        addSubviews(webPageScreenshotImageView, topStackView, bottomStackView, addressBarBorderView)
 
         addressBarHeightConstraint = skeletonAddressBar.heightAnchor
             .constraint(equalToConstant: UX.addressBarHeight)
@@ -61,14 +62,14 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
 
             topStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topStackView.topAnchor.constraint(equalTo: topAnchor),
-            topStackView.rightAnchor.constraint(equalTo: rightAnchor),
+            topStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             webPageScreenshotImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             webPageScreenshotImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             bottomStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            bottomStackView.rightAnchor.constraint(equalTo: rightAnchor)
+            bottomStackView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
@@ -98,7 +99,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
             bottomStackView.addArrangedSubview(skeletonAddressBar)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
             addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(
-                equalTo: bottomStackView.topAnchor
+                equalTo: skeletonAddressBar.topAnchor, constant: -UX.edgePadding
             )
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(
                 equalTo: addressBarBorderView.topAnchor
@@ -107,7 +108,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
             topStackView.addArrangedSubview(skeletonAddressBar)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
             addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor.constraint(
-                equalTo: topStackView.bottomAnchor
+                equalTo: skeletonAddressBar.bottomAnchor, constant: UX.edgePadding
             )
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
         }

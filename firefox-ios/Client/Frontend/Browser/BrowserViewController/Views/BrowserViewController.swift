@@ -70,7 +70,8 @@ class BrowserViewController: UIViewController,
         .URL,
         .title,
         .hasOnlySecureContent,
-        .fullscreenState
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
@@ -92,6 +93,7 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    var zoomManager: ZoomPageManager
 
     // MARK: Optional UI elements
 
@@ -117,7 +119,7 @@ class BrowserViewController: UIViewController,
 
     private var _downloadLiveActivityWrapper: Any?
 
-    @available(iOS 16.2, *)
+    @available(iOS 17, *)
     var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
         get {
             return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
@@ -167,6 +169,10 @@ class BrowserViewController: UIViewController,
 
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build()
+
+    // A view used as the background for the address bar, designed to look nice
+    // when swiping between tabs, similar to Safari.
+    private lazy var addressBarBackgroundView: UIView = .build()
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
@@ -332,6 +338,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
+        self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -424,9 +431,10 @@ class BrowserViewController: UIViewController,
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
+            updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
         if let readerModeBar = readerModeBar {
             readerModeBar.removeFromParent()
@@ -484,7 +492,9 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = false
                 navigationToolbarContainer.applyTheme(theme: currentTheme())
                 updateTabCountUsingTabManager(self.tabManager)
-                if isSwipingTabsEnabled {
+                if isSwipingTabsEnabled,
+                   let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+                   !toolbarState.addressToolbar.isEditing {
                     addressBarPanGestureHandler?.enablePanGestureRecognizer()
                 }
             } else {
@@ -556,9 +566,7 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
-        if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
-        }
+
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -592,6 +600,10 @@ class BrowserViewController: UIViewController,
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
+        }
+
+        if let tab = tabManager.selectedTab, let screenshotHelper {
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
         guard canShowPrivacyWindow else { return }
@@ -776,7 +788,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled { webPagePreview.applyTheme(theme: theme) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -802,14 +814,6 @@ class BrowserViewController: UIViewController,
         // links into the view from other apps.
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
-
-        // Feature flag for credit card until we fully enable this feature
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
-            .creditCardAutofillStatus, checking: .buildOnly)
-        // We need to update autofill status on sync manager as there could be delay from nimbus
-        // in getting the value. When the delay happens the credit cards might not sync
-        // as the default value is false
-        profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
     }
 
     private func setupTopTabsViewController() {
@@ -919,6 +923,22 @@ class BrowserViewController: UIViewController,
             name: .RemoteTabNotificationTapped,
             object: nil
         )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onStopDownloads(_:)),
+            name: .StopDownloads,
+            object: nil
+        )
+    }
+
+    @objc
+    private func onStopDownloads(_ notification: Notification) {
+        ensureMainThread {
+            guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
+                  notiWindowUUID == self.windowUUID.uuidString else {return}
+            self.downloadToast?.dismiss(true)
+            self.stopDownload(buttonPressed: true)
+        }
     }
 
     private func switchToolbarIfNeeded() {
@@ -945,6 +965,7 @@ class BrowserViewController: UIViewController,
             header.removeArrangedView(addressToolbarContainer, animated: false)
             bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
 
+            if isSwipingTabsEnabled { addressBarPanGestureHandler?.disablePanGestureRecognizer() }
             createLegacyUrlBar()
 
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1001,7 +1022,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        if isSwipingTabsEnabled { view.addSubview(webPagePreview) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
@@ -1219,6 +1240,8 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
+    private var addressBarBackgroundViewTopConstraint: NSLayoutConstraint?
+    private var addressBarBackgroundViewBottomConstraint: NSLayoutConstraint?
 
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
@@ -1234,13 +1257,19 @@ class BrowserViewController: UIViewController,
             contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             NSLayoutConstraint.activate([
                 webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
             ])
+
+            addressBarBackgroundViewTopConstraint = addressBarBackgroundView.topAnchor
+                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor
+                .constraint(equalTo: bottomContainer.topAnchor)
+            updateAddressBarBackgroundViewConstraints(searchBarPosition: searchBarPosition)
         }
 
         updateHeaderConstraints()
@@ -1259,6 +1288,21 @@ class BrowserViewController: UIViewController,
                 make.left.right.equalTo(view)
             }
         }
+    }
+
+    private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
+        guard isToolbarRefactorEnabled else { return }
+
+        let isTop = (searchBarPosition == .top)
+        addressBarBackgroundView.constraints.forEach { $0.isActive = false }
+        addressBarBackgroundViewBottomConstraint?.isActive = !isTop
+        addressBarBackgroundViewTopConstraint?.isActive = isTop
+
+        NSLayoutConstraint.activate([
+            addressBarBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            addressBarBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            addressBarBackgroundView.heightAnchor.constraint(equalTo: addressToolbarContainer.heightAnchor)
+        ])
     }
 
     override func updateViewConstraints() {
@@ -1920,6 +1964,23 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func updateToolbarAnimationStateIfNeeded() {
+        guard isSwipingTabsEnabled,
+              isToolbarRefactorEnabled,
+        store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.shouldAnimate == false else { return }
+        store.dispatch(
+            ToolbarAction(
+                shouldAnimate: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged
+            )
+        )
+    }
+
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -1981,6 +2042,7 @@ class BrowserViewController: UIViewController,
             }
 
         case .URL:
+            updateToolbarAnimationStateIfNeeded()
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
                 break
@@ -2068,16 +2130,17 @@ class BrowserViewController: UIViewController,
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
             }
-        case .fullscreenState:
-            if #available(iOS 16.0, *) {
-                guard webView.fullscreenState == .enteringFullscreen ||
-                        webView.fullscreenState == .exitingFullscreen else { return }
-                if webView.fullscreenState == .enteringFullscreen {
-                    fullscreenDelegate?.enteringFullscreen()
-                } else {
-                    fullscreenDelegate?.exitingFullscreen()
-                }
-            }
+            // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        case .fullscreenState:
+//            if #available(iOS 16.0, *) {
+//                guard webView.fullscreenState == .enteringFullscreen ||
+//                        webView.fullscreenState == .exitingFullscreen else { return }
+//                if webView.fullscreenState == .enteringFullscreen {
+//                    fullscreenDelegate?.enteringFullscreen()
+//                } else {
+//                    fullscreenDelegate?.exitingFullscreen()
+//                }
+//            }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
@@ -2124,7 +2187,7 @@ class BrowserViewController: UIViewController,
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
                     lockIconImageName = hasSecureContent ?
                         StandardImageIdentifiers.Small.shieldCheckmarkFill :
                         StandardImageIdentifiers.Small.shieldSlashFill
@@ -2303,6 +2366,7 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
+            updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
@@ -2961,14 +3025,6 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    private func autofillCreditCardNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-    }
-
-    private func autofillLoginNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
-    }
-
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -3051,8 +3107,6 @@ class BrowserViewController: UIViewController,
                                          method: .tap,
                                          object: .creditCardFormDetected)
         }
-
-        guard autofillCreditCardNimbusFeatureFlag() else { return }
 
         // Handle different types of credit card interactions
         switch type {
@@ -3213,7 +3267,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        updateViewBackgroundColor(theme: currentTheme)
+        updateAddressBarBackgroundViewColor(theme: currentTheme)
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -3232,11 +3286,12 @@ class BrowserViewController: UIViewController,
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 
-    private func updateViewBackgroundColor(theme: Theme) {
-        guard isSwipingTabsEnabled else { return }
+    private func updateAddressBarBackgroundViewColor(theme: Theme) {
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let toolbarLayoutStyle = toolbarState?.toolbarLayout
-        view.backgroundColor = toolbarLayoutStyle == .baseline ? theme.colors.layer1 : theme.colors.layer3
+        let colors = theme.colors
+        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
     }
 
     // MARK: - Telemetry
@@ -3397,7 +3452,7 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
         guard let profile = profile as? BrowserProfile else { return }
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
         }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
@@ -3417,7 +3472,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        if isSwipingTabsEnabled {
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
         }
         if searchSessionState == .active {
@@ -3550,7 +3605,6 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(logins, name: LoginsHelper.name())
         logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
             Task {
-                guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
@@ -4258,7 +4312,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
-        guard isSwipingTabsEnabled else { return }
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
 

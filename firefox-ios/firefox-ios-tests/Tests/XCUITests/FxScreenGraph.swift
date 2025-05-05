@@ -138,6 +138,9 @@ class Action {
     static let TogglePrivateModeFromTabBarHomePanel = "TogglePrivateModeFromTabBarHomePanel"
     static let TogglePrivateModeFromTabBarBrowserTab = "TogglePrivateModeFromTabBarBrowserTab"
     static let TogglePrivateModeFromTabBarNewTab = "TogglePrivateModeFromTabBarNewTab"
+    static let ToggleExperimentRegularMode = "ToggleExperimentRegularMode"
+    static let ToggleExperimentPrivateMode = "ToggleExperimentPrivateBrowing"
+    static let ToggleExperimentSyncMode = "ToggleExperimentSyncMode"
 
     static let ToggleRequestDesktopSite = "ToggleRequestDesktopSite"
     static let ToggleNightMode = "ToggleNightMode"
@@ -664,11 +667,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
-            if isTablet {
+            if #available(iOS 17, *) {
                 app.webViews.textFields.firstMatch.tapAndTypeText(userState.fxaUsername!)
-            } else {
+            } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
                 app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
                     .tapAndTypeText(userState.fxaUsername!)
+            } else {
+                app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+                    .waitAndTap()
+                app.typeText(userState.fxaUsername!)
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
@@ -865,10 +872,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         var privateModeSelector: XCUIElement
         var syncModeSelector: XCUIElement
 
+        var regularModeExperimentSelector: XCUIElement
+        var privateModeExperimentSelector: XCUIElement
+        var syncModeExperimentSelector: XCUIElement
+
         if isTablet {
             regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
             syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
+            regularModeExperimentSelector = regularModeSelector
+            privateModeExperimentSelector = privateModeSelector
+            syncModeExperimentSelector = syncModeSelector
         } else {
             regularModeSelector = app.toolbars["Toolbar"]
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
@@ -876,6 +890,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 1)
             syncModeSelector = app.toolbars["Toolbar"]
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 2)
+
+            regularModeExperimentSelector = app.cells.buttons.containingText("\(AccessibilityIdentifiers.TabTray.selectorCell)\(1)").element
+            privateModeExperimentSelector = app.cells.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)\(0)"]
+            syncModeExperimentSelector = app.cells.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)\(2)"]
         }
         screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
@@ -884,6 +902,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.isPrivate = !userState.isPrivate
         }
         screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
+        }
+
+        // Tab tray selector for the tab tray UI experiment
+        screenState.tap(regularModeExperimentSelector, forAction: Action.ToggleExperimentRegularMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+        screenState.tap(privateModeExperimentSelector, forAction: Action.ToggleExperimentPrivateMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+        screenState.tap(syncModeExperimentSelector, forAction: Action.ToggleExperimentSyncMode) { userState in
         }
 
         screenState.onEnter { userState in

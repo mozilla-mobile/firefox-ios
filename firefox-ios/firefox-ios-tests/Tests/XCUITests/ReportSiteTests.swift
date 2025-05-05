@@ -6,11 +6,7 @@ import Common
 import XCTest
 import Shared
 
-class ReportSiteTests: BaseTestCase {
-    override func setUpApp() {
-        setUpLaunchArguments()
-    }
-
+class ReportSiteTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2831278
     func testReportSiteIssueOn() {
         launchAndGoToMenu()
@@ -19,9 +15,8 @@ class ReportSiteTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2831279
     func testReportSiteIssueOff() {
-        var launchArgs = app.launchArguments + ["\(LaunchArguments.LoadExperiment)reportSiteIssueOff"]
-        launchArgs = launchArgs + ["\(LaunchArguments.ExperimentFeatureName)general-app-features"]
-        app.launchArguments = launchArgs
+        addLaunchArgument(jsonFileName: "reportSiteIssueOff",
+                          featureName: "general-app-features")
 
         launchAndGoToMenu()
         mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.reportBrokenSite])

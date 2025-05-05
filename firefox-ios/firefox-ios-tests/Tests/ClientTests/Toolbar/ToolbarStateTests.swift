@@ -44,7 +44,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(initialState.isNewTabFeatureEnabled)
         XCTAssertFalse(initialState.canShowDataClearanceAction)
         XCTAssertFalse(initialState.canShowNavigationHint)
-        XCTAssertFalse(initialState.shouldAnimate)
+        XCTAssertTrue(initialState.shouldAnimate)
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
@@ -305,6 +305,22 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
+    func test_animationStateChanged_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                shouldAnimate: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged)
+        )
+
+        XCTAssertNotEqual(newState.shouldAnimate, initialState.shouldAnimate)
+        XCTAssertFalse(newState.shouldAnimate)
     }
 
     func test_showMenuWarningBadgeAction_returnsExpectedState() {

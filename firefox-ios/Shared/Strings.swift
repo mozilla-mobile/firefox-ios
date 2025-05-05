@@ -1554,10 +1554,10 @@ extension String {
                 tableName: "Onboarding",
                 value: "Fast and secure web browsing",
                 comment: "Subtitle for the Terms of Service screen in the onboarding process.")
-            public static let AgreementButtonTitleV2 = MZLocalizedString(
-                key: "Onboarding.TermsOfService.AgreementButtonTitle.v136",
+            public static let AgreementButtonTitleV3 = MZLocalizedString(
+                key: "Onboarding.TermsOfService.AgreementButtonTitle.v140",
                 tableName: "Onboarding",
-                value: "Agree and Continue",
+                value: "Continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
             public static let TermsOfServiceAgreement = MZLocalizedString(
                 key: "Onboarding.TermsOfService.TermsOfServiceAgreement.v135",
@@ -2234,6 +2234,39 @@ extension String {
                 value: "App Icon",
                 comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen.")
 
+            public static let ContributorCreditSubtitle = MZLocalizedString(
+                key: "Settings.AppIconSelection.ContributorCredit.Subtitle.v139",
+                tableName: "AppIconSelection",
+                value: "Created by %@",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier.")
+
+            /// Names for the groupings of app icons on the App Icon Selection screen
+            public struct SectionNames {
+                public static let Basics = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.Basics.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Basics",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the basic variants of the app icon like the default, white, black, and legacy options.")
+
+                public static let Colors = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.Colors.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Colors",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the solid color background variants of the app icon, all of which apply different colored backgrounds (like blue, pink, or orange) to the regular app icon.")
+
+                public static let Gradients = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.Gradients.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Gradients",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the gradient color background variants of the app icon, all of which apply different gradient color backgrounds (like blue fading to yellow or black fading to purple) to the regular app icon.")
+
+                public static let More = MZLocalizedString(
+                    key: "Settings.AppIconSelection.SectionNames.More.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "More",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for all other miscellaneous variants of the app icon (like hand drawn or retro versions).")
+            }
+
             public struct Errors {
                 public static let SelectErrorMessage = MZLocalizedString(
                     key: "Settings.AppIconSelection.Errors.SelectErrorMessage.v136",
@@ -2255,6 +2288,24 @@ extension String {
                     value: "Default",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon.")
 
+                public static let Light = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Light.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Light",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a white background.")
+
+                public static let Dark = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Dark.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Dark",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a black background.")
+
+                public static let SystemAuto = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.SystemAuto.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "System Theme",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon which automatically adjusts the white/black background according to the iOS 18+ system light/dark/tinted home screen themes.")
+
                 public static let DarkPurple = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136",
                     tableName: "AppIconSelection",
@@ -2266,6 +2317,12 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Blue",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background.")
+
+                public static let Cute = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Cute.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Cute",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon.")
 
                 public static let Cyan = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137",
@@ -2290,6 +2347,12 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Lazy",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
+
+                public static let Minimal = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Minimal.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Minimal",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a minimal version of the Firefox for iOS app icon which flattens and simplifies the default icon.")
 
                 public static let Orange = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Orange.Title.v137",
@@ -2327,11 +2390,17 @@ extension String {
                     value: "Red",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red background.")
 
-                public static let Retro = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Retro.Title.v136",
+                public static let Retro2004 = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Retro2004.Title.v139",
                     tableName: "AppIconSelection",
-                    value: "Retro",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon.")
+                    value: "Retro 2004",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2004.")
+
+                public static let Retro2017 = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139",
+                    tableName: "AppIconSelection",
+                    value: "Retro 2017",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2017.")
 
                 public static let Yellow = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Yellow.Title.v137",
@@ -2386,6 +2455,15 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Northern Lights",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
+
+                /// Names and subtitles for approved icons added by contributors.
+                struct FromContributors {
+                    public static let Momo = MZLocalizedString(
+                        key: "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139",
+                        tableName: "AppIconSelection",
+                        value: "Momo",
+                        comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe.")
+                }
             }
 
             public struct Accessibility {
@@ -2604,6 +2682,87 @@ extension String {
 // MARK: - Tabs Tray
 extension String {
     public struct TabsTray {
+        public static let TabTrayV2Title = MZLocalizedString(
+            key: "TabTray.Title",
+            tableName: nil,
+            value: "Open Tabs",
+            comment: "The title for the tab tray")
+        public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
+            key: "PrivateBrowsing.Toggle.A11y.Label.v132",
+            tableName: "PrivateBrowsing",
+            value: "Private browsing",
+            comment: "Accessibility label for toggling on/off private mode")
+        public static let TabTrayToggleAccessibilityValueOn = MZLocalizedString(
+            key: "On",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Toggled ON accessibility value")
+        public static let TabTrayToggleAccessibilityValueOff = MZLocalizedString(
+            key: "Off",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Toggled OFF accessibility value")
+        public static let TabTrayViewAccessibilityLabel = MZLocalizedString(
+            key: "Tabs Tray",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label for the Tabs Tray view.")
+        public static let TabTrayClosingTabAccessibilityMessage =  MZLocalizedString(
+            key: "Closing tab",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed.")
+        public static let TabTrayCloseAllTabsPromptCancel = MZLocalizedString(
+            key: "Cancel",
+            tableName: nil,
+            value: nil,
+            comment: "Label for Cancel button")
+        public static let TabTrayPrivateBrowsingTitle = MZLocalizedString(
+            key: "Private Browsing",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Title displayed for when there are no open tabs while in private mode")
+        public static let TabTrayPrivateBrowsingDescription =  MZLocalizedString(
+            key: "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
+            tableName: "PrivateBrowsing",
+            value: nil,
+            comment: "Description text displayed when there are no open tabs while in private mode")
+        public static let TabTrayAddTabAccessibilityLabel = MZLocalizedString(
+            key: "Add Tab",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString(
+            key: "Close",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
+        public static let TabTraySwipeToCloseAccessibilityHint = MZLocalizedString(
+            key: "Swipe right or left with three fingers to close the tab.",
+            tableName: nil,
+            value: nil,
+            comment: "Accessibility hint for tab tray's displayed tab.")
+        public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString(
+            key: "TabTray.CurrentSelectedTab.A11Y",
+            tableName: nil,
+            value: "Currently selected tab.",
+            comment: "Accessibility label for the currently selected tab.")
+        public static let TabsSelectorNormalTabsTitle = MZLocalizedString(
+            key: "TabTray.TabsSelectorNormalTabsTitle.v140",
+            tableName: "TabsTray",
+            value: "%@ Tabs",
+            comment: "The title on the button to look at regular tabs. %@ is the number of regular tabs.")
+        public static let TabsSelectorSyncedTabsTitle = MZLocalizedString(
+            key: "TabTray.TabsSelectorSyncedTabsTitle.v140",
+            tableName: "TabsTray",
+            value: "Sync",
+            comment: "The title on the button to look at synced tabs.")
+        public static let TabsSelectorPrivateTabsTitle = MZLocalizedString(
+            key: "TabTray.SegmentedControlTitles.PrivateTabs",
+            tableName: nil,
+            value: "Private",
+            comment: "The title on the button to look at private tabs.")
+
         public struct InactiveTabs {
             public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
                 key: "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
@@ -2681,6 +2840,31 @@ extension String {
             tableName: "TabsTray",
             value: "%1$@ of %2$@",
             comment: "Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total.")
+        public static let TabTrayCloseOldTabsTitle = MZLocalizedString(
+            key: "TabTrayCloseOldTabsTitle.v140",
+            tableName: "TabsTray",
+            value: "Close Old Tabs…",
+            comment: "Text for a button in the tabs tray used to open another menu to close older tabs.")
+        public static let TabTrayCloseTabsOlderThanTitle = MZLocalizedString(
+            key: "TabTrayCloseTabsOlderThanTitle.v140",
+            tableName: "TabsTray",
+            value: "Close tabs older than…",
+            comment: "Text for the menu title under the tabs tray in which users can close tabs older than a certain period of time.")
+        public static let TabTrayOneDayAgoTitle = MZLocalizedString(
+            key: "TabTrayOneDayAgoTitle.v140",
+            tableName: "TabsTray",
+            value: "1 Day Ago",
+            comment: "The label for a button that closes tabs older than 1 day ago. Shown in a menu under the tabs tray.")
+        public static let TabTrayOneWeekAgoTitle = MZLocalizedString(
+            key: "TabTrayOneWeekAgoTitle.v140",
+            tableName: "TabsTray",
+            value: "1 Week Ago",
+            comment: "The label for a button that closes tabs older than 1 week ago. Shown in a menu under the tabs tray.")
+        public static let TabTrayOneMonthAgoTitle = MZLocalizedString(
+            key: "TabTrayOneMonthAgoTitle.v140",
+            tableName: "TabsTray",
+            value: "1 Month Ago",
+            comment: "The label for a button that closes tabs older than 1 month ago. Shown in a menu under the tabs tray.")
     }
 }
 
@@ -3483,32 +3667,6 @@ extension String {
         tableName: nil,
         value: "URL",
         comment: "The label for the URL field when editing a bookmark")
-}
-
-// MARK: - Tab tray (chronological tabs)
-extension String {
-    public static let TabTrayV2Title = MZLocalizedString(
-        key: "TabTray.Title",
-        tableName: nil,
-        value: "Open Tabs",
-        comment: "The title for the tab tray")
-
-    // Segmented Control tites for iPad
-    public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
-        key: "TabTray.SegmentedControlTitles.Tabs",
-        tableName: nil,
-        value: "Tabs",
-        comment: "The title on the button to look at regular tabs.")
-    public static let TabTraySegmentedControlTitlesPrivateTabs = MZLocalizedString(
-        key: "TabTray.SegmentedControlTitles.PrivateTabs",
-        tableName: nil,
-        value: "Private",
-        comment: "The title on the button to look at private tabs.")
-    public static let TabTraySegmentedControlTitlesSyncedTabs = MZLocalizedString(
-        key: "TabTray.SegmentedControlTitles.SyncedTabs",
-        tableName: nil,
-        value: "Synced",
-        comment: "The title on the button to look at synced tabs.")
 }
 
 // MARK: - Clipboard Toast
@@ -6141,70 +6299,6 @@ extension String {
         comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
 }
 
-// MARK: - Tab Tray v1
-extension String {
-    public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
-        key: "PrivateBrowsing.Toggle.A11y.Label.v132",
-        tableName: "PrivateBrowsing",
-        value: "Private browsing",
-        comment: "Accessibility label for toggling on/off private mode")
-    public static let TabTrayToggleAccessibilityValueOn = MZLocalizedString(
-        key: "On",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Toggled ON accessibility value")
-    public static let TabTrayToggleAccessibilityValueOff = MZLocalizedString(
-        key: "Off",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Toggled OFF accessibility value")
-    public static let TabTrayViewAccessibilityLabel = MZLocalizedString(
-        key: "Tabs Tray",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the Tabs Tray view.")
-    public static let TabTrayClosingTabAccessibilityMessage =  MZLocalizedString(
-        key: "Closing tab",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed.")
-    public static let TabTrayCloseAllTabsPromptCancel = MZLocalizedString(
-        key: "Cancel",
-        tableName: nil,
-        value: nil,
-        comment: "Label for Cancel button")
-    public static let TabTrayPrivateBrowsingTitle = MZLocalizedString(
-        key: "Private Browsing",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Title displayed for when there are no open tabs while in private mode")
-    public static let TabTrayPrivateBrowsingDescription =  MZLocalizedString(
-        key: "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Description text displayed when there are no open tabs while in private mode")
-    public static let TabTrayAddTabAccessibilityLabel = MZLocalizedString(
-        key: "Add Tab",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-    public static let TabTrayCloseAccessibilityCustomAction = MZLocalizedString(
-        key: "Close",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
-    public static let TabTraySwipeToCloseAccessibilityHint = MZLocalizedString(
-        key: "Swipe right or left with three fingers to close the tab.",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility hint for tab tray's displayed tab.")
-    public static let TabTrayCurrentlySelectedTabAccessibilityLabel = MZLocalizedString(
-        key: "TabTray.CurrentSelectedTab.A11Y",
-        tableName: nil,
-        value: "Currently selected tab.",
-        comment: "Accessibility label for the currently selected tab.")
-}
-
 // MARK: - URL Bar
 extension String {
     public static let URLBarLocationAccessibilityLabel = MZLocalizedString(
@@ -7085,6 +7179,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "Agree and continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
+            public static let AgreementButtonTitleV2 = MZLocalizedString(
+                key: "Onboarding.TermsOfService.AgreementButtonTitle.v136",
+                tableName: "Onboarding",
+                value: "Agree and Continue",
+                comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
             public static let SendUsageSettingTitle = MZLocalizedString(
                 key: "Settings.SendUsage.Title",
                 tableName: nil,
@@ -7723,6 +7822,16 @@ extension String {
                 tableName: "PasswordGenerator",
                 value: "Password Generator",
                 comment: "Accessibility label describing a feature that generates a password when the password field of a signup form is interacted with.")
+            public static let TabTraySegmentedControlTitlesSyncedTabs = MZLocalizedString(
+                key: "TabTray.SegmentedControlTitles.SyncedTabs",
+                tableName: nil,
+                value: "Synced",
+                comment: "The title on the button to look at synced tabs.")
+            public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
+                key: "TabTray.SegmentedControlTitles.Tabs",
+                tableName: nil,
+                value: "Tabs",
+                comment: "The title on the button to look at regular tabs.")
         }
     }
 }

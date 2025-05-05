@@ -13,6 +13,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                             FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
+    private let windowManager: WindowManager
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
@@ -25,11 +26,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.profile = profile
         self.logger = logger
+        self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
@@ -57,6 +60,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         guard let tabsState = state.screenState(TabsPanelState.self,
                                                 for: .tabsPanel,
                                                 window: action.windowUUID) else { return }
+        // TODO: FXIOS-12101 this should be removed once we figure out screenshots
+        guard windowManager.windows[action.windowUUID]?.tabManager != nil else {
+            logger.log("Tab manager does not exist for this window, bailing from taking a screenshot.", level: .fatal, category: .tabs, extra: ["windowUUID": "\(action.windowUUID)"])
+            return
+        }
+
         let manager = tabManager(for: action.windowUUID)
         manager.tabDidSetScreenshot(action.tab)
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
@@ -173,6 +182,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         case TabPanelViewActionType.confirmCloseAllTabs:
             closeAllTabs(state: state, uuid: action.windowUUID)
+
+        case TabPanelViewActionType.deleteTabsOlderThan:
+            guard let period = action.deleteTabPeriod else { return }
+            deleteNormalTabsOlderThan(period: period, uuid: action.windowUUID)
 
         case TabPanelViewActionType.undoCloseAllTabs:
             undoCloseAllTabs(uuid: action.windowUUID)
@@ -536,6 +549,18 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         }
     }
 
+    private func deleteNormalTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        tabManager.removeNormalTabsOlderThan(period: period)
+
+        // We are not closing the tab tray, so we need to refresh the tabs on screen
+        let model = getTabsDisplayModel(for: false, uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatch(refreshAction)
+    }
+
     /// Add a new tab when privateMode is selected and all or last normal tabs/tab are/is going to be closed
     private func addNewTabIfPrivate(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
@@ -667,7 +692,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     private func tabManager(for uuid: WindowUUID) -> TabManager {
-        let windowManager: WindowManager = AppContainer.shared.resolve()
         guard uuid != .unavailable else {
             assertionFailure()
             logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
@@ -909,7 +933,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
         case HomepageActionType.viewWillAppear,
-            JumpBackInActionType.fetchLocalTabs,
+            HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated,
             TopTabsActionType.didTapNewTab,
             TopTabsActionType.didTapCloseTab:
             dispatchRecentlyAccessedTabs(action: action)

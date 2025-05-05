@@ -13,7 +13,7 @@ final class WindowSimpleTabsCoordinator {
     private struct Timing {
         static let throttleDelay = 1.0
     }
-    private let throttler = Throttler(seconds: Timing.throttleDelay)
+    private let throttler = GCDThrottler(seconds: Timing.throttleDelay)
 
     func saveSimpleTabs(for providers: [WindowSimpleTabsProvider]) {
         throttler.throttle {

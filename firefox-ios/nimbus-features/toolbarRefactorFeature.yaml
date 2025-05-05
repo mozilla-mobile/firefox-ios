@@ -38,19 +38,19 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
           unified_search: false
           one_tap_new_tab: false
-          navigation_hint: false
-          swiping_tabs: false
-          layout: baseline
+          navigation_hint: true
+          swiping_tabs: true
+          layout: version1
       - channel: developer
         value:
           enabled: true
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          swiping_tabs: false
+          swiping_tabs: true
           layout: baseline
 
 enums:
@@ -61,3 +61,5 @@ enums:
         description: The default layout of the toolbars.
       version1:
         description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.
+      version2:
+        description: Like version1 but the menu and tabs buttons are inverted.

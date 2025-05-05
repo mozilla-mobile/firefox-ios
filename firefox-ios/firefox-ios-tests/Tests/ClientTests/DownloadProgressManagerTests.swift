@@ -53,12 +53,12 @@ class DownloadProgressManagerTests: XCTestCase {
         XCTAssertEqual(mockDelegate.totalBytesExpectedParameter, 40)
     }
 
-    @available(iOS 16.2, *)
+    @available(iOS 17, *)
     func testMemoryLeaks() {
         let download = MockDownload()
         let downloadProgressManager = createSubject(downloads: [download])
         var downloadLiveActivity: DownloadLiveActivityWrapper? = DownloadLiveActivityWrapper(
-            downloadProgressManager: downloadProgressManager)
+            downloadProgressManager: downloadProgressManager, windowUUID: WindowUUID.XCTestDefaultUUID.uuidString)
         var downloadToast: DownloadToast? = DownloadToast(
             downloadProgressManager: downloadProgressManager,
             theme: LightTheme(),

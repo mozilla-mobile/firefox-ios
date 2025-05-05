@@ -51,7 +51,10 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_enterForegroundAction_getPocketData() throws {
         let subject = createSubject(pocketManager: pocketManager)
-        let action = PocketAction(windowUUID: .XCTestDefaultUUID, actionType: PocketActionType.enteredForeground)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.enteredForeground
+        )
 
         let expectation = XCTestExpectation(description: "Pocket action entered foreground dispatched")
         mockStore.dispatchCalled = {

@@ -14,7 +14,8 @@ class WebviewViewController: UIViewController,
                              FullscreenDelegate {
     private var webView: WKWebView
     var contentType: ContentType = .webview
-    var isFullScreen = false
+    // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//    var isFullScreen = false
 
     init(webView: WKWebView) {
         self.webView = webView
@@ -39,7 +40,8 @@ class WebviewViewController: UIViewController,
         self.webView = webView
 
         // Avoid updating constraints while on fullscreen mode
-        guard !isFullScreen else { return }
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        guard !isFullScreen else { return }
         setupWebView()
     }
 
@@ -69,13 +71,15 @@ class WebviewViewController: UIViewController,
     // MARK: - FullscreenDelegate
 
     func enteringFullscreen() {
-        isFullScreen = true
-        webView.translatesAutoresizingMaskIntoConstraints = true
-        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        isFullScreen = true
+//        webView.translatesAutoresizingMaskIntoConstraints = true
+//        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
 
     func exitingFullscreen() {
-        setupWebView()
-        isFullScreen = false
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        setupWebView()
+//        isFullScreen = false
     }
 }

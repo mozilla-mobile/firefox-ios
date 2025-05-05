@@ -6,19 +6,29 @@ pipelines:
     workflows:
         determine_apps_affected: {}
         firefox_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         focus_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         klar_configure_build:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         run_firefox_ui_tests:
+            run_if: 
+              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
             depends_on:
             - firefox_configure_build
             parallel: 5
         focus_ui_test:
+            run_if: 
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - focus_configure_build
             parallel: 1
@@ -112,7 +122,6 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
 
   firefox_configure_build:
-    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
@@ -183,8 +192,24 @@ workflows:
             #!/usr/bin/env bash
             # Fail if any command fails
             set -e
-            echo "Run danger"
+            # Extract .xcresult using xcrun xccov
+            echo "Generating coverage.json from xcresult..."
+            xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > coverage.json
+            echo "coverage.json created successfully"
+
+            # Define a cleanup function to remove the file
+            function cleanup_coverage {
+              if [ -f coverage.json ]; then
+                echo "Removing coverage.json"
+                rm coverage.json
+              fi
+            }
+            # Register it to run on script exit
+            trap cleanup_coverage EXIT
+
+            echo "Running Danger"
             swift run danger-swift ci
+
     - cache-push@2.7.1:
         is_always_run: true
     - script@1.2.1:
@@ -238,7 +263,6 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
   run_firefox_ui_tests:
-    run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
     before_run:
     - 1_git_clone_and_post_clone
     steps:
@@ -367,8 +391,12 @@ workflows:
             envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
             envman add --key BUILD_FOCUS_IOS --value "$BUILD_FOCUS_IOS"
             envman add --key BUILD_SAMPLE_BROWSER_IOS --value "$BUILD_SAMPLE_BROWSER_IOS"
-    - share-pipeline-variable@1.1.1:
-        title: Share which application(s) to base configuration off of
+
+            echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
+            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
+            echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
+
+    - share-pipeline-variable@1:
         inputs:
         - variables: |-
             BUILD_FIREFOX_IOS
@@ -1631,16 +1659,17 @@ workflows:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
+        - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 10
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
   focus_configure_build:
-    run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
     before_run:
     - focus-clone-and-build-dependencies
     steps:
@@ -1698,7 +1727,6 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
 
   klar_configure_build:
-    run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
     before_run:
     - focus-clone-and-build-dependencies
     steps:
@@ -2112,6 +2140,150 @@ workflows:
             set -x
             focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
+
+# RelPro workflows
+  release_promotion_promote:
+    before_run:
+    - SPM_Common_Steps
+    steps:
+    - script@1.2.1:
+        # If the current bitrise application is `staging-firefox-ios`, then
+        # this is a test release made from the staging repository.
+        # Ignore the value passed by release promotion for `BITRISE_SCHEME` and
+        # force it to `FirefoxStaging`, which makes it use non production
+        # certs/profiles. Also override the export method since the scheme is
+        # using a developer ID, not a distribution one
+        title: Set staging environment variables
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            envman add --key BITRISE_SCHEME --value FirefoxStaging
+            envman add --key EXPORT_METHOD --value development
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "staging-firefox-ios"}}
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+
+            cd firefox-ios/Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+    - script@1.2.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+
+            ./bootstrap.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: "$EXPORT_METHOD"
+        - output_tool: xcodebuild
+        - distribution_method: "$EXPORT_METHOD"
+        - export_development_team: 43AQ936H96
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@2.9.2: {}
+    envs:
+    - opts:
+        is_expand: false
+      EXPORT_METHOD: app-store
+    description: This step is used during release promotion to build a firefox release
+
+  release_promotion_push:
+    envs:
+    - IPA_PATH: /tmp/Client.ipa
+    - DSYM_PATH: /tmp/symbols.zip
+    steps:
+    - file-downloader@1:
+        title: Download Artifact
+        inputs:
+        - destination: $IPA_PATH
+        - source: https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/$BUILD_TASK_ID/artifacts/public%2Frelease_promotion_promote%2FClient.ipa
+    - file-downloader@1:
+        title: Download symbols
+        inputs:
+        - destination: $DSYM_PATH
+        - source: https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/$BUILD_TASK_ID/artifacts/public%2Frelease_promotion_promote%2FClient.dSYM.zip
+    - script@1.2.1:
+        title: Check if IPA was downloaded
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            echo "$IPA_PATH"
+            file "$IPA_PATH"
+    - script@1.2.1:
+        title: Check if symbols were downloaded
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            echo "$DSYM_PATH"
+            file "$DSYM_PATH"
+    - script@1.2.1:
+        title: Upload Firefox Prod Beta Symbols
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
+              --org mozilla --project firefox-ios "$DSYM_PATH"
+    - deploy-to-itunesconnect-application-loader@1:
+        title: Deploy to AppStoreConnect
+        run_if: |-
+          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        - ipa_path: $IPA_PATH
+        - retries: 5
 
 app:
   envs:

@@ -9,8 +9,8 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
         static let offset: CGFloat = 24
-        static let swipingDuration: TimeInterval = 0.15
-        static let swipingVelocity: CGFloat = 150
+        static let swipingDuration: TimeInterval = 0.25
+        static let swipingVelocity: CGFloat = 250
     }
 
     // MARK: - UI Properties
@@ -161,6 +161,13 @@ final class AddressBarPanGestureHandler: NSObject {
             // Reactivate Auto Layout after the animation.
             webPagePreview.translatesAutoresizingMaskIntoConstraints = false
             if shouldCompleteTransition && isValidIndex {
+                store.dispatch(
+                    ToolbarAction(
+                        shouldAnimate: false,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.animationStateChanged
+                    )
+                )
                 // Reset the positions and select the new tab if the transition was completed.
                 contentContainer.frame.origin.x = 0
                 addressBarContainer.frame.origin.x = 0

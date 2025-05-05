@@ -51,10 +51,6 @@ class CreditCardsTests: BaseTestCase {
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         waitForElementsToExist(
             [
-                app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards],
-                app.staticTexts.containingText(
-                    "New"
-                ).element,
                 app.tables.cells.element(
                     boundBy: 1
                 ).buttons.elementContainingText(
@@ -283,15 +279,16 @@ class CreditCardsTests: BaseTestCase {
         let cardsInfo = [["1252", "Test", "5/40"],
                          ["1111", "Test2", "6/40"],
                          ["9631", "Test3", "7/40"]]
-        for index in 1...3 {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: index).buttons.firstMatch)
-            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons
-                .elementContainingText(cardsInfo[index-1][0]).exists,
-                          "\(cardsInfo[index-1][0]) info is not displayed")
-            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons[cardsInfo[index-1][1]].exists,
-                          "\(cardsInfo[index-1][1]) info is not displayed")
-            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons[cardsInfo[index-1][2]].exists,
-                          "\(cardsInfo[index-1][2]) info is not displayed")
+
+        // Reverse the expected order to match new UI logic (newest at top)
+        let expectedOrder = cardsInfo.reversed()
+        for (index, card) in expectedOrder.enumerated() {
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: index+1).buttons.firstMatch)
+
+            let cellElement = app.tables.cells.element(boundBy: index+1).buttons
+            XCTAssertTrue(cellElement.elementContainingText(card[0]).exists, "\(card[0]) info is not displayed")
+            XCTAssertTrue(cellElement[card[1]].exists, "\(card[1]) info is not displayed")
+            XCTAssertTrue(cellElement[card[2]].exists, "\(card[2]) info is not displayed")
         }
         // reachAutofillWebsite() not working on iOS 15
         if #available(iOS 16, *) {

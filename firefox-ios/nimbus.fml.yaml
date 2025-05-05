@@ -14,10 +14,8 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
-  - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
-  - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
@@ -41,6 +39,7 @@ include:
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
+  - nimbus-features/startAtHomeFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml

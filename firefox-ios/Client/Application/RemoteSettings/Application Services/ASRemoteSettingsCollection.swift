@@ -8,6 +8,8 @@ import Common
 /// Defines a specific Remote Settings collection fetched through Application Services
 enum ASRemoteSettingsCollection: String {
     case searchEngineIcons = "search-config-icons"
+    case translationsModels = "translations-models"
+    case translationsWasm = "translations-wasm"
 }
 
 extension ASRemoteSettingsCollection {
@@ -16,11 +18,6 @@ extension ASRemoteSettingsCollection {
     func makeClient() -> RemoteSettingsClient? {
         let profile: Profile = AppContainer.shared.resolve()
         guard let service = profile.remoteSettingsService else { return nil }
-        do {
-            return try service.makeClient(collectionName: rawValue)
-        } catch {
-            DefaultLogger.shared.log("Error creating RS client: \(error)", level: .warning, category: .remoteSettings)
-        }
-        return nil
+        return service.makeClient(collectionName: rawValue)
     }
 }

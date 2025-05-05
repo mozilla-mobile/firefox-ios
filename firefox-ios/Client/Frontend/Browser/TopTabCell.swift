@@ -13,7 +13,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         static let faviconSize: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 2
         static let tabTitlePadding: CGFloat = 10
-        static let tabTitlePaddingVersion1: CGFloat = 14
+        static let tabTitlePaddingVersion: CGFloat = 14
         static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
 
         // MARK: - Tab Appearance Constants
@@ -90,12 +90,12 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         closeButton.largeContentTitle = .TopSitesRemoveButtonLargeContentTitle
 
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: tab.windowUUID)
-        if let toolbarState, toolbarState.toolbarLayout == .version1 {
+        if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
             closeButton.configuration?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Medium.cross)
             closeButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalPadding,
-                                                                               leading: UX.tabTitlePaddingVersion1,
+                                                                               leading: UX.tabTitlePaddingVersion,
                                                                                bottom: UX.verticalPadding,
-                                                                               trailing: UX.tabTitlePaddingVersion1)
+                                                                               trailing: UX.tabTitlePaddingVersion)
         } else {
             closeButton.configuration?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
         }
@@ -204,9 +204,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         let baseName = tab.getTabTrayTitle()
 
         if isSelectedTab, !tab.getTabTrayTitle().isEmpty {
-            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
+            return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
-            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
+            return String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else {
             return baseName
         }

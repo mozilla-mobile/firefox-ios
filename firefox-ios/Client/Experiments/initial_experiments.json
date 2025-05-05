@@ -85,6 +85,75 @@
     },
     {
       "schemaVersion": "1.12.0",
+      "slug": "ios-dma-remove-set-to-default",
+      "id": "ios-dma-remove-set-to-default",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "iOS DMA Remove Set to Default onboarding card",
+      "userFacingDescription": "Disable onboarding Set to Default card",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-release-ios_default_browser_user-rollout-1",
+        "start": 0,
+        "count": 5000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "welcome": {
+                    "prerequisites": [
+                      "NEVER"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "(is_default_browser == true && is_first_run) && (app_version|versionCompare('138.1.0') >= 0) && (region in ['AU', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'])",
+      "startDate": "2025-05-02",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2025-05-02T17:42:45.277889Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null,
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
       "slug": "long-term-holdback-2025-h1-growth-ios",
       "id": "long-term-holdback-2025-h1-growth-ios",
       "arguments": {},
@@ -153,186 +222,6 @@
       "localizations": null,
       "locales": null,
       "publishedDate": "2024-12-12T20:37:24.603794Z",
-      "isFirefoxLabsOptIn": false,
-      "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null,
-      "firefoxLabsDescriptionLinks": null,
-      "firefoxLabsGroup": null,
-      "requiresRestart": false
-    },
-    {
-      "schemaVersion": "1.12.0",
-      "slug": "new-onboarding-experience-experiment-phase-1-ios",
-      "id": "new-onboarding-experience-experiment-phase-1-ios",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
-      "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.Firefox",
-      "channel": "release",
-      "userFacingName": "New Onboarding Experience experiment phase 1 (iOS)",
-      "userFacingDescription": "Rolling out new onboarding experience pointing to more information about data use.",
-      "isEnrollmentPaused": true,
-      "isRollout": false,
-      "bucketConfig": {
-        "randomizationUnit": "nimbus_id",
-        "namespace": "ios-tos-feature-release-1",
-        "start": 0,
-        "count": 1000,
-        "total": 10000
-      },
-      "featureIds": [
-        "tos-feature"
-      ],
-      "probeSets": [],
-      "outcomes": [
-        {
-          "slug": "onboarding",
-          "priority": "primary"
-        },
-        {
-          "slug": "default_browser",
-          "priority": "secondary"
-        }
-      ],
-      "branches": [
-        {
-          "slug": "control",
-          "ratio": 9,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "tos-feature",
-              "enabled": true,
-              "value": {
-                "status": false
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-a",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "tos-feature",
-              "enabled": true,
-              "value": {
-                "status": true
-              }
-            }
-          ]
-        }
-      ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('136.!') >= 0)))",
-      "startDate": "2025-02-24",
-      "enrollmentEndDate": "2025-03-11",
-      "endDate": null,
-      "proposedDuration": 14,
-      "proposedEnrollment": 14,
-      "referenceBranch": "control",
-      "featureValidationOptOut": false,
-      "localizations": null,
-      "locales": null,
-      "publishedDate": "2025-02-24T16:05:16.292365Z",
-      "isFirefoxLabsOptIn": false,
-      "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null,
-      "firefoxLabsDescriptionLinks": null,
-      "firefoxLabsGroup": null,
-      "requiresRestart": false
-    },
-    {
-      "schemaVersion": "1.12.0",
-      "slug": "new-onboarding-experience-experiment-phase-2-ios",
-      "id": "new-onboarding-experience-experiment-phase-2-ios",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
-      "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.Firefox",
-      "channel": "release",
-      "userFacingName": "New Onboarding Experience experiment phase 2 (iOS)",
-      "userFacingDescription": "Rolling out new onboarding experience pointing to more information about data use.",
-      "isEnrollmentPaused": true,
-      "isRollout": false,
-      "bucketConfig": {
-        "randomizationUnit": "nimbus_id",
-        "namespace": "ios-tos-feature-release-1",
-        "start": 1000,
-        "count": 1000,
-        "total": 10000
-      },
-      "featureIds": [
-        "tos-feature"
-      ],
-      "probeSets": [],
-      "outcomes": [
-        {
-          "slug": "onboarding",
-          "priority": "primary"
-        },
-        {
-          "slug": "default_browser",
-          "priority": "secondary"
-        }
-      ],
-      "branches": [
-        {
-          "slug": "control",
-          "ratio": 5,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "tos-feature",
-              "enabled": true,
-              "value": {
-                "status": false
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-a",
-          "ratio": 5,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "tos-feature",
-              "enabled": true,
-              "value": {
-                "status": true
-              }
-            }
-          ]
-        }
-      ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('136.!') >= 0)))",
-      "startDate": "2025-03-11",
-      "enrollmentEndDate": "2025-04-07",
-      "endDate": null,
-      "proposedDuration": 14,
-      "proposedEnrollment": 14,
-      "referenceBranch": "control",
-      "featureValidationOptOut": false,
-      "localizations": null,
-      "locales": null,
-      "publishedDate": "2025-03-11T19:46:41.458937Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
       "firefoxLabsDescription": null,
@@ -441,7 +330,7 @@
       "channel": "release",
       "userFacingName": "New Onboarding Experience experiment phase 4 (iOS)",
       "userFacingDescription": "Rolling out new onboarding experience pointing to more information about data use.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -504,7 +393,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('137.!') >= 0)))",
       "startDate": "2025-04-11",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2025-04-24",
       "endDate": null,
       "proposedDuration": 14,
       "proposedEnrollment": 14,
@@ -531,7 +420,7 @@
       "channel": "release",
       "userFacingName": "New Toolbar iOS - iOS Redesign - Iteration 1",
       "userFacingDescription": "iOS Redesign - New rollout",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -595,7 +484,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('137.!') >= 0)))",
       "startDate": "2025-03-25",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2025-04-25",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,
@@ -622,7 +511,7 @@
       "channel": "release",
       "userFacingName": "Tab Tray - Rapid UI Experiment Weekly Release",
       "userFacingDescription": "Tab Tray Experiment",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",

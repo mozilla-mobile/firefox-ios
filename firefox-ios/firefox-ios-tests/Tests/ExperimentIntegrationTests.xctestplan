@@ -129,6 +129,7 @@
         "MultiWindowTests",
         "NavigationTest",
         "NightModeTests",
+        "O_AddressesTests",
         "OpeningScreenTests",
         "PerformanceTests",
         "PhotonActionSheetTests",

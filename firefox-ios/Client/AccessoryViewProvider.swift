@@ -36,6 +36,10 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     var savedLoginsClosure: (() -> Void)?
     var useStrongPasswordClosure: (() -> Void)?
 
+    var hasAccessoryView: Bool {
+        return currentAccessoryView != nil
+    }
+
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build {
         $0.sizeToFit()

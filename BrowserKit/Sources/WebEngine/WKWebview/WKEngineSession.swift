@@ -41,7 +41,7 @@ class WKEngineSession: NSObject,
     private var contentScriptManager: WKContentScriptManager
     private var metadataFetcher: MetadataFetcherHelper
     private var contentBlockingSettings: WKContentBlockingSettings = []
-    private let navigationHandler: WKNavigationHandler
+    let navigationHandler: WKNavigationHandler
     private let uiHandler: WKUIHandler
     public var isActive = false {
         didSet {
@@ -54,7 +54,8 @@ class WKEngineSession: NSObject,
     public static func sessionFactory(
         userScriptManager: WKUserScriptManager,
         dependencies: EngineSessionDependencies,
-        configurationProvider: WKEngineConfigurationProvider
+        configurationProvider: WKEngineConfigurationProvider,
+        readerModeDelegate: WKReaderModeDelegate? = nil
     ) -> WKEngineSession? {
         let webViewProvider = DefaultWKWebViewProvider()
         let logger = DefaultLogger.shared
@@ -74,7 +75,8 @@ class WKEngineSession: NSObject,
             scriptResponder: scriptResponder,
             metadataFetcher: metadataFetcher,
             navigationHandler: navigationHandler,
-            uiHandler: uiHandler
+            uiHandler: uiHandler,
+            readerModeDelegate: readerModeDelegate
         )
     }
 
@@ -88,7 +90,8 @@ class WKEngineSession: NSObject,
           scriptResponder: EngineSessionScriptResponder,
           metadataFetcher: MetadataFetcherHelper,
           navigationHandler: DefaultNavigationHandler,
-          uiHandler: WKUIHandler) {
+          uiHandler: WKUIHandler,
+          readerModeDelegate: WKReaderModeDelegate?) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider,
                                                           parameters: dependencies.webviewParameters) else {
             logger.log("WKEngineWebView creation failed on configuration",
@@ -116,7 +119,7 @@ class WKEngineSession: NSObject,
         webView.navigationDelegate = navigationHandler
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
-        addContentScripts()
+        addContentScripts(readerModeDelegate: readerModeDelegate)
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
@@ -337,7 +340,7 @@ class WKEngineSession: NSObject,
 
     // MARK: - Content scripts
 
-    private func addContentScripts() {
+    private func addContentScripts(readerModeDelegate: WKReaderModeDelegate?) {
         scriptResponder.session = self
         let searchProviders = delegate?.adsSearchProviderModels() ?? []
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: scriptResponder,
@@ -346,6 +349,12 @@ class WKEngineSession: NSObject,
                                               forSession: self)
         contentScriptManager.addContentScript(FocusContentScript(delegate: scriptResponder),
                                               name: FocusContentScript.name(),
+                                              forSession: self)
+
+        let readerMode = ReaderModeContentScript(session: self)
+        readerMode.delegate = readerModeDelegate
+        contentScriptManager.addContentScript(readerMode,
+                                              name: ReaderModeContentScript.name(),
                                               forSession: self)
     }
 

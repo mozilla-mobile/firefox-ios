@@ -38,7 +38,7 @@ class TabCellTests: XCTestCase {
         let state = createDefaultState()
         cell.configure(with: state, theme: nil, delegate: cellDelegate, a11yId: "")
         XCTAssertEqual(cell.accessibilityHint!,
-                       String.TabTraySwipeToCloseAccessibilityHint)
+                       .TabsTray.TabTraySwipeToCloseAccessibilityHint)
     }
 
     func testConfigureTabSelectedState() {

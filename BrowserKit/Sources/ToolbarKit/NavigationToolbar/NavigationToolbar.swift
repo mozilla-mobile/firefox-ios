@@ -8,7 +8,7 @@ import Foundation
 public protocol NavigationToolbar {
     func configure(
         config: NavigationToolbarConfiguration,
-        isVersion1Layout: Bool,
+        isVersionLayout: Bool,
         toolbarDelegate: BrowserNavigationToolbarDelegate
     )
 }

@@ -158,21 +158,41 @@ class RemoteTabsTableViewController: UITableViewController,
         }
     }
 
+    private func retrieveTheme() -> Theme {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            return themeManager.resolvedTheme(with: false)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    // MARK: Themeable
+    var shouldUsePrivateOverride: Bool {
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        return false
+    }
+
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = retrieveTheme()
         emptyView.applyTheme(theme: theme)
         tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
+        view.backgroundColor = theme.colors.layer3
     }
 
     private func configureEmptyView() {
         guard let emptyStateReason = state.showingEmptyState else { return }
         emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel)
-        emptyView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        emptyView.applyTheme(theme: retrieveTheme())
     }
 
     private func show(toast: Toast,
                       afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
                       duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+        guard !isTabTrayUIExperimentsEnabled else { return }
+
         if let buttonToast = toast as? ButtonToast {
             self.buttonToast = buttonToast
         }
@@ -309,7 +329,7 @@ class RemoteTabsTableViewController: UITableViewController,
         cell.descriptionLabel.text = tab.URL.absoluteString
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.URL.absoluteString))
         cell.accessoryView = nil
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: retrieveTheme())
     }
 
     @objc
@@ -352,7 +372,7 @@ class RemoteTabsTableViewController: UITableViewController,
             let viewModel = ButtonToastViewModel(labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
                                                  buttonText: .UndoString)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                                    theme: retrieveTheme(),
                                     completion: { didTapUndoButton in
                                         if didTapUndoButton {
                                             self.undo()
@@ -411,7 +431,7 @@ class RemoteTabsTableViewController: UITableViewController,
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(sectionHeaderTapped(sender:)))
         headerView.addGestureRecognizer(tapGesture)
-        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        headerView.applyTheme(theme: retrieveTheme())
         /*
         * (Copied from legacy RemoteTabsClientAndTabsDataSource)
         * A note on timestamps.

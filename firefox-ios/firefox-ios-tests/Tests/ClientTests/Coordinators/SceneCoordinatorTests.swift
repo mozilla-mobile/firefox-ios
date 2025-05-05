@@ -8,18 +8,21 @@ import Common
 
 final class SceneCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
+        profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
     override func tearDown() {
-        super.tearDown()
         mockRouter = nil
-        AppContainer.shared.reset()
+        profile = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testInitialState() {
@@ -84,6 +87,8 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
     }
 
+    // MARK: - Handle route
+
     func testHandleRoute_launchNotFinished_routeSaved() {
         let subject = createSubject()
 
@@ -96,6 +101,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
     func testHandleRoute_launchFinishedAndBrowserNotReady_routeSaved() throws {
         let subject = createSubject()
+        setupNimbusDeeplinkOptimization(isEnabled: false)
 
         subject.start()
         subject.launchBrowser()
@@ -119,8 +125,6 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(coordinator)
         XCTAssertNil(subject.savedRoute)
     }
-
-    // MARK: - Handle route
 
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
         let subject = createSubject()
@@ -147,5 +151,11 @@ final class SceneCoordinatorTests: XCTestCase {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setupNimbusDeeplinkOptimization(isEnabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: isEnabled)
+        }
     }
 }

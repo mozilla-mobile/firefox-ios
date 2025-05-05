@@ -76,7 +76,9 @@ class NavigationTest: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.webViews.staticTexts["Continue to your Mozilla account"])
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.webViews.staticTexts["Continue to your ⁨Mozilla account⁩"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441493
@@ -112,8 +114,16 @@ class NavigationTest: BaseTestCase {
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Enter your email"
-        let defaultMailPlaceholder = email.placeholderValue!
-        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        var defaultMailPlaceholder: String
+        if #available(iOS 17, *) {
+            defaultMailPlaceholder = email.label
+            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
+            defaultMailPlaceholder = email.placeholderValue!
+            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        } else {
+            mozWaitForElementToExist(app.staticTexts[mailPlaceholder])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441494

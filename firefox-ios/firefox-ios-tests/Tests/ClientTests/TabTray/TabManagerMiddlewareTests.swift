@@ -51,6 +51,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             expectation.fulfill()
         }
 
+        mockWindowManager.overrideWindows = true
+
         subject.tabsPanelProvider(appState, action)
         wait(for: [expectation])
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
@@ -58,6 +60,26 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
+    }
+
+    func test_screenshotAction_returnsEarlyIfTabManagerDoesNotExistForWindow() {
+        let subject = createSubject()
+        let action = ScreenshotAction(
+            windowUUID: .XCTestDefaultUUID,
+            tab: Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID),
+            actionType: ScreenshotActionType.screenshotTaken
+        )
+
+        let expectation = XCTestExpectation(description: "Recent tabs should be returned")
+        expectation.isInverted = true
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertTrue(mockWindowManager.windowsWereAccessed)
     }
 
     // MARK: - Recent Tabs
@@ -86,11 +108,11 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
     }
 
-    func test_jumpBackInAction_returnsRecentTabs() throws {
+    func test_homepageAction_returnsRecentTabs() throws {
         let subject = createSubject()
         let action = JumpBackInAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: JumpBackInActionType.fetchLocalTabs
+            actionType: HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated
         )
 
         let expectation = XCTestExpectation(description: "Recent tabs should be returned")
@@ -252,7 +274,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
-        return TabManagerMiddleware(profile: mockProfile)
+        return TabManagerMiddleware(profile: mockProfile, windowManager: mockWindowManager)
     }
 
     private func createTab(

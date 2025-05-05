@@ -80,7 +80,7 @@
 "Autocomplete.customUrlAdded" = "Nýrri sérsniðinni vefslóð bætt við.";
 
 /* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Autocomplete.defaultDescriptoin" = "Virkja sjálfvirka útfyllingu í staðsetningarslá %@ á rúmlega 450 vinsælum slóðum.";
+"Autocomplete.defaultDescriptoin" = "Virkja sjálfvirka útfyllingu í veffangastiku %@ á rúmlega 450 vinsælum slóðum.";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Óvirkt";
@@ -134,7 +134,7 @@
 "Browser.stopLabel" = "Stöðva";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
-"browserShortcutDescription.selectLocationBar" = "Velja staðsetningarslá";
+"browserShortcutDescription.selectLocationBar" = "Veldu veffangastiku";
 
 /* Label on button to complete edits */
 "Done" = "Búið";

@@ -108,11 +108,10 @@ class TabTrayViewController: UIViewController,
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
-        let selector = TabTraySelectorView(selectedIndex: selectedIndex,
-                                           theme: themeManager.getCurrentTheme(for: windowUUID))
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
-                          TabTrayPanelType.tabs.label,
+                          String(format: TabTrayPanelType.tabs.label, "0"),
                           TabTrayPanelType.syncedTabs.label]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
@@ -163,7 +162,7 @@ class TabTrayViewController: UIViewController,
         return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
                                 action: #selector(newTabButtonTapped),
                                 a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
-                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+                                a11yLabel: .TabsTray.TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var flexibleSpace: UIBarButtonItem = {
@@ -193,10 +192,10 @@ class TabTrayViewController: UIViewController,
     private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        syncingLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        syncingLabel.textColor = retrieveTheme().colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        activityIndicator.color = retrieveTheme().colors.textPrimary
         activityIndicator.startAnimating()
 
         stackView.addArrangedSubview(syncingLabel)
@@ -289,6 +288,13 @@ class TabTrayViewController: UIViewController,
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateLayout()
         }
+
+        if isTabTrayUIExperimentsEnabled {
+            // Needs to execute the layout pass after the orientation has changed
+            DispatchQueue.main.async {
+                self.experimentSegmentControl.scrollToCenter()
+            }
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -372,23 +378,43 @@ class TabTrayViewController: UIViewController,
                 self.shownToast = nil
             }
         }
+        applyTheme()
     }
 
     func updateTabCountImage(count: String) {
         countLabel.text = count
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
+        if isTabTrayUIExperimentsEnabled {
+            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
+        }
     }
 
     // MARK: Themeable
+    var shouldUsePrivateOverride: Bool {
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        return tabTrayState?.isPrivateMode ?? false
+    }
+
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = retrieveTheme()
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
         doneButton.tintColor = theme.colors.iconPrimary
         syncTabButton.tintColor = theme.colors.iconPrimary
+
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            experimentSegmentControl.applyTheme(theme: theme)
+
+            let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
+            navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
+        }
     }
 
     // MARK: Private
@@ -485,7 +511,7 @@ class TabTrayViewController: UIViewController,
         var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
-            experimentSegmentControl.scrollToItem(at: experimentConvertSelectedIndex(), animated: false)
+            experimentSegmentControl.scrollToCenter()
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
@@ -534,8 +560,12 @@ class TabTrayViewController: UIViewController,
         return button
     }
 
-    internal func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+    internal func retrieveTheme() -> Theme {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            return themeManager.resolvedTheme(with: tabTrayState.isPrivateMode)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
     }
 
     private func presentToast(toastType: ToastType, completion: @escaping (Bool) -> Void) {
@@ -546,7 +576,7 @@ class TabTrayViewController: UIViewController,
         if toastType.reduxAction(for: windowUUID) != nil {
             let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme(),
+                                    theme: retrieveTheme(),
                                     completion: { buttonPressed in
                                         completion(buttonPressed)
             })
@@ -577,7 +607,7 @@ class TabTrayViewController: UIViewController,
             let toast = SimpleToast()
             toast.showAlertWithText(toastType.title,
                                     bottomContainer: view,
-                                    theme: currentTheme(),
+                                    theme: retrieveTheme(),
                                     bottomConstraintPadding: -toolbarHeight)
         }
     }
@@ -657,23 +687,83 @@ class TabTrayViewController: UIViewController,
     }
 
     private func showCloseAllConfirmation() {
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
-                                           style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
-                                           style: .cancel,
-                                           handler: nil),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
-        controller.popoverPresentationController?.barButtonItem = deleteButton
-        present(controller, animated: true, completion: nil)
+        let alert = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        // We only show the potion to delete old tabs with normal tabs tray
+        if tabTrayState.isNormalTabsPanel {
+            alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseOldTabsTitle,
+                                          style: .default,
+                                          handler: { _ in
+                // Delay to allow current sheet to dismiss
+                DispatchQueue.main.async {
+                    self.showTabsDeletionPicker()
+                }
+            }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteOlderTabsButton
+            )
+        }
+
+        alert.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
+                                      style: .destructive,
+                                      handler: { _ in
+            self.confirmCloseAll()
+        }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton
+        )
+
+        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+                        accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+        alert.popoverPresentationController?.barButtonItem = deleteButton
+        present(alert, animated: true, completion: nil)
+    }
+
+    private func showTabsDeletionPicker() {
+        let alert = AlertController(title: .TabsTray.TabTrayCloseTabsOlderThanTitle,
+                                    message: nil,
+                                    preferredStyle: .actionSheet)
+
+        struct TabDeletionData {
+            let period: TabsDeletionPeriod
+            let title: String
+            let accessibilityID: String
+        }
+
+        let options = [
+            TabDeletionData(period: .oneDay,
+                            title: .TabsTray.TabTrayOneDayAgoTitle,
+                            accessibilityID: AccessibilityIdentifiers.TabTray.deleteTabsOlderThan1DayButton),
+            TabDeletionData(period: .oneWeek,
+                            title: .TabsTray.TabTrayOneWeekAgoTitle,
+                            accessibilityID: AccessibilityIdentifiers.TabTray.deleteTabsOlderThan1WeekButton),
+            TabDeletionData(period: .oneMonth,
+                            title: .TabsTray.TabTrayOneMonthAgoTitle,
+                            accessibilityID: AccessibilityIdentifiers.TabTray.deleteTabsOlderThan1MonthButton)
+        ]
+
+        for option in options {
+            let action = UIAlertAction(title: option.title, style: .default) { _ in
+                self.deleteTabsOlderThan(period: option.period)
+            }
+            alert.addAction(action, accessibilityIdentifier: option.accessibilityID)
+        }
+
+        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
+                        accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+
+        alert.popoverPresentationController?.barButtonItem = deleteButton
+        present(alert, animated: true, completion: nil)
     }
 
     private func confirmCloseAll() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.confirmCloseAllTabs)
+        store.dispatch(action)
+    }
+
+    private func deleteTabsOlderThan(period: TabsDeletionPeriod) {
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        deleteTabPeriod: period,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.deleteTabsOlderThan)
         store.dispatch(action)
     }
 

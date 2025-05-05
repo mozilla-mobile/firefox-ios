@@ -11,14 +11,17 @@ import XCTest
 final class TopSitesManagerTests: XCTestCase {
     private var profile: MockProfile?
     private var dispatchQueue: MockDispatchQueue?
+    private var mockNotificationCenter: MockNotificationCenter?
     override func setUp() {
         super.setUp()
         profile = MockProfile()
         dispatchQueue = MockDispatchQueue()
+        mockNotificationCenter = MockNotificationCenter()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
+        mockNotificationCenter = nil
         dispatchQueue = nil
         profile = nil
         super.tearDown()
@@ -415,6 +418,7 @@ final class TopSitesManagerTests: XCTestCase {
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
             dispatchQueue: mockQueue,
+            notification: try XCTUnwrap(mockNotificationCenter),
             maxTopSites: maxCount
         )
         trackForMemoryLeaks(subject, file: file, line: line)

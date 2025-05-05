@@ -11,10 +11,12 @@ import XCTest
 final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockGleanWrapper: MockGleanWrapper!
     var mockStore: MockStoreForMiddleware<AppState>!
+    var mockNotificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
         mockGleanWrapper = MockGleanWrapper()
+        mockNotificationCenter = MockNotificationCenter()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
@@ -22,8 +24,24 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     override func tearDown() {
         DependencyHelperMock().reset()
         mockGleanWrapper = nil
+        mockNotificationCenter = nil
         resetStore()
         super.tearDown()
+    }
+
+    func test_init_setsUpNotifications() {
+        _ = createSubject()
+
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           .FirefoxAccountChanged,
+                                                           .PrivateDataClearedHistory,
+                                                           .ProfileDidFinishSyncing,
+                                                           .TopSitesUpdated,
+                                                           .DefaultSearchEngineUpdated,
+                                                           .BookmarksUpdated,
+                                                           .RustPlacesOpened
+        ])
     }
 
     func test_viewWillAppearAction_sendsTelemetryData() throws {
@@ -217,7 +235,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         return HomepageMiddleware(
             homepageTelemetry: HomepageTelemetry(
                 gleanWrapper: mockGleanWrapper
-            )
+            ),
+            notificationCenter: mockNotificationCenter
         )
     }
 

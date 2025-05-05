@@ -1,0 +1,28 @@
+# The configuration for the open to last tab feature
+features:
+  start-at-home-feature:
+    description: This feature is for experimenting with opening screen
+    variables:
+      setting:
+        description: This property provides a default setting for the start at home feature
+        type: StartAtHome
+        default: afterFourHours
+    defaults:
+      - channel: beta
+        value:
+          setting: afterFourHours
+      - channel: developer
+        value: 
+          setting: afterFourHours
+        
+# These different variants must match those of StartAtHomeSetting (including casing) in FlaggableFeatureOptions.swift
+enums:
+  StartAtHome:
+    description: The option for what screen to open the app to
+    variants:
+      afterFourHours:
+        description: Starts the app at the homepage after four hours of inactivity, otherwise starts the app at the most recently viewed tab.
+      always:
+        description: Starts the app at the homepage.
+      disabled:
+        description: Starts the app at the most recently viewed tab.

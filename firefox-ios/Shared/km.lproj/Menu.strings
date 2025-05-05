@@ -10,19 +10,19 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "បើក​ផ្ទាំង​ថ្មី";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "ចំណាំ";
 
-/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ប្រវត្តិ";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "បញ្ជី​​អំណាន";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "ការ​កំណត់​";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "ផ្ទាំង​​ដែល​​បាន​​ធ្វើ​​សមកាល​កម្ម";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
