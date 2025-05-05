@@ -109,6 +109,7 @@ class TabTrayViewController: UIViewController,
         selector.items = [TabTrayPanelType.privateTabs.label,
                           TabTrayPanelType.tabs.label,
                           TabTrayPanelType.syncedTabs.label]
+        selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
