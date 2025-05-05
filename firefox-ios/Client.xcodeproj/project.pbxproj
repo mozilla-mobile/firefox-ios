@@ -199,6 +199,7 @@
 		1DAEEE002D93532900F4B42D /* UIImage+RenderingUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAEEDFF2D93532400F4B42D /* UIImage+RenderingUtilities.swift */; };
 		1DC372022B23C80F000F96C8 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC372012B23C80F000F96C8 /* WindowManager.swift */; };
 		1DC598B42DC52E3A0037D263 /* ForceRSSyncSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC598B32DC52E360037D263 /* ForceRSSyncSetting.swift */; };
+		1DC598B02DC3EDD50037D263 /* BenchmarkSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */; };
 		1DCEC3F22D5D1FEC00129966 /* ASSearchEngineSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC3F12D5D1FDD00129966 /* ASSearchEngineSelector.swift */; };
 		1DCEC3F42D600AE000129966 /* ASSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC3F32D600ADC00129966 /* ASSearchEngineProvider.swift */; };
 		1DCEC3F62D600C4400129966 /* ASSearchEngineIconRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC3F52D600C3D00129966 /* ASSearchEngineIconRecord.swift */; };
@@ -2664,6 +2665,7 @@
 		1DAEEDFF2D93532400F4B42D /* UIImage+RenderingUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+RenderingUtilities.swift"; sourceTree = "<group>"; };
 		1DC372012B23C80F000F96C8 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		1DC598B32DC52E360037D263 /* ForceRSSyncSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceRSSyncSetting.swift; sourceTree = "<group>"; };
+		1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkSteps.swift; sourceTree = "<group>"; };
 		1DCEC3F12D5D1FDD00129966 /* ASSearchEngineSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineSelector.swift; sourceTree = "<group>"; };
 		1DCEC3F32D600ADC00129966 /* ASSearchEngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineProvider.swift; sourceTree = "<group>"; };
 		1DCEC3F52D600C3D00129966 /* ASSearchEngineIconRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineIconRecord.swift; sourceTree = "<group>"; };
@@ -10828,6 +10830,14 @@
 			path = OpenTabs;
 			sourceTree = "<group>";
 		};
+		1DC598B52DC53CED0037D263 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				1DC598AF2DC3EDD40037D263 /* BenchmarkSteps.swift */,
+			);
+			path = Performance;
+			sourceTree = "<group>";
+		};
 		1DCEC3EF2D5C1BA700129966 /* Application Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -12256,6 +12266,7 @@
 		8A3EF7EE2A2FCF0000796E3A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				1DC598B52DC53CED0037D263 /* Performance */,
 				8ABCBE622C485CAA00480A21 /* FeatureFlags */,
 				8A3EF7FC2A2FCFAC00796E3A /* AppReviewPromptSetting.swift */,
 				1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */,
@@ -17713,6 +17724,7 @@
 				254B760A2B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */,
+				1DC598B02DC3EDD50037D263 /* BenchmarkSteps.swift in Sources */,
 				5A1947152B8FA9E0009C7A6C /* BrowserViewType.swift in Sources */,
 				8A454D412CB9B8AA009436D9 /* TopSitesAction.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
