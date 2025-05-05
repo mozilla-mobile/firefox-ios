@@ -134,8 +134,4 @@ extension TabManager {
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
         addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab, isPrivate: isPrivate)
     }
-
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date = Date()) {
-        removeNormalTabsOlderThan(period: period, currentDate: currentDate)
-    }
 }

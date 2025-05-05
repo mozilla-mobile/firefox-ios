@@ -22,7 +22,8 @@ class TabManagerTests: XCTestCase {
     var mockDiskImageStore: MockDiskImageStore!
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
-    let testDate = Date(timeIntervalSince1970: 1_000_000_000)
+    /// 9 Sep 2001 8:00 pm GMT + 0
+    let testDate = Date(timeIntervalSince1970: 1_000_065_600)
 
     override func setUp() {
         super.setUp()
@@ -1773,7 +1774,7 @@ class TabManagerTests: XCTestCase {
                 let twoWeeksDate = testDate.lastTwoWeek
                 tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: twoWeeksDate)
             case .normalInactiveYesterday:
-                let yesterdayDate = yesterdayDate()
+                let yesterdayDate = testDate.dayBefore
                 tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: yesterdayDate)
             }
 

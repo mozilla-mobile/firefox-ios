@@ -364,8 +364,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
     }
 
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod,
-                                   currentDate: Date = Date()) {
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
         let cutoffDate: Date
         switch period {
