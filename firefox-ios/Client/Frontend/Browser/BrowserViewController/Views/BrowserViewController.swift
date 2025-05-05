@@ -208,11 +208,6 @@ class BrowserViewController: UIViewController,
         view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
 
-    // Mask for the content view so the content is only extending top and bottom
-    private let contentMaskView: UIView = .build { view in
-        view.backgroundColor = .black
-    }
-
     // background view is placed behind content view so view scrolled to top or bottom shows
     // correct background for translucent toolbars
     private let backgroundView: UIView = .build()
@@ -496,7 +491,7 @@ class BrowserViewController: UIViewController,
             header.isClearBackground = false
             overKeyboardContainer.isClearBackground = false
             bottomContainer.isClearBackground = false
-            contentMaskView.isHidden = true
+            contentContainer.mask = nil
             return
         }
 
@@ -521,7 +516,13 @@ class BrowserViewController: UIViewController,
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
         bottomBlurView.isHidden = !showNavToolbar && !isBottomSearchBar && enableBlur
-        contentMaskView.isHidden = false
+
+        let maskView = UIView(frame: CGRect(x: 0,
+                                            y: -contentContainer.frame.origin.y,
+                                            width: view.frame.width,
+                                            height: view.frame.height))
+        maskView.backgroundColor = .black
+        contentContainer.mask = maskView
 
         [header, overKeyboardContainer, bottomContainer].forEach { $0.applyTheme(theme: theme) }
     }
@@ -1367,7 +1368,6 @@ class BrowserViewController: UIViewController,
 
         view.insertSubview(topBlurView, aboveSubview: contentContainer)
         view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
-        view.insertSubview(contentMaskView, belowSubview: contentContainer)
 
         view.insertSubview(backgroundView,
                            belowSubview: isSwipingTabsEnabled ? webPagePreview : contentContainer)
@@ -1382,11 +1382,6 @@ class BrowserViewController: UIViewController,
             bottomBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             bottomBlurView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             bottomBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            contentMaskView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentMaskView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
-            contentMaskView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
-            contentMaskView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1570,11 +1565,12 @@ class BrowserViewController: UIViewController,
         }
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
-        // for the first two layers of views
-        if ToolbarHelper().shouldBlur() {
+        // for the first two layers of views other than web view and legacy homepage
+        if ToolbarHelper().shouldBlur() &&
+            !viewController.isKind(of: WebviewViewController.self) &&
+            !viewController.isKind(of: LegacyHomepageViewController.self) {
             viewController.view.clipsToBounds = false
             viewController.view.subviews.forEach { $0.clipsToBounds = false }
-            contentContainer.mask = contentMaskView
         } else {
             contentContainer.mask = nil
         }
