@@ -431,7 +431,6 @@ class BrowserViewController: UIViewController,
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
@@ -1017,7 +1016,6 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
     }
 
     func addSubviews() {

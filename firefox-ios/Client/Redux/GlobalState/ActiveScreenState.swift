@@ -23,6 +23,7 @@ enum AppScreenState: Equatable {
     case searchEngineSelection(SearchEngineSelectionState)
     case passwordGenerator(PasswordGeneratorState)
     case nativeErrorPage(NativeErrorPageState)
+    case tabWebViewPreview(TabWebViewPreviewState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -58,6 +59,8 @@ enum AppScreenState: Equatable {
             return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
         case .nativeErrorPage(let state):
             return .nativeErrorPage(NativeErrorPageState.reducer(state, action))
+        case .tabWebViewPreview(let state):
+            return .tabWebViewPreview(TabWebViewPreviewState.reducer(state, action))
         }
     }
 
@@ -80,6 +83,7 @@ enum AppScreenState: Equatable {
         case .searchEngineSelection: return .searchEngineSelection
         case .passwordGenerator: return .passwordGenerator
         case .nativeErrorPage: return .nativeErrorPage
+        case .tabWebViewPreview: return .tabWebViewPreview
         }
     }
 
@@ -101,6 +105,7 @@ enum AppScreenState: Equatable {
         case .searchEngineSelection(let state): return state.windowUUID
         case .passwordGenerator(let state): return state.windowUUID
         case .nativeErrorPage(let state): return state.windowUUID
+        case .tabWebViewPreview(let state): return state.windowUUID
         }
     }
 }
@@ -171,6 +176,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
             case .nativeErrorPage:
                 screens.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
+            case .tabWebViewPreview:
+                screens.append(.tabWebViewPreview(TabWebViewPreviewState()))
             }
         default:
             return screens

@@ -4,8 +4,9 @@
 
 import UIKit
 import Common
+import Redux
 
-final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
+final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable, StoreSubscriber {
     // MARK: - UX Constants
     private struct UX {
         static let addressBarCornerRadius: CGFloat = 8
@@ -16,6 +17,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         static let addressBarOnBottomLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
     var notificationCenter: any NotificationProtocol = NotificationCenter.default
+    private var state: TabWebViewPreviewState = .init()
 
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
@@ -40,6 +42,8 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setStackViewsLayoutMargins()
         adjustSkeletonAddressBarHeightForA11ySizeCategory()
+        updateLayoutBasedOn(searchBarPosition: state.searchBarPosition)
+        subscribeToRedux()
     }
 
     required init?(coder: NSCoder) {
@@ -72,6 +76,38 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         ])
     }
 
+    // MARK: - Redux
+    func subscribeToRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: .unavailable,
+                actionType: ScreenActionType.showScreen,
+                screen: .tabWebViewPreview
+            )
+        )
+
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return TabWebViewPreviewState(appState: appState)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TabWebViewPreviewState) {
+        updateView(from: state)
+    }
+
+    private func updateView(from state: TabWebViewPreviewState) {
+        webPageScreenshotImageView.image = state.screenshot
+        guard self.state.searchBarPosition != state.searchBarPosition else { return }
+        self.state = state
+        updateLayoutBasedOn(searchBarPosition: state.searchBarPosition)
+    }
+
     // MARK: - A11y
     private func adjustSkeletonAddressBarHeightForA11ySizeCategory() {
         let scaledHeight = min(UIFontMetrics.default.scaledValue(for: UX.addressBarHeight), UX.addressBarMaxHeight)
@@ -79,12 +115,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         addressBarHeightConstraint?.constant = isA11yCategory ? scaledHeight : UX.addressBarHeight
     }
 
-    // MARK: - Public Functions
-
-    /// Updates the layout based on the given search bar position.
-    ///
-    /// - Parameter searchBarPosition: The position of the search bar, either `.top` or `.bottom`.
-    func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
+    private func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
         topStackView.removeAllArrangedViews()
         bottomStackView.removeAllArrangedViews()
 
@@ -117,10 +148,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         addressBarBorderViewTopBottomConstraint?.isActive = true
     }
 
-    /// Sets the screenshot image for the web page preview.
-    ///
-    /// - Parameter image: The screenshot image to display, or `nil` to remove the current image.
-    func setScreenshot(_ image: UIImage?) {
+    private func setScreenshot(_ image: UIImage?) {
         webPageScreenshotImageView.image = image
     }
 
