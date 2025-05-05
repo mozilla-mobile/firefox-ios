@@ -16,7 +16,6 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
     private enum UX {
         static let toolbarHeight: CGFloat = 48
-        static let backgroundAlphaForBlur: CGFloat = 0.8
     }
 
     var windowUUID: WindowUUID? {
@@ -111,7 +110,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         toolbar.applyTheme(theme: theme)
 
         let isTranslucent = model?.isTranslucent ?? false
-        let backgroundAlpha: CGFloat = isTranslucent ? UX.backgroundAlphaForBlur : 1.0
+        let backgroundAlpha: CGFloat = isTranslucent ? ToolbarHelper().backgroundAlpha() : 1.0
 
         let backgroundColorWithoutAlpha = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
         backgroundColor = backgroundColorWithoutAlpha.withAlphaComponent(backgroundAlpha)
