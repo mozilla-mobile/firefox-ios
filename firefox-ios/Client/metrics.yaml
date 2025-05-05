@@ -3758,7 +3758,7 @@ tabs_panel:
   done_button_tapped:
     type: event
     description: |
-      Recorded when a user taps the done button on the tab tray
+      Recorded when a user taps the done button to close the tab tray
     extra_keys:
       mode:
         type: string
@@ -3813,12 +3813,12 @@ tabs_panel:
   tab_selected:
     type: event
     description: |
-      Recorded when a user selects an open tab
+      Recorded when a user selects an open tab.
     extra_keys:
       selected_tab_index:
         type: quantity
         description: |
-          The index of the open tab that the user selects
+          The index of the open tab that the user selects.
       mode:
         type: string
         description: |
