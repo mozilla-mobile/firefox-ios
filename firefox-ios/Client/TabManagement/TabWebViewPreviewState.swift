@@ -9,7 +9,7 @@ struct TabWebViewPreviewState: ScreenState, Equatable {
     let windowUUID: WindowUUID = .unavailable
     let searchBarPosition: SearchBarPosition
     let screenshot: UIImage?
-    
+
     init(appState: AppState) {
         guard let tabPreviewState = store.state.screenState(
             Self.self,
@@ -25,13 +25,13 @@ struct TabWebViewPreviewState: ScreenState, Equatable {
             screenshot: tabPreviewState.screenshot
         )
     }
-    
+
     init(searchBarPosition: SearchBarPosition,
          screenshot: UIImage?) {
         self.searchBarPosition = searchBarPosition
         self.screenshot = screenshot
     }
-    
+
     init() {
         self.init(searchBarPosition: .top, screenshot: nil)
     }
@@ -43,7 +43,7 @@ struct TabWebViewPreviewState: ScreenState, Equatable {
             else { return defaultState(from: state) }
 
             return Self(searchBarPosition: toolbarPosition, screenshot: state.screenshot)
-            
+
         case TabWebViewPreviewActionType.didTakeScreenshot:
             guard let tabPreviewAction = action as? TabWebViewPreviewAction else { return defaultState(from: state) }
             return Self(searchBarPosition: state.searchBarPosition, screenshot: tabPreviewAction.screenshot)
