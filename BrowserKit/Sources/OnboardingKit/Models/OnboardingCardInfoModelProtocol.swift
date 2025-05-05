@@ -10,16 +10,6 @@ public enum OnboardingCardType: String, Codable {
     case multipleChoice = "multiple-choice"
 }
 
-public struct OnboardingButtonInfoModel<OnboardingActionType> {
-    let title: String
-    let action: OnboardingActionType
-    
-    public init(title: String, action: OnboardingActionType) {
-        self.title = title
-        self.action = action
-    }
-}
-
 protocol OnboardingDefaultBrowserModelProtocol {
     associatedtype OnboardingPopupActionType
     var title: String { get set }
