@@ -55,19 +55,7 @@ class RustSyncManagerTests: XCTestCase {
     override func tearDown() {
         rustSyncManager = nil
         UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
-        profile.prefs.removeObjectForKey(Keys.bookmarksStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.bookmarksEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.creditcardsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.creditcardsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.historyStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.historyEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.passwordsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.passwordsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.tabsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.tabsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.addressesEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.addressesStateChangedPrefKey)
-
+        profile.prefs.clearAll()
         profile = nil
         super.tearDown()
     }
@@ -115,11 +103,10 @@ class RustSyncManagerTests: XCTestCase {
         ]
 
         rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
-            XCTAssertEqual(engines.count, 6)
+            XCTAssertEqual(engines.count, 5)
 
             XCTAssertTrue(engines.contains("bookmarks"))
             XCTAssertTrue(engines.contains("history"))
-            XCTAssertTrue(engines.contains("passwords"))
             XCTAssertTrue(engines.contains("tabs"))
             XCTAssertTrue(engines.contains("addresses"))
             XCTAssertTrue(engines.contains("creditcards"))
@@ -128,7 +115,7 @@ class RustSyncManagerTests: XCTestCase {
             XCTAssertNotNil(keys["creditcards"])
 
             XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
-            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 0)
             XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
             XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
         }
