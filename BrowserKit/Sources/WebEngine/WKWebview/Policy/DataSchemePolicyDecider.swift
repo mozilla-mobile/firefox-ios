@@ -10,7 +10,7 @@ struct DataSchemePolicyDecider: WKPolicyDecider {
     func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
         return .allow
     }
-    
+
     func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.

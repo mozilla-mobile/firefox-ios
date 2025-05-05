@@ -12,12 +12,12 @@ class WKPolicyDeciderFactory: WKPolicyDecider {
         guard let next else { return .cancel }
         return next.policyForNavigation(action: action)
     }
-    
+
     func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
         guard let next else { return .cancel }
         return next.policyForNavigation(response: response)
     }
-    
+
     func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
         next = popupNavigationResponderChain()
         guard let next else { return .cancel }

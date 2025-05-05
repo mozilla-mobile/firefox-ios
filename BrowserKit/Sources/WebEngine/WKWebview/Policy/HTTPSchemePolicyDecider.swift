@@ -69,14 +69,14 @@ struct AppLaunchPolicyDecider: WKPolicyDecider {
         }
         return .cancel
     }
-    
+
     func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
         return .allow
     }
 
     func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
         guard let url = action.request.url,
-              (isSupportedHost(url) || isSupportedScheme(url)) else {
+              isSupportedHost(url) || isSupportedScheme(url) else {
             return next?.policyForPopupNavigation(action: action) ?? .cancel
         }
 
@@ -96,11 +96,11 @@ struct AppLaunchPolicyDecider: WKPolicyDecider {
 
 struct LocalRequestPolicyDecider: WKPolicyDecider {
     var next: (any WKPolicyDecider)?
-    
+
     func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
         return .allow
     }
-    
+
     func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
         return .allow
     }

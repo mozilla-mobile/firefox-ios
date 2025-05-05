@@ -88,7 +88,6 @@ class DefaultUIHandler: NSObject, WKUIHandler {
                  createWebViewWith configuration: WKWebViewConfiguration,
                  for navigationAction: WKNavigationAction,
                  windowFeatures: WKWindowFeatures) -> WKWebView? {
-
         let policy = policyDecider.policyForPopupNavigation(action: navigationAction)
         switch policy {
         case .cancel:
