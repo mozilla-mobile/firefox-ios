@@ -175,8 +175,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.hntTopSitesVisualRefreshFeature.value()
-        return config.enabled
+        return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
