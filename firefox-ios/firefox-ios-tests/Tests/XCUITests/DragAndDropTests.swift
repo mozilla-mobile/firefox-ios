@@ -270,7 +270,11 @@ private extension BaseTestCase {
         }
     }
 
-    func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
+    func checkTabsOrder(dragAndDropTab: Bool,
+                        firstTab: String,
+                        secondTab: String,
+                        file: StaticString = #file,
+                        line: UInt = #line) {
         waitForElementsToExist(
             [
                 app.collectionViews.cells.element(
@@ -281,16 +285,17 @@ private extension BaseTestCase {
                 )
             ]
         )
-        let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
-        let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
+        let collectionView = app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView]
+        let firstTabCell = collectionView.cells.element(boundBy: 0).label
+        let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
         if dragAndDropTab {
             sleep(2)
-            XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
-            XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
+            XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct", file: file, line: line)
+            XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct", file: file, line: line)
         } else {
-            XCTAssertEqual(firstTabCell, firstTab, "first tab before is not correct")
-            XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct")
+            XCTAssertEqual(firstTabCell, firstTab, "first tab before is not correct", file: file, line: line)
+            XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct", file: file, line: line)
         }
     }
 }
