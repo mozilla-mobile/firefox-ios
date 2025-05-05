@@ -268,12 +268,14 @@ final class AddressListViewModelTests: XCTestCase {
     }
 }
 
-final class MockAutofill: AddressProvider {
+final class MockAutofill: AddressProvider, SyncAutofillProvider {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
     var mockEditAddressResult: Result<Void, Error>?
     var listAllAddressesCalled = false
     var deleteAddressesCalled = false
+    var getStoredKeyCalledCount = 0
+    var registerWithSyncManagerCalled = 0
 
     func deleteAddress(
         id: String,
@@ -311,5 +313,14 @@ final class MockAutofill: AddressProvider {
                 completion(nil, error)
             }
         }
+    }
+
+    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+        getStoredKeyCalledCount += 1
+        return completion(.success("test autofill encryption key"))
+    }
+
+    func registerWithSyncManager() {
+        registerWithSyncManagerCalled += 1
     }
 }
