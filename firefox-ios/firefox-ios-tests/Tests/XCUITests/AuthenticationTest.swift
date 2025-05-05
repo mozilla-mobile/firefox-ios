@@ -9,7 +9,7 @@ let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 class AuthenticationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
-        navigator.openURL(testBasicHTTPAuthURL)
+        navigator.openURL(testBasicHTTPAuthURL
 
         // Predicate to wait for element to exist
         let existsPredicate = NSPredicate(format: "exists == true")
