@@ -1002,6 +1002,12 @@ class BrowserViewController: UIViewController,
             name: .StopDownloads,
             object: nil
         )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(onReduceTransparencyStatusDidChange(_:)),
+            name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+            object: nil
+        )
     }
 
     @objc
@@ -1012,6 +1018,11 @@ class BrowserViewController: UIViewController,
             self.downloadToast?.dismiss(true)
             self.stopDownload(buttonPressed: true)
         }
+    }
+
+    @objc
+    private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
+        updateBlurViews()
     }
 
     private func switchToolbarIfNeeded() {
