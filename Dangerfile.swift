@@ -13,6 +13,7 @@ let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/Standa
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
 checkCodeCoverage()
+failOnNewFilesWithoutCoverage()
 checkForPRDescription()
 checkForWebEngineFileChange()
 checkForCodeUsage()
@@ -33,6 +34,53 @@ func checkCodeCoverage() {
         .xcresultBundle(xcresult),
         minimumCoverage: 50
     )
+}
+
+func failOnNewFilesWithoutCoverage() {
+    let jsonPath = "coverage.json"
+
+    guard let data = FileManager.default.contents(atPath: jsonPath),
+          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let targets = json["targets"] as? [[String: Any]] else {
+        fail("Could not parse coverage.json for per-file coverage")
+        return
+    }
+
+    // Build a dictionary of file coverage: [file path: coverage %]
+    var coverageByFile: [String: Double] = [:]
+    for target in targets {
+        if let files = target["files"] as? [[String: Any]] {
+            for file in files {
+                guard let path = file["name"] as? String,
+                      let coverage = file["lineCoverage"] as? Double else { continue }
+                coverageByFile[path] = coverage * 100.0 // Convert from 0.0–1.0 to percent
+            }
+        }
+    }
+
+    // Get new files filtering Test and Generated
+    let newSwiftFiles = danger.git.createdFiles.filter {
+        $0.hasSuffix(".swift") &&
+        !$0.contains("Tests") &&
+        !$0.contains("/Generated/") // adjust if you use codegen folders
+    }
+
+    for file in newSwiftFiles {
+        // Adjust path if needed to match coverage.json format
+        // Strip "./" and match suffixes
+        let cleanedFile = file.replacingOccurrences(of: "./", with: "")
+
+        // Try to find a file in coverage report that ends with this file
+        let matching = coverageByFile.first { (coveragePath, _) in
+            coveragePath.hasSuffix(cleanedFile)
+        }
+
+        if let (_, coveragePercent) = matching {
+            if coveragePercent == 0 {
+                warn("New file `\(file)` has 0% test coverage. Please add unit tests.")
+            }
+        }
+    }
 }
 
 // MARK: - PR guidelines

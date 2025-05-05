@@ -1,0 +1,6 @@
+/* Label for copying contents of the form */
+"CreditCard.EditCard.CopyLabel.v113" = "Kopyahin";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Mag-save at Maglagay ng mga Payment Method";
+

@@ -7,6 +7,6 @@
 /* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
 "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "Setélan Privasi & Kaamanan";
 
-/* Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google). */
+/* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
 "AddressToolbar.SearchEngine.A11y.Label.v128" = "Mesin Pamaluruh: %@";
 

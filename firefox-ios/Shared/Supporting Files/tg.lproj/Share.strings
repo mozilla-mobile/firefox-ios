@@ -1,3 +1,9 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Шумо ягон дастгоҳе надоред, ки ба ин ҳисоб пайваст карда шудааст ва барои ҳамоҳангсозӣ дастрасӣ дорад.";
+
 /* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
 "SendTo.NotSignedIn.Title.v119" = "Шумо ба ҳисоби худ ворид нашудаед.";
+
+/* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "Файл ба ҳофизаи муваққатӣ нусха бардошта шуд";
 

@@ -1,0 +1,3 @@
+/* Displayed during a download in Live Activity or Dynamic Island to show the current progress of the file(s) download. %1$@ is the downloaded size, %2$@ is the total size of the file(s) (e.g. 10 MB of 200 MB). */
+"LiveActivity.Downloads.FileProgressText.v138" = "%1$@ av %2$@";
+

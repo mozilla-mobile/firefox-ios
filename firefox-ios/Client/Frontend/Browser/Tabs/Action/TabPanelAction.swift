@@ -20,6 +20,7 @@ class TabPanelViewAction: Action {
     let toastType: ToastType?
     let shareSheetURL: URL?
     let isInactiveTab: Bool?
+    let deleteTabPeriod: TabsDeletionPeriod?
 
     init(panelType: TabTrayPanelType?,
          isPrivateModeActive: Bool? = nil,
@@ -29,6 +30,7 @@ class TabPanelViewAction: Action {
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
          isInactiveTab: Bool? = nil,
+         deleteTabPeriod: TabsDeletionPeriod? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.panelType = panelType
@@ -39,6 +41,7 @@ class TabPanelViewAction: Action {
         self.toastType = toastType
         self.shareSheetURL = shareSheetURL
         self.isInactiveTab = isInactiveTab
+        self.deleteTabPeriod = deleteTabPeriod
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -53,6 +56,7 @@ enum TabPanelViewActionType: ActionType {
     case undoClose
     case closeAllTabs
     case confirmCloseAllTabs
+    case deleteTabsOlderThan
     case undoCloseAllTabs
     case moveTab
     case toggleInactiveTabs
@@ -62,7 +66,6 @@ enum TabPanelViewActionType: ActionType {
     case undoCloseAllInactiveTabs
     case learnMorePrivateMode
     case selectTab
-    case hideUndoToast
 }
 
 class TabPanelMiddlewareAction: Action {

@@ -215,9 +215,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         let baseName = tab.getTabTrayTitle()
 
         if isSelectedTab, !tab.getTabTrayTitle().isEmpty {
-            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
+            return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
-            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
+            return String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else {
             return baseName
         }

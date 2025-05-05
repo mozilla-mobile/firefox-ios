@@ -200,9 +200,10 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
-        if #available(iOS 15.4, *) {
-            configuration.preferences.isElementFullscreenEnabled = true
-        }
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        if #available(iOS 15.4, *) {
+//            configuration.preferences.isElementFullscreenEnabled = true
+//        }
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         } else {
@@ -361,6 +362,29 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         if flushToDisk {
             storeChanges()
         }
+    }
+
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod) {
+        let calendar = Calendar.current
+        let now = Date()
+        let cutoffDate: Date
+
+        switch period {
+        case .oneDay:
+            cutoffDate = calendar.date(byAdding: .day, value: -1, to: now) ?? now
+        case .oneWeek:
+            cutoffDate = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+        case .oneMonth:
+            cutoffDate = calendar.date(byAdding: .month, value: -1, to: now) ?? now
+        }
+
+        let tabsToRemove = normalTabs.filter { tab in
+            let lastUsed = Date.fromTimestamp(tab.lastExecutedTime)
+            return lastUsed < cutoffDate
+        }
+
+        guard !tabsToRemove.isEmpty else { return }
+        removeTabs(tabsToRemove)
     }
 
     // MARK: - Add Tab

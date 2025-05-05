@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "ਹਟਾਓ";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "ਸਾਰਾ ਸਮਾਂ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "ਪਿਛਲੇ 4 ਹਫ਼ਤੇ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "ਆਖਰੀ ਘੰਟਾ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "ਪਿਛਲੇ 7 ਦਿਨ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "ਪਿਛਲੇ 24 ਘੰਟੇ";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "ਅਤੀਤ (ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਸਿੰਕ ਕੀਤੇ ਅਤੀਤ ਦੇ ਸਮੇਤ), ਕੂਕੀਜ਼ ਤੇ ਹੋਰ ਬਰਾਊਜ਼ਰ ਡਾਟੇ ਨੂੰ ਹਟਾਓ।";
+

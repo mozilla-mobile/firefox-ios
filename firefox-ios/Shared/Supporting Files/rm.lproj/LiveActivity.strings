@@ -1,0 +1,9 @@
+/* Displayed during a download in Live Activity or Dynamic Island. %@ is the number of files (e.g. Downloading Files: 2). */
+"LiveActivity.Downloads.FileCountText.v138" = "Telechargiada da datotecas: %@";
+
+/* Displayed during a download in Live Activity or Dynamic Island. %@ is the name of the file being downloaded (e.g. Downloading “MyFile.pdf”). */
+"LiveActivity.Downloads.FileNameText.v138" = "Telechargiar «%@»";
+
+/* Displayed during a download in Live Activity or Dynamic Island to show the current progress of the file(s) download. %1$@ is the downloaded size, %2$@ is the total size of the file(s) (e.g. 10 MB of 200 MB). */
+"LiveActivity.Downloads.FileProgressText.v138" = "%1$@ da %2$@";
+
