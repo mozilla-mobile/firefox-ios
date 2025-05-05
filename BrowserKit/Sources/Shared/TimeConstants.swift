@@ -124,6 +124,7 @@ extension Date {
     }
 }
 
+// TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-12175
 extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow: Date { return Date().dayAfter }
