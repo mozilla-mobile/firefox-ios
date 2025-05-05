@@ -5,5 +5,5 @@
 "SendTo.NotSignedIn.Title.v119" = "Du är inte inloggad på ditt konto.";
 
 /* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
-"ShareExtension.FileCopiedToClipboard.Title.v139" = "Fil Kopierad Till Urklipp";
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "Fil kopierad till urklipp";
 
