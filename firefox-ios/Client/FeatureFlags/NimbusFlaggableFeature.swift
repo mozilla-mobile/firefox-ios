@@ -20,6 +20,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacySimplifiedUI
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
+    case hntTopSitesVisualRefresh
     case homepageRebuild
     case inactiveTabs
     case menuRefactor
@@ -58,6 +59,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .addressBarMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
+                .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -117,6 +119,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .deeplinkOptimizationRefactor,
+                .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .microsurvey,
                 .menuRefactor,

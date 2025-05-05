@@ -192,6 +192,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
+                FeatureFlagsBoolSetting(
+                    with: .hntTopSitesVisualRefresh,
+                    titleText: format(string: "Enable Top Sites Visual Refresh"),
+                    statusText: format(string: "Toggle to enable top sites visual refresh")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }

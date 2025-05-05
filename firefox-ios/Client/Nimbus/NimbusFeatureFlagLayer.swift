@@ -40,6 +40,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+        case .hntTopSitesVisualRefresh:
+            return checkHntTopSitesVisualRefreshFeature(from: nimbus)
+
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
 
@@ -169,6 +172,11 @@ final class NimbusFeatureFlagLayer {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         default: return false
         }
+    }
+
+    public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.hntTopSitesVisualRefreshFeature.value()
+        return config.enabled
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
