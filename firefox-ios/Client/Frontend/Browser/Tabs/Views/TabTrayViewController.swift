@@ -799,6 +799,7 @@ class TabTrayViewController: UIViewController,
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         store.dispatch(
             TabTrayAction(
+                panelType: tabTrayState.selectedPanel,
                 windowUUID: windowUUID,
                 actionType: TabTrayActionType.doneButtonTapped
             )

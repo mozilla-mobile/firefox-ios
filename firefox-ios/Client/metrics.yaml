@@ -3814,7 +3814,7 @@ tabs_panel:
       selected_tab_index:
         type: quantity
         description: |
-          The index of the open tab that the user selects.
+          The index of the open tab that the user selects (starts at 0).
       mode:
         type: string
         description: |
