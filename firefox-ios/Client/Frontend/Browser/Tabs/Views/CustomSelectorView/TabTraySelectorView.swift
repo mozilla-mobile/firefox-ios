@@ -12,11 +12,10 @@ protocol TabTraySelectorDelegate: AnyObject {
 // MARK: - UX Constants
 struct TabTraySelectorUX {
     static let horizontalPadding: CGFloat = 40
-    static let cellVerticalPadding: CGFloat = 8
-    static let estimatedCellWidth: CGFloat = 100
     static let cornerRadius: CGFloat = 12
     static let verticalInsets: CGFloat = 4
     static let maxFontSize: CGFloat = 30
+    static let horizontalInsets: CGFloat = 10
 }
 
 class TabTraySelectorView: UIView,
@@ -32,6 +31,9 @@ class TabTraySelectorView: UIView,
         }
     }
     private var buttons: [UIButton] = []
+    private lazy var selectionBackgroundView: UIView = .build { _ in }
+    private var selectionBackgroundLeadingConstraint: NSLayoutConstraint?
+    private var selectionBackgroundTrailingConstraint: NSLayoutConstraint?
 
     var items: [String] = ["", "", ""] {
         didSet {
@@ -52,6 +54,10 @@ class TabTraySelectorView: UIView,
     }
 
     private func setup() {
+        selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
+        selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
+        addSubview(selectionBackgroundView)
+
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = TabTraySelectorUX.horizontalPadding
@@ -72,9 +78,6 @@ class TabTraySelectorView: UIView,
             button.tag = index
             button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
 
-            buttons.append(button)
-            stackView.addArrangedSubview(button)
-
             button.titleLabel?.font = index == selectedIndex ?
                 FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
                 FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
@@ -83,14 +86,39 @@ class TabTraySelectorView: UIView,
             button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
                                               NSNumber(value: index + 1),
                                               NSNumber(value: items.count))
+            button.translatesAutoresizingMaskIntoConstraints = false
+            buttons.append(button)
+            stackView.addArrangedSubview(button)
         }
 
         applyTheme(theme: theme)
+        setupInitialSelectionBackground()
+    }
+
+    private func setupInitialSelectionBackground() {
+        guard buttons.indices.contains(selectedIndex) else { return }
+
+        let selectedButton = buttons[selectedIndex]
+        selectionBackgroundLeadingConstraint = selectionBackgroundView.leadingAnchor.constraint(
+            equalTo: selectedButton.leadingAnchor, constant: -TabTraySelectorUX.horizontalInsets
+        )
+        selectionBackgroundTrailingConstraint = selectionBackgroundView.trailingAnchor.constraint(
+            equalTo: selectedButton.trailingAnchor, constant: TabTraySelectorUX.horizontalInsets
+        )
+
+        NSLayoutConstraint.activate([
+            selectionBackgroundView.topAnchor.constraint(equalTo: selectedButton.topAnchor,
+                                                         constant: -TabTraySelectorUX.verticalInsets),
+            selectionBackgroundView.bottomAnchor.constraint(equalTo: selectedButton.bottomAnchor,
+                                                            constant: TabTraySelectorUX.verticalInsets),
+            selectionBackgroundLeadingConstraint!,
+            selectionBackgroundTrailingConstraint!
+        ])
     }
 
     private func updateLabels() {
         for (index, title) in items.enumerated() {
-            buttons[index].setTitle(title, for: .normal)
+            buttons[safe: index]?.setTitle(title, for: .normal)
         }
     }
 
@@ -100,15 +128,9 @@ class TabTraySelectorView: UIView,
     }
 
     private func selectNewSection() {
-        var panelType: TabTrayPanelType = .tabs
-        if selectedIndex == 0 {
-            panelType = .privateTabs
-        } else if selectedIndex == 1 {
-            panelType = .tabs
-        } else if selectedIndex == 2 {
-            panelType = .syncedTabs
-        }
+        guard buttons.indices.contains(selectedIndex) else { return }
 
+        let newSelectedButton = buttons[selectedIndex]
         for (index, button) in buttons.enumerated() {
             if index == selectedIndex {
                 button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
@@ -117,6 +139,32 @@ class TabTraySelectorView: UIView,
             }
         }
 
+        selectionBackgroundLeadingConstraint?.isActive = false
+        selectionBackgroundLeadingConstraint = selectionBackgroundView.leadingAnchor.constraint(
+            equalTo: newSelectedButton.leadingAnchor, constant: -TabTraySelectorUX.horizontalInsets
+        )
+        selectionBackgroundLeadingConstraint?.isActive = true
+
+        selectionBackgroundTrailingConstraint?.isActive = false
+        selectionBackgroundTrailingConstraint = selectionBackgroundView.trailingAnchor.constraint(
+            equalTo: newSelectedButton.trailingAnchor, constant: TabTraySelectorUX.horizontalInsets
+        )
+        selectionBackgroundTrailingConstraint?.isActive = true
+
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       options: [.curveEaseInOut],
+                       animations: {
+            self.layoutIfNeeded()
+        }, completion: nil)
+
+        var panelType: TabTrayPanelType = .tabs
+        switch selectedIndex {
+        case 0: panelType = .privateTabs
+        case 1: panelType = .tabs
+        case 2: panelType = .syncedTabs
+        default: break
+        }
         delegate?.didSelectSection(panelType: panelType)
     }
 
@@ -125,6 +173,7 @@ class TabTraySelectorView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         backgroundColor = theme.colors.layer1
+        selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
 
         for button in buttons {
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
