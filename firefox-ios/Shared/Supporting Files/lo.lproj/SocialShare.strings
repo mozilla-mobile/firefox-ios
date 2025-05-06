@@ -1,0 +1,20 @@
+/* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "ເຜີຍແຜ່ກ່ຽວກັບ %1$@ ທຸກໆຄັ້ງທີ່ທ່ານແບ່ງປັນລິ້ງໃນ %2$@.";
+
+/* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "ລວມເອົາ %1$@ ລິ້ງດາວໂຫຼດຢູ່ໃນ %2$@ Shares";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ ສົ່ງມາຈາກ %2$@ 🦊 ລອງໃຊ້ໂປຣແກຣມທ່ອງເວັບໃນມືຖື: %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v137" = "%1$@\n\nສົ່ງມາຈາກ %2$@ 🦊 ລອງໃຊ້ໂປຣແກຣມທ່ອງເວັບມືຖື: %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ ສົ່ງຈາກ %2$@ 🦊 %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v137" = "%1$@\n\nສົ່ງຈາກ %2$@ 🦊 %3$@";
+

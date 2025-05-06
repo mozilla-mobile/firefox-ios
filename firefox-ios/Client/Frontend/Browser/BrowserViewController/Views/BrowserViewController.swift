@@ -70,7 +70,8 @@ class BrowserViewController: UIViewController,
         .URL,
         .title,
         .hasOnlySecureContent,
-        .fullscreenState
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
@@ -565,9 +566,7 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
-        if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
-        }
+
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -601,6 +600,10 @@ class BrowserViewController: UIViewController,
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
+        }
+
+        if let tab = tabManager.selectedTab, let screenshotHelper {
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
         guard canShowPrivacyWindow else { return }
@@ -2127,16 +2130,17 @@ class BrowserViewController: UIViewController,
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
             }
-        case .fullscreenState:
-            if #available(iOS 16.0, *) {
-                guard webView.fullscreenState == .enteringFullscreen ||
-                        webView.fullscreenState == .exitingFullscreen else { return }
-                if webView.fullscreenState == .enteringFullscreen {
-                    fullscreenDelegate?.enteringFullscreen()
-                } else {
-                    fullscreenDelegate?.exitingFullscreen()
-                }
-            }
+            // TODO: FXIOS-12158 Add back after investigating why video player is broken
+//        case .fullscreenState:
+//            if #available(iOS 16.0, *) {
+//                guard webView.fullscreenState == .enteringFullscreen ||
+//                        webView.fullscreenState == .exitingFullscreen else { return }
+//                if webView.fullscreenState == .enteringFullscreen {
+//                    fullscreenDelegate?.enteringFullscreen()
+//                } else {
+//                    fullscreenDelegate?.exitingFullscreen()
+//                }
+//            }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }

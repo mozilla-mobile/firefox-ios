@@ -2,7 +2,7 @@
 "Are you sure?" = "Sigurado ka?";
 
 /* Prompt option for cancelling out of deletion */
-"Cancel" = "Kanselahin";
+"Cancel" = "Ikansela";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
 "Clear Search" = "Burahin ang Search";
@@ -10,7 +10,7 @@
 /* Copy password text selection menu item */
 "Copy" = "Kopyahin";
 
-/* Label describing when the current login was created with the timestamp as the parameter. */
+/* Label describing when the current login was created. %@ is the timestamp. */
 "Created %@" = "Created %@";
 
 /* Label for the button used to delete the current login. */
@@ -31,7 +31,7 @@
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "Tatangalin ang mga login sa lahat ng mga device";
 
-/* Label describing when the current login was last modified with the timestamp as the parameter. */
+/* Label describing when the current login was last modified. %@ is the timestamp. */
 "Modified %@" = "Modified %@";
 
 /* Label displayed when no logins are found after searching. */

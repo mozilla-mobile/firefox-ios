@@ -64,25 +64,25 @@
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "പിന്തുടർച്ചയന്ത്രങ്ങൾ കണ്ടെത്താൻ കഴിഞ്ഞില്ല";
 
-/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+/* Text to let users know how many analytics trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "പിന്തുടർച്ച ഉള്ളടക്കം: %@";
 
-/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+/* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "വിരലടയാളപ്പിന്തുടൎച്ചയന്ത്രങ്ങൾ: %@";
 
-/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+/* Text to let users know how many social media trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "സമൂഹികമാധ്യമ പിന്തുടർച്ചായന്ത്രങ്ങൾ: %@";
 
-/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked */
+/* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "പിന്തുടർച്ചായന്ത്രങ്ങളെ തടഞ്ഞു: %@";
 
-/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+/* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "ഉറപ്പാക്കിയതു്: %@";
 
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "പ്രമാണപത്രം കാണുക";
 
-/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ കാവൽ വിട്ടു. പരിരക്ഷകൾ വീണ്ടും തുടങ്ങിവയ്ക്കാനാണു് നല്ലതു്.";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
@@ -97,7 +97,7 @@
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "ഈ വെബ്സ്ഥാനത്തിൽ ശ്രദ്ധത്തോളം ഇരിക്കുക";
 
-/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ കാവൽ നിൽക്കുന്നു";
 
 /* The title for the privacy settings button inside the enhanced tracking protection screen. */

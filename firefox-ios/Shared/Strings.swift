@@ -1554,10 +1554,10 @@ extension String {
                 tableName: "Onboarding",
                 value: "Fast and secure web browsing",
                 comment: "Subtitle for the Terms of Service screen in the onboarding process.")
-            public static let AgreementButtonTitleV2 = MZLocalizedString(
-                key: "Onboarding.TermsOfService.AgreementButtonTitle.v136",
+            public static let AgreementButtonTitleV3 = MZLocalizedString(
+                key: "Onboarding.TermsOfService.AgreementButtonTitle.v140",
                 tableName: "Onboarding",
-                value: "Agree and Continue",
+                value: "Continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
             public static let TermsOfServiceAgreement = MZLocalizedString(
                 key: "Onboarding.TermsOfService.TermsOfServiceAgreement.v135",
@@ -2759,6 +2759,31 @@ extension String {
             tableName: "TabsTray",
             value: "%1$@ of %2$@",
             comment: "Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total.")
+        public static let TabTrayCloseOldTabsTitle = MZLocalizedString(
+            key: "TabTrayCloseOldTabsTitle.v140",
+            tableName: "TabsTray",
+            value: "Close Old Tabs…",
+            comment: "Text for a button in the tabs tray used to open another menu to close older tabs.")
+        public static let TabTrayCloseTabsOlderThanTitle = MZLocalizedString(
+            key: "TabTrayCloseTabsOlderThanTitle.v140",
+            tableName: "TabsTray",
+            value: "Close tabs older than…",
+            comment: "Text for the menu title under the tabs tray in which users can close tabs older than a certain period of time.")
+        public static let TabTrayOneDayAgoTitle = MZLocalizedString(
+            key: "TabTrayOneDayAgoTitle.v140",
+            tableName: "TabsTray",
+            value: "1 Day Ago",
+            comment: "The label for a button that closes tabs older than 1 day ago. Shown in a menu under the tabs tray.")
+        public static let TabTrayOneWeekAgoTitle = MZLocalizedString(
+            key: "TabTrayOneWeekAgoTitle.v140",
+            tableName: "TabsTray",
+            value: "1 Week Ago",
+            comment: "The label for a button that closes tabs older than 1 week ago. Shown in a menu under the tabs tray.")
+        public static let TabTrayOneMonthAgoTitle = MZLocalizedString(
+            key: "TabTrayOneMonthAgoTitle.v140",
+            tableName: "TabsTray",
+            value: "1 Month Ago",
+            comment: "The label for a button that closes tabs older than 1 month ago. Shown in a menu under the tabs tray.")
     }
 }
 
@@ -7162,6 +7187,11 @@ extension String {
                 key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",
                 tableName: "Onboarding",
                 value: "Agree and continue",
+                comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
+            public static let AgreementButtonTitleV2 = MZLocalizedString(
+                key: "Onboarding.TermsOfService.AgreementButtonTitle.v136",
+                tableName: "Onboarding",
+                value: "Agree and Continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
             public static let SendUsageSettingTitle = MZLocalizedString(
                 key: "Settings.SendUsage.Title",

@@ -4,6 +4,6 @@
 /* Deny button to cancel opening URL from scanned QR Code */
 "ScanQRCode.ConfirmOpenURL.DenyButton.v129" = "Diùlt";
 
-/* Text of the prompt to ask user permission to open a URL from a scanned QR code. Placeholder is app name. */
+/* Text of the prompt to ask user permission to open a URL from a scanned QR code. %@ is the app name (e.g. Firefox). */
 "ScanQRCode.ConfirmOpenURL.Message.v129" = "A bheil thu airson cead fosglaidh a thoirt dha %@?";
 

@@ -5,13 +5,13 @@
 "New Tab" = "പുതിയ ടാബ്";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "ഇത് നിങ്ങൾക്ക് ഫോട്ടോകൾ എടുക്കാനും അപ്ലോഡ് ചെയ്യാനും അനുവദിക്കുന്നു.";
+"NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "താങ്ങളുടെ കരുതിവച്ച പ്രവേശിക്കലുകൾ ഉപയോഗിക്കാൻ ഫയർഫോക്സിന് മുഖതിരിച്ചറിയൽരേഖ ആവശ്യമാണ്.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "താങ്കള്‍ സന്ദര്‍ശിക്കുന്ന വെബ്‌സൈറ്റുകള്‍ താങ്കളുടെ സ്ഥലത്തിനായി അപേക്ഷിച്ചേക്കാം.";
+"NSLocationWhenInUseUsageDescription" = "താങ്കള്‍ സന്ദര്‍ശിക്കുന്ന വെബിടങ്ങൾ താങ്കളുടെ സ്ഥലത്തിനായി അപേക്ഷിച്ചേക്കാം.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "രേഖപ്പെടത്തി ഉപ്ലോടു് ചെയ്യാൻ വേണ്ടി ഫയർഫോക്സു് താങ്ങളുടെ ശബ്ദഗ്രാഹിയെ ഉപയോഗിക്കാരുണ്ടു്.";
@@ -20,5 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "ഇത് നിങ്ങൾക്ക് ഫോട്ടോകൾ സംരക്ഷിക്കാൻ അനുവദിക്കുന്നു.";
 
 /* (No Comment) */
-"Scan QR Code" = "QR കോഡ് പരിശോധിക്കുക";
+"Scan QR Code" = "QR സങ്കേതം പരിശോധിക്കുക";
 

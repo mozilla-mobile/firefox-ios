@@ -24,11 +24,35 @@ class AddressLocaleFeatureValidatorTests: XCTestCase {
         )
     }
 
-    func testInvalidRegionFR() {
+    func testValidRegionFR() {
         let locale = Locale(identifier: "fr_FR")
+        XCTAssertTrue(
+            AddressLocaleFeatureValidator.isValidRegion(locale: locale),
+            "Valid region for FR"
+        )
+    }
+
+    func testValidRegionDE() {
+        let locale = Locale(identifier: "de_DE")
+        XCTAssertTrue(
+            AddressLocaleFeatureValidator.isValidRegion(locale: locale),
+            "Valid region for DE"
+        )
+    }
+
+    func testValidRegionGB() {
+        let locale = Locale(identifier: "en_GB")
+        XCTAssertTrue(
+            AddressLocaleFeatureValidator.isValidRegion(locale: locale),
+            "Valid region for GB"
+        )
+    }
+
+    func testInvalidRegionMA() {
+        let locale = Locale(identifier: "fr_MA")
         XCTAssertFalse(
             AddressLocaleFeatureValidator.isValidRegion(locale: locale),
-            "Invalid region for FR"
+            "Invalid region for MA"
         )
     }
 

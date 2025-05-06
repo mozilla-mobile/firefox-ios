@@ -42,7 +42,7 @@ final class TabTraySelectorCell: UICollectionViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(title: String, selected: Bool, theme: Theme?, position: Int, total: Int) {
+    func configure(title: String, selected: Bool, theme: Theme, position: Int, total: Int) {
         isCellSelected = selected
         isSelected = selected
         label.text = title
@@ -51,7 +51,7 @@ final class TabTraySelectorCell: UICollectionViewCell,
         label.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
                                          NSNumber(value: position + 1),
                                          NSNumber(value: total + 1))
-        applyTheme(theme: theme ?? LightTheme())
+        applyTheme(theme: theme)
     }
 
     // MARK: - ThemeApplicable
