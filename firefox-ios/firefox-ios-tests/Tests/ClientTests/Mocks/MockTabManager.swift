@@ -93,7 +93,7 @@ class MockTabManager: TabManager {
         removeTabsByURLCalled += 1
     }
 
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod) {}
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {}
 
     func undoCloseAllTabs() {}
 

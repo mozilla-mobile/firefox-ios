@@ -731,7 +731,7 @@ open class BrowserProfile: Profile {
         return service
     }()
 
-    private var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?
+    private(set) var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?
 
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {
