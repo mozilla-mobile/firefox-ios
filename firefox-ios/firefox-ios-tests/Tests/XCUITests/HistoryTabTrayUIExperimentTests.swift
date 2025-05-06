@@ -400,7 +400,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
-        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
+        XCTAssertFalse(app.cells.staticTexts["Recently closed"].isSelected)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
 
@@ -411,7 +411,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
-        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
+        XCTAssertFalse(app.cells.staticTexts["Recently closed"].isSelected)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
