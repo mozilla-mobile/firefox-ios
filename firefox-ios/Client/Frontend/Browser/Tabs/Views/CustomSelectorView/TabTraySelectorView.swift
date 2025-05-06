@@ -78,10 +78,10 @@ class TabTraySelectorView: UIView,
                 FXFontStyles.Bold.body.scaledFont() :
                 FXFontStyles.Regular.body.scaledFont()
 
-            button.titleLabel?.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
-            button.titleLabel?.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
-                                                          NSNumber(value: index + 1),
-                                                          NSNumber(value: items.count + 1))
+            button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
+            button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                                              NSNumber(value: index + 1),
+                                              NSNumber(value: items.count))
         }
 
         applyTheme(theme: theme)
