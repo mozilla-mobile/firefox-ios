@@ -51,6 +51,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     private var crashedLastLaunch: Bool
 
     private var profile: Profile?
+    private var searchEnginesManager: SearchEnginesManagerProvider?
     private var logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
 
@@ -92,13 +93,17 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         initGlean(profile, sendUsageData: sendUsageData)
     }
 
-    func initGlean(_ profile: Profile, sendUsageData: Bool) {
+    func initGlean(
+        _ profile: Profile,
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        sendUsageData: Bool
+    ) {
         // Record default search engine setting to avoid sending a `null` value.
         // If there's no default search engine, (there's not, at this point), we will
         // send "unavailable" in order not to send `null`, but still differentiate
         // the event in the startup sequence.
 
-        let defaultEngine = profile.searchEnginesManager.defaultEngine
+        let defaultEngine = searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
         // Set the date that the app was last used as default browser
@@ -155,6 +160,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
+        self.searchEnginesManager = searchEnginesManager
+
         TelemetryContextualIdentifier.setupContextId()
 
         // Register an observer to record settings and other metrics that are more appropriate to
@@ -210,7 +217,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Record default search engine setting
-        let defaultEngine = profile.searchEnginesManager.defaultEngine
+        let defaultEngine = searchEnginesManager?.defaultEngine
 
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 

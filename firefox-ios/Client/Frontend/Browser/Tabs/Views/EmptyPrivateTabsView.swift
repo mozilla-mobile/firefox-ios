@@ -44,7 +44,7 @@ class EmptyPrivateTabsView: UIView, EmptyPrivateTabView {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.text = .TabTrayPrivateBrowsingDescription
+        label.text = .TabsTray.TabTrayPrivateBrowsingDescription
     }
 
     private lazy var learnMoreButton: LinkButton = .build { button in

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 protocol CredentialWelcomeViewControllerDelegate: AnyObject {
     func credentialWelcomeViewControllerDidCancel()
@@ -10,6 +11,8 @@ protocol CredentialWelcomeViewControllerDelegate: AnyObject {
 }
 
 class CredentialWelcomeViewController: UIViewController {
+    let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+
     weak var delegate: CredentialWelcomeViewControllerDelegate?
 
     private lazy var logoImageView: UIImageView = {
@@ -49,7 +52,6 @@ class CredentialWelcomeViewController: UIViewController {
     private lazy var proceedButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setTitle(String.LoginsWelcomeTurnOnAutoFillButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -59,7 +61,17 @@ class CredentialWelcomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+        applyTheme()
+    }
 
+    func applyTheme() {
+        proceedButton.backgroundColor = currentTheme().colors.actionPrimary
+    }
+}
+
+private extension CredentialWelcomeViewController {
+    func setupView() {
         view.backgroundColor = CredentialProvider.welcomeScreenBackgroundColor
 
         view.addSubviews(cancelButton, logoImageView, titleLabel, taglineLabel, proceedButton)
@@ -122,8 +134,11 @@ class CredentialWelcomeViewController: UIViewController {
                     priority: .defaultHigh
                 ),
                 proceedButton.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
-            ]
-        )
+            ])
+    }
+
+    func currentTheme() -> Theme {
+        themeManager.windowNonspecificTheme()
     }
 
     @objc

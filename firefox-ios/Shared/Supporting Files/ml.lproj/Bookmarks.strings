@@ -1,23 +1,26 @@
-/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Body.v135" = "താങ്ങളുടെ പ്രിയപ്പെട്ട വെബ്സ്ഥാനങ്ങളെ പിന്നീടു് കണ്ടെത്താൻ താങ്ങൾക്കു് തിരയുമ്പോൾ അടയാളക്കുറിപ്പുകളൾ ചേൎക്കാം.";
 
-/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "ഈ അറയിൽ ഒന്നുമില്ല";
 
-/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Body.v135" = "താങ്ങൾ തിരയുമ്പോഴു് സൈറ്റുകളെ കരുതിവയ്ക്കുക. മറ്റു് സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു് അടയാളക്കുറിപ്പുകൾ ഞങ്ങൾ കൊണ്ടുവരാം.";
 
-/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.BodySignedOut.v135" = "താങ്ങൾ തിരയുമ്പോഴു് സൈറ്റുകളെ കരുതിവയ്ക്കുക. മറ്റു് സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു് അടയാളക്കുറിപ്പുകൾ പിടിച്ചുകൊണ്ടുവരാനായി പ്രവേശിക്കുക.";
 
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
 "Bookmarks.EmptyState.Root.ButtonTitle.v136" = "സമന്വയിപ്പിക്കാനായി പ്രവേശിക്കുക";
 
-/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Title.v135" = "ഇതുവരെ അടയാളക്കുറിപ്പുകളൊന്നുമില്ല";
 
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "എല്ലാം";
+
+/* Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text */
+"Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "മായ്ക്കുക";
 
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
 "Bookmarks.Menu.DeleteBookmark.v132" = "അടയാളക്കുറിപ്പു് മായ്ക്കുക";
@@ -49,10 +52,13 @@
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "കൂടുതൽ ഐച്ഛികങ്ങൾ";
 
+/* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
+"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "കുറുക്കുവഴികളിൽ നിന്നു് മാറ്റുക";
+
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "“അടയാളക്കുറിപ്പുകളിൽ” കരുതിവച്ചു";
 
-/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "“%@”-ൽ കരുതിവച്ചു";
 
 /* The title for the Edit context menu action for sites in Home Panels */

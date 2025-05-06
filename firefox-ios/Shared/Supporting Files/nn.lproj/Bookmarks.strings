@@ -1,17 +1,26 @@
-/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Body.v135" = "Legg til bokmerke medan du surfar slik at du kan finne favorittsidene dine seinare.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "Mappa er tom";
 
-/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Body.v135" = "Lagre nettstadar medan du surfar. Vi hentar også bokmerke frå andre synkroniserte einingar.";
+
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "Lagre nettstadar medan du surfar. Logg inn for å hente bokmerke frå andre synkroniserte einingar.";
 
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
 "Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Logg inn for å synkronisere";
 
-/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Root.Title.v135" = "Ingen bokmerke enno";
 
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Alle";
+
+/* Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text */
+"Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "Tøm";
 
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
 "Bookmarks.Menu.DeleteBookmark.v132" = "Slett bokmerke";
@@ -24,6 +33,9 @@
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Rediger bokmerke";
+
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "DATAMASKIN-BOKMERKE";
 
 /* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
 "Bookmarks.Menu.EditBookmarkSave.v135" = "Lagre";
@@ -40,10 +52,13 @@
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Fleire innstillingar";
 
+/* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
+"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Fjern frå snarvegar";
+
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Lagra til «Bokmerke»";
 
-/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Lagra i «%@»";
 
 /* The title for the Edit context menu action for sites in Home Panels */

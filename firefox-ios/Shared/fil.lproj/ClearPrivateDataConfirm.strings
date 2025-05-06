@@ -1,5 +1,5 @@
 /* The cancel button when confirming clear private data. */
-"Cancel" = "Kanselahin";
+"Cancel" = "Ikansela";
 
 /* The button that clears private data. */
 "OK" = "OK";

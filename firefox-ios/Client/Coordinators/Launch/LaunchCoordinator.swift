@@ -12,10 +12,10 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator,
-                         SurveySurfaceViewControllerDelegate,
-                         QRCodeNavigationHandler,
-                         ParentCoordinatorDelegate {
+final class LaunchCoordinator: BaseCoordinator,
+                               SurveySurfaceViewControllerDelegate,
+                               QRCodeNavigationHandler,
+                               ParentCoordinatorDelegate {
     private let profile: Profile
     private let isIphone: Bool
     let windowUUID: WindowUUID

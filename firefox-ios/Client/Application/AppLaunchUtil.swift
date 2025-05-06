@@ -10,7 +10,7 @@ import Account
 import Glean
 import MozillaAppServices
 
-class AppLaunchUtil {
+final class AppLaunchUtil {
     private var logger: Logger
 //    private var adjustHelper: AdjustHelper
     private var profile: Profile
