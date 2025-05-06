@@ -22,11 +22,6 @@ struct TabsPanelTelemetry {
         }
     }
 
-    enum CloseTabMethod: String {
-        case xTapped
-        case swipe
-    }
-
     enum CloseAllPanelOption: String {
         case all
         case cancel

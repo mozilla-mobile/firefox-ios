@@ -3786,10 +3786,6 @@ tabs_panel:
       Recorded when a user closes an open tab via tapping the x or
       swiping closed.
     extra_keys:
-      method:
-        type: string
-        description: |
-          The method used to close the tab (tapping x or swipe)
       mode:
         type: string
         description: |
