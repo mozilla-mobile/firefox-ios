@@ -66,6 +66,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
     }
 
     func didSelect(profile: Profile,
+                   searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?,

@@ -14,15 +14,18 @@ class TopSitesViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+
         self.profile = MockProfile(databasePrefix: "FxHomeTopSitesViewModelTests")
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
-        super.tearDown()
         self.profile.shutdown()
         self.profile = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testDeletionOfSingleSuggestedSite() {
