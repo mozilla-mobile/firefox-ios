@@ -271,6 +271,7 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.CfrAnalytics.pressCfrActionButton.testGetValue())
     }
 
+<<<<<<< HEAD
     // MARK: - Tabs quantity
 
     func test_tabsNormalQuantity_GleanIsCalled() {
@@ -687,6 +688,8 @@ class TelemetryWrapperTests: XCTestCase {
         )
     }
 
+=======
+>>>>>>> d2095dff9 (Refactor FXIOS-11614 [Tabs Optimization] Additional Tabs Panel Telemetry (#26131))
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue

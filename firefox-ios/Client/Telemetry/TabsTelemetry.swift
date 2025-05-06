@@ -20,6 +20,7 @@ final class TabsTelemetry {
         tabSwitchTimerId = nil
     }
 
+<<<<<<< HEAD
     static func trackTabsQuantity(tabManager: TabManager) {
         let privateExtra = [
             TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.privateTabs.count)
@@ -44,5 +45,11 @@ final class TabsTelemetry {
                                      method: .background,
                                      object: .tabInactiveQuantity,
                                      extras: inactiveExtra)
+=======
+    func trackConsecutiveCrashTelemetry(attemptNumber: UInt) {
+        let extras = GleanMetrics.Webview.ProcessDidTerminateExtra(consecutiveCrash: Int32(attemptNumber))
+        gleanWrapper.recordEvent(for: GleanMetrics.Webview.processDidTerminate,
+                                 extras: extras)
+>>>>>>> d2095dff9 (Refactor FXIOS-11614 [Tabs Optimization] Additional Tabs Panel Telemetry (#26131))
     }
 }
