@@ -123,6 +123,7 @@ final class AddressToolbarContainer: UIView,
     func configure(
         windowUUID: WindowUUID,
         profile: Profile,
+        searchEnginesManager: SearchEnginesManagerProvider,
         delegate: AddressToolbarContainerDelegate,
         isUnifiedSearchEnabled: Bool
     ) {

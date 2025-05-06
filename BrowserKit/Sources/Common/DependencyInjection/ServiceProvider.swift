@@ -18,6 +18,7 @@ import Dip
 /// to resolve services.
 public protocol ServiceProvider {
     func resolve<T>() -> T
+    func resolve<T>(_ type: T.Type) -> T
     func register<T>(service: T)
     func bootstrap()
     func reset()

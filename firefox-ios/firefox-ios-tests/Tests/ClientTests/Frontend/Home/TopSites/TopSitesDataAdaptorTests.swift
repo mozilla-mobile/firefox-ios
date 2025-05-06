@@ -4,21 +4,30 @@
 
 @testable import Client
 
+import Common
 import Shared
 import Storage
 import XCTest
 
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
+    private var searchEnginesManager: SearchEnginesManager!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
 
         notificationCenter = MockNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
+
+        searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
@@ -26,13 +35,14 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         notificationCenter = nil
         contileProviderMock = nil
+        searchEnginesManager = nil
         profile.prefs.clearAll()
         profile.shutdown()
         profile = nil
+
+        super.tearDown()
     }
 
     func testData_whenNotLoaded() {
@@ -563,6 +573,7 @@ extension TopSitesDataAdaptorTests {
                                                         contileProvider: contileProviderMock,
                                                         unifiedAdsProvider: contileProviderMock,
                                                         notificationCenter: notificationCenter,
+                                                        searchEnginesManager: searchEnginesManager,
                                                         dispatchGroup: dispatchGroup)
 
         trackForMemoryLeaks(subject, file: file, line: line)
@@ -574,7 +585,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        profile.searchEnginesManager.defaultEngine = searchEngine
+        searchEnginesManager.defaultEngine = searchEngine
     }
 }
 
