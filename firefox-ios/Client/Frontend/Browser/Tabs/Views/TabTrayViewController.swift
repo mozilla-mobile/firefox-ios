@@ -701,8 +701,19 @@ class TabTrayViewController: UIViewController,
         }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton
         )
 
+<<<<<<< HEAD
         alert.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
                         accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+=======
+        alert.addAction(
+            UIAlertAction(
+                title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
+                style: .cancel,
+                handler: { _ in self.cancelCloseAll() }
+            ),
+            accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton
+        )
+>>>>>>> d2095dff9 (Refactor FXIOS-11614 [Tabs Optimization] Additional Tabs Panel Telemetry (#26131))
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
     }
@@ -737,11 +748,29 @@ class TabTrayViewController: UIViewController,
             alert.addAction(action, accessibilityIdentifier: option.accessibilityID)
         }
 
+<<<<<<< HEAD
         alert.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
                         accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+=======
+        alert.addAction(
+            UIAlertAction(
+                title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
+                style: .cancel,
+                handler: { _ in self.cancelCloseAll() }
+            ),
+            accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton
+        )
+>>>>>>> d2095dff9 (Refactor FXIOS-11614 [Tabs Optimization] Additional Tabs Panel Telemetry (#26131))
 
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
+    }
+
+    private func cancelCloseAll() {
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.cancelCloseAllTabs)
+        store.dispatch(action)
     }
 
     private func confirmCloseAll() {
@@ -772,6 +801,7 @@ class TabTrayViewController: UIViewController,
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         store.dispatch(
             TabTrayAction(
+                panelType: tabTrayState.selectedPanel,
                 windowUUID: windowUUID,
                 actionType: TabTrayActionType.doneButtonTapped
             )
