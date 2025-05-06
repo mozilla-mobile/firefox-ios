@@ -85,10 +85,6 @@ class TabTrayViewController: UIViewController,
         return childPanelControllers[index]
     }
 
-    var toolbarHeight: CGFloat {
-        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
-    }
-
     var shownToast: Toast?
     var logger: Logger
 
