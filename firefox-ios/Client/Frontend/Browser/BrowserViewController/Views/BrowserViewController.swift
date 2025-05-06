@@ -217,6 +217,8 @@ class BrowserViewController: UIViewController,
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
     private(set) lazy var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     private(set) lazy var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
+    private(set) lazy var tabsTelemetry = TabsTelemetry()
+
     private lazy var appStartupTelemetry = AppStartupTelemetry()
 
     // location label actions
@@ -377,7 +379,7 @@ class BrowserViewController: UIViewController,
 
     fileprivate func didInit() {
         tabManager.addDelegate(self)
-        tabManager.addNavigationDelegate(self)
+        tabManager.setNavigationDelegate(self)
         downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
