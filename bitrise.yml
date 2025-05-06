@@ -2167,6 +2167,16 @@ workflows:
         run_if: |-
           {{enveq "BITRISE_APP_TITLE" "staging-firefox-ios"}}
     - script@1.2.1:
+        title: Override default bitrise scheme
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            if [[ ! -z "${API_BITRISE_SCHEME}" ]]; then
+              envman add --key BITRISE_SCHEME --value "${API_BITRISE_SCHEME}"
+            fi
+    - script@1.2.1:
         inputs:
         - content: |-
             #!/usr/bin/env bash
