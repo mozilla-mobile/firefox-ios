@@ -74,10 +74,11 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
                 toggle.onTintColor = .accent
                 cell.accessoryView = PaddedSwitch(switchView: toggle)
             } else {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
-                cell.accessoryType = .disclosureIndicator
-                cell.accessibilityIdentifier = "customURLS"
-                cell.textLabel?.text = UIConstants.strings.autocompleteManageSitesLabel
+                let settingCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
+                settingCell.accessoryType = .disclosureIndicator
+                settingCell.accessibilityIdentifier = "customURLS"
+                settingCell.setConfiguration(text: UIConstants.strings.autocompleteManageSitesLabel)
+                cell = settingCell
             }
         }
 
