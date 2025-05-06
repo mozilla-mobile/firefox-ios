@@ -59,6 +59,7 @@ struct TabPeekState: ScreenState, Equatable {
             return TabPeekState(windowUUID: state.windowUUID,
                                 showAddToBookmarks: tabPeekModel.canTabBeSaved,
                                 showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
+                                showCopyURL: tabPeekModel.canCopyURL,
                                 previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
                                 screenshot: tabPeekModel.screenshot)
         default:
