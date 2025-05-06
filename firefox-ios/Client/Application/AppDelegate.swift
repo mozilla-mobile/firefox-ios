@@ -34,6 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         rustKeychainEnabled: rustKeychainEnabled,
         loginsVerificationEnabled: loginsVerificationEnabled)
 
+    lazy var searchEnginesManager = SearchEnginesManager(
+        prefs: profile.prefs,
+        files: profile.files
+    )
+
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
         isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
