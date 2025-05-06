@@ -82,11 +82,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     init(profile: Profile,
+         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger
-        model = profile.searchEnginesManager
+        model = searchEnginesManager
 
         super.init(windowUUID: windowUUID)
     }

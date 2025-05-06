@@ -34,6 +34,8 @@ class CustomSearchViewController: SettingsTableViewController {
         spinner.hidesWhenStopped = true
     }
 
+    var searchEnginesManager: SearchEnginesManager?
+
     init(windowUUID: WindowUUID,
          faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.faviconFetcher = faviconFetcher
@@ -67,23 +69,23 @@ class CustomSearchViewController: SettingsTableViewController {
         Task {
             do {
                 let engine = try await createEngine(query: trimmedQuery, name: trimmedTitle)
-                self.spinnerView.stopAnimating()
-                self.profile?.searchEnginesManager.addSearchEngine(engine)
+                spinnerView.stopAnimating()
+                searchEnginesManager?.addSearchEngine(engine)
 
                 CATransaction.begin() // Use transaction to call callback after animation has been completed
-                CATransaction.setCompletionBlock(self.successCallback)
-                _ = self.navigationController?.popViewController(animated: true)
+                CATransaction.setCompletionBlock(successCallback)
+                _ = navigationController?.popViewController(animated: true)
                 CATransaction.commit()
             } catch {
-                self.spinnerView.stopAnimating()
+                spinnerView.stopAnimating()
                 let alert: UIAlertController
                 let error = error as? CustomSearchError
 
                 alert = (error?.reason == .DuplicateEngine) ?
                     ThirdPartySearchAlerts.duplicateCustomEngine() : ThirdPartySearchAlerts.incorrectCustomEngineForm()
 
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
-                self.present(alert, animated: true, completion: nil)
+                navigationItem.rightBarButtonItem?.isEnabled = true
+                present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -126,8 +128,8 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     private func engineExists(name: String, template: String) -> Bool {
-        guard let profile else { return false }
-        return profile.searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
+        guard let searchEnginesManager else { return false }
+        return searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
         }
     }
