@@ -778,7 +778,9 @@ extension BrowserViewController: WKNavigationDelegate {
                 self?.logger.log("Failed to download Document",
                                  level: .warning,
                                  category: .webview,
-                                 extra: ["url": request.url?.absoluteString ?? "Unknown URL"])
+                                 extra: [
+                                    "error": error?.localizedDescription ?? "",
+                                    "url": request.url?.absoluteString ?? "Unknown URL"])
                 guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }

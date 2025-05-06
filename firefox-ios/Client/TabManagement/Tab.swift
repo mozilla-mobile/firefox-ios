@@ -966,10 +966,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
-            self?.documentLogger.registerDownloadFinish(url: url)
+
             // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
             guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
             self?.downloadedTemporaryDocs[url] = sourceURL
+            self?.documentLogger.registerDownloadFinish(url: sourceURL)
         }
     }
 

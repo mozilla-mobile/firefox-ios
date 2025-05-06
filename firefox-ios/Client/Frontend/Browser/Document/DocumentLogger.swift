@@ -7,6 +7,7 @@ import Common
 
 /// A wrapper on `Logger` that facilitates tracking the documents that failed to download.
 class DocumentLogger {
+    let downloadExtraKey = "Pending Downloads"
     private let logger: Logger
     private var pending: [URL: Bool] = [:]
 
@@ -15,6 +16,7 @@ class DocumentLogger {
     }
 
     func registerDownloadStart(url: URL) {
+        guard !url.isFileURL else { return }
         pending[url] = true
     }
 
@@ -23,8 +25,15 @@ class DocumentLogger {
     }
 
     func registerDownloadFinish(url: URL) {
+        // avoid logging local directories
+        guard !url.isFileURL else { return }
         if pending[url] == nil {
-            // log missing download
+            logger.log(
+                "Document is missing but finished downloading",
+                level: .info,
+                category: .webview,
+                extra: ["url": url.absoluteString]
+            )
         }
         pending[url] = false
     }
@@ -35,7 +44,7 @@ class DocumentLogger {
             logger.log("Documents Downloads not completed",
                        level: .warning,
                        category: .webview,
-                       extra: ["Pending Downloads": "\(pendingDownload)"]
+                       extra: [downloadExtraKey: "\(pendingDownload)"]
             )
         }
     }
