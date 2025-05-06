@@ -36,6 +36,8 @@ class MockTabManager: TabManager {
     var removeTabsByURLCalled = 0
 
     var addTabWasCalled = false
+    var notifyCurrentTabDidFinishLoadingCalled = 0
+    var commitChangesCalled = 0
 
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
@@ -46,11 +48,13 @@ class MockTabManager: TabManager {
     }
 
     subscript(index: Int) -> Tab? {
-        return nil
+        return tabs[index]
     }
 
     subscript(webView: WKWebView) -> Tab? {
-        return nil
+        return tabs.first {
+            $0.webView === webView
+        }
     }
 
     func selectTab(_ tab: Tab?, previous: Tab?) {
@@ -70,7 +74,7 @@ class MockTabManager: TabManager {
 
     func addDelegate(_ delegate: TabManagerDelegate) {}
 
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {}
+    func setNavigationDelegate(_ delegate: WKNavigationDelegate) {}
 
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
 
@@ -100,6 +104,10 @@ class MockTabManager: TabManager {
     func undoCloseTab() {}
 
     func clearAllTabsHistory() {}
+
+    func commitChanges() {
+        commitChangesCalled += 1
+    }
 
     func willSwitchTabMode(leavingPBM: Bool) {}
 
@@ -164,6 +172,10 @@ class MockTabManager: TabManager {
     func removeAllInactiveTabs() async {}
 
     func undoCloseInactiveTabs() async {}
+
+    func notifyCurrentTabDidFinishLoading() {
+        notifyCurrentTabDidFinishLoadingCalled += 1
+    }
 
     func tabDidSetScreenshot(_ tab: Client.Tab) {}
 }
