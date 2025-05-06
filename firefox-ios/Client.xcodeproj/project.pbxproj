@@ -1694,6 +1694,7 @@
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DF77FDAC2DC4CA450056ACB6 /* TabWebViewPreviewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF77FDAB2DC4CA450056ACB6 /* TabWebViewPreviewAction.swift */; };
 		DF77FDAE2DC4CD5D0056ACB6 /* TabWebViewPreviewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF77FDAD2DC4CD5D0056ACB6 /* TabWebViewPreviewState.swift */; };
+		DF77FDB42DCA0DC50056ACB6 /* TabWebViewPreviewStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF77FDB32DCA0DC50056ACB6 /* TabWebViewPreviewStateTests.swift */; };
 		DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */; };
 		DFACBF7F277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF7E277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift */; };
 		DFACBF85277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */; };
@@ -9815,6 +9816,7 @@
 		DF4B4523B01B0EDC485E3BCB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		DF77FDAB2DC4CA450056ACB6 /* TabWebViewPreviewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewPreviewAction.swift; sourceTree = "<group>"; };
 		DF77FDAD2DC4CD5D0056ACB6 /* TabWebViewPreviewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewPreviewState.swift; sourceTree = "<group>"; };
+		DF77FDB32DCA0DC50056ACB6 /* TabWebViewPreviewStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewPreviewStateTests.swift; sourceTree = "<group>"; };
 		DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSyncManagerTests.swift; sourceTree = "<group>"; };
 		DFACBF7E277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesRowCountSettingsController.swift; sourceTree = "<group>"; };
@@ -15019,6 +15021,7 @@
 				0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */,
 				21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */,
 				2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */,
+				DF77FDB32DCA0DC50056ACB6 /* TabWebViewPreviewStateTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -18052,6 +18055,7 @@
 				8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */,
 				21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */,
 				F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */,
+				DF77FDB42DCA0DC50056ACB6 /* TabWebViewPreviewStateTests.swift in Sources */,
 				ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */,
 				8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */,
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
