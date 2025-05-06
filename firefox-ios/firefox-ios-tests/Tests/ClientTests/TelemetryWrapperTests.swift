@@ -4,12 +4,15 @@
 
 @testable import Client
 
+import Common
 import Glean
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
     typealias ValueKey = TelemetryWrapper.EventValue
+
+    var profile: Profile!
 
     override func setUp() {
         super.setUp()
@@ -20,11 +23,14 @@ class TelemetryWrapperTests: XCTestCase {
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
+
+        profile = MockProfile()
     }
 
     override func tearDown() {
         Experiments.events.clearEvents()
         DependencyHelperMock().reset()
+        profile = nil
         super.tearDown()
     }
 
@@ -333,7 +339,6 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: Wallpapers
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
-        let profile = MockProfile()
         TelemetryWrapper.shared.setup(profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
@@ -354,7 +359,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
-        let profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile)
 

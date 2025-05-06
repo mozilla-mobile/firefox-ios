@@ -29,6 +29,10 @@ public class RustSyncManager: NSObject, SyncManager {
     // profile as a whole, so we hold on to our Prefs, potentially for a little while
     // longer. This is safe as a strong reference, because there's no cycle.
     private weak var profile: BrowserProfile?
+    private let logins: SyncLoginProvider
+    private let autofill: SyncAutofillProvider
+    private let places: SyncPlacesProvider
+    private let tabs: SyncTabsProvider
     private let prefs: Prefs
     private var syncTimer: Timer?
     private var backgrounded = true
@@ -55,7 +59,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    lazy var syncManagerAPI = RustSyncManagerAPI(logger: logger)
+    lazy var syncManagerAPI = RustSyncManagerAPI(logger: logger, dispatchQueue: DispatchQueue.global())
 
     public var isSyncing: Bool {
         return syncDisplayState != nil && syncDisplayState! == .inProgress
@@ -72,11 +76,19 @@ public class RustSyncManager: NSObject, SyncManager {
          rustKeychainEnabled: Bool = false,
          loginsVerificationEnabled: Bool = false,
          logger: Logger = DefaultLogger.shared,
+         logins: SyncLoginProvider? = nil,
+         autofill: SyncAutofillProvider? = nil,
+         places: SyncPlacesProvider? = nil,
+         tabs: SyncTabsProvider? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
         self.prefs = profile.prefs
         self.logger = logger
         self.notificationCenter = notificationCenter
+        self.logins = logins ?? profile.logins
+        self.autofill = autofill ?? profile.autofill
+        self.places = places ?? profile.places
+        self.tabs = tabs ?? profile.tabs
 
         super.init()
         self.rustKeychainEnabled = rustKeychainEnabled
@@ -358,7 +370,7 @@ public class RustSyncManager: NSObject, SyncManager {
             // Otherwise logins could exist in the database that can't be decrypted and would
             // prevent logins from syncing if they are not removed.
 
-            self.profile?.logins.verifyLogins { successfullyVerified in
+            self.logins.verifyLogins { successfullyVerified in
                 self.prefs.setBool(successfullyVerified, forKey: PrefsKeys.LoginsHaveBeenVerified)
                 completion(successfullyVerified)
             }
@@ -369,6 +381,7 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
+                                     dispatchGroup: DispatchGroupInterface,
                                      loginKey: String?,
                                      creditCardKey: String?,
                                      completion: @escaping (([String], [String: String])) -> Void) {
@@ -381,19 +394,21 @@ public class RustSyncManager: NSObject, SyncManager {
             self.syncManagerAPI.rustTogglableEngines.contains($0) }) {
              switch engine {
              case .tabs:
-                 self.profile?.tabs.registerWithSyncManager()
+                 self.tabs.registerWithSyncManager()
                  rustEngines.append(engine.rawValue)
              case .passwords:
                  if loginsVerificationEnabled {
+                     dispatchGroup.enter()
                      self.shouldSyncLogins { shouldSync in
+                         defer { dispatchGroup.leave() }
                          if shouldSync, loginKey != nil {
-                             self.profile?.logins.registerWithSyncManager()
+                             self.logins.registerWithSyncManager()
                              rustEngines.append(engine.rawValue)
                          }
                      }
                  } else {
                      if loginKey != nil {
-                          self.profile?.logins.registerWithSyncManager()
+                         self.logins.registerWithSyncManager()
                           rustEngines.append(engine.rawValue)
                       }
                  }
@@ -401,7 +416,7 @@ public class RustSyncManager: NSObject, SyncManager {
                 if let key = creditCardKey {
                     // checking if autofill was already registered with addresses
                     if !registeredAutofill {
-                        self.profile?.autofill.registerWithSyncManager()
+                        self.autofill.registerWithSyncManager()
                         registeredAutofill = true
                     }
                     localEncryptionKeys[engine.rawValue] = key
@@ -410,48 +425,59 @@ public class RustSyncManager: NSObject, SyncManager {
              case .addresses:
                  // checking if autofill was already registered with credit cards
                  if !registeredAutofill {
-                     self.profile?.autofill.registerWithSyncManager()
+                     self.autofill.registerWithSyncManager()
                      registeredAutofill = true
                  }
                  rustEngines.append(engine.rawValue)
              case .bookmarks, .history:
                  if !registeredPlaces {
-                     self.profile?.places.registerWithSyncManager()
+                     self.places.registerWithSyncManager()
                      registeredPlaces = true
                  }
                  rustEngines.append(engine.rawValue)
              }
         }
-        completion((rustEngines, localEncryptionKeys))
+
+        if loginsVerificationEnabled {
+            dispatchGroup.notify(queue: .global()) {
+                completion((rustEngines, localEncryptionKeys))
+            }
+        } else {
+            completion((rustEngines, localEncryptionKeys))
+        }
     }
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
+                           dispatchGroup: DispatchGroupInterface = DispatchGroup(),
                            completion: @escaping (([String], [String: String])) -> Void) {
-        profile?.logins.getStoredKey { loginResult in
+        logins.getStoredKey { loginResult in
             var loginKey: String?
 
             switch loginResult {
             case .success(let key):
                 loginKey = key
             case .failure(let err):
-                self.logger.log("Login encryption key could not be retrieved for syncing: \(err)",
-                                level: .warning,
-                                category: .sync)
+                self.logger.log(
+                    "Login encryption key could not be retrieved for syncing: \(err)",
+                    level: .warning,
+                    category: .sync
+                )
             }
 
-            self.profile?.autofill.getStoredKey { creditCardResult in
+            self.autofill.getStoredKey { creditCardResult in
                 var creditCardKey: String?
-
                 switch creditCardResult {
                 case .success(let key):
                     creditCardKey = key
                 case .failure(let err):
-                    self.logger.log("Credit card encryption key could not be retrieved for syncing: \(err)",
-                                    level: .warning,
-                                    category: .sync)
+                    self.logger.log(
+                        "Credit card encryption key could not be retrieved for syncing: \(err)",
+                        level: .warning,
+                        category: .sync
+                    )
                 }
-
                 self.registerSyncEngines(engines: engines,
+                                         dispatchGroup: dispatchGroup,
                                          loginKey: loginKey,
                                          creditCardKey: creditCardKey,
                                          completion: completion)

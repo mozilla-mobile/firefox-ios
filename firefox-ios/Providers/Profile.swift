@@ -90,9 +90,6 @@ protocol Profile: AnyObject {
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-    var searchEnginesManager: SearchEnginesManager { get }
-    #endif
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
@@ -486,12 +483,6 @@ open class BrowserProfile: Profile {
 
     lazy var autofill = RustAutofill(databasePath: autofillDbPath, rustKeychainEnabled: rustKeychainEnabled)
 
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-    lazy var searchEnginesManager: SearchEnginesManager = {
-        return SearchEnginesManager(prefs: self.prefs, files: self.files)
-    }()
-    #endif
-
     func makePrefs() -> Prefs {
         return NSUserDefaultsPrefs(prefix: self.localName())
     }
@@ -731,7 +722,7 @@ open class BrowserProfile: Profile {
         return service
     }()
 
-    private var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?
+    private(set) var serviceSyncCoordinator: RemoteSettingsServiceSyncCoordinator?
 
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {

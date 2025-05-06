@@ -10,6 +10,7 @@ import XCTest
 class TelemetryContextualIdentifierTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         clearTest()
     }
 
