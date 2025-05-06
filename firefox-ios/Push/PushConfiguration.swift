@@ -21,7 +21,6 @@ public enum PushConfigurationLabel: String {
     case fennec = "fennec"
     case fennecEnterprise = "fennecenterprise"
     case firefoxBeta = "firefoxbeta"
-    case firefoxNightlyEnterprise = "firefoxnightlyenterprise"
     case firefox = "firefox"
 
     static func fromScheme(scheme: String) throws -> PushConfigurationLabel {
@@ -29,7 +28,6 @@ public enum PushConfigurationLabel: String {
         case "Fennec": return .fennec
         case "FennecEnterprise": return .fennecEnterprise
         case "FirefoxBeta": return .firefoxBeta
-        case "FirefoxNightly": return .firefoxNightlyEnterprise
         case "Firefox": return .firefox
         default: throw InvalidSchemeError.InvalidScheme(scheme)
         }
