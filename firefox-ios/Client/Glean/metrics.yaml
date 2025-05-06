@@ -5929,7 +5929,7 @@ zoom_bar:
   zoom_in_button_tapped:
     type: event
     description: |
-      Records when the user taps zoom in button in the zoom bar. 
+      Records when the user taps the zoom in button in the zoom bar. 
       This will cause the current webpage to zoom in.
     extra_keys:
       level:
