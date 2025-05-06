@@ -5949,7 +5949,7 @@ zoom_bar:
   reset_button_tapped:
     type: event
     description: |
-      Records when the user taps current zoom percentage to reset the zoom  
+      Records when the user taps the current zoom percentage to reset the zoom  
       level in the zoom bar. This will cause the current webpage to reset 
       back to 100% zoom level.
     bugs:
