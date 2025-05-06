@@ -5909,7 +5909,7 @@ zoom_bar:
   zoom_out_button_tapped:
     type: event
     description: |
-      Records when the user taps zoom out button in the zoom bar. 
+      Records when the user taps the zoom out button in the zoom bar. 
       This will cause the current webpage to zoom out.
     extra_keys:
       level:
