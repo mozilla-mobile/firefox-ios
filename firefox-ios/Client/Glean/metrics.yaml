@@ -5951,7 +5951,7 @@ zoom_bar:
     description: |
       Records when the user taps the current zoom percentage to reset the zoom  
       level in the zoom bar. This will cause the current webpage to reset 
-      back to 100% zoom level.
+      back to the default 100% zoom level.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
     data_reviews:
