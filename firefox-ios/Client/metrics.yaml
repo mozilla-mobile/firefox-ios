@@ -3758,13 +3758,12 @@ tabs_panel:
   done_button_tapped:
     type: event
     description: |
-      Recorded when a user taps the done button to close the tab tray
+      Recorded when a user taps the done button to close the tabs panel.
     extra_keys:
       mode:
         type: string
         description: |
-          The tab mode you are in when you press the done 
-          button (normal or private or sync).
+          The current tabs panel mode (normal or private or sync).
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7526
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
@@ -3789,8 +3788,7 @@ tabs_panel:
       mode:
         type: string
         description: |
-          The tab mode you are in when you press the new tab 
-          button (normal or private).
+          The current tabs panel mode (normal or private).
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7526
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
@@ -3809,17 +3807,16 @@ tabs_panel:
   tab_selected:
     type: event
     description: |
-      Recorded when a user selects an open tab.
+      Recorded when a user selects a tab in the tabs panel.
     extra_keys:
       selected_tab_index:
         type: quantity
         description: |
-          The index of the open tab that the user selects (starts at 0).
+          The index of the selectd tab (indicies start at 0).
       mode:
         type: string
         description: |
-          The tab mode you are in when you press the new tab 
-          button (normal, private and sync).
+          The current tabs panel mode (normal or private or sync).
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7526
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
@@ -3838,13 +3835,13 @@ tabs_panel:
   new_tab_button_tapped:
     type: event
     description: | 
-      User taps the button in the tabs panel to open a new tab.
+      Recorded when the user taps the button in the tabs panel to open a new
+      tab.
     extra_keys:
       mode:
         type: string
         description: |
-          The tab mode you are in when you press the new tab 
-          button (normal or private).
+          The current tabs panel mode (normal or private).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
       - https://github.com/mozilla-mobile/firefox-ios/issues/6886
@@ -3862,13 +3859,13 @@ tabs_panel:
   tab_mode_selected:
     type: event
     description: | 
-      User changes the tab tray mode with the segmented control in the
-      tabs panel.
+      Recorded when the user changes the tabs panel mode with the segmented 
+      control in the tabs panel.
     extra_keys:
       mode:
         type: string
         description: |
-          The tab mode the user is switching to (normal, private, or sync).
+          The newly selected tabs panel mode (normal or private or sync).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
@@ -3886,8 +3883,7 @@ tabs_panel.close_all_tabs_sheet:
   option_selected:
     type: event
     description: | 
-      Records the option selected after a user has opened the 
-      close all tabs sheet.
+      Recorded when the user taps an option in the close all tabs sheet.
     extra_keys:
       option:
         type: string
@@ -3897,7 +3893,7 @@ tabs_panel.close_all_tabs_sheet:
       mode:
         type: string
         description: |
-          The tab mode the user is switching to (normal or private).
+          The current tabs panel mode (normal or private or sync).
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7008
       - https://github.com/mozilla-mobile/firefox-ios/issues/25296
