@@ -607,8 +607,7 @@ class TabTrayViewController: UIViewController,
             let toast = SimpleToast()
             toast.showAlertWithText(toastType.title,
                                     bottomContainer: view,
-                                    theme: retrieveTheme(),
-                                    bottomConstraintPadding: -toolbarHeight)
+                                    theme: retrieveTheme())
         }
     }
 
