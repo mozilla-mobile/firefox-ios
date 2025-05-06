@@ -13,4 +13,9 @@ protocol AddressProvider {
     func deleteAddress(id: String, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-extension RustAutofill: AddressProvider {}
+protocol SyncAutofillProvider {
+    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void)
+    func registerWithSyncManager()
+}
+
+extension RustAutofill: AddressProvider, SyncAutofillProvider {}

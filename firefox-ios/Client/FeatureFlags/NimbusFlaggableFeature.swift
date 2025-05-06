@@ -11,45 +11,46 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
-    case appearanceMenu
     case addressBarMenu
+    case appearanceMenu
     case bookmarksRefactor
     case bottomSearchBar
     case cleanupHistoryReenabled
     case deeplinkOptimizationRefactor
-    case feltPrivacySimplifiedUI
+    case downloadLiveActivities
     case feltPrivacyFeltDeletion
+    case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
+    case hntTopSitesVisualRefresh
     case homepageRebuild
     case inactiveTabs
+    case loginsVerificationEnabled
     case menuRefactor
     case menuRefactorHint
     case microsurvey
-    case loginsVerificationEnabled
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case pdfRefactor
-    case downloadLiveActivities
     case ratingPromptFeature
     case reportSiteIssue
+    case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
-    case unifiedAds
-    case unifiedSearch
     case tabAnimation
     case tabTrayUIExperiments
-    case toolbarRefactor
-    case toolbarOneTapNewTab
-    case toolbarSwipingTabs
     case toolbarNavigationHint
+    case toolbarOneTapNewTab
+    case toolbarRefactor
+    case toolbarSwipingTabs
     case tosFeature
     case trackingProtectionRefactor
-    case revertUnsafeContinuationsRefactor
-    case useRustKeychain
+    case unifiedAds
+    case unifiedSearch
     case updatedPasswordManager
+    case useRustKeychain
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -58,6 +59,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .addressBarMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
+                .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -110,42 +112,43 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
-        // Cases where users do not have the option to manipulate a setting.
+        // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
+                .addressAutofillEdit,
                 .addressBarMenu,
                 .bookmarksRefactor,
-                .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .deeplinkOptimizationRefactor,
+                .downloadLiveActivities,
+                .feltPrivacyFeltDeletion,
+                .feltPrivacySimplifiedUI,
+                .hntTopSitesVisualRefresh,
                 .homepageRebuild,
-                .microsurvey,
+                .loginsVerificationEnabled,
                 .menuRefactor,
                 .menuRefactorHint,
-                .loginsVerificationEnabled,
+                .microsurvey,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .pdfRefactor,
-                .downloadLiveActivities,
                 .ratingPromptFeature,
                 .reportSiteIssue,
-                .feltPrivacySimplifiedUI,
-                .feltPrivacyFeltDeletion,
+                .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
-                .unifiedAds,
-                .unifiedSearch,
                 .tabAnimation,
                 .tabTrayUIExperiments,
-                .toolbarRefactor,
-                .toolbarOneTapNewTab,
-                .toolbarSwipingTabs,
                 .toolbarNavigationHint,
+                .toolbarOneTapNewTab,
+                .toolbarRefactor,
+                .toolbarSwipingTabs,
                 .tosFeature,
                 .trackingProtectionRefactor,
-                .revertUnsafeContinuationsRefactor,
-                .useRustKeychain,
-                .updatedPasswordManager:
+                .unifiedAds,
+                .unifiedSearch,
+                .updatedPasswordManager,
+                .useRustKeychain:
             return nil
         }
     }
