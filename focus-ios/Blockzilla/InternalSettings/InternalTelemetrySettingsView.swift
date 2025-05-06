@@ -6,8 +6,13 @@ import Combine
 import SwiftUI
 import Glean
 
-private let GleanDebugViewURL = URL(string: "https://debug-ping-preview.firebaseapp.com",
-                                    invalidCharacters: false)!
+private var GleanDebugViewURL: URL {
+    if let tag = UserDefaults.standard.string(forKey: GleanDebugViewTag), !tag.isEmpty, let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
+        return URL(string: "https://debug-ping-preview.firebaseapp.com/pings/\(encodedTag)", invalidCharacters: false)!
+    } else {
+        return URL(string: "https://debug-ping-preview.firebaseapp.com", invalidCharacters: false)!
+    }
+}
 
 struct InternalTelemetrySettingsView {
     @ObservedObject var internalSettings = InternalSettings()
