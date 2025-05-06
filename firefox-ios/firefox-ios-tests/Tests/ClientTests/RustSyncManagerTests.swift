@@ -26,39 +26,42 @@ class RustSyncManagerTests: XCTestCase {
     private var rustSyncManager: RustSyncManager!
     private var profile: MockBrowserProfile!
 
+    private var logins: MockLoginProvider!
+    private var autofill: MockAutofill!
+    private var places: MockPlaces!
+    private var tabs: MockRemoteTabs!
+
     override func setUp() {
         super.setUp()
+        logins = MockLoginProvider()
+        autofill = MockAutofill()
+        places = MockPlaces()
+        tabs = MockRemoteTabs()
+
         profile = MockBrowserProfile(localName: "RustSyncManagerTests")
         rustSyncManager = RustSyncManager(profile: profile,
                                           creditCardAutofillEnabled: true,
                                           loginsVerificationEnabled: true,
                                           logger: MockLogger(),
+                                          logins: logins,
+                                          autofill: autofill,
+                                          places: places,
+                                          tabs: tabs,
                                           notificationCenter: MockNotificationCenter())
-        rustSyncManager.syncManagerAPI = RustSyncManagerAPI()
+        rustSyncManager.syncManagerAPI = RustSyncManagerAPI(dispatchQueue: MockDispatchQueue())
         profile.syncManager = rustSyncManager
     }
 
     override func tearDown() {
-        super.tearDown()
         rustSyncManager = nil
         UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
-        profile.prefs.removeObjectForKey(Keys.bookmarksStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.bookmarksEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.creditcardsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.creditcardsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.historyStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.historyEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.passwordsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.passwordsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.tabsStateChangedPrefKey)
-        profile.prefs.removeObjectForKey(Keys.tabsEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.addressesEnabledPrefKey)
-        profile.prefs.removeObjectForKey(Keys.addressesStateChangedPrefKey)
-
+        profile.prefs.clearAll()
         profile = nil
+        super.tearDown()
     }
 
-    func testGetEnginesAndKeys() {
+    func testGetEnginesAndKeys_withLoginsVerified() {
+        logins.loginsVerified = true
         let engines: [RustSyncManagerAPI.TogglableEngine] = [
             .bookmarks,
             .creditcards,
@@ -76,11 +79,45 @@ class RustSyncManagerTests: XCTestCase {
             XCTAssertTrue(engines.contains("passwords"))
             XCTAssertTrue(engines.contains("tabs"))
             XCTAssertTrue(engines.contains("addresses"))
+            XCTAssertTrue(engines.contains("creditcards"))
             XCTAssertFalse(keys.isEmpty)
 
-            XCTAssertEqual(keys.count, 2)
             XCTAssertNotNil(keys["creditcards"])
-            XCTAssertNotNil(keys["passwords"])
+
+            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
+        }
+    }
+
+    func testGetEnginesAndKeys_withOutLoginsVerified() {
+        logins.loginsVerified = false
+        let engines: [RustSyncManagerAPI.TogglableEngine] = [
+            .bookmarks,
+            .creditcards,
+            .history,
+            .passwords,
+            .tabs,
+            .addresses
+        ]
+
+        rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
+            XCTAssertEqual(engines.count, 5)
+
+            XCTAssertTrue(engines.contains("bookmarks"))
+            XCTAssertTrue(engines.contains("history"))
+            XCTAssertTrue(engines.contains("tabs"))
+            XCTAssertTrue(engines.contains("addresses"))
+            XCTAssertTrue(engines.contains("creditcards"))
+            XCTAssertFalse(keys.isEmpty)
+
+            XCTAssertNotNil(keys["creditcards"])
+
+            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 0)
+            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
         }
     }
 
@@ -247,19 +284,34 @@ class LegacyRustSyncManagerTests: XCTestCase {
     private var rustSyncManager: RustSyncManager!
     private var profile: MockBrowserProfile!
 
+    private var logins: MockLoginProvider!
+    private var autofill: MockAutofill!
+    private var places: MockPlaces!
+    private var tabs: MockRemoteTabs!
+
     override func setUp() {
         super.setUp()
+        logins = MockLoginProvider()
+        autofill = MockAutofill()
+        places = MockPlaces()
+        tabs = MockRemoteTabs()
+
         profile = MockBrowserProfile(localName: "RustSyncManagerTests")
-        rustSyncManager = RustSyncManager(profile: profile,
-                                          creditCardAutofillEnabled: true,
-                                          logger: MockLogger(),
-                                          notificationCenter: MockNotificationCenter())
-        rustSyncManager.syncManagerAPI = RustSyncManagerAPI()
+        rustSyncManager = RustSyncManager(
+            profile: profile,
+            creditCardAutofillEnabled: true,
+            logger: MockLogger(),
+            logins: logins,
+            autofill: autofill,
+            places: places,
+            tabs: tabs,
+            notificationCenter: MockNotificationCenter()
+        )
+        rustSyncManager.syncManagerAPI = RustSyncManagerAPI(dispatchQueue: MockDispatchQueue())
         profile.syncManager = rustSyncManager
     }
 
     override func tearDown() {
-        super.tearDown()
         rustSyncManager = nil
         UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
         profile.prefs.removeObjectForKey(Keys.bookmarksStateChangedPrefKey)
@@ -274,8 +326,8 @@ class LegacyRustSyncManagerTests: XCTestCase {
         profile.prefs.removeObjectForKey(Keys.tabsEnabledPrefKey)
         profile.prefs.removeObjectForKey(Keys.addressesEnabledPrefKey)
         profile.prefs.removeObjectForKey(Keys.addressesStateChangedPrefKey)
-
         profile = nil
+        super.tearDown()
     }
 
     func testGetEnginesAndKeys() {
@@ -288,7 +340,7 @@ class LegacyRustSyncManagerTests: XCTestCase {
             .addresses
         ]
 
-        rustSyncManager.getEnginesAndKeys(engines: engines) { (engines, keys) in
+        rustSyncManager.getEnginesAndKeys(engines: engines, dispatchGroup: MockDispatchGroup()) { (engines, keys) in
             XCTAssertEqual(engines.count, 6)
 
             XCTAssertTrue(engines.contains("bookmarks"))
@@ -296,11 +348,15 @@ class LegacyRustSyncManagerTests: XCTestCase {
             XCTAssertTrue(engines.contains("passwords"))
             XCTAssertTrue(engines.contains("tabs"))
             XCTAssertTrue(engines.contains("addresses"))
+            XCTAssertTrue(engines.contains("creditcards"))
             XCTAssertFalse(keys.isEmpty)
 
-            XCTAssertEqual(keys.count, 2)
             XCTAssertNotNil(keys["creditcards"])
-            XCTAssertNotNil(keys["passwords"])
+
+            XCTAssertEqual(self.tabs.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.logins.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.autofill.registerWithSyncManagerCalled, 1)
+            XCTAssertEqual(self.places.registerWithSyncManagerCalled, 1)
         }
     }
 

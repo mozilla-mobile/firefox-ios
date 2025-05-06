@@ -867,6 +867,9 @@
 		8A454D462CB9C83F009436D9 /* TopSitesMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D452CB9C83F009436D9 /* TopSitesMiddleware.swift */; };
 		8A456B6B2DC4F91000056533 /* ThemableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4B828F9DD8700B75884 /* ThemableTests.swift */; };
 		8A456B6D2DC4FD8300056533 /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A456B6C2DC4FD7E00056533 /* MockThemeManager.swift */; };
+		8A456B6E2DC50F9400056533 /* MockLoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB893A52C73AFBA00DAEED7 /* MockLoginProvider.swift */; };
+		8A456B6F2DC50F9400056533 /* MockLoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB893A52C73AFBA00DAEED7 /* MockLoginProvider.swift */; };
+		8A456B702DC50F9400056533 /* MockLoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB893A52C73AFBA00DAEED7 /* MockLoginProvider.swift */; };
 		8A4593C72BF7BECA002758DE /* MicrosurveyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C32BF7BEC9002758DE /* MicrosurveyTableViewCell.swift */; };
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
@@ -1028,6 +1031,30 @@
 		8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5927C5A2AB00FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
+		8A9F4EF22DC8F15D004644B9 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
+		8A9F4EF32DC8F15D004644B9 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
+		8A9F4EF52DC8F15D004644B9 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
+		8A9F4EF62DC8F164004644B9 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
+		8A9F4EF72DC8F164004644B9 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
+		8A9F4EF92DC8F164004644B9 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
+		8A9F4EFA2DC8F16C004644B9 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
+		8A9F4EFB2DC8F16C004644B9 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
+		8A9F4EFD2DC8F16C004644B9 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
+		8A9F4EFE2DC8F1CC004644B9 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
+		8A9F4EFF2DC8F1D3004644B9 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
+		8A9F4F002DC8F1DA004644B9 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
+		8A9F4F062DC8F592004644B9 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
+		8A9F4F072DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */; };
+		8A9F4F082DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */; };
+		8A9F4F092DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */; };
+		8A9F4F0A2DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */; };
+		8A9F4F0B2DC8F5D1004644B9 /* MockPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */; };
+		8A9F4F0C2DC8F5D1004644B9 /* MockPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */; };
+		8A9F4F0D2DC8F5D1004644B9 /* MockPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */; };
+		8A9F4F0E2DC8F5D1004644B9 /* MockPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */; };
+		8A9F4F0F2DC8F5D7004644B9 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
+		8A9F4F102DC8F5D7004644B9 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
+		8A9F4F112DC8F5D7004644B9 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
 		8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA020EE2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift */; };
 		8AA0A6632CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */; };
 		8AA0A6652CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */; };
@@ -1037,7 +1064,6 @@
 		8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA8389C2CA2FEFC003FA256 /* StoreTestUtility.swift */; };
 		8AAAB0592C1B7240008830B3 /* MockRustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAAB0582C1B723F008830B3 /* MockRustFirefoxSuggest.swift */; };
 		8AAAB05B2C1B7268008830B3 /* ClientTabsSearchWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAAB05A2C1B7268008830B3 /* ClientTabsSearchWrapper.swift */; };
-		8AABB92D2C64F77000F1FE51 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
 		8AABBCFC2A0010900089941E /* GleanWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBCFB2A0010900089941E /* GleanWrapper.swift */; };
 		8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBCFD2A0017560089941E /* MockGleanWrapper.swift */; };
 		8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD002A001ADF0089941E /* ApplicationHelper.swift */; };
@@ -1205,7 +1231,6 @@
 		8CE1E4392B8C76C80026530B /* LoginCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4352B8C76C80026530B /* LoginCellView.swift */; };
 		8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4362B8C76C80026530B /* LoginListView.swift */; };
 		8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */; };
-		8CEDF0802BFE138B00D2617B /* AddressProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AddressProvider.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		94AEF1552D690043003E2623 /* DownloadLiveActivityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEF1542D690040003E2623 /* DownloadLiveActivityTest.swift */; };
 		94D3DD162D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */; };
@@ -8379,6 +8404,10 @@
 		8A9E041E2D4D0B7A0022ED90 /* BookmarksSectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksSectionStateTests.swift; sourceTree = "<group>"; };
 		8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatusBarScrollDelegate.swift; sourceTree = "<group>"; };
 		8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentifiers.swift; sourceTree = "<group>"; };
+		8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesProvider.swift; sourceTree = "<group>"; };
+		8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsProvider.swift; sourceTree = "<group>"; };
+		8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaces.swift; sourceTree = "<group>"; };
+		8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRemoteTabs.swift; sourceTree = "<group>"; };
 		8AA020EE2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSplashScreenFeatureLayer.swift; sourceTree = "<group>"; };
 		8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageDiffableDataSource.swift; sourceTree = "<group>"; };
 		8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageSectionLayoutProvider.swift; sourceTree = "<group>"; };
@@ -8571,7 +8600,7 @@
 		8CE1E4352B8C76C80026530B /* LoginCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCellView.swift; sourceTree = "<group>"; };
 		8CE1E4362B8C76C80026530B /* LoginListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListView.swift; sourceTree = "<group>"; };
 		8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListViewModelTests.swift; sourceTree = "<group>"; };
-		8CEDF07F2BFE138B00D2617B /* AddressProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressProvider.swift; sourceTree = "<group>"; };
+		8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillProvider.swift; sourceTree = "<group>"; };
 		8D1340A4B7E4ACBF43347178 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8D194DCF9E244D29DA68FDE5 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/Shared.strings; sourceTree = "<group>"; };
 		8D1D42808537A1B29FEE3BF4 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -12647,7 +12676,6 @@
 		8A97E6EC2C58489C00F94793 /* AddressUtility */ = {
 			isa = PBXGroup;
 			children = (
-				8CEDF07F2BFE138B00D2617B /* AddressProvider.swift */,
 				8A97E6E92C58487900F94793 /* AddressLocaleFeatureValidator.swift */,
 			);
 			path = AddressUtility;
@@ -12674,6 +12702,17 @@
 				8A7835342D5100970052E328 /* BookmarksAction.swift */,
 			);
 			path = Bookmark;
+			sourceTree = "<group>";
+		};
+		8A9F4EDF2DC8EE44004644B9 /* RustProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */,
+				8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */,
+				8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */,
+				8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */,
+			);
+			path = RustProtocols;
 			sourceTree = "<group>";
 		};
 		8AAEB9FF2BF510E4000C02B5 /* Survey */ = {
@@ -13700,6 +13739,8 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */,
+				8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */,
 				2199A1D32DB8389000DC84BD /* MockZoomStore.swift */,
 				0B7B05422D64C08F007FD7AC /* MockURLProtocol.swift */,
 				0B7B05402D64C087007FD7AC /* MockURLResponse.swift */,
@@ -14059,6 +14100,7 @@
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				8A9F4EDF2DC8EE44004644B9 /* RustProtocols */,
 				6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */,
 				C8B0F5EE283B7CCE007AE65D /* Pocket */,
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
@@ -14653,7 +14695,6 @@
 				E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
 				CA520E7924913C1B00CCAB48 /* PasswordManagerViewModel.swift */,
-				8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */,
 				CA7FC7D224A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift */,
 				CA90753724929B22005B794D /* NoLoginsView.swift */,
 				CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */,
@@ -16783,16 +16824,23 @@
 			files = (
 				1D05C9842D9CD2080081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
 				397848DE1ED86605004C0C0B /* NotificationService.swift in Sources */,
+				8A9F4EF32DC8F15D004644B9 /* PlacesProvider.swift in Sources */,
 				F8B710A12ABE38980029726E /* RustErrors.swift in Sources */,
+				8A9F4EFB2DC8F16C004644B9 /* LoginProvider.swift in Sources */,
 				45355B232A269E7100B1EA8E /* Autopush.swift in Sources */,
 				45355B262A269EAC00B1EA8E /* PushConfiguration.swift in Sources */,
 				396E38CC1EE0816C00CC180F /* Profile.swift in Sources */,
+				8A456B6E2DC50F9400056533 /* MockLoginProvider.swift in Sources */,
 				1D5CBF4A2B17E3CB0001D033 /* NotificationPayloads.swift in Sources */,
 				1D1933792AF2C8CF005089C9 /* AppEvent.swift in Sources */,
+				8A9F4F0C2DC8F5D1004644B9 /* MockPlaces.swift in Sources */,
 				396E38DD1EE081DA00CC180F /* SyncDisplayState.swift in Sources */,
 				1D1933762AF2C8C9005089C9 /* EventQueue.swift in Sources */,
 				6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
+				8A9F4EF72DC8F164004644B9 /* AutofillProvider.swift in Sources */,
+				8A9F4F082DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				396E38F21EE0C8ED00CC180F /* FxAPushMessageHandler.swift in Sources */,
+				8A9F4F0F2DC8F5D7004644B9 /* TabsProvider.swift in Sources */,
 				F8A0B08329AD64790091C75B /* RustSyncManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -16966,17 +17014,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AB8574227D963290075C173 /* UIConstants.swift in Sources */,
+				8A9F4F0E2DC8F5D1004644B9 /* MockPlaces.swift in Sources */,
+				8A9F4EFD2DC8F16C004644B9 /* LoginProvider.swift in Sources */,
 				6025B10C267B6BEA00F59F6B /* LoginRecordExtension.swift in Sources */,
 				1D05C9862D9CD20F0081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
 				F8A0B08529AD647B0091C75B /* RustSyncManager.swift in Sources */,
 				C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */,
 				F8324A0A2649A188007E4BFA /* CredentialProviderViewController.swift in Sources */,
 				60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */,
+				8A456B702DC50F9400056533 /* MockLoginProvider.swift in Sources */,
 				6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */,
 				1D1933742AF2C8C8005089C9 /* EventQueue.swift in Sources */,
 				C87DF962267246730097E707 /* photon-colors.swift in Sources */,
 				6025B10A267B6BB300F59F6B /* SelectPasswordCell.swift in Sources */,
 				8AB8574127D9630E0075C173 /* PrivateModeUI.swift in Sources */,
+				8A9F4EF52DC8F15D004644B9 /* PlacesProvider.swift in Sources */,
 				1D1933772AF2C8CE005089C9 /* AppEvent.swift in Sources */,
 				F8324B122649B707007E4BFA /* Profile.swift in Sources */,
 				F8324B262649B76E007E4BFA /* SyncDisplayState.swift in Sources */,
@@ -16986,12 +17038,15 @@
 				F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */,
 				5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */,
 				C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */,
+				8A9F4F0A2DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */,
 				6025B109267B6BB300F59F6B /* NoSearchResultCell.swift in Sources */,
 				C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */,
 				F85C7F14272104E3004BDBA4 /* Layout.swift in Sources */,
+				8A9F4EF92DC8F164004644B9 /* AutofillProvider.swift in Sources */,
 				E1442FDC2947836E003680B0 /* UIView+Extension.swift in Sources */,
 				C874FB3A2660E8B900EBE86E /* CredentialProviderPresenter.swift in Sources */,
+				8A9F4F112DC8F5D7004644B9 /* TabsProvider.swift in Sources */,
 				E1442FC0294782B6003680B0 /* CGRect+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -17011,6 +17066,7 @@
 				EB9A179F20E6C1A200B12184 /* ThemedTableViewController.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */,
+				8A9F4F072DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
 				1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */,
 				ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */,
@@ -17023,6 +17079,7 @@
 				8ADAE4262A33A13B007BF926 /* OpenSupportPageSetting.swift in Sources */,
 				8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */,
 				BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */,
+				8A9F4EFA2DC8F16C004644B9 /* LoginProvider.swift in Sources */,
 				EBB895332193FFF400EB91A0 /* ContentBlockerSettingViewController.swift in Sources */,
 				8A5D1CB42A30D7D9005AD35C /* NoImageModeSetting.swift in Sources */,
 				8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */,
@@ -17544,6 +17601,7 @@
 				8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */,
 				0E6C1E212C909AD7001A43BB /* PasswordGeneratorAction.swift in Sources */,
 				F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */,
+				8A9F4F062DC8F592004644B9 /* TabsProvider.swift in Sources */,
 				E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */,
 				96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */,
 				8AB8574627D97CB00075C173 /* HomepageContextMenuProtocol.swift in Sources */,
@@ -17559,7 +17617,6 @@
 				EBB89507219398E500EB91A0 /* ContentBlocker.swift in Sources */,
 				216A0D792A40E85A008077BA /* ThemeSettingsState.swift in Sources */,
 				5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */,
-				8AABB92D2C64F77000F1FE51 /* LoginProvider.swift in Sources */,
 				1DCEC4122D8372E600129966 /* ASSearchEngineUtilities.swift in Sources */,
 				21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */,
 				8A1CBB952BE017D3008BE4D4 /* MicrosurveyPromptAction.swift in Sources */,
@@ -17650,6 +17707,7 @@
 				74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
+				8A9F4EF62DC8F164004644B9 /* AutofillProvider.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
 				8A454D362CB86993009436D9 /* PocketStoryConfiguration.swift in Sources */,
 				61CEFF5E2DA8BC78000B88A7 /* TabsPanelTelemetry.swift in Sources */,
@@ -17773,7 +17831,6 @@
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
-				8CEDF0802BFE138B00D2617B /* AddressProvider.swift in Sources */,
 				F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */,
 				8A7892052CF91FEF00490CA4 /* UnifiedAdsCallbackTelemetry.swift in Sources */,
 				8A454D292CB7078D009436D9 /* PocketState.swift in Sources */,
@@ -17801,6 +17858,7 @@
 				8A6E63C72D4946B90040D355 /* JumpBackInSectionState.swift in Sources */,
 				BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */,
 				8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */,
+				8A9F4F0B2DC8F5D1004644B9 /* MockPlaces.swift in Sources */,
 				8AAC7C452D52C18A0011F87A /* SaveLoginAlert.swift in Sources */,
 				8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */,
 				E177989A2BD7D44200F6F0EB /* ToolbarState.swift in Sources */,
@@ -17917,6 +17975,7 @@
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
 				0ECAA5F32DAD737700E27780 /* DownloadLiveActivityIntent.swift in Sources */,
+				8A9F4EF22DC8F15D004644B9 /* PlacesProvider.swift in Sources */,
 				E13C072D2C2189B80087E404 /* ToolbarActionConfiguration.swift in Sources */,
 				43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */,
 				E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */,
@@ -18386,16 +18445,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */,
+				8A9F4F092DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */,
 				BD2577982C9D85B5007B344C /* AnyHashable.swift in Sources */,
 				FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */,
 				EDDF340B2CDD1B7C008BB6A4 /* SearchEngineModel.swift in Sources */,
 				E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */,
+				8A456B6F2DC50F9400056533 /* MockLoginProvider.swift in Sources */,
 				F8A0B08429AD64790091C75B /* RustSyncManager.swift in Sources */,
 				EB6E0C60207E6C3100FBFF7E /* SendToDevice.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
 				1D05C9852D9CD2080081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
+				8A9F4EFE2DC8F1CC004644B9 /* LoginProvider.swift in Sources */,
+				8A9F4F102DC8F5D7004644B9 /* TabsProvider.swift in Sources */,
 				D04CD74D216CF86F004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
@@ -18407,10 +18470,13 @@
 				F8B710A02ABE38980029726E /* RustErrors.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */,
 				2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */,
+				8A9F4F0D2DC8F5D1004644B9 /* MockPlaces.swift in Sources */,
 				E136D41A2B19D35D003D0302 /* EmbeddedNavController.swift in Sources */,
 				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
 				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
+				8A9F4EFF2DC8F1D3004644B9 /* AutofillProvider.swift in Sources */,
+				8A9F4F002DC8F1DA004644B9 /* PlacesProvider.swift in Sources */,
 				1D1933782AF2C8CE005089C9 /* AppEvent.swift in Sources */,
 				1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
