@@ -17140,11 +17140,8 @@
 				810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */,
-<<<<<<< HEAD
 				5A96FB622D97076200917B12 /* CenterSnappingFlowLayout.swift in Sources */,
-=======
 				BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */,
->>>>>>> 1c08fe129 (Refactor FXIOS-11604 [Tab tray UI experiment] Refactor tab section selector view (#26388))
 				8A62B15D2CED408B0045F46E /* ContextMenuState.swift in Sources */,
 				C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
