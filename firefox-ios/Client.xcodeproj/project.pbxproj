@@ -55,6 +55,7 @@
 		0B7B053F2D64C022007FD7AC /* MockTabWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */; };
 		0B7B05412D64C088007FD7AC /* MockURLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B05402D64C087007FD7AC /* MockURLResponse.swift */; };
 		0B7B05432D64C08F007FD7AC /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B05422D64C08F007FD7AC /* MockURLProtocol.swift */; };
+		0B7B957D2DCA3099007DC749 /* DocumentLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B957C2DCA3099007DC749 /* DocumentLogger.swift */; };
 		0B7C1E951F6097AD006A8869 /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */; };
 		0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */; };
 		0B7FC3D32CAE811F005C5CCE /* DefaultBookmarksSaverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */; };
@@ -2421,6 +2422,7 @@
 		0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabWebView.swift; sourceTree = "<group>"; };
 		0B7B05402D64C087007FD7AC /* MockURLResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLResponse.swift; sourceTree = "<group>"; };
 		0B7B05422D64C08F007FD7AC /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
+		0B7B957C2DCA3099007DC749 /* DocumentLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentLogger.swift; sourceTree = "<group>"; };
 		0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
 		0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFolderHierarchyFetcherTests.swift; sourceTree = "<group>"; };
 		0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookmarksSaverTests.swift; sourceTree = "<group>"; };
@@ -10707,6 +10709,15 @@
 			path = Metrics;
 			sourceTree = "<group>";
 		};
+		0B7B957B2DCA305D007DC749 /* Document */ = {
+			isa = PBXGroup;
+			children = (
+				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
+				0B7B957C2DCA3099007DC749 /* DocumentLogger.swift */,
+			);
+			path = Document;
+			sourceTree = "<group>";
+		};
 		0B7CF8842CAC1B7000DC02F8 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
@@ -14167,6 +14178,7 @@
 				23F2C365244E44FA00FA4496 /* Tabs */,
 				E17798942BD6B30700F6F0EB /* Toolbars */,
 				217641B62D651D8600597B6F /* DownloadHelper */,
+				0B7B957B2DCA305D007DC749 /* Document */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
 				C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */,
 				C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */,
@@ -14202,7 +14214,6 @@
 				D87F84AB20B891160091F2DA /* TopTabDisplayManager.swift */,
 				C4E3983C1D21F1E7004E89BA /* TopTabCell.swift */,
 				E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */,
-				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
 				8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
@@ -17267,6 +17278,7 @@
 				8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */,
 				21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */,
+				0B7B957D2DCA3099007DC749 /* DocumentLogger.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
 				814B60F52C90C0A0000997BE /* MainMenuConfigurationUtility.swift in Sources */,
 				210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */,
