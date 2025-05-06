@@ -175,14 +175,7 @@ class CreditCardsTests: BaseTestCase {
         cardNumber.waitAndTap()
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
         // If Keyboard is open, hit return button
-        let keyboard = app.keyboards.firstMatch
-        let timeout: TimeInterval = 5.0 // Set the timeout duration
-
-        if keyboard.waitForExistence(timeout: timeout) {
-            app.buttons["KeyboardAccessory.doneButton"].waitAndTap()
-        } else {
-            XCTFail("Keyboard did not appear within \(timeout) seconds")
-        }
+        app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -192,8 +185,9 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         cardNumber.waitAndTap()
         // The autofill option (Use saved card prompt) is displayed
-        if !app.buttons[useSavedCard].waitForExistence(timeout: 3) {
-            app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
+        if iPad() {
+            app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
+            app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
         }
         mozWaitForElementToExist(app.buttons[useSavedCard])
     }
@@ -302,6 +296,10 @@ class CreditCardsTests: BaseTestCase {
             } else {
                 app.textFields.element(boundBy: 3).waitAndTap()
             }
+            if iPad() {
+                app.webViews["Web content"].textFields["Card Number:"].waitAndTap()
+                app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
+            }
             app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
@@ -317,6 +315,10 @@ class CreditCardsTests: BaseTestCase {
                 if !app.buttons[useSavedCard].exists {
                     app.textFields.element(boundBy: 2).waitAndTap()
                 }
+            }
+            if iPad() {
+                app.webViews["Web content"].textFields["Card Number:"].waitAndTap()
+                app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
             }
             app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
@@ -495,6 +497,10 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
         waitUntilPageLoad()
+        if iPad() {
+            app.webViews["Web content"].textFields["Card Number:"].waitAndTap()
+            app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
+        }
         app.textFields["Card Number:"].waitAndTap()
         // Expand the saved card prompt
         app.buttons[useSavedCard].waitAndTap()
@@ -636,6 +642,10 @@ class CreditCardsTests: BaseTestCase {
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
         waitUntilPageLoad()
         app.textFields.element(boundBy: 1).waitAndTap()
+        if iPad() {
+            app.webViews["Web content"].textFields["Card Number:"].waitAndTap()
+            app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
+        }
         app.buttons[useSavedCard].waitAndTap()
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts["Use saved card"])
@@ -662,6 +672,10 @@ class CreditCardsTests: BaseTestCase {
             cardNumber = app.webViews["Web content"].staticTexts["Card Number:"]
         }
         mozWaitForElementToExist(cardNumber)
+        if iPad() {
+            cardNumber.waitAndTap()
+            app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
+        }
         cardNumber.waitAndTap()
         // Use saved card prompt is displayed
         app.buttons[useSavedCard].waitAndTap(timeout: TIMEOUT)
