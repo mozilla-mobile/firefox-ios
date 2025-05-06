@@ -9,6 +9,7 @@ final class NimbusFeatureFlagLayer {
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
+        // For better code readability, please keep in alphabetical order by NimbusFeatureFlagID
         switch featureID {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
@@ -39,6 +40,9 @@ final class NimbusFeatureFlagLayer {
 
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
+
+        case .hntTopSitesVisualRefresh:
+            return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
@@ -169,6 +173,10 @@ final class NimbusFeatureFlagLayer {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         default: return false
         }
+    }
+
+    public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
