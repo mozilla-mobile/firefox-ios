@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var logger: Logger
     var zoomManager: ZoomPageManager
+    let documentLogger: DocumentLogger
 
     // MARK: Optional UI elements
 
@@ -116,6 +117,7 @@ class BrowserViewController: UIViewController,
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
+    let tabsPanelTelemetry: TabsPanelTelemetry
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -327,7 +329,9 @@ class BrowserViewController: UIViewController,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         logger: Logger = DefaultLogger.shared,
+        documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
     ) {
@@ -339,11 +343,13 @@ class BrowserViewController: UIViewController,
         self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.downloadQueue = downloadQueue
         self.logger = logger
+        self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
+        self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1510,7 +1516,9 @@ class BrowserViewController: UIViewController,
             // The web view can go gray if it was zombified due to memory pressure.
             // When this happens, the URL is nil, so try restoring the page upon selection.
             logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            selectedTab.reload()
+            if selectedTab.temporaryDocument == nil {
+                selectedTab.reload()
+            }
         }
 
         browserDelegate?.show(webView: webView)
@@ -2011,7 +2019,12 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             let isLoadingDocument = isPDFRefactorEnabled && tab.isDownloadingDocument()
-            if let url = webView.url, !InternalURL.isValid(url: url) || isLoadingDocument {
+            let isValidURL = if let url = webView.url {
+                !InternalURL.isValid(url: url)
+            } else {
+                false
+            }
+            if isValidURL || isLoadingDocument {
                 let progress = if let progress = change?[.newKey] as? Double {
                     progress
                 } else {
@@ -3304,7 +3317,6 @@ class BrowserViewController: UIViewController,
 
     private func logTelemetryForAppDidEnterBackground() {
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             let windowManager: WindowManager = AppContainer.shared.resolve()
@@ -4109,6 +4121,10 @@ extension BrowserViewController: TabManagerDelegate {
         /// If the selectedTab is showing an error page trigger a reload
         if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
             needsReload = true
+        }
+
+        if selectedTab.temporaryDocument != nil, isPDFRefactorEnabled {
+            needsReload = false
         }
 
         if needsReload {

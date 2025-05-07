@@ -17,12 +17,14 @@ class ZoomPageManagerTests: XCTestCase {
         super.setUp()
         self.profile = MockProfile()
         self.zoomStore = MockZoomStore()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
-        super.tearDown()
         self.profile = nil
         self.zoomStore = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testTabNil_AfterInit() {
