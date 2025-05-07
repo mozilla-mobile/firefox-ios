@@ -177,7 +177,7 @@ struct ActiveScreensState: Equatable {
             case .nativeErrorPage:
                 screens.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
             case .tabWebViewPreview:
-                screens.append(.tabWebViewPreview(TabWebViewPreviewState()))
+                screens.append(.tabWebViewPreview(TabWebViewPreviewState(windowUUID: uuid)))
             }
         default:
             return screens

@@ -18,7 +18,8 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable, StoreSubscri
         static let addressBarOnBottomLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
     }
     var notificationCenter: any NotificationProtocol = NotificationCenter.default
-    private var state: TabWebViewPreviewState = .init()
+    private var state: TabWebViewPreviewState = .init(windowUUID: .unavailable)
+    private let windowUUID: WindowUUID
 
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
@@ -37,7 +38,8 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable, StoreSubscri
     private var addressBarHeightConstraint: NSLayoutConstraint?
 
     // MARK: Inits
-    init() {
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         super.init(frame: .zero)
         setupLayout()
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
@@ -81,15 +83,16 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable, StoreSubscri
     func subscribeToRedux() {
         store.dispatch(
             ScreenAction(
-                windowUUID: .unavailable,
+                windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
                 screen: .tabWebViewPreview
             )
         )
 
+        let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return TabWebViewPreviewState(appState: appState)
+                return TabWebViewPreviewState(appState: appState, uuid: uuid)
             })
         })
     }

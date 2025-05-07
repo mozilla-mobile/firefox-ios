@@ -27,7 +27,7 @@ final class TabWebViewPreviewStateTests: XCTestCase, StoreTestUtility {
         setupStore()
         let initialState = createSubject()
 
-        XCTAssertEqual(initialState.windowUUID, .unavailable)
+        XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.searchBarPosition, .top)
         XCTAssertNil(initialState.screenshot)
     }
@@ -48,13 +48,13 @@ final class TabWebViewPreviewStateTests: XCTestCase, StoreTestUtility {
 
         let newState = TabWebViewPreviewState.reducer(initialState, didLoadToolbarsAction)
 
-        XCTAssertEqual(newState.windowUUID, .unavailable)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.searchBarPosition, .bottom)
         XCTAssertNotEqual(initialState.searchBarPosition, newState.searchBarPosition)
 
         let newState2 = TabWebViewPreviewState.reducer(initialState, toolbarPositionChangedAction)
 
-        XCTAssertEqual(newState2.windowUUID, .unavailable)
+        XCTAssertEqual(newState2.windowUUID, windowUUID)
         XCTAssertEqual(newState2.searchBarPosition, .top)
         XCTAssertNotEqual(newState.searchBarPosition, newState2.searchBarPosition)
     }
@@ -79,7 +79,7 @@ final class TabWebViewPreviewStateTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject() -> TabWebViewPreviewState {
-        return TabWebViewPreviewState()
+        return TabWebViewPreviewState(windowUUID: windowUUID)
     }
 
     // MARK: - StoreTestUtility
@@ -87,7 +87,7 @@ final class TabWebViewPreviewStateTests: XCTestCase, StoreTestUtility {
         return AppState(
             activeScreens: ActiveScreensState(
                 screens: [
-                    .tabWebViewPreview(TabWebViewPreviewState())
+                    .tabWebViewPreview(TabWebViewPreviewState(windowUUID: windowUUID))
                 ]
             )
         )
