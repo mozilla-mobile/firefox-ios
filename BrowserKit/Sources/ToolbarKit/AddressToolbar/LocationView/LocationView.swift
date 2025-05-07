@@ -162,12 +162,12 @@ final class LocationView: UIView,
         searchTerm = config.searchTerm
         onLongPress = config.onLongPress
 
-        layoutContainerView(config, isURLTextFieldCentered: isURLTextFieldCentered)
+        layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
     }
 
-    private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
+    private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
         NSLayoutConstraint.deactivate(containerViewConstrains)
-        if config.isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
+        if isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
             // leading alignment configuration
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -197,6 +197,8 @@ final class LocationView: UIView,
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        layoutContainerView(isEditing: isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
         updateGradient()
         // Updates the URL text field's leading constraint to ensure it reflects the current layout state
         // during layout passes, such as on screen size or orientation changes.
