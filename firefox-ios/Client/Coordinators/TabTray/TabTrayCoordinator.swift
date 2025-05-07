@@ -15,11 +15,17 @@ protocol TabTrayNavigationHandler: AnyObject {
 class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
-                          TabTrayNavigationHandler {
+                          TabTrayNavigationHandler,
+                          FeatureFlaggable {
     var tabTrayViewController: TabTrayViewController?
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
     private let profile: Profile
     private let tabManager: TabManager
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
 
     init(router: Router,
          tabTraySection: TabTrayPanelType,
@@ -57,11 +63,20 @@ class TabTrayCoordinator: BaseCoordinator,
         let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false, windowUUID: windowUUID)
         let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true, windowUUID: windowUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
-        return [
-            ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
-            ThemedNavigationController(rootViewController: privateTabsPanel, windowUUID: windowUUID),
-            ThemedNavigationController(rootViewController: syncTabs, windowUUID: windowUUID)
-        ]
+        if isTabTrayUIExperimentsEnabled {
+            // Panels order is different for the experiment
+            return [
+                ThemedNavigationController(rootViewController: privateTabsPanel, windowUUID: windowUUID),
+                ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
+                ThemedNavigationController(rootViewController: syncTabs, windowUUID: windowUUID)
+            ]
+        } else {
+            return [
+                ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
+                ThemedNavigationController(rootViewController: privateTabsPanel, windowUUID: windowUUID),
+                ThemedNavigationController(rootViewController: syncTabs, windowUUID: windowUUID)
+            ]
+        }
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
