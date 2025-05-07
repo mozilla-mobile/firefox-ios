@@ -111,7 +111,7 @@ class TabTrayViewController: UIViewController,
         let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
-                          String(format: TabTrayPanelType.tabs.label, "0"),
+                          TabTrayPanelType.tabs.label,
                           TabTrayPanelType.syncedTabs.label]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
@@ -151,7 +151,7 @@ class TabTrayViewController: UIViewController,
         ]
 
         let regularLayoutItems = [
-            String(format: TabTrayPanelType.tabs.label, tabTrayState.normalTabsCount),
+            TabTrayPanelType.tabs.label,
             TabTrayPanelType.privateTabs.label,
             TabTrayPanelType.syncedTabs.label,
         ]
@@ -386,9 +386,6 @@ class TabTrayViewController: UIViewController,
         countLabel.text = count
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
-        if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
-        }
     }
 
     // MARK: Themeable
