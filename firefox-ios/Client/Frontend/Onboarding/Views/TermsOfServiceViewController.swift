@@ -65,8 +65,10 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     }
 
     private lazy var confirmationButton: PrimaryRoundedButton = .build { button in
+        // Using .LoginsOnboardingContinueButtonTite until
+        // we have a new translation for .Onboarding.TermsOfService.AgreementButtonTitleV3
         let viewModel = PrimaryRoundedButtonViewModel(
-            title: .Onboarding.TermsOfService.AgreementButtonTitleV3,
+            title: .LoginsOnboardingContinueButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.acceptTermsOfService), for: .touchUpInside)
