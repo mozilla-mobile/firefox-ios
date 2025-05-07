@@ -197,9 +197,9 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     private func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly),
-           panelType == .privateTabs {
-            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            let isPrivateMode = tabsState.isPrivateMode && panelType == .privateTabs
+            return themeManager.resolvedTheme(with: isPrivateMode)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
         }
@@ -269,10 +269,9 @@ class TabDisplayPanelViewController: UIViewController,
         }
         shouldShowFadeView()
 
-        // TODO: Laurie to ask Cyndi about this
-//        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-//            applyTheme()
-//        }
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            applyTheme()
+        }
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
