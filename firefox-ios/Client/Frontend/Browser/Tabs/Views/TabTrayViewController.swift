@@ -63,6 +63,7 @@ class TabTrayViewController: UIViewController,
     }
     private lazy var panelContainer: UIView = .build { _ in }
     private var panelStackLeadingConstraint: NSLayoutConstraint?
+    private var hasAppliedInitialPanelOffset = false
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
@@ -287,6 +288,16 @@ class TabTrayViewController: UIViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateToolbarItems()
+
+        // Hacky way to slide to the right initial panel
+        if isTabTrayUIExperimentsEnabled, !hasAppliedInitialPanelOffset, panelContainer.bounds.width != 0 {
+            hasAppliedInitialPanelOffset = true
+
+            let initialIndex = experimentConvertSelectedIndex()
+            let initialOffset = CGFloat(-initialIndex) * panelContainer.bounds.width
+            panelStackLeadingConstraint?.constant = initialOffset
+            view.layoutIfNeeded()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -528,15 +539,20 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
-        var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
-            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+            // Adding a delay since `tabTrayState` is not accurate otherwise
+            DispatchQueue.main.async {
+                let isSyncTabsPanel = self.tabTrayState.isSyncTabsPanel
+                let toolbarItems = isSyncTabsPanel ?
+                    self.experimentBottomToolbarItemsForSync :
+                    self.experimentBottomToolbarItems
+                self.setToolbarItems(toolbarItems, animated: true)
+            }
         } else {
-            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+            let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
+            let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+            setToolbarItems(toolbarItems, animated: true)
         }
-
-        setToolbarItems(toolbarItems, animated: true)
     }
 
     private func setupToolbarForIpad() {
@@ -680,9 +696,8 @@ class TabTrayViewController: UIViewController,
                 view.heightAnchor.constraint(equalTo: panelContainer.heightAnchor)
             ])
 
-            if let panelType = TabTrayPanelType(rawValue: index) {
-                navigationHandler?.start(panelType: panelType, navigationController: controller)
-            }
+            let panelType = TabTrayPanelType.getExperimentConvert(index: index)
+            navigationHandler?.start(panelType: panelType, navigationController: controller)
         }
     }
 
@@ -851,7 +866,7 @@ class TabTrayViewController: UIViewController,
         guard tabTrayState.selectedPanel != panelType else { return }
 
         if isTabTrayUIExperimentsEnabled {
-            let targetIndex = panelType.rawValue
+            let targetIndex = TabTrayPanelType.getExperimentConvert(index: panelType.rawValue).rawValue
             let targetOffset = CGFloat(-targetIndex) * panelContainer.bounds.width
             panelStackLeadingConstraint?.constant = targetOffset
 

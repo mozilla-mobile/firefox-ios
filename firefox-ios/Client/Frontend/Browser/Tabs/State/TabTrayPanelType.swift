@@ -53,4 +53,15 @@ enum TabTrayPanelType: Int, CaseIterable {
             return .sync
         }
     }
+
+    static func getExperimentConvert(index: Int) -> TabTrayPanelType {
+        var panelType: TabTrayPanelType = .tabs
+        switch index {
+        case 0: panelType = .privateTabs
+        case 1: panelType = .tabs
+        case 2: panelType = .syncedTabs
+        default: break
+        }
+        return panelType
+    }
 }
