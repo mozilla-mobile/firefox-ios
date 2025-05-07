@@ -65,8 +65,14 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     }
 
     private lazy var confirmationButton: PrimaryRoundedButton = .build { button in
+        // Using .LoginsOnboardingContinueButtonTite until
+        // we have a new translation for .Onboarding.TermsOfService.AgreementButtonTitleV3
         let viewModel = PrimaryRoundedButtonViewModel(
+<<<<<<< HEAD
             title: .Onboarding.TermsOfService.AgreementButtonTitleV2,
+=======
+            title: .LoginsOnboardingContinueButtonTitle,
+>>>>>>> df7bfc50e (Add FXIOS-12147 Change ToS card's button string from Agree and continue to just Continue Firefox and Focus (#26564))
             a11yIdentifier: AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.acceptTermsOfService), for: .touchUpInside)
