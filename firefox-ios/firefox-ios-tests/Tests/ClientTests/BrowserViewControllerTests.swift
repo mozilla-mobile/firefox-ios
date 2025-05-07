@@ -147,12 +147,24 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Handle PDF
 
-    func testHandlePDF_showsDocumentLoadingView() {
+    func testHandlePDF_doesntDocumentLoadingView_whenTabNotSelected() {
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         let response = URLResponse()
         let request = URLRequest(url: URL(fileURLWithPath: "test"))
 
+        subject.handlePDFResponse(tab: tab, response: response, request: request)
+
+        XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 0)
+    }
+
+    func testHandlePDF_showDocumentLoadingView_whenTabSelected() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let response = URLResponse()
+        let request = URLRequest(url: URL(fileURLWithPath: "test"))
+
+        tabManager.selectedTab = tab
         subject.handlePDFResponse(tab: tab, response: response, request: request)
 
         XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 1)

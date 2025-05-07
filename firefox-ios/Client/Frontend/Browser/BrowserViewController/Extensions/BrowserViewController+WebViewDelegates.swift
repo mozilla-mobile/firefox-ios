@@ -814,8 +814,12 @@ extension BrowserViewController: WKNavigationDelegate {
     func handlePDFResponse(tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
-        navigationHandler?.showDocumentLoading()
-        scrollController.showToolbars(animated: false)
+        let shouldUpdateUI = tab === tabManager.selectedTab
+
+        if shouldUpdateUI {
+            navigationHandler?.showDocumentLoading()
+            scrollController.showToolbars(animated: false)
+        }
 
         tab.getSessionCookies { [weak tab, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -835,9 +839,18 @@ extension BrowserViewController: WKNavigationDelegate {
                                    of: tab?.webView,
                                    change: [.newKey: true],
                                    context: nil)
+                if let url = request.url {
+                    self?.documentLogger.registerDownloadStart(url: url)
+                }
             }
             tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
+                self?.logger.log("Failed to download Document",
+                                 level: .warning,
+                                 category: .webview,
+                                 extra: [
+                                    "error": error?.localizedDescription ?? "",
+                                    "url": request.url?.absoluteString ?? "Unknown URL"])
                 guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }
