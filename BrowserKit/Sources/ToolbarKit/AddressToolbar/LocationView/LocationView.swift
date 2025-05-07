@@ -205,8 +205,7 @@ final class LocationView: UIView,
 
     private func setupLayout() {
         addSubview(containerView)
-        containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
-        iconContainerStackView.addSubview(iconContainerBackgroundView)
+        containerView.addSubviews(urlTextField, iconContainerBackgroundView, iconContainerStackView, gradientView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
