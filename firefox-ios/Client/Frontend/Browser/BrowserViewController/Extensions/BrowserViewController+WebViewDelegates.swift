@@ -449,7 +449,7 @@ extension BrowserViewController: WKNavigationDelegate {
     ) {
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
-        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+//        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -506,18 +506,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.allow)
             return
         }
-
-        // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
-//                if url.scheme == "javascript", navigationAction.request.isPrivileged {
-//                    decisionHandler(.cancel)
-//                    if let javaScriptString = url.absoluteString.replaceFirstOccurrence(
-//                        of: "javascript:",
-//                        with: ""
-//                    ).removingPercentEncoding {
-//                        webView.evaluateJavaScript(javaScriptString)
-//                    }
-//                    return
-//                }
 
         if isStoreURL(url) {
             decisionHandler(.cancel)
@@ -608,41 +596,54 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
-            let isGoogleDomain = url.host?.contains("google") ?? false
-            let isPrivate = tab.isPrivate
+            let policy = resolveHttpSchemes(
+                url: url,
+                webView: webView,
+                isPrivate: tab.isPrivate,
+                navigationType: navigationAction.navigationType
+            )
 
-            if navigationAction.navigationType == .linkActivated,
-               !shouldBlockExternalApps,
-               url != webView.url,
-               !isPrivate,
-               !isGoogleDomain {
-                decisionHandler(.allow)
-                return
-            }
-
-            decisionHandler(allowPolicy)
+            decisionHandler(policy)
             return
         }
 
+        // At this point the scheme is not supported so we try to open it in external app
         if !(url.scheme?.contains("firefox") ?? true) {
-            // Try to open the custom scheme URL, if it doesn't work we show an error alert
-            UIApplication.shared.open(url, options: [:]) { openedURL in
-                // Do not show error message for JS navigated links or
-                // redirect as it's not the result of a user action.
-                if !openedURL, navigationAction.navigationType == .linkActivated {
-                    let alert = UIAlertController(
-                        title: nil,
-                        message: .ExternalInvalidLinkMessage,
-                        preferredStyle: .alert
-                    )
-                    alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
+            resolveSchemeNotSupported(url: url, navigationActionType: navigationAction.navigationType)
         }
 
         decisionHandler(.cancel)
+    }
+
+    private func resolveHttpSchemes(url: URL,
+                                    webView: WKWebView,
+                                    isPrivate: Bool,
+                                    navigationType: WKNavigationType) -> WKNavigationActionPolicy {
+        var googleHosts = ["google"]
+        let blockExternalLinks = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+        if blockExternalLinks {
+            // block lens and voice to open google search
+            googleHosts.append("search.app.goo.gl")
+        }
+        let shouldAllowBlockingExternalLinks = blockExternalLinks ||
+                                               isPrivate ||
+                                               url == webView.url ||
+                                               navigationType != .linkActivated ||
+                                               googleHosts.contains(url.host ?? "")
+        if shouldAllowBlockingExternalLinks {
+            return WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+        }
+        return .allow
+    }
+
+    private func resolveSchemeNotSupported(url: URL, navigationActionType: WKNavigationType) {
+        let blockExternalLinks = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+        if !blockExternalLinks {
+            UIApplication.shared.open(url, options: [:]) { [weak self] urlWasOpened in
+                guard !urlWasOpened, navigationActionType == .linkActivated else { return }
+                self?.showExternalAlert(withText: .ExternalOpenMessage) { _ in }
+            }
+        }
     }
 
     func webView(
