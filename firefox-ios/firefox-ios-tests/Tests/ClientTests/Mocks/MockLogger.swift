@@ -9,6 +9,7 @@ class MockLogger: Logger {
     var savedMessage: String?
     var savedLevel: LoggerLevel?
     var savedCategory: LoggerCategory?
+    var savedExtra: [String: String]?
 
     func setup(sendCrashReports: Bool) {}
     func configure(crashManager: Common.CrashManager) {}
@@ -27,5 +28,6 @@ class MockLogger: Logger {
         savedMessage = message
         savedLevel = level
         savedCategory = category
+        savedExtra = extra
     }
 }
