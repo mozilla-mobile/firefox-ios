@@ -16,10 +16,10 @@ public protocol URLFormatter {
     func getURL(entry: String) -> URL?
 }
 
-final class DefaultURLFormatter: URLFormatter {
+public class DefaultURLFormatter: URLFormatter {
     private var securityManager: SecurityManager
 
-    init(securityManager: SecurityManager = DefaultSecurityManager()) {
+    public init(securityManager: SecurityManager = DefaultSecurityManager()) {
         self.securityManager = securityManager
     }
 
@@ -28,7 +28,7 @@ final class DefaultURLFormatter: URLFormatter {
         return CharacterSet(charactersIn: allowed)
     }
 
-    func getURL(entry: String) -> URL? {
+    public func getURL(entry: String) -> URL? {
         // If it's an Internal URL no formatting should happen
         if let url = URL(string: entry), WKInternalURL.isValid(url: url) {
             return URL(string: entry)

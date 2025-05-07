@@ -12,9 +12,17 @@ protocol SessionHandler: AnyObject {
     func received(error: NSError, forURL url: URL)
 }
 
+protocol WKJavascriptInterface: AnyObject {
+    /// Calls a javascript method.
+    /// - Parameter method: The method signature to be called in javascript world.
+    /// - Parameter scope: An optional string defining the scope in which the method should be called.
+    func callJavascriptMethod(_ method: String, scope: String?)
+}
+
 class WKEngineSession: NSObject,
                        EngineSession,
                        WKEngineWebViewDelegate,
+                       WKJavascriptInterface,
                        MetadataFetcherDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate? {
@@ -32,6 +40,7 @@ class WKEngineSession: NSObject,
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var metadataFetcher: MetadataFetcherHelper
+    private var contentBlockingSettings: WKContentBlockingSettings = []
     let navigationHandler: WKNavigationHandler
     private let uiHandler: WKUIHandler
     public var isActive = false {
@@ -254,6 +263,32 @@ class WKEngineSession: NSObject,
         metadataFetcher.delegate = nil
     }
 
+    func disableTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.remove(.standard)
+        contentBlockingSettings = settings
+    }
+
+    func switchToStandardTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.insert(.standard)
+        contentBlockingSettings = settings
+    }
+
+    func switchToStrictTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.standard)
+        settings.insert(.strict)
+        contentBlockingSettings = settings
+    }
+
+    func toggleNoImageMode() {
+        let settings = (contentBlockingSettings.rawValue ^ WKContentBlockingSettings.noImages.rawValue)
+        contentBlockingSettings = WKContentBlockingSettings(rawValue: settings)
+    }
+
     func updatePageZoom(_ change: ZoomChangeValue) {
         let zoomKey = "viewScale"
         let stepAmt = ZoomChangeValue.defaultStepIncrease
@@ -292,6 +327,8 @@ class WKEngineSession: NSObject,
         telemetryProxy?.handleTelemetry(event: .showErrorPage(errorCode: error.code))
         delegate?.onErrorPageRequest(error: error)
     }
+
+    // MARK: - WKJavascriptInterface
 
     func callJavascriptMethod(_ method: String, scope: String?) {
         guard let scope else {

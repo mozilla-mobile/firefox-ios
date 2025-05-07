@@ -63,6 +63,18 @@ public protocol EngineSession: NSObject {
     /// Close the session. This may free underlying objects. Call this when you are finished using this session.
     func close()
 
+    /// Switch to standard tracking protection mode.
+    func switchToStandardTrackingProtection()
+
+    /// Switch to strict tracking protection mode.
+    func switchToStrictTrackingProtection()
+
+    /// Disable all tracking protection.
+    func disableTrackingProtection()
+
+    /// Toggle image blocking mode.
+    func toggleNoImageMode()
+
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
 }
