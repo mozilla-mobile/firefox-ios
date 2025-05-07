@@ -686,11 +686,10 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request,
-                                               response: response,
-                                               cookieStore: cookieStore,
-                                               canShowInWebView: canShowInWebView,
-                                               forceDownload: forceDownload) {
+        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
+            downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
+                                              forceDownload: forceDownload,
+                                              isForMainFrame: navigationResponse.isForMainFrame) {
             // Clear the pending download web view so that subsequent navigations from the same
             // web view don't invoke another download.
             pendingDownloadWebView = nil

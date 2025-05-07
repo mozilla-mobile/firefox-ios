@@ -25,6 +25,8 @@ struct MIMEType {
     static let Calendar = "text/calendar"
     static let USDZ = "model/vnd.usdz+zip"
     static let Reality = "model/vnd.reality"
+    static let OpenDocument = "application/msword"
+    static let MicrosoftWord = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
     private static let webViewViewableTypes: [String] = [
         MIMEType.Bitmap,
@@ -34,10 +36,24 @@ struct MIMEType {
         MIMEType.PDF,
         MIMEType.PlainText,
         MIMEType.PNG,
-        MIMEType.WebP]
+        MIMEType.WebP
+    ]
+
+    private static let downloadableTypes: [String] = [
+        MIMEType.PDF,
+        MIMEType.OpenDocument,
+        MIMEType.MicrosoftWord,
+        MIMEType.PNG,
+        MIMEType.JPEG
+    ]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
         return webViewViewableTypes.contains(mimeType.lowercased())
+    }
+
+    static func canBeDownloaded(_ mimeType: String?) -> Bool {
+        guard let mimeType else { return false }
+        return downloadableTypes.contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
@@ -74,26 +90,41 @@ class DownloadHelper: NSObject {
     required init?(
         request: URLRequest?,
         response: URLResponse,
-        cookieStore: WKHTTPCookieStore,
-        canShowInWebView: Bool,
-        forceDownload: Bool
+        cookieStore: WKHTTPCookieStore
     ) {
         guard let request = request else { return nil }
-
-        let mimeType = response.mimeType ?? MIMEType.OctetStream
-        let isAttachment = mimeType == MIMEType.OctetStream
-
-        // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
-        // Leaving this here for now, but commented out. Checking this HTTP header is
-        // what Desktop does should we ever decide to change our minds on this.
-        // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
-        // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
-
-        guard isAttachment || !canShowInWebView || forceDownload else { return nil }
 
         self.cookieStore = cookieStore
         self.request = request
         self.preflightResponse = response
+    }
+
+    func shouldDownloadFile(canShowInWebView: Bool,
+                            forceDownload: Bool,
+                            isForMainFrame: Bool) -> Bool {
+        let mimeType = preflightResponse.mimeType ?? MIMEType.OctetStream
+
+        // Handles automatic Blob URL download
+        if mimeType == MIMEType.OctetStream {
+            return true
+        }
+
+        // Handles attachments downloads.
+        // Only supports PDF and Words docs but can be expanded to support more extensions
+        if shouldDownloadAttachment(isForMainFrame: isForMainFrame) {
+            return true
+        }
+
+        // Handles forced downloads && MIMETypes not supported on webview
+        return !canShowInWebView || forceDownload
+    }
+
+    func shouldDownloadAttachment(isForMainFrame: Bool) -> Bool {
+        let contentDisposition = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
+        let isAttachment = contentDisposition?.starts(with: "attachment") ?? false
+        let canBeDownloaded = MIMEType.canBeDownloaded(preflightResponse.mimeType) && !isForMainFrame
+
+        return isAttachment && canBeDownloaded
     }
 
     func downloadViewModel(windowUUID: WindowUUID,
