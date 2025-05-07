@@ -66,6 +66,79 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
+<<<<<<< HEAD
+=======
+                    with: .searchEngineConsolidation,
+                    titleText: format(string: "Consolidated Search"),
+                    statusText: format(string: "Toggle to use Consolidated Search")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .deeplinkOptimizationRefactor,
+                    titleText: format(string: "Deeplink Optimization Refactor"),
+                    statusText: format(string: "Toggle to enable deeplink optimization refactor")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .downloadLiveActivities,
+                    titleText: format(string: "Download Live Activities"),
+                    statusText: format(string: "Toggle to enable download live activities")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .trackingProtectionRefactor,
+                    titleText: format(string: "Enhanced Tracking Protection"),
+                    statusText: format(string: "Toggle to use enhanced tracking protection")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacyFeltDeletion,
+                    titleText: format(string: "Felt Privacy Deletion"),
+                    statusText: format(string: "Toggle to enable felt privacy deletion")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacySimplifiedUI,
+                    titleText: format(string: "Felt Privacy UI"),
+                    statusText: format(string: "Toggle to enable felt privacy UI")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .hntContentFeedRefresh,
+                    titleText: format(string: "Homepage Content Feed Refresh"),
+                    statusText: format(string: "Toggle to enable the content feed refresh")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .homepageRebuild,
+                    titleText: format(string: "Homepage Rebuild"),
+                    statusText: format(string: "Toggle to use the homepage rebuild")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .loginsVerificationEnabled,
+                    titleText: format(string: "Logins Verification"),
+                    statusText: format(string: "Toggle to enable logins verification")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .menuRefactor,
+                    titleText: format(string: "Menu Redesign"),
+                    statusText: format(string: "Toggle to use the menu redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+>>>>>>> 75dc3c8a1 (Add FXIOS-12198 Feature flag toggle for Consolidated Search (#26556))
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
