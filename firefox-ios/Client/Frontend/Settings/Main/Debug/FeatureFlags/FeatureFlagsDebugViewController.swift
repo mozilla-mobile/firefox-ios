@@ -88,16 +88,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .hntcontentFeedRefresh,
-                    titleText: format(string: "Content Feed Refresh"),
+                    with: .hntContentFeedRefresh,
+                    titleText: format(string: "Homepage Content Feed Refresh"),
                     statusText: format(string: "Toggle to enable the content feed refresh")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .hntTopSitesVisualRefresh,
-                    titleText: format(string: "Top Sites Visual Refresh"),
-                    statusText: format(string: "Toggle to enable the top sites visual refresh")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
@@ -183,6 +176,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .toolbarRefactor,
                     titleText: format(string: "Toolbar Redesign"),
                     statusText: format(string: "Toggle to enable the toolbar redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .hntTopSitesVisualRefresh,
+                    titleText: format(string: "Top Sites Visual Refresh"),
+                    statusText: format(string: "Toggle to enable the top sites visual refresh")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
