@@ -100,6 +100,8 @@ public struct PrefsKeys {
     public struct RemoteSettings {
         public static let lastRemoteSettingsServiceSyncTimestamp =
         "LastRemoteSettingsServiceSyncTimestamp"
+        public static let useQAStagingServerForRemoteSettings =
+        "useQAStagingServerForRemoteSettings"
     }
 
     public struct Sync {

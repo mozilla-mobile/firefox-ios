@@ -221,11 +221,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.telemetryID ?? "unavailable")
 
-        // Record the open tab count
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        let tabCount = windowManager.allWindowTabManagers().map({ $0.count }).reduce(0, +)
-        GleanMetrics.Tabs.cumulativeCount.add(Int32(tabCount))
-
         // Record other preference settings.
         // If the setting exists at the key location, use that value. Otherwise record the default
         // value for that preference to ensure it makes it into the metrics ping.
@@ -402,8 +397,6 @@ extension TelemetryWrapper {
         case tabPrivateQuantity = "private-tab-quantity"
         case tabInactiveQuantity = "inactive-tab-quantity"
         case iPadWindowCount = "ipad-window-count"
-        case groupedTab = "grouped-tab"
-        case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionSafelist = "tracking-protection-safelist"
         case trackingProtectionMenu = "tracking-protection-menu"
@@ -638,7 +631,6 @@ extension TelemetryWrapper {
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
         case openRecentlyClosedTab = "openRecentlyClosedTab"
-        case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
         case messageImpression = "message-impression"
         case messageDismissed = "message-dismissed"
@@ -862,18 +854,6 @@ extension TelemetryWrapper {
             GleanMetrics.QrCode.scanned.add()
 
         // MARK: Tabs
-        case (.action, .add, .tab, let privateOrNormal?, _):
-            GleanMetrics.Tabs.open[privateOrNormal.rawValue].add()
-        case (.action, .close, .tab, let privateOrNormal?, _):
-            GleanMetrics.Tabs.close[privateOrNormal.rawValue].add()
-        case (.action, .closeAll, .tab, let privateOrNormal?, _):
-            GleanMetrics.Tabs.closeAll[privateOrNormal.rawValue].add()
-        case (.action, .tap, .tab, _, _):
-            GleanMetrics.Tabs.clickTab.record()
-        case (.action, .open, .tabTray, _, _):
-            GleanMetrics.Tabs.openTabTray.record()
-        case (.action, .close, .tabTray, _, _):
-            GleanMetrics.Tabs.closeTabTray.record()
         case (.action, .press, .tabToolbar, .tabView, _):
             GleanMetrics.Tabs.pressTabToolbar.record()
         case (.action, .press, .tab, _, _):
@@ -895,24 +875,6 @@ extension TelemetryWrapper {
         case(.information, .background, .iPadWindowCount, _, let extras):
             if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
                 GleanMetrics.Windows.ipadWindowCount.set(quantity)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case(.information, .background, .tabNormalQuantity, _, let extras):
-            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
-                GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case(.information, .background, .tabPrivateQuantity, _, let extras):
-            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
-                GleanMetrics.Tabs.privateTabsQuantity.set(quantity)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case(.information, .background, .tabInactiveQuantity, _, let extras):
-            if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
-                GleanMetrics.Tabs.inactiveTabsCount.set(quantity)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -1595,21 +1557,6 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .newPrivateTab, .tabTray, _):
             GleanMetrics.TabsTray.newPrivateTabTapped.record()
-
-        // MARK: Tab Groups
-        case (.action, .view, .tabTray, .tabGroupWithExtras, let extras):
-           let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra(
-            averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32,
-            groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32,
-            groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32,
-            totalNumOfGroups: extras?["\(EventExtraKey.totalNumberOfGroups)"] as? Int32,
-            totalTabsInAllGroups: extras?["\(EventExtraKey.totalTabsInAllGroups)"] as? Int32)
-            GleanMetrics.Tabs.groupedTab.record(groupedTabExtras)
-        case (.action, .tap, .groupedTab, .closeGroupedTab, _):
-            GleanMetrics.Tabs.groupedTabClosed.add()
-        case (.action, .tap, .groupedTabPerformSearch, _, _):
-            GleanMetrics.Tabs.groupedTabSearch.add()
-
         // MARK: Firefox Homepage
         case (.action, .view, .firefoxHomepage, .fxHomepageOrigin, let extras):
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
