@@ -21,12 +21,10 @@ enum TabTrayPanelType: Int, CaseIterable {
         }
     }
 
-    func getLabel(hasMoreThanOneTab: Bool = false, tabsCount: String = "") -> String {
+    var label: String {
         switch self {
         case .tabs:
-            return hasMoreThanOneTab ?
-                String(format: .TabsTray.TabsSelectorNormalTabsTitleOther, tabsCount) :
-                .TabsTray.TabsSelectorNormalTabsTitleOne
+            return .TabsTray.TabsSelectorNormalTabsTitle
         case .privateTabs:
             return .TabsTray.TabsSelectorPrivateTabsTitle
         case .syncedTabs:

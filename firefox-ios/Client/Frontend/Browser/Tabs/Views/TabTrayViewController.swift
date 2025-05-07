@@ -110,9 +110,9 @@ class TabTrayViewController: UIViewController,
         let selectedIndex = experimentConvertSelectedIndex()
         let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
-        selector.items = [TabTrayPanelType.privateTabs.getLabel(),
-                          TabTrayPanelType.tabs.getLabel(),
-                          TabTrayPanelType.syncedTabs.getLabel()]
+        selector.items = [TabTrayPanelType.privateTabs.label,
+                          String(format: TabTrayPanelType.tabs.label, "0"),
+                          TabTrayPanelType.syncedTabs.label]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
@@ -151,10 +151,9 @@ class TabTrayViewController: UIViewController,
         ]
 
         let regularLayoutItems = [
-            TabTrayPanelType.tabs.getLabel(hasMoreThanOneTab: tabTrayState.hasMoreThanOneTab,
-                                           tabsCount: tabTrayState.normalTabsCount),
-            TabTrayPanelType.privateTabs.getLabel(),
-            TabTrayPanelType.syncedTabs.getLabel(),
+            String(format: TabTrayPanelType.tabs.label, tabTrayState.normalTabsCount),
+            TabTrayPanelType.privateTabs.label,
+            TabTrayPanelType.syncedTabs.label,
         ]
 
         return isRegularLayout ? regularLayoutItems : iPhoneItems
@@ -388,10 +387,8 @@ class TabTrayViewController: UIViewController,
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
         if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = TabTrayPanelType.tabs.getLabel(
-                hasMoreThanOneTab: tabTrayState.hasMoreThanOneTab,
-                tabsCount: tabTrayState.normalTabsCount
-            )
+            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label,
+                                                       tabTrayState.normalTabsCount)
         }
     }
 

@@ -2747,16 +2747,11 @@ extension String {
             tableName: nil,
             value: "Currently selected tab.",
             comment: "Accessibility label for the currently selected tab.")
-        public static let TabsSelectorNormalTabsTitleOne = MZLocalizedString(
-            key: "TabTray.TabsSelectorNormalTabsTitleOne.v140",
+        public static let TabsSelectorNormalTabsTitle = MZLocalizedString(
+            key: "TabTray.TabsSelectorNormalTabsTitle.v140",
             tableName: "TabsTray",
-            value: "1 Tab",
-            comment: "The title on the button to look at regular tabs when there is only one tab in the regular tabs tray.")
-        public static let TabsSelectorNormalTabsTitleOther = MZLocalizedString(
-            key: "TabTray.TabsSelectorNormalTabsTitleOther.v140",
-            tableName: "TabsTray",
-            value: "%@ Tabs",
-            comment: "The title on the button to look at regular tabs when there is more than 1 tab in the regular tabs tray. %@ is the number of regular tabs.")
+            value: "Tabs: %@",
+            comment: "The title on the button to look at regular tabs. %@ is the number of regular tabs.")
         public static let TabsSelectorSyncedTabsTitle = MZLocalizedString(
             key: "TabTray.TabsSelectorSyncedTabsTitle.v140",
             tableName: "TabsTray",
