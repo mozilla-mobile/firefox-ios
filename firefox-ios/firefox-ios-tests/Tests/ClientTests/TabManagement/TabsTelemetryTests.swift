@@ -27,9 +27,9 @@ class TabsTelemetryTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         profile = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testTabSwitchMeasurement() throws {
