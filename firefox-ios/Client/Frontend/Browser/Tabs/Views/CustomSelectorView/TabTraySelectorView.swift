@@ -158,13 +158,7 @@ class TabTraySelectorView: UIView,
             self.layoutIfNeeded()
         }, completion: nil)
 
-        var panelType: TabTrayPanelType = .tabs
-        switch selectedIndex {
-        case 0: panelType = .privateTabs
-        case 1: panelType = .tabs
-        case 2: panelType = .syncedTabs
-        default: break
-        }
+        let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
         delegate?.didSelectSection(panelType: panelType)
     }
 
