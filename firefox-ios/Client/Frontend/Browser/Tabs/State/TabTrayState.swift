@@ -33,6 +33,11 @@ struct TabTrayState: ScreenState, Equatable {
         return selectedPanel == .tabs
     }
 
+    // Avoid changing the `normalTabsCount` String type to an Int type for simplicity
+    var hasMoreThanOneTab: Bool {
+        return normalTabsCount != "1" && normalTabsCount != "0"
+    }
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let panelState = store.state.screenState(TabTrayState.self,
                                                        for: .tabsTray,

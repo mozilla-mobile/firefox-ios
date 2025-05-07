@@ -110,9 +110,9 @@ class TabTrayViewController: UIViewController,
         let selectedIndex = experimentConvertSelectedIndex()
         let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
-        selector.items = [TabTrayPanelType.privateTabs.label,
-                          String(format: TabTrayPanelType.tabs.label, "0"),
-                          TabTrayPanelType.syncedTabs.label]
+        selector.items = [TabTrayPanelType.privateTabs.getLabel(),
+                          TabTrayPanelType.tabs.getLabel(),
+                          TabTrayPanelType.syncedTabs.getLabel()]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
@@ -147,8 +147,17 @@ class TabTrayViewController: UIViewController,
         let iPhoneItems = [
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
             TabTrayPanelType.privateTabs.image!,
-            TabTrayPanelType.syncedTabs.image!]
-        return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
+            TabTrayPanelType.syncedTabs.image!
+        ]
+
+        let regularLayoutItems = [
+            TabTrayPanelType.tabs.getLabel(hasMoreThanOneTab: tabTrayState.hasMoreThanOneTab,
+                                           tabsCount: tabTrayState.normalTabsCount),
+            TabTrayPanelType.privateTabs.getLabel(),
+            TabTrayPanelType.syncedTabs.getLabel(),
+        ]
+
+        return isRegularLayout ? regularLayoutItems : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -379,7 +388,10 @@ class TabTrayViewController: UIViewController,
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
         if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
+            experimentSegmentControl.items[1] = TabTrayPanelType.tabs.getLabel(
+                hasMoreThanOneTab: tabTrayState.hasMoreThanOneTab,
+                tabsCount: tabTrayState.normalTabsCount
+            )
         }
     }
 
