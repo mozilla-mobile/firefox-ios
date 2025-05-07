@@ -66,8 +66,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
-<<<<<<< HEAD
-=======
                     with: .searchEngineConsolidation,
                     titleText: format(string: "Consolidated Search"),
                     statusText: format(string: "Toggle to use Consolidated Search")
@@ -138,7 +136,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
->>>>>>> 75dc3c8a1 (Add FXIOS-12198 Feature flag toggle for Consolidated Search (#26556))
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
