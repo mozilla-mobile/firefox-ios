@@ -43,6 +43,9 @@ class DependencyHelper {
         )
         AppContainer.shared.register(service: pocketManager)
 
+        let documentLogger = appDelegate.documentLogger
+        AppContainer.shared.register(service: documentLogger)
+
         let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService =
         appDelegate.gleanUsageReportingMetricsService
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
