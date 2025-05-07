@@ -387,8 +387,7 @@ class TabTrayViewController: UIViewController,
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
         if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label,
-                                                       tabTrayState.normalTabsCount)
+            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
         }
     }
 
