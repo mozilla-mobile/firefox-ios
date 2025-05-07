@@ -2165,7 +2165,7 @@ workflows:
             envman add --key BITRISE_SCHEME --value FirefoxStaging
             envman add --key EXPORT_METHOD --value development
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "staging-firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "staging-firefox-ios"}}
     - script@1.2.1:
         inputs:
         - content: |-
@@ -2177,7 +2177,7 @@ workflows:
             cd -
         title: Set xcodeproj code_sign_identity
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
     - script@1.2.1:
         title: NPM, ContentBlockerGen
         inputs:
@@ -2271,7 +2271,7 @@ workflows:
     - script@1.2.1:
         title: Upload Firefox Prod Beta Symbols
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -2281,7 +2281,7 @@ workflows:
     - deploy-to-itunesconnect-application-loader@1:
         title: Deploy to AppStoreConnect
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
         inputs:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"

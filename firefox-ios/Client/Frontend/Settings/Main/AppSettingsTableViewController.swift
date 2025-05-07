@@ -465,7 +465,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
-            DeleteLoginsKeysSetting(settings: self)
+            DeleteLoginsKeysSetting(settings: self),
+            ChangeRSServerSetting(settings: self),
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

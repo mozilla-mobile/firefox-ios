@@ -238,62 +238,6 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.CfrAnalytics.pressCfrActionButton.testGetValue())
     }
 
-    // MARK: - Tabs quantity
-
-    func test_tabsNormalQuantity_GleanIsCalled() {
-        let expectTabCount: Int64 = 80
-        let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabNormalQuantity,
-            value: nil,
-            extras: extra
-        )
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity,
-                                  expectedValue: expectTabCount,
-                                  failureMessage: "Should have \(expectTabCount) tabs for normal tabs")
-    }
-
-    func test_tabsPrivateQuantity_GleanIsCalled() {
-        let expectTabCount: Int64 = 60
-        let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabPrivateQuantity,
-            value: nil,
-            extras: extra
-        )
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
-                                  expectedValue: expectTabCount,
-                                  failureMessage: "Should have \(expectTabCount) tabs for private tabs")
-    }
-
-    func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabNormalQuantity,
-            value: nil,
-            extras: nil
-        )
-        XCTAssertNil(GleanMetrics.Tabs.normalTabsQuantity.testGetValue())
-    }
-
-    func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabPrivateQuantity,
-            value: nil,
-            extras: nil
-        )
-        XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
-    }
-
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
