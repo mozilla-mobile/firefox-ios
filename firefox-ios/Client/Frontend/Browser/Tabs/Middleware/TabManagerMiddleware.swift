@@ -740,6 +740,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
             let browserProfile = self.profile as? BrowserProfile
             browserProfile?.tabs.getClientGUIDs { (result, error) in
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
                                          isSyncEnabled: !(result?.isEmpty ?? true),
                                          screenshot: tab?.screenshot ?? UIImage(),
                                          accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
