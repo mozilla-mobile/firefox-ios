@@ -490,6 +490,9 @@ class O_AddressesTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
         app.webViews.textFields.element(boundBy: 1).waitAndTap()
+        if iPad() {
+            app.buttons["_previousTapped"].waitAndTap()
+        }
         let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
         let manageAddresses = AccessibilityIdentifiers.Autofill.footerPrimaryAction
         app.buttons[addressAutofillButton].waitAndTap()
@@ -543,6 +546,10 @@ class O_AddressesTests: BaseTestCase {
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
         // Using indexes to tap on text fields to comodate with iOS 16 OS
         app.webViews.textFields.element(boundBy: indexField).waitAndTap()
+        if iPad() {
+            app.buttons["_previousTapped"].waitAndTap()
+            app.buttons["_nextTapped"].waitAndTap()
+        }
         // The option to open saved Addresses is available
         let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
         mozWaitForElementToExist(app.buttons[addressAutofillButton])

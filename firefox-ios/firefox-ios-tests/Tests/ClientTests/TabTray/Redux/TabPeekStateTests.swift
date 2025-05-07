@@ -41,6 +41,7 @@ final class TabPeekStateTests: XCTestCase {
 
         let model = TabPeekModel(
             canTabBeSaved: false,
+            canCopyURL: true,
             isSyncEnabled: true,
             screenshot: UIImage(),
             accessiblityLabel: ""
@@ -61,6 +62,7 @@ final class TabPeekStateTests: XCTestCase {
 
         let model = TabPeekModel(
             canTabBeSaved: true,
+            canCopyURL: true,
             isSyncEnabled: false,
             screenshot: UIImage(),
             accessiblityLabel: ""
@@ -85,6 +87,7 @@ final class TabPeekStateTests: XCTestCase {
         for actionType: TabPeekActionType,
         with model: TabPeekModel = TabPeekModel(
             canTabBeSaved: true,
+            canCopyURL: true,
             isSyncEnabled: true,
             screenshot: UIImage(),
             accessiblityLabel: "tabpeek-a11y-label"

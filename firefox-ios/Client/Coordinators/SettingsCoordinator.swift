@@ -13,17 +13,17 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
-class SettingsCoordinator: BaseCoordinator,
-                           SettingsDelegate,
-                           SettingsFlowDelegate,
-                           GeneralSettingsDelegate,
-                           PrivacySettingsDelegate,
-                           PasswordManagerCoordinatorDelegate,
-                           AccountSettingsDelegate,
-                           AboutSettingsDelegate,
-                           ParentCoordinatorDelegate,
-                           QRCodeNavigationHandler,
-                           BrowsingSettingsDelegate {
+final class SettingsCoordinator: BaseCoordinator,
+                                 SettingsDelegate,
+                                 SettingsFlowDelegate,
+                                 GeneralSettingsDelegate,
+                                 PrivacySettingsDelegate,
+                                 PasswordManagerCoordinatorDelegate,
+                                 AccountSettingsDelegate,
+                                 AboutSettingsDelegate,
+                                 ParentCoordinatorDelegate,
+                                 QRCodeNavigationHandler,
+                                 BrowsingSettingsDelegate {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -130,7 +130,10 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .search:
-            let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
+            let viewController = SearchSettingsTableViewController(
+                profile: profile,
+                windowUUID: windowUUID
+            )
             return viewController
 
         case .clearPrivateData:
@@ -365,7 +368,10 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSearchEngine() {
-        let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
+        let viewController = SearchSettingsTableViewController(
+            profile: profile,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
     }
 

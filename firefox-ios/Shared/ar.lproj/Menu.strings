@@ -19,22 +19,22 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "افتح لسانًا جديدًا";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
 "Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "العلامات";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
 "Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "التنزيلات";
 
-/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "التأريخ";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
 "Menu.OpenReadingListAction.AccessibilityLabel.v2" = "قائمة القراءة";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "الإعدادات";
 
-/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "الألسنة المُزامنة";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */

@@ -9,6 +9,8 @@ import Foundation
 class MockSearchEnginesManager: SearchEnginesManagerProvider {
     private let searchEngines: [OpenSearchEngine]
 
+    weak var delegate: (any SearchEngineDelegate)?
+
     var defaultEngine: OpenSearchEngine? {
         return searchEngines.first
     }

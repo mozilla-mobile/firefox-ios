@@ -264,6 +264,10 @@ struct AccessibilityIdentifiers {
     struct TabTray {
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
+        static let deleteOlderTabsButton = "TabTrayController.deleteButton.closeOlderTabs"
+        static let deleteTabsOlderThan1DayButton = "TabTrayController.deleteButton.olderThan1Day"
+        static let deleteTabsOlderThan1WeekButton = "TabTrayController.deleteButton.olderThan1Week"
+        static let deleteTabsOlderThan1MonthButton = "TabTrayController.deleteButton.olderThan1Month"
         static let syncedTabs = "Synced Tabs"
         static let closeAllTabsButton = "closeAllTabsButtonTabTray"
         static let newTabButton = "newTabButtonTabTray"
@@ -275,7 +279,7 @@ struct AccessibilityIdentifiers {
         static let learnMoreButton = "learnMoreButton"
         static let collectionView = "TabDisplayView.collectionView"
         static let tabCell = "TabDisplayView.tabCell"
-        static let closeButton = "badge mask"
+        static let closeButton = "tabCloseButton"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"

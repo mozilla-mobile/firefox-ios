@@ -4,12 +4,15 @@
 
 @testable import Client
 
+import Common
 import Glean
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
     typealias ValueKey = TelemetryWrapper.EventValue
+
+    var profile: Profile!
 
     override func setUp() {
         super.setUp()
@@ -20,11 +23,14 @@ class TelemetryWrapperTests: XCTestCase {
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
+
+        profile = MockProfile()
     }
 
     override func tearDown() {
         Experiments.events.clearEvents()
         DependencyHelperMock().reset()
+        profile = nil
         super.tearDown()
     }
 
@@ -232,62 +238,6 @@ class TelemetryWrapperTests: XCTestCase {
         XCTAssertNil(GleanMetrics.CfrAnalytics.pressCfrActionButton.testGetValue())
     }
 
-    // MARK: - Tabs quantity
-
-    func test_tabsNormalQuantity_GleanIsCalled() {
-        let expectTabCount: Int64 = 80
-        let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabNormalQuantity,
-            value: nil,
-            extras: extra
-        )
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity,
-                                  expectedValue: expectTabCount,
-                                  failureMessage: "Should have \(expectTabCount) tabs for normal tabs")
-    }
-
-    func test_tabsPrivateQuantity_GleanIsCalled() {
-        let expectTabCount: Int64 = 60
-        let extra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: expectTabCount]
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabPrivateQuantity,
-            value: nil,
-            extras: extra
-        )
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
-                                  expectedValue: expectTabCount,
-                                  failureMessage: "Should have \(expectTabCount) tabs for private tabs")
-    }
-
-    func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabNormalQuantity,
-            value: nil,
-            extras: nil
-        )
-        XCTAssertNil(GleanMetrics.Tabs.normalTabsQuantity.testGetValue())
-    }
-
-    func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .information,
-            method: .background,
-            object: .tabPrivateQuantity,
-            value: nil,
-            extras: nil
-        )
-        XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
-    }
-
     // MARK: - Onboarding
     func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() {
         let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
@@ -333,7 +283,6 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: Wallpapers
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
-        let profile = MockProfile()
         TelemetryWrapper.shared.setup(profile: profile)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
@@ -354,7 +303,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
-        let profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile)
 

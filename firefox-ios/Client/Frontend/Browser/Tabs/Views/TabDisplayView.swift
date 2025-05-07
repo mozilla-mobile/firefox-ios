@@ -278,6 +278,7 @@ class TabDisplayView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         collectionView.backgroundColor = theme.colors.layer3
+        collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
 
     private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
@@ -307,6 +308,7 @@ class TabDisplayView: UIView,
                 let tabUUID = inactiveTabsModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
+                                                selectedTabIndex: indexPath.item,
                                                 isInactiveTab: true,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
@@ -315,6 +317,7 @@ class TabDisplayView: UIView,
                 let tabUUID = tabModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
+                                                selectedTabIndex: indexPath.item,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)
@@ -365,7 +368,7 @@ class TabDisplayView: UIView,
                                         actionType: TabPanelViewActionType.closeTab)
         store.dispatch(action)
         UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
-                             argument: String.TabTrayClosingTabAccessibilityMessage)
+                             argument: String.TabsTray.TabTrayClosingTabAccessibilityMessage)
     }
 
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {

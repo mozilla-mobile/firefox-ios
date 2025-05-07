@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "Διαγραφή";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "Από την αρχή";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "Τελευταίες 4 εβδομάδες";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "Τελευταία ώρα";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "Τελευταίες 7 ημέρες";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Τελευταίες 24 ώρες";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Διαγράφει το ιστορικό (και το συγχρονισμένο ιστορικό άλλων συσκευών), τα cookie και άλλα δεδομένα περιήγησης.";
+

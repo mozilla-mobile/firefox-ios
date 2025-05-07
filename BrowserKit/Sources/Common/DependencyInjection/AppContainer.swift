@@ -16,8 +16,12 @@ public class AppContainer: ServiceProvider {
 
     /// Any services needed by the client can be resolved by calling this.
     public func resolve<T>() -> T {
+        resolve(T.self)
+    }
+
+    public func resolve<T>(_ type: T.Type) -> T {
         do {
-            guard let service = try container.resolve(T.self) as? T else {
+            guard let service = try container.resolve(type) as? T else {
                 fatalError("Failed to cast resolved service to type \(T.self)")
             }
             return service

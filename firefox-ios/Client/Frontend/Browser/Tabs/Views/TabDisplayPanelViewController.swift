@@ -92,7 +92,7 @@ class TabDisplayPanelViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.accessibilityLabel = .TabTrayViewAccessibilityLabel
+        view.accessibilityLabel = .TabsTray.TabTrayViewAccessibilityLabel
         setupView()
         listenForThemeChange(view)
         applyTheme()
@@ -180,21 +180,36 @@ class TabDisplayPanelViewController: UIViewController,
         fadeView.isHidden = !shouldShow
     }
 
-    private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+    private func retrieveTheme() -> Theme {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    // MARK: Themeable
+    var shouldUsePrivateOverride: Bool {
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        return tabTrayState?.isPrivateMode ?? false
     }
 
     func applyTheme() {
-        backgroundPrivacyOverlay.backgroundColor = currentTheme().colors.layerScrim
-        tabDisplayView.applyTheme(theme: currentTheme())
-        emptyPrivateTabsView.applyTheme(theme: currentTheme())
+        let theme = retrieveTheme()
+        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: theme)
+        emptyPrivateTabsView.applyTheme(theme: theme)
 
         if isTabTrayUIExperimentsEnabled {
             gradientLayer.colors = [
-                currentTheme().colors.layer3.cgColor,
-                currentTheme().colors.layer3.cgColor,
-                currentTheme().colors.layer3.withAlphaComponent(0.95).cgColor,
-                currentTheme().colors.layer3.withAlphaComponent(0.0).cgColor
+                theme.colors.layer3.cgColor,
+                theme.colors.layer3.cgColor,
+                theme.colors.layer3.withAlphaComponent(0.95).cgColor,
+                theme.colors.layer3.withAlphaComponent(0.0).cgColor
             ]
         }
     }
@@ -234,6 +249,10 @@ class TabDisplayPanelViewController: UIViewController,
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
         shouldShowFadeView()
+
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            applyTheme()
+        }
     }
 
     // MARK: EmptyPrivateTabsViewDelegate

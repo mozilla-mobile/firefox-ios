@@ -2,6 +2,12 @@
 "Address.Bar.Reload.A11y.Hint.v124" = "ແຕະສອງເທື່ອຄ້າງໄວ້ສຳລັບທາງເລືອກເພີ່ມເຕີມ";
 
 /* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "ການເຊື່ອມຕໍ່ບໍ່ປອດໄພ. ການປົກປ້ອງການຕິດຕາມທີ່ປັບປຸງດີຂຶ້ນປິດຢູ່.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "ການເຊື່ອມຕໍ່ທີ່ປອດໄພ. ການປົກປ້ອງການຕິດຕາມທີ່ປັບປຸງດີຂຶ້ນປິດຢູ່.";
+
+/* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "ການເຊື່ອມຕໍ່ບໍ່ປອດໄພ";
 
 /* Accessibility label for the security icon in url bar */
@@ -21,4 +27,10 @@
 
 /* Accessibility label for the shopping button in url bar */
 "TabLocation.Shopping.A11y.Label.v120" = "ກວດສອບການກວດສອບ";
+
+/* Large content title for the tabs button. %@ is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "ສະແດງແຖບ: %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "ລືບຫນ້ານີ້";
 

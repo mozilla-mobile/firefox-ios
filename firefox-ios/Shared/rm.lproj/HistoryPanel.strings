@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "Stizzar";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "Dapi adina";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "Las ultimas 4 emnas";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "L’ultima ura";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "Ils ultims 7 dis";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Las ultimas 24 uras";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Stizza la cronologia (inclusivamain la cronologia sincronisada dad auters apparats), cookies ed autras datas da navigaziun.";
+

@@ -45,7 +45,7 @@ class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.text = .TabTrayPrivateBrowsingDescription
+        label.text = .TabsTray.TabTrayPrivateBrowsingDescription
     }
 
     private lazy var learnMoreButton: SecondaryRoundedButton = .build { button in
