@@ -49,6 +49,9 @@ struct AppearanceSettingsView: View {
                                    isEnabled: NightModeHelper.isActivated(),
                                    onChange: setWebsiteDarkMode)
             }
+            GenericSectionView(theme: currentTheme, title: String.PageZoomSectionHeader) {
+                GenericItemCellView(title: String.PageZoomTitle, theme: currentTheme)
+            }
             Spacer()
         }
         .padding(.top, UX.spacing)

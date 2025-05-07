@@ -5670,6 +5670,16 @@ extension String {
         tableName: nil,
         value: "Gives websites a dark appearance. Some sites might not look right.",
         comment: "Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature.")
+    public static let PageZoomSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.PageZoom.SectionHeader.v140",
+        tableName: nil,
+        value: "Zoom Settings",
+        comment: "Page zoom section header title in Appearance settings")
+    public static let PageZoomTitle = MZLocalizedString(
+        key: "Settings.Appearance.PageZoom.Title.v140",
+        tableName: nil,
+        value: "Page Zoom",
+        comment: "Page zoom settings title in Appearance settings")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString(
         key: "Settings.DisplayTheme.BrightnessThreshold.SectionHeader",
         tableName: nil,
