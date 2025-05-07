@@ -88,6 +88,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .hntContentFeedRefresh,
+                    titleText: format(string: "Homepage Content Feed Refresh"),
+                    statusText: format(string: "Toggle to enable the content feed refresh")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .homepageRebuild,
                     titleText: format(string: "Homepage Rebuild"),
                     statusText: format(string: "Toggle to use the homepage rebuild")
