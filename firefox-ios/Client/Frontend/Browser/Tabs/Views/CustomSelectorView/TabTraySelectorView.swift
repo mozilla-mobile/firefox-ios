@@ -78,8 +78,8 @@ class TabTraySelectorView: UIView,
             button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
 
             button.titleLabel?.font = index == selectedIndex ?
-            FXFontStyles.Bold.body.scaledFont() :
-            FXFontStyles.Regular.body.scaledFont()
+                FXFontStyles.Bold.body.scaledFont() :
+                FXFontStyles.Regular.body.scaledFont()
 
             button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
             button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
