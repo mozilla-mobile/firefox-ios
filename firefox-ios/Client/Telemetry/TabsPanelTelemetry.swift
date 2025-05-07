@@ -84,10 +84,9 @@ struct TabsPanelTelemetry {
     }
 
     func deleteNormalTabsSheetOptionSelected(period: TabsDeletionPeriod) {
-        // Laurie
-//        let extras = GleanMetrics.DeleteNormalTabsSheetOptionSelected.OptionSelectedExtra(
-//            period: period.rawValue,
-//        )
-//        gleanWrapper.recordEvent(for: GleanMetrics.DeleteNormalTabsSheetOptionSelected.optionSelected, extras: extras)
+        let extras = GleanMetrics.TabsPanel.DeleteTabsSheetOptionSelectedExtra(
+            period: period.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.deleteTabsSheetOptionSelected, extras: extras)
     }
 }
