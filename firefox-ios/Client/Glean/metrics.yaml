@@ -3637,7 +3637,9 @@ tabs_panel:
     metadata:
       tags:
         - TabsPanel
-  delete_tabs_sheet_option_selected:
+
+tabs_panel.close_old_tabs_sheet:
+  option_selected:
     type: event
     description: |
       Recorded when the user taps an option in the close old tabs sheet.
