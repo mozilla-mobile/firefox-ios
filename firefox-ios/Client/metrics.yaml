@@ -6266,6 +6266,79 @@ fx_suggest:
     send_in_pings:
       - fx-suggest
 
+# Zoom Bar
+zoom_bar:
+  zoom_out_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the zoom out button in the zoom bar. 
+      This will cause the current webpage to zoom out.
+    extra_keys:
+      level:
+        type: quantity
+        description: |
+          The new zoom level shown on the zoom bar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+  zoom_in_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the zoom in button in the zoom bar. 
+      This will cause the current webpage to zoom in.
+    extra_keys:
+      level:
+        type: quantity
+        description: |
+          The new zoom level shown on the zoom bar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+  reset_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the current zoom percentage to reset the zoom  
+      level in the zoom bar. This will cause the current webpage to reset 
+      back to the default 100% zoom level.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+  close_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the close button to close the zoom bar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+
 # Window (iPad) metrics
 windows:
   ipad_window_count:
