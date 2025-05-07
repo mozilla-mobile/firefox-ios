@@ -1979,8 +1979,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateToolbarAnimationStateIfNeeded() {
-        guard isSwipingTabsEnabled,
-              isToolbarRefactorEnabled,
+        guard isToolbarRefactorEnabled,
         store.state.screenState(
             ToolbarState.self,
             for: .toolbar,
@@ -2387,6 +2386,13 @@ class BrowserViewController: UIViewController,
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
+            store.dispatch(
+                ToolbarAction(
+                    shouldAnimate: false,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.animationStateChanged
+                )
+            )
         case .share:
             // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
