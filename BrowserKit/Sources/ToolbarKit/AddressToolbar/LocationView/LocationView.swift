@@ -135,7 +135,8 @@ final class LocationView: UIView,
                    delegate: LocationViewDelegate,
                    isUnifiedSearchEnabled: Bool,
                    toolbarCornerRadius: CGFloat,
-                   isLocationTextCentered: Bool) {
+                   isLocationTextCentered: Bool,
+                   locationTextFieldTrailingPadding: CGFloat) {
         isURLTextFieldCentered = isLocationTextCentered
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
@@ -150,7 +151,8 @@ final class LocationView: UIView,
         configureA11y(config)
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
-                            isURLTextFieldCentered: isURLTextFieldCentered)
+                            isURLTextFieldCentered: isURLTextFieldCentered,
+                            locationTextFieldTrailingPadding: locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
         handleGesture(
             &longPressGestureRecognizer,
@@ -308,7 +310,8 @@ final class LocationView: UIView,
     }
 
     private func updateIconContainer(iconContainerCornerRadius: CGFloat,
-                                     isURLTextFieldCentered: Bool) {
+                                     isURLTextFieldCentered: Bool,
+                                     locationTextFieldTrailingPadding: CGFloat) {
         iconContainerBackgroundView.layer.cornerRadius = iconContainerCornerRadius
         guard !isEditing else {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
@@ -323,7 +326,7 @@ final class LocationView: UIView,
             updateUIForLockIconDisplay()
         }
         animateIconAppearance()
-        urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
+        urlTextFieldTrailingConstraint?.constant = -locationTextFieldTrailingPadding
     }
 
     private func animateIconAppearance() {
