@@ -88,6 +88,7 @@ final class HomepageMiddleware {
         // Time complexity: O(n), where n is the number of windows in windowManager.windows
         // In the case of the phone layout, there should only be one window so n = 1
 
+        // TODO: FXIOS-12199 Update to improve how we handle notifications for multi-window
         windowManager.windows.forEach { windowUUID, _ in
             switch notification.name {
             case UIApplication.willEnterForegroundNotification:
