@@ -49,9 +49,20 @@ class TabTrayViewController: UIViewController,
     var notificationCenter: NotificationProtocol
 
     // MARK: Child panel and navigation
-    var childPanelControllers = [UINavigationController]()
+    var childPanelControllers = [UINavigationController]() {
+        didSet {
+            setupSlidingPanel()
+        }
+    }
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
+
+    private lazy var panelStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+    }
+    private lazy var panelContainer: UIView = .build { _ in }
+    private var panelStackLeadingConstraint: NSLayoutConstraint?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
@@ -436,7 +447,23 @@ class TabTrayViewController: UIViewController,
             containerView.addSubview(experimentSegmentControl)
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
+            containerView.addSubview(panelContainer)
+            panelContainer.addSubview(panelStackView)
+            panelStackLeadingConstraint = panelStackView.leadingAnchor.constraint(equalTo: panelContainer.leadingAnchor)
+
             NSLayoutConstraint.activate([
+                panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
+                panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                panelContainer.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
+                                                       constant: -UX.segmentedControlTopSpacing),
+
+                panelStackLeadingConstraint!,
+                panelStackView.topAnchor.constraint(equalTo: panelContainer.topAnchor),
+                panelStackView.bottomAnchor.constraint(equalTo: panelContainer.bottomAnchor),
+                panelStackView.heightAnchor.constraint(equalTo: panelContainer.heightAnchor),
+                panelStackView.widthAnchor.constraint(equalTo: panelContainer.widthAnchor, multiplier: 3.0),
+
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -614,9 +641,12 @@ class TabTrayViewController: UIViewController,
         segmentedControl.selectedSegmentIndex = panelType.rawValue
         updateTitle()
         updateLayout()
-        hideCurrentPanel()
-        showPanel(currentPanel)
-        navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
+
+        if !isTabTrayUIExperimentsEnabled {
+            hideCurrentPanel()
+            showPanel(currentPanel)
+            navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
+        }
     }
 
     private func showPanel(_ panel: UIViewController) {
@@ -627,25 +657,34 @@ class TabTrayViewController: UIViewController,
         panel.endAppearanceTransition()
         panel.view.translatesAutoresizingMaskIntoConstraints = false
 
-        if isTabTrayUIExperimentsEnabled, !isRegularLayout {
-            NSLayoutConstraint.activate([
-                panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-                panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
-                                                   constant: -UX.segmentedControlTopSpacing),
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-                panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-            ])
-        }
+        NSLayoutConstraint.activate([
+            panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+        ])
 
         panel.didMove(toParent: self)
         updateTitle()
+    }
+
+    func setupSlidingPanel() {
+        for (index, controller) in childPanelControllers.enumerated() {
+            addChild(controller)
+            let view = controller.view!
+            panelStackView.addArrangedSubview(view)
+            controller.didMove(toParent: self)
+            view.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                view.widthAnchor.constraint(equalTo: panelContainer.widthAnchor),
+                view.heightAnchor.constraint(equalTo: panelContainer.heightAnchor)
+            ])
+
+            if let panelType = TabTrayPanelType(rawValue: index) {
+                navigationHandler?.start(panelType: panelType, navigationController: controller)
+            }
+        }
     }
 
     private func hideCurrentPanel() {
@@ -812,7 +851,22 @@ class TabTrayViewController: UIViewController,
     func didSelectSection(panelType: TabTrayPanelType) {
         guard tabTrayState.selectedPanel != panelType else { return }
 
-        setupOpenPanel(panelType: panelType)
+        if isTabTrayUIExperimentsEnabled {
+            let targetIndex = panelType.rawValue
+            let targetOffset = CGFloat(-targetIndex) * panelContainer.bounds.width
+            panelStackLeadingConstraint?.constant = targetOffset
+
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: [.curveEaseInOut],
+                           animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+
+            tabTrayState.selectedPanel = panelType
+        } else {
+            setupOpenPanel(panelType: panelType)
+        }
 
         let action = TabTrayAction(panelType: panelType,
                                    windowUUID: windowUUID,
