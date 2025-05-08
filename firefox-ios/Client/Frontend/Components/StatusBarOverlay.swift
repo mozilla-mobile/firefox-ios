@@ -31,7 +31,7 @@ class StatusBarOverlay: UIView,
     var hasTopTabs = false
 
     private var isToolbarRefactorEnabled: Bool {
-        FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
+        ToolbarHelper().isToolbarRefactorEnabled
     }
 
     private var toolbarLayoutType: ToolbarLayoutType? {

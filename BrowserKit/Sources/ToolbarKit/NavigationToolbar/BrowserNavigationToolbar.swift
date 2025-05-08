@@ -34,7 +34,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     private var isTranslucent = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the translucency changes.
-            guard let theme, isVersionLayout != oldValue else { return }
+            guard let theme, isTranslucent != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
