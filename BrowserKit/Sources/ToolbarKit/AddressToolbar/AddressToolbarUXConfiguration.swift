@@ -9,21 +9,34 @@ public struct AddressToolbarUXConfiguration {
     let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
+    let shouldBlur: Bool
+    let backgroundAlpha: CGFloat
 
-    public static let experiment = AddressToolbarUXConfiguration(
-        toolbarCornerRadius: 12.0,
-        browserActionsAddressBarDividerWidth: 0.0,
-        isLocationTextCentered: true
-    )
+    public static func experiment(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
+        AddressToolbarUXConfiguration(
+            toolbarCornerRadius: 12.0,
+            browserActionsAddressBarDividerWidth: 0.0,
+            isLocationTextCentered: true,
+            shouldBlur: true,
+            backgroundAlpha: backgroundAlpha
+        )
+    }
 
-    public static let `default` = AddressToolbarUXConfiguration(
-        toolbarCornerRadius: 8.0,
-        browserActionsAddressBarDividerWidth: 4.0,
-        isLocationTextCentered: false
-    )
+    public static func `default`(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
+        AddressToolbarUXConfiguration(
+            toolbarCornerRadius: 8.0,
+            browserActionsAddressBarDividerWidth: 4.0,
+            isLocationTextCentered: false,
+            shouldBlur: false,
+            backgroundAlpha: backgroundAlpha
+        )
+    }
 
     func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {
-        return isLocationTextCentered ? theme.colors.layer3 : theme.colors.layer1
+        let blurBackgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha)
+        let centerBackgroundColor = shouldBlur ? blurBackgroundColor : theme.colors.layer3
+
+        return isLocationTextCentered ? centerBackgroundColor : theme.colors.layer1
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {

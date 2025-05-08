@@ -255,7 +255,7 @@ public class BrowserAddressToolbar: UIView,
             browserActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
         ])
 
-        updateActionSpacing(uxConfig: .default)
+        updateActionSpacing(uxConfig: .default())
 
         setupAccessibility()
     }

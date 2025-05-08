@@ -11,8 +11,15 @@ protocol AlphaDimmable {
 
 class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isClearBackground = false
+    var isSpacerClearBackground = false
+    lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
+
     private var toolbarLayoutType: ToolbarLayoutType? {
         return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+    }
+
+    private var isToolbarTranslucencyEnabled: Bool {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
     }
 
     override init(frame: CGRect) {
@@ -111,13 +118,11 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         let isVersionLayout = toolbarLayoutType == .version1 || toolbarLayoutType == .version2
-        let color: UIColor = if isClearBackground {
-            .clear
-        } else {
-            isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
-        }
-        backgroundColor = color
-        keyboardSpacer?.backgroundColor = color
-        insetSpacer?.backgroundColor = color
+        let color: UIColor = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+
+        backgroundColor = isClearBackground ? .clear : color
+        keyboardSpacer?.backgroundColor = isSpacerClearBackground ? .clear : color.withAlphaComponent(backgroundAlpha)
+        insetSpacer?.backgroundColor = isSpacerClearBackground ? .clear : color.withAlphaComponent(backgroundAlpha)
     }
 }

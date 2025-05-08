@@ -126,7 +126,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                             isNewTabFeatureEnabled: false,
                             canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
-                            shouldAnimate: false)
+                            shouldAnimate: false,
+                            isTranslucent: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -145,6 +146,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                             isNewTabFeatureEnabled: false,
                             canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
-                            shouldAnimate: false)
+                            shouldAnimate: false,
+                            isTranslucent: false)
     }
 }

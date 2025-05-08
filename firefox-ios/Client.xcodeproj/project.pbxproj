@@ -14435,13 +14435,13 @@
 			children = (
 				E1ABF9062BF49744009C995C /* Models */,
 				E1DE2F812BE394C80054BCDC /* Redux */,
-				E16941B72C5119A200FF5F4E /* Autocompletable.swift */,
+				BD011FB72D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift */,
 				E17798972BD6B44B00F6F0EB /* AddressToolbarContainer.swift */,
+				E16941B72C5119A200FF5F4E /* Autocompletable.swift */,
 				E18CE8D92BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift */,
 				E14792A22C2C5C660058211C /* ToolbarHelper.swift */,
 				E19F86022D6F4B49007453A7 /* ToolbarLayoutStyle.swift */,
 				E1B9A2C12CAD91EF00F6A0E9 /* ToolbarTelemetry.swift */,
-				BD011FB72D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift */,
 			);
 			path = Toolbars;
 			sourceTree = "<group>";
