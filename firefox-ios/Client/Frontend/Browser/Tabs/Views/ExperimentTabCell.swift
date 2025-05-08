@@ -18,11 +18,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let faviconSize = CGSize(width: 16, height: 16)
         static let fallbackFaviconSize = CGSize(width: 24, height: 24)
         static let closeButtonSize: CGFloat = 24
+        static let closeButtonHitTarget: CGFloat = 44
         static let textBoxHeight: CGFloat = 32
-        static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 12,
-                                                                  leading: 12,
-                                                                  bottom: 12,
-                                                                  trailing: 12)
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
         static let closeButtonOverlaySpacing: CGFloat = 6
@@ -82,13 +79,18 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
+    /// Invisible button without corner radius to ensure the button has the required hitbox size
     private lazy var closeButton: UIButton = .build { button in
-        var configuration = UIButton.Configuration.plain()
-        configuration.contentInsets = UX.closeButtonEdgeInset
-        button.configuration = configuration
         button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.closeButton
     }
 
+    /// Contains the blur background for the X icon
+    private lazy var closeButtonBlur: UIView = .build { view in
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+    }
+
+    /// Contains the cross image for the close button
     private lazy var closeButtonOverlay: UIImageView = .build { imageView in
         imageView.image = UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate)
     }
@@ -104,8 +106,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             cornerRadius: self.backgroundHolder.layer.cornerRadius
         ).cgPath
 
-        closeButton.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
-        closeButton.layer.cornerRadius = closeButton.frame.height / 2
+        closeButtonBlur.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
+        closeButtonBlur.layer.cornerRadius = closeButtonBlur.frame.height / 2
     }
 
     // MARK: - Initializer
@@ -123,7 +125,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         footerView.addArrangedSubview(titleText)
         faviconContainer.addSubview(favicon)
 
-        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton, closeButtonOverlay)
+        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton, closeButtonBlur, closeButtonOverlay)
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
@@ -296,12 +298,17 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
             favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),
 
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.topAnchor.constraint(equalTo: backgroundHolder.topAnchor,
-                                             constant: UX.closeButtonTop),
-            closeButton.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor,
-                                                  constant: -UX.closeButtonTrailing),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),
+            closeButton.centerXAnchor.constraint(equalTo: closeButtonBlur.centerXAnchor),
+            closeButton.centerYAnchor.constraint(equalTo: closeButtonBlur.centerYAnchor),
+
+            closeButtonBlur.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButtonBlur.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButtonBlur.topAnchor.constraint(equalTo: backgroundHolder.topAnchor,
+                                                 constant: UX.closeButtonTop),
+            closeButtonBlur.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor,
+                                                      constant: -UX.closeButtonTrailing),
 
             // Screenshot either shown or favicon takes its place as fallback
             screenshotView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
@@ -314,11 +321,11 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             smallFaviconView.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
 
-            closeButtonOverlay.centerXAnchor.constraint(equalTo: closeButton.centerXAnchor),
-            closeButtonOverlay.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            closeButtonOverlay.widthAnchor.constraint(equalTo: closeButton.widthAnchor,
+            closeButtonOverlay.centerXAnchor.constraint(equalTo: closeButtonBlur.centerXAnchor),
+            closeButtonOverlay.centerYAnchor.constraint(equalTo: closeButtonBlur.centerYAnchor),
+            closeButtonOverlay.widthAnchor.constraint(equalTo: closeButtonBlur.widthAnchor,
                                                       constant: -UX.closeButtonOverlaySpacing),
-            closeButtonOverlay.heightAnchor.constraint(equalTo: closeButton.heightAnchor,
+            closeButtonOverlay.heightAnchor.constraint(equalTo: closeButtonBlur.heightAnchor,
                                                        constant: -UX.closeButtonOverlaySpacing)
         ])
     }
