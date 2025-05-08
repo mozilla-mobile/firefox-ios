@@ -9,6 +9,7 @@ public struct AddressToolbarUXConfiguration {
     let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
+    let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
 
@@ -17,6 +18,7 @@ public struct AddressToolbarUXConfiguration {
             toolbarCornerRadius: 12.0,
             browserActionsAddressBarDividerWidth: 0.0,
             isLocationTextCentered: true,
+            locationTextFieldTrailingPadding: 0,
             shouldBlur: true,
             backgroundAlpha: backgroundAlpha
         )
@@ -27,6 +29,7 @@ public struct AddressToolbarUXConfiguration {
             toolbarCornerRadius: 8.0,
             browserActionsAddressBarDividerWidth: 4.0,
             isLocationTextCentered: false,
+            locationTextFieldTrailingPadding: 8.0,
             shouldBlur: false,
             backgroundAlpha: backgroundAlpha
         )
