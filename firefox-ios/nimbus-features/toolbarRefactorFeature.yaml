@@ -47,7 +47,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          swiping_tabs: true
+          swiping_tabs: false
           translucency: false
           layout: version1
       - channel: developer
