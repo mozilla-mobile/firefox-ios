@@ -402,6 +402,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .SettingsTrackingProtectionSectionName,
                                      iconString: StandardImageIdentifiers.Large.shieldCheckmark,
                                      allowIconScaling: true) { [weak self] _ in
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .trackingProtectionMenu)
             self?.delegate?.showTrackingProtection()
         }.items
     }
