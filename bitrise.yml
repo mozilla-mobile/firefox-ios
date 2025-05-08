@@ -2248,6 +2248,8 @@ workflows:
     description: This step is used during release promotion to build a firefox release
 
   release_promotion_push:
+    before_run:
+    - SPM_Common_Steps
     envs:
     - IPA_PATH: /tmp/Client.ipa
     - DSYM_PATH: /tmp/symbols.zip
