@@ -23,6 +23,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
             subscribeToRedux()
         }
     }
+    lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
     weak var toolbarDelegate: NavigationToolbarContainerDelegate?
     private var model: NavigationToolbarContainerModel?
 
@@ -110,7 +111,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         toolbar.applyTheme(theme: theme)
 
         let isTranslucent = model?.isTranslucent ?? false
-        let backgroundAlpha: CGFloat = isTranslucent ? ToolbarHelper().backgroundAlpha() : 1.0
+        let backgroundAlpha: CGFloat = isTranslucent ? toolbarHelper.backgroundAlpha() : 1.0
 
         let backgroundColorWithoutAlpha = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
         backgroundColor = backgroundColorWithoutAlpha.withAlphaComponent(backgroundAlpha)

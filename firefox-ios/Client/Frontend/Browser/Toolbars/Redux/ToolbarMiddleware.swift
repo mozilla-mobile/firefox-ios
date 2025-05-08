@@ -8,13 +8,13 @@ import ToolbarKit
 
 final class ToolbarMiddleware: FeatureFlaggable {
     private let manager: ToolbarManager
-    private let toolbarHelper: ToolbarHelper
+    private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
     private let logger: Logger
     private let toolbarTelemetry = ToolbarTelemetry()
 
     init(manager: ToolbarManager = DefaultToolbarManager(),
-         toolbarHelper: ToolbarHelper = ToolbarHelper(),
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.manager = manager

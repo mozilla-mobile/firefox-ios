@@ -5,7 +5,18 @@
 import Common
 import Foundation
 
-class ToolbarHelper {
+protocol ToolbarHelperInterface {
+    var isToolbarRefactorEnabled: Bool { get set }
+    var isToolbarTranslucencyEnabled: Bool { get set }
+    var isReduceTransparencyEnabled: Bool { get set }
+
+    func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
+    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
+    func shouldBlur() -> Bool
+    func backgroundAlpha() -> CGFloat
+}
+
+class ToolbarHelper: ToolbarHelperInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.8
     }

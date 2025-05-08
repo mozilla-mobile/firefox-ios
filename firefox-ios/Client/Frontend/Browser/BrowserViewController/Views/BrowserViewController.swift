@@ -333,6 +333,8 @@ class BrowserViewController: UIViewController,
 
     private var keyboardPressesHandlerValue: Any?
 
+    var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
+
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         if let existingHandler = keyboardPressesHandlerValue as? KeyboardPressesHandler {
@@ -496,7 +498,7 @@ class BrowserViewController: UIViewController,
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
         let enableBlur = isToolbarRefactorEnabled && isToolbarTranslucencyEnabled
-        guard ToolbarHelper().shouldBlur() else {
+        guard toolbarHelper.shouldBlur() else {
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
             header.isClearBackground = false
@@ -506,7 +508,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
@@ -564,8 +566,8 @@ class BrowserViewController: UIViewController,
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
-        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
 
         switchToolbarIfNeeded()
 
@@ -877,7 +879,7 @@ class BrowserViewController: UIViewController,
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
         statusBarOverlay.scrollDelegate = self
-        statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
 
@@ -1037,7 +1039,7 @@ class BrowserViewController: UIViewController,
 
         store.dispatch(
             ToolbarAction(
-                isTranslucent: ToolbarHelper().shouldBlur(),
+                isTranslucent: toolbarHelper.shouldBlur(),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.translucencyDidChange
             )
@@ -1259,7 +1261,7 @@ class BrowserViewController: UIViewController,
 
         // Adjustment for landscape on the urlbar
         // need to account for inset and remove it when keyboard is showing
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let isKeyboardShowing = keyboardState != nil
 
         if !showNavToolbar && isBottomSearchBar && !isKeyboardShowing {
@@ -1280,7 +1282,7 @@ class BrowserViewController: UIViewController,
 
         // Adjustment for landscape on the urlbar
         // need to account for inset and remove it when keyboard is showing
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let isKeyboardShowing = keyboardState != nil
 
         if !showNavToolbar && isBottomSearchBar &&
@@ -1539,7 +1541,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
@@ -1597,7 +1599,7 @@ class BrowserViewController: UIViewController,
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than web view and legacy homepage
-        if ToolbarHelper().shouldBlur() &&
+        if toolbarHelper.shouldBlur() &&
             !viewController.isKind(of: WebviewViewController.self) &&
             !viewController.isKind(of: LegacyHomepageViewController.self) {
             viewController.view.clipsToBounds = false
@@ -2375,7 +2377,7 @@ class BrowserViewController: UIViewController,
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
                 isPrivate: tab.isPrivate,
-                isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
+                isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
@@ -2637,7 +2639,7 @@ class BrowserViewController: UIViewController,
     func presentNewTabLongPressActionSheet(from view: UIView) {
         let actions = getNewTabLongPressActions()
 
-        let shouldPresentAsPopover = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        let shouldPresentAsPopover = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         let style: UIModalPresentationStyle = shouldPresentAsPopover ? .popover : .overCurrentContext
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,
@@ -2848,8 +2850,8 @@ class BrowserViewController: UIViewController,
     /// When the trait collection changes the top taps display might have to change
     /// This requires an update of the toolbars.
     private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
-        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
         // to avoid having the toolbar re-displayed
@@ -3435,7 +3437,7 @@ class BrowserViewController: UIViewController,
 
     func applyTheme() {
         let currentTheme = currentTheme()
-        statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         updateAddressBarBackgroundViewColor(theme: currentTheme)

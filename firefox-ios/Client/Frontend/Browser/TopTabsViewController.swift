@@ -45,6 +45,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     var currentWindowUUID: UUID? { windowUUID }
     var windowUUID: WindowUUID { tabManager.windowUUID }
 
+    private var toolbarHelper: ToolbarHelperInterface
+
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
@@ -116,11 +118,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     init(tabManager: TabManager,
          profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.tabManager = tabManager
         self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.toolbarHelper = toolbarHelper
         super.init(nibName: nil, bundle: nil)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -188,7 +192,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         if isToolbarRefactorEnabled,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.isTranslucent {
-            view.backgroundColor = colors.layer3.withAlphaComponent(ToolbarHelper().backgroundAlpha())
+            view.backgroundColor = colors.layer3.withAlphaComponent(toolbarHelper.backgroundAlpha())
             collectionView.backgroundColor = .clear
         } else {
             view.backgroundColor = colors.layer3

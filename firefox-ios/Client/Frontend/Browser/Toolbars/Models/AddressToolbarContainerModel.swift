@@ -7,6 +7,8 @@ import ToolbarKit
 import Shared
 
 final class AddressToolbarContainerModel: Equatable {
+    let toolbarHelper: ToolbarHelperInterface
+
     let navigationActions: [ToolbarElement]
     let leadingPageActions: [ToolbarElement]
     let trailingPageActions: [ToolbarElement]
@@ -36,7 +38,7 @@ final class AddressToolbarContainerModel: Equatable {
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url)
         let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
-        let backgroundAlpha = ToolbarHelper().backgroundAlpha()
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
         let uxConfiguration: AddressToolbarUXConfiguration = if isVersionLayout {
             .experiment(backgroundAlpha: backgroundAlpha)
         } else {
@@ -99,6 +101,7 @@ final class AddressToolbarContainerModel: Equatable {
         state: ToolbarState,
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
         windowUUID: UUID
     ) {
         self.borderPosition = state.addressToolbar.borderPosition
@@ -137,6 +140,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
         self.toolbarLayoutStyle = state.toolbarLayout
+        self.toolbarHelper = toolbarHelper
     }
 
     func searchTermFromURL(_ url: URL?) -> String? {

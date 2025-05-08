@@ -26,12 +26,13 @@ class StatusBarOverlay: UIView,
     private var savedBackgroundColor: UIColor?
     private var savedIsHomepage: Bool?
     private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
+    private var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
     var scrollDelegate: BrowserStatusBarScrollDelegate?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
 
     private var isToolbarRefactorEnabled: Bool {
-        ToolbarHelper().isToolbarRefactorEnabled
+        toolbarHelper.isToolbarRefactorEnabled
     }
 
     private var toolbarLayoutType: ToolbarLayoutType? {
@@ -49,12 +50,14 @@ class StatusBarOverlay: UIView,
     convenience init(frame: CGRect,
                      scrollDelegate: BrowserStatusBarScrollDelegate? = nil,
                      notificationCenter: NotificationProtocol = NotificationCenter.default,
-                     wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
+                     wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+                     toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.init(frame: frame)
 
         self.notificationCenter = notificationCenter
         self.wallpaperManager = wallpaperManager
         self.scrollDelegate = scrollDelegate
+        self.toolbarHelper = toolbarHelper
         setupNotifications(forObserver: self,
                            observing: [.WallpaperDidChange,
                                        .SearchBarPositionDidChange])
@@ -82,7 +85,7 @@ class StatusBarOverlay: UIView,
         let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.hasImage && isBottomSearchBar
         scrollOffset = needsNoStatusBar ? 0 : 1
 
-        let translucencyBackgroundAlpha = ToolbarHelper().backgroundAlpha()
+        let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
         let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
@@ -92,7 +95,7 @@ class StatusBarOverlay: UIView,
     func applyTheme(theme: Theme) {
         let isVersionLayout = isToolbarRefactorEnabled && (toolbarLayoutType == .version1 || toolbarLayoutType == .version2)
         savedBackgroundColor = (hasTopTabs || isVersionLayout) ? theme.colors.layer3 : theme.colors.layer1
-        let translucencyBackgroundAlpha = ToolbarHelper().backgroundAlpha()
+        let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         // We only need no status bar for one edge case
         let isWallpaperedHomepage = savedIsHomepage ?? false && wallpaperManager.currentWallpaper.hasImage
