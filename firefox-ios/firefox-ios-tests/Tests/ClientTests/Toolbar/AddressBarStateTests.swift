@@ -775,7 +775,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
             canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
-            shouldAnimate: toolbarState.shouldAnimate)
+            shouldAnimate: toolbarState.shouldAnimate,
+            isTranslucent: toolbarState.isTranslucent)
     }
 
     // MARK: StoreTestUtility
