@@ -9,7 +9,7 @@ import SiteImageView
 import Storage
 import UIKit
 
-/// The TopSite cell that appears for the homepage rebuild project.
+/// The TopSite cell that appears for the homepage rebuild + redesign project.
 class LegacyTopSiteCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
 
