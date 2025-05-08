@@ -41,6 +41,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+        case .hntContentFeedRefresh:
+            return checkHNTContentFeedRefreshFeature(from: nimbus)
+
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
@@ -113,6 +116,9 @@ final class NimbusFeatureFlagLayer {
         case .toolbarSwipingTabs:
             return checkToolbarSwipingTabsFeature(from: nimbus)
 
+        case .toolbarTranslucency:
+            return checkToolbarTranslucencyFeature(from: nimbus)
+
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
 
@@ -175,6 +181,10 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
+    public func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntContentFeedCleanupFeature.value().enabled
+    }
+
     public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
@@ -217,6 +227,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarSwipingTabsFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.swipingTabs
+    }
+
+    private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.translucency
     }
 
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {

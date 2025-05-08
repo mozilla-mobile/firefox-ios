@@ -36,6 +36,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
 
     weak var delegate: TopTabCellDelegate?
 
+    private var windowUUID: WindowUUID?
+
     // MARK: - UI Elements
     let cellBackground: UIView = .build { view in
         view.clipsToBounds = false
@@ -77,6 +79,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
 
     func configureLegacyCellWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
+        windowUUID = tab.windowUUID
 
         titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
@@ -148,7 +151,15 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         closeButton.tintColor = colors.textPrimary
 
         let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        cellBackground.backgroundColor = isToolbarRefactorEnabled ? colors.actionTabInactive : .clear
+
+        if isToolbarRefactorEnabled,
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           toolbarState.isTranslucent {
+            cellBackground.backgroundColor = toolbarState.isTranslucent ? .clear : colors.actionTabInactive
+        } else {
+            cellBackground.backgroundColor = isToolbarRefactorEnabled ? colors.actionTabInactive : .clear
+        }
+
         cellBackground.layer.shadowColor = UIColor.clear.cgColor
         cellBackground.isHidden = isToolbarRefactorEnabled ? false : true
     }
