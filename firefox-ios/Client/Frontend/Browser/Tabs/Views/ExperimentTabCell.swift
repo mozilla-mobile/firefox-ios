@@ -125,7 +125,11 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         footerView.addArrangedSubview(titleText)
         faviconContainer.addSubview(favicon)
 
-        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton, closeButtonBlurView, closeButtonImageOverlay)
+        backgroundHolder.addSubviews(screenshotView,
+                                     smallFaviconView,
+                                     closeButton,
+                                     closeButtonBlurView,
+                                     closeButtonImageOverlay)
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
@@ -306,9 +310,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             closeButtonBlurView.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButtonBlurView.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButtonBlurView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor,
-                                                 constant: UX.closeButtonTop),
+                                                     constant: UX.closeButtonTop),
             closeButtonBlurView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor,
-                                                      constant: -UX.closeButtonTrailing),
+                                                          constant: -UX.closeButtonTrailing),
 
             // Screenshot either shown or favicon takes its place as fallback
             screenshotView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
@@ -324,9 +328,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             closeButtonImageOverlay.centerXAnchor.constraint(equalTo: closeButtonBlurView.centerXAnchor),
             closeButtonImageOverlay.centerYAnchor.constraint(equalTo: closeButtonBlurView.centerYAnchor),
             closeButtonImageOverlay.widthAnchor.constraint(equalTo: closeButtonBlurView.widthAnchor,
-                                                      constant: -UX.closeButtonOverlaySpacing),
+                                                           constant: -UX.closeButtonOverlaySpacing),
             closeButtonImageOverlay.heightAnchor.constraint(equalTo: closeButtonBlurView.heightAnchor,
-                                                       constant: -UX.closeButtonOverlaySpacing)
+                                                            constant: -UX.closeButtonOverlaySpacing)
         ])
     }
 
