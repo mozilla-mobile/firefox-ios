@@ -9,8 +9,8 @@ import SiteImageView
 import Storage
 import UIKit
 
-/// The TopSite cell that appears for the homepage rebuild project.
-class TopSiteCell: UICollectionViewCell, ReusableCell {
+/// The TopSite cell that appears for the homepage rebuild + redesign project.
+class LegacyTopSiteCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
 
     private var homeTopSite: TopSiteConfiguration?
@@ -62,7 +62,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        titleLabel.font = FXFontStyles.Bold.caption1.scaledFont()
+        titleLabel.font = FXFontStyles.Regular.caption1.scaledFont()
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
         titleLabel.backgroundColor = .clear
@@ -71,7 +71,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
-        sponsoredLabel.font = FXFontStyles.Regular.caption1.scaledFont()
+        sponsoredLabel.font = FXFontStyles.Regular.caption2.scaledFont()
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }
@@ -259,11 +259,11 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: ThemeApplicable
-extension TopSiteCell: ThemeApplicable {
+extension LegacyTopSiteCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         pinImageView.tintColor = textColor ?? theme.colors.iconPrimary
         titleLabel.textColor = textColor ?? theme.colors.textPrimary
-        sponsoredLabel.textColor = textColor ?? theme.colors.textPrimary
+        sponsoredLabel.textColor = textColor ?? theme.colors.textSecondary
         selectedOverlay.backgroundColor = theme.colors.layer5Hover.withAlphaComponent(0.25)
 
         adjustBlur(theme: theme)
@@ -271,7 +271,7 @@ extension TopSiteCell: ThemeApplicable {
 }
 
 // MARK: - Blurrable
-extension TopSiteCell: Blurrable {
+extension LegacyTopSiteCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             rootContainer.layoutIfNeeded()
