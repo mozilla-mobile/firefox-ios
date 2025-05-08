@@ -8,55 +8,19 @@ public struct AddressToolbarUXConfiguration {
     let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
-<<<<<<< HEAD
+    let locationTextFieldTrailingPadding: CGFloat
 
     public static let experiment = AddressToolbarUXConfiguration(
         toolbarCornerRadius: 12.0,
         browserActionsAddressBarDividerWidth: 0.0,
-        isLocationTextCentered: true
+        isLocationTextCentered: true,
+        locationTextFieldTrailingPadding: 0
     )
 
     public static let `default` = AddressToolbarUXConfiguration(
         toolbarCornerRadius: 8.0,
         browserActionsAddressBarDividerWidth: 4.0,
-        isLocationTextCentered: false
+        isLocationTextCentered: false,
+        locationTextFieldTrailingPadding: 8.0
     )
-=======
-    let locationTextFieldTrailingPadding: CGFloat
-    let shouldBlur: Bool
-    let backgroundAlpha: CGFloat
-
-    public static func experiment(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
-        AddressToolbarUXConfiguration(
-            toolbarCornerRadius: 12.0,
-            browserActionsAddressBarDividerWidth: 0.0,
-            isLocationTextCentered: true,
-            locationTextFieldTrailingPadding: 0,
-            shouldBlur: true,
-            backgroundAlpha: backgroundAlpha
-        )
-    }
-
-    public static func `default`(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
-        AddressToolbarUXConfiguration(
-            toolbarCornerRadius: 8.0,
-            browserActionsAddressBarDividerWidth: 4.0,
-            isLocationTextCentered: false,
-            locationTextFieldTrailingPadding: 8.0,
-            shouldBlur: false,
-            backgroundAlpha: backgroundAlpha
-        )
-    }
-
-    func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {
-        let blurBackgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha)
-        let centerBackgroundColor = shouldBlur ? blurBackgroundColor : theme.colors.layer3
-
-        return isLocationTextCentered ? centerBackgroundColor : theme.colors.layer1
-    }
-
-    func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
-        return isLocationTextCentered ? theme.colors.layer2 : theme.colors.layerSearch
-    }
->>>>>>> ff3d57024 (Bugfix FXIOS-12185 [Toolbar Redesign] For some long domain names, the domain name almost touches the reader view icon (#26567))
 }
