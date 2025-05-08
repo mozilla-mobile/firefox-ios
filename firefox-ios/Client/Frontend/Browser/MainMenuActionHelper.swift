@@ -9,6 +9,7 @@ import Storage
 import UIKit
 import SwiftUI
 import Common
+import Glean
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
@@ -402,7 +403,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .SettingsTrackingProtectionSectionName,
                                      iconString: StandardImageIdentifiers.Large.shieldCheckmark,
                                      allowIconScaling: true) { [weak self] _ in
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .trackingProtectionMenu)
+            let isPrivate = self?.selectedTab?.isPrivate ?? false
+            let extra = GleanMetrics.Toolbar.SiteInfoButtonTappedExtra(isPrivate: isPrivate,
+                                                                       isToolbar: false)
+            GleanMetrics.Toolbar.siteInfoButtonTapped.record(extra)
             self?.delegate?.showTrackingProtection()
         }.items
     }
