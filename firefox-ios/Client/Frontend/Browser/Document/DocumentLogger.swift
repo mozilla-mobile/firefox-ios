@@ -30,7 +30,7 @@ class DocumentLogger {
         if pending[url] == nil {
             logger.log(
                 "Document is missing but finished downloading",
-                level: .fatal,
+                level: .warning,
                 category: .webview,
                 extra: ["url": url.absoluteString]
             )
