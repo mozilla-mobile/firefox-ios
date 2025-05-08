@@ -28,6 +28,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showSignInView(fxaParameters: FxASignInViewParameters)
     func showFilePicker(fileURL: URL)
     func showEditBookmark()
+    func showTrackingProtection()
 }
 
 extension ToolBarActionMenuDelegate {
@@ -67,6 +68,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
+    private var toolbarLayoutStyle: ToolbarLayoutStyle {
+        return .style(from: FxNimbus.shared.features.toolbarRefactorFeature.value().layout)
+    }
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -237,6 +241,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let desktopSiteAction = getRequestDesktopSiteAction()
             append(to: &section, action: desktopSiteAction)
+
+            if toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2 {
+                let trackingProtectionAction = getTrackingProtectionAction()
+                append(to: &section, action: trackingProtectionAction)
+            }
         }
 
         /// In the new experiment, where website theming is different from app theming homepage menu should not show
@@ -386,6 +395,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 )
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: siteTypeTelemetryObject)
             }
+        }.items
+    }
+
+    private func getTrackingProtectionAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .SettingsTrackingProtectionSectionName,
+                                     iconString: StandardImageIdentifiers.Large.shieldCheckmark,
+                                     allowIconScaling: true) { [weak self] _ in
+            self?.delegate?.showTrackingProtection()
         }.items
     }
 
