@@ -111,7 +111,7 @@ class TabTrayViewController: UIViewController,
         let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
-                          String(format: TabTrayPanelType.tabs.label, "0"),
+                          TabTrayPanelType.tabs.label,
                           TabTrayPanelType.syncedTabs.label]
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
@@ -147,8 +147,16 @@ class TabTrayViewController: UIViewController,
         let iPhoneItems = [
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
             TabTrayPanelType.privateTabs.image!,
-            TabTrayPanelType.syncedTabs.image!]
-        return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
+            TabTrayPanelType.syncedTabs.image!
+        ]
+
+        let regularLayoutItems = [
+            TabTrayPanelType.tabs.label,
+            TabTrayPanelType.privateTabs.label,
+            TabTrayPanelType.syncedTabs.label,
+        ]
+
+        return isRegularLayout ? regularLayoutItems : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -378,9 +386,6 @@ class TabTrayViewController: UIViewController,
         countLabel.text = count
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
-        if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
-        }
     }
 
     // MARK: Themeable

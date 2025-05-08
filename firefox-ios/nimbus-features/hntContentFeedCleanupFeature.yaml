@@ -1,0 +1,18 @@
+# The configuration for the hnt-contentfeed-cleanup feature
+features:
+  hnt-content-feed-cleanup-feature:
+    description: >
+      Controls updates for the content feed
+    variables:
+      enabled:
+        description: >
+          Whether or not the feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
