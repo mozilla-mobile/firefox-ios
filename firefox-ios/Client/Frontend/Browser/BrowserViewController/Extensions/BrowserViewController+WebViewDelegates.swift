@@ -521,22 +521,19 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isStoreURL(url) {
             decisionHandler(.cancel)
-
-            // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
-            // Otherwise the AppStoreAlert is shown on the wrong tab
-            let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
-            DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
-                self?.showAppStoreAlert { isOpened in
-                    if isOpened {
-                        UIApplication.shared.open(url, options: [:])
-                    }
-                    // If a new window was opened for this URL, close it
-                    if let currentTab = self?.tabManager.selectedTab,
-                       currentTab.historyList.count == 1,
-                       self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                        self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-                        self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
-                    }
+            Task { @MainActor in
+                do {
+                    // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
+                    // Otherwise the AppStoreAlert is shown on the wrong tab
+                    try await Task.sleep(nanoseconds: UInt64(tabManager.delaySelectingNewPopupTab + 0.1) * NSEC_PER_SEC)
+                    showAppStoreAlert(url: url, tab: tab)
+                } catch {
+                    logger.log(
+                        "show app store alert failed",
+                        level: .warning,
+                        category: .webview,
+                        extra: ["error": error.localizedDescription]
+                    )
                 }
             }
             return
@@ -1139,21 +1136,42 @@ private extension BrowserViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    func showAppStoreAlert(completion: @escaping (Bool) -> Void) {
+    func showAppStoreAlert(url: URL, tab: Tab) {
         let alert = UIAlertController(title: nil,
                                       message: .ExternalLinkAppStoreConfirmationTitle,
                                       preferredStyle: .alert)
 
+        let handler: (Bool) async -> Void = { [weak self] isOpened in
+            if isOpened {
+                await UIApplication.shared.open(url, options: [:])
+            }
+            // If a new window was opened for this URL, close it
+            if let currentTab = self?.tabManager.selectedTab,
+               currentTab.historyList.count == 1,
+               self?.isStoreURL(currentTab.historyList[0]) ?? false {
+                self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
+                await self?.tabManager.removeTab(tab.tabUUID)
+            }
+        }
+
         let okOption = UIAlertAction(
             title: .AppStoreString,
             style: .default,
-            handler: { _ in completion(true) }
+            handler: { _ in
+                Task { @MainActor in
+                    await handler(true)
+                }
+            }
         )
 
         let cancelOption = UIAlertAction(
             title: .NotNowString,
             style: .cancel,
-            handler: { _ in completion(false) }
+            handler: { _ in
+                Task { @MainActor in
+                    await handler(false)
+                }
+            }
         )
 
         alert.addAction(okOption)

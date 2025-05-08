@@ -251,17 +251,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
     }
 
-    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
-        guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
-        let tab = tabs[index]
-
-        DispatchQueue.main.async { [weak self] in
-            self?.removeTab(tab, flushToDisk: true)
-            self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
-            completion?()
-        }
-    }
-
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
@@ -1083,8 +1072,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
         selectTab(tabToSelect)
-        removeTabWithCompletion(selectedTab.tabUUID, completion: nil)
         Task {
+            await removeTab(selectedTab.tabUUID)
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
     }
