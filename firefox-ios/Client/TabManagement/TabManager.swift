@@ -10,7 +10,7 @@ enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"
 }
 
-enum TabsDeletionPeriod {
+enum TabsDeletionPeriod: String {
     case oneDay, oneWeek, oneMonth
 }
 

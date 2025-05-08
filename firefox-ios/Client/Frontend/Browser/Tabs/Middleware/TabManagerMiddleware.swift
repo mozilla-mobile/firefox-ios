@@ -550,6 +550,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     private func deleteNormalTabsOlderThan(period: TabsDeletionPeriod, uuid: WindowUUID) {
+        tabsPanelTelemetry.deleteNormalTabsSheetOptionSelected(period: period)
         let tabManager = tabManager(for: uuid)
         tabManager.removeNormalTabsOlderThan(period: period, currentDate: .now)
 

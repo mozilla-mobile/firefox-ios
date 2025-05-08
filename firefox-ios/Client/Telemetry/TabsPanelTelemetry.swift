@@ -44,4 +44,40 @@ struct TabsPanelTelemetry {
         let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected, extras: extras)
     }
+<<<<<<< HEAD
+=======
+
+    func tabSelected(at index: Int?, mode: Mode) {
+        let indexForGlean: Int32? = index != nil ? Int32(index!) : nil
+        let extras = GleanMetrics.TabsPanel.TabSelectedExtra(mode: mode.rawValue, selectedTabIndex: indexForGlean)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabSelected, extras: extras)
+    }
+
+    func closeAllTabsSheetOptionSelected(option: CloseAllPanelOption, mode: Mode) {
+        let extras = GleanMetrics.TabsPanelCloseAllTabsSheet.OptionSelectedExtra(
+            mode: mode.rawValue,
+            option: option.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanelCloseAllTabsSheet.optionSelected, extras: extras)
+    }
+
+    func tabClosed(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.TabClosedExtra(
+            mode: mode.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabClosed, extras: extras)
+    }
+
+    func doneButtonTapped(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.DoneButtonTappedExtra(mode: mode.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.doneButtonTapped, extras: extras)
+    }
+
+    func deleteNormalTabsSheetOptionSelected(period: TabsDeletionPeriod) {
+        let extras = GleanMetrics.TabsPanelCloseOldTabsSheet.OptionSelectedExtra(
+            period: period.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanelCloseOldTabsSheet.optionSelected, extras: extras)
+    }
+>>>>>>> 620d70bc4 (Add FXIOS-12154 #26444 [Tab tray] trash can telemetry (#26584))
 }
