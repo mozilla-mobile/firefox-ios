@@ -34,8 +34,9 @@ struct ToolbarTelemetry {
     }
 
     func siteInfoButtonTapped(isPrivate: Bool) {
-        let isPrivateExtra = GleanMetrics.Toolbar.SiteInfoButtonTappedExtra(isPrivate: isPrivate)
-        GleanMetrics.Toolbar.siteInfoButtonTapped.record(isPrivateExtra)
+        let extra = GleanMetrics.Toolbar.SiteInfoButtonTappedExtra(isPrivate: isPrivate,
+                                                                   isToolbar: true)
+        GleanMetrics.Toolbar.siteInfoButtonTapped.record(extra)
     }
 
     func backButtonTapped(isPrivate: Bool) {
