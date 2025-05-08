@@ -124,6 +124,7 @@ public struct StandardImageIdentifiers {
         public static let settings = "settingsLarge"
         public static let share = "shareLarge"
         public static let shield = "shieldLarge"
+        public static let shieldCheckmark = "shieldCheckmarkLarge"
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
         public static let socialMedia = "socialMediaLarge"
