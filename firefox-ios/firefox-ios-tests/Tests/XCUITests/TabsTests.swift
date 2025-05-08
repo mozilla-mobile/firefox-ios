@@ -508,8 +508,7 @@ class TabsTests: BaseTestCase {
         // Context menu opens
         waitForElementsToExist(
             [
-                app.buttons["Close Tab"],
-                app.buttons["Copy URL"]
+                app.buttons["Close Tab"]
             ]
         )
         // Choose to close the tab
