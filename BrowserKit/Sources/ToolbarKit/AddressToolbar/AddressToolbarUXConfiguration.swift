@@ -9,6 +9,7 @@ public struct AddressToolbarUXConfiguration {
     let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
+<<<<<<< HEAD
 
     public static let experiment = AddressToolbarUXConfiguration(
         toolbarCornerRadius: 12.0,
@@ -21,6 +22,33 @@ public struct AddressToolbarUXConfiguration {
         browserActionsAddressBarDividerWidth: 4.0,
         isLocationTextCentered: false
     )
+=======
+    let locationTextFieldTrailingPadding: CGFloat
+    let shouldBlur: Bool
+    let backgroundAlpha: CGFloat
+
+    public static func experiment(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
+        AddressToolbarUXConfiguration(
+            toolbarCornerRadius: 12.0,
+            browserActionsAddressBarDividerWidth: 0.0,
+            isLocationTextCentered: true,
+            locationTextFieldTrailingPadding: 0,
+            shouldBlur: true,
+            backgroundAlpha: backgroundAlpha
+        )
+    }
+
+    public static func `default`(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
+        AddressToolbarUXConfiguration(
+            toolbarCornerRadius: 8.0,
+            browserActionsAddressBarDividerWidth: 4.0,
+            isLocationTextCentered: false,
+            locationTextFieldTrailingPadding: 8.0,
+            shouldBlur: false,
+            backgroundAlpha: backgroundAlpha
+        )
+    }
+>>>>>>> ff3d57024 (Bugfix FXIOS-12185 [Toolbar Redesign] For some long domain names, the domain name almost touches the reader view icon (#26567))
 
     func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {
         return isLocationTextCentered ? theme.colors.layer3 : theme.colors.layer1
