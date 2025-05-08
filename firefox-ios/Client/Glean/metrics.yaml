@@ -4666,10 +4666,17 @@ toolbar:
       is_private:
         description: Whether the user is in private mode or not
         type: boolean
+      is_toolbar:
+        type: boolean
+        description: |
+         Wether the source view of this button is the Toolbar, otherwise the Menu.
+         For Toolbar layout version1 and version2 the source is the Legacy menu meanwhile for 
+         baseline the Toolbar.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26604
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
