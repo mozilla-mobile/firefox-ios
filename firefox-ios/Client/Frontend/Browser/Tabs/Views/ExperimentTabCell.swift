@@ -85,13 +85,13 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     /// Contains the blur background for the X icon
-    private lazy var closeButtonBlur: UIView = .build { view in
+    private lazy var closeButtonBlurView: UIView = .build { view in
         view.isUserInteractionEnabled = false
         view.backgroundColor = .clear
     }
 
     /// Contains the cross image for the close button
-    private lazy var closeButtonOverlay: UIImageView = .build { imageView in
+    private lazy var closeButtonImageOverlay: UIImageView = .build { imageView in
         imageView.image = UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate)
     }
 
@@ -106,8 +106,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             cornerRadius: self.backgroundHolder.layer.cornerRadius
         ).cgPath
 
-        closeButtonBlur.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
-        closeButtonBlur.layer.cornerRadius = closeButtonBlur.frame.height / 2
+        closeButtonBlurView.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
+        closeButtonBlurView.layer.cornerRadius = closeButtonBlurView.frame.height / 2
     }
 
     // MARK: - Initializer
@@ -125,7 +125,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         footerView.addArrangedSubview(titleText)
         faviconContainer.addSubview(favicon)
 
-        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton, closeButtonBlur, closeButtonOverlay)
+        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton, closeButtonBlurView, closeButtonImageOverlay)
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
@@ -188,7 +188,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
-        closeButtonOverlay.tintColor = theme.colors.textOnDark
+        closeButtonImageOverlay.tintColor = theme.colors.textOnDark
         titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
@@ -300,14 +300,14 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),
-            closeButton.centerXAnchor.constraint(equalTo: closeButtonBlur.centerXAnchor),
-            closeButton.centerYAnchor.constraint(equalTo: closeButtonBlur.centerYAnchor),
+            closeButton.centerXAnchor.constraint(equalTo: closeButtonBlurView.centerXAnchor),
+            closeButton.centerYAnchor.constraint(equalTo: closeButtonBlurView.centerYAnchor),
 
-            closeButtonBlur.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButtonBlur.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButtonBlur.topAnchor.constraint(equalTo: backgroundHolder.topAnchor,
+            closeButtonBlurView.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButtonBlurView.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButtonBlurView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor,
                                                  constant: UX.closeButtonTop),
-            closeButtonBlur.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor,
+            closeButtonBlurView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor,
                                                       constant: -UX.closeButtonTrailing),
 
             // Screenshot either shown or favicon takes its place as fallback
@@ -321,11 +321,11 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             smallFaviconView.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
 
-            closeButtonOverlay.centerXAnchor.constraint(equalTo: closeButtonBlur.centerXAnchor),
-            closeButtonOverlay.centerYAnchor.constraint(equalTo: closeButtonBlur.centerYAnchor),
-            closeButtonOverlay.widthAnchor.constraint(equalTo: closeButtonBlur.widthAnchor,
+            closeButtonImageOverlay.centerXAnchor.constraint(equalTo: closeButtonBlurView.centerXAnchor),
+            closeButtonImageOverlay.centerYAnchor.constraint(equalTo: closeButtonBlurView.centerYAnchor),
+            closeButtonImageOverlay.widthAnchor.constraint(equalTo: closeButtonBlurView.widthAnchor,
                                                       constant: -UX.closeButtonOverlaySpacing),
-            closeButtonOverlay.heightAnchor.constraint(equalTo: closeButtonBlur.heightAnchor,
+            closeButtonImageOverlay.heightAnchor.constraint(equalTo: closeButtonBlurView.heightAnchor,
                                                        constant: -UX.closeButtonOverlaySpacing)
         ])
     }
