@@ -29,7 +29,7 @@ class SyncUITests: BaseTestCase {
 
     private func verifyFxASigninScreen() {
         mozWaitForElementToExist(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar])
-        if #available(iOS 16, *) {
+        if #available(iOS 17, *) {
             mozWaitForElementToExist(
                 app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
         } else {
@@ -45,17 +45,9 @@ class SyncUITests: BaseTestCase {
                 mailPlaceholder,
                 defaultMailPlaceholder,
                 "The mail placeholder does not show the correct value"
-            )
-        } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
-            defaultMailPlaceholder = self.app.webViews.textFields["Enter your email"].placeholderValue!
-            XCTAssertEqual(
-                mailPlaceholder,
-                defaultMailPlaceholder,
-                "The mail placeholder does not show the correct value"
-            )
-        } else {
-            mozWaitForElementToExist(app.staticTexts[mailPlaceholder])
-        }
+            ) } else {
+                mozWaitForElementToExist(app.staticTexts[mailPlaceholder])
+            }
         mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
@@ -79,6 +71,7 @@ class SyncUITests: BaseTestCase {
         // Enter only email, wrong and correct and tap sign in
         userState.fxaUsername = "foo1bar2baz3@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
+        app.buttons["Done"].tapIfExists()
         navigator.performAction(Action.FxATapOnContinueButton)
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
@@ -101,7 +94,7 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-        if #available(iOS 16, *) {
+        if #available(iOS 17, *) {
             mozWaitForElementToExist(
                 app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
                 timeout: TIMEOUT_LONG
@@ -114,6 +107,7 @@ class SyncUITests: BaseTestCase {
         }
         userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
+        app.buttons["Done"].tapIfExists()
         navigator.performAction(Action.FxATapOnContinueButton)
         mozWaitForElementToExist(app.webViews.buttons["Create account"])
     }
@@ -125,7 +119,7 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        if #available(iOS 16, *) {
+        if #available(iOS 17, *) {
             mozWaitForElementToExist(
                 app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
         } else {
@@ -134,6 +128,7 @@ class SyncUITests: BaseTestCase {
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
+        app.buttons["Done"].tapIfExists()
         navigator.performAction(Action.FxATapOnContinueButton)
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"

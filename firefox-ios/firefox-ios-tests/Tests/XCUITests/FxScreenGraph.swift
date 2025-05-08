@@ -669,9 +669,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             if #available(iOS 17, *) {
                 app.webViews.textFields.firstMatch.tapAndTypeText(userState.fxaUsername!)
-            } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
-                app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
-                    .tapAndTypeText(userState.fxaUsername!)
             } else {
                 app.staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
                     .waitAndTap()
