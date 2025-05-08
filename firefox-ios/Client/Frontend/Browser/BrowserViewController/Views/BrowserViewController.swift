@@ -170,7 +170,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
 
     // A view for displaying a preview of the web page.
-    private lazy var webPagePreview: TabWebViewPreview = .build()
+    private lazy var webPagePreview = TabWebViewPreview(windowUUID: windowUUID)
 
     // A view used as the background for the address bar, designed to look nice
     // when swiping between tabs, similar to Safari.
@@ -443,7 +443,6 @@ class BrowserViewController: UIViewController,
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
@@ -1030,11 +1029,13 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
     }
 
     func addSubviews() {
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            view.addSubviews(addressBarBackgroundView, webPagePreview)
+            webPagePreview.translatesAutoresizingMaskIntoConstraints = false
+        }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
