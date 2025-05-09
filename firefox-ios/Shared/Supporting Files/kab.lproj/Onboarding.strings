@@ -124,11 +124,20 @@
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Azen s wudem awurman ineqqisen n truẓi";
 
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Isefka yerzan ibenk-ik, tawila n warrum akked wamek i tesseqdaceḍ %1$@ yettal-aneɣ ad nesnerni timahilin, tamlellit akked urkad i yal yiwen. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Azen isefka itiknikanen akked wid n umyigew %@";
+
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "All-aneɣ ad nerr %@ igerrez ugar";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. */
 "Onboarding.TermsOfService.Subtitle.v136" = "Tinigin taruradt, taɣellsant deg uẓeṭṭa";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "S ukemmel, ad tqebleḍ %@..";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Tiwtilin n useqdec n %@.";
