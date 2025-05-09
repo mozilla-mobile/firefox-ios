@@ -34,11 +34,13 @@ class CustomSearchViewController: SettingsTableViewController {
         spinner.hidesWhenStopped = true
     }
 
-    var searchEnginesManager: SearchEnginesManager?
+    let searchEnginesManager: SearchEnginesManager
 
     init(windowUUID: WindowUUID,
-         faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
+         faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory(),
+         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()) {
         self.faviconFetcher = faviconFetcher
+        self.searchEnginesManager = searchEnginesManager
         super.init(windowUUID: windowUUID)
     }
 
@@ -70,7 +72,7 @@ class CustomSearchViewController: SettingsTableViewController {
             do {
                 let engine = try await createEngine(query: trimmedQuery, name: trimmedTitle)
                 spinnerView.stopAnimating()
-                searchEnginesManager?.addSearchEngine(engine)
+                searchEnginesManager.addSearchEngine(engine)
 
                 CATransaction.begin() // Use transaction to call callback after animation has been completed
                 CATransaction.setCompletionBlock(successCallback)
@@ -128,7 +130,6 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     private func engineExists(name: String, template: String) -> Bool {
-        guard let searchEnginesManager else { return false }
         return searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
         }
