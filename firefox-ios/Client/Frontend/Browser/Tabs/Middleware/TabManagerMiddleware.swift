@@ -1054,7 +1054,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
-        _ = profile.pinnedSites.addPinnedTopSite(site)
+        profile.pinnedSites.addPinnedTopSite(site)
     }
 
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
@@ -1066,7 +1066,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
-        _ = profile.pinnedSites.removeFromPinnedTopSites(site)
+        profile.pinnedSites.removeFromPinnedTopSites(site)
     }
 
     private func preserveTabs(uuid: WindowUUID) {

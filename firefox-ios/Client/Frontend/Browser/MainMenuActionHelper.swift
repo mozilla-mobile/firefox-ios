@@ -812,7 +812,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
 
-            _ = self.profile.pinnedSites.addPinnedTopSite(site)
+            self.profile.pinnedSites.addPinnedTopSite(site)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
         }
     }
@@ -825,7 +825,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
 
-            _ = self.profile.pinnedSites.removeFromPinnedTopSites(site)
+            self.profile.pinnedSites.removeFromPinnedTopSites(site)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
     }
