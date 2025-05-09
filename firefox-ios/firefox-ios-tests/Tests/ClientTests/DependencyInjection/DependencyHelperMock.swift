@@ -53,6 +53,9 @@ class DependencyHelperMock {
         let pocketManager: PocketManagerProvider = injectedPocketManager ?? MockPocketManager()
         AppContainer.shared.register(service: pocketManager)
 
+        let documentLogger = DocumentLogger(logger: MockLogger())
+        AppContainer.shared.register(service: documentLogger)
+
         let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService =
         MockGleanUsageReportingMetricsService(profile: profile)
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)

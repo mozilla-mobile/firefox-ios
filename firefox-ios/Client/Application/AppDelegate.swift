@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
         isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
     )
+    lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
@@ -243,6 +244,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // We have only five seconds here, so let's hope this doesn't take too long.
         logger.log("applicationWillTerminate", level: .info, category: .lifecycle)
         profile.shutdown()
+        documentLogger.logPendingDownloads()
     }
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
