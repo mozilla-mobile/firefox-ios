@@ -791,6 +791,14 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
+
+        if let readerMode = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            if readerMode.state == .active && !contentContainer.hasHomepage {
+                showReaderModeBar(animated: false)
+            } else {
+                hideReaderModeBar(animated: false)
+            }
+        }
     }
 
     private func showToastType(toast: ToastType) {
@@ -1624,8 +1632,6 @@ class BrowserViewController: UIViewController,
             updateBlurViews()
             return
         }
-
-        hideReaderModeBar(animated: false)
 
         // Make sure reload button is hidden on homepage
         if !isToolbarRefactorEnabled {
