@@ -39,7 +39,7 @@ final class EmptyReadingListView: UIView, Themeable {
     }
     var readerModeImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "ReaderModeCircle")?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?.withRenderingMode(.alwaysTemplate)
     }
     var readingListLabel: UILabel = .build { label in
         label.text = .ReaderPanelReadingListDescription
@@ -48,7 +48,7 @@ final class EmptyReadingListView: UIView, Themeable {
     }
     var readingListImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "AddToReadingListCircle")?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?.withRenderingMode(.alwaysTemplate)
     }
 
     // MARK: - Init
