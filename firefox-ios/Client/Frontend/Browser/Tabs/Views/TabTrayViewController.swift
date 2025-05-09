@@ -26,6 +26,7 @@ class TabTrayViewController: UIViewController,
                              UIToolbarDelegate,
                              UIPageViewControllerDataSource,
                              UIPageViewControllerDelegate,
+                             UIScrollViewDelegate,
                              StoreSubscriber,
                              FeatureFlaggable,
                              TabTraySelectorDelegate {
@@ -61,6 +62,7 @@ class TabTrayViewController: UIViewController,
 
     private lazy var panelContainer: UIView = .build { _ in }
     private var pageViewController: UIPageViewController?
+    private var swipeFromIndex: Int?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
@@ -697,6 +699,10 @@ class TabTrayViewController: UIViewController,
         ])
         pageVC.didMove(toParent: self)
 
+        if let scrollView = pageVC.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
+            scrollView.delegate = self
+        }
+
         self.pageViewController = pageVC
     }
 
@@ -918,9 +924,44 @@ class TabTrayViewController: UIViewController,
                                        windowUUID: windowUUID,
                                        actionType: TabTrayActionType.changePanel)
             store.dispatch(action)
-            experimentSegmentControl.select(index: index)
+            swipeFromIndex = nil
+            experimentSegmentControl.didFinishSelection()
 
             navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
         }
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
+        guard let fromVC = pageViewController.viewControllers?.first as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: fromVC) else { return }
+
+        swipeFromIndex = index
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard isTabTrayUIExperimentsEnabled,
+              let fromIndex = swipeFromIndex,
+              let width = scrollView.superview?.bounds.width else { return }
+
+        let offsetX = scrollView.contentOffset.x
+        let progress = (offsetX - width) / width
+
+        let toIndex: Int
+        if progress > 0 {
+            toIndex = min(fromIndex + 1, childPanelControllers.count - 1)
+        } else if progress < 0 {
+            toIndex = max(fromIndex - 1, 0)
+        } else {
+            toIndex = fromIndex
+        }
+
+        experimentSegmentControl.updateSelectionProgress(
+            fromIndex: fromIndex,
+            toIndex: toIndex,
+            progress: progress
+        )
     }
 }
