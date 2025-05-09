@@ -25,4 +25,4 @@ tasks:
         artifact_prefix: public
         workflows:
           - release_promotion_promote:
-              - BITRISE_SCHEME: "<release-type-scheme>"
+              - API_BITRISE_SCHEME: "<release-type-scheme>"
