@@ -183,7 +183,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
-        nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .firefoxHomepage,
