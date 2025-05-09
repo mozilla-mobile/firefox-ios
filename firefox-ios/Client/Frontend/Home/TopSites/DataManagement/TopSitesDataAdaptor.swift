@@ -64,7 +64,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         self.notificationCenter = notificationCenter
         self.searchEnginesManager = searchEnginesManager
         self.dispatchGroup = dispatchGroup
-        topSiteHistoryManager.delegate = self
 
         setupNotifications(forObserver: self,
                            observing: [.FirefoxAccountChanged,
@@ -304,7 +303,7 @@ private extension Array where Element == Site {
 }
 
 // MARK: - DataObserverDelegate
-extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
+extension TopSitesDataAdaptorImplementation {
     func didInvalidateDataSource(forceRefresh forced: Bool) {
         guard forced else { return }
         loadTopSitesData()

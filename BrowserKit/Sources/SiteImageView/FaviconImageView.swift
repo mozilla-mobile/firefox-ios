@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Common
 
 /// FaviconImageView supports the favicon image layout.
 /// By setting the view model, the image will be updated for you asynchronously

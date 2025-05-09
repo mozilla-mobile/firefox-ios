@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 12
         static let iconSize: CGFloat = 24
@@ -44,7 +44,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     // MARK: - Properties
-    public var model: MenuElement?
+    var model: MenuElement?
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -55,7 +55,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configureCellWith(model: MenuElement) {
+    func configureCellWith(model: MenuElement) {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
@@ -105,13 +105,8 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         icon.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
     }
 
-    func performAction() {
-        guard let action = model?.action else { return }
-        action()
-    }
-
     // MARK: - Theme Applicable
-    public func applyTheme(theme: Theme) {
+    func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
         accessoryArrowView.isHidden = isIconHidden ? true : false

@@ -14,8 +14,6 @@ extension Notification.Name {
 
     public static let FirefoxAccountProfileChanged = Notification.Name("FirefoxAccountProfileChanged")
 
-    public static let FirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
-
     public static let PrivateDataClearedHistory = Notification.Name("PrivateDataClearedHistory")
     public static let PrivateDataClearedDownloadedFiles = Notification.Name("PrivateDataClearedDownloadedFiles")
 
@@ -23,7 +21,6 @@ extension Notification.Name {
     public static let OnLocationChange = Notification.Name("OnLocationChange")
 
     // MARK: Notification UserInfo Keys
-    public static let UserInfoKeyHasSyncableAccount = Notification.Name("UserInfoKeyHasSyncableAccount")
 
     // Fired when the login synchronizer has finished applying remote changes
     public static let DataRemoteLoginChangesWereApplied = Notification.Name("DataRemoteLoginChangesWereApplied")
@@ -37,15 +34,7 @@ extension Notification.Name {
 
     public static let RustPlacesOpened = Notification.Name("RustPlacesOpened")
 
-    public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
-
-    public static let PasscodeDidCreate = Notification.Name("PasscodeDidCreate")
-
-    public static let PasscodeDidRemove = Notification.Name("PasscodeDidRemove")
-
     public static let DynamicFontChanged = Notification.Name("DynamicFontChanged")
-
-    public static let FaviconDidLoad = Notification.Name("FaviconDidLoad")
 
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
 
@@ -123,7 +112,6 @@ extension Notification.Name {
 
     // Search
     public static let DefaultSearchEngineUpdated = Notification.Name("DefaultSearchEngineUpdated")
-    public static let DisablePrivateModeSearchSuggests = Notification.Name("DisablePrivateModeSearchSuggests")
     public static let SearchSettingsDidUpdateDefaultSearchEngine =
     Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
 }

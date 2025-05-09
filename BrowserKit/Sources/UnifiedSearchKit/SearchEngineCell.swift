@@ -8,12 +8,11 @@ import UIKit
 
 // FXIOS-10189 This class will be refactored into a generic UITableView solution later. For now, it is largely a clone of
 // MenuKit's work. Eventually both this target and the MenuKit target will leverage a common reusable tableView component.
-public class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 11
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48
-        static let contentSpacing: CGFloat = 5
         static let noDescriptionContentSpacing: CGFloat = 0
     }
 
@@ -37,7 +36,7 @@ public class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private var accessoryArrowView: UIImageView = .build()
 
     // MARK: - Properties
-    public var model: SearchEngineElement?
+    var model: SearchEngineElement?
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -48,7 +47,7 @@ public class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configureCellWith(model: SearchEngineElement) {
+    func configureCellWith(model: SearchEngineElement) {
         self.model = model
         self.titleLabel.text = model.title
         self.contentStackView.spacing = UX.noDescriptionContentSpacing
@@ -88,7 +87,7 @@ public class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     // MARK: - Theme Applicable
-    public func applyTheme(theme: Theme) {
+    func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         icon.tintColor = theme.colors.iconSecondary

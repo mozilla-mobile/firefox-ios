@@ -13,10 +13,8 @@ protocol TopSiteHistoryManagerProvider {
 }
 
 // Manages the top site
-class TopSiteHistoryManager: DataObserver, TopSiteHistoryManagerProvider {
+class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
     private let profile: Profile
-
-    weak var delegate: DataObserverDelegate?
 
     private let topSiteCacheSize: Int32 = 32
     private let topSitesProvider: TopSitesProvider

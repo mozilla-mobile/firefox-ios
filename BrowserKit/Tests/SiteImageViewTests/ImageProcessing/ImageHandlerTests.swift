@@ -38,8 +38,7 @@ final class ImageHandlerTests: XCTestCase {
         return SiteImageModel(id: UUID(),
                               imageType: type,
                               siteURL: siteURL,
-                              siteResource: resourceURL != nil ? .remoteURL(url: resourceURL!) : nil,
-                              image: nil)
+                              siteResource: resourceURL != nil ? .remoteURL(url: resourceURL!) : nil)
     }
 
     func testFavicon_whenImageInCache_returnsCacheImage() async {
@@ -211,8 +210,7 @@ final class ImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: URL(string: "internal://local/about/home#panel=0")!,
-                                   siteResource: nil,
-                                   image: nil)
+                                   siteResource: nil)
         let result = await subject.fetchFavicon(imageModel: model)
 
         XCTAssertEqual(letterImageGenerator.image, result)

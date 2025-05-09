@@ -5,7 +5,7 @@
 import Foundation
 
 /// The constants related to the Web Engine
-public struct EngineConstants {
+struct EngineConstants {
     static let aboutBlank = "about:blank"
     static var webserverPort = 6571
     static let isPrivateKey = "isPrivate"

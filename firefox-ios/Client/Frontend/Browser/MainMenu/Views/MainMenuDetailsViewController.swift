@@ -8,10 +8,9 @@ import Redux
 import UIKit
 import ComponentLibrary
 
-class MainMenuDetailsViewController: UIViewController,
-                                    MenuTableViewDataDelegate,
-                                    Notifiable,
-                                    StoreSubscriber {
+final class MainMenuDetailsViewController: UIViewController,
+                                           Notifiable,
+                                           StoreSubscriber {
     typealias StoreSubscriberType = MainMenuDetailsState
 
     // MARK: - UI/UX elements
