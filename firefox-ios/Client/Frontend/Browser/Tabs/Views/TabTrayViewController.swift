@@ -925,7 +925,7 @@ class TabTrayViewController: UIViewController,
                                        actionType: TabTrayActionType.changePanel)
             store.dispatch(action)
             swipeFromIndex = nil
-            experimentSegmentControl.didFinishSelection()
+            experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
 
             navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
         }
