@@ -251,13 +251,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         self.removeTab(tab, flushToDisk: true)
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
@@ -269,13 +262,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     func removeTabs(_ tabs: [Tab]) {
@@ -956,7 +942,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know

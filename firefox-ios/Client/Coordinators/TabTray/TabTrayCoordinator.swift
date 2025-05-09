@@ -17,14 +17,15 @@ class TabTrayCoordinator: BaseCoordinator,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
     var tabTrayViewController: TabTrayViewController?
+    weak var parentCoordinator: TabTrayCoordinatorDelegate?
     private let profile: Profile
     private let tabManager: TabManager
-    weak var parentCoordinator: TabTrayCoordinatorDelegate?
 
     init(router: Router,
          tabTraySection: TabTrayPanelType,
          profile: Profile,
-         tabManager: TabManager) {
+         tabManager: TabManager
+    ) {
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
@@ -64,9 +65,6 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .open,
-                                     object: .tabTray)
         switch panelType {
         case .tabs:
             makeTabsCoordinator(navigationController: navigationController)
@@ -97,18 +95,12 @@ class TabTrayCoordinator: BaseCoordinator,
 
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .tabTray)
         remove(child: childCoordinator)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 
     // MARK: - TabTrayViewControllerDelegate
     func didFinish() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .tabTray)
         parentCoordinator?.didDismissTabTray(from: self)
     }
 }

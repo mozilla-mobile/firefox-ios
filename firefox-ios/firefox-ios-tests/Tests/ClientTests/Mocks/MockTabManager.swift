@@ -11,6 +11,7 @@ import Common
 class MockTabManager: TabManager {
     let windowUUID: WindowUUID
     var isRestoringTabs = false
+    var selectedIndex = 0
     var selectedTab: Tab?
     var selectedTabUUID: UUID?
     var backupCloseTab: BackupCloseTab?
