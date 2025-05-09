@@ -15,7 +15,7 @@ import struct MozillaAppServices.SuggestionQuery
 @preconcurrency
 public protocol RustFirefoxSuggestProtocol {
     /// Downloads and stores new Firefox Suggest suggestions.
-    func ingest() async throws
+    func ingest(emptyOnly: Bool) async throws
 
     /// Searches the store for matching suggestions.
     func query(
@@ -55,7 +55,7 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
         store = try builder.build()
     }
 
-    public func ingest() async throws {
+    public func ingest(emptyOnly: Bool) async throws {
         // Ensure that the Rust networking stack has been initialized before
         // downloading new suggestions. This is safe to call multiple times.
         Viaduct.shared.useReqwestBackend()
@@ -63,7 +63,7 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
         try await withCheckedThrowingContinuation { continuation in
             writerQueue.async(qos: .utility) {
                 do {
-                    _ = try self.store.ingest(constraints: SuggestIngestionConstraints())
+                    _ = try self.store.ingest(constraints: SuggestIngestionConstraints(emptyOnly: emptyOnly))
                     continuation.resume()
                 } catch {
                     continuation.resume(throwing: error)
