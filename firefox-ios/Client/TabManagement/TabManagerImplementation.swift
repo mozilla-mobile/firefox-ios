@@ -647,8 +647,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             return
         }
         await generateTabs(from: windowData)
-        cleanUpUnusedScreenshots()
-        cleanUpTabSessionData()
+        await cleanUpUnusedScreenshots()
+        await cleanUpTabSessionData()
 
         await MainActor.run {
             for delegate in delegates {
@@ -670,7 +670,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         var tabToSelect: Tab?
 
         for tabData in filteredTabs {
-            let newTab = configureNewTab(with: tabData)
+            let newTab = await configureNewTab(with: tabData)
             if isDeeplinkOptimizationRefactorEnabled {
                 if deeplinkTab == nil, windowData.activeTabId == tabData.id {
                     tabToSelect = newTab
@@ -688,7 +688,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
     }
 
-    private func configureNewTab(with tabData: TabData) -> Tab? {
+    @MainActor
+    private func configureNewTab(with tabData: TabData) async -> Tab? {
         let newTab: Tab
 
         let isDeeplinkTabAlreadyAdded: Bool = if let deeplinkTab {
@@ -730,7 +731,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         // Restore screenshot
-        restoreScreenshot(tab: newTab)
+        await restoreScreenshot(tab: newTab)
         return newTab
     }
 
@@ -775,11 +776,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         selectTab(newTab)
     }
 
-    private func restoreScreenshot(tab: Tab) {
-        Task {
-            let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
-            tab.setScreenshot(screenshot)
-        }
+    private func restoreScreenshot(tab: Tab) async {
+        let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
+        tab.setScreenshot(screenshot)
     }
 
     // MARK: - Save tabs
@@ -996,50 +995,42 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     // MARK: - TabEventHandler
-    func tabDidSetScreenshot(_ tab: Tab) {
+    func tabDidSetScreenshot(_ tab: Tab) async {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
-            removeScreenshot(tab: tab)
+            await removeScreenshot(tab: tab)
             return
         }
 
-        storeScreenshot(tab: tab)
+        await storeScreenshot(tab: tab)
     }
 
-    func storeScreenshot(tab: Tab) {
+    func storeScreenshot(tab: Tab) async {
         guard let screenshot = tab.screenshot else { return }
 
-        Task {
-            do {
-                try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
-            } catch {
-                logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
-            }
+        do {
+            try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+        } catch {
+            logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
         }
     }
 
-    private func removeScreenshot(tab: Tab) {
-        Task {
-            await imageStore?.deleteImageForKey(tab.tabUUID)
-        }
+    private func removeScreenshot(tab: Tab) async {
+        await imageStore?.deleteImageForKey(tab.tabUUID)
     }
 
-    private func cleanUpUnusedScreenshots() {
+    private func cleanUpUnusedScreenshots() async {
         // Clean up any screenshots that are no longer associated with a tab.
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
         let savedUUIDsCopy = savedUUIDs
-        Task {
-            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
-        }
+        try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
     }
 
-    private func cleanUpTabSessionData() {
+    private func cleanUpTabSessionData() async {
         let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
-        Task {
-            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
-        }
+        await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
     }
 
     // MARK: - Inactive tabs
@@ -1067,7 +1058,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         backupCloseTabs = [Tab]()
     }
 
-    func clearAllTabsHistory() {
+    @MainActor
+    func clearAllTabsHistory() async {
         guard let selectedTab = selectedTab, let url = selectedTab.url else { return }
 
         for tab in tabs where tab !== selectedTab {
@@ -1084,9 +1076,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         selectTab(tabToSelect)
         removeTabWithCompletion(selectedTab.tabUUID, completion: nil)
-        Task {
-            await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
-        }
+        await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
     }
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
