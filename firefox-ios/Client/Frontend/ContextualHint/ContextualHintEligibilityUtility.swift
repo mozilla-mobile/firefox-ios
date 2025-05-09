@@ -45,7 +45,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .navigation:
             hintTypeShouldBePresented = true
-        case .toolbarRefactor:
+        case .toolbarUpdate:
             hintTypeShouldBePresented = true
         }
 

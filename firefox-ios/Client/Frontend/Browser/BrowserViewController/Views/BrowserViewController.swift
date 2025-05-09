@@ -232,7 +232,7 @@ class BrowserViewController: UIViewController,
     }()
 
     private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
-        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarRefactor, with: profile)
+        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
         return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
     }()
 
