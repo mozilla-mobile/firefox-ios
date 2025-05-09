@@ -24,6 +24,9 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
+                             UIPageViewControllerDataSource,
+                             UIPageViewControllerDelegate,
+                             UIScrollViewDelegate,
                              StoreSubscriber,
                              FeatureFlaggable,
                              TabTraySelectorDelegate {
@@ -49,9 +52,17 @@ class TabTrayViewController: UIViewController,
     var notificationCenter: NotificationProtocol
 
     // MARK: Child panel and navigation
-    var childPanelControllers = [UINavigationController]()
+    var childPanelControllers = [UINavigationController]() {
+        didSet {
+            setupSlidingPanel()
+        }
+    }
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
+
+    private lazy var panelContainer: UIView = .build { _ in }
+    private var pageViewController: UIPageViewController?
+    private var swipeFromIndex: Int?
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
@@ -82,6 +93,12 @@ class TabTrayViewController: UIViewController,
     var currentPanel: UINavigationController? {
         guard !childPanelControllers.isEmpty else { return nil }
         let index = tabTrayState.selectedPanel.rawValue
+        return childPanelControllers[index]
+    }
+
+    var currentExperimentPanel: UINavigationController? {
+        guard !childPanelControllers.isEmpty else { return nil }
+        let index = experimentConvertSelectedIndex()
         return childPanelControllers[index]
     }
 
@@ -376,6 +393,18 @@ class TabTrayViewController: UIViewController,
             }
         }
         applyTheme()
+
+        if isTabTrayUIExperimentsEnabled,
+           let pageVC = pageViewController,
+           pageVC.viewControllers?.isEmpty ?? true {
+            let initialIndex = experimentConvertSelectedIndex()
+            if let initialVC = childPanelControllers[safe: initialIndex] {
+                pageVC.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+
+                let panelType = tabTrayState.selectedPanel
+                navigationHandler?.start(panelType: panelType, navigationController: initialVC)
+            }
+        }
     }
 
     func updateTabCountImage(count: String) {
@@ -435,7 +464,15 @@ class TabTrayViewController: UIViewController,
             containerView.addSubview(experimentSegmentControl)
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
+            containerView.addSubview(panelContainer)
+
             NSLayoutConstraint.activate([
+                panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
+                panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                panelContainer.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
+                                                       constant: -UX.segmentedControlTopSpacing),
+
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -501,15 +538,20 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
-        var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
-            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+            // Adding a delay since `tabTrayState` is not accurate otherwise
+            DispatchQueue.main.async {
+                let isSyncTabsPanel = self.tabTrayState.isSyncTabsPanel
+                let toolbarItems = isSyncTabsPanel ?
+                    self.experimentBottomToolbarItemsForSync :
+                    self.experimentBottomToolbarItems
+                self.setToolbarItems(toolbarItems, animated: true)
+            }
         } else {
-            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+            let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
+            let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+            setToolbarItems(toolbarItems, animated: true)
         }
-
-        setToolbarItems(toolbarItems, animated: true)
     }
 
     private func setupToolbarForIpad() {
@@ -613,9 +655,12 @@ class TabTrayViewController: UIViewController,
         segmentedControl.selectedSegmentIndex = panelType.rawValue
         updateTitle()
         updateLayout()
-        hideCurrentPanel()
-        showPanel(currentPanel)
-        navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
+
+        if !isTabTrayUIExperimentsEnabled {
+            hideCurrentPanel()
+            showPanel(currentPanel)
+            navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
+        }
     }
 
     private func showPanel(_ panel: UIViewController) {
@@ -626,25 +671,38 @@ class TabTrayViewController: UIViewController,
         panel.endAppearanceTransition()
         panel.view.translatesAutoresizingMaskIntoConstraints = false
 
-        if isTabTrayUIExperimentsEnabled, !isRegularLayout {
-            NSLayoutConstraint.activate([
-                panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-                panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
-                                                   constant: -UX.segmentedControlTopSpacing),
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-                panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-            ])
-        }
+        NSLayoutConstraint.activate([
+            panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+        ])
 
         panel.didMove(toParent: self)
         updateTitle()
+    }
+
+    func setupSlidingPanel() {
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageVC.dataSource = self
+        pageVC.delegate = self
+
+        addChild(pageVC)
+        panelContainer.addSubview(pageVC.view)
+        pageVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pageVC.view.leadingAnchor.constraint(equalTo: panelContainer.leadingAnchor),
+            pageVC.view.trailingAnchor.constraint(equalTo: panelContainer.trailingAnchor),
+            pageVC.view.topAnchor.constraint(equalTo: panelContainer.topAnchor),
+            pageVC.view.bottomAnchor.constraint(equalTo: panelContainer.bottomAnchor)
+        ])
+        pageVC.didMove(toParent: self)
+
+        if let scrollView = pageVC.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
+            scrollView.delegate = self
+        }
+
+        self.pageViewController = pageVC
     }
 
     private func hideCurrentPanel() {
@@ -811,11 +869,98 @@ class TabTrayViewController: UIViewController,
     func didSelectSection(panelType: TabTrayPanelType) {
         guard tabTrayState.selectedPanel != panelType else { return }
 
-        setupOpenPanel(panelType: panelType)
+        if isTabTrayUIExperimentsEnabled {
+            let targetIndex = TabTrayPanelType.getExperimentConvert(index: panelType.rawValue).rawValue
+            guard let targetVC = childPanelControllers[safe: targetIndex],
+                  let currentVC = pageViewController?.viewControllers?.first as? UINavigationController,
+                  let currentIndex = childPanelControllers.firstIndex(of: currentVC)
+            else { return }
+
+            let direction: UIPageViewController.NavigationDirection = targetIndex > currentIndex ? .forward : .reverse
+
+            pageViewController?.setViewControllers([targetVC], direction: direction, animated: true, completion: nil)
+            tabTrayState.selectedPanel = panelType
+        } else {
+            setupOpenPanel(panelType: panelType)
+        }
 
         let action = TabTrayAction(panelType: panelType,
                                    windowUUID: windowUUID,
                                    actionType: TabTrayActionType.changePanel)
         store.dispatch(action)
+    }
+
+    // MARK: - UIPageViewControllerDataSource & UIPageViewControllerDelegate
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let viewController = viewController as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: viewController),
+              index > 0 else { return nil }
+        return childPanelControllers[index - 1]
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let viewController = viewController as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: viewController),
+              index < childPanelControllers.count - 1 else { return nil }
+        return childPanelControllers[index + 1]
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
+        guard completed,
+              let currentVC = pageViewController.viewControllers?.first as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: currentVC) else { return }
+
+        let newPanelType = TabTrayPanelType.getExperimentConvert(index: index)
+        if tabTrayState.selectedPanel != newPanelType {
+            tabTrayState.selectedPanel = newPanelType
+            let action = TabTrayAction(panelType: newPanelType,
+                                       windowUUID: windowUUID,
+                                       actionType: TabTrayActionType.changePanel)
+            store.dispatch(action)
+            swipeFromIndex = nil
+            experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
+
+            navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
+        }
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
+        guard let fromVC = pageViewController.viewControllers?.first as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: fromVC) else { return }
+
+        swipeFromIndex = index
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard isTabTrayUIExperimentsEnabled,
+              let fromIndex = swipeFromIndex,
+              let width = scrollView.superview?.bounds.width else { return }
+
+        let offsetX = scrollView.contentOffset.x
+        let progress = (offsetX - width) / width
+
+        let toIndex: Int
+        if progress > 0 {
+            toIndex = min(fromIndex + 1, childPanelControllers.count - 1)
+        } else if progress < 0 {
+            toIndex = max(fromIndex - 1, 0)
+        } else {
+            toIndex = fromIndex
+        }
+
+        experimentSegmentControl.updateSelectionProgress(
+            fromIndex: fromIndex,
+            toIndex: toIndex,
+            progress: progress
+        )
     }
 }
