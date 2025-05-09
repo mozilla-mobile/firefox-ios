@@ -5,9 +5,15 @@
 import SwiftUI
 import Common
 
+/// Child settings pages browsing actions
+protocol AppearanceSettingsDelegate: AnyObject {
+    func pressedPageZoom()
+}
+
 /// The main view displaying the settings for the appearance menu.
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
+    let delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
     var themeManager
@@ -50,8 +56,12 @@ struct AppearanceSettingsView: View {
                                    onChange: setWebsiteDarkMode)
             }
             GenericSectionView(theme: currentTheme, title: String.PageZoomSectionHeader) {
-                GenericItemCellView(title: String.PageZoomTitle, theme: currentTheme)
+                GenericItemCellView(title: String.PageZoomTitle, theme: currentTheme) {
+                    print("YRD calling delegate on callback")
+                    delegate?.pressedPageZoom()
+                }
             }
+
             Spacer()
         }
         .padding(.top, UX.spacing)

@@ -41,9 +41,8 @@ struct GenericSectionView<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            headerView(title.uppercased())
-                .padding([.leading, .trailing], UX.sectionPadding)
-                .padding(.bottom, UX.textPadding)
+            GenericSectionHeaderView(title: title.uppercased(),
+                                     sectionTitleColor: sectionTitleColor)
 
             Divider().frame(height: UX.dividerHeight)
 
@@ -59,18 +58,6 @@ struct GenericSectionView<Content: View>: View {
             }
         }
         .padding(.bottom, UX.sectionPadding)
-    }
-
-    /// Creates the header view with the provided title.
-    /// - Parameter title: The title text.
-    /// - Returns: A view containing the header.
-    private func headerView(_ title: String) -> some View {
-        HStack {
-            Text(title)
-                .font(.caption)
-                .foregroundColor(sectionTitleColor)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
     }
 
     /// Creates the footer view with the provided text.

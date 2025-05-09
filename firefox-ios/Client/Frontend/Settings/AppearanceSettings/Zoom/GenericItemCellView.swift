@@ -14,8 +14,9 @@ struct GenericItemCellView: View {
 
     let title: String
     let theme: Theme?
+    // TODO: Pass in chevron
 //    let imageResource: String?
-//    let onPress: (() -> Void)??
+    private(set) var onTap: () -> Void
 
     var textColor: Color {
         return Color(theme?.colors.textPrimary ?? UIColor.clear)
@@ -47,8 +48,12 @@ struct GenericItemCellView: View {
         .padding(.vertical, UX.verticalSpacing)
         .background(backgroundColor)
         .accessibilityElement()
-        .accessibilityLabel("\(String.WebsiteDarkModeToggleTitle)")
+        .accessibilityLabel("\(String.WebsiteDarkModeToggleTitle)") // TODO: Add A11yLabel
         .accessibilityAddTraits(traits)
+        .onTapGesture {
+            print("YRD on gesture is working")
+            onTap()
+        }
     }
 
     var traits: AccessibilityTraits {
