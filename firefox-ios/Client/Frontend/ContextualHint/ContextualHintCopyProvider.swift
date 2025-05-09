@@ -78,6 +78,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .navigation:
             descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
+
+        case .toolbarRefactor:
+            descriptionCopy = CFRStrings.Toolbar.ToolbarUpdateBody
         }
 
         return descriptionCopy
@@ -97,6 +100,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
                 .jumpBackInSyncedTab:
             actionCopy = ""
         case .navigation:
+            actionCopy = ""
+        case .toolbarRefactor:
             actionCopy = ""
         }
 

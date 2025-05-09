@@ -19,6 +19,7 @@ enum ContextualHintType: String {
     case mainMenu = "MainMenu"
     case dataClearance = "DataClearance"
     case navigation = "Navigation"
+    case toolbarRefactor = "ToolbarRefactor"
 }
 
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {

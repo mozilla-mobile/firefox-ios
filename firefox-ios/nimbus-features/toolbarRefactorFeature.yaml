@@ -19,9 +19,9 @@ features:
           If true, enables the navigation contextual hint.
         type: Boolean
         default: false
-      address_toolbar_hint:
+      toolbar_update_hint:
         description: >
-          If true, enables the address toolbar contextual hint.
+          If true, enables the toolbar update contextual hint.
         type: Boolean
         default: false
       unified_search:
@@ -52,7 +52,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          address_toolbar_hint: true
+          toolbar_update_hint: true
           swiping_tabs: true
           translucency: false
           layout: version1
@@ -62,7 +62,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          address_toolbar_hint: true
+          toolbar_update_hint: true
           swiping_tabs: true
           translucency: false
           layout: baseline
