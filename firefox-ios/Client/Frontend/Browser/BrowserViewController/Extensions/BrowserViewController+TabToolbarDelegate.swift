@@ -314,13 +314,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     private func getCloseTabAction() -> PhotonRowActions {
         let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
         let title = isRefactorEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
-                                        String.KeyboardShortcuts.CloseCurrentTab
+        String.KeyboardShortcuts.CloseCurrentTab
         return SingleActionViewModel(title: title,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                self.tabManager.removeTabWithCompletion(tab.tabUUID) {
+            Task { @MainActor in
+                if let tab = self.tabManager.selectedTab {
+                    self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
+                    await self.tabManager.removeTab(tab.tabUUID)
                     self.updateTabCountUsingTabManager(self.tabManager)
 
                     if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
