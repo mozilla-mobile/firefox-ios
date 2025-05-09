@@ -97,6 +97,9 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Issin ugar";
 
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Azen s wudem awurman ineqqisen n truẓi";
+
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "Issin ugar";
 
@@ -196,11 +199,20 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Issin ugar";
 
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Ɛreḍ timahilin d tektiwin send ma ad asent-nserrḥen akk i medden.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Sbedd syen seddu almad";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Issin ugar";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Issin ugar";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
+"Settings.TechnicalData.Message.v135" = "%1$@ tettennaɣ akken ad telqeḍ kan ayen tesra i usnulfu d usnerni n %2$@ i yal yiwen.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Isefka itiknikanen akked temyigawt";

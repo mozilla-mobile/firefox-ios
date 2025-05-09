@@ -20,7 +20,7 @@
 "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "Cyan";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a black background. */
-"Settings.AppIconSelection.AppIconNames.Dark.Title.v139" = "Mörkt";
+"Settings.AppIconSelection.AppIconNames.Dark.Title.v139" = "Mörk";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
 "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "Mörkt lila";
@@ -41,7 +41,7 @@
 "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "Lat";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a white background. */
-"Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "Ljust";
+"Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "Ljus";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to light purple. */
 "Settings.AppIconSelection.AppIconNames.Midday.Title.v137" = "Middag";
