@@ -54,7 +54,7 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureF
                    level: .debug,
                    category: .storage)
         do {
-            try await firefoxSuggest.ingest()
+            try await firefoxSuggest.ingest(emptyOnly: false)
             logger.log("Successfully ingested new suggestions",
                        level: .debug,
                        category: .storage)
