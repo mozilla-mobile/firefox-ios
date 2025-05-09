@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Shared
 import Storage
+import MozillaAppServices
 
 // Small iPhone screens in landscape require that the popup have a shorter height.
 func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
@@ -32,6 +33,9 @@ class InitialViewController: UIViewController {
     var shareViewController: ShareViewController?
 
     override func viewDidLoad() {
+        // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
+        MozillaAppServices.initialize()
+
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
 
