@@ -7,7 +7,7 @@ import Storage
 import MozillaAppServices
 
 class MockRustFirefoxSuggest: RustFirefoxSuggestProtocol {
-    func ingest() async throws {
+    func ingest(emptyOnly: Bool = false) async throws {
     }
     func query(
         _ keyword: String,
