@@ -128,6 +128,7 @@ public struct PrefsKeys {
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case mainMenuKey = "MainMenuHintKey"
         case navigationKey = "ContextualHintNavigation"
+        case toolbarUpdateKey = "ContextualHintToolbarUpdate"
     }
 
     // Firefox settings
