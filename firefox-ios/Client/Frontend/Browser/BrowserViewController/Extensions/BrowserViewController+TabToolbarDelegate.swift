@@ -319,6 +319,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
+                self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
                     self.updateTabCountUsingTabManager(self.tabManager)
 

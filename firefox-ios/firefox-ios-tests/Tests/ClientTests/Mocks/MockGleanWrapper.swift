@@ -16,6 +16,7 @@ class MockGleanWrapper: GleanWrapper {
     var recordLabelCalled = 0
     var setBooleanCalled = 0
     var recordQuantityCalled = 0
+    var recordLabeledQuantityCalled = 0
     var recordUrlCalled = 0
     var incrementNumeratorCalled = 0
     var incrementDenominatorCalled = 0
@@ -78,6 +79,11 @@ class MockGleanWrapper: GleanWrapper {
     func recordQuantity(for metric: QuantityMetricType, value: Int64) {
         savedEvents?.append(metric)
         recordQuantityCalled += 1
+    }
+
+    func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
+        savedEvents?.append(metric)
+        recordLabeledQuantityCalled += 1
     }
 
     func recordUrl(for metric: UrlMetricType, value: String) {

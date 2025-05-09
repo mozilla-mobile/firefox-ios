@@ -16,6 +16,7 @@ class TabPanelViewAction: Action {
     let isPrivateModeActive: Bool?
     let urlRequest: URLRequest?
     let tabUUID: TabUUID?
+    let selectedTabIndex: Int?
     let moveTabData: MoveTabData?
     let toastType: ToastType?
     let shareSheetURL: URL?
@@ -25,6 +26,7 @@ class TabPanelViewAction: Action {
          isPrivateModeActive: Bool? = nil,
          urlRequest: URLRequest? = nil,
          tabUUID: TabUUID? = nil,
+         selectedTabIndex: Int? = nil,
          moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
@@ -35,6 +37,7 @@ class TabPanelViewAction: Action {
         self.isPrivateModeActive = isPrivateModeActive
         self.urlRequest = urlRequest
         self.tabUUID = tabUUID
+        self.selectedTabIndex = selectedTabIndex
         self.moveTabData = moveTabData
         self.toastType = toastType
         self.shareSheetURL = shareSheetURL
@@ -52,6 +55,7 @@ enum TabPanelViewActionType: ActionType {
     case closeTab
     case undoClose
     case closeAllTabs
+    case cancelCloseAllTabs
     case confirmCloseAllTabs
     case undoCloseAllTabs
     case moveTab
