@@ -1,6 +1,9 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "വീണ്ടും ലഭ്യമാക്കുക";
 
+/* On error page, this is the description for a generic error. %@ is the site url. */
+"NativeErrorPage.GenericError.Description.v134" = "%@-ന്റെ ഉടമസ്ഥൻ ഇതിനെ ശരിയായിട്ടു് ഒരുങ്ങാത്തുകൊണ്ടു് ഒരു സുരക്ഷിതമായ ഇണക്കപ്പെടാൻ പറ്റിയില്ല.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ശ്രദ്ധിക്കൂ. ഇതിൽ എന്തോ കുഴപ്പമുണ്ടെന്നു് തോന്നുന്നു.";
 
