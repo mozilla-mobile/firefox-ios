@@ -174,6 +174,7 @@ enum Experiments {
             "is_phone": isPhone,
             "is_review_checker_enabled": isReviewCheckerEnabled(),
             "is_default_browser": isDefaultBrowser(),
+            "is_bottom_toolbar_user": isBottomToolbarUser(),
         ]
 
         // App settings, to allow experiments to target the app name and the
@@ -198,6 +199,11 @@ enum Experiments {
         return UserDefaults.standard.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser)
     }
 
+    private static func isBottomToolbarUser() -> Bool {
+        return UserDefaults.standard
+            .bool(forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+    }
+
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
@@ -210,8 +216,13 @@ enum Experiments {
 
         let nimbusRecordedContext = RecordedNimbusContext(
             isFirstRun: isFirstRun,
+<<<<<<< HEAD
             isReviewCheckerEnabled: isReviewCheckerEnabled(),
             isDefaultBrowser: isDefaultBrowser()
+=======
+            isDefaultBrowser: isDefaultBrowser(),
+            isBottomToolbarUser: isBottomToolbarUser()
+>>>>>>> 027db46c4 (Add FXIOS-12240 [Nimbus] Advanced targeting for existing bottom toolbar users (#26647))
         )
 
         return NimbusBuilder(dbPath: dbPath)
