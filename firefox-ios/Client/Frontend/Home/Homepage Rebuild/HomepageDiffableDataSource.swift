@@ -49,6 +49,7 @@ final class HomepageDiffableDataSource:
             return [
                 HomepageHeaderCell.self,
                 HomepageMessageCardCell.self,
+                LegacyTopSiteCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 JumpBackInCell.self,

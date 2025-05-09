@@ -3593,7 +3593,7 @@ tabs_panel:
         - TabsPanel
   new_tab_button_tapped:
     type: event
-    description: | 
+    description: |
       Recorded when the user taps the button in the tabs panel to open a new
       tab.
     extra_keys:
@@ -3617,7 +3617,7 @@ tabs_panel:
         - TabsPanel
   tab_mode_selected:
     type: event
-    description: | 
+    description: |
       Recorded when the user changes the tabs panel mode with the segmented 
       control in the tabs panel.
     extra_keys:
@@ -3638,10 +3638,32 @@ tabs_panel:
       tags:
         - TabsPanel
 
+tabs_panel.close_old_tabs_sheet:
+  option_selected:
+    type: event
+    description: |
+      Recorded when the user taps an option in the close old tabs sheet.
+    extra_keys:
+      period:
+        type: string
+        description: |
+          The period of time chosen by the user to delete their older tabs.
+          Either `oneDay`, `oneWeek` or `oneMonth`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/26444
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26584
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-11-01"
+    metadata:
+      tags:
+        - TabsPanel
+
 tabs_panel.close_all_tabs_sheet:
   option_selected:
     type: event
-    description: | 
+    description: |
       Recorded when the user taps an option in the close all tabs sheet.
     extra_keys:
       option:
@@ -3673,7 +3695,7 @@ tabs_panel.close_all_tabs_sheet:
 toasts.close_single_tab:
   undo_tapped:
     type: event
-    description: | 
+    description: |
       Records when the user selects undo after closing a tab.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
@@ -3690,7 +3712,7 @@ toasts.close_single_tab:
 toasts.close_all_tabs:
   undo_tapped:
     type: event
-    description: | 
+    description: |
       Records when the user selects undo after closing all tabs.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
@@ -4644,10 +4666,17 @@ toolbar:
       is_private:
         description: Whether the user is in private mode or not
         type: boolean
+      is_toolbar:
+        type: boolean
+        description: |
+         Wether the source view of this button is the Toolbar, otherwise the Menu.
+         For Toolbar layout version1 and version2 the source is the Legacy menu meanwhile for 
+         baseline the Toolbar.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26604
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"

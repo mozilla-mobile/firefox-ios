@@ -318,7 +318,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch sections[indexPath.section] {
         case .defaultBrowser:
             let defaultBrowserCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "defaultBrowserCell")
-            defaultBrowserCell.textLabel?.text = String(format: UIConstants.strings.setAsDefaultBrowserLabel)
+            defaultBrowserCell.setConfiguration(text: String(format: UIConstants.strings.setAsDefaultBrowserLabel))
             defaultBrowserCell.accessibilityIdentifier = "settingsViewController.defaultBrowserCell"
             cell = defaultBrowserCell
         case .general:
@@ -381,21 +381,25 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .mozilla:
             if indexPath.row == 0 {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
-                cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
-                cell.accessibilityIdentifier = "settingsViewController.about"
+                let settingCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
+                settingCell.setConfiguration(text: String(format: UIConstants.strings.aboutTitle, AppInfo.productName))
+                settingCell.accessibilityIdentifier = "settingsViewController.about"
+                cell = settingCell
             } else if indexPath.row == 1 {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
-                cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
-                cell.accessibilityIdentifier = "settingsViewController.rateFocus"
+                let settingCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
+                settingCell.setConfiguration(text: String(format: UIConstants.strings.ratingSetting, AppInfo.productName))
+                settingCell.accessibilityIdentifier = "settingsViewController.rateFocus"
+                cell = settingCell
             } else {
-                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "licensesCell")
-                cell.textLabel?.text = UIConstants.strings.licenses
-                cell.accessibilityIdentifier = "settingsViewController.licenses"
+                let settingCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "licensesCell")
+                settingCell.setConfiguration(text: UIConstants.strings.licenses)
+                settingCell.accessibilityIdentifier = "settingsViewController.licenses"
+                cell = settingCell
             }
         case .secret:
-            cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "secretSettingsCell")
-            cell.textLabel?.text = "Internal Settings"
+            let settingCell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "secretSettingsCell")
+            settingCell.setConfiguration(text: "Internal Settings")
+            cell = settingCell
         case .crashReports:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .dailyUsagePing:

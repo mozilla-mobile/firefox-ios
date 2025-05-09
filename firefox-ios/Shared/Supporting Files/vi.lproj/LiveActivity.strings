@@ -1,5 +1,5 @@
 /* Displayed during a download in Live Activity or Dynamic Island. %@ is the number of files (e.g. Downloading Files: 2). */
-"LiveActivity.Downloads.FileCountText.v138" = "Đang tải tập tin: %@";
+"LiveActivity.Downloads.FileCountText.v138" = "Đang tải tệp: %@";
 
 /* Displayed during a download in Live Activity or Dynamic Island. %@ is the name of the file being downloaded (e.g. Downloading “MyFile.pdf”). */
 "LiveActivity.Downloads.FileNameText.v138" = "Đang tải “%@”";
