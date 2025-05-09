@@ -55,7 +55,7 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
         store = try builder.build()
     }
 
-    public func ingest(emptyOnly: Bool = false) async throws {
+    public func ingest(emptyOnly: Bool) async throws {
         // Ensure that the Rust networking stack has been initialized before
         // downloading new suggestions. This is safe to call multiple times.
         Viaduct.shared.useReqwestBackend()
