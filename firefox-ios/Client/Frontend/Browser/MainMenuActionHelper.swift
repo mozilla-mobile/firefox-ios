@@ -245,7 +245,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let desktopSiteAction = getRequestDesktopSiteAction()
             append(to: &section, action: desktopSiteAction)
 
-            if toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2 {
+            if toolbarLayoutStyle == .version1 {
                 let trackingProtectionAction = getTrackingProtectionAction()
                 append(to: &section, action: trackingProtectionAction)
             }
