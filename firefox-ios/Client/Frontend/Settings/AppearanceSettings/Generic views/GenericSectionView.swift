@@ -43,6 +43,7 @@ struct GenericSectionView<Content: View>: View {
         VStack(alignment: .leading, spacing: 0) {
             GenericSectionHeaderView(title: title.uppercased(),
                                      sectionTitleColor: sectionTitleColor)
+            .padding([.leading, .trailing], UX.sectionPadding)
 
             Divider().frame(height: UX.dividerHeight)
 

@@ -17,9 +17,14 @@ struct PageZoomSettingsView: View {
     var sectionTitleColor: Color {
         return Color(theme.colors.textSecondary)
     }
+    
+    var textColor: Color {
+        return Color(theme.colors.textPrimary)
+    }
 
     private let theme: Theme
     let siteZooms: [String] = ["amazon.com", "wikipedia.org"]
+    @State private var defaultZoom = "100%"
 
     init(theme: Theme) {
         self.theme = theme
@@ -33,6 +38,15 @@ struct PageZoomSettingsView: View {
                         Text(item.displayName)
                     }
                     .listRowBackground(theme.colors.layer2.color)
+//                    Picker("Zoom Level", selection: $defaultZoom) {
+//                        ForEach(ZoomLevel.allCases, id: \.displayName) { item in
+//                            Text(item.displayName)
+//                                .font(.body)
+//                                .foregroundColor(textColor)
+//                        }
+//                    }
+//                    .accentColor(textColor)
+//                    .pickerStyle(.menu)
                 } header: {
                     // TODO: String
                     GenericSectionHeaderView(title: "DEFAULT", sectionTitleColor: sectionTitleColor)
@@ -41,6 +55,8 @@ struct PageZoomSettingsView: View {
                 Section {
                     ForEach(siteZooms, id: \.self) { item in
                         Text(item)
+                            .font(.body)
+                            .foregroundColor(textColor)
                     }
                     .listRowBackground(theme.colors.layer2.color)
                 } header: {

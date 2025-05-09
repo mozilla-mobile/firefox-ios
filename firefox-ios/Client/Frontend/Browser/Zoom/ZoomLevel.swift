@@ -4,7 +4,7 @@
 
 enum ZoomLevel: CGFloat, CaseIterable, Identifiable {
     var id: String { displayName }
-    
+
     case fiftyPercent = 0.5
     case seventyFivePercent = 0.75
     case ninetyPercent = 0.9
@@ -36,6 +36,10 @@ enum ZoomLevel: CGFloat, CaseIterable, Identifiable {
         case .oneHundredSeventyFivePercent: return 175
         case .twoHundred: return 200
         }
+    }
+
+    init(from value: CGFloat) {
+        self = ZoomLevel(rawValue: value) ?? .oneHundredPercent
     }
 
     /// Returns the next higher zoom level based on the given current zoom level.

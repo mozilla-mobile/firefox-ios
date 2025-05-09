@@ -6,7 +6,6 @@ import SwiftUI
 
 struct GenericSectionHeaderView: View {
     private struct UX {
-        static var sectionPadding: CGFloat { 16 }
         static var textPadding: CGFloat { 8 }
     }
 
@@ -28,7 +27,6 @@ struct GenericSectionHeaderView: View {
                 .foregroundColor(sectionTitleColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding([.leading, .trailing], UX.sectionPadding)
         .padding(.bottom, UX.textPadding)
     }
 }

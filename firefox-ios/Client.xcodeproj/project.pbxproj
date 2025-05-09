@@ -10863,10 +10863,19 @@
 		214099602DCBF4DB004881E1 /* Zoom */ = {
 			isa = PBXGroup;
 			children = (
-				2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */,
 				2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */,
 			);
 			path = Zoom;
+			sourceTree = "<group>";
+		};
+		214099632DCE665F004881E1 /* Generic views */ = {
+			isa = PBXGroup;
+			children = (
+				2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */,
+				214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */,
+				BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */,
+			);
+			path = "Generic views";
 			sourceTree = "<group>";
 		};
 		2142B12B2D9F1284003AA82F /* Zoom */ = {
@@ -11218,7 +11227,6 @@
 		2F44FC551A9E83E200FD20CC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */,
 				BA4BB9962D7F371F006BD137 /* AppearanceSettings */,
 				2152473D2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift */,
 				8ADED55B2D6679B200345293 /* BrowsingSettingsViewController.swift */,
@@ -13395,10 +13403,10 @@
 				214099602DCBF4DB004881E1 /* Zoom */,
 				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
 				BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */,
-				BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */,
 				BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */,
 				BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */,
 				BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */,
+				214099632DCE665F004881E1 /* Generic views */,
 			);
 			path = AppearanceSettings;
 			sourceTree = "<group>";
