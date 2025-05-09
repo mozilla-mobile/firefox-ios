@@ -213,7 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         /// On first run (when suggest‑data.db is empty) this populates the db; later calls are no‑ops due to `emptyOnly`.
         /// For details, see:
         ///     https://github.com/mozilla/application-services/blob/5aade8c09653ad2a2ec02746dc6bcf80dc8434c2/components/suggest/src/store.rs#L597-L599
-        /// Actual periodic refreshing happens in `BackgroundFirefoxSuggestIngestUtility.swift`.
+        /// Actual periodic refreshing happens in the background in `BackgroundFirefoxSuggestIngestUtility.swift`.
         /// `.utility` priority is used here because this blocks on network calls and would otherwise trigger a
         /// priority‑inversion warning if run at user‑initiated QoS.
         Task.detached(priority: .utility) {
