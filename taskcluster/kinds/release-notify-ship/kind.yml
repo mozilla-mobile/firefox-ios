@@ -1,0 +1,37 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - taskgraph.transforms.from_deps
+    - ffios_taskgraph.transforms.release_notifications:transforms
+    - taskgraph.transforms.task
+
+kind-dependencies:
+    - mark-as-shipped
+
+tasks:
+  firefox-ios:
+    name: notify-release-signoff-ship
+    description: Sends email to release-signoff telling a release was shipped.
+    run-on-projects: []
+    shipping-phase: ship
+    worker-type: succeed
+    notifications:
+      emails:
+        by-level:
+          '3': ["release-signoff@mozilla.org"]
+          default: []
+      subject: "firefox-ios {release_type} {version} build{build_number} is shipped!"
+      message: "firefox-ios {release_type} {version} build{build_number} is shipped!"
+    from-deps:
+      group-by:
+        attribute: release-type
+      unique-kinds: false
+      copy-attributes: true
+      with-attributes:
+        release-type:
+          - beta
+          - release
