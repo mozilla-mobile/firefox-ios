@@ -385,6 +385,18 @@ class TabTrayViewController: UIViewController,
             }
         }
         applyTheme()
+
+        if isTabTrayUIExperimentsEnabled,
+           let pageVC = pageViewController,
+           pageVC.viewControllers?.isEmpty ?? true {
+            let initialIndex = experimentConvertSelectedIndex()
+            if let initialVC = childPanelControllers[safe: initialIndex] {
+                pageVC.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+
+                let panelType = tabTrayState.selectedPanel
+                navigationHandler?.start(panelType: panelType, navigationController: initialVC)
+            }
+        }
     }
 
     func updateTabCountImage(count: String) {
@@ -667,12 +679,6 @@ class TabTrayViewController: UIViewController,
         pageVC.dataSource = self
         pageVC.delegate = self
 
-        // Set the initial panel based on Redux state
-        let initialIndex = tabTrayState.selectedPanel.rawValue
-        let initialVC = childPanelControllers[safe: initialIndex] ?? childPanelControllers.first!
-
-        pageVC.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
-
         addChild(pageVC)
         panelContainer.addSubview(pageVC.view)
         pageVC.view.translatesAutoresizingMaskIntoConstraints = false
@@ -685,12 +691,6 @@ class TabTrayViewController: UIViewController,
         pageVC.didMove(toParent: self)
 
         self.pageViewController = pageVC
-
-        // Set up routing logic
-        for (index, controller) in childPanelControllers.enumerated() {
-            let panelType = TabTrayPanelType.getExperimentConvert(index: index)
-            navigationHandler?.start(panelType: panelType, navigationController: controller)
-        }
     }
 
     private func hideCurrentPanel() {
@@ -867,7 +867,6 @@ class TabTrayViewController: UIViewController,
             let direction: UIPageViewController.NavigationDirection = targetIndex > currentIndex ? .forward : .reverse
 
             pageViewController?.setViewControllers([targetVC], direction: direction, animated: true, completion: nil)
-
             tabTrayState.selectedPanel = panelType
         } else {
             setupOpenPanel(panelType: panelType)
@@ -897,7 +896,8 @@ class TabTrayViewController: UIViewController,
         return childPanelControllers[index + 1]
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool,
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
         guard completed,
@@ -912,6 +912,8 @@ class TabTrayViewController: UIViewController,
                                        actionType: TabTrayActionType.changePanel)
             store.dispatch(action)
             experimentSegmentControl.select(index: index)
+
+            navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
         }
     }
 }
