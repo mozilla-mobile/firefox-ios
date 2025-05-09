@@ -127,6 +127,11 @@ class TabTraySelectorView: UIView,
         selectedIndex = sender.tag
     }
 
+    func select(index: Int) {
+        guard index != selectedIndex, index >= 0, index < buttons.count else { return }
+        selectedIndex = index
+    }
+
     private func selectNewSection() {
         guard buttons.indices.contains(selectedIndex) else { return }
 
