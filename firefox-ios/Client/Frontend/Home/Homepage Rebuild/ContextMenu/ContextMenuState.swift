@@ -20,7 +20,6 @@ protocol BookmarksHandlerDelegate: AnyObject {
 /// Ideally, we want that view to subscribe to the store and update its state following the redux pattern
 /// For now, we will instantiate this state and populate the associated view model instead to avoid
 /// increasing scope of homepage rebuild project.
-
 struct ContextMenuState {
     var site: Site?
     var actions: [[PhotonRowActions]] = [[]]

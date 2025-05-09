@@ -441,4 +441,9 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
         openBookmarkEditPanel(urlString: urlString)
     }
+
+    func showTrackingProtection() {
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
+    }
 }
