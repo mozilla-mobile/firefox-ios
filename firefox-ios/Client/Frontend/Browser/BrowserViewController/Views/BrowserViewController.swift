@@ -344,11 +344,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
-<<<<<<< HEAD
-=======
-        self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
->>>>>>> d2095dff9 (Refactor FXIOS-11614 [Tabs Optimization] Additional Tabs Panel Telemetry (#26131))
 
         super.init(nibName: nil, bundle: nil)
         didInit()
