@@ -81,13 +81,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     /// Invisible button without corner radius to ensure the button has the required hitbox size
     private lazy var closeButton: UIButton = .build { button in
-<<<<<<< HEAD
-        var configuration = UIButton.Configuration.plain()
-        configuration.contentInsets = UX.closeButtonEdgeInset
-        button.configuration = configuration
-=======
         button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.closeButton
->>>>>>> 46b7979d6 (Refactor FXIOS-12189 [Tab tray UI experiment] Make hit box bigger for close button (#26624))
     }
 
     /// Contains the blur background for the X icon
