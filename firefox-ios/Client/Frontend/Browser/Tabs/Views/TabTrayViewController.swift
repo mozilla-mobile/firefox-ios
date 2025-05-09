@@ -94,6 +94,12 @@ class TabTrayViewController: UIViewController,
         return childPanelControllers[index]
     }
 
+    var currentExperimentPanel: UINavigationController? {
+        guard !childPanelControllers.isEmpty else { return nil }
+        let index = experimentConvertSelectedIndex()
+        return childPanelControllers[index]
+    }
+
     var shownToast: Toast?
     var logger: Logger
 
