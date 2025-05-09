@@ -22,13 +22,7 @@ class TabTraySelectorView: UIView,
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
-    private var selectedIndex: Int {
-        didSet {
-            if oldValue != selectedIndex {
-                selectNewSection(from: oldValue, to: selectedIndex)
-            }
-        }
-    }
+    private var selectedIndex: Int
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var hasAppliedInitialTransform = false
@@ -89,7 +83,8 @@ class TabTraySelectorView: UIView,
         selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
     }
 
-    func didFinishSelection() {
+    func didFinishSelection(to index: Int) {
+        selectedIndex = index
         adjustSelectedButtonFont()
     }
 
@@ -146,7 +141,9 @@ class TabTraySelectorView: UIView,
 
     @objc
     private func sectionSelected(_ sender: UIButton) {
+        let oldValue = selectedIndex
         selectedIndex = sender.tag
+        selectNewSection(from: oldValue, to: selectedIndex)
     }
 
     private func selectNewSection(from fromIndex: Int, to toIndex: Int) {
