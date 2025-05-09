@@ -25,6 +25,7 @@ class FeatureFlaggedTestBase: BaseTestCase {
         launchArgs.append("\(LaunchArguments.LoadExperiment)\(jsonFileName)")
         launchArgs.append("\(LaunchArguments.ExperimentFeatureName)\(featureName)")
         app.launchArguments = launchArgs
+        launchArguments = launchArgs + launchArguments
     }
 }
 
@@ -40,6 +41,19 @@ class FeatureFlaggedTestSuite: FeatureFlaggedTestBase {
 
     override func setUpApp() {
         addLaunchArgument(jsonFileName: jsonFileName, featureName: featureName)
+    }
+
+    override func setUp() {
+        continueAfterFailure = false
+        setUpExperimentVariables()
+        setUpApp()
+        setUpLaunchArguments()
+        setUpScreenGraph()
+    }
+
+    // Important: `launchApp` must be called explicitly in each test case.
+    func launchApp() {
         app.launch()
+        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
     }
 }

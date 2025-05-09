@@ -116,6 +116,7 @@
         "FirefoxSuggestTest",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",
+        "HistoryTabTrayUIExperimentTests",
         "HomeButtonTests",
         "HomePageSettingsUITests\/testRecentlyVisited()",
         "InactiveTabsTest",

@@ -103,7 +103,6 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        setUpExperimentVariables()
         setUpApp()
         setUpScreenGraph()
     }
