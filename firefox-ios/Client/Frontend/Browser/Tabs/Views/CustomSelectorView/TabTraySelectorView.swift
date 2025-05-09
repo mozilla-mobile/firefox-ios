@@ -26,14 +26,13 @@ class TabTraySelectorView: UIView,
     private var selectedIndex: Int {
         didSet {
             if oldValue != selectedIndex {
-                selectNewSection()
+                selectNewSection(from: oldValue, to: selectedIndex)
             }
         }
     }
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
-    private var selectionBackgroundLeadingConstraint: NSLayoutConstraint?
-    private var selectionBackgroundTrailingConstraint: NSLayoutConstraint?
+    private var hasAppliedInitialTransform = false
 
     var items: [String] = ["", "", ""] {
         didSet {
@@ -53,6 +52,48 @@ class TabTraySelectorView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        guard !hasAppliedInitialTransform else { return }
+        applyInitalSelectionBackgroundFrame()
+    }
+
+    /// Width of the `selectionBackground` needs to be larger than the widest button. Due to translations, we need
+    /// to search for this widest button between the three available.
+    private func applyInitalSelectionBackgroundFrame() {
+        guard let widestButton = buttons.max(by: {
+            $0.intrinsicContentSize.width < $1.intrinsicContentSize.width
+        }) else { return }
+
+        let selectionBackgroundWidth = widestButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
+        if let widthConstraint = selectionBackgroundView.constraints.first(where: { $0.firstAttribute == .width }) {
+            widthConstraint.constant = selectionBackgroundWidth
+        } else {
+            selectionBackgroundView.widthAnchor.constraint(equalToConstant: selectionBackgroundWidth).isActive = true
+        }
+
+        hasAppliedInitialTransform = true
+    }
+
+    func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
+        guard buttons.indices.contains(fromIndex),
+              buttons.indices.contains(toIndex) else { return }
+
+        let fromX = buttons[fromIndex].center.x
+        let toX = buttons[toIndex].center.x
+        let interpolatedX = fromX + (toX - fromX) * abs(progress)
+
+        let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
+        let targetOffset = stackCenterX - selectionBackgroundView.center.x
+
+        selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+    }
+
+    func didFinishSelection() {
+        adjustSelectedButtonFont()
+    }
+
     private func setup() {
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
@@ -63,14 +104,9 @@ class TabTraySelectorView: UIView,
         stackView.spacing = TabTraySelectorUX.horizontalPadding
         stackView.distribution = .equalCentering
         stackView.alignment = .center
-
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stackView)
 
-        NSLayoutConstraint.activate([
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            stackView.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
+        addSubview(stackView)
 
         for (index, title) in items.enumerated() {
             let button = UIButton()
@@ -91,29 +127,16 @@ class TabTraySelectorView: UIView,
             stackView.addArrangedSubview(button)
         }
 
-        applyTheme(theme: theme)
-        setupInitialSelectionBackground()
-    }
-
-    private func setupInitialSelectionBackground() {
-        guard buttons.indices.contains(selectedIndex) else { return }
-
-        let selectedButton = buttons[selectedIndex]
-        selectionBackgroundLeadingConstraint = selectionBackgroundView.leadingAnchor.constraint(
-            equalTo: selectedButton.leadingAnchor, constant: -TabTraySelectorUX.horizontalInsets
-        )
-        selectionBackgroundTrailingConstraint = selectionBackgroundView.trailingAnchor.constraint(
-            equalTo: selectedButton.trailingAnchor, constant: TabTraySelectorUX.horizontalInsets
-        )
-
         NSLayoutConstraint.activate([
-            selectionBackgroundView.topAnchor.constraint(equalTo: selectedButton.topAnchor,
-                                                         constant: -TabTraySelectorUX.verticalInsets),
-            selectionBackgroundView.bottomAnchor.constraint(equalTo: selectedButton.bottomAnchor,
-                                                            constant: TabTraySelectorUX.verticalInsets),
-            selectionBackgroundLeadingConstraint!,
-            selectionBackgroundTrailingConstraint!
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor,
+                                                            constant: TabTraySelectorUX.verticalInsets * 2),
+            selectionBackgroundView.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
+            selectionBackgroundView.centerXAnchor.constraint(equalTo: buttons[selectedIndex].centerXAnchor)
         ])
+
+        applyTheme(theme: theme)
     }
 
     private func updateLabels() {
@@ -127,15 +150,30 @@ class TabTraySelectorView: UIView,
         selectedIndex = sender.tag
     }
 
-    func select(index: Int) {
-        guard index != selectedIndex, index >= 0, index < buttons.count else { return }
-        selectedIndex = index
+    private func selectNewSection(from fromIndex: Int, to toIndex: Int) {
+        guard buttons.indices.contains(fromIndex),
+              buttons.indices.contains(toIndex) else { return }
+
+        let fromX = buttons[fromIndex].center.x
+        let toX = buttons[toIndex].center.x
+        let interpolatedX = fromX + (toX - fromX)
+        let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
+        let targetOffset = stackCenterX - selectionBackgroundView.center.x
+
+        adjustSelectedButtonFont()
+
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       options: [.curveEaseInOut],
+                       animations: {
+            self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+        }, completion: nil)
+
+        let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
+        delegate?.didSelectSection(panelType: panelType)
     }
 
-    private func selectNewSection() {
-        guard buttons.indices.contains(selectedIndex) else { return }
-
-        let newSelectedButton = buttons[selectedIndex]
+    private func adjustSelectedButtonFont() {
         for (index, button) in buttons.enumerated() {
             if index == selectedIndex {
                 button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
@@ -143,28 +181,6 @@ class TabTraySelectorView: UIView,
                 button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
             }
         }
-
-        selectionBackgroundLeadingConstraint?.isActive = false
-        selectionBackgroundLeadingConstraint = selectionBackgroundView.leadingAnchor.constraint(
-            equalTo: newSelectedButton.leadingAnchor, constant: -TabTraySelectorUX.horizontalInsets
-        )
-        selectionBackgroundLeadingConstraint?.isActive = true
-
-        selectionBackgroundTrailingConstraint?.isActive = false
-        selectionBackgroundTrailingConstraint = selectionBackgroundView.trailingAnchor.constraint(
-            equalTo: newSelectedButton.trailingAnchor, constant: TabTraySelectorUX.horizontalInsets
-        )
-        selectionBackgroundTrailingConstraint?.isActive = true
-
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       options: [.curveEaseInOut],
-                       animations: {
-            self.layoutIfNeeded()
-        }, completion: nil)
-
-        let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
-        delegate?.didSelectSection(panelType: panelType)
     }
 
     // MARK: - ThemeApplicable
