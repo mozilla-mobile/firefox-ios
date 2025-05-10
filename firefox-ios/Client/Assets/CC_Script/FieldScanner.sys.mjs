@@ -42,6 +42,10 @@ export class FieldDetail {
   // The possible values are "autocomplete", "fathom", and "regex-heuristic"
   reason = null;
 
+  // This field could be a lookup field, for example, one that could be used to
+  // search for an address or postal code and fill in other fields.
+  isLookup = false;
+
   /*
    * The "section", "addressType", and "contactType" values are
    * used to identify the exact field when the serializable data is received
@@ -101,6 +105,7 @@ export class FieldDetail {
       isVisible = true,
       mlHeaderInput = null,
       mlButtonInput = null,
+      isLookup = false,
     } = {}
   ) {
     const fieldDetail = new FieldDetail(element);
@@ -179,6 +184,8 @@ export class FieldDetail {
       fieldDetail.fathomConfidence = fathomConfidence;
     }
 
+    fieldDetail.isLookup = isLookup;
+
     return fieldDetail;
   }
 }
@@ -249,6 +256,24 @@ export class FieldScanner {
     }
 
     return this.#fieldDetails[index];
+  }
+
+  /**
+   * Return the index of the first field found with the given name.
+   *
+   * @param {string} fieldName
+   *        The field name to find.
+   * @returns {number}
+   *          The index of the element or -1 if not found.
+   */
+  getFieldIndexByName(fieldName) {
+    for (let idx = 0; this.elementExisting(idx); idx++) {
+      if (this.#fieldDetails[idx].fieldName == fieldName) {
+        return idx;
+      }
+    }
+
+    return -1;
   }
 
   /**
