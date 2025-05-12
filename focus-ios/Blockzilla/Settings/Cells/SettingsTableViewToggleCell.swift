@@ -10,18 +10,7 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, toggle: BlockerToggle) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupDynamicFont(forLabels: [newLabel], addObserver: true)
-
-        newLabel.numberOfLines = 0
-        newLabel.text = toggle.label
-
-        textLabel?.numberOfLines = 0
-        textLabel?.text = toggle.label
-
-        newLabel.textColor = .primaryText
-        textLabel?.textColor = .primaryText
-        layoutMargins = UIEdgeInsets.zero
-
+        setConfiguration(text: toggle.label)
         accessoryView = PaddedSwitch(switchView: toggle.toggle)
         selectionStyle = .none
     }
