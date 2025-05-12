@@ -319,6 +319,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
+                self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
                     self.updateTabCountUsingTabManager(self.tabManager)
 
@@ -440,5 +441,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     func showEditBookmark() {
         guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
         openBookmarkEditPanel(urlString: urlString)
+    }
+
+    func showTrackingProtection() {
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
     }
 }

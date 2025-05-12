@@ -3599,171 +3599,6 @@ sync:
 
 # Tab metrics
 tabs:
-  normal_tabs_quantity:
-    type: quantity
-    description: |
-      A snapshot of how many normal tabs a user has opened when he
-      closes the application.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    unit: quantity of normal tabs
-  private_tabs_quantity:
-    type: quantity
-    description: |
-      A snapshot of how many private tabs a user has opened when he
-      closes the application.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9627
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10272
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    unit: quantity of private tabs
-  inactive_tabs_count:
-    type: quantity
-    description: |
-      A quantity that indicates how many INACTIVE tabs a user
-      currently has open. This is reported when the user backgrounds
-      the app.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14906
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/15511
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-    unit: quantity of inactive tabs
-  cumulative_count:
-    type: counter
-    description: |
-      Measures the current open tab count as the application
-      goes to background. Each background event adds to this
-      metric, making it the cumulative sum of all open tabs
-      when the app goes to background during the period of
-      time covered by a single metrics ping. This can be
-      divided by the number of baseline pings with
-      `ping_info.reason="inactive"` from the `start_time` to
-      the `end_time` of the metrics ping to determine the
-      average open tabs per foreground "session".
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  open:
-    type: labeled_counter
-    description: |
-      The count of tabs opened by the user. Increments the
-      appropriate label when either a normal or private tab
-      is opened.
-    labels:
-      - normal-tab
-      - private-tab
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  close:
-    type: labeled_counter
-    description: |
-      The count of tabs closed by the user. Increments the
-      appropriate label when either a normal or private tab
-      is closed.
-    labels:
-      - normal-tab
-      - private-tab
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  close_all:
-    type: labeled_counter
-    description: |
-      The count of times the user closes all tabs. Increments the
-      appropriate label when either a normal or private tab
-      is closed.
-    labels:
-      - normal-tab
-      - private-tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  click_tab:
-    type: event
-    description: |
-      Recorded when a user clicks an open tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  open_tab_tray:
-    type: event
-    description: |
-      Recorded when a user opens the tab tray
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  close_tab_tray:
-    type: event
-    description: |
-      Recorded when a user closes the tab tray
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   pull_to_refresh:
     type: event
     description: |
@@ -3807,70 +3642,6 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-  grouped_tab:
-    type: event
-    description: |
-      Recorded when a user opens the tab tray with grouped tab
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    extra_keys:
-      total_num_of_groups:
-        description:
-          Total number of groups in tab tray
-        type: quantity
-      groups_two_tabs_only:
-        description:
-          Total number of groups with only 2 tabs
-        type: quantity
-      groups_with_more_than_two_tab:
-        description:
-          Total number of groups with more than 2 tabs
-        type: quantity
-      average_tabs_in_all_groups:
-        description:
-          Average number of tabs in all groups
-        type: quantity
-      total_tabs_in_all_groups:
-        description:
-          Total number of tabs in all groups
-        type: quantity
-    expires: "2025-07-01"
-  grouped_tab_closed:
-    type: counter
-    description: |
-      Recorded when a user closes the tab in a group
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9134
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  grouped_tab_search:
-    type: counter
-    description: |
-      This counts the number of times a user has tapped the search
-      icon for grouped tabs in the tab tray.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9267
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9267
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   navigate_tab_history_back:
     type: counter
     description: |
@@ -3984,16 +3755,93 @@ tabs:
 
 # Tabs Panel
 tabs_panel:
-  new_tab_button_tapped:
+  done_button_tapped:
     type: event
-    description: | 
-      User taps the button in the tabs panel to open a new tab.
+    description: |
+      Recorded when a user taps the done button to close the tabs panel.
     extra_keys:
       mode:
         type: string
         description: |
-          The tab mode you are in when you press the new tab 
-          button (normal or private).
+          The current tabs panel mode (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-12-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_closed:
+    type: event
+    description: |
+      Recorded when a user closes an open tab via tapping the x or
+      swiping closed.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-12-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_selected:
+    type: event
+    description: |
+      Recorded when a user selects a tab in the tabs panel.
+    extra_keys:
+      selected_tab_index:
+        type: quantity
+        description: |
+          The index of the selectd tab (indicies start at 0).
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-12-01"
+    metadata:
+      tags:
+        - TabsPanel
+  new_tab_button_tapped:
+    type: event
+    description: | 
+      Recorded when the user taps the button in the tabs panel to open a new
+      tab.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
       - https://github.com/mozilla-mobile/firefox-ios/issues/6886
@@ -4002,7 +3850,6 @@ tabs_panel:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -4012,13 +3859,13 @@ tabs_panel:
   tab_mode_selected:
     type: event
     description: | 
-      User changes the tab tray mode with the segmented control in the
-      tabs panel.
+      Recorded when the user changes the tabs panel mode with the segmented 
+      control in the tabs panel.
     extra_keys:
       mode:
         type: string
         description: |
-          The tab mode the user is switching to (normal, private, or sync).
+          The newly selected tabs panel mode (normal or private or sync).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
@@ -4028,6 +3875,37 @@ tabs_panel:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    metadata:
+      tags:
+        - TabsPanel
+
+tabs_panel.close_all_tabs_sheet:
+  option_selected:
+    type: event
+    description: | 
+      Recorded when the user taps an option in the close all tabs sheet.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option selected from the close all tabs sheet, either
+          all or cancel.
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25296
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-12-01"
     metadata:
       tags:
         - TabsPanel
@@ -4458,6 +4336,7 @@ tabs_tray:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    
 # Inactive Tabs metrics
 inactive_tabs_tray:
   toggle_inactive_tab_tray:
@@ -5006,10 +4885,17 @@ toolbar:
       is_private:
         description: Whether the user is in private mode or not
         type: boolean
+      is_toolbar:
+        type: boolean
+        description: |
+         Wether the source view of this button is the Toolbar, otherwise the Menu.
+         For Toolbar layout version1 and version2 the source is the Legacy menu meanwhile for 
+         baseline the Toolbar.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26604
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
@@ -6265,6 +6151,79 @@ fx_suggest:
     expires: never
     send_in_pings:
       - fx-suggest
+
+# Zoom Bar
+zoom_bar:
+  zoom_out_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the zoom out button in the zoom bar. 
+      This will cause the current webpage to zoom out.
+    extra_keys:
+      level:
+        type: quantity
+        description: |
+          The new zoom level shown on the zoom bar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+  zoom_in_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the zoom in button in the zoom bar. 
+      This will cause the current webpage to zoom in.
+    extra_keys:
+      level:
+        type: quantity
+        description: |
+          The new zoom level shown on the zoom bar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+  reset_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the current zoom percentage to reset the zoom  
+      level in the zoom bar. This will cause the current webpage to reset 
+      back to the default 100% zoom level.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
+  close_button_tapped:
+    type: event
+    description: |
+      Records when the user taps the close button to close the zoom bar.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12099
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26555
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - ZoomBar
 
 # Window (iPad) metrics
 windows:
