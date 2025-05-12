@@ -6,6 +6,6 @@ import Foundation
 
 enum WKPolicy: Equatable {
     case allow
-    case openApp
+    case launchExternalApp
     case cancel
 }

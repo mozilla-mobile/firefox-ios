@@ -5,12 +5,58 @@
 import Foundation
 import WebKit
 
+/// An object that decides by returning a `WKPolicy` the policy for a navigation request by `WebKit`'s delegate methods.
 protocol WKPolicyDecider {
+    /// The next decider in the chain, that can eventually respond with a `WKPolicy` if this decider is not able to handle it.
     var next: WKPolicyDecider? { get set }
 
-    func policyForNavigation(action: WKNavigationAction) -> WKPolicy
+    func policyForNavigation(action: NavigationAction) -> WKPolicy
 
-    func policyForNavigation(response: WKNavigationResponse) -> WKPolicy
+    func policyForNavigation(response: NavigationResponse) -> WKPolicy
 
-    func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy
+    func policyForPopupNavigation(action: NavigationAction) -> WKPolicy
+}
+
+protocol NavigationAction {
+    var url: URL? { get }
+    var request: URLRequest { get }
+    var navigationType: WKNavigationType { get }
+
+    var sourceFrameInfo: FrameInfo { get }
+    var targetFrameInfo: FrameInfo? { get }
+}
+
+protocol NavigationResponse {
+    var url: URL? { get }
+    var response: URLResponse { get }
+    var isForMainFrame: Bool { get }
+}
+
+extension WKNavigationAction: NavigationAction {
+    var sourceFrameInfo: any FrameInfo {
+        return sourceFrame
+    }
+    
+    var targetFrameInfo: (any FrameInfo)? {
+        return targetFrame
+    }
+
+    var url: URL? {
+        return request.url
+    }
+}
+
+extension WKNavigationResponse: NavigationResponse {
+    var url: URL? {
+        return response.url
+    }
+}
+
+protocol FrameInfo {
+    var isMainFrame: Bool { get }
+    var request: URLRequest { get }
+}
+
+extension WKFrameInfo: FrameInfo {
+
 }

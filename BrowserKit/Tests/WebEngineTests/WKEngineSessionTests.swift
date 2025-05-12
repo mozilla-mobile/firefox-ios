@@ -574,7 +574,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testUIHandlerIsActiveSetTrue() {
-        let uiHandler = DefaultUIHandler()
+        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
 
         let subject = createSubject(uiHandler: uiHandler)
 
@@ -584,7 +584,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testUIHandlerIsActiveSetFalse() {
-        let uiHandler = DefaultUIHandler()
+        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
 
         let subject = createSubject(uiHandler: uiHandler)
 
@@ -595,7 +595,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testSettingEngineSessionDelegateSetsUIHandlerDelegate() {
-        let uiHandler = DefaultUIHandler()
+        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
         let subject = createSubject(uiHandler: uiHandler)
 
         subject?.delegate = engineSessionDelegate
@@ -616,7 +616,7 @@ final class WKEngineSessionTests: XCTestCase {
                                             scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
                                             navigationHandler: DefaultNavigationHandler(),
-                                            uiHandler: uiHandler ?? DefaultUIHandler(),
+                                            uiHandler: uiHandler ?? DefaultUIHandler(sessionDependencies:  DefaultTestDependencies().sessionDependencies),
                                             readerModeDelegate: MockWKReaderModeDelegate()) else {
             return nil
         }

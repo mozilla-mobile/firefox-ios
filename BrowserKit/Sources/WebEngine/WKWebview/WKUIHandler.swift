@@ -4,6 +4,7 @@
 
 @preconcurrency
 import WebKit
+import Common
 
 protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
@@ -53,32 +54,16 @@ protocol WKUIHandler: WKUIDelegate {
     )
 }
 
-protocol Application {
-    func open(url: URL)
-
-    func canOpen(url: URL) -> Bool
-}
-
-extension UIApplication: Application {
-    func open(url: URL) {
-        open(url, options: [:])
-    }
-
-    func canOpen(url: URL) -> Bool {
-        return canOpenURL(url)
-    }
-}
-
 class DefaultUIHandler: NSObject, WKUIHandler {
     weak var delegate: EngineSessionDelegate?
     public var isActive = false
     private let sessionDependencies: EngineSessionDependencies
     private let application: Application
-    private let policyDecider: WKPolicyDeciderFactory
+    private let policyDecider: WKPolicyDecider
 
     init(sessionDependencies: EngineSessionDependencies,
          application: Application = UIApplication.shared,
-         policyDecider: WKPolicyDeciderFactory = WKPolicyDeciderFactory()) {
+         policyDecider: WKPolicyDecider = WKPolicyDeciderFactory()) {
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
@@ -93,18 +78,25 @@ class DefaultUIHandler: NSObject, WKUIHandler {
         case .cancel:
             return nil
         case .allow:
+            let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
             let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
                                                          dependencies: sessionDependencies,
-                                                         configurationProvider: DefaultWKEngineConfigurationProvider(configuration: configuration))
-            if let session, let webView = session.webView as? WKWebView {
-                delegate?.onRequestOpenNewSession(session)
-                return webView
+                                                         configurationProvider: configurationProvider)
+
+            guard let session, let webView = session.webView as? WKWebView else { return nil }
+            let url = navigationAction.request.url
+            let urlString = url?.absoluteString ?? ""
+
+            if (url == nil || urlString.isEmpty),
+               let blank = URL(string: "about:blank"),
+               let url = BrowserURL(browsingContext: BrowsingContext(type: .internalNavigation, url: blank)) {
+                session.load(browserURL: url)
             }
-            return nil
-        case .openApp:
-            guard let url = navigationAction.request.url, application.canOpen(url: url) else {
-                return nil
-            }
+
+            delegate?.onRequestOpenNewSession(session)
+            return webView
+        case .launchExternalApp:
+            guard let url = navigationAction.request.url, application.canOpen(url: url) else { return nil }
             application.open(url: url)
             return nil
         }

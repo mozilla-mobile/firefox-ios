@@ -64,7 +64,7 @@ final class WKUIHandlerTests: XCTestCase {
     }
 
     func createSubject(delegate: EngineSessionDelegate, isActive: Bool = false) -> WKUIHandler {
-        let uiHandler = DefaultUIHandler()
+        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
         uiHandler.delegate = delegate
         uiHandler.isActive = isActive
         return uiHandler

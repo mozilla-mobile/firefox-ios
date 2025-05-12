@@ -5,20 +5,23 @@
 import Foundation
 import WebKit
 
+/// The root class that generates the responder chain with all the available `WKPolicyDecider`s
+///
+/// The class decides a `WKPolicy` for each type of navigation by asking it to it's managed chain.
 class WKPolicyDeciderFactory: WKPolicyDecider {
     var next: WKPolicyDecider?
 
-    func policyForNavigation(action: WKNavigationAction) -> WKPolicy {
+    func policyForNavigation(action: NavigationAction) -> WKPolicy {
         guard let next else { return .cancel }
         return next.policyForNavigation(action: action)
     }
 
-    func policyForNavigation(response: WKNavigationResponse) -> WKPolicy {
+    func policyForNavigation(response: NavigationResponse) -> WKPolicy {
         guard let next else { return .cancel }
         return next.policyForNavigation(response: response)
     }
 
-    func policyForPopupNavigation(action: WKNavigationAction) -> WKPolicy {
+    func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
         next = popupNavigationResponderChain()
         guard let next else { return .cancel }
         return next.policyForPopupNavigation(action: action)
