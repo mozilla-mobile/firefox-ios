@@ -5671,15 +5671,30 @@ extension String {
         value: "Gives websites a dark appearance. Some sites might not look right.",
         comment: "Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature.")
     public static let PageZoomSectionHeader = MZLocalizedString(
-        key: "Settings.Appearance.PageZoom.SectionHeader.v140",
+        key: "Settings.Appearance.Zoom.SectionHeader.v140",
         tableName: nil,
         value: "Zoom Settings",
         comment: "Page zoom section header title in Appearance settings")
     public static let PageZoomTitle = MZLocalizedString(
-        key: "Settings.Appearance.PageZoom.Title.v140",
+        key: "Settings.Appearance.Zoom.Title.v140",
         tableName: nil,
         value: "Page Zoom",
         comment: "Page zoom settings title in Appearance settings")
+    public static let DefaultZoomLevelSectionTitle = MZLocalizedString(
+        key: "Settings.Appearance.Zoom.Default.Title.v140",
+        tableName: nil,
+        value: "Default",
+        comment: "Default section header title under page zoom settings. Indicates the default value for all websites")
+    public static let ZoomLevelSelectorTitle = MZLocalizedString(
+        key: "Settings.Appearance.Zoom.ZoomLevelTitle.v140",
+        tableName: nil,
+        value: "Zoom Level",
+        comment: "Zoom level title under page zoom settings to select the default zoom level for all websites")
+    public static let SpecificSiteZoomSectionTitle = MZLocalizedString(
+        key: "Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140",
+        tableName: nil,
+        value: "Specific site settings",
+        comment: "Specific site settings section header title under page zoom settings. List all websites with custom zoom level")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString(
         key: "Settings.DisplayTheme.BrightnessThreshold.SectionHeader",
         tableName: nil,
