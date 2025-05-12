@@ -7,8 +7,20 @@ import Shared
 import Glean
 import MozillaAppServices
 
+protocol VersionProviding {
+  func object(forInfoDictionaryKey key: String) -> Any?
+}
+
+extension Bundle: VersionProviding {}
+
 struct TermsOfServiceManager: FeatureFlaggable {
     var prefs: Prefs
+    private let bundle: VersionProviding
+
+    init(prefs: Prefs, bundle: VersionProviding = Bundle.main) {
+        self.prefs = prefs
+        self.bundle = bundle
+    }
 
     var isFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
@@ -83,18 +95,16 @@ struct TermsOfServiceManager: FeatureFlaggable {
     // MARK: – Helpers
 
     /// Checks whether the app’s CFBundleShortVersionString lies within the half-open range [min, max).
-    private func isAppVersion(in range: Range<String>) -> Bool {
-        guard
-            let versionString = Bundle.main
-                .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-        else {
+    func isAppVersion(in range: Range<String>) -> Bool {
+        guard let versionString = bundle
+            .object(forInfoDictionaryKey: "CFBundleShortVersionString")
+                as? String else {
             return false
         }
-
         let v = versionString as NSString
-        let meetsMinimum = v.compare(range.lowerBound, options: .numeric) != .orderedAscending
-        let belowMaximum = v.compare(range.upperBound, options: .numeric) == .orderedAscending
-        return meetsMinimum && belowMaximum
+        let meetsMin  = v.compare(range.lowerBound, options: .numeric) != .orderedAscending
+        let belowMax  = v.compare(range.upperBound, options: .numeric) == .orderedAscending
+        return meetsMin && belowMax
     }
 
     /// Returns `true` if the given experiment’s branch slug exists and equals “control”.
