@@ -14,7 +14,6 @@ enum ToastType: Equatable {
     case closedSingleInactiveTab
     case closedAllTabs(count: Int)
     case closedAllInactiveTabs(count: Int)
-    case copyURL
     case removeFromReadingList
     case removeShortcut
 
@@ -35,8 +34,6 @@ enum ToastType: Equatable {
             return String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
-        case .copyURL:
-            return .LegacyAppMenu.AppMenuCopyURLConfirmMessage
         case .removeFromReadingList:
             return .LegacyAppMenu.RemoveFromReadingListConfirmMessage
         case .removeShortcut:
@@ -56,7 +53,6 @@ enum ToastType: Equatable {
         case .closedAllTabs: actionType = TabPanelViewActionType.undoCloseAllTabs
         case .closedAllInactiveTabs: actionType = TabPanelViewActionType.undoCloseAllInactiveTabs
         case .clearCookies,
-                .copyURL,
                 .addBookmark,
                 .addShortcut,
                 .addToReadingList,
