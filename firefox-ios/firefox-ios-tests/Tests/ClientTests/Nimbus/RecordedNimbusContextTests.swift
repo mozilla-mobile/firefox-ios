@@ -19,28 +19,22 @@ class RecordedNimbusContextTests: XCTestCase {
      * This test should not be modified. It will fail if any of the eventQueries are invalid.
      */
     func testValidateEventQueries() throws {
-<<<<<<< HEAD
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
-=======
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
+            isReviewCheckerEnabled: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true
         )
->>>>>>> 027db46c4 (Add FXIOS-12240 [Nimbus] Advanced targeting for existing bottom toolbar users (#26647))
         try validateEventQueries(recordedContext: recordedContext)
     }
 
     func testToJsonReturnsExpected() throws {
-<<<<<<< HEAD
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
-=======
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
+            isReviewCheckerEnabled: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true
         )
->>>>>>> 027db46c4 (Add FXIOS-12240 [Nimbus] Advanced targeting for existing bottom toolbar users (#26647))
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
         let jsonString = recordedContext.toJson()
 
@@ -68,15 +62,12 @@ class RecordedNimbusContextTests: XCTestCase {
     }
 
     func testObjectRecordedToGleanMatchesExpected() throws {
-<<<<<<< HEAD
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
-=======
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
+            isReviewCheckerEnabled: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true
         )
->>>>>>> 027db46c4 (Add FXIOS-12240 [Nimbus] Advanced targeting for existing bottom toolbar users (#26647))
 
         var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
@@ -108,15 +99,12 @@ class RecordedNimbusContextTests: XCTestCase {
     }
 
     func testGetEventQueries() throws {
-<<<<<<< HEAD
-        let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
-=======
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
+            isReviewCheckerEnabled: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true
         )
->>>>>>> 027db46c4 (Add FXIOS-12240 [Nimbus] Advanced targeting for existing bottom toolbar users (#26647))
         let eventQueries = recordedContext.getEventQueries()
 
         XCTAssertEqual(eventQueries, RecordedNimbusContext.EVENT_QUERIES)
