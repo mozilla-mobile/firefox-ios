@@ -16,6 +16,7 @@ struct TabTraySelectorUX {
     static let estimatedCellWidth: CGFloat = 100
     static let cornerRadius: CGFloat = 12
     static let verticalInsets: CGFloat = 4
+    static let maxFontSize: CGFloat = 30
 }
 
 class TabTraySelectorView: UIView,
@@ -75,8 +76,8 @@ class TabTraySelectorView: UIView,
             stackView.addArrangedSubview(button)
 
             button.titleLabel?.font = index == selectedIndex ?
-                FXFontStyles.Bold.body.scaledFont() :
-                FXFontStyles.Regular.body.scaledFont()
+                FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
+                FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
 
             button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
             button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
@@ -110,9 +111,9 @@ class TabTraySelectorView: UIView,
 
         for (index, button) in buttons.enumerated() {
             if index == selectedIndex {
-                button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
+                button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
             } else {
-                button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+                button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
             }
         }
 
