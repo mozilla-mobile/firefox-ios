@@ -11,6 +11,17 @@ import Common
 
 class TabEventHandlerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        DependencyHelperMock().reset()
+        super.tearDown()
+    }
+
     func testEventDelivery() {
         let tab = Tab(profile: MockProfile(),
                       windowUUID: windowUUID)

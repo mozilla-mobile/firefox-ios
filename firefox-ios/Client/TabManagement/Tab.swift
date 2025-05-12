@@ -146,6 +146,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isFindInPageMode = false
 
     private var logger: Logger
+    private let documentLogger: DocumentLogger
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -470,7 +471,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false
@@ -479,6 +481,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
+        self.documentLogger = documentLogger
         super.init()
         self.isPrivate = isPrivate
 
@@ -929,6 +932,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.temporaryDocument = nil
         if temporaryDocument.isDownloading {
             temporaryDocument.cancelDownload()
+            if let sourceURL = temporaryDocument.sourceURL {
+                documentLogger.remove(url: sourceURL)
+            }
             if forceReload {
                 // if the webView's url is the home page then bypass cache so to reload the homepage
                 // Otherwise the webView is restored causing the PDF to be reloaded again.
@@ -960,9 +966,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
+
             // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
             guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
             self?.downloadedTemporaryDocs[url] = sourceURL
+            self?.documentLogger.registerDownloadFinish(url: sourceURL)
         }
     }
 
