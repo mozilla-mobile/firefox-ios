@@ -216,13 +216,9 @@ enum Experiments {
 
         let nimbusRecordedContext = RecordedNimbusContext(
             isFirstRun: isFirstRun,
-<<<<<<< HEAD
             isReviewCheckerEnabled: isReviewCheckerEnabled(),
-            isDefaultBrowser: isDefaultBrowser()
-=======
             isDefaultBrowser: isDefaultBrowser(),
             isBottomToolbarUser: isBottomToolbarUser()
->>>>>>> 027db46c4 (Add FXIOS-12240 [Nimbus] Advanced targeting for existing bottom toolbar users (#26647))
         )
 
         return NimbusBuilder(dbPath: dbPath)
