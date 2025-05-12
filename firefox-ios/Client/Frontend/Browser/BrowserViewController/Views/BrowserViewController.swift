@@ -811,8 +811,7 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .addShortcut,
-                .clearCookies,
+        case .clearCookies,
                 .addToReadingList,
                 .removeShortcut,
                 .removeFromReadingList:
@@ -1550,6 +1549,7 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
+        view.layoutIfNeeded()
     }
 
     private func adjustBottomSearchBarForKeyboard() {

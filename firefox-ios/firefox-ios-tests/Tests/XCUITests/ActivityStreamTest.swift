@@ -346,13 +346,13 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     func testShortcutsToggle() {
         app.launch()
         //  Go to customize homepage
+        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         navigator.performAction(Action.SelectShortcuts)
         let shortCutSwitch = app.switches["TopSitesUserPrefsKey"]
         mozWaitForElementToExist(shortCutSwitch)
-        let shortCutValue = shortCutSwitch.value!
         // Shortcuts toggle is enabled by default
-        XCTAssertEqual(shortCutValue as? String, "1", "The shortcut switch is not on")
+        XCTAssertEqual(shortCutSwitch.value as? String, "1", "The shortcut switch is not on")
         // Access a couple of websites and add them to shortcuts
         navigator.nowAt(Shortcuts)
         navigator.goto(HomeSettings)
@@ -360,21 +360,24 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(NewTabScreen)
         addWebsiteToShortcut(website: url_3)
         addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
-        // The shortcuts are displayed on homepage
+
+        // Verify shortcuts are displayed on the homepage
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let firstWebsite = itemCell.staticTexts["Example Domain"]
         let secondWebsite = itemCell.staticTexts["Internet for people, not profit — Mozilla"]
         mozWaitForElementToExist(firstWebsite)
         mozWaitForElementToExist(secondWebsite)
-        // Go to customize homepage and disable shortcuts toggle
+
+        // Disable shortcuts toggle
         navigator.goto(HomeSettings)
         navigator.performAction(Action.SelectShortcuts)
         shortCutSwitch.waitAndTap()
+
+        // Verify shortcuts are not displayed on the homepage
         navigator.nowAt(Shortcuts)
         navigator.goto(HomeSettings)
         navigator.nowAt(HomeSettings)
         navigator.goto(BrowserTab)
-        // The shortcuts are not displayed anymore on homepage
         mozWaitForElementToNotExist(itemCell)
         mozWaitForElementToNotExist(firstWebsite)
         mozWaitForElementToNotExist(secondWebsite)
