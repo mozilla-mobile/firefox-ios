@@ -31,6 +31,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        guard !isPayPalPopUp(navigationAction) else { return nil }
+
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -148,51 +150,85 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
-        guard let url = elementInfo.linkURL else { return }
+        guard let url = elementInfo.linkURL,
+              let currentTab = tabManager.selectedTab,
+              let contextHelper = currentTab.getContentScript(
+                name: ContextMenuHelper.name()
+              ) as? ContextMenuHelper,
+              let elements = contextHelper.elements
+        else {
+            completionHandler(nil)
+            return
+        }
+        completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
+    }
 
-        completionHandler(
-            UIContextMenuConfiguration(
-                identifier: nil,
-                previewProvider: {
-                    guard self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
+        guard tabManager.selectedTab?.webView === webView, !contentContainer.hasAnyHomepage else {
+            decisionHandler(.deny)
+            return
+        }
 
-                    let previewViewController = UIViewController()
-                    previewViewController.view.isUserInteractionEnabled = false
-                    let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+        decisionHandler(.prompt)
+    }
 
-                    previewViewController.view.addSubview(clonedWebView)
-                    NSLayoutConstraint.activate([
-                        clonedWebView.topAnchor.constraint(equalTo: previewViewController.view.topAnchor),
-                        clonedWebView.leadingAnchor.constraint(equalTo: previewViewController.view.leadingAnchor),
-                        clonedWebView.trailingAnchor.constraint(equalTo: previewViewController.view.trailingAnchor),
-                        clonedWebView.bottomAnchor.constraint(equalTo: previewViewController.view.bottomAnchor)
-                    ])
-                    clonedWebView.translatesAutoresizingMaskIntoConstraints = false
+    // MARK: - Helpers
+    private func contextMenuConfiguration(for url: URL,
+                                          webView: WKWebView,
+                                          elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
+                                          actionProvider: contextMenuActionProvider(for: url,
+                                                                                    webView: webView,
+                                                                                    elements: elements))
+    }
 
-                    clonedWebView.load(URLRequest(url: url))
+    private func contextMenuActionProvider(for url: URL,
+                                           webView: WKWebView,
+                                           elements: ContextMenuHelper.Elements) -> UIContextMenuActionProvider {
+        return { [self] (suggested) -> UIMenu? in
+            guard let currentTab = tabManager.selectedTab else { return nil }
 
-                    return previewViewController
-                },
-                actionProvider: { [self] (suggested) -> UIMenu? in
-                    guard let currentTab = tabManager.selectedTab,
-                          let contextHelper = currentTab.getContentScript(
-                            name: ContextMenuHelper.name()
-                          ) as? ContextMenuHelper,
-                          let elements = contextHelper.elements
-                    else { return nil }
+            let isPrivate = currentTab.isPrivate
 
-                    let isPrivate = currentTab.isPrivate
+            let actions = createActions(isPrivate: isPrivate,
+                                        url: url,
+                                        addTab: self.addTab,
+                                        title: elements.title,
+                                        image: elements.image,
+                                        currentTab: currentTab,
+                                        webView: webView)
+            return UIMenu(title: url.normalizedHost ?? url.absoluteString, children: actions)
+        }
+    }
 
-                    let actions = createActions(isPrivate: isPrivate,
-                                                url: url,
-                                                addTab: self.addTab,
-                                                title: elements.title,
-                                                image: elements.image,
-                                                currentTab: currentTab,
-                                                webView: webView)
-                    return UIMenu(title: url.absoluteString, children: actions)
-                })
-        )
+    private func contextMenuPreviewProvider(for url: URL, webView: WKWebView) -> UIContextMenuContentPreviewProvider? {
+        let provider: UIContextMenuContentPreviewProvider = {
+            guard self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
+
+            let previewViewController = UIViewController()
+            previewViewController.view.isUserInteractionEnabled = false
+            let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+
+            previewViewController.view.addSubview(clonedWebView)
+            NSLayoutConstraint.activate([
+                clonedWebView.topAnchor.constraint(equalTo: previewViewController.view.topAnchor),
+                clonedWebView.leadingAnchor.constraint(equalTo: previewViewController.view.leadingAnchor),
+                clonedWebView.trailingAnchor.constraint(equalTo: previewViewController.view.trailingAnchor),
+                clonedWebView.bottomAnchor.constraint(equalTo: previewViewController.view.bottomAnchor)
+            ])
+            clonedWebView.translatesAutoresizingMaskIntoConstraints = false
+
+            clonedWebView.load(URLRequest(url: url))
+
+            return previewViewController
+        }
+        return provider
     }
 
     func addTab(rURL: URL, isPrivate: Bool, currentTab: Tab) {
@@ -332,21 +368,6 @@ extension BrowserViewController: WKUIDelegate {
 
     func assignWebView(_ webView: WKWebView?) {
         pendingDownloadWebView = webView
-    }
-
-    @available(iOS 15, *)
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
-            decisionHandler(.deny)
-            return
-        }
-
-        decisionHandler(.prompt)
     }
 
     func writeToPhotoAlbum(image: UIImage) {
@@ -1018,6 +1039,13 @@ private extension BrowserViewController {
         }
 
         return false
+    }
+
+    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
+    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
+    // so we will block the creation of a new Webview with this check
+    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
+        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

@@ -45,7 +45,7 @@ final class UserAgentBuilderTests: XCTestCase {
         /* Ecosia: Update extensions
         let extensions = "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
          */
-        let extensions = "Ecosia/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
+        let extensions = "\(UserAgent.uaBitVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) \(UserAgent.uaBitEcosia)"
         let testAgent = "\(UserAgent.product) \(systemInfo) \(UserAgent.platform) \(UserAgent.platformDetails) \(extensions)"
         XCTAssertEqual(builder.userAgent(), testAgent)
     }

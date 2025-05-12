@@ -73,9 +73,7 @@ open class UserAgent {
     }
 
     public static func mobileUserAgent() -> String {
-        // Ecosia: Always returns the Ecosia's UA as default one
-        // return UserAgentBuilder.defaultMobileUserAgent().userAgent()
-        UserAgentBuilder.ecosiaMobileUserAgent().userAgent()
+         return UserAgentBuilder.defaultMobileUserAgent().userAgent()
     }
 
     public static func oppositeUserAgent(domain: String) -> String {
@@ -137,14 +135,12 @@ struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
 
-    public static let customMobileUAForDomain = [
-        // Ecosia: Update paypal UA
-        // "paypal.com": defaultMobileUA,
-        "paypal.com": UserAgentBuilder.defaultPayPalMobileUserAgent().userAgent(),
-        "yahoo.com": defaultMobileUA,
-        "disneyplus.com": customDesktopUA]
+    static let customMobileUAForDomain = [
+        "disneyplus.com": customDesktopUA
+    ]
 
-    public static let customDesktopUAForDomain = [
+    static let customDesktopUAForDomain = [
+        "paypal.com": defaultMobileUA,
         "firefox.com": defaultMobileUA,
         // Ecosia: Add Ecosia URLs
         Ecosia.URLProvider.production.domain: UserAgent.ecosiaDesktopUA,
@@ -203,15 +199,15 @@ public struct UserAgentBuilder {
     }
 
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
+        /* Ecosia: Always returns the Ecosia's UA as default one
         return UserAgentBuilder(
             product: UserAgent.product,
             systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            /* Ecosia: Update extension
             extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
-             */
-            extensions: "Ecosia/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+         */
+        return UserAgentBuilder.ecosiaMobileUserAgent()
     }
 
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
@@ -227,7 +223,7 @@ public struct UserAgentBuilder {
     }
 }
 
-// Ecosia: Ecosia Mobile UA + Paypal fix
+// Ecosia: Ecosia Mobile UA
 extension UserAgentBuilder {
 
     public static func ecosiaMobileUserAgent() -> UserAgentBuilder {
@@ -236,14 +232,5 @@ extension UserAgentBuilder {
                          platform: UserAgent.platform,
                          platformDetails: UserAgent.platformDetails,
                          extensions: "\(UserAgent.uaBitVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) \(UserAgent.uaBitEcosia)")
-    }
-
-    public static func defaultPayPalMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(
-            product: UserAgent.product,
-            systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
-            platform: UserAgent.platform,
-            platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 }
