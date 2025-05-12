@@ -116,45 +116,6 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func handleMainMenuAction(action: MainMenuAction, isHomepage: Bool) -> Bool {
-        guard let mainMenuActionType = action.actionType as? MainMenuActionType else {
-            return false
-        }
-
-        switch mainMenuActionType {
-        case .tapNavigateToDestination:
-            handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
-            return true
-
-        case .tapShowDetailsView:
-            handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
-            return true
-
-        case .tapToggleUserAgent:
-            handleTapToggleUserAgentAction(action: action, isHomepage: isHomepage)
-            return true
-
-        case .tapCloseMenu:
-            telemetry.closeButtonTapped(isHomepage: isHomepage)
-            return true
-
-        case .didInstantiateView:
-            handleDidInstantiateViewAction(action: action)
-            return true
-
-        case .viewDidLoad:
-            handleViewDidLoadAction(action: action)
-            return true
-
-        case .menuDismissed:
-            telemetry.menuDismissed(isHomepage: isHomepage)
-            return true
-
-        default:
-            return false
-        }
-    }
-
     private func handleTapNavigateToDestinationAction(action: MainMenuAction, isHomepage: Bool) {
         guard let destination = action.navigationDestination?.destination else { return }
         handleTelemetryFor(for: destination,
