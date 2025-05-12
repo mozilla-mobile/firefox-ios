@@ -44,8 +44,6 @@ struct TabsPanelTelemetry {
         let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected, extras: extras)
     }
-<<<<<<< HEAD
-=======
 
     func tabSelected(at index: Int?, mode: Mode) {
         let indexForGlean: Int32? = index != nil ? Int32(index!) : nil
@@ -79,5 +77,4 @@ struct TabsPanelTelemetry {
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanelCloseOldTabsSheet.optionSelected, extras: extras)
     }
->>>>>>> 620d70bc4 (Add FXIOS-12154 #26444 [Tab tray] trash can telemetry (#26584))
 }

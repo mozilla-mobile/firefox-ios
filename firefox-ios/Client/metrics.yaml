@@ -4017,15 +4017,9 @@ tabs_panel:
         - TabsPanel
   tab_mode_selected:
     type: event
-<<<<<<< HEAD:firefox-ios/Client/metrics.yaml
-    description: | 
-      User changes the tab tray mode with the segmented control in the
-      tabs panel.
-=======
     description: |
       Recorded when the user changes the tabs panel mode with the segmented 
       control in the tabs panel.
->>>>>>> 620d70bc4 (Add FXIOS-12154 #26444 [Tab tray] trash can telemetry (#26584)):firefox-ios/Client/Glean/metrics.yaml
     extra_keys:
       mode:
         type: string
@@ -4044,8 +4038,6 @@ tabs_panel:
       tags:
         - TabsPanel
 
-<<<<<<< HEAD:firefox-ios/Client/metrics.yaml
-=======
 tabs_panel.close_old_tabs_sheet:
   option_selected:
     type: event
@@ -4099,7 +4091,6 @@ tabs_panel.close_all_tabs_sheet:
       tags:
         - TabsPanel
 
->>>>>>> 620d70bc4 (Add FXIOS-12154 #26444 [Tab tray] trash can telemetry (#26584)):firefox-ios/Client/Glean/metrics.yaml
 # Toasts
 toasts.close_single_tab:
   undo_tapped:
