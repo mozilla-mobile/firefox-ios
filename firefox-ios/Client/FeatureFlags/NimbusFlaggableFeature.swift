@@ -116,7 +116,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting.
-        case    .addressBarMenu,
+        case .addressAutofillEdit,
+                .addressBarMenu,
                 .bookmarksRefactor,
                 .cleanupHistoryReenabled,
                 .deeplinkOptimizationRefactor,

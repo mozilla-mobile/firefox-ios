@@ -11,12 +11,13 @@ class DisplaySettingTests: BaseTestCase {
         navigator.goto(DisplaySettings)
         waitForElementsToExist(
             [
-                app.navigationBars["Theme"],
-                app.tables["DisplayTheme.Setting.Options"]
+                app.navigationBars["Appearance"],
+                app.staticTexts[AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle],
+                app.staticTexts[AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle]
             ]
         )
-        let switchValue = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValue as? String, "1")
+        let switchValue = app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle].value!
+        XCTAssertEqual(switchValue as? String, "0")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2337487
