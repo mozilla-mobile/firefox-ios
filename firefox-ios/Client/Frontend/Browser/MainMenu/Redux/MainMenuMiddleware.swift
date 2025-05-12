@@ -56,7 +56,7 @@ final class MainMenuMiddleware {
 
         self.handleMainMenuActions(action: action, isHomepage: isHomepage)
     }
-    
+
     private func handleMainMenuActions(action: MainMenuAction, isHomepage: Bool) {
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
