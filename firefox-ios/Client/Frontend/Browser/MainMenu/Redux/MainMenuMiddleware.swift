@@ -155,21 +155,6 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func handleGeneralBrowserActionType(action: MainMenuAction) -> Bool {
-        guard let generalBrowserActionType = action.actionType as? GeneralBrowserActionType else {
-            return false
-        }
-
-        switch generalBrowserActionType {
-        case .showReaderMode:
-            handleShowReaderModeAction(action: action)
-            return true
-
-        default:
-            return false
-        }
-    }
-
     private func handleTapNavigateToDestinationAction(action: MainMenuAction, isHomepage: Bool) {
         guard let destination = action.navigationDestination?.destination else { return }
         handleTelemetryFor(for: destination,
