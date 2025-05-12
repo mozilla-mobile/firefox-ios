@@ -723,8 +723,7 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .addShortcut,
-                .clearCookies,
+        case .clearCookies,
                 .addToReadingList,
                 .removeShortcut,
                 .removeFromReadingList:
