@@ -42,9 +42,11 @@ class MilkyWayRenderer: NSObject, MTKViewDelegate {
 
         // Shader functions
         let library = try device.makeDefaultLibrary(bundle: .module)
-        guard
-            let vfn = library.makeFunction(name: "milky_way_vertex"),
-            let ffn = library.makeFunction(name: "milky_way_fragment")
+        guard let vfn = library.makeFunction(
+            name: "milky_way_vertex"
+        ), let ffn = library.makeFunction(
+            name: "milky_way_fragment"
+        )
         else {
             let msg = "Missing shader functions milky_way_vertex / milky_way_fragment"
             logger.log(msg, level: .fatal, category: .onboarding)
