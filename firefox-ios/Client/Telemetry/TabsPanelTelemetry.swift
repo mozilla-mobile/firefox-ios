@@ -22,6 +22,18 @@ struct TabsPanelTelemetry {
         }
     }
 
+    enum CloseAllPanelOption: String {
+        case all
+        case cancel
+    }
+
+    private enum TabType: String {
+        case normal
+        case `private`
+        case inactive
+        case total
+    }
+
     private let gleanWrapper: GleanWrapper
     private let logger: Logger
 

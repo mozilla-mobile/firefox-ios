@@ -11,11 +11,13 @@ class TelemetryContextualIdentifierTests: XCTestCase {
     override func setUp() {
         super.setUp()
         clearTest()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
         clearTest()
+        DependencyHelperMock().reset()
     }
 
     // MARK: Context id
