@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import SwiftUI
 import MetalKit
 import Common
@@ -153,15 +157,21 @@ class MilkyWayRenderer: NSObject, MTKViewDelegate {
                                             commandBuffer: MTLCommandBuffer) {
         guard let history = previousFrameTexture else { return }
         let blit = commandBuffer.makeBlitCommandEncoder()
-        blit?.copy(from: drawable.texture,
-                   sourceSlice: 0, sourceLevel: 0,
-                   sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
-                   sourceSize: MTLSize(width: history.width,
-                                       height: history.height,
-                                       depth: 1),
-                   to: history,
-                   destinationSlice: 0, destinationLevel: 0,
-                   destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
+        blit?.copy(
+            from: drawable.texture,
+            sourceSlice: 0,
+            sourceLevel: 0,
+            sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+            sourceSize: MTLSize(
+                width: history.width,
+                height: history.height,
+                depth: 1
+            ),
+            to: history,
+            destinationSlice: 0,
+            destinationLevel: 0,
+            destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0)
+        )
         blit?.endEncoding()
     }
 }
