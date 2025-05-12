@@ -93,6 +93,7 @@ class BrowserViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     var logger: Logger
+    let documentLogger: DocumentLogger
 
     // MARK: Optional UI elements
 
@@ -331,7 +332,8 @@ class BrowserViewController: UIViewController,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         logger: Logger = DefaultLogger.shared,
-        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
+        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+        documentLogger: DocumentLogger = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -341,6 +343,7 @@ class BrowserViewController: UIViewController,
         self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.downloadQueue = downloadQueue
         self.logger = logger
+        self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
@@ -1528,7 +1531,9 @@ class BrowserViewController: UIViewController,
             // The web view can go gray if it was zombified due to memory pressure.
             // When this happens, the URL is nil, so try restoring the page upon selection.
             logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            selectedTab.reload()
+            if selectedTab.temporaryDocument == nil {
+                selectedTab.reload()
+            }
         }
 
         browserDelegate?.show(webView: webView)
@@ -2002,7 +2007,12 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             let isLoadingDocument = isPDFRefactorEnabled && tab.isDownloadingDocument()
-            if let url = webView.url, !InternalURL.isValid(url: url) || isLoadingDocument {
+            let isValidURL = if let url = webView.url {
+                !InternalURL.isValid(url: url)
+            } else {
+                false
+            }
+            if isValidURL || isLoadingDocument {
                 let progress = if let progress = change?[.newKey] as? Double {
                     progress
                 } else {
@@ -4211,6 +4221,10 @@ extension BrowserViewController: TabManagerDelegate {
        /// If the selectedTab is showing an error page trigger a reload
         if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
             needsReload = true
+        }
+
+        if selectedTab.temporaryDocument != nil, isPDFRefactorEnabled {
+            needsReload = false
         }
 
         if needsReload {

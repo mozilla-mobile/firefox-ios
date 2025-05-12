@@ -25,9 +25,9 @@ class ContextMenuHelperTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testHistoryHighlightsTelemetry() {
