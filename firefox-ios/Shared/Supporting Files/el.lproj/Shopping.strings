@@ -2,10 +2,10 @@
 "ContextualHints.Shopping.NotOptedIn.v120" = "Μάθετε εάν μπορείτε να εμπιστευτείτε τις κριτικές αυτού του προϊόντος πριν το αγοράσετε.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
-"ContextualHints.Shopping.NotOptedInAction.v120" = "Δοκιμή ελέγχου κριτικών";
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Δοκιμή Ελέγχου κριτικών";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
-"ContextualHints.Shopping.OptedInAction.v120" = "Άνοιγμα ελέγχου κριτικών";
+"ContextualHints.Shopping.OptedInAction.v120" = "Άνοιγμα Ελέγχου κριτικών";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Είναι αξιόπιστες αυτές οι κριτικές; Κάντε έλεγχο τώρα για να δείτε μια αναπροσαρμοσμένη βαθμολογία.";
@@ -119,10 +119,10 @@
 "Shopping.OptInCard.Disclaimer.Text.v123" = "Επιλέγοντας «Έναρξη δοκιμής», συμφωνείτε με τα εξής:";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the website the user is coming from when viewing this screen (default Amazon). %2$@ is the app name (e.g. Firefox). This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
-"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Δείτε πόσο αξιόπιστες είναι οι κριτικές των προϊόντων στο %1$@ πριν αγοράσετε. Ο έλεγχος κριτικών, μια πειραματική δυνατότητα από τo %2$@, ενσωματώνεται στο πρόγραμμα περιήγησης.";
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Δείτε πόσο αξιόπιστες είναι οι κριτικές των προϊόντων στο %1$@ πριν αγοράσετε. Ο Έλεγχος κριτικών, μια πειραματική δυνατότητα από τo %2$@, ενσωματώνεται στο πρόγραμμα περιήγησης.";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). %1$@ is the website the user is coming from when viewing this screen (default Amazon). %2$@ is the app name (e.g. Firefox). %3$@ and %4$@ are the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
-"Shopping.OptInCard.FirstParagraph.Description.v120" = "Δείτε πόσο αξιόπιστες είναι οι κριτικές των προϊόντων στο %1$@ πριν αγοράσετε. Ο έλεγχος κριτικών, μια πειραματική δυνατότητα από τo %2$@, ενσωματώνεται στο πρόγραμμα περιήγησης. Λειτουργεί επίσης στο %3$@ και στο %4$@.";
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Δείτε πόσο αξιόπιστες είναι οι κριτικές των προϊόντων στο %1$@ πριν αγοράσετε. Ο Έλεγχος κριτικών, μια πειραματική δυνατότητα από τo %2$@, ενσωματώνεται στο πρόγραμμα περιήγησης. Λειτουργεί επίσης στο %3$@ και στο %4$@.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Δοκιμάστε τον αξιόπιστο οδηγό μας για κριτικές προϊόντων";
@@ -206,7 +206,7 @@
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, κουμπί εναλλαγής, %2$@.";
 
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. %1$@ is the Fakespot, %2$@ is the company name (e.g. Mozilla). */
-"Shopping.SettingsCard.Footer.Action.v120" = "Ο έλεγχος κριτικών παρέχεται από το %1$@ της %2$@";
+"Shopping.SettingsCard.Footer.Action.v120" = "Ο Έλεγχος κριτικών παρέχεται από το %1$@ της %2$@";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "Ρυθμίσεις";
@@ -221,13 +221,13 @@
 "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Ενεργό";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
-"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Απενεργοποίηση ελέγχου κριτικών";
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Απενεργοποίηση Ελέγχου κριτικών";
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BETA";
 
 /* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
-"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Κλείσιμο ελέγχου κριτικών";
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Κλείσιμο Ελέγχου κριτικών";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "Έλεγχος κριτικών";
