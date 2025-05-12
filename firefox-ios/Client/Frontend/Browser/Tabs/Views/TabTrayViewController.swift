@@ -700,6 +700,13 @@ class TabTrayViewController: UIViewController,
         present(controller, animated: true, completion: nil)
     }
 
+    private func cancelCloseAll() {
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.cancelCloseAllTabs)
+        store.dispatch(action)
+    }
+
     private func confirmCloseAll() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
@@ -720,6 +727,7 @@ class TabTrayViewController: UIViewController,
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         store.dispatch(
             TabTrayAction(
+                panelType: tabTrayState.selectedPanel,
                 windowUUID: windowUUID,
                 actionType: TabTrayActionType.doneButtonTapped
             )
