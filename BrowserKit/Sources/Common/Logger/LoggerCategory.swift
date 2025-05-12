@@ -44,7 +44,7 @@ public enum LoggerCategory: String {
 
     /// Related to the main menu.
     case mainMenu
-    
+
     /// Related to onboarding
     case onboarding
 
