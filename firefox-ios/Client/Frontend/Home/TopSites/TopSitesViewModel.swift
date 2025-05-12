@@ -131,7 +131,7 @@ class TopSitesViewModel {
     }
 
     func pinTopSite(_ site: Site) {
-        _ = profile.pinnedSites.addPinnedTopSite(site)
+        profile.pinnedSites.addPinnedTopSite(site)
     }
 
     func removePinTopSite(_ site: Site) {
