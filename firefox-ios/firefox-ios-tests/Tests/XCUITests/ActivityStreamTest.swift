@@ -125,6 +125,47 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
+<<<<<<< HEAD
+=======
+    // https://mozilla.testrail.io/index.php?/cases/view/2272220
+    func testTopSitesRemoveAllExceptPinnedClearPrivateData_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        waitForExistence(TopSiteCellgroup)
+        if iPad() {
+            app.textFields.element(boundBy: 0).waitAndTap()
+            app.typeText("mozilla.org\n")
+        } else {
+            navigator.openURL("mozilla.org")
+        }
+        waitUntilPageLoad()
+        // navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(TabTray)
+        if iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+        }
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        let topSitesCells = app.collectionViews.links["TopSitesCell"]
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        selectOptionFromContextMenu(option: "Pin")
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        navigator.goto(ClearPrivateDataSettings)
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(HomePanelsScreen)
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+    }
+
+>>>>>>> b9850210f (Bugfix FXIOS-11997 [Tab Tray UI Experiment] Fix animation on URL bar by stopping keyboard coming up automatically (#26390))
     // https://mozilla.testrail.io/index.php?/cases/view/2272514
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
