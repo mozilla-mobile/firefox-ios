@@ -13,6 +13,7 @@ protocol AppearanceSettingsDelegate: AnyObject {
 /// The main view displaying the settings for the appearance menu.
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
+    var shouldShowPageZoom: Bool
     let delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
@@ -55,10 +56,11 @@ struct AppearanceSettingsView: View {
                                    isEnabled: NightModeHelper.isActivated(),
                                    onChange: setWebsiteDarkMode)
             }
-            GenericSectionView(theme: currentTheme, title: String.PageZoomSectionHeader) {
-                GenericItemCellView(title: String.PageZoomTitle, theme: currentTheme) {
-                    print("YRD calling delegate on callback")
-                    delegate?.pressedPageZoom()
+            if shouldShowPageZoom {
+                GenericSectionView(theme: currentTheme, title: String.PageZoomSectionHeader) {
+                    GenericItemCellView(title: String.PageZoomTitle, theme: currentTheme) {
+                        delegate?.pressedPageZoom()
+                    }
                 }
             }
 

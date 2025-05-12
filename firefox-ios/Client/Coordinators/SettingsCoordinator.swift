@@ -156,12 +156,13 @@ final class SettingsCoordinator: BaseCoordinator,
         case .theme:
             if themeManager.isNewAppearanceMenuOn {
                 let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
+                                                            shouldShowPageZoom: true,
                                                             delegate: self)
                 return UIHostingController(rootView: appearanceView)
             } else {
                 return ThemeSettingsController(windowUUID: windowUUID)
             }
-    
+
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
                 let viewModel = WallpaperSettingsViewModel(
@@ -399,7 +400,9 @@ final class SettingsCoordinator: BaseCoordinator,
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
-            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
+            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
+                                                        shouldShowPageZoom: true,
+                                                        delegate: self)
             let viewController = UIHostingController(rootView: appearanceView)
             viewController.title = .SettingsAppearanceTitle
             router.push(viewController)
@@ -481,6 +484,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let appearanceView = PageZoomSettingsView(theme: theme)
         let viewController = UIHostingController(rootView: appearanceView)
+        viewController.title = .PageZoomTitle
         router.push(viewController)
     }
 

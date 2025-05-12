@@ -17,14 +17,14 @@ struct PageZoomSettingsView: View {
     var sectionTitleColor: Color {
         return Color(theme.colors.textSecondary)
     }
-    
+
     var textColor: Color {
         return Color(theme.colors.textPrimary)
     }
 
     private let theme: Theme
-    let siteZooms: [String] = ["amazon.com", "wikipedia.org"]
-    @State private var defaultZoom = "100%"
+    let siteZooms: [String] = ["amazon.com",
+                               "wikipedia.org"]
 
     init(theme: Theme) {
         self.theme = theme
@@ -34,39 +34,46 @@ struct PageZoomSettingsView: View {
         VStack {
             List {
                 Section {
-                    ForEach(ZoomLevel.allCases, id: \.displayName) { item in
-                        Text(item.displayName)
-                    }
-                    .listRowBackground(theme.colors.layer2.color)
-//                    Picker("Zoom Level", selection: $defaultZoom) {
-//                        ForEach(ZoomLevel.allCases, id: \.displayName) { item in
-//                            Text(item.displayName)
-//                                .font(.body)
-//                                .foregroundColor(textColor)
-//                        }
-//                    }
-//                    .accentColor(textColor)
-//                    .pickerStyle(.menu)
+                    ZoomLevelPickerView(theme: theme)
                 } header: {
-                    // TODO: String
-                    GenericSectionHeaderView(title: "DEFAULT", sectionTitleColor: sectionTitleColor)
+                    GenericSectionHeaderView(title: .DefaultZoomLevelSectionTitle.uppercased(),
+                                             sectionTitleColor: sectionTitleColor)
                 }
 
                 Section {
                     ForEach(siteZooms, id: \.self) { item in
-                        Text(item)
-                            .font(.body)
-                            .foregroundColor(textColor)
+                        HStack {
+                            Text(item)
+                                .font(.body)
+                                .foregroundColor(textColor)
+
+                            Spacer()
+
+                            Text("50%")
+                                .padding([.trailing], 10)
+                                .font(.body)
+                                .foregroundColor(textColor)
+                        }
                     }
+                    .onDelete(perform: delete)
                     .listRowBackground(theme.colors.layer2.color)
                 } header: {
-                    // TODO: String
-                    GenericSectionHeaderView(title: "SPECIFIC SITE SETTINGS", sectionTitleColor: sectionTitleColor)
+                    GenericSectionHeaderView(title: .SpecificSiteZoomSectionTitle.uppercased(),
+                                             sectionTitleColor: sectionTitleColor)
+                }
+                Section {
+                    Button(action: {}) {
+                        Text("Red thin text")
+                            .padding([.leading, .trailing], 10)
+                            .font(.title)
+                            .foregroundColor(.red)
+                            .background(.orange)
+                    }
+                    .padding([.top], 10)
                 }
             }
             .listStyle(.plain)
         }
-//        .padding(.top, UX.spacing)
         .frame(maxWidth: .infinity)
         .background(viewBackground)
         .onAppear {
@@ -79,5 +86,8 @@ struct PageZoomSettingsView: View {
 
     func applyTheme() {
         // TODO: Apply theme
+    }
+
+    func delete(at index: IndexSet) {
     }
 }

@@ -246,6 +246,7 @@
 		213BF7532AC21D1B00C53A64 /* TabDisplayPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */; };
 		2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */; };
 		214099622DCE57A4004881E1 /* GenericSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */; };
+		214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */; };
 		21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */; };
 		21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */; };
 		2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */; };
@@ -2760,6 +2761,7 @@
 		213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayPanelViewController.swift; sourceTree = "<group>"; };
 		2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageZoomSettingView.swift; sourceTree = "<group>"; };
 		214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionHeaderView.swift; sourceTree = "<group>"; };
+		214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelPickerView.swift; sourceTree = "<group>"; };
 		21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinator.swift; sourceTree = "<group>"; };
 		21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinatorTests.swift; sourceTree = "<group>"; };
 		2142B1292D9F1284003AA82F /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
@@ -10863,6 +10865,7 @@
 		214099602DCBF4DB004881E1 /* Zoom */ = {
 			isa = PBXGroup;
 			children = (
+				214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */,
 				2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */,
 			);
 			path = Zoom;
@@ -17223,6 +17226,7 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8A0727462B4890B50071BB9F /* WebviewTelemetry.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
+				214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */,
 				8AC6F2242D6E243F00D10A9F /* ExperimentEmptyPrivateTabsView.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
