@@ -3986,14 +3986,9 @@ tabs:
 tabs_panel:
   new_tab_button_tapped:
     type: event
-<<<<<<< HEAD:firefox-ios/Client/metrics.yaml
-    description: | 
-      User taps the button in the tabs panel to open a new tab.
-=======
     description: |
       Recorded when the user taps the button in the tabs panel to open a new
       tab.
->>>>>>> 620d70bc4 (Add FXIOS-12154 #26444 [Tab tray] trash can telemetry (#26584)):firefox-ios/Client/Glean/metrics.yaml
     extra_keys:
       mode:
         type: string
