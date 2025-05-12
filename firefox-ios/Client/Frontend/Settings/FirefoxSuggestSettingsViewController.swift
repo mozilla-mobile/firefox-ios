@@ -69,7 +69,7 @@ class ForceFirefoxSuggestIngestSetting: Setting {
                        level: .info,
                        category: .storage)
             do {
-                try await self.profile?.firefoxSuggest?.ingest()
+                try await self.profile?.firefoxSuggest?.ingest(emptyOnly: false)
                 logger.log("Successfully ingested new suggestions",
                            level: .info,
                            category: .storage)
