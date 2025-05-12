@@ -67,6 +67,7 @@ class TopTabDisplayManager: NSObject {
     }
 
     // MARK: - Variables
+    let tabsPanelTelemetry: TabsPanelTelemetry
     private var performingChainedOperations = false
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
@@ -176,7 +177,8 @@ class TopTabDisplayManager: NSObject {
          tabManager: TabManager,
          tabDisplayer: TabDisplayerDelegate,
          reuseID: String,
-         profile: Profile
+         profile: Profile,
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.collectionView = collectionView
         self.tabDisplayerDelegate = tabDisplayer
@@ -185,6 +187,7 @@ class TopTabDisplayManager: NSObject {
         self.tabReuseIdentifier = reuseID
         self.profile = profile
         self.notificationCenter = NotificationCenter.default
+        self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper)
 
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
@@ -323,6 +326,7 @@ class TopTabDisplayManager: NSObject {
         guard !isDragging else { return }
 
         getTabs { [weak self] _ in
+            self?.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
             self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
         }
     }

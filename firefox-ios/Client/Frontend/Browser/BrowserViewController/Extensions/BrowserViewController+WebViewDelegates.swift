@@ -140,6 +140,7 @@ extension BrowserViewController: WKUIDelegate {
             if let tab = tabManager[webView] {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
                 try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 await tabManager.removeTab(tab.tabUUID)
             }
         }
@@ -502,6 +503,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     if let currentTab = self?.tabManager.selectedTab,
                        currentTab.historyList.count == 1,
                        self?.isStoreURL(currentTab.historyList[0]) ?? false {
+                        self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
                         self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
                     }
                 }
