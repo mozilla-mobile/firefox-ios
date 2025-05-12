@@ -241,7 +241,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         largeContentConstraints = [
             pinImageView.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
             pinImageView.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.textSafeSpace),
-            descriptionWrapper.topAnchor.constraint(equalTo: pinImageView.bottomAnchor, constant: 2)
+            descriptionWrapper.topAnchor.constraint(equalTo: pinImageView.bottomAnchor)
         ]
 
         pinHeightConstraint = pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height)
