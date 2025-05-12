@@ -116,7 +116,7 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func handleMainMenuActionType(action: MainMenuAction, isHomepage: Bool) -> Bool {
+    private func handleMainMenuAction(action: MainMenuAction, isHomepage: Bool) -> Bool {
         guard let mainMenuActionType = action.actionType as? MainMenuActionType else {
             return false
         }
