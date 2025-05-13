@@ -14,18 +14,15 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
                                          ContextualHintPrefsKeysProvider,
                                          SearchBarLocationProvider {
     var profile: Profile
-    var device: UIDeviceInterface
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?
     var isToolbarUpdateCFRFeatureEnabled: Bool
 
     init(with profile: Profile,
          overlayState: OverlayStateProtocol?,
-         device: UIDeviceInterface = UIDevice.current,
          isToolbarUpdateCFRFeatureEnabled: Bool = false) {
         self.profile = profile
         self.overlayState = overlayState
-        self.device = device
         self.isToolbarUpdateCFRFeatureEnabled = isToolbarUpdateCFRFeatureEnabled
     }
 
