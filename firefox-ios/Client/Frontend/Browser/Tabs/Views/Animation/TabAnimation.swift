@@ -208,7 +208,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         ).cgPath
         borderLayer.strokeColor = borderColor.cgColor
         borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.lineWidth = 3
+        borderLayer.lineWidth = 0
         borderLayer.opacity = 0
         tabSnapshot.layer.addSublayer(borderLayer)
 
@@ -222,6 +222,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             fadeIn.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             borderLayer.add(fadeIn, forKey: "fadeIn")
             borderLayer.opacity = 1 // final value to persist
+            borderLayer.lineWidth = 3
             cv.transform = .identity
             cv.alpha = 1
             if let frame = cellFrame {
