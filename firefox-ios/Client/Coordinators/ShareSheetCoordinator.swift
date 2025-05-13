@@ -104,8 +104,6 @@ class ShareSheetCoordinator: BaseCoordinator,
         case .copyToPasteboard:
             if case .file = shareType {
                 showToast(text: .ShareFileCopiedToClipboard)
-            } else {
-                showToast(text: .LegacyAppMenu.AppMenuCopyURLConfirmMessage)
             }
             dequeueNotShownJSAlert()
         default:
