@@ -136,11 +136,16 @@ struct CustomUserAgentConstant {
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
+        // Ecosia: Re-introduce paypal UA so it uses the Firefox one
+        "paypal.com": UserAgentBuilder.defaultFirefoxMobileUserAgent().userAgent(),
         "disneyplus.com": customDesktopUA
     ]
 
     static let customDesktopUAForDomain = [
+        /* Ecosia: Update paypal UA so it uses the Firefox one
         "paypal.com": defaultMobileUA,
+        */
+        "paypal.com": UserAgentBuilder.defaultFirefoxMobileUserAgent().userAgent(),
         "firefox.com": defaultMobileUA,
         // Ecosia: Add Ecosia URLs
         Ecosia.URLProvider.production.domain: UserAgent.ecosiaDesktopUA,
@@ -223,7 +228,7 @@ public struct UserAgentBuilder {
     }
 }
 
-// Ecosia: Ecosia Mobile UA
+// Ecosia: Ecosia Mobile UA + Firefox
 extension UserAgentBuilder {
 
     public static func ecosiaMobileUserAgent() -> UserAgentBuilder {
@@ -232,5 +237,14 @@ extension UserAgentBuilder {
                          platform: UserAgent.platform,
                          platformDetails: UserAgent.platformDetails,
                          extensions: "\(UserAgent.uaBitVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) \(UserAgent.uaBitEcosia)")
+    }
+
+    // This is what Firefox uses on production
+    public static func defaultFirefoxMobileUserAgent() -> UserAgentBuilder {
+        UserAgentBuilder(product: UserAgent.product,
+                         systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
+                         platform: UserAgent.platform,
+                         platformDetails: UserAgent.platformDetails,
+                         extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 }
