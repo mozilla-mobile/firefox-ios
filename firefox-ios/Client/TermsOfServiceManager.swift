@@ -8,7 +8,7 @@ import Glean
 import MozillaAppServices
 
 protocol VersionProviding {
-  func object(forInfoDictionaryKey key: String) -> Any?
+    func object(forInfoDictionaryKey key: String) -> Any?
 }
 
 extension Bundle: VersionProviding {}

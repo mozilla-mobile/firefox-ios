@@ -7,8 +7,11 @@ import Shared
 
 @testable import Client
 
-private struct StubBundle: VersionProviding {
+private class StubBundle: VersionProviding {
     var fakeVersion: String?
+    init(fakeVersion: String? = nil) {
+        self.fakeVersion = fakeVersion
+    }
     func object(forInfoDictionaryKey key: String) -> Any? {
         guard key == "CFBundleShortVersionString" else { return nil }
         return fakeVersion
