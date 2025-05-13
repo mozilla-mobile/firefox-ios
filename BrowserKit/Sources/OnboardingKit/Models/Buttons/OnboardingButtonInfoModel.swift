@@ -13,16 +13,3 @@ public struct OnboardingButtonInfoModel<OnboardingActionType> {
         self.action = action
     }
 }
-
-public struct OnboardingButtons<OnboardingActionType> {
-    let primary: OnboardingButtonInfoModel<OnboardingActionType>
-    let secondary: OnboardingButtonInfoModel<OnboardingActionType>?
-
-    init(
-        primary: OnboardingButtonInfoModel<OnboardingActionType>,
-        secondary: OnboardingButtonInfoModel<OnboardingActionType>? = nil
-    ) {
-        self.primary = primary
-        self.secondary = secondary
-    }
-}

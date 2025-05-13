@@ -4,40 +4,6 @@
 
 import UIKit
 
-public enum OnboardingCardType: String, Codable {
-    case basic
-    case multipleChoice = "multiple-choice"
-}
-
-protocol OnboardingDefaultBrowserModelProtocol {
-    associatedtype OnboardingPopupActionType
-    var title: String { get set }
-    var instructionSteps: [String] { get set }
-    var buttonTitle: String { get set }
-    var buttonAction: OnboardingPopupActionType { get set }
-    var a11yIdRoot: String { get set }
-
-    func getAttributedStrings(with font: UIFont) -> [NSAttributedString]
-}
-
-public struct OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>: OnboardingDefaultBrowserModelProtocol {
-    var title: String
-    var instructionSteps: [String]
-    var buttonTitle: String
-    var buttonAction: OnboardingPopupActionType
-    var a11yIdRoot: String
-
-    func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {
-        return []// instructionSteps.map { MarkupAttributeUtility(baseFont: font).addAttributesTo(text: $0) }
-    }
-}
-
-public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType> {
-    let title: String
-    let action: OnboardingMultipleChoiceActionType
-    var imageID: String
-}
-
 public protocol OnboardingCardInfoModelProtocol {
     associatedtype OnboardingType
     associatedtype OnboardingPopupActionType
