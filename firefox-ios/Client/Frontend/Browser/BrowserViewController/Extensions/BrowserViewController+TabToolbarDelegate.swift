@@ -112,7 +112,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     private func presentToolbarUpdateContextualHint() {
-        guard let selectedTab = tabManager.selectedTab,
+        guard !IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen,
+              let selectedTab = tabManager.selectedTab,
               selectedTab.isFxHomeTab || selectedTab.isCustomHomeTab
         else { return }
 
