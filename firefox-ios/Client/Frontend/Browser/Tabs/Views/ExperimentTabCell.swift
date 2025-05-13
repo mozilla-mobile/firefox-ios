@@ -257,8 +257,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         guard let theme = theme else { return }
         if selected {
             setSelectedState(isPrivate: isPrivate, theme: theme)
-            //            backgroundHolder.layer.borderColor = borderColor.cgColor
-//            backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
         } else {
             setUnselectedState(theme: theme)
         }
@@ -285,7 +283,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         view.clipsToBounds = false
 
         // Optional: remove old border if it exists
-//        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
 
         view.layer.addSublayer(borderLayer)
     }
@@ -295,8 +293,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     func setSelectedState(isPrivate: Bool, theme: Theme) {
+        backgroundHolder.layer.borderWidth = 0
         let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-        addExternalBorder(to: backgroundHolder, color: borderColor, width: 3)
+        addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
     }
 
     func setUnselectedState(theme: Theme) {
@@ -312,6 +311,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         super.prepareForReuse()
         screenshotView.image = nil
         smallFaviconView.isHidden = true
+        removeExternalBorder(from: backgroundHolder)
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
