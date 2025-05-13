@@ -21,9 +21,9 @@ public protocol OnboardingCardInfoModelProtocol {
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
-    
+
     var image: UIImage? { get }
-    
+
     init(
         cardType: OnboardingCardType,
         name: String,

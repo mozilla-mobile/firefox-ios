@@ -7,7 +7,7 @@ import Foundation
 public struct OnboardingButtonInfoModel<OnboardingActionType> {
     let title: String
     let action: OnboardingActionType
-    
+
     public init(title: String, action: OnboardingActionType) {
         self.title = title
         self.action = action

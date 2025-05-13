@@ -7,7 +7,7 @@ import Foundation
 public struct OnboardingButtons<OnboardingActionType> {
     let primary: OnboardingButtonInfoModel<OnboardingActionType>
     let secondary: OnboardingButtonInfoModel<OnboardingActionType>?
-    
+
     init(
         primary: OnboardingButtonInfoModel<OnboardingActionType>,
         secondary: OnboardingButtonInfoModel<OnboardingActionType>? = nil
