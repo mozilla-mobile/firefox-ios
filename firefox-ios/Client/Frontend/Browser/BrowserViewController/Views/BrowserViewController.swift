@@ -1979,7 +1979,6 @@ class BrowserViewController: UIViewController,
     func removeBookmark(urlString: String, title: String?, site: Site? = nil) {
         profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(urlString: urlString, title: title, action: .remove)
             self.removeBookmarkShortcut()
         }
     }
@@ -2009,18 +2008,7 @@ class BrowserViewController: UIViewController,
                     toastAction: .bookmarkPage
                 )
             }
-        case .remove:
-            let messageTitle: String = if let title {
-                String(format: .Bookmarks.Menu.DeletedBookmark, title)
-            } else {
-                .LegacyAppMenu.RemoveBookmarkConfirmMessage
-            }
-            showToast(
-                urlString,
-                title,
-                message: messageTitle,
-                toastAction: .removeBookmark
-            )
+        default: break
         }
     }
 
@@ -2044,13 +2032,8 @@ class BrowserViewController: UIViewController,
                                                                      windowUUID: self.windowUUID,
                                                                      bookmarkNode: bookmarkItem,
                                                                      parentBookmarkFolder: parentFolder,
-                                                                     presentedFromToast: true) { [weak self] in
-                        self?.showBookmarkToast(
-                            urlString: bookmarkItem.url,
-                            title: bookmarkItem.title,
-                            action: .remove
-                        )
-                    }
+                                                                     presentedFromToast: true,
+                                                                     deleteBookmark: {})
                     let controller: DismissableNavigationViewController
                     controller = DismissableNavigationViewController(rootViewController: detailController)
                     self.present(controller, animated: true, completion: nil)

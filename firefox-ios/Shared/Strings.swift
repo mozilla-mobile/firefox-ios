@@ -177,11 +177,6 @@ extension String {
                 tableName: "Bookmarks",
                 value: "DESKTOP BOOKMARKS",
                 comment: "Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop.")
-            public static let DeletedBookmark = MZLocalizedString(
-                key: "Bookmarks.Menu.DeletedBookmark.v131",
-                tableName: "Bookmarks",
-                value: "Deleted “%@”",
-                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
             public static let DeleteBookmark = MZLocalizedString(
                 key: "Bookmarks.Menu.DeleteBookmark.v132",
                 tableName: "Bookmarks",
@@ -4881,11 +4876,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label.")
-        public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
-            key: "Menu.RemoveBookmark.Confirm",
-            tableName: nil,
-            value: "Bookmark Removed",
-            comment: "Toast displayed to the user after a bookmark has been removed.")
         public static let EditBookmarkLabel = MZLocalizedString(
             key: "Menu.EditBookmark.Label.v135",
             tableName: "Menu",
@@ -7834,6 +7824,16 @@ extension String {
                 tableName: nil,
                 value: "URL Copied To Clipboard",
                 comment: "Toast displayed to user after copy url pressed.")
+            public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
+                key: "Menu.RemoveBookmark.Confirm",
+                tableName: nil,
+                value: "Bookmark Removed",
+                comment: "Toast displayed to the user after a bookmark has been removed.")
+            public static let DeletedBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.DeletedBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Deleted “%@”",
+                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
         }
     }
 }
