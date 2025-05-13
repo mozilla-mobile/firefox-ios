@@ -194,8 +194,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
                 // Hide the cell and border that is being animated since we are making a copy of it to animate in
                 cell.isHidden = true
-                cell.backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
-                cell.backgroundHolder.layer.borderWidth = ExperimentTabCell.UX.unselectedBorderWidth
+                cell.setUnselectedState(theme: theme)
                 cell.alpha = 0.0
             }
         }
@@ -234,9 +233,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
     private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
         guard let tab = tabCell else { return }
-        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-        tab.backgroundHolder.layer.borderColor = borderColor.cgColor
-        tab.backgroundHolder.layer.borderWidth = ExperimentTabCell.UX.selectedBorderWidth
+        tab.setSelectedState(isPrivate: isPrivate, theme: theme)
     }
 
     private func runDismissalAnimation(
