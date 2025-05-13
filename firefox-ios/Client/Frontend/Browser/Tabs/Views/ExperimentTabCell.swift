@@ -60,11 +60,12 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.layer.borderWidth = UX.unselectedBorderWidth
-        view.clipsToBounds = true
+        view.clipsToBounds = false
     }
 
     private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = UX.cornerRadius
         view.clipsToBounds = true
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
@@ -255,13 +256,32 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            backgroundHolder.layer.borderColor = borderColor.cgColor
-            backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
+            setSelectedState(isPrivate: isPrivate, theme: theme)
+            //            backgroundHolder.layer.borderColor = borderColor.cgColor
+//            backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
         } else {
-            backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
-            backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
+            setUnselectedState(theme: theme)
         }
+    }
+
+    func setSelectedState(isPrivate: Bool, theme: Theme) {
+        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+
+        let path = UIBezierPath(roundedRect: backgroundHolder.bounds.insetBy(dx: -3, dy: -3),
+                                cornerRadius: backgroundHolder.layer.cornerRadius).cgPath
+        backgroundHolder.layer.shadowPath = path
+        backgroundHolder.layer.shadowColor = borderColor.cgColor
+        backgroundHolder.layer.shadowOffset = .zero
+        backgroundHolder.layer.shadowOpacity = 1
+        backgroundHolder.layer.shadowRadius = 0
+    }
+
+    func setUnselectedState(theme: Theme) {
+        backgroundHolder.layer.shadowOffset = .zero
+        backgroundHolder.layer.shadowPath = nil
+        backgroundHolder.layer.shadowOpacity = 0
+        backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
+        backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
     }
 
     // MARK: - UICollectionViewCell
