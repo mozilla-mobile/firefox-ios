@@ -30,6 +30,7 @@ struct GenericSectionView<Content: View>: View {
         static var sectionPadding: CGFloat { 16 }
         static var dividerHeight: CGFloat { 0.7 }
         static var textPadding: CGFloat { 8 }
+        static var contentPadding: CGFloat { 4 }
     }
 
     init(theme: Theme?, title: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
@@ -48,6 +49,7 @@ struct GenericSectionView<Content: View>: View {
             Divider().frame(height: UX.dividerHeight)
 
             content()
+                .padding([.top, .bottom], UX.contentPadding)
 
             Divider().frame(height: UX.dividerHeight)
 

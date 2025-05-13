@@ -26,18 +26,16 @@ struct ZoomLevelPickerView: View {
     }
 
     var body: some View {
-        Picker(pickerText, selection: $defaultZoom) {
-            ForEach(ZoomLevel.allCases, id: \.displayName) { item in
-                Text(item.displayName)
-                    .font(.body)
-                    .foregroundColor(textColor)
+        List {
+            Picker(pickerText, selection: $defaultZoom) {
+                ForEach(ZoomLevel.allCases, id: \.displayName) { item in
+                    Text(item.displayName)
+                        .font(.body)
+                        .foregroundColor(textColor)
+                }
             }
+            .accentColor(textColor)
+            .pickerStyle(.menu)
         }
-        .background(theme.colors.layer2.color)
-        .accentColor(textColor)
-        .pickerStyle(.menu)
-    }
-
-    func applyTheme() {
     }
 }

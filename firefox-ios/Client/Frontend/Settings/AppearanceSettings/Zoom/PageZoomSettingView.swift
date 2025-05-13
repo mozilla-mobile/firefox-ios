@@ -6,88 +6,86 @@ import SwiftUI
 import Common
 
 struct PageZoomSettingsView: View {
+    let windowUUID: WindowUUID
     private struct UX {
-        static let spacing: CGFloat = 24
+        static var dividerHeight: CGFloat { 0.7 }
+        static var buttonPadding: CGFloat { 4 }
     }
 
     private var viewBackground: Color {
-        return Color(theme.colors.layer1)
+        return themeColors.layer1.color
     }
 
     var sectionTitleColor: Color {
-        return Color(theme.colors.textSecondary)
+        return themeColors.textSecondary.color
     }
 
     var textColor: Color {
-        return Color(theme.colors.textPrimary)
+        return themeColors.textPrimary.color
     }
 
-    private let theme: Theme
-    let siteZooms: [String] = ["amazon.com",
-                               "wikipedia.org"]
+    var descriptionTextColor: Color {
+        return themeColors.textSecondary.color
+    }
 
-    init(theme: Theme) {
-        self.theme = theme
+    @Environment(\.themeManager)
+    var themeManager
+    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+
+    var theme: Theme {
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
         VStack {
             List {
+                // Default level picker
                 Section {
                     ZoomLevelPickerView(theme: theme)
+                        .background(themeColors.layer1.color)
                 } header: {
                     GenericSectionHeaderView(title: .DefaultZoomLevelSectionTitle.uppercased(),
                                              sectionTitleColor: sectionTitleColor)
                 }
 
+                // Specific site zoom levels
                 Section {
-                    ForEach(siteZooms, id: \.self) { item in
-                        HStack {
-                            Text(item)
-                                .font(.body)
-                                .foregroundColor(textColor)
-
-                            Spacer()
-
-                            Text("50%")
-                                .padding([.trailing], 10)
-                                .font(.body)
-                                .foregroundColor(textColor)
-                        }
-                    }
-                    .onDelete(perform: delete)
-                    .listRowBackground(theme.colors.layer2.color)
+                    ZoomSiteListView(theme: theme)
+                        .background(themeColors.layer1.color)
                 } header: {
                     GenericSectionHeaderView(title: .SpecificSiteZoomSectionTitle.uppercased(),
                                              sectionTitleColor: sectionTitleColor)
-                }
-                Section {
-                    Button(action: {}) {
-                        Text("Red thin text")
-                            .padding([.leading, .trailing], 10)
-                            .font(.title)
-                            .foregroundColor(.red)
-                            .background(.orange)
-                    }
-                    .padding([.top], 10)
+                } footer: {
+                    Text(String.SpecificSiteZoomFooterTitle)
+                        .background(themeColors.layer1.color)
+                        .font(.caption)
+                        .foregroundColor(descriptionTextColor)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             .listStyle(.plain)
+            .listRowBackground(theme.colors.layer2.color)
+
+            VStack {
+                Divider().frame(height: UX.dividerHeight)
+
+                Button(action: {}) {
+                    Text(String.PageZoomResetButtonTitle)
+                        .foregroundColor(theme.colors.textCritical.color)
+                }
+                .padding([.top, .bottom], UX.buttonPadding)
+
+                Divider().frame(height: UX.dividerHeight)
+            }
         }
+        .background(themeColors.layer1.color)
         .frame(maxWidth: .infinity)
-        .background(viewBackground)
         .onAppear {
-            applyTheme()
+            themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            applyTheme()
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }
-    }
-
-    func applyTheme() {
-        // TODO: Apply theme
-    }
-
-    func delete(at index: IndexSet) {
     }
 }

@@ -58,7 +58,9 @@ struct AppearanceSettingsView: View {
             }
             if shouldShowPageZoom {
                 GenericSectionView(theme: currentTheme, title: String.PageZoomSectionHeader) {
-                    GenericItemCellView(title: String.PageZoomTitle, theme: currentTheme) {
+                    GenericItemCellView(title: String.PageZoomTitle,
+                                        image: .chevronRightLarge,
+                                        theme: currentTheme) {
                         delegate?.pressedPageZoom()
                     }
                 }

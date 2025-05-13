@@ -247,6 +247,8 @@
 		2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */; };
 		214099622DCE57A4004881E1 /* GenericSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */; };
 		214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */; };
+		214099672DD392D1004881E1 /* ZoomSiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099662DD392D1004881E1 /* ZoomSiteListView.swift */; };
+		214099692DD3B8AD004881E1 /* ZoomLevelCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */; };
 		21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */; };
 		21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */; };
 		2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */; };
@@ -2762,6 +2764,8 @@
 		2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageZoomSettingView.swift; sourceTree = "<group>"; };
 		214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionHeaderView.swift; sourceTree = "<group>"; };
 		214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelPickerView.swift; sourceTree = "<group>"; };
+		214099662DD392D1004881E1 /* ZoomSiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomSiteListView.swift; sourceTree = "<group>"; };
+		214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelCellView.swift; sourceTree = "<group>"; };
 		21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinator.swift; sourceTree = "<group>"; };
 		21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinatorTests.swift; sourceTree = "<group>"; };
 		2142B1292D9F1284003AA82F /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
@@ -10866,7 +10870,9 @@
 			isa = PBXGroup;
 			children = (
 				214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */,
+				214099662DD392D1004881E1 /* ZoomSiteListView.swift */,
 				2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */,
+				214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */,
 			);
 			path = Zoom;
 			sourceTree = "<group>";
@@ -17468,6 +17474,7 @@
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				217641B82D651DB900597B6F /* MIMEType.swift in Sources */,
+				214099692DD3B8AD004881E1 /* ZoomLevelCellView.swift in Sources */,
 				219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */,
 				BA4BB9A02D7FB3C9006BD137 /* ThemeOptionView.swift in Sources */,
 				8A5D1CB22A30D756005AD35C /* SiriPageSetting.swift in Sources */,
@@ -17840,6 +17847,7 @@
 				8A5D1CAC2A30D70B005AD35C /* OpenWithSetting.swift in Sources */,
 				8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */,
 				43D16B7A29831C7F009F8279 /* CreditCardAutofillToggle.swift in Sources */,
+				214099672DD392D1004881E1 /* ZoomSiteListView.swift in Sources */,
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,

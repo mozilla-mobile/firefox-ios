@@ -5695,6 +5695,16 @@ extension String {
         tableName: nil,
         value: "Specific site settings",
         comment: "Specific site settings section header title under page zoom settings. List all websites with custom zoom level")
+    public static let SpecificSiteZoomFooterTitle = MZLocalizedString(
+        key: "Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140",
+        tableName: nil,
+        value: "To add to this list, visit a site and adjust the page zoom from the menu",
+        comment: "Specific site settings section footer title under page zoom settings. Explain how to add elements to the list")
+    public static let PageZoomResetButtonTitle = MZLocalizedString(
+        key: "Settings.Appearance.Zoom.Reset.Button.v140",
+        tableName: nil,
+        value: "Reset site Settings",
+        comment: "Button to reset specific zoom site levels back to default")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString(
         key: "Settings.DisplayTheme.BrightnessThreshold.SectionHeader",
         tableName: nil,

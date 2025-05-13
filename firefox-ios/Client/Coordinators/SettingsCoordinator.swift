@@ -481,10 +481,9 @@ final class SettingsCoordinator: BaseCoordinator,
     // MARK: - AppearanceSettingsDelegate
 
     func pressedPageZoom() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let appearanceView = PageZoomSettingsView(theme: theme)
+        let appearanceView = PageZoomSettingsView(windowUUID: windowUUID)
         let viewController = UIHostingController(rootView: appearanceView)
-        viewController.title = .PageZoomTitle
+        viewController.title = String.PageZoomTitle
         router.push(viewController)
     }
 
