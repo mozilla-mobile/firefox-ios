@@ -4802,11 +4802,6 @@ extension String {
             tableName: nil,
             value: "Passwords",
             comment: "Label for the button, displayed in the menu, takes you to passwords screen when pressed.")
-        public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
-            key: "Menu.CopyURL.Confirm",
-            tableName: nil,
-            value: "URL Copied To Clipboard",
-            comment: "Toast displayed to user after copy url pressed.")
         public static let AppMenuTabSentConfirmMessage = MZLocalizedString(
             key: "Menu.TabSent.Confirm",
             tableName: nil,
@@ -7837,6 +7832,13 @@ extension String {
                 tableName: nil,
                 value: "Tabs",
                 comment: "The title on the button to look at regular tabs.")
+        }
+        struct v140 {
+            public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
+                key: "Menu.CopyURL.Confirm",
+                tableName: nil,
+                value: "URL Copied To Clipboard",
+                comment: "Toast displayed to user after copy url pressed.")
         }
     }
 }

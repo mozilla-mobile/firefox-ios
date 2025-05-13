@@ -372,10 +372,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(dismissAction)
 
-        let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
-                                                 windowUUID: uuid,
-                                                 actionType: GeneralBrowserActionType.showOverlay)
-        store.dispatch(overlayAction)
+        if !isTabTrayUIExperimentsEnabled {
+            let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
+                                                     windowUUID: uuid,
+                                                     actionType: GeneralBrowserActionType.showOverlay)
+            store.dispatch(overlayAction)
+        }
     }
 
     /// Move tab on `TabManager` array to support drag and drop
@@ -756,13 +758,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
-
-        if !isTabTrayUIExperimentsEnabled {
-            let toastAction = TabPanelMiddlewareAction(toastType: .copyURL,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
-        }
     }
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {

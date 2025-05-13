@@ -93,7 +93,7 @@ public class BottomSheetViewController: UIViewController,
         setupChildViewController()
 
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: viewModel.closeButtonA11yLabel,
-                                                        a11yIdentifier: "a11yCloseButton")
+                                                        a11yIdentifier: viewModel.closeButtonA11yIdentifier)
         closeButton.configure(viewModel: closeButtonViewModel)
 
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
