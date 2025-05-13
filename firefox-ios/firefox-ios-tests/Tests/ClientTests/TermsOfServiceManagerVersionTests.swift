@@ -61,7 +61,7 @@ final class TermsOfServiceManagerVersionTests: XCTestCase {
         XCTAssertFalse(manager.isAppVersion(in: versionRange),
                        "138.1 is the exclusive upper bound and should fail")
     }
-    
+
     func testVersionAboveUpperBoundReturnsFalse() {
         bundle.fakeVersion = "138.2"
         XCTAssertFalse(manager.isAppVersion(in: versionRange),
