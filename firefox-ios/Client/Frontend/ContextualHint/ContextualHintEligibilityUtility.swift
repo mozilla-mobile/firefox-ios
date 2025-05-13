@@ -41,7 +41,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         case .jumpBackIn:
             hintTypeShouldBePresented = canJumpBackInBePresented
         case .jumpBackInSyncedTab:
-            hintTypeShouldBePresented = true
+            hintTypeShouldBePresented = canPresentJumpBackInSyncedTab
         case .mainMenu:
             hintTypeShouldBePresented = canMenuCFRBePresented
         case .inactiveTabs:
@@ -79,17 +79,35 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return isToolbarUpdateCFRFeatureEnabled
     }
 
+    /// We present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been
+    /// presented if the feature is enabled. If the Toolbar CFR flag is disabled we bypass it.
+    private var shouldCheckToolbarHasShown: Bool {
+        guard isToolbarUpdateCFRFeatureEnabled else { return true }
+
+        return profile.prefs.boolForKey(CFRPrefsKeys.toolbarUpdateKey.rawValue) ?? false
+    }
+
     /// Determine if the CFR for Jump Back In is presentable.
     ///
     /// It's presentable on these conditions:
+    /// - the Toolbar Update CFR has already been presented or the toolbar update flag CFR is disabled
     /// - the JumpBackInSyncedTab CFR has NOT been presented already
     /// - the JumpBackIn CFR has NOT been presented yet
     private var canJumpBackInBePresented: Bool {
-        guard !hasHintBeenConfigured(.jumpBackInSyncedTab),
+        guard shouldCheckToolbarHasShown,
+              !hasHintBeenConfigured(.jumpBackInSyncedTab),
               !hasAlreadyBeenPresented(.jumpBackInSyncedTab)
         else { return false }
 
         return true
+    }
+
+    /// Determine if the CFR for SyncedTab in JumpBackIn is presentable.
+    ///
+    /// The context hint is presentable when certain conditions are met:
+    /// - the Toolbar Update CFR has already been presented or the toolbar update flag CFR is disabled
+    private var canPresentJumpBackInSyncedTab: Bool {
+        return shouldCheckToolbarHasShown
     }
 
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
