@@ -6,20 +6,16 @@ import SwiftUI
 import Common
 
 struct ZoomLevelPickerView: View {
-    private struct UX {
-        static let spacing: CGFloat = 24
-    }
+    @State private var defaultZoom = "100%"
+    private let theme: Theme
 
     var textColor: Color {
-        return Color(theme.colors.textPrimary)
+        return theme.colors.textPrimary.color
     }
 
     var pickerText: String {
         return .ZoomLevelSelectorTitle
     }
-
-    @State private var defaultZoom = "100%"
-    private let theme: Theme
 
     init(theme: Theme) {
         self.theme = theme

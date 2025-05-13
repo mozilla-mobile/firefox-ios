@@ -58,12 +58,4 @@ struct GenericItemCellView: View {
             onTap()
         }
     }
-
-    var traits: AccessibilityTraits {
-        if #available(iOS 17.0, *) {
-            return [.isButton, .isToggle]
-        } else {
-            return [.isButton]
-        }
-    }
 }

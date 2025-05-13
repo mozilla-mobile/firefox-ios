@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-/// Child settings pages browsing actions
+/// Child settings pages appearance actions
 protocol AppearanceSettingsDelegate: AnyObject {
     func pressedPageZoom()
 }

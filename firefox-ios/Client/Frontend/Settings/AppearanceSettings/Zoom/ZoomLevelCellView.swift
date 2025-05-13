@@ -7,12 +7,18 @@ import SwiftUI
 import Storage
 
 struct ZoomLevelCellView: View {
-    var textColor: Color {
-        return Color(theme.colors.textPrimary)
+    private let theme: Theme
+    private let domainZoomLevel: DomainZoomLevel
+
+    private struct UX {
+        static var dividerHeight: CGFloat { 0.7 }
+        static var buttonPadding: CGFloat { 4 }
+        static var textPadding: CGFloat { 10 }
     }
 
-    private let theme: Theme
-    let domainZoomLevel: DomainZoomLevel
+    var textColor: Color {
+        return theme.colors.textPrimary.color
+    }
 
     init(theme: Theme, domainZoomLevel: DomainZoomLevel) {
         self.theme = theme
@@ -28,7 +34,7 @@ struct ZoomLevelCellView: View {
             Spacer()
 
             Text(ZoomLevel(from: domainZoomLevel.zoomLevel).displayName)
-                .padding([.trailing], 10)
+                .padding([.trailing], UX.textPadding)
                 .font(.body)
                 .foregroundColor(textColor)
         }

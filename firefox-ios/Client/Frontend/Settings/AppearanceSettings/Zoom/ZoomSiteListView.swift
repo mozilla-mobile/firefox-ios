@@ -7,16 +7,12 @@ import SwiftUI
 import Storage
 
 struct ZoomSiteListView: View {
-    private struct UX {
-        static let spacing: CGFloat = 24
-    }
-
-    var textColor: Color {
-        return Color(theme.colors.textPrimary)
-    }
-
     let theme: Theme
     let zoomLevels: [DomainZoomLevel]
+
+    var textColor: Color {
+        return theme.colors.textPrimary.color
+    }
 
     init(theme: Theme,
          zoomStore: ZoomLevelStorage = ZoomLevelStore.shared) {
@@ -32,5 +28,6 @@ struct ZoomSiteListView: View {
     }
 
     func delete(at index: IndexSet) {
+        // TODO: Integration task delete item from the list and save
     }
 }
