@@ -203,14 +203,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let borderLayer = CAShapeLayer()
         borderLayer.path = UIBezierPath(
-            roundedRect: tabSnapshot.bounds,
-            cornerRadius: tabSnapshot.layer.cornerRadius
+            roundedRect: bvcSnapshot.bounds,
+            cornerRadius: bvcSnapshot.layer.cornerRadius
         ).cgPath
         borderLayer.strokeColor = borderColor.cgColor
         borderLayer.fillColor = UIColor.clear.cgColor
         borderLayer.lineWidth = 0
         borderLayer.opacity = 0
-        tabSnapshot.layer.addSublayer(borderLayer)
+        bvcSnapshot.layer.addSublayer(borderLayer)
 
         cv.transform = .init(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
