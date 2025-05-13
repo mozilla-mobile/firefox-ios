@@ -199,9 +199,29 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             }
         }
 
+        let borderColor = selectedTab.isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+
+        let borderLayer = CAShapeLayer()
+        borderLayer.path = UIBezierPath(
+            roundedRect: tabSnapshot.bounds,
+            cornerRadius: tabSnapshot.layer.cornerRadius
+        ).cgPath
+        borderLayer.strokeColor = borderColor.cgColor
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.lineWidth = 3
+        borderLayer.opacity = 0
+        tabSnapshot.layer.addSublayer(borderLayer)
+
         cv.transform = .init(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
         let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
+            let fadeIn = CABasicAnimation(keyPath: "opacity")
+            fadeIn.fromValue = 0
+            fadeIn.toValue = 1
+            fadeIn.duration = 0.4
+            fadeIn.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            borderLayer.add(fadeIn, forKey: "fadeIn")
+            borderLayer.opacity = 1 // final value to persist
             cv.transform = .identity
             cv.alpha = 1
             if let frame = cellFrame {
