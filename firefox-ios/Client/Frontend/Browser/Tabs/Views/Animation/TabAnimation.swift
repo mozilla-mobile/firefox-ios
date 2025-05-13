@@ -227,28 +227,38 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.alpha = 0.5
 
         let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-            cv.transform = .identity
-            cv.alpha = 1
-
-            borderLayer.opacity = 1
-            borderLayer.lineWidth = 10
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
                 snapshotContainer.frame = frame
                 bvcSnapshot.frame = snapshotContainer.bounds
+
                 snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-
-                // Update border path after frame change
-                borderLayer.path = UIBezierPath(
+                // Animate path to match new size
+                let oldPath = borderLayer.path
+                let newPath = UIBezierPath(
                     roundedRect: snapshotContainer.bounds,
                     cornerRadius: ExperimentTabCell.UX.cornerRadius
                 ).cgPath
+
+                let pathAnimation = CABasicAnimation(keyPath: "path")
+                pathAnimation.fromValue = oldPath
+                pathAnimation.toValue = newPath
+                pathAnimation.duration = 0.4
+                pathAnimation.timingFunction = CAMediaTimingFunction(name: .default)
+
+                borderLayer.add(pathAnimation, forKey: "path")
+                borderLayer.path = newPath
             } else {
-                tabSnapshot.alpha = 0
-                snapshotContainer.alpha = 0
+                tabSnapshot.alpha = 0.0
+                snapshotContainer.alpha = 0.0
             }
+
+            borderLayer.opacity = 1
+            borderLayer.lineWidth = 3
+            cv.transform = .identity
+            cv.alpha = 1
             backgroundView.alpha = 0
         }
 

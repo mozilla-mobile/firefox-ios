@@ -235,7 +235,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         borderLayer.path = UIBezierPath(
             roundedRect: borderRect,
-            cornerRadius: view.layer.cornerRadius + width / 2
+            cornerRadius: UX.cornerRadius
         ).cgPath
 
         borderLayer.fillColor = UIColor.clear.cgColor
