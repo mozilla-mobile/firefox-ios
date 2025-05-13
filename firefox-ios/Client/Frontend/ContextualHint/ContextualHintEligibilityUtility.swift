@@ -17,13 +17,16 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     var device: UIDeviceInterface
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?
+    var isToolbarUpdateCFRFeatureEnabled: Bool
 
     init(with profile: Profile,
          overlayState: OverlayStateProtocol?,
-         device: UIDeviceInterface = UIDevice.current) {
+         device: UIDeviceInterface = UIDevice.current,
+         isToolbarUpdateCFRFeatureEnabled: Bool = false) {
         self.profile = profile
         self.overlayState = overlayState
         self.device = device
+        self.isToolbarUpdateCFRFeatureEnabled = isToolbarUpdateCFRFeatureEnabled
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
@@ -46,7 +49,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         case .navigation:
             hintTypeShouldBePresented = true
         case .toolbarUpdate:
-            hintTypeShouldBePresented = true
+            hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
@@ -66,6 +69,14 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// - menu-hint flag is enabled
     private var canMenuCFRBePresented: Bool {
         return featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) ? true : false
+    }
+
+    /// Determine if the CFR for Toolbar Update is presentable.
+    ///
+    /// It's presentable on these conditions:
+    /// - toolbar-update-hint flag is enabled
+    private var canToolbarUpdateCFRBePresented: Bool {
+        return isToolbarUpdateCFRFeatureEnabled
     }
 
     /// Determine if the CFR for Jump Back In is presentable.

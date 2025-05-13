@@ -47,7 +47,9 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
     func shouldPresentContextualHint() -> Bool {
         let hintEligibilityUtility = ContextualHintEligibilityUtility(
             with: profile,
-            overlayState: overlayState)
+            overlayState: overlayState,
+            isToolbarUpdateCFRFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarUpdateHint, checking: .buildOnly)
+        )
 
         return hintEligibilityUtility.canPresent(hintType)
     }
