@@ -142,6 +142,13 @@ class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
         iconImageView.tintColor = theme.colors.iconDisabled
     }
 
+    func applyTheme(textPrimary: UIColor, iconDisabled: UIColor, layer3: UIColor) {
+        backgroundColor = layer3
+        titleLabel.textColor = textPrimary
+        descriptionLabel.textColor = textPrimary
+        iconImageView.tintColor = iconDisabled
+    }
+
     @objc
     private func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String

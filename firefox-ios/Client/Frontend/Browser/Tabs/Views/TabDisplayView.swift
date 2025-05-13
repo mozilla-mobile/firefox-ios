@@ -281,6 +281,10 @@ class TabDisplayView: UIView,
         collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
 
+    func applyTheme(layer3: UIColor) {
+        collectionView.backgroundColor = layer3
+    }
+
     private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
         let snapshot = dataSource.snapshot()
         guard

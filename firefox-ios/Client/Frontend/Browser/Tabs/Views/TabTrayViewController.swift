@@ -26,6 +26,7 @@ class TabTrayViewController: UIViewController,
                              UIToolbarDelegate,
                              UIPageViewControllerDataSource,
                              UIPageViewControllerDelegate,
+                             UIGestureRecognizerDelegate,
                              UIScrollViewDelegate,
                              StoreSubscriber,
                              FeatureFlaggable,
@@ -441,6 +442,61 @@ class TabTrayViewController: UIViewController,
         }
     }
 
+    func applyTheme(progress: CGFloat) {
+        let dark = LightTheme()
+        let feltPr = PrivateModeTheme()
+
+        let layer1 = mix(dark.colors.layer1, feltPr.colors.layer1, t: progress)
+        let iconPrimary = mix(dark.colors.iconPrimary, feltPr.colors.iconPrimary, t: progress)
+        let textPrimary = mix(dark.colors.textPrimary, feltPr.colors.textPrimary, t: progress)
+        let actionSecondary = mix(dark.colors.actionSecondary, feltPr.colors.actionSecondary, t: progress)
+        let layerScrim = mix(dark.colors.layerScrim, feltPr.colors.layerScrim, t: progress)
+        let layer3 = mix(dark.colors.layer3, feltPr.colors.layer3, t: progress)
+
+        view.backgroundColor = layer1
+        (currentExperimentPanel?.topViewController as? TabDisplayPanelViewController)?.applyTheme(
+            layerScrim: layerScrim,
+            layer3: layer3,
+            textPrimary: textPrimary,
+            iconDisabled: iconPrimary
+        )
+
+        (childPanelControllers[0].topViewController as? TabDisplayPanelViewController)?.applyTheme(
+            layerScrim: layerScrim,
+            layer3: layer3,
+            textPrimary: textPrimary,
+            iconDisabled: iconPrimary
+        )
+        navigationToolbar.barTintColor = layer1
+        deleteButton.tintColor = iconPrimary
+        newTabButton.tintColor = iconPrimary
+        doneButton.tintColor = iconPrimary
+        syncTabButton.tintColor = iconPrimary
+
+        experimentSegmentControl.applyTheme(
+            layer1: layer1,
+            actionSecondary: actionSecondary,
+            textPrimary: textPrimary
+        )
+    }
+
+    func mix(_ color1: UIColor, _ color2: UIColor, t: CGFloat) -> UIColor {
+        let t = max(0, min(1, t))
+
+        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
+
+        color1.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+        color2.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+
+        return UIColor(
+            red: r1 + (r2 - r1) * t,
+            green: g1 + (g2 - g1) * t,
+            blue: b1 + (b2 - b1) * t,
+            alpha: a1 + (a2 - a1) * t
+        )
+    }
+
     // MARK: Private
     private func setupView() {
         // Should use Regular layout used for iPad
@@ -704,6 +760,29 @@ class TabTrayViewController: UIViewController,
         }
 
         self.pageViewController = pageVC
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(onPageVCpan))
+        pan.delegate = self
+        pageVC.view.addGestureRecognizer(pan)
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
+    @objc
+    private func onPageVCpan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: pageViewController?.view)
+        switch gesture.state {
+        case .changed:
+            let progress = abs(translation.x / view.frame.width)
+            applyTheme(progress: progress)
+        case .ended:
+            UIView.animate(withDuration: 0.25) {
+                self.applyTheme(progress: 1.0)
+            }
+        default:
+            break
+        }
     }
 
     private func hideCurrentPanel() {
@@ -928,6 +1007,9 @@ class TabTrayViewController: UIViewController,
             experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
 
             navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.applyTheme(progress: 1.0)
         }
     }
 

@@ -191,4 +191,13 @@ class TabTraySelectorView: UIView,
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
         }
     }
+
+    func applyTheme(layer1: UIColor, actionSecondary: UIColor, textPrimary: UIColor) {
+        backgroundColor = layer1
+        selectionBackgroundView.backgroundColor = actionSecondary
+
+        for button in buttons {
+            button.setTitleColor(textPrimary, for: .normal)
+        }
+    }
 }

@@ -215,6 +215,25 @@ class TabDisplayPanelViewController: UIViewController,
         }
     }
 
+    func applyTheme(layerScrim: UIColor, layer3: UIColor, textPrimary: UIColor, iconDisabled: UIColor) {
+        backgroundPrivacyOverlay.backgroundColor = layerScrim
+        tabDisplayView.applyTheme(layer3: layer3)
+        (emptyPrivateTabsView as? ExperimentEmptyPrivateTabsView)?.applyTheme(textPrimary: textPrimary,
+                                                                              iconDisabled: iconDisabled,
+                                                                              layer3: layer3)
+//        tabDisplayView.applyTheme(theme: theme)
+//        emptyPrivateTabsView.applyTheme(theme: theme)
+//
+//        if isTabTrayUIExperimentsEnabled {
+//            gradientLayer.colors = [
+//                theme.colors.layer3.cgColor,
+//                theme.colors.layer3.cgColor,
+//                theme.colors.layer3.withAlphaComponent(0.95).cgColor,
+//                theme.colors.layer3.withAlphaComponent(0.0).cgColor
+//            ]
+//        }
+    }
+
     // MARK: - Redux
 
     func subscribeToRedux() {
