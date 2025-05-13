@@ -264,22 +264,43 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         }
     }
 
+    private func addExternalBorder(to view: UIView, color: UIColor, width: CGFloat) {
+        let borderLayer = CAShapeLayer()
+
+        // Expand the border frame slightly outward
+        let borderRect = view.bounds.insetBy(dx: -width / 2, dy: -width / 2)
+
+        borderLayer.path = UIBezierPath(
+            roundedRect: borderRect,
+            cornerRadius: view.layer.cornerRadius + width / 2
+        ).cgPath
+
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = color.cgColor
+        borderLayer.lineWidth = width
+        borderLayer.frame = view.bounds // Stay in sync with the view
+        borderLayer.name = "externalBorder"
+
+        // Avoid clipping the border
+        view.clipsToBounds = false
+
+        // Optional: remove old border if it exists
+//        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+
+        view.layer.addSublayer(borderLayer)
+    }
+
+    private func removeExternalBorder(from view: UIView) {
+        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+    }
+
     func setSelectedState(isPrivate: Bool, theme: Theme) {
         let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-
-        let path = UIBezierPath(roundedRect: backgroundHolder.bounds.insetBy(dx: -3, dy: -3),
-                                cornerRadius: backgroundHolder.layer.cornerRadius).cgPath
-        backgroundHolder.layer.shadowPath = path
-        backgroundHolder.layer.shadowColor = borderColor.cgColor
-        backgroundHolder.layer.shadowOffset = .zero
-        backgroundHolder.layer.shadowOpacity = 1
-        backgroundHolder.layer.shadowRadius = 0
+        addExternalBorder(to: backgroundHolder, color: borderColor, width: 3)
     }
 
     func setUnselectedState(theme: Theme) {
-        backgroundHolder.layer.shadowOffset = .zero
-        backgroundHolder.layer.shadowPath = nil
-        backgroundHolder.layer.shadowOpacity = 0
+        removeExternalBorder(from: backgroundHolder)
         backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
         backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
     }
