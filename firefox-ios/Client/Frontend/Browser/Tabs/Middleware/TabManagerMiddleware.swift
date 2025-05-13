@@ -758,13 +758,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
-
-        if !isTabTrayUIExperimentsEnabled {
-            let toastAction = TabPanelMiddlewareAction(toastType: .copyURL,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
-        }
     }
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {

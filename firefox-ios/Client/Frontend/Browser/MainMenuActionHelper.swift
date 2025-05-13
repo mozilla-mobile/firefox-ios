@@ -417,7 +417,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
-                self.delegate?.showToast(message: .LegacyAppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl)
             }
         }.items
     }
