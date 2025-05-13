@@ -372,10 +372,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(dismissAction)
 
-        let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
-                                                 windowUUID: uuid,
-                                                 actionType: GeneralBrowserActionType.showOverlay)
-        store.dispatch(overlayAction)
+        if !isTabTrayUIExperimentsEnabled {
+            let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
+                                                     windowUUID: uuid,
+                                                     actionType: GeneralBrowserActionType.showOverlay)
+            store.dispatch(overlayAction)
+        }
     }
 
     /// Move tab on `TabManager` array to support drag and drop
