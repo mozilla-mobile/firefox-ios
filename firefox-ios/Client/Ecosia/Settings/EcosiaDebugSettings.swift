@@ -285,16 +285,6 @@ final class UnleashNativeSRPVAnalyticsSetting: UnleashVariantResetSetting {
     }
 }
 
-final class UnleashDefaultBrowserPromoSetting: UnleashVariantResetSetting {
-    override var titleName: String? {
-        "Default Browser Promo"
-    }
-
-    override var variant: Unleash.Variant? {
-        Unleash.getVariant(.defaultBrowserPromoCTR)
-    }
-}
-
 final class AnalyticsIdentifierSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Analytics Identifier", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])

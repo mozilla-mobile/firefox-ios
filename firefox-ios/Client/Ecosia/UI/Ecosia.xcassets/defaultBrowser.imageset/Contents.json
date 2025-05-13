@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "photo-farmer.png",
+      "filename" : "showcase-impact.png",
       "idiom" : "iphone",
       "scale" : "2x"
     },
     {
-      "filename" : "photo-farmer-1.png",
+      "filename" : "showcase-impact-1.png",
       "idiom" : "iphone",
       "scale" : "3x"
     },
@@ -19,7 +19,7 @@
       "scale" : "1x"
     },
     {
-      "filename" : "photo-farmer-2.png",
+      "filename" : "showcase-impact-2.png",
       "idiom" : "ipad",
       "scale" : "2x"
     }

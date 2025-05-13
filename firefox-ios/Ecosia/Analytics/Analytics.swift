@@ -116,14 +116,10 @@ open class Analytics {
     }
 
     public func defaultBrowser(_ action: Action.Promo) {
-        let event = Structured(category: Category.browser.rawValue,
-                               action: action.rawValue)
+        track(Structured(category: Category.browser.rawValue,
+                         action: action.rawValue)
             .label(Label.DefaultBrowser.promo.rawValue)
-            .property(Property.home.rawValue)
-
-        addABTestContexts(to: event, toggles: [.defaultBrowserPromoCTR])
-
-        track(event)
+            .property(Property.home.rawValue))
     }
 
     public func defaultBrowserSettingsShowsDetailViewVia(_ label: Label.DefaultBrowser) {

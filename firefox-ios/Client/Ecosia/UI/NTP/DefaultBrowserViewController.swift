@@ -11,6 +11,8 @@ protocol DefaultBrowserDelegate: AnyObject {
 }
 
 final class DefaultBrowserViewController: UIViewController, Themeable {
+    static let minSearchCountToTrigger = 50
+
     struct UX {
         static let imageHeight: CGFloat = 300
         static let wavesHeight: CGFloat = 92
@@ -26,7 +28,7 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         return view
     }()
     private lazy var imageView: UIImageView = {
-        let view = UIImageView(image: DefaultBrowserExperiment.image)
+        let view = UIImageView(image: .init(named: "defaultBrowser"))
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +44,7 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = DefaultBrowserExperiment.title
+        label.text = .localized(.defaultBrowserPromptExperimentTitle)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .title2).bold()
         label.adjustsFontForContentSizeCategory = true
@@ -50,18 +52,10 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
-    private lazy var variationContentStack: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .vertical
-        stack.spacing = .ecosia.space._1s
-        stack.setContentCompressionResistancePriority(.required, for: .vertical)
-        return stack
-    }()
     private lazy var actionButton: UIButton = {
         let button = EcosiaPrimaryButton(windowUUID: windowUUID)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(DefaultBrowserExperiment.buttonTitle, for: .normal)
+        button.setTitle(.localized(.defaultBrowserPromptExperimentButton), for: .normal)
         button.titleLabel?.font = .preferredFont(forTextStyle: .body)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.layer.cornerRadius = UX.buttonHeight/2
@@ -79,51 +73,6 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return button
     }()
-
-    // MARK: Description variation
-    private lazy var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.text = DefaultBrowserExperiment.description
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        return label
-    }()
-
-    // MARK: Checks variation
-    private lazy var firstCheckItemLabel: UILabel = {
-        let label = UILabel()
-        label.text = DefaultBrowserExperiment.checkItems.0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var secondCheckItemLabel: UILabel = {
-        let label = UILabel()
-        label.text = DefaultBrowserExperiment.checkItems.1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        return label
-    }()
-    private lazy var firstCheckImageView: UIImageView = {
-        let view = UIImageView(image: .init(systemName: "checkmark"))
-        view.contentMode = .scaleAspectFit
-        view.widthAnchor.constraint(equalToConstant: UX.checksSize).isActive = true
-        return view
-    }()
-    private lazy var secondCheckImageView: UIImageView = {
-        let view = UIImageView(image: .init(systemName: "checkmark"))
-        view.contentMode = .scaleAspectFit
-        view.widthAnchor.constraint(equalToConstant: UX.checksSize).isActive = true
-        return view
-    }()
-
-    // MARK: Trivia variation
     private lazy var triviaView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -133,14 +82,16 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
     }()
     private lazy var triviaTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = .localized(.defaultBrowserPromptExperimentDescriptionTitleVarBC)
+        label.text = .localized(.defaultBrowserPromptExperimentDescriptionTitle)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .body).semibold()
         return label
     }()
     private lazy var triviaDecriptionLabel: UILabel = {
         let label = UILabel()
-        label.attributedText = DefaultBrowserExperiment.trivia(font: .preferredFont(forTextStyle: .body))
+        let text = String.localized(.defaultBrowserPromptExperimentDescription)
+        let highlight = String.localized(.defaultBrowserPromptExperimentDescriptionHighlight)
+        label.attributedText = text.semiboldHighlight(highlight)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
@@ -215,46 +166,12 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         contentView.addSubview(titleLabel)
         contentView.addSubview(actionButton)
         contentView.addSubview(skipButton)
-        view.addSubview(variationContentStack)
+        view.addSubview(triviaView)
 
-        let type = DefaultBrowserExperiment.contentType
-        if case .checks = type {
-            let line1 = UIStackView()
-            line1.spacing = .ecosia.space._1s
-            line1.axis = .horizontal
-            variationContentStack.addArrangedSubview(line1)
-            line1.addArrangedSubview(firstCheckImageView)
-            line1.addArrangedSubview(firstCheckItemLabel)
-            let line2 = UIStackView()
-            line2.spacing = .ecosia.space._1s
-            line2.axis = .horizontal
-            variationContentStack.addArrangedSubview(line2)
-            line2.addArrangedSubview(secondCheckImageView)
-            line2.addArrangedSubview(secondCheckItemLabel)
-        } else if case .description = type {
-            variationContentStack.addArrangedSubview(descriptionLabel)
-        } else if case .trivia = type {
-            variationContentStack.addArrangedSubview(triviaView)
-            triviaView.addSubview(triviaTitleLabel)
-            triviaView.addSubview(triviaDecriptionLabel)
-            contentView.addSubview(beforeView)
-            contentView.addSubview(afterView)
-            let padding: CGFloat = .ecosia.space._m
-            NSLayoutConstraint.activate([
-                triviaTitleLabel.topAnchor.constraint(equalTo: triviaView.topAnchor, constant: padding),
-                triviaDecriptionLabel.topAnchor.constraint(equalTo: triviaTitleLabel.bottomAnchor, constant: padding),
-                triviaDecriptionLabel.bottomAnchor.constraint(equalTo: triviaView.bottomAnchor, constant: -padding),
-                triviaTitleLabel.leadingAnchor.constraint(equalTo: triviaView.leadingAnchor, constant: padding),
-                triviaTitleLabel.trailingAnchor.constraint(equalTo: triviaView.trailingAnchor, constant: -padding),
-                triviaDecriptionLabel.leadingAnchor.constraint(equalTo: triviaView.leadingAnchor, constant: padding),
-                triviaDecriptionLabel.trailingAnchor.constraint(equalTo: triviaView.trailingAnchor, constant: -padding),
-
-                beforeView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
-                afterView.centerYAnchor.constraint(equalTo: beforeView.centerYAnchor),
-                beforeView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor, constant: -screenWidth/4),
-                afterView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor, constant: screenWidth/4)
-            ])
-        }
+        triviaView.addSubview(triviaTitleLabel)
+        triviaView.addSubview(triviaDecriptionLabel)
+        contentView.addSubview(beforeView)
+        contentView.addSubview(afterView)
     }
 
     private func setupConstraints() {
@@ -278,11 +195,11 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: .ecosia.space._m),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -.ecosia.space._m),
 
-            variationContentStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: .ecosia.space._m),
-            variationContentStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            variationContentStack.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            triviaView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: .ecosia.space._m),
+            triviaView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            triviaView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
 
-            actionButton.topAnchor.constraint(equalTo: variationContentStack.bottomAnchor, constant: .ecosia.space._1l).priority(.defaultLow),
+            actionButton.topAnchor.constraint(equalTo: triviaView.bottomAnchor, constant: .ecosia.space._1l).priority(.defaultLow),
             actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             actionButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             actionButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
@@ -292,6 +209,19 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
             skipButton.trailingAnchor.constraint(equalTo: actionButton.trailingAnchor),
             skipButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonHeight),
             skipButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -.ecosia.space._m),
+
+            triviaTitleLabel.topAnchor.constraint(equalTo: triviaView.topAnchor, constant: .ecosia.space._m),
+            triviaDecriptionLabel.topAnchor.constraint(equalTo: triviaTitleLabel.bottomAnchor, constant: .ecosia.space._m),
+            triviaDecriptionLabel.bottomAnchor.constraint(equalTo: triviaView.bottomAnchor, constant: -.ecosia.space._m),
+            triviaTitleLabel.leadingAnchor.constraint(equalTo: triviaView.leadingAnchor, constant: .ecosia.space._m),
+            triviaTitleLabel.trailingAnchor.constraint(equalTo: triviaView.trailingAnchor, constant: -.ecosia.space._m),
+            triviaDecriptionLabel.leadingAnchor.constraint(equalTo: triviaView.leadingAnchor, constant: .ecosia.space._m),
+            triviaDecriptionLabel.trailingAnchor.constraint(equalTo: triviaView.trailingAnchor, constant: -.ecosia.space._m),
+
+            beforeView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            afterView.centerYAnchor.constraint(equalTo: beforeView.centerYAnchor),
+            beforeView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor, constant: -screenWidth/4),
+            afterView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor, constant: screenWidth/4)
         ])
     }
 
@@ -304,11 +234,6 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         actionButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
         skipButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
         actionButton.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimary
-        descriptionLabel.textColor = theme.colors.ecosia.textSecondary
-        firstCheckItemLabel.textColor = theme.colors.ecosia.textSecondary
-        secondCheckItemLabel.textColor = theme.colors.ecosia.textSecondary
-        firstCheckImageView.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
-        secondCheckImageView.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
         triviaView.backgroundColor = theme.colors.ecosia.backgroundSecondary
         triviaTitleLabel.textColor = theme.colors.ecosia.textPrimary
         triviaDecriptionLabel.textColor = theme.colors.ecosia.textSecondary
@@ -327,5 +252,19 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         dismiss(animated: true) {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
         }
+    }
+}
+
+fileprivate extension String {
+    func semiboldHighlight(_ highlight: String, baseFont: UIFont = .preferredFont(forTextStyle: .body)) -> NSAttributedString {
+        let fullText = String(format: self, highlight)
+        let attributedText = NSMutableAttributedString(string: fullText,
+                                                       attributes: [.font: baseFont])
+        if let range = fullText.range(of: highlight) {
+            attributedText.addAttributes([
+                .font: UIFont.systemFont(ofSize: baseFont.pointSize, weight: .semibold)
+            ], range: .init(range, in: fullText))
+        }
+        return fullText.attributedText(boldString: highlight, font: baseFont)
     }
 }

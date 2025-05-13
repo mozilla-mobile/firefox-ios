@@ -160,7 +160,6 @@ extension AppSettingsTableViewController {
             UnleashBrazeIntegrationSetting(settings: self),
             UnleashAPNConsent(settings: self),
             UnleashNativeSRPVAnalyticsSetting(settings: self),
-            UnleashDefaultBrowserPromoSetting(settings: self),
             UnleashSeedCounterNTPSetting(settings: self),
         ]
 
