@@ -48,7 +48,7 @@ struct TermsOfServiceManager: FeatureFlaggable {
 
     // MARK: – Constants
 
-    private enum VersionRange {
+    private enum TelemetryAffectedVersionRange {
         static let minimum = "138.0"
         static let maximum = "138.1"
     }
@@ -67,7 +67,7 @@ struct TermsOfServiceManager: FeatureFlaggable {
     /// 4. User did not see the TOC screen
     var isAffectedUser: Bool {
         // 1) Version check
-        guard isAppVersion(in: VersionRange.minimum..<VersionRange.maximum) else {
+        guard isAppVersion(in: TelemetryAffectedVersionRange.minimum..<TelemetryAffectedVersionRange.maximum) else {
             // Outside of the target version window
             return false
         }
