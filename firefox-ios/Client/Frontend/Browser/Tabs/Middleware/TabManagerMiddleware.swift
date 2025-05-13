@@ -372,10 +372,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(dismissAction)
 
-        let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
-                                                 windowUUID: uuid,
-                                                 actionType: GeneralBrowserActionType.showOverlay)
-        store.dispatch(overlayAction)
+        if !isTabTrayUIExperimentsEnabled {
+            let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
+                                                     windowUUID: uuid,
+                                                     actionType: GeneralBrowserActionType.showOverlay)
+            store.dispatch(overlayAction)
+        }
     }
 
     /// Move tab on `TabManager` array to support drag and drop
@@ -1054,17 +1056,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
-        profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-
-            store.dispatch(
-                GeneralBrowserAction(
-                    toastType: .addShortcut,
-                    windowUUID: uuid,
-                    actionType: GeneralBrowserActionType.showToast
-                )
-            )
-        }
+        profile.pinnedSites.addPinnedTopSite(site)
     }
 
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
@@ -1076,16 +1068,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         let site = Site.createBasicSite(url: url, title: tab.displayTitle)
 
-        profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            store.dispatch(
-                GeneralBrowserAction(
-                    toastType: .removeShortcut,
-                    windowUUID: uuid,
-                    actionType: GeneralBrowserActionType.showToast
-                )
-            )
-        }
+        profile.pinnedSites.removeFromPinnedTopSites(site)
     }
 
     private func preserveTabs(uuid: WindowUUID) {
