@@ -452,9 +452,6 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
-        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
