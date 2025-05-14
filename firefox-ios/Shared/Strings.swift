@@ -381,18 +381,6 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public struct Edit {
-                public static let AddressRemovedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressRemovedConfirmation.v129",
-                    tableName: "EditAddress",
-                    value: "Address Removed",
-                    comment: "Toast message confirming that an address has been successfully removed."
-                )
-                public static let AddressSavedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressSavedConfirmation.v129",
-                    tableName: "EditAddress",
-                    value: "Address Saved",
-                    comment: "Toast message confirming that an address has been successfully saved."
-                )
                 public static let AddressRemoveError = MZLocalizedString(
                     key: "Addresses.Toast.AddressSaveError.v130",
                     tableName: "EditAddress",
@@ -7834,6 +7822,18 @@ extension String {
                 tableName: nil,
                 value: "URL Copied To Clipboard",
                 comment: "Toast displayed to user after copy url pressed.")
+            public static let AddressRemovedConfirmation = MZLocalizedString(
+                key: "Addresses.Toast.AddressRemovedConfirmation.v129",
+                tableName: "EditAddress",
+                value: "Address Removed",
+                comment: "Toast message confirming that an address has been successfully removed."
+            )
+            public static let AddressSavedConfirmation = MZLocalizedString(
+                key: "Addresses.Toast.AddressSavedConfirmation.v129",
+                tableName: "EditAddress",
+                value: "Address Saved",
+                comment: "Toast message confirming that an address has been successfully saved."
+            )
         }
     }
 }
