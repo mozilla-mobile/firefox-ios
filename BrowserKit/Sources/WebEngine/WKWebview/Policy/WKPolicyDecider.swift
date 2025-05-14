@@ -7,7 +7,8 @@ import WebKit
 
 /// An object that decides the policy for a navigation request by `WebKit`'s delegate methods.
 protocol WKPolicyDecider {
-    /// The next decider in the chain, that can eventually respond with a `WKPolicy` if this decider is not able to handle it.
+    /// The next decider in the chain, that can eventually respond with a `WKPolicy`
+    /// when this decider is not able to handle it.
     var next: WKPolicyDecider? { get set }
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy
