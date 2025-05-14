@@ -616,7 +616,7 @@ final class WKEngineSessionTests: XCTestCase {
                                             scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
                                             navigationHandler: DefaultNavigationHandler(),
-                                            uiHandler: uiHandler ?? DefaultUIHandler(sessionDependencies:  DefaultTestDependencies().sessionDependencies),
+                                            uiHandler: uiHandler ?? DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies),
                                             readerModeDelegate: MockWKReaderModeDelegate()) else {
             return nil
         }

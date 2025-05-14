@@ -87,7 +87,7 @@ class DefaultUIHandler: NSObject, WKUIHandler {
             let url = navigationAction.request.url
             let urlString = url?.absoluteString ?? ""
 
-            if (url == nil || urlString.isEmpty),
+            if url == nil || urlString.isEmpty,
                let blank = URL(string: "about:blank"),
                let url = BrowserURL(browsingContext: BrowsingContext(type: .internalNavigation, url: blank)) {
                 session.load(browserURL: url)

@@ -40,7 +40,7 @@ final class LocalRequestPolicyDeciderTests: XCTestCase {
         let subject = createSubject(next: mockDecider)
         let url = URL(string: "https://example.com")!
 
-        let _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+        _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
 
         XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
     }

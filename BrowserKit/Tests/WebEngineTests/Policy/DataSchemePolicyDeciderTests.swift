@@ -30,9 +30,9 @@ final class DataSchemePolicyDeciderTests: XCTestCase {
     func testPolicyForPopupNavigation_allowsVideoDataScheme_whenTargetIsMainFrame() {
         let subject = createSubject()
         let url = URL(string: "data:video/test-video")!
-        
+
         let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
-        
+
         XCTAssertEqual(policy, .allow)
     }
 
@@ -85,7 +85,7 @@ final class DataSchemePolicyDeciderTests: XCTestCase {
         let subject = createSubject(next: mockDecider)
         let url = URL(string: "data:video/")!
 
-        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url, isMainFrame: false))
+        _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url, isMainFrame: false))
 
         XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
     }
@@ -94,7 +94,7 @@ final class DataSchemePolicyDeciderTests: XCTestCase {
         let subject = createSubject(next: mockDecider)
         let url = URL(string: "unsupported:scheme")!
 
-        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+        _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
 
         XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
     }

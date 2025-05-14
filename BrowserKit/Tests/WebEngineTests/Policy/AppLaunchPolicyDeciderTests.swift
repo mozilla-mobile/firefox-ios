@@ -35,17 +35,17 @@ final class AppLaunchPolicyDeciderTests: XCTestCase {
     func testPolicyForPopupNavigation_returnsLaunchApp_forSupportedHost() {
         let appStoreURL = URL(string: "https://itunes.apple.com")!
         let subject = createSubject()
-        
+
         let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: appStoreURL))
-        
+
         XCTAssertEqual(policy, .launchExternalApp)
     }
 
     func testPolicyForPopupNavigation_callsNext_forUnsupportedSchemes() {
         let subject = createSubject(next: mockDecider)
         let url = URL(string: "unsupported://test")!
-        
-        let _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
 
         XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
     }

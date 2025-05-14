@@ -17,12 +17,12 @@ class MockPolicyDecider: WKPolicyDecider {
         policyForNavigationActionCalled += 1
         return policyToReturn
     }
-    
+
     func policyForNavigation(response: NavigationResponse) -> WKPolicy {
         policyForNavigationResponseCalled += 1
         return policyToReturn
     }
-    
+
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
         policyForPopupNavigationCalled += 1
         return policyToReturn

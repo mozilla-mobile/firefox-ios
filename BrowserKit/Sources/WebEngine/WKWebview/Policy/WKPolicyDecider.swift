@@ -36,7 +36,7 @@ extension WKNavigationAction: NavigationAction {
     var sourceFrameInfo: any FrameInfo {
         return sourceFrame
     }
-    
+
     var targetFrameInfo: (any FrameInfo)? {
         return targetFrame
     }
@@ -58,5 +58,4 @@ protocol FrameInfo {
 }
 
 extension WKFrameInfo: FrameInfo {
-
 }

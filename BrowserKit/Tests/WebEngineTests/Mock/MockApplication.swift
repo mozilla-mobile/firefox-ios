@@ -13,7 +13,7 @@ class MockApplication: Application {
     func open(url: URL) {
         openCalled += 1
     }
-    
+
     func canOpen(url: URL) -> Bool {
         canOpenCalled += 1
         return canOpenURL
