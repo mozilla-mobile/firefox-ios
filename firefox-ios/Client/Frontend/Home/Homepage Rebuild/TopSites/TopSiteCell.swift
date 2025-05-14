@@ -83,8 +83,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
     private var textColor: UIColor?
     private var pinHeightConstraint: NSLayoutConstraint?
     private var pinWidthConstraint: NSLayoutConstraint?
-    var smallContentConstraints: [NSLayoutConstraint] = []
-    var largeContentConstraints: [NSLayoutConstraint] = []
+    private var smallContentConstraints: [NSLayoutConstraint] = []
+    private var largeContentConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Inits
 
@@ -204,8 +204,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             rootContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            rootContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.width),
-            rootContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.height),
+            rootContainer.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
+            rootContainer.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
 
             imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
                                            constant: UX.imageTopSpace),
@@ -215,12 +215,9 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
                                                 constant: -UX.imageLeadingTrailingSpace),
             imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
                                               constant: -UX.imageBottomSpace),
-            imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
-            imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
 
             descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             selectedOverlay.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
@@ -244,6 +241,9 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             descriptionWrapper.topAnchor.constraint(equalTo: pinImageView.bottomAnchor)
         ]
 
+        let bottomConstraint = descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        bottomConstraint.priority = .defaultHigh
+        bottomConstraint.isActive = true
         pinHeightConstraint = pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height)
         pinHeightConstraint?.isActive = true
         pinWidthConstraint = pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width)
