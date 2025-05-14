@@ -18,7 +18,69 @@ final class HTTPSchemePolicyDeciderTests: XCTestCase {
         super.tearDown()
     }
 
-    
+    func testPolicyForPopupNavigation_allowsHttpScheme() {
+        let subject = createSubject()
+        let url = URL(string: "http://example.com")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_allowsHttpsScheme() {
+        let subject = createSubject()
+        let url = URL(string: "https://example.com")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_allowsAboutScheme() {
+        let subject = createSubject()
+        let url = URL(string: "about://example.com")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_allowsJavascriptScheme() {
+        let subject = createSubject()
+        let url = URL(string: "javascript://example.com")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_blockPayPalPopup() {
+        let subject = createSubject()
+        let url = URL(string: "https://www.paypal.com")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .cancel)
+    }
+
+    func testPolicyForPopupNavigation_blockUnsupportedScheme() {
+        let subject = createSubject()
+        let url = URL(string: "itms-apps://test-app")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .cancel)
+    }
+
+    func testPolicyForPopupNavigation_forwardsToNextDecider_whenSchemeIsUnsupported() {
+        let subject = createSubject(next: mockDecider)
+        let url = URL(string: "itms-apps://test-app")!
+
+        let _ = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
+    }
+
 
     private func createSubject(next: WKPolicyDecider? = nil) -> HTTPSchemePolicyDecider {
         return HTTPSchemePolicyDecider(next: next)

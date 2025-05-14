@@ -7,15 +7,11 @@ import WebKit
 struct DataSchemePolicyDecider: WKPolicyDecider {
     var next: (any WKPolicyDecider)?
 
-    func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
-        return .allow
-    }
-
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.
         guard action.targetFrameInfo?.isMainFrame ?? true else {
-            return .allow
+            return next?.policyForNavigation(action: action) ?? .allow
         }
 
         return shouldAllowDataScheme(for: action.request.url) ? .allow : .cancel
@@ -23,6 +19,19 @@ struct DataSchemePolicyDecider: WKPolicyDecider {
 
     func policyForNavigation(response: NavigationResponse) -> WKPolicy {
         return .allow
+    }
+
+    func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
+        // Only filter top-level navigation, not on data URL subframes.
+        // If target frame is nil, we filter as well.
+        guard action.targetFrameInfo?.isMainFrame ?? true else {
+            return next?.policyForPopupNavigation(action: action) ?? .allow
+        }
+
+        if shouldAllowDataScheme(for: action.url) {
+            return .allow
+        }
+        return next?.policyForPopupNavigation(action: action) ?? .cancel
     }
 
     func shouldAllowDataScheme(for url: URL?) -> Bool {

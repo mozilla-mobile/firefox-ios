@@ -43,7 +43,7 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
         }
 
         /// List of schemes that are allowed to be opened in new tabs.
-        let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
+        let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "about"]
 
         if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
             return true

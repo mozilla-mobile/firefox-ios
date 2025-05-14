@@ -26,7 +26,7 @@ struct LocalRequestPolicyDecider: WKPolicyDecider {
         guard let url = request.url else { return true }
 
         if let url = WKInternalURL(url) {
-            return !url.isAuthorized
+            return url.isAuthorized
         }
         return false
     }

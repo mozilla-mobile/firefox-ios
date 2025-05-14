@@ -10,7 +10,9 @@ class MockNavigationAction: NavigationAction {
     var sourceFrameInfo: any FrameInfo {
         MockFrameInfo(isMainFrame: isMainFrame, request: request)
     }
-    var targetFrameInfo: (any FrameInfo)?
+    var targetFrameInfo: (any FrameInfo)? {
+        MockFrameInfo(isMainFrame: isMainFrame, request: request)
+    }
     var navigationType: WKNavigationType
     let url: URL?
     private let isMainFrame: Bool

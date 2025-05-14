@@ -3,30 +3,113 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+@testable import WebEngine
 
 final class DataSchemePolicyDeciderTests: XCTestCase {
+    private var mockDecider: MockPolicyDecider!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() {
+        super.setUp()
+        mockDecider = MockPolicyDecider()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func tearDown() {
+        mockDecider = nil
+        super.tearDown()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testPolicyForPopupNavigation_allowsImageDataScheme_whenTargetIsMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "data:image/test-image")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testPolicyForPopupNavigation_allowsVideoDataScheme_whenTargetIsMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "data:video/test-video")!
+        
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+        
+        XCTAssertEqual(policy, .allow)
     }
 
+    func testPolicyForPopupNavigation_allowsPDFDataScheme_whenTargetIsMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "data:application/pdf/test")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_allowsJSONDataScheme_whenTargetIsMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "data:application/json/test")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_allowsBase64DataScheme_whenTargetIsMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "data:;base64,")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_preventsOtherDataSchemes_whenTargetIsMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "unsupported:scheme")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(policy, .cancel)
+    }
+
+    func testPolicyForPopupNavigation_AllowAnyScheme_whenTargetIsNotMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "data:video/")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url, isMainFrame: false))
+
+        XCTAssertEqual(policy, .allow)
+    }
+
+    func testPolicyForPopupNavigation_forwardsToNextDecider_whenTargetIsNotMainFrame() {
+        let subject = createSubject(next: mockDecider)
+        let url = URL(string: "data:video/")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url, isMainFrame: false))
+
+        XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
+    }
+
+    func testPolicyForPopupNavigation_forwardsToNextDecider_whenSchemeIsNotHandled() {
+        let subject = createSubject(next: mockDecider)
+        let url = URL(string: "unsupported:scheme")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 1)
+    }
+
+    func testPolicyForPopupNavigation_doesntForwardToNextDecider_whenSchemeIsHandled() {
+        let subject = createSubject(next: mockDecider)
+        let url = URL(string: "data:video/")!
+
+        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
+
+        XCTAssertEqual(mockDecider.policyForPopupNavigationCalled, 0)
+        XCTAssertEqual(policy, .allow)
+    }
+
+    private func createSubject(next: WKPolicyDecider? = nil) -> DataSchemePolicyDecider {
+        return DataSchemePolicyDecider(next: next)
+    }
 }

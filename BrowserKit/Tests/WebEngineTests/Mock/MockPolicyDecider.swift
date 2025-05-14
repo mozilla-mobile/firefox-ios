@@ -11,19 +11,20 @@ class MockPolicyDecider: WKPolicyDecider {
     var policyForNavigationActionCalled = 0
     var policyForNavigationResponseCalled = 0
     var policyForPopupNavigationCalled = 0
+    var policyToReturn: WKPolicy = .allow
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
-        policyForPopupNavigationCalled += 1
-        return .allow
+        policyForNavigationActionCalled += 1
+        return policyToReturn
     }
     
     func policyForNavigation(response: NavigationResponse) -> WKPolicy {
         policyForNavigationResponseCalled += 1
-        return .allow
+        return policyToReturn
     }
     
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
         policyForPopupNavigationCalled += 1
-        return .allow
+        return policyToReturn
     }
 }
