@@ -608,6 +608,8 @@ final class WKEngineSessionTests: XCTestCase {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line,
                        uiHandler: WKUIHandler? = nil) -> WKEngineSession? {
+        let sessionDependencies = DefaultTestDependencies().sessionDependencies
+        let defaultUIHandler = uiHandler ?? DefaultUIHandler(sessionDependencies: sessionDependencies)
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             dependencies: DefaultTestDependencies().sessionDependencies,
                                             configurationProvider: configurationProvider,
@@ -616,7 +618,7 @@ final class WKEngineSessionTests: XCTestCase {
                                             scriptResponder: scriptResponder,
                                             metadataFetcher: metadataFetcher,
                                             navigationHandler: DefaultNavigationHandler(),
-                                            uiHandler: uiHandler ?? DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies),
+                                            uiHandler: defaultUIHandler,
                                             readerModeDelegate: MockWKReaderModeDelegate()) else {
             return nil
         }
