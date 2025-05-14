@@ -18,4 +18,8 @@ final class MockZoomStore: ZoomLevelStorage {
         findZoomLevelCalledCount += 1
         return store.first { $0.host == host }
     }
+
+    func loadAll() -> [DomainZoomLevel] {
+        return [DomainZoomLevel]()
+    }
 }

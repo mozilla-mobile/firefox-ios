@@ -2,7 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-enum ZoomLevel: CGFloat, CaseIterable {
+enum ZoomLevel: CGFloat, CaseIterable, Identifiable {
+    var id: String { displayName }
+
     case fiftyPercent = 0.5
     case seventyFivePercent = 0.75
     case ninetyPercent = 0.9
@@ -12,6 +14,15 @@ enum ZoomLevel: CGFloat, CaseIterable {
     case oneHundredFiftyPercent = 1.5
     case oneHundredSeventyFivePercent = 1.75
     case twoHundred = 2.0
+
+    var displayName: String {
+         let text = NumberFormatter.localizedString(
+            from: NSNumber(value: self.rawValue),
+            number: .percent
+        )
+
+        return text
+    }
 
     var telemetryQuantity: Int32 {
         switch self {
