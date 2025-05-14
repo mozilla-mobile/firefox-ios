@@ -8,13 +8,7 @@ struct DataSchemePolicyDecider: WKPolicyDecider {
     var next: (any WKPolicyDecider)?
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
-        // Only filter top-level navigation, not on data URL subframes.
-        // If target frame is nil, we filter as well.
-        guard action.targetFrameInfo?.isMainFrame ?? true else {
-            return next?.policyForNavigation(action: action) ?? .allow
-        }
-
-        return shouldAllowDataScheme(for: action.request.url) ? .allow : .cancel
+        return .allow
     }
 
     func policyForNavigation(response: NavigationResponse) -> WKPolicy {
@@ -25,7 +19,7 @@ struct DataSchemePolicyDecider: WKPolicyDecider {
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.
         guard action.targetFrameInfo?.isMainFrame ?? true else {
-            return next?.policyForPopupNavigation(action: action) ?? .allow
+            return next?.policyForPopupNavigation(action: action) ?? .cancel
         }
 
         if shouldAllowDataScheme(for: action.url) {

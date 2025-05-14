@@ -21,11 +21,10 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
             return next?.policyForPopupNavigation(action: action) ?? .cancel
         }
 
-        // Check if we want to open 
+        // We don't want to open a PayPal popup since it will result in blank screen.
         if action.sourceFrameInfo.request.url?.baseDomain == "paypal.com" {
             return .cancel
         }
-
         return .allow
     }
 
@@ -42,7 +41,6 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
             return true
         }
 
-        /// List of schemes that are allowed to be opened in new tabs.
         let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "about"]
 
         if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {

@@ -13,9 +13,7 @@ enum SupportedAppScheme: String, CaseIterable {
 struct AppLaunchPolicyDecider: WKPolicyDecider {
     var next: (any WKPolicyDecider)?
 
-    // We should add marketplace kit schemes
-    // Should we consider doing like for popup to check if we can open the app trough the application and just
-    // open the app in that case ?
+    // TODO: - FXIOS-11259 - add market place kit
     private let supportedSchemes = SupportedAppScheme.allCases
     private let appStoreHosts = ["itunes.apple.com", "apps.apple.com", "appsto.re"]
 
