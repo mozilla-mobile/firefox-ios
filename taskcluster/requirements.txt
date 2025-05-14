@@ -222,9 +222,9 @@ mozilla-taskgraph==3.0.3 \
     --hash=sha256:0a9a4ad20163fb85f56584ce05c5c9fdd4948e2ddfe1a568446b7e63e5da95fd \
     --hash=sha256:65d0dcadae2960d7a45ffeb07479dcf9f4d9c5478555e5b6f3ba2098c5af3f06
     # via -r requirements.in
-mozilla-version==3.2.1 \
-    --hash=sha256:76ddd4a9f7063063da3016af5ad8af76c3e7d7a958e5636bea51261dc6659649 \
-    --hash=sha256:c43dfc818c4bfb2c764c663bca9403c18a2ff64a15cc12f3a94337d812f3f704
+mozilla-version==4.1.0 \
+    --hash=sha256:816b0cd03456105f49ad8661e47934e66118f84ddae38c4193082f297396a7ed \
+    --hash=sha256:f32f6f5607c345bb4db0aba0077511b196cba80af70c83cfe606a913a478f7e8
     # via -r requirements.in
 pygments==2.18.0 \
     --hash=sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199 \

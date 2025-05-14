@@ -22,6 +22,18 @@ struct TabsPanelTelemetry {
         }
     }
 
+    enum CloseAllPanelOption: String {
+        case all
+        case cancel
+    }
+
+    private enum TabType: String {
+        case normal
+        case `private`
+        case inactive
+        case total
+    }
+
     private let gleanWrapper: GleanWrapper
     private let logger: Logger
 
@@ -43,5 +55,38 @@ struct TabsPanelTelemetry {
     func tabModeSelected(mode: Mode) {
         let extras = GleanMetrics.TabsPanel.TabModeSelectedExtra(mode: mode.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabModeSelected, extras: extras)
+    }
+
+    func tabSelected(at index: Int?, mode: Mode) {
+        let indexForGlean: Int32? = index != nil ? Int32(index!) : nil
+        let extras = GleanMetrics.TabsPanel.TabSelectedExtra(mode: mode.rawValue, selectedTabIndex: indexForGlean)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabSelected, extras: extras)
+    }
+
+    func closeAllTabsSheetOptionSelected(option: CloseAllPanelOption, mode: Mode) {
+        let extras = GleanMetrics.TabsPanelCloseAllTabsSheet.OptionSelectedExtra(
+            mode: mode.rawValue,
+            option: option.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanelCloseAllTabsSheet.optionSelected, extras: extras)
+    }
+
+    func tabClosed(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.TabClosedExtra(
+            mode: mode.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.tabClosed, extras: extras)
+    }
+
+    func doneButtonTapped(mode: Mode) {
+        let extras = GleanMetrics.TabsPanel.DoneButtonTappedExtra(mode: mode.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanel.doneButtonTapped, extras: extras)
+    }
+
+    func deleteNormalTabsSheetOptionSelected(period: TabsDeletionPeriod) {
+        let extras = GleanMetrics.TabsPanelCloseOldTabsSheet.OptionSelectedExtra(
+            period: period.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.TabsPanelCloseOldTabsSheet.optionSelected, extras: extras)
     }
 }

@@ -33,7 +33,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
                             region: String,
                             completion: @escaping ((RefinedSearchConfig?, Error?) -> Void)) {
         do {
-            try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
+            engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
 
             let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
             let env = SearchUserEnvironment(locale: locale,

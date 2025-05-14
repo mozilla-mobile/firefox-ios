@@ -55,6 +55,9 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "ഈ അവലോകനങ്ങളെക്കുറിച്ച് ഇതുവരെ വിവരങ്ങളൊന്നുമില്ല";
 
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "“അതെ, പരീക്ഷിച്ചു നോക്കൂ” തിരഞ്ഞെടുക്കുന്നതിലൂടെ നിങ്ങൾ ഈ ഇനങ്ങൾ കൈക്കൊള്ളുന്നു:";
+
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "കൂടുതല്‍ അറിയുക";
 

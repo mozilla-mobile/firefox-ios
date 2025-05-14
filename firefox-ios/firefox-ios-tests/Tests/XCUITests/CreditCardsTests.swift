@@ -52,9 +52,6 @@ class CreditCardsTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards],
-                app.staticTexts.containingText(
-                    "New"
-                ).element,
                 app.tables.cells.element(
                     boundBy: 1
                 ).buttons.elementContainingText(

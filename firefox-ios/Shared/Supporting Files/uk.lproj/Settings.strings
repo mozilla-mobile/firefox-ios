@@ -185,7 +185,7 @@
 "Settings.Search.ShowSuggestions.v121" = "Пошукові пропозиції";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Панель адреси - Пропозиції Firefox";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Пропозиції Firefox у панелі адреси";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Докладніше про Пропозиції Firefox";
@@ -197,10 +197,10 @@
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Шукати в історії перегляду";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
-"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Шукати закладки";
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Шукати в закладках";
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
-"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Шукати синхронізовані вкладки";
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Шукати в синхронізованих вкладках";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Отримувати пропозиції %@, пов'язані з вашим пошуком";

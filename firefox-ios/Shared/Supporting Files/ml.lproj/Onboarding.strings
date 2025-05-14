@@ -67,6 +67,9 @@
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "മേൽഭാഗം";
 
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v114" = "എല്ലാവൎക്കു് വേണ്ടിയൊരു മെച്ചപ്പെട്ട ഗോളാന്തരവല എത്തിപ്പിക്കാനുള്ള ചുമതല നമ്മൾ ഏറ്റെടുക്കുന്നു.";
+
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ഒഴിവാക്കുക";
 

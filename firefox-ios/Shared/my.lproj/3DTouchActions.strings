@@ -7,6 +7,9 @@
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
 "Copy URL" = "URLကို ကူးယူပါ";
 
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "လင့်ခ်ကို ကိရိယာသို့ ပို့ပါ";
+
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "နောက်ဆုံးမှတ်သားခဲ့သည့် စာအမှတ်ကို ဖွင့်ပါ";
 

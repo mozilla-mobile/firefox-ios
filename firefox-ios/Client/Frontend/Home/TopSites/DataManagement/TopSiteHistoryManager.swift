@@ -38,7 +38,7 @@ class TopSiteHistoryManager: DataObserver, TopSiteHistoryManagerProvider {
     }
 
     func removeTopSite(site: Site) {
-        _ = profile.pinnedSites.removeFromPinnedTopSites(site)
+        profile.pinnedSites.removeFromPinnedTopSites(site)
     }
 
     /// If the default top sites contains the siteurl. also wipe it from default suggested sites.

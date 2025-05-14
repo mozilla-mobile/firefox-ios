@@ -10,7 +10,7 @@ import Storage
 final class MockTopSitesManager: TopSitesManagerInterface {
     var getOtherSitesCalledCount = 0
     var fetchSponsoredSitesCalledCount = 0
-    var recalculateTopSitesCalled: () -> Void =  {}
+    var recalculateTopSitesCalled: () -> Void = {}
 
     var removeTopSiteCalledCount = 0
     var pinTopSiteCalledCount = 0

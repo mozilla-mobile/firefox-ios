@@ -121,7 +121,7 @@ final class HomepageDiffableDataSource:
         snapshot.appendSections([.customizeHomepage])
         snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
 
-        apply(snapshot, animatingDifferences: true)
+        apply(snapshot, animatingDifferences: false)
     }
 
     private func getPocketStories(

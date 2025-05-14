@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "ဓါတ်ပုံရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox သည် သင်၏သိမ်းဆည်းထားသော စကားဝှက်များနှင့် ငွေပေးချေမှုနည်းလမ်းများကို အသုံးပြုရန်အတွက် Face ID လိုအပ်သည်။";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "သင်သွားလည်သော ဝတ်ဆိုဒ်မှ သင့်တည်နေရာကို သိချင်ကောင်းသိမ်ချင်လိမ့်မည်";
 

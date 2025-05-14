@@ -19,11 +19,13 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
     override func setUp() {
         super.setUp()
         profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     // MARK: - Sites

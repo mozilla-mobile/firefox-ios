@@ -4,3 +4,6 @@
 /* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
 "SendTo.NotSignedIn.Title.v119" = "താങ്കള്‍ താങ്കളുടെ അക്കൗണ്ടിലെക്ക് പ്രവേശിച്ചിട്ടില്ല.";
 
+/* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "പകൎത്തൽപെട്ടിയിലോട്ടു് ഫയൽ പകൎത്തി";
+

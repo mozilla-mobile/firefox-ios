@@ -1,8 +1,26 @@
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefoxi muutmine vaikebrauseriks on hääl avatud ja juurdepääsetava interneti poolt.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Vaikimisi parem internet";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Vaata juhendit";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Määra Firefox automaatselt avama linke, e-posti ja sõnumeid.";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Vali vaikebrauseriks Firefox, et muuta kiirus, turvalisus ja privaatsus automaatseks.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Tõsta igapäevane sirvimine uuele tasemele";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blokeerib igas kuus 3 000+ jälitajat kasutaja kohta. Privaatsuse meelerahu tagamiseks määra meid vaikimisi veebilehitsejaks.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefoxis on privaatsus kaitstud";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Vaikebrauseri vahetamine";

@@ -13,6 +13,24 @@ enum ZoomLevel: CGFloat, CaseIterable {
     case oneHundredSeventyFivePercent = 1.75
     case twoHundred = 2.0
 
+    var telemetryQuantity: Int32 {
+        switch self {
+        case .fiftyPercent: return 50
+        case .seventyFivePercent: return 75
+        case .ninetyPercent: return 90
+        case .oneHundredPercent: return 100
+        case .oneHundredTenPercent: return 110
+        case .oneHundredTwentyFivePercent: return 125
+        case .oneHundredFiftyPercent: return 150
+        case .oneHundredSeventyFivePercent: return 175
+        case .twoHundred: return 200
+        }
+    }
+
+    init(from value: CGFloat) {
+        self = ZoomLevel(rawValue: value) ?? .oneHundredPercent
+    }
+
     /// Returns the next higher zoom level based on the given current zoom level.
     /// If the current level is at or above the upper zoom limit (`ZoomConstants.upperZoomLimit`),
     /// it will return the same level without change.

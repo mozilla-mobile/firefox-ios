@@ -1,8 +1,44 @@
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox ကို သင်၏မူလဘရောက်ဆာအဖြစ် သတ်မှတ်ခြင်းသည် ပွင့်လင်း၍ရနိုင်သော အင်တာနက်အတွက် မဲပေးခြင်းဖြစ်သည်။";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "ပိုမိုကောင်းမွန်သောအင်တာနက်သို့ မူရင်းအတိုင်းဖြစ်သည်။";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "လေ့လာနည်း";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Firefox တွင်ဝက်ဘ်ဆိုက်များ၊ အီးမေးလ်များနှင့်မက်ဆေ့ခ်ျများမှလင့်ခ်များကိုသတ်မှတ်ပါ။";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "မြန်နှုန်း၊ ဘေးကင်းရေးနှင့် ကိုယ်ရေးကိုယ်တာ အလိုအလျောက်ဖြစ်စေရန်အတွက် Firefox ကို သင်၏ မူရင်းဘရောက်ဆာအဖြစ် ရွေးချယ်ပါ။";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "နေ့စဉ်ရှာဖွေမှုကို မြှင့်တင်ပါ။";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox သည် တစ်လလျှင် သုံးစွဲသူတစ်ဦးလျှင် ခြေရာခံ 3,000+ ကို ပျမ်းမျှအားဖြင့် ပိတ်ဆို့ထားသည်။ ကိုယ်ရေးကိုယ်တာ စိတ်အေးချမ်းသာမှုအတွက် ကျွန်ုပ်တို့ကို သင်၏ မူရင်းဘရောက်ဆာအဖြစ် ပြုလုပ်ပါ။";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "ကိုယ်ရေးလုံခြုံရေးအတွက် Firefox ကိုစိတ်ချပါ";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "သင်၏ပုံမှန် Browser ကိုပြောင်းပါ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "အပြင်အဆင်များသို့ သွားပါ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1အပြင်အဆင်များသို့ သွားပါ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2 ပုံသေဘရောက်ဇာ အဖြစ်သတ်မှတ်မည်";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox ကို ရွေးပါ။";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "မူရင်း Browser အက်ပ်";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "ပုံသေဘရောက်ဇာ အဖြစ်သတ်မှတ်မည်";

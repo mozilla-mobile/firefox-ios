@@ -45,14 +45,31 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     // MARK: - Methods
+
+    /// Adds a card to `availableCards` if needed.
+    /// Does not add the card on iPads where the user can choose the address bar position (`top` or `bottom`),
+    /// as we want the address bar to always be on top for iPads.
+    private func addCardIfNeeded(
+        for cardModel: OnboardingCardInfoModelProtocol,
+        delegate: OnboardingCardDelegate?,
+        windowUUID: WindowUUID
+    ) {
+        let card = cardModel.multipleChoiceButtons.first
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+
+        if !(card?.action == .toolbarBottom || card?.action == .toolbarTop) || !isPad {
+            availableCards.append(OnboardingMultipleChoiceCardViewController(
+                viewModel: cardModel,
+                delegate: delegate,
+                windowUUID: windowUUID))
+        }
+    }
+
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {
         availableCards.removeAll()
         cardModels.forEach { cardModel in
             if cardModel.cardType == .multipleChoice {
-            availableCards.append(OnboardingMultipleChoiceCardViewController(
-                viewModel: cardModel,
-                delegate: delegate,
-                windowUUID: window))
+                addCardIfNeeded(for: cardModel, delegate: delegate, windowUUID: window)
             } else {
                 availableCards.append(OnboardingBasicCardViewController(
                     viewModel: cardModel,

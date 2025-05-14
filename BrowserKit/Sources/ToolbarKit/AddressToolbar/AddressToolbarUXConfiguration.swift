@@ -9,17 +9,20 @@ public struct AddressToolbarUXConfiguration {
     let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
+    let locationTextFieldTrailingPadding: CGFloat
 
     public static let experiment = AddressToolbarUXConfiguration(
         toolbarCornerRadius: 12.0,
         browserActionsAddressBarDividerWidth: 0.0,
-        isLocationTextCentered: true
+        isLocationTextCentered: true,
+        locationTextFieldTrailingPadding: 0
     )
 
     public static let `default` = AddressToolbarUXConfiguration(
         toolbarCornerRadius: 8.0,
         browserActionsAddressBarDividerWidth: 4.0,
-        isLocationTextCentered: false
+        isLocationTextCentered: false,
+        locationTextFieldTrailingPadding: 8.0
     )
 
     func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {

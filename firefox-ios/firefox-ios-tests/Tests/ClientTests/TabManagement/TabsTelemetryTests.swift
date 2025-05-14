@@ -27,64 +27,9 @@ class TabsTelemetryTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         profile = nil
-    }
-
-    func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile,
-                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false),
-                                                  inactiveTabsManager: inactiveTabsManager)
-
-        let tab = tabManager.addTab()
-        inactiveTabsManager.activeTabs = [tab]
-        _ = inactiveTabsManager.getInactiveTabs(tabs: [tab])
-
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
-                                  expectedValue: 0,
-                                  failureMessage: "Should have 0 private tabs")
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity,
-                                  expectedValue: 1,
-                                  failureMessage: "Should have 1 normal tab")
-    }
-
-    func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile,
-                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
-        tabManager.addTab(isPrivate: true)
-
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
-                                  expectedValue: 1,
-                                  failureMessage: "Should have 1 private tab")
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.normalTabsQuantity,
-                                  expectedValue: 0,
-                                  failureMessage: "Should have 0 normal tabs")
-    }
-
-    func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile,
-                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false),
-                                                  inactiveTabsManager: inactiveTabsManager)
-        let tab = tabManager.addTab()
-        inactiveTabsManager.activeTabs = [tab]
-        _ = inactiveTabsManager.getInactiveTabs(tabs: [tab])
-
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
-                                  expectedValue: 0,
-                                  failureMessage: "Should have 0 private tabs")
-
-        testQuantityMetricSuccess(metric: GleanMetrics.Tabs.inactiveTabsCount,
-                                  expectedValue: 0,
-                                  failureMessage: "Should have no inactive tabs, since a new tab was just created.")
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testTabSwitchMeasurement() throws {

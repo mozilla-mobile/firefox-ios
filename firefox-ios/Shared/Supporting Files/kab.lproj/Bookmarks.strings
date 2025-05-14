@@ -55,6 +55,9 @@
 /* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
 "Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Kkes seg yinegzumen";
 
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Sekles deg “Tecraḍ n yisebtar”";
+
 /* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Yettwasekles deg “%@”";
 

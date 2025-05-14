@@ -68,6 +68,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .loginsVerificationEnabled,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .searchEngineConsolidation,
                 .sentFromFirefox,
                 .tabAnimation,
                 .tabTrayUIExperiments,

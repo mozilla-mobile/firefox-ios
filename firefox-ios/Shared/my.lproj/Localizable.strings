@@ -16,6 +16,15 @@
 /* About settings section title */
 "About" = "အကြောင်း";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "ဖြတ်လမ်းများထဲသို့ ထည့်ပါ။";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "ပင်နံပတ်";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "တွယ်ဖြုတ်ရန်";
+
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "လတ်တလော သုံးခဲ့သော";
 

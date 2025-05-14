@@ -278,7 +278,7 @@
 "Downloads.Toast.GoToDownloads.Button" = "Tải xuống";
 
 /* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
-"Downloads.Toast.MultipleFiles.DescriptionText" = "1 trong số %d tập tin";
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 trong số %d tệp";
 
 /* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
@@ -290,7 +290,7 @@
 "DownloadsPanel.Delete.Title" = "Xóa";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Các tập tin tải xuống sẽ hiển thị ở đây.";
+"DownloadsPanel.EmptyState.Title" = "Các tệp đã tải xuống sẽ hiển thị ở đây.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "Chia sẻ";
@@ -1131,6 +1131,18 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Thay thế truy vấn bằng %s)";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Dưới cùng";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Vị trí thanh địa chỉ";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Thanh địa chỉ";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Trên cùng";
 
 /* Browser theme settings section title in Appearance settings */
 "Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Chủ đề trình duyệt";

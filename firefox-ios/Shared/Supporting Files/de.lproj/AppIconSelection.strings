@@ -50,7 +50,7 @@
 "Settings.AppIconSelection.AppIconNames.Midnight.Title.v137" = "Mitternacht";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a minimal version of the Firefox for iOS app icon which flattens and simplifies the default icon. */
-"Settings.AppIconSelection.AppIconNames.Minimal.Title.v139" = "Minimal";
+"Settings.AppIconSelection.AppIconNames.Minimal.Title.v139" = "Minimalistisch";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green. */
 "Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137" = "Nordlichter";
@@ -77,10 +77,10 @@
 "Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "Standard";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2004. */
-"Settings.AppIconSelection.AppIconNames.Retro2004.Title.v139" = "Rückblick 2004";
+"Settings.AppIconSelection.AppIconNames.Retro2004.Title.v139" = "Retro 2004";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2017. */
-"Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139" = "Rückblick 2017";
+"Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139" = "Retro 2017";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow. */
 "Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "Sonnenuntergang";
@@ -110,7 +110,7 @@
 "Settings.AppIconSelection.ScreenTitle.v136" = "App-Symbol";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the basic variants of the app icon like the default, white, black, and legacy options. */
-"Settings.AppIconSelection.SectionNames.Basics.Title.v139" = "Grundeinstellungen";
+"Settings.AppIconSelection.SectionNames.Basics.Title.v139" = "Standard";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the solid color background variants of the app icon, all of which apply different colored backgrounds (like blue, pink, or orange) to the regular app icon. */
 "Settings.AppIconSelection.SectionNames.Colors.Title.v139" = "Farben";

@@ -10,11 +10,14 @@ import Common
 final class HomepageMiddleware {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
+    private let windowManager: WindowManager
 
     init(homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
-         notificationCenter: NotificationProtocol) {
+         notificationCenter: NotificationProtocol,
+         windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.homepageTelemetry = homepageTelemetry
         self.notificationCenter = notificationCenter
+        self.windowManager = windowManager
         observeNotifications()
     }
 
@@ -80,56 +83,61 @@ final class HomepageMiddleware {
 
     @objc
     private func handleNotifications(_ notification: Notification) {
-        // This update occurs independently of any specific window, so for now we send `.unavailable`
-        // as the window UUID. Reducers responding to these types of messages need to use care not to
-        // propagate that UUID in any subsequent actions or state changes.
-        switch notification.name {
-        case UIApplication.willEnterForegroundNotification:
-            let storiesAction = HomepageAction(
-                windowUUID: .unavailable,
-                actionType: HomepageMiddlewareActionType.enteredForeground
-            )
-            store.dispatch(storiesAction)
+        // This update occurs for all windows and we need to pass along
+        // the windowUUID to any subsequent actions or state changes.
+        // Time complexity: O(n), where n is the number of windows in windowManager.windows
+        // In the case of the phone layout, there should only be one window so n = 1
 
-        case .PrivateDataClearedHistory,
-                .TopSitesUpdated,
-                .DefaultSearchEngineUpdated:
-            dispatchActionToFetchTopSites()
+        // TODO: FXIOS-12199 Update to improve how we handle notifications for multi-window
+        windowManager.windows.forEach { windowUUID, _ in
+            switch notification.name {
+            case UIApplication.willEnterForegroundNotification:
+                let storiesAction = HomepageAction(
+                    windowUUID: windowUUID,
+                    actionType: HomepageMiddlewareActionType.enteredForeground
+                )
+                store.dispatch(storiesAction)
 
-        case .BookmarksUpdated, .RustPlacesOpened:
-            let bookmarksAction = HomepageAction(
-                windowUUID: .unavailable,
-                actionType: HomepageMiddlewareActionType.bookmarksUpdated
-            )
-            store.dispatch(bookmarksAction)
+            case .PrivateDataClearedHistory,
+                    .TopSitesUpdated,
+                    .DefaultSearchEngineUpdated:
+                dispatchActionToFetchTopSites(windowUUID: windowUUID)
 
-        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
-            dispatchActionToFetchTopSites()
-            dispatchActionToFetchTabs()
+            case .BookmarksUpdated, .RustPlacesOpened:
+                let bookmarksAction = HomepageAction(
+                    windowUUID: windowUUID,
+                    actionType: HomepageMiddlewareActionType.bookmarksUpdated
+                )
+                store.dispatch(bookmarksAction)
 
-        default: break
+            case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
+                dispatchActionToFetchTopSites(windowUUID: windowUUID)
+                dispatchActionToFetchTabs(windowUUID: windowUUID)
+
+            default: break
+            }
         }
     }
 
-    private func dispatchActionToFetchTopSites() {
+    private func dispatchActionToFetchTopSites(windowUUID: WindowUUID) {
         store.dispatch(
             HomepageAction(
-                windowUUID: .unavailable,
+                windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.topSitesUpdated
             )
         )
     }
 
-    private func dispatchActionToFetchTabs() {
+    private func dispatchActionToFetchTabs(windowUUID: WindowUUID) {
         store.dispatch(
             HomepageAction(
-                windowUUID: .unavailable,
+                windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated
             )
         )
         store.dispatch(
             HomepageAction(
-                windowUUID: .unavailable,
+                windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInRemoteTabsUpdated
             )
         )
