@@ -180,9 +180,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                  uuid: action.windowUUID,
                                  isPrivate: action.panelType == .privateTabs)
 
-        case TabPanelViewActionType.undoClose:
-            undoCloseTab(state: state, uuid: action.windowUUID)
-
         case TabPanelViewActionType.cancelCloseAllTabs:
             tabsPanelTelemetry.closeAllTabsSheetOptionSelected(
                 option: .cancel,
@@ -218,9 +215,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.closeInactiveTab:
             guard let tabUUID = action.tabUUID else { return }
             closeInactiveTab(for: tabUUID, state: state, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.undoCloseInactiveTab:
-            undoCloseInactiveTab(uuid: action.windowUUID)
 
         case TabPanelViewActionType.learnMorePrivateMode:
             guard let urlRequest = action.urlRequest else { return }
@@ -437,30 +431,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                        windowUUID: uuid,
                                                        actionType: TabPanelViewActionType.tabPanelDidLoad)
                 store.dispatch(didLoadAction)
-
-                if !isTabTrayUIExperimentsEnabled {
-                    let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                               windowUUID: uuid,
-                                                               actionType: TabPanelMiddlewareActionType.showToast)
-                    store.dispatch(toastAction)
-                }
             } else if shouldDismiss {
                 let dismissAction = TabTrayAction(windowUUID: uuid,
                                                   actionType: TabTrayActionType.dismissTabTray)
                 store.dispatch(dismissAction)
-
-                if !isTabTrayUIExperimentsEnabled {
-                    let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: GeneralBrowserActionType.showToast)
-                    store.dispatch(toastAction)
-                }
                 addNewTabIfPrivate(uuid: uuid)
-            } else if !isTabTrayUIExperimentsEnabled {
-                let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: TabPanelMiddlewareActionType.showToast)
-                store.dispatch(toastAction)
             }
         }
     }
@@ -498,34 +473,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                               windowUUID: uuid,
                                               actionType: TabPanelMiddlewareActionType.refreshTabs)
         store.dispatch(action)
-    }
-
-    /// Handles undoing the close tab action, gets the backup tab from `TabManager`
-    private func undoCloseTab(state: AppState, uuid: WindowUUID) {
-        toastTelemetry.undoClosedSingleTab()
-        let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
-              tabManager.backupCloseTab != nil
-        else { return }
-
-        tabManager.undoCloseTab()
-
-        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatch(refreshAction)
-
-        // Scroll to the restored tab so the user knows it was restored, especially if it was restored off screen
-        // (e.g. restoring the tab in the last row, first column)
-        let scrollBehavior: TabScrollBehavior = tabManager.backupCloseTab != nil
-            ? .scrollToTab(withTabUUID: tabManager.backupCloseTab!.tab.tabUUID, shouldAnimate: true)
-            : .scrollToSelectedTab(shouldAnimate: true)
-        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                    scrollBehavior: scrollBehavior,
-                                                    windowUUID: uuid,
-                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
-        store.dispatch(scrollAction)
     }
 
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
@@ -673,24 +620,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                          windowUUID: uuid,
                                                          actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
             store.dispatch(refreshAction)
-
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleInactiveTab,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
         }
-    }
-
-    private func undoCloseInactiveTab(uuid: WindowUUID) {
-        let windowTabManager = self.tabManager(for: uuid)
-        guard windowTabManager.backupCloseTab != nil else { return }
-
-        windowTabManager.undoCloseTab()
-        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-        store.dispatch(refreshAction)
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {

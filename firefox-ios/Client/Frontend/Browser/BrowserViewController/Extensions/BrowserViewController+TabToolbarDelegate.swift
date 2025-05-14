@@ -322,11 +322,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
                     self.updateTabCountUsingTabManager(self.tabManager)
-
-                    if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-                        || UIDevice.current.userInterfaceIdiom == .pad {
-                        self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
-                    }
                 }
             }
         }.items
