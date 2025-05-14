@@ -64,7 +64,7 @@ struct TermsOfServiceManager: FeatureFlaggable {
     /// 1. App version is in [138.0, 138.1)
     /// 2. The TOS feature flag is enabled
     /// 3. User is in the "control" branch of the onboarding experiment
-    /// 4. User did not see the TOC screen
+    /// 4. User did not see the TOS screen
     var isAffectedUser: Bool {
         // 1) Version check
         guard isAppVersion(in: TelemetryAffectedVersionRange.minimum..<TelemetryAffectedVersionRange.maximum) else {
