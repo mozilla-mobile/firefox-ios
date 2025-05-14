@@ -483,7 +483,7 @@ final class SettingsCoordinator: BaseCoordinator,
     func pressedPageZoom() {
         let appearanceView = PageZoomSettingsView(windowUUID: windowUUID)
         let viewController = UIHostingController(rootView: appearanceView)
-        viewController.title = String.PageZoomTitle
+        viewController.title = .Settings.Appearance.PageZoom.PageZoomTitle
         router.push(viewController)
     }
 

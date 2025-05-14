@@ -44,7 +44,7 @@ struct PageZoomSettingsView: View {
                     ZoomLevelPickerView(theme: theme)
                         .background(themeColors.layer1.color)
                 } header: {
-                    GenericSectionHeaderView(title: .DefaultZoomLevelSectionTitle.uppercased(),
+                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
                                              sectionTitleColor: sectionTitleColor)
                 }
 
@@ -53,10 +53,10 @@ struct PageZoomSettingsView: View {
                     ZoomSiteListView(theme: theme)
                         .background(themeColors.layer1.color)
                 } header: {
-                    GenericSectionHeaderView(title: .SpecificSiteZoomSectionTitle.uppercased(),
+                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
                                              sectionTitleColor: sectionTitleColor)
                 } footer: {
-                    Text(String.SpecificSiteZoomFooterTitle)
+                    Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
                         .background(themeColors.layer1.color)
                         .font(.caption)
                         .foregroundColor(descriptionTextColor)
@@ -70,7 +70,7 @@ struct PageZoomSettingsView: View {
                 Divider().frame(height: UX.dividerHeight)
 
                 Button(action: {}) {
-                    Text(String.PageZoomResetButtonTitle)
+                    Text(String.Settings.Appearance.PageZoom.ResetButtonTitle)
                         .foregroundColor(theme.colors.textCritical.color)
                 }
                 .padding([.top, .bottom], UX.buttonPadding)

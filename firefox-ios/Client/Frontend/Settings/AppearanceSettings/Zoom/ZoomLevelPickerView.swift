@@ -14,7 +14,7 @@ struct ZoomLevelPickerView: View {
     }
 
     var pickerText: String {
-        return .ZoomLevelSelectorTitle
+        return .Settings.Appearance.PageZoom.ZoomLevelSelectorTitle
     }
 
     init(theme: Theme) {
