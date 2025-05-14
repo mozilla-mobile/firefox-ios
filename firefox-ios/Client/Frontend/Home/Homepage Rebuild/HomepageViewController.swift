@@ -312,10 +312,7 @@ final class HomepageViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            if let newContentSizeCategory = notification.userInfo?[UIContentSizeCategory.newValueUserInfoKey]
-                as? UIContentSizeCategory {
-                dynamicTypeChanged(contentSizeCategory: newContentSizeCategory)
-            }
+            dynamicTypeChanged()
         default:
             break
         }
@@ -646,11 +643,10 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func dynamicTypeChanged(contentSizeCategory: UIContentSizeCategory) {
+    private func dynamicTypeChanged() {
         collectionView?.visibleCells.forEach { cell in
-            if let customCell = cell as? TopSiteCell {
-                customCell.updateDynamicConstraints(contentSizeCategory: contentSizeCategory)
-            }
+            guard let customCell = cell as? TopSiteCell else { return }
+            customCell.updateDynamicConstraints()
         }
     }
 

@@ -118,7 +118,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
         rootContainer.setNeedsLayout()
         rootContainer.layoutIfNeeded()
-        updateDynamicConstraints(contentSizeCategory: traitCollection.preferredContentSizeCategory)
+        updateDynamicConstraints()
 
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
@@ -170,11 +170,11 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         applyTheme(theme: theme)
     }
 
-    func updateDynamicConstraints(contentSizeCategory: UIContentSizeCategory) {
+    func updateDynamicConstraints() {
         NSLayoutConstraint.deactivate(smallContentConstraints)
         NSLayoutConstraint.deactivate(largeContentConstraints)
 
-        if contentSizeCategory <= .extraLarge || pinImageView.isHidden {
+        if UIApplication.shared.preferredContentSizeCategory <= .extraLarge || pinImageView.isHidden {
             NSLayoutConstraint.activate(smallContentConstraints)
         } else {
             NSLayoutConstraint.activate(largeContentConstraints)
@@ -249,7 +249,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         pinWidthConstraint = pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width)
         pinWidthConstraint?.isActive = true
 
-        updateDynamicConstraints(contentSizeCategory: traitCollection.preferredContentSizeCategory)
+        updateDynamicConstraints()
     }
 
     private func configurePinnedSite(_ topSite: TopSiteConfiguration) {
