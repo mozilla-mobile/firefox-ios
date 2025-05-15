@@ -8,15 +8,35 @@ import Common
 /// Helper utility that aims to detect potential bugs in production which could result in tab loss.
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
-    private let defaultsKey = "TabErrorTelemetryHelper_Data"
     private let telemetryWrapper: TelemetryWrapperProtocol
     private let defaults: UserDefaultsInterface
     private let windowManager: WindowManager
     private let logger: Logger
 
-    private enum EntryPoint: String {
-        case foreground = "on foreground"
-        case tabRestore = "on tab restore"
+    private enum EntryPoint {
+        case backgroundForeground
+        case preserveRestore
+
+        var logInfo: String {
+            switch self {
+            case .backgroundForeground:
+                return "on foreground"
+            case .preserveRestore:
+                return "on tab restore"
+            }
+        }
+
+        var defaultsKey: String {
+            let foregroundDefaultsKey = "TabErrorTelemetryHelper_Data_BackgroundForegroundEvent"
+            let restoreDefaultsKey = "TabErrorTelemetryHelper_Data_PreserveRestoreEvent"
+
+            switch self {
+            case .backgroundForeground:
+                return foregroundDefaultsKey
+            case .preserveRestore:
+                return restoreDefaultsKey
+            }
+        }
     }
 
     private init(logger: Logger = DefaultLogger.shared,
@@ -35,33 +55,33 @@ final class TabErrorTelemetryHelper {
     /// This count is then checked again upon foregrounding in an attempt to
     /// identify potential tab-loss errors.
     func recordTabCountForBackgroundedScene(_ window: WindowUUID) {
-        ensureMainThread { self.recordTabCount(window) }
+        ensureMainThread { self.recordTabCount(window, entryPoint: .backgroundForeground) }
     }
 
     /// Validates the tab count when the app is foregrounded to ensure the
     /// count is consistent with the count upon backgrounding.
     func validateTabCountForForegroundedScene(_ window: WindowUUID) {
-        ensureMainThread { self.validateTabCount(window, entryPoint: .foreground) }
+        ensureMainThread { self.validateTabCount(window, entryPoint: .backgroundForeground) }
     }
 
     @MainActor
     func recordTabCountAfterPreservingTabs(_ window: WindowUUID) async {
-        self.recordTabCount(window)
+        self.recordTabCount(window, entryPoint: .preserveRestore)
     }
 
     @MainActor
     func validateTabCountAfterRestoringTabs(_ window: WindowUUID) async {
-        self.validateTabCount(window, entryPoint: .tabRestore)
+        self.validateTabCount(window, entryPoint: .preserveRestore)
     }
 
     // MARK: - Internal Utility
 
-    private func recordTabCount(_ window: WindowUUID) {
+    private func recordTabCount(_ window: WindowUUID, entryPoint: EntryPoint) {
         guard self.tabManagerAvailable(for: window) else { return }
-        var tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int] ?? [String: Int]()
+        var tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int] ?? [String: Int]()
         let tabCount = getTotalTabCount(window: window)
         tabCounts[window.uuidString] = tabCount
-        defaults.set(tabCounts, forKey: defaultsKey)
+        defaults.set(tabCounts, forKey: entryPoint.defaultsKey)
     }
 
     private func validateTabCount(_ window: WindowUUID, entryPoint: EntryPoint) {
@@ -72,7 +92,7 @@ final class TabErrorTelemetryHelper {
             // is still in preferences and the app crashes. If the user removed
             // any tabs during this time, it means the next launch there will be
             // fewer tabs than recorded and we'll send the event erroneously.
-            invalidateTabCount(for: window)
+            invalidateTabCount(for: window, entryPoint: entryPoint)
         }
         guard tabManagerAvailable(for: window) else {
             logger.log("Can't validate tab count. Tab manager unavailable.",
@@ -83,7 +103,7 @@ final class TabErrorTelemetryHelper {
             return
         }
 
-        guard let tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int],
+        guard let tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
         let currentTabCount = getTotalTabCount(window: window)
 
@@ -97,10 +117,10 @@ final class TabErrorTelemetryHelper {
         }
     }
 
-    private func invalidateTabCount(for window: WindowUUID) {
-        guard var tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int] else { return }
+    private func invalidateTabCount(for window: WindowUUID, entryPoint: EntryPoint) {
+        guard var tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int] else { return }
         tabCounts.removeValue(forKey: window.uuidString)
-        defaults.set(tabCounts, forKey: defaultsKey)
+        defaults.set(tabCounts, forKey: entryPoint.defaultsKey)
     }
 
     /// It's possible for this telemetry helper to be called during onboarding flow before
@@ -117,7 +137,7 @@ final class TabErrorTelemetryHelper {
     }
 
     private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int, entryPoint: EntryPoint) {
-        logger.log("Tab loss detected \(entryPoint.rawValue).",
+        logger.log("Tab loss detected \(entryPoint.logInfo).",
                    level: .fatal,
                    category: .tabs,
                    extra: [
@@ -129,7 +149,7 @@ final class TabErrorTelemetryHelper {
 
         // Only send the telemetry event for the foregrounding log so we don't mess with our existing metrics
         // around tab loss
-        if case .foreground = entryPoint {
+        if case .backgroundForeground = entryPoint {
             telemetryWrapper.recordEvent(
                 category: .information,
                 method: .error,
