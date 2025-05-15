@@ -6747,7 +6747,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-04-26T15:16:32Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-04-30T15:19:32Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -8832,10 +8832,6 @@ lamborghini
 // lamer : The Estée Lauder Companies Inc.
 // https://www.iana.org/domains/root/db/lamer.html
 lamer
-
-// lancaster : LANCASTER
-// https://www.iana.org/domains/root/db/lancaster.html
-lancaster
 
 // land : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/land.html
@@ -11997,11 +11993,6 @@ analytics-gateway.us-east-1.amazonaws.com
 analytics-gateway.us-east-2.amazonaws.com
 analytics-gateway.us-west-2.amazonaws.com
 
-// Appwrite : https://appwrite.io
-// Submitted by Steven Nguyen <security@appwrite.io>
-appwrite.global
-*.appwrite.run
-
 // AWS Amplify
 // Submitted by AWS Security <psl-maintainers@amazon.com>
 // Reference: c35bed18-6f4f-424f-9298-5756f2f7d72b
@@ -12175,6 +12166,11 @@ appspaceusercontent.com
 // Appudo UG (haftungsbeschränkt) : https://www.appudo.com
 // Submitted by Alexander Hochbaum <admin@appudo.com>
 appudo.net
+
+// Appwrite : https://appwrite.io
+// Submitted by Steven Nguyen <security@appwrite.io>
+appwrite.global
+*.appwrite.run
 
 // Aptible : https://www.aptible.com/
 // Submitted by Thomas Orozco <thomas@aptible.com>
@@ -12684,7 +12680,9 @@ ondigitalocean.app
 
 // DigitalPlat : https://www.digitalplat.org/
 // Submitted by Edward Hsing <contact@digitalplat.org>
+qzz.io
 us.kg
+xx.kg
 dpdns.org
 
 // Discord Inc : https://discord.com
@@ -13646,10 +13644,6 @@ günstigliefern.de
 // Submitted by Eero Häkkinen <Eero+psl@Häkkinen.fi>
 häkkinen.fi
 
-// Harrison Network : https://hrsn.net
-// Submitted by William Harrison <psl@hrsn.net>
-hrsn.dev
-
 // Hashbang : https://hashbang.sh
 hashbang.sh
 
@@ -13882,7 +13876,7 @@ ir.md
 is-a-good.dev
 
 // is-a.dev : https://is-a.dev
-// Submitted by William Harrison <psl@is-a.dev>
+// Submitted by William Harrison <security@is-a.dev>
 is-a.dev
 
 // IServ GmbH : https://iserv.de
@@ -14098,9 +14092,8 @@ ggff.net
 *.user.localcert.dev
 
 // LocalCert : https://localcert.net
-// Submitted by William Harrison <psl@localcert.net>
+// Submitted by William Harrison <security@localcert.net>
 localcert.net
-localhostcert.net
 
 // Localtonet : https://localtonet.com/
 // Submitted by Burak Isleyici <support@localtonet.com>
@@ -14779,14 +14772,6 @@ dev.project-study.com
 // Protonet GmbH : http://protonet.io
 // Submitted by Martin Meier <admin@protonet.io>
 protonet.io
-
-// PSL Sandbox : https://psl.hrsn.dev
-// Submitted by William Harrison <psl@hrsn.net>
-sub.psl.hrsn.dev
-*.wc.psl.hrsn.dev
-!ignored.wc.psl.hrsn.dev
-*.sub.wc.psl.hrsn.dev
-!ignored.sub.wc.psl.hrsn.dev
 
 // Publication Presse Communication SARL : https://ppcom.fr
 // Submitted by Yaacov Akiba Slama <admin@chirurgiens-dentistes-en-france.fr>
@@ -15675,8 +15660,9 @@ wmcloud.org
 wmflabs.org
 
 // William Harrison : https://wharrison.com.au
-// Submitted by William Harrison <psl@wharrison.com.au>
+// Submitted by William Harrison <security@wharrison.com.au>
 wdh.app
+hrsn.dev
 
 // Windsurf : https://windsurf.com
 // Submitted by Douglas Chen <psl@windsurf.com>
