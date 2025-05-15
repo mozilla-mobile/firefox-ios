@@ -100,6 +100,13 @@ class UserScriptManager: FeatureFlaggable {
         // removed to prevent the same script from being injected twice.
         webView?.configuration.userContentController.removeAllUserScripts()
 
+        if let sandboxScript = UserScriptManager.getScriptSource("SandboxUtility") {
+            let script = WKUserScript(source: sandboxScript,
+                                      injectionTime: .atDocumentStart,
+                                      forMainFrameOnly: false)
+            webView?.configuration.userContentController.addUserScript(script)
+        }
+
         // Inject all pre-compiled user scripts.
         [(WKUserScriptInjectionTime.atDocumentStart, mainFrameOnly: false),
          (WKUserScriptInjectionTime.atDocumentEnd, mainFrameOnly: false),

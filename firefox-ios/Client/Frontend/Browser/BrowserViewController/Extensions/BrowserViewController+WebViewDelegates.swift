@@ -18,6 +18,16 @@ extension BrowserViewController: WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
+        let isSandboxed: Bool = {
+            if let url = navigationAction.request.url {
+                let isSandboxed = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+                    .queryItems?
+                    .contains(where: { $0.name == "__sandboxed" && $0.value == "true" }) ?? false
+                return isSandboxed
+            }
+            return false
+        }()
+
         guard let parentTab = tabManager[webView] else { return nil }
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
@@ -63,7 +73,9 @@ extension BrowserViewController: WKUIDelegate {
             newTab.url = URL(string: "about:blank")
         }
 
-        return newTab.webView
+        let webView = newTab.webView
+        webView?.sandboxedIFrame = isSandboxed
+        return webView
     }
 
     func webView(
@@ -741,13 +753,17 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Check if this response should be downloaded
-        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
-            downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
-                                              forceDownload: forceDownload,
-                                              isForMainFrame: navigationResponse.isForMainFrame) {
-            handleDownloadFiles(downloadHelper: downloadHelper)
-            decisionHandler(.cancel)
-            return
+        // This custom downloading is skipped if we are loading from a sandboxed iFrame (#1912671 / FXIOS-12201)
+        let isSandboxedIFrame = (webView as? TabWebView)?.sandboxedIFrame ?? false
+        if !isSandboxedIFrame {
+            if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
+               downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
+                                                 forceDownload: forceDownload,
+                                                 isForMainFrame: navigationResponse.isForMainFrame) {
+                handleDownloadFiles(downloadHelper: downloadHelper)
+                decisionHandler(.cancel)
+                return
+            }
         }
 
         // If the content type is not HTML, create a temporary document so it can be downloaded and

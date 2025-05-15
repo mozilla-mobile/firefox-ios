@@ -148,6 +148,7 @@
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */; };
 		1D1418782DC92E0C004BBFAD /* ChangeRSServerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */; };
+		1D1418832DD684F1004BBFAD /* SandboxUtility.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D1418822DD684F1004BBFAD /* SandboxUtility.js */; };
 		1D1933742AF2C8C8005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D1933762AF2C8C9005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
@@ -2658,6 +2659,7 @@
 		1D06AE6924FEE8D6000B092B /* TabProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabProvider.swift; sourceTree = "<group>"; };
 		1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesProvider.swift; sourceTree = "<group>"; };
 		1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRSServerSetting.swift; sourceTree = "<group>"; };
+		1D1418822DD684F1004BBFAD /* SandboxUtility.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = SandboxUtility.js; sourceTree = "<group>"; };
 		1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelAction.swift; sourceTree = "<group>"; };
 		1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelState.swift; sourceTree = "<group>"; };
 		1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsTableViewController.swift; sourceTree = "<group>"; };
@@ -15244,6 +15246,7 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				1D1418822DD684F1004BBFAD /* SandboxUtility.js */,
 				E699220D1B94E3EF007C480D /* About */,
 				D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */,
 				D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */,
@@ -16454,6 +16457,7 @@
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */,
 				D03F8F23200EAC1F003C2224 /* AllFramesAtDocumentStart.js in Resources */,
+				1D1418832DD684F1004BBFAD /* SandboxUtility.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
