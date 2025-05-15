@@ -229,6 +229,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         // When preferredContentSizeCategory is > extraLarge, place the pin icon above the title (largeContentConstraints)
         // When preferredContentSizeCategory is <= extraLarge, place the pin icon in front of (smallContentConstraints)
         smallContentConstraints = [
+            pinImageView.topAnchor.constraint(equalTo: titleLabel.topAnchor),
+            pinImageView.bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             pinImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             pinImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -UX.pinAlignmentSpacing),
             descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor,
@@ -236,6 +238,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         ]
 
         largeContentConstraints = [
+            pinImageView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
+            pinImageView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
             pinImageView.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
             pinImageView.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.textSafeSpace),
             descriptionWrapper.topAnchor.constraint(equalTo: pinImageView.bottomAnchor)
