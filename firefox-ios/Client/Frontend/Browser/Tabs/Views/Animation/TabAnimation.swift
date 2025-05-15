@@ -21,6 +21,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+// TODO: Laurie - Tab animation doesnt work with private tabs
 extension TabTrayViewController: BasicAnimationControllerDelegate {
     func animatePresentation(context: UIViewControllerContextTransitioning) {
         guard

@@ -159,13 +159,18 @@ class TabTraySelectorView: UIView,
 
         selectionBackgroundWidthConstraint?.constant = newWidth
 
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       options: [.curveEaseInOut],
-                       animations: {
+        if UIAccessibility.isReduceMotionEnabled {
             self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
             self.layoutIfNeeded()
-        }, completion: nil)
+        } else {
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: [.curveEaseInOut],
+                           animations: {
+                self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+                self.layoutIfNeeded()
+            }, completion: nil)
+        }
 
         let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
         delegate?.didSelectSection(panelType: panelType)

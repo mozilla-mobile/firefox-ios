@@ -902,10 +902,16 @@ class TabTrayViewController: UIViewController,
                   let currentIndex = childPanelControllers.firstIndex(of: currentVC)
             else { return }
 
-            animateThemeTransition(fromIndex: currentIndex, toIndex: targetIndex)
+            let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
+            if !reduceMotionEnabled {
+                animateThemeTransition(fromIndex: currentIndex, toIndex: targetIndex)
+            }
 
             let direction: UIPageViewController.NavigationDirection = targetIndex > currentIndex ? .forward : .reverse
-            pageViewController?.setViewControllers([targetVC], direction: direction, animated: true, completion: nil)
+            pageViewController?.setViewControllers([targetVC],
+                                                   direction: direction,
+                                                   animated: !reduceMotionEnabled,
+                                                   completion: nil)
             tabTrayState.selectedPanel = panelType
         } else {
             setupOpenPanel(panelType: panelType)
