@@ -21,14 +21,10 @@ public struct SiteImageModel {
     // The bundled resource or remote URL (e.g. faviconURL, preferrably high resolution) for this image.
     var siteResource: SiteResource?
 
-    // Loaded image asset
-    public var image: UIImage?
-
     public init(id: UUID,
                 imageType: SiteImageType,
                 siteURL: URL,
-                siteResource: SiteResource? = nil,
-                image: UIImage? = nil) {
+                siteResource: SiteResource? = nil) {
         self.id = id
         self.imageType = imageType
         self.siteURL = siteURL
@@ -41,7 +37,6 @@ public struct SiteImageModel {
             self.cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
         }
         self.siteResource = siteResource
-        self.image = image
     }
 
     /// Generates a cache key for the given image type by using its associated site URL.

@@ -103,8 +103,8 @@ line_length:
   ignores_interpolated_strings: true
 
 closure_body_length:
-  warning: 43
-  error: 43
+  warning: 42
+  error: 42
 
 file_header:
   required_string: |

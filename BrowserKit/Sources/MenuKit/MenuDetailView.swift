@@ -7,9 +7,8 @@ import UIKit
 import ComponentLibrary
 
 public final class MenuDetailView: UIView,
-                                   MenuTableViewDataDelegate, ThemeApplicable {
+                                   ThemeApplicable {
     private struct UX {
-        static let headerLineOffset: CGFloat = 35
         static let headerTopMargin: CGFloat = 15
         static let horizontalTableViewMargin: CGFloat = 4
     }
@@ -57,10 +56,6 @@ public final class MenuDetailView: UIView,
                                             titleA11yId: titleA11yId,
                                             backButtonA11yLabel: backButtonA11yLabel,
                                             backButtonA11yId: backButtonA11yId)
-    }
-
-    public func adjustLayout() {
-        detailHeaderView.adjustLayout()
     }
 
     private func handleUpdateHeaderLineView() {

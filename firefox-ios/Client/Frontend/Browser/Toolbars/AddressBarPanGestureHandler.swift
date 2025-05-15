@@ -19,6 +19,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private var originalPosition = CGPoint()
     private var panGestureRecognizer: UIPanGestureRecognizer?
     private var addressBarContainer: BaseAlphaStackView
+    private var blurView: UIVisualEffectView?
 
     // MARK: - Properties
     private let tabManager: TabManager
@@ -29,6 +30,7 @@ final class AddressBarPanGestureHandler: NSObject {
     init(
         contentContainer: ContentContainer,
         addressBarContainer: BaseAlphaStackView,
+        blurView: UIVisualEffectView?,
         webPagePreview: TabWebViewPreview,
         tabManager: TabManager,
         windowUUID: WindowUUID,
@@ -41,17 +43,22 @@ final class AddressBarPanGestureHandler: NSObject {
         self.windowUUID = windowUUID
         self.screenshotHelper = screenshotHelper
         super.init()
-        updateAddressBarContainer(addressBarContainer)
+        updateAddressBarContainer(addressBarContainer, blurView: blurView)
     }
 
     /// Updates the address bar container with a new container view and reattaches the pan gesture recognizer.
     ///
-    /// - Parameter newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
-    func updateAddressBarContainer(_ newContainer: BaseAlphaStackView) {
+    /// - Parameters:
+    ///   - newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
+    ///   - blurView: The new blur view is shown behind the address bar container.
+    ///
+    func updateAddressBarContainer(_ newContainer: BaseAlphaStackView,
+                                   blurView: UIVisualEffectView?) {
         if let panGestureRecognizer {
             addressBarContainer.removeGestureRecognizer(panGestureRecognizer)
         }
         addressBarContainer = newContainer
+        self.blurView = blurView
 
         let newPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressBarContainer.addGestureRecognizer(newPanGesture)
@@ -113,6 +120,7 @@ final class AddressBarPanGestureHandler: NSObject {
         // Update the position of the contentContainer and addressBarContainer based on the translation.
         contentContainer.frame.origin.x = originalPosition.x + translation.x
         addressBarContainer.frame.origin.x = originalPosition.x + translation.x
+        blurView?.frame.origin.x = originalPosition.x + translation.x
 
         // Update the position of the webPagePreview based on the swipe direction and translation.
         webPagePreview.frame.origin.x = calculateX(translation: translation, width: contentContainer.frame.width)
@@ -154,12 +162,14 @@ final class AddressBarPanGestureHandler: NSObject {
                 // Move the contentContainer and addressBarContainer off-screen based on the panning direction.
                 contentContainer.frame.origin.x = targetX
                 addressBarContainer.frame.origin.x = targetX
+                blurView?.frame.origin.x = targetX
                 webPagePreview.frame.origin.x = 0
             } else {
                 // Reset the positions if the transition should not be completed
                 webPagePreview.frame.origin.x = isPanningLeft ? contentWidth + UX.offset : -contentWidth - UX.offset
                 contentContainer.frame.origin.x = 0
                 addressBarContainer.frame.origin.x = 0
+                blurView?.frame.origin.x = 0
             }
         }) { [self] _ in
             // Hide the webPagePreview after the animation.
@@ -177,6 +187,7 @@ final class AddressBarPanGestureHandler: NSObject {
                 // Reset the positions and select the new tab if the transition was completed.
                 contentContainer.frame.origin.x = 0
                 addressBarContainer.frame.origin.x = 0
+                blurView?.frame.origin.x = 0
                 tabManager.selectTab(tabs[newTabIndex])
             }
         }

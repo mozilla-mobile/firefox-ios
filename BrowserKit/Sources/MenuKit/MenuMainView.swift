@@ -7,10 +7,9 @@ import UIKit
 import ComponentLibrary
 
 public final class MenuMainView: UIView,
-                                 MenuTableViewDataDelegate, ThemeApplicable {
+                                 ThemeApplicable {
     private struct UX {
         static let headerTopMargin: CGFloat = 15
-        static let horizontalTableViewMargin: CGFloat = 4
     }
 
     // MARK: - UI Elements
@@ -65,10 +64,6 @@ public final class MenuMainView: UIView,
                                              mainButtonA11yLabel: mainButtonA11yLabel,
                                              mainButtonA11yId: mainButtonA11yId)
         tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
-    }
-
-    public func adjustLayout() {
-        accountHeaderView.adjustLayout()
     }
 
     private func handleUpdateHeaderLineView() {

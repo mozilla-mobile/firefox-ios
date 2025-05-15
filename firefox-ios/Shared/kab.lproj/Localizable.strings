@@ -1153,6 +1153,9 @@
 /* Website Appearance settings section title in Appearance settings */
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Arwes n usmel web";
 
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Yettak udem aberkan i yismal web. Kra n yismal zemren ur d-ttbinen ara akken iwata.";
+
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Askar aberkan n usmel web";
 

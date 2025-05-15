@@ -13,10 +13,8 @@ protocol TopSiteHistoryManagerProvider {
 }
 
 // Manages the top site
-class TopSiteHistoryManager: DataObserver, TopSiteHistoryManagerProvider {
+class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
     private let profile: Profile
-
-    weak var delegate: DataObserverDelegate?
 
     private let topSiteCacheSize: Int32 = 32
     private let topSitesProvider: TopSitesProvider
@@ -38,7 +36,7 @@ class TopSiteHistoryManager: DataObserver, TopSiteHistoryManagerProvider {
     }
 
     func removeTopSite(site: Site) {
-        _ = profile.pinnedSites.removeFromPinnedTopSites(site)
+        profile.pinnedSites.removeFromPinnedTopSites(site)
     }
 
     /// If the default top sites contains the siteurl. also wipe it from default suggested sites.

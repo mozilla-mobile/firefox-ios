@@ -57,6 +57,8 @@ class LegacyHomepageViewController:
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
 
+    private var toolbarHelper: ToolbarHelperInterface
+
     // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
@@ -76,6 +78,7 @@ class LegacyHomepageViewController:
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
          logger: Logger = DefaultLogger.shared
     ) {
         self.overlayManager = overlayManager
@@ -106,6 +109,7 @@ class LegacyHomepageViewController:
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.toolbarHelper = toolbarHelper
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
         viewModel.isZeroSearch = isZeroSearch
@@ -226,7 +230,7 @@ class LegacyHomepageViewController:
     /// When the trait collection changes the top taps display might have to change
     /// This requires an update of the toolbars.
     private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
-        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
         // to avoid having the toolbar re-displayed

@@ -10,20 +10,59 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background. */
 "Settings.AppIconSelection.AppIconNames.Blue.Title.v136" = "Amidadi";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple. */
+"Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "Tasragt tamidadit";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon. */
+"Settings.AppIconSelection.AppIconNames.Cute.Title.v139" = "Sser";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background. */
+"Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "Cyan";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a black background. */
+"Settings.AppIconSelection.AppIconNames.Dark.Title.v139" = "Aberkan";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
+"Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "Axuxi iḥemqen";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe. */
+"Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139" = "Momo";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
+"Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "Asrag ureɣ";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background. */
 "Settings.AppIconSelection.AppIconNames.Green.Title.v136" = "Azegzaw";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo. */
+"Settings.AppIconSelection.AppIconNames.Hug.Title.v136" = "Aḥmaẓ";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe. */
 "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "Afenyan";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a white background. */
+"Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "Aceɛlal";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to light purple. */
+"Settings.AppIconSelection.AppIconNames.Midday.Title.v137" = "Azgan n wass";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to dark purple. */
 "Settings.AppIconSelection.AppIconNames.Midnight.Title.v137" = "Ttnaṣfa n yiḍ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a minimal version of the Firefox for iOS app icon which flattens and simplifies the default icon. */
+"Settings.AppIconSelection.AppIconNames.Minimal.Title.v139" = "Adday";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green. */
+"Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137" = "Tiftilin n ugafa";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a orange background. */
 "Settings.AppIconSelection.AppIconNames.Orange.Title.v137" = "Ačinawi";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background. */
 "Settings.AppIconSelection.AppIconNames.Pink.Title.v136" = "Axuxi";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo. */
+"Settings.AppIconSelection.AppIconNames.Pride.Title.v136" = "Zzux";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a purple background. */
 "Settings.AppIconSelection.AppIconNames.Purple.Title.v137" = "Avyuli";
@@ -34,14 +73,26 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
 "Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "Amezwer";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2004. */
+"Settings.AppIconSelection.AppIconNames.Retro2004.Title.v139" = "Retro 2004";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2017. */
+"Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139" = "Retro 2017";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow. */
 "Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "Alluy n yiṭij";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of purple fading to pink. */
 "Settings.AppIconSelection.AppIconNames.Sunset.Title.v137" = "Aɣelluy n yiṭij";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon which automatically adjusts the white/black background according to the iOS 18+ system light/dark/tinted home screen themes. */
+"Settings.AppIconSelection.AppIconNames.SystemAuto.Title.v139" = "Asentel n unagraw";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a yellow background. */
 "Settings.AppIconSelection.AppIconNames.Yellow.Title.v137" = "Awraɣ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier. */
+"Settings.AppIconSelection.ContributorCredit.Subtitle.v139" = "Yettwarna sɣur %@";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred. */
 "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "IH";
@@ -51,6 +102,15 @@
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
 "Settings.AppIconSelection.ScreenTitle.v136" = "Tignit n usnas";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the basic variants of the app icon like the default, white, black, and legacy options. */
+"Settings.AppIconSelection.SectionNames.Basics.Title.v139" = "Iɣewwaren igejdanen";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for the solid color background variants of the app icon, all of which apply different colored backgrounds (like blue, pink, or orange) to the regular app icon. */
+"Settings.AppIconSelection.SectionNames.Colors.Title.v139" = "Initen";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for all other miscellaneous variants of the app icon (like hand drawn or retro versions). */
+"Settings.AppIconSelection.SectionNames.More.Title.v139" = "Ugar";
 
 /* On the Settings screen, the name of the row that opens app icon selection options. */
 "Settings.AppIconSelection.SettingsOptionName.v136" = "Tignit n usnas";

@@ -411,11 +411,11 @@ class CreditCardsTests: BaseTestCase {
             [
                 app.staticTexts["Securely save this card?"],
                 app.buttons["Save"],
-                app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton]
+                app.buttons[AccessibilityIdentifiers.Autofill.creditCardCloseButton]
             ]
         )
         // Tapping 'x' will dismiss the prompt
-        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Autofill.creditCardCloseButton].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Securely save this card?"])
         // Go to the Settings --> Payment methods
         navigator.goto(CreditCardsSettings)
@@ -480,7 +480,7 @@ class CreditCardsTests: BaseTestCase {
         )
         // Tapping 'x' will dismiss the prompt
         app.buttons["Done"].tapIfExists()
-        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Autofill.creditCardCloseButton].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
         navigator.goto(CreditCardsSettings)

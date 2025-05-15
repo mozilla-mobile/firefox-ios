@@ -1,3 +1,9 @@
+/* A statement shown to user when tapping an external link and the link doesn't work. */
+"ExternalLink.ExternalInvalidLinkMessage.v136" = "Asnas ilaqen akken ad yeldi useɣwen-a ur yettwaf ara.";
+
+/* Question shown to user when tapping a mail link that opens the external app for those. */
+"ExternalLink.ExternalMailLinkConfirmation.v136" = "Tebɣiḍ ad teldiḍ imayl deg usnas n yimayl amezwer?";
+
 /* The call to action button for a user to open an external link. */
 "ExternalLink.ExternalOpenMessage.v136" = "Ldi";
 

@@ -9,6 +9,7 @@ import Storage
 import UIKit
 import SwiftUI
 import Common
+import Glean
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
@@ -28,6 +29,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showSignInView(fxaParameters: FxASignInViewParameters)
     func showFilePicker(fileURL: URL)
     func showEditBookmark()
+    func showTrackingProtection()
 }
 
 extension ToolBarActionMenuDelegate {
@@ -67,6 +69,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
+    private var toolbarLayoutStyle: ToolbarLayoutStyle {
+        return .style(from: FxNimbus.shared.features.toolbarRefactorFeature.value().layout)
+    }
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -237,6 +242,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let desktopSiteAction = getRequestDesktopSiteAction()
             append(to: &section, action: desktopSiteAction)
+
+            if toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2 {
+                let trackingProtectionAction = getTrackingProtectionAction()
+                append(to: &section, action: trackingProtectionAction)
+            }
         }
 
         /// In the new experiment, where website theming is different from app theming homepage menu should not show
@@ -389,13 +399,24 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
+    private func getTrackingProtectionAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .SettingsTrackingProtectionSectionName,
+                                     iconString: StandardImageIdentifiers.Large.shieldCheckmark,
+                                     allowIconScaling: true) { [weak self] _ in
+            let isPrivate = self?.selectedTab?.isPrivate ?? false
+            let extra = GleanMetrics.Toolbar.SiteInfoButtonTappedExtra(isPrivate: isPrivate,
+                                                                       isToolbar: false)
+            GleanMetrics.Toolbar.siteInfoButtonTapped.record(extra)
+            self?.delegate?.showTrackingProtection()
+        }.items
+    }
+
     private func getCopyAction() -> PhotonRowActions? {
         return SingleActionViewModel(title: .LegacyAppMenu.AppMenuCopyLinkTitleString,
                                      iconString: StandardImageIdentifiers.Large.link) { _ in
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
-                self.delegate?.showToast(message: .LegacyAppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl)
             }
         }.items
     }
@@ -758,10 +779,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(
-                    message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
-                    toastAction: .removeBookmark
-                )
                 self.removeBookmarkShortcut()
             }
             let bookmarksTelemetry = BookmarksTelemetry()
@@ -790,11 +807,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
 
-            self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
-                guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .LegacyAppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage)
-            }
-
+            self.profile.pinnedSites.addPinnedTopSite(site)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)
         }
     }
@@ -807,14 +820,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
 
-            self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
-                if result.isSuccess {
-                    self.delegate?.showToast(
-                        message: .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage,
-                        toastAction: .removePinPage
-                    )
-                }
-            }
+            self.profile.pinnedSites.removeFromPinnedTopSites(site)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
     }

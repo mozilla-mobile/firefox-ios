@@ -17,8 +17,11 @@ public struct TextStyling {
         self.weight = weight
     }
 
-    public func scaledFont() -> UIFont {
-        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size, weight: weight)
+    public func scaledFont(sizeCap: CGFloat? = nil) -> UIFont {
+        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle,
+                                                      size: size,
+                                                      sizeCap: sizeCap,
+                                                      weight: weight)
     }
 
     public func systemFont() -> UIFont {

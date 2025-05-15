@@ -8,13 +8,11 @@ import Common
 enum ToastType: Equatable {
     case addBookmark(urlString: String)
     case addToReadingList
-    case addShortcut
     case clearCookies
     case closedSingleTab
     case closedSingleInactiveTab
     case closedAllTabs(count: Int)
     case closedAllInactiveTabs(count: Int)
-    case copyURL
     case removeFromReadingList
     case removeShortcut
 
@@ -24,8 +22,6 @@ enum ToastType: Equatable {
             return .LegacyAppMenu.AddBookmarkConfirmMessage
         case .addToReadingList:
             return .LegacyAppMenu.AddToReadingListConfirmMessage
-        case .addShortcut:
-            return .LegacyAppMenu.AddPinToShortcutsConfirmMessage
         case .clearCookies:
             return .Menu.EnhancedTrackingProtection.clearDataToastMessage
         case .closedSingleTab, .closedSingleInactiveTab:
@@ -35,8 +31,6 @@ enum ToastType: Equatable {
             return String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
-        case .copyURL:
-            return .LegacyAppMenu.AppMenuCopyURLConfirmMessage
         case .removeFromReadingList:
             return .LegacyAppMenu.RemoveFromReadingListConfirmMessage
         case .removeShortcut:
@@ -56,9 +50,7 @@ enum ToastType: Equatable {
         case .closedAllTabs: actionType = TabPanelViewActionType.undoCloseAllTabs
         case .closedAllInactiveTabs: actionType = TabPanelViewActionType.undoCloseAllInactiveTabs
         case .clearCookies,
-                .copyURL,
                 .addBookmark,
-                .addShortcut,
                 .addToReadingList,
                 .removeFromReadingList,
                 .removeShortcut:
