@@ -25,7 +25,7 @@ class BookmarksTests: BaseTestCase {
     private func undoBookmarkRemoval() {
         navigator.goto(LibraryPanel_Bookmarks)
         app.buttons["More options"].waitAndTap()
-        app.tables["Context Menu"].otherElements["bookmarkSlashLarge"].waitAndTap()
+        app.tables["Context Menu"].buttons["bookmarkSlashLarge"].waitAndTap()
         app.buttons["Undo"].waitAndTap()
         navigator.nowAt(BrowserTab)
     }
