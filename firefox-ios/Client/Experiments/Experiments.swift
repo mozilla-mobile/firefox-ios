@@ -195,6 +195,11 @@ enum Experiments {
             .bool(forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
     }
 
+    private static func hasEnabledTipsNotifications() -> Bool {
+        return UserDefaults.standard
+            .bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+    }
+
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
@@ -208,7 +213,8 @@ enum Experiments {
         let nimbusRecordedContext = RecordedNimbusContext(
             isFirstRun: isFirstRun,
             isDefaultBrowser: isDefaultBrowser(),
-            isBottomToolbarUser: isBottomToolbarUser()
+            isBottomToolbarUser: isBottomToolbarUser(),
+            hasEnabledTipsNotifications: hasEnabledTipsNotifications()
         )
 
         return NimbusBuilder(dbPath: dbPath)
