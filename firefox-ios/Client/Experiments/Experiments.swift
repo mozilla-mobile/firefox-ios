@@ -174,6 +174,7 @@ enum Experiments {
             "is_phone": isPhone,
             "is_default_browser": isDefaultBrowser(),
             "is_bottom_toolbar_user": isBottomToolbarUser(),
+            "has_enabled_tips_notifications": hasEnabledTipsNotifications(),
         ]
 
         // App settings, to allow experiments to target the app name and the
