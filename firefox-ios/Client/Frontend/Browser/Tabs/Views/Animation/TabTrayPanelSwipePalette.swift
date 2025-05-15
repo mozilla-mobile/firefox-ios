@@ -15,6 +15,11 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var actionSecondary: UIColor
     var layerScrim: UIColor
     var layer3: UIColor
+    var textOnDark: UIColor
+    var borderPrimary: UIColor
+    var borderAccent: UIColor
+    var borderAccentPrivate: UIColor
+    var shadowDefault: UIColor
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
@@ -24,6 +29,11 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         self.actionSecondary = overrides.actionSecondary
         self.layerScrim = overrides.layerScrim
         self.layer3 = overrides.layer3
+        self.textOnDark = overrides.textOnDark
+        self.borderPrimary = overrides.borderPrimary
+        self.borderAccent = overrides.borderAccent
+        self.borderAccentPrivate = overrides.borderAccentPrivate
+        self.shadowDefault = overrides.shadowDefault
     }
 
     struct PartialOverrides {
@@ -33,6 +43,11 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         var actionSecondary: UIColor
         var layerScrim: UIColor
         var layer3: UIColor
+        var textOnDark: UIColor
+        var borderPrimary: UIColor
+        var borderAccent: UIColor
+        var borderAccentPrivate: UIColor
+        var shadowDefault: UIColor
     }
 
     var layer2: UIColor { base.layer2 }
@@ -85,7 +100,6 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var textDisabled: UIColor { base.textDisabled }
     var textCritical: UIColor { base.textCritical }
     var textAccent: UIColor { base.textAccent }
-    var textOnDark: UIColor { base.textOnDark }
     var textOnLight: UIColor { base.textOnLight }
     var textInverted: UIColor { base.textInverted }
     var textInvertedDisabled: UIColor { base.textInvertedDisabled }
@@ -103,14 +117,10 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconAccentYellow: UIColor { base.iconAccentYellow }
     var iconRatingNeutral: UIColor { base.iconRatingNeutral }
 
-    var borderPrimary: UIColor { base.borderPrimary }
-    var borderAccent: UIColor { base.borderAccent }
     var borderAccentNonOpaque: UIColor { base.borderAccentNonOpaque }
-    var borderAccentPrivate: UIColor { base.borderAccentPrivate }
     var borderInverted: UIColor { base.borderInverted }
     var borderToolbarDivider: UIColor { base.borderToolbarDivider }
 
     var shadowSubtle: UIColor { base.shadowSubtle }
-    var shadowDefault: UIColor { base.shadowDefault }
     var shadowStrong: UIColor { base.shadowStrong }
 }

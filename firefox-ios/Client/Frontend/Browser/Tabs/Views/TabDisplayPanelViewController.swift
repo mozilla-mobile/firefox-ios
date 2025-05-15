@@ -220,6 +220,7 @@ class TabDisplayPanelViewController: UIViewController,
         emptyPrivateTabsView.applyTheme(theme: theme)
 
         if isTabTrayUIExperimentsEnabled {
+            fadeView.isHidden = false
             gradientLayer.colors = [
                 theme.colors.layer3.cgColor,
                 theme.colors.layer3.cgColor,
@@ -244,14 +245,8 @@ class TabDisplayPanelViewController: UIViewController,
         tabDisplayView.applyTheme(theme: theme)
         emptyPrivateTabsView.applyTheme(theme: theme)
 
-        if isTabTrayUIExperimentsEnabled {
-            gradientLayer.colors = [
-                theme.colors.layer3.cgColor,
-                theme.colors.layer3.cgColor,
-                theme.colors.layer3.withAlphaComponent(0.95).cgColor,
-                theme.colors.layer3.withAlphaComponent(0.0).cgColor
-            ]
-        }
+        // Hide the fadeview when animating the transition of panels
+        fadeView.isHidden = true
     }
 
     // MARK: - Redux
