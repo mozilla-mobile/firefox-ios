@@ -776,10 +776,6 @@ class TabTrayViewController: UIViewController,
         case .changed:
             let progress = abs(translation.x / view.frame.width)
             applyTheme(progress: progress)
-        case .ended:
-            UIView.animate(withDuration: 0.25) {
-                self.applyTheme(progress: 1.0)
-            }
         default:
             break
         }
