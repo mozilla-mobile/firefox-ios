@@ -142,7 +142,7 @@ class TabTraySelectorView: UIView,
             FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         }
 
-        let newWidth = toButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let newWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
         let toCenterX = toButton.superview!.convert(toButton.center, to: self).x
         let offsetX = toCenterX - selectionBackgroundView.center.x
 
