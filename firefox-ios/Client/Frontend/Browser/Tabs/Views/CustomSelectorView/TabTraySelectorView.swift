@@ -156,20 +156,6 @@ class TabTraySelectorView: UIView,
         let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
         let targetOffset = stackCenterX - selectionBackgroundView.center.x
 
-        adjustSelectedButtonFont()
-
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       options: [.curveEaseInOut],
-                       animations: {
-            self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
-        }, completion: nil)
-
-        let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
-        delegate?.didSelectSection(panelType: panelType)
-    }
-
-    private func adjustSelectedButtonFont() {
         for (index, button) in buttons.enumerated() {
             if index == selectedIndex {
                 button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
@@ -182,16 +168,10 @@ class TabTraySelectorView: UIView,
                        delay: 0,
                        options: [.curveEaseInOut],
                        animations: {
-            self.layoutIfNeeded()
+            self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
         }, completion: nil)
 
-        var panelType: TabTrayPanelType = .tabs
-        switch selectedIndex {
-        case 0: panelType = .privateTabs
-        case 1: panelType = .tabs
-        case 2: panelType = .syncedTabs
-        default: break
-        }
+        let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
         delegate?.didSelectSection(panelType: panelType)
     }
 
