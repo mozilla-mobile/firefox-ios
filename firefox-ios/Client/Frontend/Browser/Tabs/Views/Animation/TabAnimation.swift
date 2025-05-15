@@ -226,7 +226,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
 
-        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
+        let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
                 snapshotContainer.frame = frame
@@ -246,7 +246,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 pathAnimation.fromValue = oldPath
                 pathAnimation.toValue = newPath
                 pathAnimation.duration = 0.4
-                pathAnimation.timingFunction = CAMediaTimingFunction(name: .default)
+                pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
                 borderLayer.add(pathAnimation, forKey: "path")
                 borderLayer.path = newPath
