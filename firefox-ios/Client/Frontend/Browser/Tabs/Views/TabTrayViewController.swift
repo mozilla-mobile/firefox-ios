@@ -396,18 +396,6 @@ class TabTrayViewController: UIViewController,
         if themeAnimationDisplayLink == nil {
             applyTheme()
         }
-
-        if isTabTrayUIExperimentsEnabled,
-           let pageVC = pageViewController,
-           pageVC.viewControllers?.isEmpty ?? true {
-            let initialIndex = experimentConvertSelectedIndex()
-            if let initialVC = childPanelControllers[safe: initialIndex] {
-                pageVC.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
-
-                let panelType = tabTrayState.selectedPanel
-                navigationHandler?.start(panelType: panelType, navigationController: initialVC)
-            }
-        }
     }
 
     func updateTabCountImage(count: String) {
@@ -686,6 +674,15 @@ class TabTrayViewController: UIViewController,
             hideCurrentPanel()
             showPanel(currentPanel)
             navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
+        } else if isTabTrayUIExperimentsEnabled,
+                  let pageVC = pageViewController {
+            let initialIndex = TabTrayPanelType.getExperimentConvert(index: panelType.rawValue).rawValue
+            if let initialVC = childPanelControllers[safe: initialIndex] {
+                pageVC.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+
+                let panelType = tabTrayState.selectedPanel
+                navigationHandler?.start(panelType: panelType, navigationController: initialVC)
+            }
         }
     }
 
