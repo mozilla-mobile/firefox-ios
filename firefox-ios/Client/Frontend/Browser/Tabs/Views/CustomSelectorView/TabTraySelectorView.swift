@@ -76,20 +76,6 @@ class TabTraySelectorView: UIView,
         hasAppliedInitialTransform = true
     }
 
-    func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
-        guard buttons.indices.contains(fromIndex),
-              buttons.indices.contains(toIndex) else { return }
-
-        let fromX = buttons[fromIndex].center.x
-        let toX = buttons[toIndex].center.x
-        let interpolatedX = fromX + (toX - fromX) * abs(progress)
-
-        let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
-        let targetOffset = stackCenterX - selectionBackgroundView.center.x
-
-        selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
-    }
-
     private func setup() {
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
