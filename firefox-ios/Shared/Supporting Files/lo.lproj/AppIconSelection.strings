@@ -13,11 +13,20 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple. */
 "Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "ສີຟ້າແບບໃກ້ແຈ້ງ";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon. */
+"Settings.AppIconSelection.AppIconNames.Cute.Title.v139" = "ໜ້າຮັກ";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background. */
 "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "ສີຟ້າຂຽວ";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a black background. */
+"Settings.AppIconSelection.AppIconNames.Dark.Title.v139" = "ມືດ";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
 "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "ສີມ່ວງເຂັ້ມ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe. */
+"Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139" = "ໂມໂມ";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
 "Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "ສີເຫຼືອງຍາມແລງ";
@@ -30,6 +39,9 @@
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe. */
 "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136" = "ຂີ້ຄ້ານ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a white background. */
+"Settings.AppIconSelection.AppIconNames.Light.Title.v139" = "ແຈ້ງ";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to light purple. */
 "Settings.AppIconSelection.AppIconNames.Midday.Title.v137" = "ສີຟ້າຕອນທ່ຽງ";

@@ -343,6 +343,10 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2861436
     func testShortcutsToggle() {
         app.launch()
+        XCTExpectFailure("The app was not launched", strict: false) {
+            mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         //  Go to customize homepage
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)

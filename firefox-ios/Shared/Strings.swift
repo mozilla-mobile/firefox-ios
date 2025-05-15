@@ -386,18 +386,6 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public struct Edit {
-                public static let AddressRemovedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressRemovedConfirmation.v129",
-                    tableName: "EditAddress",
-                    value: "Address Removed",
-                    comment: "Toast message confirming that an address has been successfully removed."
-                )
-                public static let AddressSavedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressSavedConfirmation.v129",
-                    tableName: "EditAddress",
-                    value: "Address Saved",
-                    comment: "Toast message confirming that an address has been successfully saved."
-                )
                 public static let AddressRemoveError = MZLocalizedString(
                     key: "Addresses.Toast.AddressSaveError.v130",
                     tableName: "EditAddress",
@@ -2124,6 +2112,46 @@ extension String {
                 value: "Media",
                 comment: "This is the title for Media customization under the Browsing settings section."
             )
+        }
+
+        public struct Appearance {
+            public struct PageZoom {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.SectionHeader.v140",
+                    tableName: "Settings",
+                    value: "Zoom Settings",
+                    comment: "Page zoom section header title in Appearance settings")
+                public static let PageZoomTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.Title.v140",
+                    tableName: "Settings",
+                    value: "Page Zoom",
+                    comment: "Page zoom settings title in Appearance settings")
+                public static let DefaultSectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.Default.Title.v140",
+                    tableName: "Settings",
+                    value: "Default",
+                    comment: "Default section header title under page zoom settings. Indicates the default value for all websites")
+                public static let ZoomLevelSelectorTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.ZoomLevelTitle.v140",
+                    tableName: "Settings",
+                    value: "Zoom Level",
+                    comment: "Zoom level title under page zoom settings to select the default zoom level for all websites")
+                public static let SpecificSiteSectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140",
+                    tableName: "Settings",
+                    value: "Specific site settings",
+                    comment: "Specific site settings section header title under page zoom settings. List all websites with custom zoom level")
+                public static let SpecificSiteFooterTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140",
+                    tableName: "Settings",
+                    value: "To add to this list, visit a site and adjust the page zoom from the menu",
+                    comment: "Specific site settings section footer title under page zoom settings. Explain how to add elements to the list")
+                public static let ResetButtonTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.Reset.Button.v140",
+                    tableName: "Settings",
+                    value: "Reset site Settings",
+                    comment: "Button to reset specific zoom site levels back to default")
+            }
         }
 
         public struct AutofillAndPassword {
@@ -7839,6 +7867,18 @@ extension String {
                 tableName: nil,
                 value: "URL Copied To Clipboard",
                 comment: "Toast displayed to user after copy url pressed.")
+            public static let AddressRemovedConfirmation = MZLocalizedString(
+                key: "Addresses.Toast.AddressRemovedConfirmation.v129",
+                tableName: "EditAddress",
+                value: "Address Removed",
+                comment: "Toast message confirming that an address has been successfully removed."
+            )
+            public static let AddressSavedConfirmation = MZLocalizedString(
+                key: "Addresses.Toast.AddressSavedConfirmation.v129",
+                tableName: "EditAddress",
+                value: "Address Saved",
+                comment: "Toast message confirming that an address has been successfully saved."
+            )
         }
     }
 }
