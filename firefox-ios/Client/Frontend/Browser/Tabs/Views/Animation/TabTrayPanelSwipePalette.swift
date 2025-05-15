@@ -20,6 +20,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var borderAccent: UIColor
     var borderAccentPrivate: UIColor
     var shadowDefault: UIColor
+    var iconDisabled: UIColor
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
@@ -34,6 +35,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         self.borderAccent = overrides.borderAccent
         self.borderAccentPrivate = overrides.borderAccentPrivate
         self.shadowDefault = overrides.shadowDefault
+        self.iconDisabled = overrides.iconDisabled
     }
 
     struct PartialOverrides {
@@ -48,6 +50,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         var borderAccent: UIColor
         var borderAccentPrivate: UIColor
         var shadowDefault: UIColor
+        var iconDisabled: UIColor
     }
 
     var layer2: UIColor { base.layer2 }
@@ -105,7 +108,6 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var textInvertedDisabled: UIColor { base.textInvertedDisabled }
 
     var iconSecondary: UIColor { base.iconSecondary }
-    var iconDisabled: UIColor { base.iconDisabled }
     var iconAccent: UIColor { base.iconAccent }
     var iconOnColor: UIColor { base.iconOnColor }
     var iconCritical: UIColor { base.iconCritical }
