@@ -46,17 +46,10 @@ features:
           enabled: false
           unified_search: false
           one_tap_new_tab: false
-<<<<<<< HEAD
           navigation_hint: false
+          toolbar_update_hint: true
           swiping_tabs: true
           layout: baseline
-=======
-          navigation_hint: true
-          toolbar_update_hint: true
-          swiping_tabs: false
-          translucency: false
-          layout: version1
->>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
       - channel: developer
         value:
           enabled: true

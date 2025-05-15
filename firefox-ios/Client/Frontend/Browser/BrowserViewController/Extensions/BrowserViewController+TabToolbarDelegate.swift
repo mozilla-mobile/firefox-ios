@@ -98,7 +98,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
               isToolbarUpdateHintEnabled
         else { return }
 
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
         let view = state.toolbarPosition == .top && showNavToolbar ? navigationToolbarView : addressToolbarView
         let arrowDirection: UIPopoverArrowDirection = state.toolbarPosition == .top && !showNavToolbar ? .up : .down
 
