@@ -325,12 +325,12 @@ extension PreviewModel {
     /// All of the built-in preview cards
     static let all: [PreviewModel] = [
         .welcome,
-//        .notificationPermissions,
-//        .customizationTheme,
-        .customizationToolbar,
+        //        .notificationPermissions,
+        //        .customizationTheme,
+            .customizationToolbar,
         .signToSync
-//        .updateWelcome,
-//        .updateSignToSync
+        //        .updateWelcome,
+        //        .updateSignToSync
     ]
 }
 
@@ -348,7 +348,7 @@ struct OnboardingUI_Previews: PreviewProvider {
                 onPrimary: { print("Next tapped") },
                 onSecondary: { print("Skip tapped") },
                 onLink: { print("Learn more tapped") }// ,
-//                onChoice:    { choice in print("Chose \(choice.title)") }
+                //                onChoice:    { choice in print("Chose \(choice.title)") }
             )
             .previewDisplayName("Basic – iPhone 12")
             .previewDevice("iPhone 12")
@@ -358,7 +358,7 @@ struct OnboardingUI_Previews: PreviewProvider {
                 onPrimary: { print("Done tapped") },
                 onSecondary: { /* no secondary here */ },
                 onLink: { print("Learn more tapped") }// ,
-//                onChoice:    { choice in print("Chose \(choice.title)") }
+                //                onChoice:    { choice in print("Chose \(choice.title)") }
             )
             .previewDisplayName("Multiple Choice – SE1")
             .previewDevice("iPhone SE (1st generation)")
@@ -385,7 +385,7 @@ struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
                             onPrimary: { print("Done tapped") },
                             onSecondary: { /* no secondary here */ },
                             onLink: { print("Learn more tapped") }// ,
-//                            onChoice:    { choice in print("Chose \(choice.title)") }
+                            //                            onChoice:    { choice in print("Chose \(choice.title)") }
                         )
                     }
                     .tag(card.name)
@@ -401,6 +401,47 @@ struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
         onComplete: {
         },
         onboardingCards: PreviewModel.all)
+}
+
+struct OnboardingMultipleChoiceButtonModelExampleView: View {
+    @State private var selectedAction: OnboardingMultipleChoiceAction = .toolbarBottom
+
+    // configure these however you like—titles, SF Symbol names, etc.
+    private let toolbarOptions = [
+        OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
+            title: "Bottom",
+            action: .toolbarBottom,
+            imageID: "rectangle.bottomthird.inset.filled"
+        ),
+        OnboardingMultipleChoiceButtonModel(
+            title: "Top",
+            action: .toolbarTop,
+            imageID: "rectangle.topthird.inset.filled"
+        )
+    ]
+
+    var body: some View {
+        VStack(spacing: 20) {
+            OnboardingSegmentedControl(
+                selection: $selectedAction,
+                items: toolbarOptions
+            )
+            .padding()
+
+            Text("You picked: \(selectedAction.rawValue)")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .onChange(of: selectedAction) { newAction in
+            // here’s where you get the callback
+            // e.g. apply your toolbar position or theme
+            print("Did pick:", newAction)
+        }
+    }
+}
+
+#Preview {
+    OnboardingMultipleChoiceButtonModelExampleView()
 }
 
 #endif

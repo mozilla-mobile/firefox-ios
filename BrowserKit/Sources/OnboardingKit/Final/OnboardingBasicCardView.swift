@@ -81,7 +81,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
-    
+
     var imageView: some View {
         viewModel.image.map {
             Image(uiImage: $0)
@@ -89,10 +89,10 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 150)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
-            
+
         }
     }
-    
+
     var linkView: some View {
         viewModel.link.map {
             LinkButton(

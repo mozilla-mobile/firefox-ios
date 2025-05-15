@@ -8,4 +8,10 @@ public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction
     let title: String
     let action: OnboardingMultipleChoiceActionType
     var imageID: String
+
+    public init(title: String, action: OnboardingMultipleChoiceActionType, imageID: String) {
+        self.title = title
+        self.action = action
+        self.imageID = imageID
+    }
 }
