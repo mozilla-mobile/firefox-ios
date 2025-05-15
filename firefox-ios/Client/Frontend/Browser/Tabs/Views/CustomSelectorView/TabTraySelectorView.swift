@@ -26,7 +26,7 @@ class TabTraySelectorView: UIView,
     private var selectedIndex: Int
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
-    private var hasAppliedInitialTransform = false
+    private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
 
     var items: [String] = ["", "", ""] {
         didSet {
@@ -44,30 +44,6 @@ class TabTraySelectorView: UIView,
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        guard !hasAppliedInitialTransform else { return }
-        applyInitalSelectionBackgroundFrame()
-    }
-
-    /// Width of the `selectionBackground` needs to be larger than the widest button. Due to translations, we need
-    /// to search for this widest button between the three available.
-    private func applyInitalSelectionBackgroundFrame() {
-        guard let widestButton = buttons.max(by: {
-            $0.intrinsicContentSize.width < $1.intrinsicContentSize.width
-        }) else { return }
-
-        let selectionBackgroundWidth = widestButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
-        if let widthConstraint = selectionBackgroundView.constraints.first(where: { $0.firstAttribute == .width }) {
-            widthConstraint.constant = selectionBackgroundWidth
-        } else {
-            selectionBackgroundView.widthAnchor.constraint(equalToConstant: selectionBackgroundWidth).isActive = true
-        }
-
-        hasAppliedInitialTransform = true
     }
 
     func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
@@ -132,6 +108,18 @@ class TabTraySelectorView: UIView,
         ])
 
         applyTheme(theme: theme)
+
+        layoutIfNeeded()
+        applyInitalSelectionBackgroundFrame()
+    }
+
+    private func applyInitalSelectionBackgroundFrame() {
+        guard buttons.indices.contains(selectedIndex) else { return }
+        let selectedButton = buttons[selectedIndex]
+        let width = selectedButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+
+        selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
+        selectionBackgroundWidthConstraint?.isActive = true
     }
 
     private func updateLabels() {
