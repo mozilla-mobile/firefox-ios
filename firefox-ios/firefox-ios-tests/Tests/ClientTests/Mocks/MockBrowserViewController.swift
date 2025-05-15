@@ -56,6 +56,12 @@ class MockBrowserViewController: BrowserViewController {
 
     var mockContentContainer = MockContentContainer()
 
+    var viewControllerToPresent: UIViewController?
+
+    override var presentedViewController: UIViewController? {
+        return viewControllerToPresent
+    }
+
     override var contentContainer: ContentContainer {
         return mockContentContainer
     }
