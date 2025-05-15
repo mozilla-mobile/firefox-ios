@@ -62,6 +62,12 @@ class TabTrayViewController: UIViewController,
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
 
+    private var themeAnimationDisplayLink: CADisplayLink?
+    private var themeAnimationStartTime: CFTimeInterval = 0
+    private let themeAnimationDuration: CFTimeInterval = 0.25
+    private var themeFromIndex = 0
+    private var themeToIndex = 0
+
     private lazy var panelContainer: UIView = .build { _ in }
     private var pageViewController: UIPageViewController?
     private var swipeFromIndex: Int?
@@ -396,7 +402,11 @@ class TabTrayViewController: UIViewController,
                 self.shownToast = nil
             }
         }
-        applyTheme()
+
+        // Only apply normal theme when there's no on going animations
+        if themeAnimationDisplayLink == nil {
+            applyTheme()
+        }
 
         if isTabTrayUIExperimentsEnabled,
            let pageVC = pageViewController,
@@ -896,8 +906,9 @@ class TabTrayViewController: UIViewController,
                   let currentIndex = childPanelControllers.firstIndex(of: currentVC)
             else { return }
 
-            let direction: UIPageViewController.NavigationDirection = targetIndex > currentIndex ? .forward : .reverse
+            animateThemeTransition(fromIndex: currentIndex, toIndex: targetIndex)
 
+            let direction: UIPageViewController.NavigationDirection = targetIndex > currentIndex ? .forward : .reverse
             pageViewController?.setViewControllers([targetVC], direction: direction, animated: true, completion: nil)
             tabTrayState.selectedPanel = panelType
         } else {
@@ -983,5 +994,29 @@ class TabTrayViewController: UIViewController,
             progress: progress
         )
         applyTheme(fromIndex: fromIndex, toIndex: toIndex, progress: abs(progress))
+    }
+
+    private func animateThemeTransition(fromIndex: Int, toIndex: Int) {
+        themeAnimationDisplayLink?.invalidate()
+
+        themeFromIndex = fromIndex
+        themeToIndex = toIndex
+        themeAnimationStartTime = CACurrentMediaTime()
+
+        themeAnimationDisplayLink = CADisplayLink(target: self, selector: #selector(handleThemeAnimationTick))
+        themeAnimationDisplayLink?.add(to: .main, forMode: .common)
+    }
+
+    @objc
+    private func handleThemeAnimationTick() {
+        let elapsed = CACurrentMediaTime() - themeAnimationStartTime
+        let progress = min(max(elapsed / themeAnimationDuration, 0), 1)
+
+        applyTheme(fromIndex: themeFromIndex, toIndex: themeToIndex, progress: CGFloat(progress))
+
+        if progress >= 1 {
+            themeAnimationDisplayLink?.invalidate()
+            themeAnimationDisplayLink = nil
+        }
     }
 }

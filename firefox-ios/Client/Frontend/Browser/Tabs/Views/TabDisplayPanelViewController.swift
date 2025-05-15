@@ -277,6 +277,7 @@ class TabDisplayPanelViewController: UIViewController,
         store.dispatch(action)
     }
 
+    // TODO: Laurie - why does the private tabs empty view is hidden on swipe
     func newState(state: TabsPanelState) {
         guard state != tabsState else { return }
 
