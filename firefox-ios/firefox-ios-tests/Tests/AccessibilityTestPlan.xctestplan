@@ -149,6 +149,7 @@
         "FirefoxSuggestTest",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",
+        "HistoryTabTrayUIExperimentTests",
         "HistoryTests",
         "HistoryTests\/testClearHistoryFromSettings()",
         "HistoryTests\/testClearPrivateData()",

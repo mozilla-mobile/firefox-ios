@@ -5,9 +5,16 @@
 import SwiftUI
 import Common
 
+/// Child settings pages appearance actions
+protocol AppearanceSettingsDelegate: AnyObject {
+    func pressedPageZoom()
+}
+
 /// The main view displaying the settings for the appearance menu.
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
+    var shouldShowPageZoom: Bool
+    let delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
     var themeManager
@@ -49,6 +56,16 @@ struct AppearanceSettingsView: View {
                                    isEnabled: NightModeHelper.isActivated(),
                                    onChange: setWebsiteDarkMode)
             }
+            if shouldShowPageZoom {
+                GenericSectionView(theme: currentTheme, title: .Settings.Appearance.PageZoom.SectionHeader) {
+                    GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
+                                        image: .chevronRightLarge,
+                                        theme: currentTheme) {
+                        delegate?.pressedPageZoom()
+                    }
+                }
+            }
+
             Spacer()
         }
         .padding(.top, UX.spacing)

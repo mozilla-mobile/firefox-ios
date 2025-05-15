@@ -60,6 +60,8 @@ class BackForwardListViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    private var toolbarHelper: ToolbarHelperInterface
+
     var tableHeight: CGFloat {
         return min(BackForwardViewUX.RowHeight * CGFloat(listData.count), self.view.frame.height/2)
     }
@@ -76,11 +78,13 @@ class BackForwardListViewController: UIViewController,
          windowUUID: WindowUUID,
          backForwardList: WKBackForwardList,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.toolbarHelper = toolbarHelper
         super.init(nibName: nil, bundle: nil)
 
         loadSites(backForwardList)
@@ -208,7 +212,7 @@ class BackForwardListViewController: UIViewController,
     // the back/forward list can be shown at the top or bottom of the screen
     // the position depends on the address bar position and whether the navigation toolbar is shown or not
     private func isDisplayedAtBottom(for traitCollection: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
-        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         return showNavToolbar || isBottomSearchBar
     }
 

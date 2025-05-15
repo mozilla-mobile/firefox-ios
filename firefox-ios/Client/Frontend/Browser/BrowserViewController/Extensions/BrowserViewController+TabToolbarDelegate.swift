@@ -24,7 +24,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         dataClearanceContextHintVC.configure(
             anchor: view,
-            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
@@ -54,7 +54,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
         navigationContextHintVC.configure(
             anchor: view,
-            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
             actionOnDismiss: {
@@ -161,7 +161,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let dataClearanceAnimation = DataClearanceAnimation()
         dataClearanceAnimation.startAnimation(
             with: view,
-            for: ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+            for: toolbarHelper.shouldShowTopTabs(for: traitCollection)
         )
 
         completion(timingToMatchGradientOverlay)
@@ -441,5 +441,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     func showEditBookmark() {
         guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
         openBookmarkEditPanel(urlString: urlString)
+    }
+
+    func showTrackingProtection() {
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
     }
 }

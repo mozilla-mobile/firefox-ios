@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "ဖျက်ရန်";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "အချိန်တိုင်း";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "နောက်ဆုံး 4 ပတ်";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "နောက်ဆုံးအချိန်";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "လွန်ခဲ့သော 7 ရက်က";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "နောက်ဆုံး 24 နာရီ";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "မှတ်တမ်း (အခြားစက်များမှ စင့်ခ်လုပ်ထားသော မှတ်တမ်းအပါအဝင်)၊ ကွတ်ကီးများနှင့် အခြားရှာဖွေမှုဒေတာများကို ဖျက်ပါ။";
+

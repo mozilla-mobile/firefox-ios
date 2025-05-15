@@ -9,6 +9,7 @@ import ToolbarKit
 final class ToolbarAction: Action {
     let toolbarPosition: SearchBarPosition?
     let toolbarLayout: ToolbarLayoutStyle?
+    let isTranslucent: Bool?
     let numberOfTabs: Int?
     let url: URL?
     let searchTerm: String?
@@ -31,6 +32,7 @@ final class ToolbarAction: Action {
 
     init(toolbarPosition: SearchBarPosition? = nil,
          toolbarLayout: ToolbarLayoutStyle? = nil,
+         isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
@@ -54,6 +56,7 @@ final class ToolbarAction: Action {
          actionType: ActionType) {
         self.toolbarPosition = toolbarPosition
         self.toolbarLayout = toolbarLayout
+        self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
         self.url = url
         self.searchTerm = searchTerm
@@ -103,6 +106,7 @@ enum ToolbarActionType: ActionType {
     case didEnterSearchTerm
     case didSetSearchTerm
     case didStartTyping
+    case translucencyDidChange
 }
 
 class ToolbarMiddlewareAction: Action {

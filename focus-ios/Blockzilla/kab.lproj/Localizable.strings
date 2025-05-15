@@ -181,6 +181,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Mdel";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Yettban tuqqna Internet tensa.";
+
 /* Button text for retrying network connection */
 "Network.Offline.RetryButton" = "Ɛreḍ tikkelt niḍen";
 
@@ -238,8 +241,14 @@
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "Immed";
 
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Tiwtiln n useqdec n Fiefox";
+
 /* Subtitle for the Terms of Use screen during onboarding. */
 "Onboarding.TermsOfUse.Subtitle" = "D arurad. D uslig. Ulac yesruḥuyen ddehn.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "S ukemmel, ad tqebleḍ %@.";
 
 /* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.TermsOfUse.Title" = "Ansuf ɣer %@";

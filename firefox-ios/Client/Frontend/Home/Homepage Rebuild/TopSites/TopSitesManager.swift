@@ -237,7 +237,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     func pinTopSite(_ site: Site) {
-        _ = profile.pinnedSites.addPinnedTopSite(site)
+        profile.pinnedSites.addPinnedTopSite(site)
     }
 
     func unpinTopSite(_ site: Site) {

@@ -1,3 +1,6 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about additions to the Firefox homepage regarding a more personalized experience. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHome" = "താങ്ങളുടെ ഇഷ്ടനുസൃതമാക്കിയ പൂമുറ്റം. ഒടുവിലത്തെ ടാബുകളും അടയാളക്കുറിപ്പുകളും തിരയൽ ഫലങ്ങളും ഇവിടെ കാണിക്കും.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user is logged in and has a tab synced from desktop, this popup indicates which tab that is within the Jump Back In section. */
 "ContextualHints.FirefoxHomepage.JumpBackIn.SyncedTab.v106" = "താങ്ങളുടെ ടാബുകൾ സമന്വയിപ്പിക്കുന്നു! താങ്ങളുടെ മറ്റു് ഉപകരണത്തിൽ നിർത്തിയിടത്തു് നിന്നു് വീണ്ടും തുടങ്ങുക.";
 

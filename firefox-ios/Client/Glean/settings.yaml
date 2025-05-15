@@ -1,0 +1,265 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Settings
+
+###############################################################################
+# Legacy "preferences" telemetry to be expired and/or migrated to "settings" 
+# telemetry.
+###############################################################################
+
+preferences:
+  changed:
+    type: event
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    extra_keys:
+      preference:
+        type: string
+        description: |
+          The preference that was changed.
+      changed_to:
+        type: string
+        description: |
+          The value the preference was changed to.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  new_tab_experience:
+    type: string
+    description: |
+      The name of the view that the user wants to see on new tabs.
+      For example History, Homepage or Blank. It is used to measure
+      usage of this feature, to see how effective feature promotion
+      campaigns are and to establish a baseline number for when we
+      introduce the new Activity Stream features.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  home_page_setting:
+    type: string
+    description: |
+      The setting a user chooses as their Home page. By default,
+      it is initially set to Firefox Home.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8887
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8887
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  save_logins:
+    type: boolean
+    description: |
+      Measures the state of the "Save Logins" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_clipboard_bar:
+    type: boolean
+    description: |
+      Measures the state of the "Show Clipboard Bar" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  tips_and_features_notifs:
+    type: boolean
+    description: |
+      True if notifications for tips and features are allowed, otherwise false.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14907
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15114
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  sync_notifs:
+    type: boolean
+    description: |
+      True if notifications for sync are allowed, otherwise false.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14907
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15114
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  fxa_logged_in:
+    type: boolean
+    description: |
+      Measures the state of the fxa login.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14904
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  close_private_tabs:
+    type: boolean
+    description: |
+      Measures the state of the "Close Private Tabs" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  jump_back_in:
+    type: boolean
+    description: |
+      An indication of whether the Jump back in section
+      is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  recently_visited:
+    type: boolean
+    description: |
+      An indication of whether the Recently visited section
+      is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  recently_saved:
+    type: boolean
+    description: |
+      An indication of whether the recently saved section
+      is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  pocket:
+    type: boolean
+    description: |
+      An indication of whether Pocket is enabled to be displayed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  opening_screen:
+    type: string
+    description: |
+      What opening screen preference the user has selected under
+      "Customize Home". "homepage," "last tab," or
+      "homepage after 4 hours" default: "homepage after 4 hours".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  autoplay_setting_changed:
+    type: event
+    description: |
+      Event for user changing the autoplay setting
+    extra_keys:
+      media_type:
+        type: string
+        description: |
+          We either send "allowAudioAndVideo", "blockAudio" or "blockAudioAndVideo".
+          Default is "allowAudioAndVideo".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12862
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+
+###############################################################################
+# New "settings" telemetry properly nested under "settings".
+###############################################################################
+
+# App Icon Settings
+settings.app_icon:
+  selected:
+    type: event
+    description: |
+      Records when the user changes their app icon in the app settings.
+    extra_keys:
+      new_name:
+        type: string
+        description: |
+          The name of the new app icon the user has selected. Options
+          are listed in the AppIcon enumeration.
+      old_name:
+        type: string
+        description: |
+          The name of the app icon the user had previously selected.
+          Returns "unknown" if the previous icon had an invalid name.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11473
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - AppIconSelection

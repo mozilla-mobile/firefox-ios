@@ -135,7 +135,8 @@ final class LocationView: UIView,
                    delegate: LocationViewDelegate,
                    isUnifiedSearchEnabled: Bool,
                    toolbarCornerRadius: CGFloat,
-                   isLocationTextCentered: Bool) {
+                   isLocationTextCentered: Bool,
+                   locationTextFieldTrailingPadding: CGFloat) {
         isURLTextFieldCentered = isLocationTextCentered
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
@@ -150,7 +151,8 @@ final class LocationView: UIView,
         configureA11y(config)
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
-                            isURLTextFieldCentered: isURLTextFieldCentered)
+                            isURLTextFieldCentered: isURLTextFieldCentered,
+                            locationTextFieldTrailingPadding: locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
         handleGesture(
             &longPressGestureRecognizer,
@@ -162,24 +164,32 @@ final class LocationView: UIView,
         searchTerm = config.searchTerm
         onLongPress = config.onLongPress
 
-        layoutContainerView(config, isURLTextFieldCentered: isURLTextFieldCentered)
+        layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
     }
 
-    private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
-        NSLayoutConstraint.deactivate(containerViewConstrains)
-        if config.isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
+    private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
+        let doesURLTextFieldExceedViewWidth = doesURLTextFieldExceedViewWidth
+        var newConstraints: [NSLayoutConstraint] = []
+
+        if isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
             // leading alignment configuration
-            containerViewConstrains = [
+            newConstraints = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
-        } else if let superview, !doesURLTextFieldExceedViewWidth {
-            containerViewConstrains = [
-                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
-                containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
-                containerView.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
+        } else if !doesURLTextFieldExceedViewWidth {
+            newConstraints = [
+                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+                containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+                containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
         }
+
+        // Only update the constraints if necessary
+        guard !newConstraints.isEmpty, containerViewConstrains.count != newConstraints.count else { return }
+
+        NSLayoutConstraint.deactivate(containerViewConstrains)
+        containerViewConstrains = newConstraints
         NSLayoutConstraint.activate(containerViewConstrains)
     }
 
@@ -197,6 +207,8 @@ final class LocationView: UIView,
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        layoutContainerView(isEditing: isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
         updateGradient()
         // Updates the URL text field's leading constraint to ensure it reflects the current layout state
         // during layout passes, such as on screen size or orientation changes.
@@ -205,8 +217,7 @@ final class LocationView: UIView,
 
     private func setupLayout() {
         addSubview(containerView)
-        containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
-        iconContainerStackView.addSubview(iconContainerBackgroundView)
+        containerView.addSubviews(urlTextField, iconContainerBackgroundView, iconContainerStackView, gradientView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
@@ -299,7 +310,8 @@ final class LocationView: UIView,
     }
 
     private func updateIconContainer(iconContainerCornerRadius: CGFloat,
-                                     isURLTextFieldCentered: Bool) {
+                                     isURLTextFieldCentered: Bool,
+                                     locationTextFieldTrailingPadding: CGFloat) {
         iconContainerBackgroundView.layer.cornerRadius = iconContainerCornerRadius
         guard !isEditing else {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
@@ -314,7 +326,7 @@ final class LocationView: UIView,
             updateUIForLockIconDisplay()
         }
         animateIconAppearance()
-        urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
+        urlTextFieldTrailingConstraint?.constant = -locationTextFieldTrailingPadding
     }
 
     private func animateIconAppearance() {

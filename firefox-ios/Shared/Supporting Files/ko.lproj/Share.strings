@@ -4,3 +4,6 @@
 /* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
 "SendTo.NotSignedIn.Title.v119" = "계정에 로그인되어 있지 않습니다.";
 
+/* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "클립보드에 파일 복사됨";
+

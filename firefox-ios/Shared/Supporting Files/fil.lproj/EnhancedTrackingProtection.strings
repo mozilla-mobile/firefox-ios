@@ -1,0 +1,3 @@
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Hindi ligtas ang iyong koneksyon.";
+
