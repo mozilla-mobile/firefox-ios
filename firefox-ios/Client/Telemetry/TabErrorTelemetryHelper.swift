@@ -126,9 +126,16 @@ final class TabErrorTelemetryHelper {
                     "windows": String(windowManager.windows.count)
                    ]
         )
-        telemetryWrapper.recordEvent(category: .information,
-                                     method: .error,
-                                     object: .app,
-                                     value: .tabLossDetected)
+
+        // Only send the telemetry event for the foregrounding log so we don't mess with our existing metrics
+        // around tab loss
+        if case .foreground = entryPoint {
+            telemetryWrapper.recordEvent(
+                category: .information,
+                method: .error,
+                object: .app,
+                value: .tabLossDetected
+            )
+        }
     }
 }
