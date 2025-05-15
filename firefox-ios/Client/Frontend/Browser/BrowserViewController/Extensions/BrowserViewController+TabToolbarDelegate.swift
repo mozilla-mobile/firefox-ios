@@ -90,6 +90,37 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
     }
 
+    func configureToolbarUpdateContextualHint(addressToolbarView: UIView, navigationToolbarView: UIView) {
+        guard let state = store.state.screenState(ToolbarState.self,
+                                                  for: .toolbar,
+                                                  window: windowUUID),
+              isToolbarRefactorEnabled,
+              isToolbarUpdateHintEnabled
+        else { return }
+
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let view = state.toolbarPosition == .top && showNavToolbar ? navigationToolbarView : addressToolbarView
+        let arrowDirection: UIPopoverArrowDirection = state.toolbarPosition == .top && !showNavToolbar ? .up : .down
+
+        toolbarUpdateContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: arrowDirection,
+            andDelegate: self,
+            presentedUsing: { [weak self] in self?.presentToolbarUpdateContextualHint() },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
+
+    private func presentToolbarUpdateContextualHint() {
+        guard !IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen,
+              let selectedTab = tabManager.selectedTab,
+              selectedTab.isFxHomeTab || selectedTab.isCustomHomeTab
+        else { return }
+
+        present(toolbarUpdateContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: toolbarUpdateContextHintVC)
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }

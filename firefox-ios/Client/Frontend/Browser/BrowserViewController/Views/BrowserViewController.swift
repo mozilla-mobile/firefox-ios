@@ -214,6 +214,11 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
+    private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
+        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
+        return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
+    }()
+
     // MARK: Telemetry Variables
 
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
@@ -251,6 +256,10 @@ class BrowserViewController: UIViewController,
 
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
+    }
+
+    var isToolbarUpdateHintEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarUpdateHint, checking: .buildOnly)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -1247,6 +1256,16 @@ class BrowserViewController: UIViewController,
                 navigationContextHintVC.dismiss(animated: true)
             }
         }
+
+        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
+        // as this also could change if the navigation bar is shown or not
+        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
+                                previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+
+        if toolbarUpdateContextHintVC.isPresenting,
+           UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
+            toolbarUpdateContextHintVC.dismiss(animated: true)
+        }
     }
 
     // MARK: - Constraints
@@ -2238,6 +2257,8 @@ class BrowserViewController: UIViewController,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
             store.dispatch(middlewareAction)
 
+            configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
+                                                 navigationToolbarView: navigationToolbarContainer)
             return
         }
 
