@@ -14,9 +14,9 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
                                          ContextualHintPrefsKeysProvider,
                                          SearchBarLocationProvider {
     var profile: Profile
-    var device: UIDeviceInterface
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?
+<<<<<<< HEAD
     var isCFRToolbarFeatureEnabled: Bool
 
     init(with profile: Profile,
@@ -27,6 +27,16 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         self.overlayState = overlayState
         self.device = device
         self.isCFRToolbarFeatureEnabled = isCFRToolbarFeatureEnabled
+=======
+    var isToolbarUpdateCFRFeatureEnabled: Bool
+
+    init(with profile: Profile,
+         overlayState: OverlayStateProtocol?,
+         isToolbarUpdateCFRFeatureEnabled: Bool = false) {
+        self.profile = profile
+        self.overlayState = overlayState
+        self.isToolbarUpdateCFRFeatureEnabled = isToolbarUpdateCFRFeatureEnabled
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
@@ -42,8 +52,11 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = canJumpBackInBePresented
         case .jumpBackInSyncedTab:
             hintTypeShouldBePresented = canPresentJumpBackInSyncedTab
+<<<<<<< HEAD
         case .toolbarLocation:
             hintTypeShouldBePresented = isSearchBarLocationFeatureEnabled
+=======
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
         case .mainMenu:
             hintTypeShouldBePresented = canMenuCFRBePresented
         case .inactiveTabs:
@@ -52,6 +65,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             return canPresentShoppingCFR
         case .navigation:
             hintTypeShouldBePresented = true
+        case .toolbarUpdate:
+            hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
@@ -73,6 +88,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) ? true : false
     }
 
+<<<<<<< HEAD
     /// If device is iPhone we present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been
     /// presented if the feature is enabled. If the Toolbar CFR flag is disabled or the device
     /// is iPad (toolbar CFR is not presented on iPad) we bypass it
@@ -81,12 +97,32 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
               isCFRToolbarFeatureEnabled else { return true }
 
         return profile.prefs.boolForKey(CFRPrefsKeys.toolbarOnboardingKey.rawValue) ?? false
+=======
+    /// Determine if the CFR for Toolbar Update is presentable.
+    ///
+    /// It's presentable on these conditions:
+    /// - toolbar-update-hint flag is enabled
+    private var canToolbarUpdateCFRBePresented: Bool {
+        return isToolbarUpdateCFRFeatureEnabled
+    }
+
+    /// We present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been
+    /// presented if the feature is enabled. If the Toolbar CFR flag is disabled we bypass it.
+    private var shouldCheckToolbarHasShown: Bool {
+        guard isToolbarUpdateCFRFeatureEnabled else { return true }
+
+        return profile.prefs.boolForKey(CFRPrefsKeys.toolbarUpdateKey.rawValue) ?? false
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
     }
 
     /// Determine if the CFR for Jump Back In is presentable.
     ///
     /// It's presentable on these conditions:
+<<<<<<< HEAD
     /// - the Toolbar CFR has already been presented or the CFR toolbar flag is disabled
+=======
+    /// - the Toolbar Update CFR has already been presented or the toolbar update flag CFR is disabled
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
     /// - the JumpBackInSyncedTab CFR has NOT been presented already
     /// - the JumpBackIn CFR has NOT been presented yet
     private var canJumpBackInBePresented: Bool {
@@ -101,15 +137,20 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     /// Determine if the CFR for SyncedTab in JumpBackIn is presentable.
     ///
     /// The context hint is presentable when certain conditions are met:
+<<<<<<< HEAD
     /// - A synced tab appears in Jump Back In
     /// - The Toolbar CFR has already been presented or the CFR toolbar flag is disabled
     /// - This CFR hasn't already been presented
     /// - The Home Tab Banner isn't being displayed (not specified by Product,
     ///   but the CFR might show when the anchor point isn't on screen)
+=======
+    /// - the Toolbar Update CFR has already been presented or the toolbar update flag CFR is disabled
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
     private var canPresentJumpBackInSyncedTab: Bool {
         return shouldCheckToolbarHasShown
     }
 
+<<<<<<< HEAD
     /// Determine if the Shopping CFRs should present.
     /// There are 2 types of CFRs.
     ///
@@ -151,6 +192,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         return true
     }
 
+=======
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey(for: hintType)) else { return false }
 

@@ -22,6 +22,7 @@ extension ContextualHintPrefsKeysProvider {
         case .mainMenu: return CFRPrefsKeys.mainMenuKey.rawValue
         case .shoppingExperience: return CFRPrefsKeys.shoppingOnboardingKey.rawValue
         case .navigation: return CFRPrefsKeys.navigationKey.rawValue
+        case .toolbarUpdate: return CFRPrefsKeys.toolbarUpdateKey.rawValue
         }
     }
 }

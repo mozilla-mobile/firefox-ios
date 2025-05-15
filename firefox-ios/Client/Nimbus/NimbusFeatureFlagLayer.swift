@@ -139,6 +139,9 @@ final class NimbusFeatureFlagLayer {
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
 
+        case .toolbarUpdateHint:
+            return checkToolbarUpdateHintFeature(from: nimbus)
+
         case .tosFeature:
             return checkTosFeature(from: nimbus)
 
@@ -275,6 +278,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.navigationHint
+    }
+
+    private func checkToolbarUpdateHintFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.toolbarUpdateHint
     }
 
     private func checkTosFeature(from nimbus: FxNimbus) -> Bool {

@@ -21,6 +21,7 @@ enum ContextualHintType: String {
     case shoppingExperience = "ShoppingExperience"
     case dataClearance = "DataClearance"
     case navigation = "Navigation"
+    case toolbarUpdate = "ToolbarUpdate"
 }
 
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
@@ -49,7 +50,12 @@ class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLoca
         let hintEligibilityUtility = ContextualHintEligibilityUtility(
             with: profile,
             overlayState: overlayState,
+<<<<<<< HEAD
             isCFRToolbarFeatureEnabled: featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly))
+=======
+            isToolbarUpdateCFRFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarUpdateHint, checking: .buildOnly)
+        )
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
 
         return hintEligibilityUtility.canPresent(hintType)
     }
