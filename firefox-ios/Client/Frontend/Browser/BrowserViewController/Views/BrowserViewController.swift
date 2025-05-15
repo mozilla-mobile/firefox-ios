@@ -136,16 +136,15 @@ class BrowserViewController: UIViewController,
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
+    lazy var screenshotHelper = ScreenshotHelper(controller: self)
 
     // MARK: Lazy loading UI elements
-
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
-    private lazy var screenshotHelper = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
