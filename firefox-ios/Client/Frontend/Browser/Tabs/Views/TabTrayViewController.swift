@@ -139,20 +139,10 @@ class TabTrayViewController: UIViewController,
         return selector
     }()
 
-    // TODO: Laurie - to adapt to new method
     private func experimentConvertSelectedIndex() -> Int {
         // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
         // Order can be updated in TabTrayPanelType once the experiment is done
-        var selectedIndex = 0
-        switch tabTrayState.selectedPanel {
-        case .privateTabs:
-            selectedIndex = 0
-        case .tabs:
-            selectedIndex = 1
-        case .syncedTabs:
-            selectedIndex = 2
-        }
-        return selectedIndex
+        return TabTrayPanelType.getExperimentConvert(index: tabTrayState.selectedPanel.rawValue).rawValue
     }
 
     lazy var countLabel: UILabel = {
