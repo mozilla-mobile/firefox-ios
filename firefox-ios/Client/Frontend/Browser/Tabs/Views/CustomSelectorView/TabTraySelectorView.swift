@@ -32,7 +32,6 @@ class TabTraySelectorView: UIView,
     }
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
-    private var hasAppliedInitialTransform = false
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
 
     var items: [String] = ["", "", ""] {
@@ -51,24 +50,6 @@ class TabTraySelectorView: UIView,
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        guard !hasAppliedInitialTransform else { return }
-        applyInitalSelectionBackgroundFrame()
-    }
-
-    private func applyInitalSelectionBackgroundFrame() {
-        guard buttons.indices.contains(selectedIndex) else { return }
-        let selectedButton = buttons[selectedIndex]
-        let width = selectedButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
-
-        selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
-        selectionBackgroundWidthConstraint?.isActive = true
-
-        hasAppliedInitialTransform = true
     }
 
     private func setup() {
@@ -114,6 +95,18 @@ class TabTraySelectorView: UIView,
         ])
 
         applyTheme(theme: theme)
+
+        layoutIfNeeded()
+        applyInitalSelectionBackgroundFrame()
+    }
+
+    private func applyInitalSelectionBackgroundFrame() {
+        guard buttons.indices.contains(selectedIndex) else { return }
+        let selectedButton = buttons[selectedIndex]
+        let width = selectedButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+
+        selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
+        selectionBackgroundWidthConstraint?.isActive = true
     }
 
     private func updateLabels() {
