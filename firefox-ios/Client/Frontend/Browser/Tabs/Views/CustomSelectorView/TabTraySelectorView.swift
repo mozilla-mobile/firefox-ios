@@ -50,14 +50,23 @@ class TabTraySelectorView: UIView,
         guard buttons.indices.contains(fromIndex),
               buttons.indices.contains(toIndex) else { return }
 
-        let fromX = buttons[fromIndex].center.x
-        let toX = buttons[toIndex].center.x
+        let fromButton = buttons[fromIndex]
+        let toButton = buttons[toIndex]
+
+        let fromX = fromButton.center.x
+        let toX = toButton.center.x
         let interpolatedX = fromX + (toX - fromX) * abs(progress)
 
-        let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
+        let stackCenterX = fromButton.superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
         let targetOffset = stackCenterX - selectionBackgroundView.center.x
-
         selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+
+        let fromWidth = fromButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let toWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let interpolatedWidth = fromWidth + (toWidth - fromWidth) * abs(progress)
+        selectionBackgroundWidthConstraint?.constant = interpolatedWidth
+
+        layoutIfNeeded()
     }
 
     func didFinishSelection(to index: Int) {
@@ -144,14 +153,18 @@ class TabTraySelectorView: UIView,
         let interpolatedX = fromX + (toX - fromX)
         let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
         let targetOffset = stackCenterX - selectionBackgroundView.center.x
+        let newWidth = buttons[toIndex].frame.width + (TabTraySelectorUX.horizontalInsets * 2)
 
         adjustSelectedButtonFont()
+
+        selectionBackgroundWidthConstraint?.constant = newWidth
 
         UIView.animate(withDuration: 0.3,
                        delay: 0,
                        options: [.curveEaseInOut],
                        animations: {
             self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+            self.layoutIfNeeded()
         }, completion: nil)
 
         let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
