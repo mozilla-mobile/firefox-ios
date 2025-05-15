@@ -21,6 +21,13 @@ extension Data {
 }
 
 extension UIImage {
+    public var hasAlpha: Bool {
+        guard let alphaInfo = self.cgImage?.alphaInfo else {return false}
+        return alphaInfo != CGImageAlphaInfo.none &&
+            alphaInfo != CGImageAlphaInfo.noneSkipFirst &&
+            alphaInfo != CGImageAlphaInfo.noneSkipLast
+    }
+
     public static func createWithColor(_ size: CGSize, color: UIColor) -> UIImage {
         UIGraphicsImageRenderer(size: size).image { (ctx) in
             color.setFill()
