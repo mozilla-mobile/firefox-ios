@@ -445,6 +445,7 @@ class TabTrayViewController: UIViewController,
         newTabButton.tintColor = theme.colors.iconPrimary
         doneButton.tintColor = theme.colors.iconPrimary
         syncTabButton.tintColor = theme.colors.iconPrimary
+        panelContainer.backgroundColor = theme.colors.layer3
 
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             experimentSegmentControl.applyTheme(theme: theme)
@@ -460,14 +461,16 @@ class TabTrayViewController: UIViewController,
 
         let swipeTheme = TabTrayPanelSwipeTheme(from: fromTheme, to: toTheme, progress: progress)
         childPanelControllers.forEach({ ($0.topViewController as? TabTrayThemeable)?.applyTheme(swipeTheme) })
-        view.backgroundColor = swipeTheme.colors.layer1
-        experimentSegmentControl.applyTheme(theme: swipeTheme)
 
+        view.backgroundColor = swipeTheme.colors.layer1
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         deleteButton.tintColor = swipeTheme.colors.iconPrimary
         newTabButton.tintColor = swipeTheme.colors.iconPrimary
         doneButton.tintColor = swipeTheme.colors.iconPrimary
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
+        panelContainer.backgroundColor = swipeTheme.colors.layer3
+
+        experimentSegmentControl.applyTheme(theme: swipeTheme)
     }
 
     // MARK: Private
