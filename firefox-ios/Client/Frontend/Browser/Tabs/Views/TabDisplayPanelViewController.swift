@@ -6,11 +6,17 @@ import Common
 import Redux
 import UIKit
 
+protocol TabTrayThemeable {
+    func retrieveTheme() -> Theme
+    func applyTheme(_ theme: Theme)
+}
+
 class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
-                                     FeatureFlaggable {
+                                     FeatureFlaggable,
+                                     TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
@@ -196,16 +202,8 @@ class TabDisplayPanelViewController: UIViewController,
         fadeView.isHidden = !shouldShow
     }
 
-    private func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            let isPrivateMode = tabsState.isPrivateMode && panelType == .privateTabs
-            return themeManager.resolvedTheme(with: isPrivateMode)
-        } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
-        }
-    }
-
     // MARK: Themeable
+
     var shouldUsePrivateOverride: Bool {
         return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
     }
@@ -217,6 +215,31 @@ class TabDisplayPanelViewController: UIViewController,
 
     func applyTheme() {
         let theme = retrieveTheme()
+        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: theme)
+        emptyPrivateTabsView.applyTheme(theme: theme)
+
+        if isTabTrayUIExperimentsEnabled {
+            gradientLayer.colors = [
+                theme.colors.layer3.cgColor,
+                theme.colors.layer3.cgColor,
+                theme.colors.layer3.withAlphaComponent(0.95).cgColor,
+                theme.colors.layer3.withAlphaComponent(0.0).cgColor
+            ]
+        }
+    }
+
+    // MARK: - TabTrayThemeable
+
+    func retrieveTheme() -> Theme {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            return themeManager.resolvedTheme(with: panelType == .privateTabs)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    func applyTheme(_ theme: Theme) {
         backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
         tabDisplayView.applyTheme(theme: theme)
         emptyPrivateTabsView.applyTheme(theme: theme)

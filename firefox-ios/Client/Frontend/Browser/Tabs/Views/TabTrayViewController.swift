@@ -57,6 +57,8 @@ class TabTrayViewController: UIViewController,
             setupSlidingPanel()
         }
     }
+    // TODO: Laurie - Ensuring this is adjusted when we switch theme
+    var childPanelThemes: [Theme]?
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
 
@@ -132,6 +134,7 @@ class TabTrayViewController: UIViewController,
         return selector
     }()
 
+    // TODO: Laurie - to adapt to new method
     private func experimentConvertSelectedIndex() -> Int {
         // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
         // Order can be updated in TabTrayPanelType once the experiment is done
@@ -439,6 +442,22 @@ class TabTrayViewController: UIViewController,
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
             navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
         }
+    }
+
+    func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat) {
+        guard let fromTheme = childPanelThemes?[fromIndex],
+              let toTheme = childPanelThemes?[toIndex] else { return }
+
+        let swipeTheme = TabTrayPanelSwipeTheme(from: fromTheme, to: toTheme, progress: progress)
+        childPanelControllers.forEach({ ($0.topViewController as? TabTrayThemeable)?.applyTheme(swipeTheme) })
+        view.backgroundColor = swipeTheme.colors.layer1
+        experimentSegmentControl.applyTheme(theme: swipeTheme)
+
+        navigationToolbar.barTintColor = swipeTheme.colors.layer1
+        deleteButton.tintColor = swipeTheme.colors.iconPrimary
+        newTabButton.tintColor = swipeTheme.colors.iconPrimary
+        doneButton.tintColor = swipeTheme.colors.iconPrimary
+        syncTabButton.tintColor = swipeTheme.colors.iconPrimary
     }
 
     // MARK: Private
@@ -963,5 +982,6 @@ class TabTrayViewController: UIViewController,
             toIndex: toIndex,
             progress: progress
         )
+        applyTheme(fromIndex: fromIndex, toIndex: toIndex, progress: abs(progress))
     }
 }
