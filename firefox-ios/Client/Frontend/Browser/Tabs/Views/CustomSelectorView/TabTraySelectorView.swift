@@ -33,6 +33,7 @@ class TabTraySelectorView: UIView,
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var hasAppliedInitialTransform = false
+    private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
 
     var items: [String] = ["", "", ""] {
         didSet {
@@ -59,19 +60,13 @@ class TabTraySelectorView: UIView,
         applyInitalSelectionBackgroundFrame()
     }
 
-    /// Width of the `selectionBackground` needs to be larger than the widest button. Due to translations, we need
-    /// to search for this widest button between the three available.
     private func applyInitalSelectionBackgroundFrame() {
-        guard let widestButton = buttons.max(by: {
-            $0.intrinsicContentSize.width < $1.intrinsicContentSize.width
-        }) else { return }
+        guard buttons.indices.contains(selectedIndex) else { return }
+        let selectedButton = buttons[selectedIndex]
+        let width = selectedButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
 
-        let selectionBackgroundWidth = widestButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
-        if let widthConstraint = selectionBackgroundView.constraints.first(where: { $0.firstAttribute == .width }) {
-            widthConstraint.constant = selectionBackgroundWidth
-        } else {
-            selectionBackgroundView.widthAnchor.constraint(equalToConstant: selectionBackgroundWidth).isActive = true
-        }
+        selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
+        selectionBackgroundWidthConstraint?.isActive = true
 
         hasAppliedInitialTransform = true
     }
@@ -136,25 +131,25 @@ class TabTraySelectorView: UIView,
         guard buttons.indices.contains(fromIndex),
               buttons.indices.contains(toIndex) else { return }
 
-        let fromX = buttons[fromIndex].center.x
-        let toX = buttons[toIndex].center.x
-        let interpolatedX = fromX + (toX - fromX)
-        let stackCenterX = buttons[fromIndex].superview!.convert(CGPoint(x: interpolatedX, y: 0), to: self).x
-        let targetOffset = stackCenterX - selectionBackgroundView.center.x
-
+        let toButton = buttons[toIndex]
         for (index, button) in buttons.enumerated() {
-            if index == selectedIndex {
-                button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-            } else {
-                button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-            }
+            button.titleLabel?.font = index == toIndex ?
+            FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
+            FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         }
+
+        let newWidth = toButton.intrinsicContentSize.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let toCenterX = toButton.superview!.convert(toButton.center, to: self).x
+        let offsetX = toCenterX - selectionBackgroundView.center.x
+
+        selectionBackgroundWidthConstraint?.constant = newWidth
 
         UIView.animate(withDuration: 0.3,
                        delay: 0,
                        options: [.curveEaseInOut],
                        animations: {
-            self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+            self.selectionBackgroundView.transform = CGAffineTransform(translationX: offsetX, y: 0)
+            self.layoutIfNeeded()
         }, completion: nil)
 
         let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
