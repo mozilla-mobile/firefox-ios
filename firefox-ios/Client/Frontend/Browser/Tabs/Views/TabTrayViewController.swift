@@ -57,7 +57,6 @@ class TabTrayViewController: UIViewController,
             setupSlidingPanel()
         }
     }
-    // TODO: Laurie - Ensuring this is adjusted when we switch theme
     var childPanelThemes: [Theme]?
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
@@ -438,6 +437,10 @@ class TabTrayViewController: UIViewController,
     }
 
     func applyTheme() {
+        childPanelThemes = childPanelControllers.compactMap { panel in
+            (panel.topViewController as? TabTrayThemeable)?.retrieveTheme()
+        }
+
         let theme = retrieveTheme()
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
