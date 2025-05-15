@@ -39,6 +39,19 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
+<<<<<<< HEAD
+=======
+    case tabAnimation
+    case tabTrayUIExperiments
+    case toolbarNavigationHint
+    case toolbarUpdateHint
+    case toolbarOneTapNewTab
+    case toolbarRefactor
+    case toolbarSwipingTabs
+    case toolbarTranslucency
+    case tosFeature
+    case trackingProtectionRefactor
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
     case unifiedAds
     case unifiedSearch
     case tabAnimation
@@ -138,6 +151,19 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchEngineConsolidation,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
+<<<<<<< HEAD
+=======
+                .tabAnimation,
+                .tabTrayUIExperiments,
+                .toolbarNavigationHint,
+                .toolbarUpdateHint,
+                .toolbarOneTapNewTab,
+                .toolbarRefactor,
+                .toolbarSwipingTabs,
+                .toolbarTranslucency,
+                .tosFeature,
+                .trackingProtectionRefactor,
+>>>>>>> beec2f646 (Add FXIOS-12222 [Toolbar refactor] CFR to onboard existing users (#26650))
                 .unifiedAds,
                 .unifiedSearch,
                 .tabAnimation,
