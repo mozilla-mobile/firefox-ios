@@ -31,6 +31,8 @@ class TabTraySelectorView: UIView,
     var items: [String] = ["", "", ""] {
         didSet {
             updateLabels()
+            // We need the labels on the buttons to adjust proper frame size
+            applyInitalSelectionBackgroundFrame()
         }
     }
 
@@ -117,13 +119,11 @@ class TabTraySelectorView: UIView,
         ])
 
         applyTheme(theme: theme)
-
-        layoutIfNeeded()
-        applyInitalSelectionBackgroundFrame()
     }
 
     private func applyInitalSelectionBackgroundFrame() {
         guard buttons.indices.contains(selectedIndex) else { return }
+        layoutIfNeeded()
         let selectedButton = buttons[selectedIndex]
         let width = selectedButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
 
