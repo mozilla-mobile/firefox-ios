@@ -779,10 +779,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(
-                    message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
-                    toastAction: .removeBookmark
-                )
                 self.removeBookmarkShortcut()
             }
             let bookmarksTelemetry = BookmarksTelemetry()
