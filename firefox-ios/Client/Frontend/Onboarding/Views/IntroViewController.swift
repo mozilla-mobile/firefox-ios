@@ -182,6 +182,7 @@ class IntroViewController: UIViewController,
     func closeOnboarding() {
         guard let viewModel = viewModel as? IntroViewModel else { return }
         viewModel.saveHasSeenOnboarding()
+        viewModel.saveSearchBarPosition()
         didFinishFlow?()
         viewModel.telemetryUtility.sendDismissOnboardingTelemetry(
             from: viewModel.availableCards[pageControl.currentPage].viewModel.name)
