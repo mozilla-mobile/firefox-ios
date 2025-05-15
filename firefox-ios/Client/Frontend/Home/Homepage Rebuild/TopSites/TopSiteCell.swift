@@ -16,15 +16,12 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
     private var homeTopSite: TopSiteConfiguration?
 
     struct UX {
-        static let iconSize = CGSize(width: 36, height: 36)
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize = CGSize(width: 16, height: 16)
         static let textSafeSpace: CGFloat = 6
-        static let bottomSpace: CGFloat = 8
-        static let imageTopSpace: CGFloat = 12
-        static let imageBottomSpace: CGFloat = 12
-        static let imageLeadingTrailingSpace: CGFloat = 12
+        static let faviconCornerRadius: CGFloat = 16
+        static let faviconTransparentBackgroundInset: CGFloat = 8
     }
 
     private var rootContainer: UIView = .build { view in
@@ -32,7 +29,13 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
-    lazy var imageView: FaviconImageView = .build { _ in }
+    private lazy var imageView: FaviconImageView = {
+        let imageView = FaviconImageView {
+            self.configureFaviconWithTransparency()
+        }
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
 
     // Holds the title text and optional sponsored text (for a sponsored tile)
     private lazy var descriptionWrapper: UIStackView = .build { stackView in
@@ -85,6 +88,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
     private var pinWidthConstraint: NSLayoutConstraint?
     private var smallContentConstraints: [NSLayoutConstraint] = []
     private var largeContentConstraints: [NSLayoutConstraint] = []
+    private var imageViewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Inits
 
@@ -106,6 +110,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = nil
         sponsoredLabel.text = nil
         pinImageView.isHidden = true
+        imageViewConstraints.forEach { $0.constant = 0 }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -121,7 +126,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         updateDynamicConstraints()
 
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+                                                      cornerRadius: UX.faviconCornerRadius).cgPath
     }
 
     // MARK: - Public methods
@@ -160,12 +165,14 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         }
 
         let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
-                                              siteResource: imageResource)
+                                              siteResource: imageResource,
+                                              faviconCornerRadius: UX.faviconCornerRadius)
         imageView.setFavicon(viewModel)
         self.textColor = textColor
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
+        configureFaviconWithTransparency()
 
         applyTheme(theme: theme)
     }
@@ -206,15 +213,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             rootContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             rootContainer.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
             rootContainer.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
-
-            imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
-                                           constant: UX.imageTopSpace),
-            imageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
-                                               constant: UX.imageLeadingTrailingSpace),
-            imageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
-                                                constant: -UX.imageLeadingTrailingSpace),
-            imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                              constant: -UX.imageBottomSpace),
+            rootContainer.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
+            rootContainer.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
 
             descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -224,6 +224,14 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             selectedOverlay.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
         ])
+
+        imageViewConstraints = [
+            imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
+        ]
+        NSLayoutConstraint.activate(imageViewConstraints)
 
         // Constraints used for changing the layout based on dynamic type
         // When preferredContentSizeCategory is > extraLarge, place the pin icon above the title (largeContentConstraints)
@@ -268,11 +276,26 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         sponsoredLabel.text = topSite.sponsoredText
     }
 
+    // Add insets to favicons with transparent backgrounds
+    private func configureFaviconWithTransparency() {
+        guard let image = imageView.image, image.hasAlpha else { return }
+
+        self.imageViewConstraints.forEach { constraint in
+            if constraint.firstAttribute == .trailing || constraint.firstAttribute == .bottom {
+                constraint.constant = -UX.faviconTransparentBackgroundInset
+            } else {
+                constraint.constant = UX.faviconTransparentBackgroundInset
+            }
+            // Inner corner radius = outer corner radius - inset
+            self.imageView.layer.cornerRadius = UX.faviconCornerRadius - UX.faviconTransparentBackgroundInset
+        }
+    }
+
     private func setupShadow(theme: Theme) {
-        rootContainer.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        rootContainer.layer.cornerRadius = UX.faviconCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
-        rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
+                                                      cornerRadius: UX.faviconCornerRadius).cgPath
+        rootContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
