@@ -33,6 +33,10 @@ class TabDisplayPanelViewController: UIViewController,
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
+    private var isToolbarRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+    }
+
     private lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
@@ -111,6 +115,7 @@ class TabDisplayPanelViewController: UIViewController,
         }
     }
 
+<<<<<<< HEAD
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = fadeView.bounds
@@ -119,6 +124,20 @@ class TabDisplayPanelViewController: UIViewController,
 
     // MARK: - Setup
 
+=======
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard isToolbarRefactorEnabled, isTabTrayUIExperimentsEnabled else { return }
+        store.dispatch(
+            ToolbarAction(
+                shouldAnimate: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged
+            )
+        )
+    }
+
+>>>>>>> 8e19c87de (Bugfix FXIOS-12184 - [Toolbar Redesign] - Domain name in the address bar shifts left or right when switching to a tab (#26572))
     private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
