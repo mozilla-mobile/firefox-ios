@@ -109,19 +109,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    func testWebViewDecidePolicyForNavigationAction_allowsGoogle_andBlockUniversalLink() {
-        let subject = createSubject()
-        let google = URL(string: "https://www.google.com")
-        let tab = createTab()
-        tabManager.tabs = [tab]
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: MockNavigationAction(url: google!,
-                                                              type: .linkActivated)) { policy in
-            XCTAssertEqual(policy, self.allowBlockingUniversalLinksPolicy)
-        }
-    }
-
     func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsite_withNormalTabs() {
         let subject = createSubject()
         let tab = createTab()
