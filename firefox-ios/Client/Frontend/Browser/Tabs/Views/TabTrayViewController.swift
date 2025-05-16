@@ -674,8 +674,8 @@ class TabTrayViewController: UIViewController,
             hideCurrentPanel()
             showPanel(currentPanel)
             navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
-        } else if isTabTrayUIExperimentsEnabled,
-                  let pageVC = pageViewController {
+        } else if let pageVC = pageViewController,
+                  pageVC.viewControllers?.isEmpty ?? true {
             let initialIndex = TabTrayPanelType.getExperimentConvert(index: panelType.rawValue).rawValue
             if let initialVC = childPanelControllers[safe: initialIndex] {
                 pageVC.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
@@ -683,6 +683,8 @@ class TabTrayViewController: UIViewController,
                 let panelType = tabTrayState.selectedPanel
                 navigationHandler?.start(panelType: panelType, navigationController: initialVC)
             }
+        } else {
+            navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
         }
     }
 
@@ -909,11 +911,9 @@ class TabTrayViewController: UIViewController,
                                                    direction: direction,
                                                    animated: !reduceMotionEnabled,
                                                    completion: nil)
-            tabTrayState.selectedPanel = panelType
-        } else {
-            setupOpenPanel(panelType: panelType)
         }
 
+        setupOpenPanel(panelType: panelType)
         let action = TabTrayAction(panelType: panelType,
                                    windowUUID: windowUUID,
                                    actionType: TabTrayActionType.changePanel)
@@ -942,8 +942,12 @@ class TabTrayViewController: UIViewController,
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        guard completed,
-              let currentVC = pageViewController.viewControllers?.first as? UINavigationController,
+        guard completed else {
+            swipeFromIndex = nil
+            return
+        }
+
+        guard let currentVC = pageViewController.viewControllers?.first as? UINavigationController,
               let index = childPanelControllers.firstIndex(of: currentVC) else { return }
 
         let newPanelType = TabTrayPanelType.getExperimentConvert(index: index)
@@ -953,11 +957,13 @@ class TabTrayViewController: UIViewController,
                                        windowUUID: windowUUID,
                                        actionType: TabTrayActionType.changePanel)
             store.dispatch(action)
-            swipeFromIndex = nil
+
             experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
 
             navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
         }
+
+        swipeFromIndex = nil
     }
 
     func pageViewController(_ pageViewController: UIPageViewController,
