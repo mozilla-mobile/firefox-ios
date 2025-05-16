@@ -15,4 +15,5 @@ protocol SettingsDelegate: AnyObject {
     func decreaseZoom()
     func resetZoom()
     func setZoom(_ value: CGFloat)
+    func loadPopupWebSource()
 }

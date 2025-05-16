@@ -294,6 +294,11 @@ class RootViewController: UIViewController,
         browserVC.scrollToTop()
     }
 
+    func loadPopupWebSource() {
+        let path = URL(fileURLWithPath: Bundle.main.path(forResource: "testPopUp", ofType: "html") ?? "")
+        browserVC.loadUrlOrSearch(SearchTerm(term: path.absoluteString))
+    }
+
     func showErrorPage(page: ErrorPageViewController) {
         self.errorPage = page
         addChild(page)

@@ -271,6 +271,11 @@ class BrowserViewController: UIViewController,
         return .default
     }
 
+    func onRequestOpenNewSession(_ session: EngineSession) {
+        engineSession = session
+        engineView.render(session: session)
+    }
+
     // MARK: - Ads Handling
 
     func adsSearchProviderModels() -> [WebEngine.EngineSearchProviderModel] {
