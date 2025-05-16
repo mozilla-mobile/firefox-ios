@@ -178,11 +178,9 @@ class TabTraySelectorView: UIView,
 
     private func adjustSelectedButtonFont() {
         for (index, button) in buttons.enumerated() {
-            if index == selectedIndex {
-                button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-            } else {
-                button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-            }
+            button.titleLabel?.font = index == toIndex ?
+            FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
+            FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         }
     }
 
