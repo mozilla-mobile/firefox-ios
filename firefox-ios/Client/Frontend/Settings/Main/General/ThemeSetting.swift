@@ -19,10 +19,6 @@ class ThemeSetting: Setting {
         return AccessibilityIdentifiers.Settings.Theme.title
     }
 
-    override var status: NSAttributedString {
-        return NSAttributedString(string: "")
-    }
-
     init(settings: SettingsTableViewController,
          settingsDelegate: GeneralSettingsDelegate?,
          themeManager: ThemeManager = AppContainer.shared.resolve()
