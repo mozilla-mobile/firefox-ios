@@ -56,20 +56,18 @@ public class ZoomLevelStore: ZoomLevelStorage {
     }
 
     public func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel) {
-        var domainZoomLevels = zoomSetting.zoomLevels
-
-        if let index = domainZoomLevels.firstIndex(where: {
+        if let index = zoomSetting.zoomLevels.firstIndex(where: {
             $0.host == domainZoomLevel.host
         }) {
-            domainZoomLevels.remove(at: index)
+            zoomSetting.zoomLevels.remove(at: index)
         }
         if domainZoomLevel.zoomLevel != ZoomLevelStore.defaultZoomLimit {
-            domainZoomLevels.append(domainZoomLevel)
+            zoomSetting.zoomLevels.append(domainZoomLevel)
         }
         save()
     }
 
-    func save(completion: (() -> Void)? = nil) {
+    private func save(completion: (() -> Void)? = nil) {
         concurrentQueue.async(flags: .barrier) { [unowned self] in
             let encoder = JSONEncoder()
             do {
