@@ -3,18 +3,26 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Common
 
 public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View {
     public let viewModel: VM
     public let onPrimary: () -> Void
     public let onSecondary: () -> Void
     public let onLink: () -> Void
-
-//    @Environment(\.theme) private var theme
-    @Environment(\.horizontalSizeClass) private var hSizeClass
+    
+    let windowUUID: WindowUUID
+    var themeManager: ThemeManager
+    
+    @State private var textColor: Color = .clear
+    @State private var secondaryTextColor: Color = .clear
+    @State private var cardBackgroundColor: Color = .clear
+    @State private var secondaryAction: Color = .clear
 
     public init(
         viewModel: VM,
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
         onPrimary: @escaping () -> Void,
         onSecondary: @escaping () -> Void,
         onLink: @escaping () -> Void
@@ -23,18 +31,17 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
         self.onPrimary = onPrimary
         self.onSecondary = onSecondary
         self.onLink = onLink
+        self.themeManager = themeManager
+        self.windowUUID = windowUUID
     }
 
     // MARK: Layout calculations
 
-    private var stackSpacing: CGFloat {
-        viewModel.link != nil ? 15 : 24
-    }
-
     var titleView: some View {
         Text(viewModel.title)
-            .font(/*UIDevice.isSmall ? .title3 :*/ .title)
+            .font(.title)
             .fontWeight(.semibold)
+            .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -43,7 +50,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     var bodyView: some View {
         Text(viewModel.body)
             .font(.subheadline)
-            .foregroundColor(.secondary)
+            .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
@@ -59,25 +66,26 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
         }
     }
 
-//    var linkView: some View {
-//        viewModel.link.map {
-//            LinkButton(
-//                viewModel: $0,
-//                action: onLink
-//            )
-//        }
-//    }
+    var linkView: some View {
+        viewModel.link.map {
+            LinkButton(viewModel: $0, action: onLink)
+        }
+    }
+    
+    var primaryButton: some View {
+        Button(viewModel.buttons.primary.title, action: onPrimary)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
+            .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+    }
 
     var secondaryButton: some View {
         viewModel.buttons.secondary.map {
-            Button($0.title) {
-                // secondary action
-            }
-            .font(.subheadline)
-            .foregroundColor(.white)
-            .padding(.top, 8)
-            .padding(.bottom, 24)
-            .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+            Button($0.title, action: onSecondary)
+                .font(.subheadline)
+                .foregroundColor(secondaryAction)
+                .padding(.top, 8)
+                .padding(.bottom, 24)
+                .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
         }
     }
 
@@ -89,19 +97,15 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                     titleView
                     imageView
                     bodyView
-//                    linkView
+                    linkView
                     Spacer()
-                    Button(viewModel.buttons.primary.title) {
-                        // primary action
-                    }
-                    .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-//                    .buttonStyle(PrimaryButtonStyle())
+                    primaryButton
                 }
                 .frame(height: 600)
                 .padding(24)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(Color(.systemBackground))
+                        .fill(cardBackgroundColor)
                         .shadow(
                             color: Color.black.opacity(0.1),
                             radius: 8,
@@ -114,5 +118,20 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 Spacer()
             }
         }
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+    
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        textColor = Color(color.textPrimary)
+        secondaryTextColor = Color(color.textSecondary)
+        cardBackgroundColor = Color(color.layer2)
+        secondaryAction = Color(color.textInverted)
     }
 }

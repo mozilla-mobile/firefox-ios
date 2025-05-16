@@ -4,6 +4,7 @@
 
 #if DEBUG
 import SwiftUI
+import Common
 
 private struct PreviewModel: OnboardingCardInfoModelProtocol {
     var image: UIImage? { UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) }
@@ -98,17 +99,24 @@ extension PreviewModel {
         order: 10,
         title: "Get automatic protection from trackers",
         body: "One tap helps stop companies spying on your clicks.",
+        link: nil,
         buttons: .init(
-            primary: .init(title: "Get Started", action: .forwardOneCard),
-            secondary: .init(title: "Not Now", action: .forwardOneCard)
+            primary: .init(title: "Get Started", action: OnboardingActions.forwardOneCard),
+            secondary: .init(title: "Not Now", action: OnboardingActions.forwardOneCard)
         ),
+        multipleChoiceButtons: [],
+        onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_welcome",
         imageID: "trackers",
         instructionsPopup: OnboardingInstructionsPopupInfoModel(
             title: "Set as Default Browser",
-            instructionSteps: ["Open Settings", "Find Default Apps", "Select Firefox"],
+            instructionSteps: [
+                "Open Settings",
+                "Find Default Apps",
+                "Select Firefox"
+            ],
             buttonTitle: "Open Settings",
-            buttonAction: .openIosFxSettings,
+            buttonAction: OnboardingInstructionsPopupActions.openIosFxSettings,
             a11yIdRoot: "onboarding_welcomeInstructionsPopup"
         )
     )
@@ -119,39 +127,138 @@ extension PreviewModel {
         order: 20,
         title: "Sync everywhere you use Firefox",
         body: "Get bookmarks, tabs, and passwords on any device. All protected with encryption.",
+        link: nil,
         buttons: .init(
-            primary: .init(title: "Sign In", action: .syncSignIn),
-            secondary: .init(title: "Skip", action: .forwardOneCard)
+            primary: .init(title: "Sign In", action: OnboardingActions.syncSignIn),
+            secondary: .init(title: "Skip", action: OnboardingActions.forwardOneCard)
         ),
+        multipleChoiceButtons: [],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_signToSync",
-        imageID: "syncWithIcons"
+        imageID: "syncWithIcons",
+        instructionsPopup: nil
     )
-    
+
+    static let notificationPermissions = PreviewModel(
+        cardType: .basic,
+        name: "notificationPermissions",
+        order: 30,
+        title: "Enable Notifications",
+        body: "Stay up to date with alerts.",
+        link: nil,
+        buttons: .init(
+            primary: .init(title: "Turn On", action: OnboardingActions.requestNotifications),
+            secondary: .init(title: "Skip", action: OnboardingActions.forwardOneCard)
+        ),
+        multipleChoiceButtons: [],
+        onboardingType: .freshInstall,
+        a11yIdRoot: "onboarding_notificationPermissions",
+        imageID: "notifications",
+        instructionsPopup: nil
+    )
+
+    static let customizationTheme = PreviewModel(
+        cardType: .multipleChoice,
+        name: "customizationTheme",
+        order: 40,
+        title: "Pick a Theme",
+        body: "Choose light, dark, or system default.",
+        link: nil,
+        buttons: .init(
+            primary: .init(title: "Continue", action: OnboardingActions.forwardOneCard),
+            secondary: nil
+        ),
+        multipleChoiceButtons: [
+            .init(title: "System Default", action: OnboardingMultipleChoiceAction.themeSystemDefault, imageID: "themeSystem"),
+            .init(title: "Light", action: OnboardingMultipleChoiceAction.themeLight, imageID: "themeLight"),
+            .init(title: "Dark", action: OnboardingMultipleChoiceAction.themeDark, imageID: "themeDark")
+        ],
+        onboardingType: .freshInstall,
+        a11yIdRoot: "onboarding_customizationTheme",
+        imageID: "themeing",
+        instructionsPopup: nil
+    )
+
     static let customizationToolbar = PreviewModel(
         cardType: .multipleChoice,
         name: "customizationToolbar",
         order: 41,
         title: "Toolbar Position",
         body: "Where should the toolbar appear?",
+        link: nil,
         buttons: .init(
-            primary: .init(title: "Continue", action: .forwardOneCard)
+            primary: .init(title: "Continue", action: OnboardingActions.forwardOneCard),
+            secondary: nil
         ),
         multipleChoiceButtons: [
-            .init(title: "Top", action: .toolbarTop, imageID: "toolbarTop"),
-            .init(title: "Bottom", action: .toolbarBottom, imageID: "toolbarBottom")
+            .init(title: "Top", action: OnboardingMultipleChoiceAction.toolbarTop, imageID: "toolbarTop"),
+            .init(title: "Bottom", action: OnboardingMultipleChoiceAction.toolbarBottom, imageID: "toolbarBottom")
         ],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_customizationToolbar",
-        imageID: "toolbar"
+        imageID: "toolbar",
+        instructionsPopup: nil
     )
 
-    static let all = [welcome, customizationToolbar, signToSync]
+    static let updateWelcome = PreviewModel(
+        cardType: .basic,
+        name: "updateWelcome",
+        order: 10,
+        title: "Welcome Back",
+        body: "Here's what's new in this update.",
+        link: nil,
+        buttons: .init(
+            primary: .init(title: "Next", action: OnboardingActions.forwardOneCard),
+            secondary: nil
+        ),
+        multipleChoiceButtons: [],
+        onboardingType: .upgrade,
+        a11yIdRoot: "onboarding_updateWelcome",
+        imageID: "welcomeGlobe",
+        instructionsPopup: nil
+    )
+
+    static let updateSignToSync = PreviewModel(
+        cardType: .basic,
+        name: "updateSignToSync",
+        order: 20,
+        title: "Reconnect Sync",
+        body: "Sign in again to keep syncing.",
+        link: nil,
+        buttons: .init(
+            primary: .init(title: "Sign In", action: OnboardingActions.syncSignIn),
+            secondary: .init(title: "Later", action: OnboardingActions.forwardOneCard)
+        ),
+        multipleChoiceButtons: [],
+        onboardingType: .upgrade,
+        a11yIdRoot: "onboarding_updateSignToSync",
+        imageID: "syncDevices",
+        instructionsPopup: nil
+    )
+    static let all: [PreviewModel] = [
+        .welcome,
+        .signToSync,
+        .notificationPermissions,
+        .customizationTheme,
+        .customizationToolbar,
+        .updateWelcome,
+        .updateSignToSync
+    ]
 }
 
 #Preview {
-    OnboardingBasicCardView(viewModel: PreviewModel.welcome, onPrimary: { }, onSecondary: { }, onLink: { })
-//    OnboardingBasicCardView(viewModel: PreviewModel.customizationToolbar, onPrimary: { }, onSecondary: {}, onLink: { })
+    ZStack {
+        MilkyWayMetalView()
+            .edgesIgnoringSafeArea(.all)
+
+        OnboardingBasicCardView(
+            viewModel: PreviewModel.updateSignToSync,
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            onPrimary: { },
+            onSecondary: { },
+            onLink: { })
+    }
 }
 
 #endif
