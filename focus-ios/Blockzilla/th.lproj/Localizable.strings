@@ -241,6 +241,9 @@
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "ยินยอมและดำเนินต่อ";
 
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "ดำเนินการต่อ";
+
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "เสร็จสิ้น";
 
