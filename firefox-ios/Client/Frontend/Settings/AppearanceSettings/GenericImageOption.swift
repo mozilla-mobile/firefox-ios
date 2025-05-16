@@ -28,6 +28,7 @@ struct GenericImageOption: View {
     let onSelected: (() -> Void)?
     let label: String
     let imageName: String
+    let a11yIdentifier: String
 
     var body: some View {
         VStack(spacing: UX.spacing) {
@@ -39,6 +40,7 @@ struct GenericImageOption: View {
             onSelected?()
         }
         .accessibilityElement()
+        .accessibilityIdentifier(a11yIdentifier)
         .accessibilityLabel("\(label)")
         .accessibilityValue("\(isSelected ? 1 : 0)")
         .accessibilityAddTraits([.isButton])

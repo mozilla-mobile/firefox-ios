@@ -18,7 +18,8 @@ struct ThemeOptionView: View {
             isSelected: isSelected,
             onSelected: onSelected,
             label: theme.rawValue,
-            imageName: imageName(for: theme)
+            imageName: imageName(for: theme),
+            a11yIdentifier: identifierName(for: theme)
         )
     }
 
@@ -30,6 +31,17 @@ struct ThemeOptionView: View {
             return ImageIdentifiers.Appearance.lightBrowserThemeGradient
         case .dark:
             return ImageIdentifiers.Appearance.darkBrowserThemeGradient
+        }
+    }
+
+    func identifierName(for themeOption: ThemeSelectionView.ThemeOption) -> String {
+        switch themeOption {
+        case .automatic:
+            return AccessibilityIdentifiers.Settings.Appearance.automaticThemeView
+        case .light:
+            return AccessibilityIdentifiers.Settings.Appearance.lightThemeView
+        case .dark:
+            return AccessibilityIdentifiers.Settings.Appearance.darkThemeView
         }
     }
 }

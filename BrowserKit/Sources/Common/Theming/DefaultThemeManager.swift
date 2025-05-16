@@ -33,8 +33,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var mainQueue: DispatchQueueInterface
     private var sharedContainerIdentifier: String
 
-    private var isNewAppearanceMenuOnClosure: () -> Bool
-
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
@@ -51,10 +49,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
     }
 
-    public var isNewAppearanceMenuOn: Bool {
-        return isNewAppearanceMenuOnClosure()
-    }
-
     public var hasMigratedToNewAppearanceMenu: Bool {
         return userDefaults.bool(forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
     }
@@ -65,14 +59,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
-        sharedContainerIdentifier: String,
-        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false }
+        sharedContainerIdentifier: String
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
-        self.isNewAppearanceMenuOnClosure = isNewAppearanceMenuOnClosure
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -206,7 +198,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // dark theme appearance of the app and web content. Once FXIOS-11655, both this check and nightMode
         // in general will be removed.
         if let migratedTheme = migratedTheme() { return migratedTheme }
-        if !isNewAppearanceMenuOn && nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
@@ -244,7 +235,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     /// - nil otherwise.
     /// NOTE(FXIOS-11655): This code will be removed once the new appearance menu experiment ends.
     private func migratedTheme() -> ThemeType? {
-        if isNewAppearanceMenuOn && !hasMigratedToNewAppearanceMenu {
+        if  !hasMigratedToNewAppearanceMenu {
             // Mark that migration has been performed to avoid repeating the process.
             userDefaults.set(true, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
             if nightModeIsOn {
@@ -259,9 +250,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
                 setSystemTheme(isOn: false)
                 setAutomaticBrightness(isOn: false)
             }
-        } else if !isNewAppearanceMenuOn && hasMigratedToNewAppearanceMenu {
-            // Reset the migration flag (mostly for debugging or rare cases).
-            userDefaults.set(false, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
         }
         return nil
     }

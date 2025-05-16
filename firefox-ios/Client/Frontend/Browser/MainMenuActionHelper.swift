@@ -251,7 +251,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         /// In the new experiment, where website theming is different from app theming homepage menu should not show
         /// the website theming option, since it will follow the app theme.
-        if !(themeManager.isNewAppearanceMenuOn && isHomePage) {
+        if !isHomePage {
             let nightModeAction = getNightModeAction()
             append(to: &section, action: nightModeAction)
         }
@@ -490,15 +490,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
-        if themeManager.isNewAppearanceMenuOn {
-            return isNightModeOn
-                ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
-                : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
-        } else {
-            return isNightModeOn
-                ? .LegacyAppMenu.AppMenuTurnOffNightMode
-                : .LegacyAppMenu.AppMenuTurnOnNightMode
-        }
+        return isNightModeOn
+            ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+            : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {

@@ -205,9 +205,10 @@ class Action {
     static let SentToDevice = "SentToDevice"
     static let AddToReadingListBrowserTabMenu = "AddToReadingListBrowserTabMenu"
 
-    static let SelectAutomatically = "SelectAutomatically"
-    static let SelectManually = "SelectManually"
-    static let SystemThemeSwitch = "SystemThemeSwitch"
+    static let SelectAutomaticTheme = "SelectAutomaticTheme"
+    static let SelectLightTheme = "SelectLightTheme"
+    static let SelectDarkTheme = "SelectDarkTheme"
+    static let SelectBrowserDarkTheme = "SelectBrowserDarkTheme"
 
     static let AddCustomSearchEngine = "AddCustomSearchEngine"
     static let RemoveCustomSearchEngine = "RemoveCustomSearchEngine"
@@ -620,14 +621,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(DisplaySettings) { screenState in
-        screenState.gesture(forAction: Action.SelectAutomatically) { userState in
-            app.cells.staticTexts["Automatically"].waitAndTap()
+        screenState.gesture(forAction: Action.SelectAutomaticTheme) { userState in
+            app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SelectManually) { userState in
-            app.cells.staticTexts["Manually"].waitAndTap()
+        screenState.gesture(forAction: Action.SelectLightTheme) { userState in
+            app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
-            app.switches["SystemThemeSwitchValue"].waitAndTap()
+        screenState.gesture(forAction: Action.SelectDarkTheme) { userState in
+            app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].waitAndTap()
+        }
+        screenState.gesture(forAction: Action.SelectBrowserDarkTheme) { userState in
+            app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction
     }

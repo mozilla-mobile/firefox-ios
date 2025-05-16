@@ -19,20 +19,6 @@ class ThemeSetting: Setting {
         return AccessibilityIdentifiers.Settings.Theme.title
     }
 
-    override var status: NSAttributedString {
-        if themeManager.isNewAppearanceMenuOn {
-            return NSAttributedString(string: "")
-        } else if themeManager.systemThemeIsOn {
-            return NSAttributedString(string: .SystemThemeSectionHeader)
-        } else if !themeManager.automaticBrightnessIsOn {
-            return NSAttributedString(string: .DisplayThemeManualStatusLabel)
-        } else if themeManager.automaticBrightnessIsOn {
-            return NSAttributedString(string: .DisplayThemeAutomaticStatusLabel)
-        }
-
-        return NSAttributedString(string: "")
-    }
-
     init(settings: SettingsTableViewController,
          settingsDelegate: GeneralSettingsDelegate?,
          themeManager: ThemeManager = AppContainer.shared.resolve()
@@ -43,9 +29,7 @@ class ThemeSetting: Setting {
         let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
-                string: themeManager.isNewAppearanceMenuOn
-                            ? .SettingsAppearanceTitle
-                            : .SettingsDisplayThemeTitle,
+                string: .SettingsAppearanceTitle,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
