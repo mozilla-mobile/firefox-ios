@@ -8,26 +8,25 @@ import Storage
 
 struct ZoomSiteListView: View {
     let theme: Theme
-    let zoomLevels: [DomainZoomLevel]
+    @Binding var domainZoomLevels: [DomainZoomLevel]
+    let onDelete: (IndexSet) -> Void
 
     var textColor: Color {
         return theme.colors.textPrimary.color
     }
 
     init(theme: Theme,
-         zoomManager: ZoomPageManager) {
+         domainZoomLevels: Binding<[DomainZoomLevel]>,
+         onDelete: @escaping (IndexSet) -> Void) {
         self.theme = theme
-        zoomLevels = zoomManager.getDomainLevel()
+        self._domainZoomLevels = domainZoomLevels
+        self.onDelete = onDelete
     }
 
     var body: some View {
-        ForEach(zoomLevels, id: \.host) { zoomItem in
+        ForEach(domainZoomLevels, id: \.host) { zoomItem in
             ZoomLevelCellView(theme: theme, domainZoomLevel: zoomItem)
         }
-        .onDelete(perform: delete)
-    }
-
-    func delete(at index: IndexSet) {
-        // TODO: Integration task delete item from the list and save
+        .onDelete(perform: onDelete)
     }
 }
