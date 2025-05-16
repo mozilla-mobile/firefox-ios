@@ -13,7 +13,7 @@ public struct InstallationUtils {
         else { return nil }
         return attributes[.creationDate] as? Date
     }
-    
+
     /// Returns true if the app was installed strictly after `start` and strictly before `end`.
     /// - Parameters:
     ///   - start: the lower boundary (exclusive)

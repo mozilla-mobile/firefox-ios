@@ -60,6 +60,7 @@ struct TermsOfServiceManager: FeatureFlaggable {
     /// 2. The TOS feature flag is enabled
     /// 3. User is in the "control" branch of the onboarding experiment
     /// 4. User did not see the TOS screen
+    /// This will be removed in 141.0 ticket FXIOS-12249 
     var isAffectedUser: Bool {
         // 1) Installation date check
         let calendar = Calendar.current
