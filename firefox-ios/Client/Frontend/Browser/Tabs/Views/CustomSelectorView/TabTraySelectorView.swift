@@ -73,7 +73,7 @@ class TabTraySelectorView: UIView,
 
     func didFinishSelection(to index: Int) {
         selectedIndex = index
-        adjustSelectedButtonFont()
+        adjustSelectedButtonFont(toIndex: index)
     }
 
     private func setup() {
@@ -155,13 +155,13 @@ class TabTraySelectorView: UIView,
         let targetOffset = stackCenterX - selectionBackgroundView.center.x
         let newWidth = buttons[toIndex].frame.width + (TabTraySelectorUX.horizontalInsets * 2)
 
-        adjustSelectedButtonFont()
+        adjustSelectedButtonFont(toIndex: toIndex)
 
         selectionBackgroundWidthConstraint?.constant = newWidth
 
         if UIAccessibility.isReduceMotionEnabled {
-            self.selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
-            self.layoutIfNeeded()
+            selectionBackgroundView.transform = CGAffineTransform(translationX: targetOffset, y: 0)
+            layoutIfNeeded()
         } else {
             UIView.animate(withDuration: 0.3,
                            delay: 0,
@@ -176,7 +176,7 @@ class TabTraySelectorView: UIView,
         delegate?.didSelectSection(panelType: panelType)
     }
 
-    private func adjustSelectedButtonFont() {
+    private func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
             button.titleLabel?.font = index == toIndex ?
             FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :

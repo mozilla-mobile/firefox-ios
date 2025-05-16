@@ -7,35 +7,55 @@ import UIKit
 
 struct TabTrayPanelSwipePalette: ThemeColourPalette {
     private let base: ThemeColourPalette
+    private let partialOverrides: PartialOverrides
 
     // MARK: Overridden colors
-    var layer1: UIColor
-    var iconPrimary: UIColor
-    var textPrimary: UIColor
-    var actionSecondary: UIColor
-    var layerScrim: UIColor
-    var layer3: UIColor
-    var textOnDark: UIColor
-    var borderPrimary: UIColor
-    var borderAccent: UIColor
-    var borderAccentPrivate: UIColor
-    var shadowDefault: UIColor
-    var iconDisabled: UIColor
+    var layer1: UIColor {
+        return partialOverrides.layer1
+    }
 
-    init(base: ThemeColourPalette, overrides: PartialOverrides) {
-        self.base = base
-        self.layer1 = overrides.layer1
-        self.iconPrimary = overrides.iconPrimary
-        self.textPrimary = overrides.textPrimary
-        self.actionSecondary = overrides.actionSecondary
-        self.layerScrim = overrides.layerScrim
-        self.layer3 = overrides.layer3
-        self.textOnDark = overrides.textOnDark
-        self.borderPrimary = overrides.borderPrimary
-        self.borderAccent = overrides.borderAccent
-        self.borderAccentPrivate = overrides.borderAccentPrivate
-        self.shadowDefault = overrides.shadowDefault
-        self.iconDisabled = overrides.iconDisabled
+    var iconPrimary: UIColor {
+        return partialOverrides.iconPrimary
+    }
+
+    var textPrimary: UIColor {
+        return partialOverrides.textPrimary
+    }
+
+    var actionSecondary: UIColor {
+        return partialOverrides.actionSecondary
+    }
+
+    var layerScrim: UIColor {
+        return partialOverrides.layerScrim
+    }
+
+    var layer3: UIColor {
+        return partialOverrides.layer3
+    }
+
+    var textOnDark: UIColor {
+        return partialOverrides.textOnDark
+    }
+
+    var borderPrimary: UIColor {
+        return partialOverrides.borderPrimary
+    }
+
+    var borderAccent: UIColor {
+        return partialOverrides.borderAccent
+    }
+
+    var borderAccentPrivate: UIColor {
+        return partialOverrides.borderAccentPrivate
+    }
+
+    var shadowDefault: UIColor {
+        return partialOverrides.shadowDefault
+    }
+
+    var iconDisabled: UIColor {
+        return partialOverrides.iconDisabled
     }
 
     struct PartialOverrides {
@@ -125,4 +145,9 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
 
     var shadowSubtle: UIColor { base.shadowSubtle }
     var shadowStrong: UIColor { base.shadowStrong }
+
+    init(base: ThemeColourPalette, overrides: PartialOverrides) {
+        self.base = base
+        self.partialOverrides = overrides
+    }
 }
