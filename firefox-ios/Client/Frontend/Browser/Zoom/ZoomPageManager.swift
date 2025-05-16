@@ -18,6 +18,7 @@ class ZoomPageManager: TabEventHandler {
     let zoomStore: ZoomLevelStorage
     var tab: Tab?
 
+    // TODO: Implement feature flag properly
     var defaultZoomIsEnabled: Bool {
         return false
     }
@@ -92,6 +93,14 @@ class ZoomPageManager: TabEventHandler {
               tab.readerModeAvailableOrActive,
               let host = tab.url?.decodeReaderModeURL?.host else { return nil }
         return host
+    }
+
+    func saveDefaultZoomLevel(defaultZoom: CGFloat) {
+        zoomStore.saveDefaultZoomLevel(defaultZoom: defaultZoom)
+    }
+
+    func getDomainLevel() -> [DomainZoomLevel] {
+        return zoomStore.getDomainZoomLevel()
     }
 
     // MARK: - Store level
