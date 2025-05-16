@@ -65,6 +65,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     private lazy var gradientLayer = CAGradientLayer()
+    private lazy var statusBarView: UIView = .build { _ in }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -176,7 +177,6 @@ class TabDisplayPanelViewController: UIViewController,
 
     private func setupFadeView() {
         guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
-        gradientLayer.locations = [0.0, 0.02, 0.08, 0.12]
         fadeView.layer.addSublayer(gradientLayer)
         view.addSubview(fadeView)
 
@@ -220,11 +220,23 @@ class TabDisplayPanelViewController: UIViewController,
         tabDisplayView.applyTheme(theme: theme)
         emptyPrivateTabsView.applyTheme(theme: theme)
 
-        if isTabTrayUIExperimentsEnabled {
+        guard isTabTrayUIExperimentsEnabled else { return }
+
+        if UIAccessibility.isReduceTransparencyEnabled {
+            statusBarView.backgroundColor = theme.colors.layer3
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height {
+                statusBarView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight)
+            }
+
+            view.addSubview(statusBarView)
+            gradientLayer.isHidden = true
+        } else {
+            gradientLayer.isHidden = false
+            statusBarView.removeFromSuperview()
+            gradientLayer.locations = [0.0, 0.12]
             gradientLayer.colors = [
                 theme.colors.layer3.cgColor,
-                theme.colors.layer3.cgColor,
-                theme.colors.layer3.withAlphaComponent(0.95).cgColor,
                 theme.colors.layer3.withAlphaComponent(0.0).cgColor
             ]
         }
