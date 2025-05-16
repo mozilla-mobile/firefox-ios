@@ -20,7 +20,7 @@ class ZoomPageManager: TabEventHandler {
 
     // TODO: Implement feature flag properly
     var defaultZoomIsEnabled: Bool {
-        return false
+        return true
     }
 
     var defaultZoomLevel: CGFloat {
@@ -95,6 +95,8 @@ class ZoomPageManager: TabEventHandler {
         return host
     }
 
+    // MARK: - Store level
+
     func saveDefaultZoomLevel(defaultZoom: CGFloat) {
         zoomStore.saveDefaultZoomLevel(defaultZoom: defaultZoom)
     }
@@ -102,8 +104,6 @@ class ZoomPageManager: TabEventHandler {
     func getDomainLevel() -> [DomainZoomLevel] {
         return zoomStore.getDomainZoomLevel()
     }
-
-    // MARK: - Store level
 
     /// Saves the zoom level for a given host and notifies other windows of the change
     /// - Parameters:
@@ -128,6 +128,14 @@ class ZoomPageManager: TabEventHandler {
         }
 
         return domainZoomLevel.zoomLevel
+    }
+
+    func deleteZoomLevel(for host: String) {
+        zoomStore.deleteZoomLevel(for: host)
+    }
+
+    func resetDomainZoomLevel() {
+        zoomStore.resetDomainZoomLevel()
     }
 
     // MARK: - TabEventHandler

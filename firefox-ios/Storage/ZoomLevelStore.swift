@@ -26,6 +26,8 @@ public protocol ZoomLevelStorage {
     func findZoomLevel(forDomain host: String) -> DomainZoomLevel?
     func getDefaultZoom() -> CGFloat
     func getDomainZoomLevel() -> [DomainZoomLevel]
+    func deleteZoomLevel(for host: String)
+    func resetDomainZoomLevel()
 }
 
 public class ZoomLevelStore: ZoomLevelStorage {
@@ -88,6 +90,18 @@ public class ZoomLevelStore: ZoomLevelStorage {
 
     public func getDefaultZoom() -> CGFloat {
         return zoomSetting.defaultZoom
+    }
+
+    public func deleteZoomLevel(for host: String) {
+        guard let index = zoomSetting.zoomLevels.firstIndex(where: { return $0.host == host}) else { return }
+
+        zoomSetting.zoomLevels.remove(at: index)
+        save()
+    }
+
+    public func resetDomainZoomLevel() {
+        zoomSetting.zoomLevels.removeAll()
+        save()
     }
 
     private func loadZoomSettings() -> ZoomSettings {

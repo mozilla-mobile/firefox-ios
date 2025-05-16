@@ -2,11 +2,41 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import SwiftUI
 import Common
+import SwiftUI
+import Storage
+
+class PageZoomSettingsViewModel: ObservableObject {
+    private let zoomManager: ZoomPageManager
+    @Published var domainZoomLevels: [DomainZoomLevel]
+
+    init(zoomManager: ZoomPageManager) {
+        self.zoomManager = zoomManager
+        self.domainZoomLevels = zoomManager.getDomainLevel()
+    }
+
+    func resetDomainZoomLevel() {
+        domainZoomLevels.removeAll()
+        zoomManager.resetDomainZoomLevel()
+    }
+
+    func deleteZoomLevel(at indexSet: IndexSet) {
+//        for index in offsets {
+//            let item = domainZoomLevels[index]
+//            zoomManager.deleteZoomLevel(for: item.domain) // Your DB/file logic
+//        }
+//        domainZoomLevels.remove(atOffsets: offsets)
+        guard let index = indexSet.first else { return }
+
+        let deleteItem = domainZoomLevels[index]
+        zoomManager.deleteZoomLevel(for: deleteItem.host)
+        domainZoomLevels.remove(at: index)
+    }
+}
 
 struct PageZoomSettingsView: View {
     private let windowUUID: WindowUUID
+    @ObservedObject var viewModel: PageZoomSettingsViewModel
     private let zoomManager: ZoomPageManager
     @Environment(\.themeManager)
     var themeManager
@@ -36,6 +66,7 @@ struct PageZoomSettingsView: View {
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         self.zoomManager = ZoomPageManager(windowUUID: windowUUID)
+        self.viewModel = PageZoomSettingsViewModel(zoomManager: zoomManager)
     }
 
     var theme: Theme {
@@ -56,7 +87,9 @@ struct PageZoomSettingsView: View {
 
                 // Specific site zoom levels
                 Section {
-                    ZoomSiteListView(theme: theme, zoomManager: zoomManager)
+                    ZoomSiteListView(theme: theme,
+                                     domainZoomLevels: $viewModel.domainZoomLevels,
+                                     onDelete: viewModel.deleteZoomLevel)
                         .background(themeColors.layer1.color)
                 } header: {
                     GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
@@ -75,7 +108,9 @@ struct PageZoomSettingsView: View {
             VStack {
                 Divider().frame(height: UX.dividerHeight)
 
-                Button(action: {}) {
+                Button(action: {
+                    viewModel.resetDomainZoomLevel()
+                }) {
                     Text(String.Settings.Appearance.PageZoom.ResetButtonTitle)
                         .foregroundColor(theme.colors.textCritical.color)
                 }
