@@ -162,7 +162,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    func testWebViewDecidePolicyForNavigationAction_cancelLoading_whenBlobURLs() {
+    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobURLsWithNavigationTypeOther() {
         let subject = createSubject()
         let tab = createTab()
         let blob = URL(string: "blob://blobfile")!
@@ -171,7 +171,20 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         subject.webView(tab.webView!,
                         decidePolicyFor: MockNavigationAction(url: blob,
                                                               type: .other)) { policy in
-            XCTAssertEqual(policy, self.allowBlockingUniversalLinksPolicy)
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelLoading() {
+        let subject = createSubject()
+        let tab = createTab()
+        let blob = URL(string: "blob://blobfile")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: blob,
+                                                              type: .backForward)) { policy in
+            XCTAssertEqual(policy, .cancel)
         }
     }
 
