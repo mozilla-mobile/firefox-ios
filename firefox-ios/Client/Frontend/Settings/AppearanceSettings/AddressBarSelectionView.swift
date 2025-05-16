@@ -30,7 +30,7 @@ struct AddressBarSelectionView: View {
                     isSelected: selectedAddressBarPosition == addressBarPosition,
                     onSelected: {
                         selectedAddressBarPosition = addressBarPosition
-                        onSelected?(selectedAddressBarPostion)
+                        onSelected?(selectedAddressBarPosition)
                     },
                     label: addressBarPosition.label,
                     imageName: addressBarPosition.imageName

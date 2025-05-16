@@ -10,7 +10,6 @@ enum SearchBarPosition: String, FlaggableFeatureOptions, CaseIterable {
     case top
     case bottom
 
-
     var getLocalizedTitle: String {
         switch self {
         case .bottom:
