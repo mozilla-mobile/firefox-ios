@@ -22,7 +22,8 @@ class RecordedNimbusContextTests: XCTestCase {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
             isDefaultBrowser: true,
-            isBottomToolbarUser: true
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true
         )
         try validateEventQueries(recordedContext: recordedContext)
     }
@@ -31,7 +32,8 @@ class RecordedNimbusContextTests: XCTestCase {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
             isDefaultBrowser: true,
-            isBottomToolbarUser: true
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true
         )
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
         let jsonString = recordedContext.toJson()
@@ -48,7 +50,14 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(json?.removeValue(forKey: "days_since_install") as? Int32, recordedContext.daysSinceInstall)
         XCTAssertEqual(json?.removeValue(forKey: "days_since_update") as? Int32, recordedContext.daysSinceUpdate)
         XCTAssertEqual(json?.removeValue(forKey: "is_default_browser") as? Bool, recordedContext.isDefaultBrowser)
-        XCTAssertEqual(json?.removeValue(forKey: "is_bottom_toolbar_user") as? Bool, recordedContext.isDefaultBrowser)
+        XCTAssertEqual(
+            json?.removeValue(forKey: "is_bottom_toolbar_user") as? Bool,
+            recordedContext.isBottomToolbarUser
+        )
+        XCTAssertEqual(
+            json?.removeValue(forKey: "has_enabled_tips_notifications") as? Bool,
+            recordedContext.hasEnabledTipsNotifications
+        )
 
         var events = json?.removeValue(forKey: "events") as? [String: Double]
         XCTAssertNotNil(events)
@@ -62,7 +71,8 @@ class RecordedNimbusContextTests: XCTestCase {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
             isDefaultBrowser: true,
-            isBottomToolbarUser: true
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true
         )
 
         var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
@@ -88,6 +98,10 @@ class RecordedNimbusContextTests: XCTestCase {
         XCTAssertEqual(value?.daysSinceUpdate, recordedContext.daysSinceUpdate.toInt64())
         XCTAssertEqual(value?.isDefaultBrowser, recordedContext.isDefaultBrowser)
         XCTAssertEqual(value?.isBottomToolbarUser, recordedContext.isBottomToolbarUser)
+        XCTAssertEqual(
+            value?.hasEnabledTipsNotifications,
+            recordedContext.hasEnabledTipsNotifications
+        )
 
         XCTAssertNotNil(value?.eventQueryValues)
         XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
@@ -97,7 +111,8 @@ class RecordedNimbusContextTests: XCTestCase {
         let recordedContext = RecordedNimbusContext(
             isFirstRun: true,
             isDefaultBrowser: true,
-            isBottomToolbarUser: true
+            isBottomToolbarUser: true,
+            hasEnabledTipsNotifications: true
         )
         let eventQueries = recordedContext.getEventQueries()
 

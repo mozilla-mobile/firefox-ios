@@ -6052,6 +6052,8 @@ nimbus_system:
           type: boolean
         is_bottom_toolbar_user:
           type: boolean
+        has_enabled_tips_notifications:
+          type: boolean
     description: |
       The Nimbus context object that is recorded to Glean
     bugs:
