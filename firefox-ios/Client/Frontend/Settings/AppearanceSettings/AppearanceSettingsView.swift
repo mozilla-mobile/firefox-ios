@@ -14,7 +14,7 @@ protocol AppearanceSettingsDelegate: AnyObject {
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
     var shouldShowPageZoom: Bool
-    let delegate: AppearanceSettingsDelegate?
+    weak var delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
     var themeManager

@@ -155,7 +155,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .theme:
             let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                        shouldShowPageZoom: true,
+                                                        shouldShowPageZoom: false,
                                                         delegate: self)
             return UIHostingController(rootView: appearanceView)
 
@@ -406,7 +406,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                   screen: .themeSettings)
         store.dispatch(action)
         let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                    shouldShowPageZoom: true,
+                                                    shouldShowPageZoom: false,
                                                     delegate: self)
         let viewController = UIHostingController(rootView: appearanceView)
         viewController.title = .SettingsAppearanceTitle
