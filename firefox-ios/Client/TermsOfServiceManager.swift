@@ -48,11 +48,6 @@ struct TermsOfServiceManager: FeatureFlaggable {
 
     // MARK: – Constants
 
-    private enum TelemetryAffectedVersionRange {
-        static let minimum = "138.0"
-        static let maximum = "138.1"
-    }
-
     private enum Experiment {
         static let onboardingPhase4ID = "new-onboarding-experience-experiment-phase-4-ios"
         static let controlBranch = "control"
@@ -61,14 +56,18 @@ struct TermsOfServiceManager: FeatureFlaggable {
     // MARK: – Public API
 
     /// Returns `true` if all of the following are satisfied:
-    /// 1. App version is in [138.0, 138.1)
+    /// 1. App was installed after 138.0 and before 138.1
     /// 2. The TOS feature flag is enabled
     /// 3. User is in the "control" branch of the onboarding experiment
     /// 4. User did not see the TOS screen
     var isAffectedUser: Bool {
-        // 1) Version check
-        guard isAppVersion(in: TelemetryAffectedVersionRange.minimum..<TelemetryAffectedVersionRange.maximum) else {
-            // Outside of the target version window
+        // 1) Installation date check
+        let calendar = Calendar.current
+        guard
+            let start = calendar.date(from: DateComponents(year: 2025, month: 4, day: 29)),
+            let end   = calendar.date(from: DateComponents(year: 2025, month: 5, day: 6)),
+            InstallationUtils.isInstalled(between: start, and: end) else {
+            // App was not installed after 138.0 and before 138.1
             return false
         }
 
@@ -93,19 +92,6 @@ struct TermsOfServiceManager: FeatureFlaggable {
     }
 
     // MARK: – Helpers
-
-    /// Checks whether the app’s CFBundleShortVersionString lies within the half-open range [min, max).
-    func isAppVersion(in range: Range<String>) -> Bool {
-        guard let versionString = bundle
-            .object(forInfoDictionaryKey: "CFBundleShortVersionString")
-                as? String else {
-            return false
-        }
-        let v = versionString as NSString
-        let meetsMin  = v.compare(range.lowerBound, options: .numeric) != .orderedAscending
-        let belowMax  = v.compare(range.upperBound, options: .numeric) == .orderedAscending
-        return meetsMin && belowMax
-    }
 
     /// Returns `true` if the given experiment’s branch slug exists and equals “control”.
     private func isInControlBranch(experimentId: String) -> Bool {
