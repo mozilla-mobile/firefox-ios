@@ -90,7 +90,7 @@ final class AddressToolbarContainer: UIView,
 
     private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
         if shouldDisplayCompact {
-            return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
+            return UX.toolbarHorizontalPadding
         }
 
         // Provide 0 padding in iPhone landscape due to safe area insets
