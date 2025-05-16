@@ -18,6 +18,7 @@ class TabDisplayPanelViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var tabsState: TabsPanelState
+    var isAnimating = false
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
@@ -259,7 +260,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     func newState(state: TabsPanelState) {
-        guard state != tabsState else { return }
+        guard state != tabsState, !isAnimating else { return }
 
         tabsState = state
         tabDisplayView.newState(state: tabsState)
