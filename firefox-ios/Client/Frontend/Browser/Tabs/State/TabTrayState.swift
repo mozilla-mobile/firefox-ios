@@ -157,7 +157,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 hasSyncableAccount: state.hasSyncableAccount)
 
         case TabPanelMiddlewareActionType.refreshTabs:
-            // Only update the nomal tab count if the tabs being refreshed are not private
+            // Only update the normal tab count if the tabs being refreshed are not private
             guard let tabDisplayModel = action.tabDisplayModel else { return defaultState(from: state) }
             let isPrivate = tabDisplayModel.tabs.first?.isPrivate ?? false
             let tabCount = isPrivate ? state.normalTabsCount : tabDisplayModel.normalTabsCount
