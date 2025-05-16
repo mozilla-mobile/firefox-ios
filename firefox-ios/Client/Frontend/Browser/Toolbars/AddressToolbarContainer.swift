@@ -46,7 +46,6 @@ final class AddressToolbarContainer: UIView,
         didSet {
             guard oldValue != isUnifiedSearchEnabled else { return }
 
-            compactToolbar.isUnifiedSearchEnabled = isUnifiedSearchEnabled
             regularToolbar.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         }
     }
@@ -68,7 +67,6 @@ final class AddressToolbarContainer: UIView,
     }
 
     var parent: UIStackView?
-    private lazy var compactToolbar: CompactBrowserAddressToolbar = .build()
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
@@ -186,7 +184,6 @@ final class AddressToolbarContainer: UIView,
 
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
-        compactToolbar.alpha = alpha
         regularToolbar.alpha = alpha
     }
 
@@ -207,15 +204,6 @@ final class AddressToolbarContainer: UIView,
         }
         updateProgressBarPosition(toolbarState.toolbarPosition)
 
-        compactToolbar.configure(
-            config: newModel.addressToolbarConfig,
-            toolbarPosition: toolbarState.toolbarPosition,
-            toolbarDelegate: self,
-            leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
-                                                       toolbarLayoutStyle: newModel.toolbarLayoutStyle),
-            trailingSpace: calculateToolbarTrailingSpace(),
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: newModel.shouldAnimate)
         regularToolbar.configure(
             config: newModel.addressToolbarConfig,
             toolbarPosition: toolbarState.toolbarPosition,
@@ -240,16 +228,6 @@ final class AddressToolbarContainer: UIView,
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
-
-        setupToolbarConstraints()
-    }
-
-    private func switchToolbars() {
-        if compactToolbar.isDescendant(of: self) {
-            compactToolbar.removeFromSuperview()
-        } else {
-            regularToolbar.removeFromSuperview()
-        }
 
         setupToolbarConstraints()
     }
@@ -281,7 +259,6 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
 
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false,
