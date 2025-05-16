@@ -15,9 +15,9 @@ struct ZoomSiteListView: View {
     }
 
     init(theme: Theme,
-         zoomStore: ZoomLevelStorage = ZoomLevelStore.shared) {
+         zoomManager: ZoomPageManager) {
         self.theme = theme
-        zoomLevels = zoomStore.getDomainZoomLevel()
+        zoomLevels = zoomManager.getDomainLevel()
     }
 
     var body: some View {

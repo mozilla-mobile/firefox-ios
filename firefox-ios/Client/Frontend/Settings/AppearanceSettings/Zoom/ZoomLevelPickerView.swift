@@ -4,11 +4,11 @@
 
 import Common
 import SwiftUI
-import Storage
 
 struct ZoomLevelPickerView: View {
     @State private var selectedZoomLevel: ZoomLevel
     private let theme: Theme
+    private let zoomManager: ZoomPageManager
 
     var textColor: Color {
         return theme.colors.textPrimary.color
@@ -18,9 +18,10 @@ struct ZoomLevelPickerView: View {
         return .Settings.Appearance.PageZoom.ZoomLevelSelectorTitle
     }
 
-    init(theme: Theme) {
+    init(theme: Theme, zoomManager: ZoomPageManager) {
         self.theme = theme
-        let currentZoom = ZoomLevel(from: ZoomLevelStore.shared.getDefaultZoom())
+        self.zoomManager = zoomManager
+        let currentZoom = ZoomLevel(from: zoomManager.defaultZoomLevel)
         _selectedZoomLevel = State(initialValue: currentZoom)
     }
 
@@ -37,8 +38,7 @@ struct ZoomLevelPickerView: View {
             .accentColor(textColor)
             .pickerStyle(.menu)
             .onChange(of: selectedZoomLevel) { newValue in
-                print("YRD --- New selected zoom level: \(newValue)")
-                ZoomLevelStore.shared.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+                zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
             }
         }
     }

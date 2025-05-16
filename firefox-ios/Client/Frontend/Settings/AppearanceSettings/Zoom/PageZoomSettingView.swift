@@ -6,7 +6,12 @@ import SwiftUI
 import Common
 
 struct PageZoomSettingsView: View {
-    let windowUUID: WindowUUID
+    private let windowUUID: WindowUUID
+    private let zoomManager: ZoomPageManager
+    @Environment(\.themeManager)
+    var themeManager
+    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+
     private struct UX {
         static var dividerHeight: CGFloat { 0.7 }
         static var buttonPadding: CGFloat { 4 }
@@ -28,9 +33,10 @@ struct PageZoomSettingsView: View {
         return themeColors.textSecondary.color
     }
 
-    @Environment(\.themeManager)
-    var themeManager
-    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
+        self.zoomManager = ZoomPageManager(windowUUID: windowUUID)
+    }
 
     var theme: Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
@@ -41,7 +47,7 @@ struct PageZoomSettingsView: View {
             List {
                 // Default level picker
                 Section {
-                    ZoomLevelPickerView(theme: theme)
+                    ZoomLevelPickerView(theme: theme, zoomManager: zoomManager)
                         .background(themeColors.layer1.color)
                 } header: {
                     GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
@@ -50,7 +56,7 @@ struct PageZoomSettingsView: View {
 
                 // Specific site zoom levels
                 Section {
-                    ZoomSiteListView(theme: theme)
+                    ZoomSiteListView(theme: theme, zoomManager: zoomManager)
                         .background(themeColors.layer1.color)
                 } header: {
                     GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),

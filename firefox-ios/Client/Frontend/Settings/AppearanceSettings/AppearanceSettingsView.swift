@@ -13,7 +13,9 @@ protocol AppearanceSettingsDelegate: AnyObject {
 /// The main view displaying the settings for the appearance menu.
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
-    var shouldShowPageZoom: Bool
+    var shouldShowPageZoom: Bool {
+        return ZoomPageManager(windowUUID: windowUUID).defaultZoomIsEnabled
+    }
     let delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
