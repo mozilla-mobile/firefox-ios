@@ -1153,6 +1153,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
+    var sandboxedIFrame = false
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
