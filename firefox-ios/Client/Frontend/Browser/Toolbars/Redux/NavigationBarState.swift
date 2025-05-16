@@ -199,15 +199,10 @@ struct NavigationBarState: StateType, Equatable {
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
                                       showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
-        case .version2:
+        case .version2, .none:
             actions.append(middleAction)
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
-                                      showWarningBadge: showWarningBadge))
-        default:
-            actions.append(middleAction)
-            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
-            actions.append(menuAction(iconName: StandardImageIdentifiers.Large.appMenu,
                                       showWarningBadge: showWarningBadge))
         }
 
