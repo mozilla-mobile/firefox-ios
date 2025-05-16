@@ -1,1 +1,1 @@
-!function(){let t=window.open;window.open=function(e,n,r,a){try{let c=new URL(e,window.location.href);return c.searchParams.set("__sandboxed","true"),t.call(window,c.toString(),n,r,a)}catch(o){return t.call(window,e,n,r,a)}}}();
+!function(){let t=window.open;window.open=function(e,n,r,a){try{let c=new URL(e,window.location.href);return c.searchParams.set("__firefox__.sandboxed","true"),t.call(window,c.toString(),n,r,a)}catch(o){return t.call(window,e,n,r,a)}}}();

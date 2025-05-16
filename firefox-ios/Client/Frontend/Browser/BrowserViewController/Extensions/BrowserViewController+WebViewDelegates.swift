@@ -22,7 +22,7 @@ extension BrowserViewController: WKUIDelegate {
             if let url = navigationAction.request.url {
                 let isSandboxed = URLComponents(url: url, resolvingAgainstBaseURL: false)?
                     .queryItems?
-                    .contains(where: { $0.name == "__sandboxed" && $0.value == "true" }) ?? false
+                    .contains(where: { $0.name == "__firefox__.sandboxed" && $0.value == "true" }) ?? false
                 return isSandboxed
             }
             return false
@@ -71,6 +71,19 @@ extension BrowserViewController: WKUIDelegate {
 
         if navigationUrl == nil || navigationUrlString.isEmpty {
             newTab.url = URL(string: "about:blank")
+        }
+
+        if isSandboxed,
+           let url = navigationAction.request.url,
+           var comp = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            comp.queryItems?.removeAll(where: { item in
+                item.name == "__firefox__.sandboxed"
+            })
+            let finalQueryItems: [URLQueryItem]? = comp.queryItems?.isEmpty == true ? nil : comp.queryItems
+            comp.queryItems = finalQueryItems
+            if let newURL = comp.url {
+                newTab.url = newURL
+            }
         }
 
         let webView = newTab.webView
