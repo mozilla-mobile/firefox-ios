@@ -13,4 +13,13 @@ public struct InstallationUtils {
         else { return nil }
         return attributes[.creationDate] as? Date
     }
+
+    /// Returns true if the app was installed strictly after `start` and strictly before `end`.
+    /// - Parameters:
+    ///   - start: the lower boundary (exclusive)
+    ///   - end: the upper boundary (exclusive)
+    public static func isInstalled(between start: Date, and end: Date) -> Bool {
+        guard let installDate = inferredDateInstalledOn else { return false }
+        return (installDate > start) && (installDate < end)
+    }
 }
