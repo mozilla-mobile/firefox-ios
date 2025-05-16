@@ -2,11 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import SwiftUI
 import Common
+import SwiftUI
+import Storage
 
 struct ZoomLevelPickerView: View {
-    @State private var defaultZoom = "100%"
+    @State private var selectedZoomLevel: ZoomLevel
     private let theme: Theme
 
     var textColor: Color {
@@ -19,19 +20,26 @@ struct ZoomLevelPickerView: View {
 
     init(theme: Theme) {
         self.theme = theme
+        let currentZoom = ZoomLevel(from: ZoomLevelStore.shared.getDefaultZoom())
+        _selectedZoomLevel = State(initialValue: currentZoom)
     }
 
     var body: some View {
         List {
-            Picker(pickerText, selection: $defaultZoom) {
-                ForEach(ZoomLevel.allCases, id: \.displayName) { item in
+            Picker(pickerText, selection: $selectedZoomLevel) {
+                ForEach(ZoomLevel.allCases, id: \.self) { item in
                     Text(item.displayName)
                         .font(.body)
                         .foregroundColor(textColor)
+                        .tag(item)
                 }
             }
             .accentColor(textColor)
             .pickerStyle(.menu)
+            .onChange(of: selectedZoomLevel) { newValue in
+                print("YRD --- New selected zoom level: \(newValue)")
+                ZoomLevelStore.shared.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+            }
         }
     }
 }
