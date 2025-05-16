@@ -289,7 +289,7 @@ class NavigationTest: BaseTestCase {
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].waitAndTap()
+        app.tables["Context Menu"].buttons[StandardImageIdentifiers.Large.download].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         mozWaitForElementToExist(app.tables["DownloadsTable"])

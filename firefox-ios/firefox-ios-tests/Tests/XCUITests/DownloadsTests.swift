@@ -62,7 +62,7 @@ class DownloadsTests: BaseTestCase {
             [
                 app.tables["Context Menu"],
                 app.tables["Context Menu"].staticTexts[testFileNameDownloadPanel],
-                app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download]
+                app.tables["Context Menu"].buttons[StandardImageIdentifiers.Large.download]
             ]
         )
         app.buttons["Cancel"].waitAndTap()
@@ -202,9 +202,9 @@ class DownloadsTests: BaseTestCase {
             app.webViews.links[testFileName].firstMatch.waitAndTap()
 
             mozWaitForElementToExist(
-                app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download]
+                app.tables["Context Menu"].buttons[StandardImageIdentifiers.Large.download]
             )
-            app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].waitAndTap()
+            app.tables["Context Menu"].buttons[StandardImageIdentifiers.Large.download].waitAndTap()
         }
         waitForTabsButton()
     }

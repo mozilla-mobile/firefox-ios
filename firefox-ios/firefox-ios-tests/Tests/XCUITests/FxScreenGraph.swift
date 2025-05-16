@@ -921,18 +921,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         map.addScreenState(TabTrayLongPressMenu) { screenState in
             screenState.dismissOnUse = true
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.plus],
+                app.buttons[StandardImageIdentifiers.Large.plus],
                 forAction: Action.OpenNewTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             )
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.cross],
+                app.buttons[StandardImageIdentifiers.Large.cross],
                 forAction: Action.CloseTabFromTabTrayLongPressMenu,
                 Action.CloseTab,
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.tables.cells.otherElements[StandardImageIdentifiers.Large.tab],
+                app.tables.cells.buttons[StandardImageIdentifiers.Large.tab],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in

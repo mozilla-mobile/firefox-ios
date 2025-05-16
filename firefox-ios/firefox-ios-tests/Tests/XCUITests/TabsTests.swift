@@ -272,13 +272,13 @@ class TabsTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
             waitForElementsToExist(
                 [
-                    app.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                    app.cells.otherElements[StandardImageIdentifiers.Large.cross]
+                    app.cells.buttons[StandardImageIdentifiers.Large.plus],
+                    app.cells.buttons[StandardImageIdentifiers.Large.cross]
                 ]
             )
 
             // Open New Tab
-            app.cells.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
+            app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
             navigator.performAction(Action.CloseURLBarOpen)
 
             waitForTabsButton()
@@ -294,8 +294,8 @@ class TabsTests: BaseTestCase {
 
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-            mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.plus])
-            app.tables.cells.otherElements[StandardImageIdentifiers.Large.cross].waitAndTap()
+            mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+            app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
@@ -308,7 +308,7 @@ class TabsTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-            app.tables.cells.otherElements["Private Browsing Mode"].waitAndTap()
+            app.tables.cells.buttons["Private Browsing Mode"].waitAndTap()
             let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
             mozWaitForElementToExist(tabsButton)
             navigator.nowAt(NewTabScreen)
