@@ -139,46 +139,6 @@ extension PreviewModel {
         instructionsPopup: nil
     )
 
-    static let notificationPermissions = PreviewModel(
-        cardType: .basic,
-        name: "notificationPermissions",
-        order: 30,
-        title: "Enable Notifications",
-        body: "Stay up to date with alerts.",
-        link: nil,
-        buttons: .init(
-            primary: .init(title: "Turn On", action: OnboardingActions.requestNotifications),
-            secondary: .init(title: "Skip", action: OnboardingActions.forwardOneCard)
-        ),
-        multipleChoiceButtons: [],
-        onboardingType: .freshInstall,
-        a11yIdRoot: "onboarding_notificationPermissions",
-        imageID: "notifications",
-        instructionsPopup: nil
-    )
-
-    static let customizationTheme = PreviewModel(
-        cardType: .multipleChoice,
-        name: "customizationTheme",
-        order: 40,
-        title: "Pick a Theme",
-        body: "Choose light, dark, or system default.",
-        link: nil,
-        buttons: .init(
-            primary: .init(title: "Continue", action: OnboardingActions.forwardOneCard),
-            secondary: nil
-        ),
-        multipleChoiceButtons: [
-            .init(title: "System Default", action: OnboardingMultipleChoiceAction.themeSystemDefault, imageID: "themeSystem"),
-            .init(title: "Light", action: OnboardingMultipleChoiceAction.themeLight, imageID: "themeLight"),
-            .init(title: "Dark", action: OnboardingMultipleChoiceAction.themeDark, imageID: "themeDark")
-        ],
-        onboardingType: .freshInstall,
-        a11yIdRoot: "onboarding_customizationTheme",
-        imageID: "themeing",
-        instructionsPopup: nil
-    )
-
     static let customizationToolbar = PreviewModel(
         cardType: .multipleChoice,
         name: "customizationToolbar",
@@ -199,59 +159,24 @@ extension PreviewModel {
         imageID: "toolbar",
         instructionsPopup: nil
     )
+}
 
-    static let updateWelcome = PreviewModel(
-        cardType: .basic,
-        name: "updateWelcome",
-        order: 10,
-        title: "Welcome Back",
-        body: "Here's what's new in this update.",
-        link: nil,
-        buttons: .init(
-            primary: .init(title: "Next", action: OnboardingActions.forwardOneCard),
-            secondary: nil
-        ),
-        multipleChoiceButtons: [],
-        onboardingType: .upgrade,
-        a11yIdRoot: "onboarding_updateWelcome",
-        imageID: "welcomeGlobe",
-        instructionsPopup: nil
-    )
-
-    static let updateSignToSync = PreviewModel(
-        cardType: .basic,
-        name: "updateSignToSync",
-        order: 20,
-        title: "Reconnect Sync",
-        body: "Sign in again to keep syncing.",
-        link: nil,
-        buttons: .init(
-            primary: .init(title: "Sign In", action: OnboardingActions.syncSignIn),
-            secondary: .init(title: "Later", action: OnboardingActions.forwardOneCard)
-        ),
-        multipleChoiceButtons: [],
-        onboardingType: .upgrade,
-        a11yIdRoot: "onboarding_updateSignToSync",
-        imageID: "syncDevices",
-        instructionsPopup: nil
-    )
+extension PreviewModel {
+    /// All of the built-in preview cards
     static let all: [PreviewModel] = [
         .welcome,
-        .signToSync,
-        .notificationPermissions,
-        .customizationTheme,
         .customizationToolbar,
-        .updateWelcome,
-        .updateSignToSync
+        .signToSync
     ]
 }
+
 
 #Preview {
     ZStack {
         MilkyWayMetalView()
             .edgesIgnoringSafeArea(.all)
         OnboardingBasicCardView(
-            viewModel: PreviewModel.updateSignToSync,
+            viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             onPrimary: { },
