@@ -37,13 +37,8 @@ final class AddressToolbarContainerModel: Equatable {
 
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url)
-        let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
-        let uxConfiguration: AddressToolbarUXConfiguration = if isVersionLayout {
-            .experiment(backgroundAlpha: backgroundAlpha)
-        } else {
-            .default(backgroundAlpha: backgroundAlpha)
-        }
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha)
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {

@@ -43,7 +43,7 @@ features:
         description: >
           The type of layout of the toolbars.
         type: Option<ToolbarLayoutType>
-        default: baseline
+        default: version1
         
     defaults:
       - channel: beta
@@ -64,15 +64,13 @@ features:
           navigation_hint: true
           toolbar_update_hint: true
           swiping_tabs: true
-          translucency: false
-          layout: baseline
+          translucency: true
+          layout: version1
 
 enums:
   ToolbarLayoutType:
     description: The type of toolbar layout.
     variants:
-      baseline:
-        description: The default layout of the toolbars.
       version1:
         description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.
       version2:

@@ -59,7 +59,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             toolbarPosition: .top,
-            toolbarLayout: .baseline,
+            toolbarLayout: .version1,
             isPrivateMode: false,
             addressToolbar: AddressBarState(windowUUID: windowUUID),
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),

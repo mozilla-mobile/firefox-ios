@@ -189,8 +189,8 @@ struct NavigationBarState: StateType, Equatable {
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
 
         actions = [
-            backAction(enabled: canGoBack, layout: layout),
-            forwardAction(enabled: canGoForward, layout: layout)
+            backAction(enabled: canGoBack),
+            forwardAction(enabled: canGoForward)
         ]
 
         switch layout {
@@ -230,21 +230,10 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Helper
-    private static func backAction(
-        enabled: Bool,
-        layout: ToolbarLayoutStyle?)
-    -> ToolbarActionConfiguration {
-        let iconName: String
-        switch layout {
-        case .version1, .version2:
-            iconName = StandardImageIdentifiers.Large.chevronLeft
-        default:
-            iconName = StandardImageIdentifiers.Large.back
-        }
-
+    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .back,
-            iconName: iconName,
+            iconName: StandardImageIdentifiers.Large.chevronLeft,
             isFlippedForRTL: true,
             isEnabled: enabled,
             contextualHintType: ContextualHintType.navigation.rawValue,
@@ -252,21 +241,10 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private static func forwardAction(
-        enabled: Bool,
-        layout: ToolbarLayoutStyle?)
-    -> ToolbarActionConfiguration {
-        let iconName: String
-        switch layout {
-        case .version1, .version2:
-            iconName = StandardImageIdentifiers.Large.chevronRight
-        default:
-            iconName = StandardImageIdentifiers.Large.forward
-        }
-
+    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .forward,
-            iconName: iconName,
+            iconName: StandardImageIdentifiers.Large.chevronRight,
             isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,

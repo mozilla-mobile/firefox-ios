@@ -44,8 +44,8 @@ class PullRefreshView: UIView,
     private var isIpad: Bool {
         return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
-    private var toolbarLayoutStyle: ToolbarLayoutStyle {
-        return .style(from: FxNimbus.shared.features.toolbarRefactorFeature.value().layout)
+    private var isToolbarRefactorEnabled: Bool {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
     }
 
     init(parentScrollView: UIScrollView?,
@@ -231,8 +231,7 @@ class PullRefreshView: UIView,
 
     func applyTheme(theme: any Theme) {
         currentTheme = theme
-        let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
-        backgroundColor = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
+        backgroundColor = isToolbarRefactorEnabled ? theme.colors.layer3 : theme.colors.layer1
         progressView.tintColor = theme.colors.iconPrimary
     }
 
