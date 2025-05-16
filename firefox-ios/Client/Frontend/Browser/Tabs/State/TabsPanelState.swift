@@ -19,6 +19,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var isInactiveTabsExpanded: Bool
     var windowUUID: WindowUUID
     var scrollState: ScrollState?
+    var isAnimating: Bool
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
 
@@ -65,6 +66,7 @@ struct TabsPanelState: ScreenState, Equatable {
          isInactiveTabsExpanded: Bool,
          toastType: ToastType? = nil,
          scrollState: ScrollState? = nil,
+         isAnimating: Bool = false,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil) {
         self.isPrivateMode = isPrivateMode
@@ -75,6 +77,7 @@ struct TabsPanelState: ScreenState, Equatable {
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
         self.urlRequest = urlRequest
+        self.isAnimating = isAnimating
     }
 
     static let reducer: Reducer<Self> = { state, action in
