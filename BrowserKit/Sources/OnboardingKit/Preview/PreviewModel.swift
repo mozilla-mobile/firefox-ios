@@ -250,14 +250,14 @@ extension PreviewModel {
     ZStack {
         MilkyWayMetalView()
             .edgesIgnoringSafeArea(.all)
-
         OnboardingBasicCardView(
             viewModel: PreviewModel.updateSignToSync,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             onPrimary: { },
             onSecondary: { },
-            onLink: { })
+            onLink: { }
+        )
     }
 }
 
