@@ -278,7 +278,10 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     // Add insets to favicons with transparent backgrounds
     private func configureFaviconWithTransparency() {
-        guard let image = imageView.image, image.hasAlpha else { return }
+        let transparencyThreshold: CGFloat = 10
+        guard let image = imageView.image,
+              let percentTransparent = image.percentTransparent,
+              percentTransparent > transparencyThreshold else { return }
 
         self.imageViewConstraints.forEach { constraint in
             if constraint.firstAttribute == .trailing || constraint.firstAttribute == .bottom {
