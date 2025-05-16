@@ -92,6 +92,8 @@ class OnboardingTests: BaseTestCase {
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
@@ -99,6 +101,8 @@ class OnboardingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
     func testFirstRunTourDarkMode() {
         app.buttons["CloseButton"].waitAndTap()
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
         switchThemeToDarkOrLight(theme: "Dark")
         app.terminate()
         app.launch()
@@ -163,6 +167,8 @@ class OnboardingTests: BaseTestCase {
         // Finish onboarding
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
         mozWaitForElementToExist(topSites)
     }
 
@@ -194,6 +200,8 @@ class OnboardingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
@@ -201,6 +209,8 @@ class OnboardingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306815
     func testWhatsNewPage() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.OpenWhatsNewPage)
         waitUntilPageLoad()
@@ -268,6 +278,8 @@ class OnboardingTests: BaseTestCase {
         }
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
 
         // Check if the toolbar exists
         if toolbar.exists {
@@ -312,6 +324,8 @@ class OnboardingTests: BaseTestCase {
         app.buttons["Save and Start Browsing"].waitAndTap()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
 
         // Check if the toolbar exists
         if toolbar.exists {
