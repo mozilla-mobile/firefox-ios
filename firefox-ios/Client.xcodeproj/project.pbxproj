@@ -13425,19 +13425,15 @@
 		BA4BB9962D7F371F006BD137 /* AppearanceSettings */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-=======
 				214099602DCBF4DB004881E1 /* Zoom */,
 				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
 				BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */,
 				BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */,
->>>>>>> 6b1a08366 (Add FXIOS-11999 [Address Bar Menu] P4. Implement new address bar UI (#26118))
 				BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */,
 				BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */,
 				BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */,
 				BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */,
 				BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */,
-				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
 			);
 			path = AppearanceSettings;
 			sourceTree = "<group>";
