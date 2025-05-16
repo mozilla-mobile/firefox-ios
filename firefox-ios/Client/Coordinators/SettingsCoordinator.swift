@@ -183,7 +183,9 @@ class SettingsCoordinator: BaseCoordinator,
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
+            return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+               ? UIHostingController(rootView: AddressBarSettingsView(windowUUID: windowUUID, viewModel: viewModel))
+               : SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
 
         case .topSites:
             let viewController = TopSitesSettingsViewController(windowUUID: windowUUID)
@@ -377,8 +379,17 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
-        router.push(viewController)
+        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly) {
+            let viewController = UIHostingController(
+                rootView: AddressBarSettingsView(
+                windowUUID: windowUUID,
+                viewModel: viewModel))
+            viewController.title = .Settings.AddressBar.AddressBarMenuTitle
+            router.push(viewController)
+        } else {
+            let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
+            router.push(viewController)
+        }
     }
 
     func pressedTheme() {
