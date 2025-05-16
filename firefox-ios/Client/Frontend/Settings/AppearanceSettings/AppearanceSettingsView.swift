@@ -60,7 +60,9 @@ struct AppearanceSettingsView: View {
                                    onChange: setWebsiteDarkMode)
             }
             if shouldShowPageZoom {
-                GenericSectionView(theme: currentTheme, title: .Settings.Appearance.PageZoom.SectionHeader) {
+                GenericSectionView(theme: currentTheme,
+                                   title: .Settings.Appearance.PageZoom.SectionHeader,
+                                   identifier: .Settings.Appearance.PageZoom.SectionHeader) {
                     GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
                                         image: .chevronRightLarge,
                                         theme: currentTheme) {
