@@ -212,7 +212,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Long tap on Wikipedia top site
         waitForExistence(app.collectionViews.links.staticTexts["Wikipedia"])
         app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
-        app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].waitAndTap()
+        app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
         mozWaitForElementToExist(TopSiteCellgroup)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
@@ -323,10 +323,10 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         waitForElementsToExist(
             [
                 contextMenuTable,
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.pin],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.cross]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.pin],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.cross]
             ]
         )
     }

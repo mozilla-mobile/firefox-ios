@@ -120,7 +120,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(pinnedItem)
         pdfTopSite.press(forDuration: 1)
-        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         mozWaitForElementToNotExist(pinnedItem)
     }
 

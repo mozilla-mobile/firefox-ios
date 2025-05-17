@@ -284,8 +284,8 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         waitForElementsToExist(
             [
                 app.tables["Context Menu"],
-                app.tables.otherElements[StandardImageIdentifiers.Large.plus],
-                app.tables.otherElements[StandardImageIdentifiers.Large.privateMode]
+                app.tables.buttons[StandardImageIdentifiers.Large.plus],
+                app.tables.buttons[StandardImageIdentifiers.Large.privateMode]
             ]
         )
     }
@@ -312,7 +312,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         }
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
+        app.tables.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
 
         // The page is opened on the new tab
         navigator.nowAt(NewTabScreen)
@@ -347,7 +347,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         )
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
+        app.tables.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
 
         // The page is opened only on the new private tab
         navigator.nowAt(NewTabScreen)

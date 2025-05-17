@@ -104,10 +104,10 @@ class PocketTests: BaseTestCase {
             [
                 contextMenuTable.otherElements.staticTexts.firstMatch,
                 contextMenuTable.otherElements.staticTexts.elementContainingText(".co"),
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmark],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
     }

@@ -31,7 +31,7 @@ class PhotonActionSheetTests: BaseTestCase {
 
         // Remove pin
         cell.press(forDuration: 2)
-        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         // Check that it has been unpinned
         if #available(iOS 17, *) {
             mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
