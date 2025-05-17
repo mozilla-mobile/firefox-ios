@@ -104,7 +104,7 @@ class MockTabManager: TabManager {
 
     func undoCloseTab() {}
 
-    func clearAllTabsHistory() {}
+    func clearAllTabsHistory() async {}
 
     func commitChanges() {
         commitChangesCalled += 1
@@ -178,5 +178,5 @@ class MockTabManager: TabManager {
         notifyCurrentTabDidFinishLoadingCalled += 1
     }
 
-    func tabDidSetScreenshot(_ tab: Client.Tab) {}
+    func tabDidSetScreenshot(_ tab: Client.Tab) async {}
 }
