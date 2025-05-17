@@ -13,6 +13,7 @@ final class HomepageViewController: UIViewController,
                                     UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
+                                    Notifiable,
                                     Themeable,
                                     StoreSubscriber {
     // MARK: - Typealiases
@@ -144,6 +145,7 @@ final class HomepageViewController: UIViewController,
             )
         )
 
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
@@ -304,6 +306,16 @@ final class HomepageViewController: UIViewController,
             screen: .homepage
         )
         store.dispatch(action)
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            dynamicTypeChanged()
+        default:
+            break
+        }
     }
 
     // MARK: - Theming
@@ -628,6 +640,13 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         default:
             return nil
+        }
+    }
+
+    private func dynamicTypeChanged() {
+        collectionView?.visibleCells.forEach { cell in
+            guard let customCell = cell as? TopSiteCell else { return }
+            customCell.updateDynamicConstraints()
         }
     }
 

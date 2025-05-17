@@ -136,16 +136,15 @@ class BrowserViewController: UIViewController,
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
+    lazy var screenshotHelper = ScreenshotHelper(controller: self)
 
     // MARK: Lazy loading UI elements
-
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
-    private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -231,6 +230,11 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
+    private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
+        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
+        return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
+    }()
+
     // MARK: Telemetry Variables
 
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
@@ -274,6 +278,10 @@ class BrowserViewController: UIViewController,
 
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
+    }
+
+    var isToolbarUpdateHintEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarUpdateHint, checking: .buildOnly)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -692,7 +700,9 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
 
-        if let tab = tabManager.selectedTab, let screenshotHelper {
+        // No need to take a screenshot if a view is presented over the current tab
+        // because a screenshot will already have been taken when we navigate away
+        if let tab = tabManager.selectedTab, presentedViewController == nil {
             screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
@@ -1213,7 +1223,7 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?) {
         if let tab {
-            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
     }
 
@@ -1358,6 +1368,16 @@ class BrowserViewController: UIViewController,
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
             }
+        }
+
+        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
+        // as this also could change if the navigation bar is shown or not
+        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
+                                previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+
+        if toolbarUpdateContextHintVC.isPresenting,
+           UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
+            toolbarUpdateContextHintVC.dismiss(animated: true)
         }
     }
 
@@ -2121,8 +2141,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateToolbarAnimationStateIfNeeded() {
-        guard isSwipingTabsEnabled,
-              isToolbarRefactorEnabled,
+        guard isToolbarRefactorEnabled,
         store.state.screenState(
             ToolbarState.self,
             for: .toolbar,
@@ -2382,6 +2401,8 @@ class BrowserViewController: UIViewController,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
             store.dispatch(middlewareAction)
 
+            configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
+                                                 navigationToolbarView: navigationToolbarContainer)
             return
         }
 
@@ -2529,6 +2550,13 @@ class BrowserViewController: UIViewController,
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
+            store.dispatch(
+                ToolbarAction(
+                    shouldAnimate: false,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.animationStateChanged
+                )
+            )
         case .share:
             // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
@@ -3142,7 +3170,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
+                    self.screenshotHelper.takeScreenshot(tab, windowUUID: self.windowUUID)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }

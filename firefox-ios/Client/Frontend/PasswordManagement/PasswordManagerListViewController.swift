@@ -132,7 +132,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadLogins()
+        loadLogins(searchController.searchBar.text)
     }
 
     func applyTheme() {
