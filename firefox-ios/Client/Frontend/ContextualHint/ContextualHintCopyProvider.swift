@@ -54,6 +54,10 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         switch hint {
         case .mainMenu:
             return CFRStrings.MainMenu.NewMenu.Title
+
+        case .toolbarUpdate:
+            return CFRStrings.Toolbar.ToolbarUpdateTitle
+
         default: return ""
         }
     }
@@ -64,6 +68,7 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         switch hint {
         case .dataClearance:
             descriptionCopy = CFRStrings.FeltDeletion.Body
+
         case .inactiveTabs:
             descriptionCopy = CFRStrings.TabsTray.InactiveTabs.Body
 
@@ -78,6 +83,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .navigation:
             descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
+
+        case .toolbarUpdate:
+            descriptionCopy = CFRStrings.Toolbar.ToolbarUpdateBody
         }
 
         return descriptionCopy
@@ -97,6 +105,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
                 .jumpBackInSyncedTab:
             actionCopy = ""
         case .navigation:
+            actionCopy = ""
+        case .toolbarUpdate:
             actionCopy = ""
         }
 
