@@ -14,6 +14,11 @@ enum TabsDeletionPeriod: String {
     case oneDay, oneWeek, oneMonth
 }
 
+struct TabRemovalGroup {
+    let index: Int
+    let total: Int
+}
+
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
@@ -65,7 +70,7 @@ protocol TabManager: AnyObject {
 
     /// Async Remove tab option using tabUUID.
     /// - Parameter tabUUID: UUID from the tab
-    func removeTab(_ tabUUID: TabUUID) async
+    func removeTab(_ tabUUID: TabUUID, inGroup: TabRemovalGroup?) async
 
     /// Async Remove all tabs indicating if is on private mode or not
     /// - Parameter isPrivateMode: Is private mode enabled or not

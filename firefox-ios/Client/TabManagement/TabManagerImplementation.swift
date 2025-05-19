@@ -209,7 +209,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Remove Tab
     @MainActor
-    func removeTab(_ tabUUID: TabUUID) async {
+    func removeTab(_ tabUUID: TabUUID, inGroup group: TabRemovalGroup? = nil) async {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -220,8 +220,16 @@ class TabManagerImplementation: NSObject,
             restorePosition: index,
             isSelected: selectedTab?.tabUUID == tab.tabUUID)
 
-        self.removeTab(tab, flushToDisk: true)
-        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+        let isInGroup = group != nil
+        let lastTabInGroup = isInGroup && (group!.index == group!.total - 1)
+
+        // Flush to disk and update selected tab if we're either removing a single tab, or the last tab in a group
+        let shouldUpdate = !isInGroup || lastTabInGroup
+        self.removeTab(tab, flushToDisk: shouldUpdate)
+        if shouldUpdate {
+            // For remove-all-tabs, pass the selectedIndex to ensure we select 'next best viable tab'
+            self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: isInGroup ? selectedIndex : index)
+        }
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
@@ -268,8 +276,9 @@ class TabManagerImplementation: NSObject,
         }
         backupCloseTabs = tabs
 
-        for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+        let tabCount = currentModeTabs.count
+        for (idx, tab) in currentModeTabs.enumerated() {
+            await self.removeTab(tab.tabUUID, inGroup: TabRemovalGroup(index: idx, total: tabCount))
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
