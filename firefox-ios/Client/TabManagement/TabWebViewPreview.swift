@@ -97,7 +97,7 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         switch searchBarPosition {
         case .bottom:
             bottomStackView.addArrangedSubview(skeletonAddressBar)
-            webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
+            webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor)
             addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(
                 equalTo: skeletonAddressBar.topAnchor, constant: -UX.edgePadding
             )

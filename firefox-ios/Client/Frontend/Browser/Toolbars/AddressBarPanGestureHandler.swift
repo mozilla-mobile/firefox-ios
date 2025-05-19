@@ -8,15 +8,14 @@ import Common
 final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
-        static let offset: CGFloat = 24
-        static let swipingDuration: TimeInterval = 0.25
+        static let offset: CGFloat = 48
+        static let swipingDuration: TimeInterval = 0.3
         static let swipingVelocity: CGFloat = 250
     }
 
     // MARK: - UI Properties
     private let contentContainer: ContentContainer
     private let webPagePreview: TabWebViewPreview
-    private var originalPosition = CGPoint()
     private var panGestureRecognizer: UIPanGestureRecognizer?
     private var addressBarContainer: BaseAlphaStackView
     private var blurView: UIVisualEffectView?
@@ -97,80 +96,62 @@ final class AddressBarPanGestureHandler: NSObject {
         guard let selectedTab = tabManager.selectedTab else { return }
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
+        let isSwipingLeft = translation.x < 0
+        let nextTab = tabs[safe: isSwipingLeft ? index + 1 : index - 1]
 
         switch gesture.state {
         case .began:
-            originalPosition = contentContainer.frame.origin
-            // Set the initial position of webPagePreview with the offset
-            webPagePreview.frame.origin.x = calculateX(width: originalPosition.x)
-            // Set to true to deactivate Auto Layout because we manipulate the rect of
-            // the view directly and want to avoid conflicts such as flickering.
-            webPagePreview.translatesAutoresizingMaskIntoConstraints = true
+            let translationX = calculateX(translation: translation, width: contentContainer.frame.width)
+            webPagePreview.transform = CGAffineTransform(translationX: translationX, y: 0)
+            screenshotHelper?.takeScreenshot(selectedTab, windowUUID: windowUUID)
         case .changed:
-            updateWebPagePreview(translation: translation, index: index, tabs: tabs)
+            handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended:
             let velocity = gesture.velocity(in: contentContainer)
-            animateTabTransition(translation: translation, velocity: velocity, index: index, tabs: tabs)
+            handleGestureEndedState(translation: translation, velocity: velocity, nextTab: nextTab)
         default: break
         }
     }
 
-    private func updateWebPagePreview(translation: CGPoint, index: Int, tabs: [Tab]) {
+    private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {
         webPagePreview.isHidden = false
-        // Update the position of the contentContainer and addressBarContainer based on the translation.
-        contentContainer.frame.origin.x = originalPosition.x + translation.x
-        addressBarContainer.frame.origin.x = originalPosition.x + translation.x
-        blurView?.frame.origin.x = originalPosition.x + translation.x
 
-        // Update the position of the webPagePreview based on the swipe direction and translation.
-        webPagePreview.frame.origin.x = calculateX(translation: translation, width: contentContainer.frame.width)
+        let currentTabTransform = CGAffineTransform(translationX: translation.x, y: 0)
+        let previewTransform = CGAffineTransform(translationX: calculateX(translation: translation,
+                                                                          width: contentContainer.frame.width), y: 0)
+        applyTransformToCurrentTab(transform: currentTabTransform)
+        webPagePreview.transform = previewTransform
 
-        let isPanningLeft = translation.x < 0
-        let newTabIndex = isPanningLeft ? index + 1 : index - 1
-
-        // Check if the new tab index is within bounds.
-        if newTabIndex >= 0 && newTabIndex < tabs.count {
-            screenshotHelper?.takeScreenshot(tabs[index], windowUUID: windowUUID)
-            webPagePreview.setScreenshot(tabs[safe: newTabIndex]?.screenshot)
+        if let nextTab {
+            webPagePreview.setScreenshot(nextTab.screenshot)
         } else {
             webPagePreview.isHidden = true
         }
     }
 
-    private func animateTabTransition(translation: CGPoint, velocity: CGPoint, index: Int, tabs: [Tab]) {
-        let isPanningLeft = translation.x < 0
-        let newTabIndex = isPanningLeft ? index + 1 : index - 1
-        let isValidIndex = newTabIndex >= 0 && newTabIndex < tabs.count
-
+    private func handleGestureEndedState(translation: CGPoint, velocity: CGPoint, nextTab: Tab?) {
         // Determine if the transition should be completed based on the translation and velocity.
         // If the user swiped more than half of the screen or had a velocity higher that the constant,
         // then we can complete the transition.
-        let shouldCompleteTransition = abs(translation.x)
-        > contentContainer.frame.width / 2 || abs(velocity.x) > UX.swipingVelocity
+        let shouldCompleteTransition = (abs(translation.x) > contentContainer.frame.width / 2
+                                       || abs(velocity.x) > UX.swipingVelocity)
+                                        && nextTab != nil
+
+        let contentWidth = contentContainer.frame.width
+        let isPanningLeft = translation.x < 0
+        let targetX = isPanningLeft ? -contentWidth : contentWidth
+
+        let currentTabTransform = CGAffineTransform(translationX: targetX, y: 0)
+        let previewTransform = CGAffineTransform(translationX: -targetX, y: 0)
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
-            let contentWidth = contentContainer.frame.width
-            let targetX = isPanningLeft ? -contentWidth : contentWidth
-
-            if shouldCompleteTransition && isValidIndex {
-                // Move the contentContainer and addressBarContainer off-screen based on the panning direction.
-                contentContainer.frame.origin.x = targetX
-                addressBarContainer.frame.origin.x = targetX
-                blurView?.frame.origin.x = targetX
-                webPagePreview.frame.origin.x = 0
-            } else {
-                // Reset the positions if the transition should not be completed
-                webPagePreview.frame.origin.x = isPanningLeft ? contentWidth + UX.offset : -contentWidth - UX.offset
-                contentContainer.frame.origin.x = 0
-                addressBarContainer.frame.origin.x = 0
-                blurView?.frame.origin.x = 0
-            }
+            applyTransformToCurrentTab(transform: shouldCompleteTransition ? currentTabTransform : .identity)
+            webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
         }) { [self] _ in
             // Hide the webPagePreview after the animation.
             webPagePreview.isHidden = true
-            // Reactivate Auto Layout after the animation.
-            webPagePreview.translatesAutoresizingMaskIntoConstraints = false
-            if shouldCompleteTransition && isValidIndex {
+
+            if shouldCompleteTransition, let nextTab {
                 store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
@@ -179,16 +160,21 @@ final class AddressBarPanGestureHandler: NSObject {
                     )
                 )
                 // Reset the positions and select the new tab if the transition was completed.
-                contentContainer.frame.origin.x = 0
-                addressBarContainer.frame.origin.x = 0
-                blurView?.frame.origin.x = 0
-                tabManager.selectTab(tabs[newTabIndex])
+                applyTransformToCurrentTab(transform: .identity)
+                tabManager.selectTab(nextTab)
             }
         }
     }
 
+    /// Applies the provided transform to the all the views representing the current tab.
+    private func applyTransformToCurrentTab(transform: CGAffineTransform) {
+        contentContainer.transform = transform
+        addressBarContainer.transform = transform
+        blurView?.transform = transform
+    }
+
     /// Helper function to calculate the x-position based on swipe direction.
-    private func calculateX(translation: CGPoint = .init(), width: CGFloat) -> CGFloat {
+    private func calculateX(translation: CGPoint = .zero, width: CGFloat) -> CGFloat {
         let isSwipingLeft = translation.x < 0
         return isSwipingLeft ? width + translation.x + UX.offset : -width + translation.x - UX.offset
     }
