@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Закрыць";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Здаецца, злучэнне з Інтэрнэтам адключана.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Паспрабаваць зноў";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Пачаць";
 
@@ -234,6 +240,9 @@
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Згадзіцца і працягнуць";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Працягнуць";
 
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "Гатова";
