@@ -1005,7 +1005,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showBackForwardList() {
-        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
+        guard let backForwardList = tabManager.selectedTab?.backForwardList else { return }
         let backForwardListVC = BackForwardListViewController(profile: profile,
                                                               windowUUID: windowUUID,
                                                               backForwardList: backForwardList)

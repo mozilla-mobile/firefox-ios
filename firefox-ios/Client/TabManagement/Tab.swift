@@ -9,6 +9,7 @@ import Shared
 import SiteImageView
 import WebKit
 import WebEngine
+import TabDataStore
 
 private var debugTabCount = 0
 
@@ -185,14 +186,20 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return webView?.estimatedProgress ?? 0
     }
 
-    private var backList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.backList
+    var backForwardList: BackForwardList? {
+        if let backForwardList = webView?.backForwardList {
+            return TabBackForwardList(
+                backForwardList: backForwardList,
+                temporaryDocumentSession: temporaryDocumentsSession
+            )
+        }
+        return nil
     }
 
     var historyList: [URL] {
-        func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
+        func listToUrl(_ item: EngineSessionBackForwardListItem) -> URL { return item.url }
 
-        var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
+        var historyUrls = self.backForwardList?.backList.map(listToUrl) ?? [URL]()
         if let url = url {
             historyUrls.append(url)
         }
@@ -293,7 +300,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var pendingScreenshot = false
     var url: URL? {
         didSet {
-            if isPDFRefactorEnabled, let _url = url, let sourceURL = downloadedTemporaryDocs[_url] {
+            if isPDFRefactorEnabled, let _url = url, let sourceURL = temporaryDocumentsSession[_url] {
                 url = sourceURL
             }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
@@ -425,8 +432,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
-    /// The dictionary containing as key the file location for a document and its corresponding source online URL.
-    private var downloadedTemporaryDocs = [URL: URL]()
+
+    private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
 
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
@@ -947,7 +954,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     private func deleteDownloadedDocuments() {
-        let docsURL = downloadedTemporaryDocs
+        let docsURL = temporaryDocumentsSession
         guard !docsURL.isEmpty else { return }
         DispatchQueue.global(qos: .background).async {
             docsURL.forEach { url in
@@ -956,8 +963,24 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    func canLoadDocumentRequest(_ request: URLRequest) -> Bool {
+    func shouldDownloadDocument(_ request: URLRequest) -> Bool {
+        if let url = request.url, url.isFileURL, temporaryDocumentsSession[url] != nil {
+            let fileExists = FileManager.default.fileExists(atPath: url.path)
+            // Add a temporary document when the request is pointing to a document to was previously viewed.
+            // This is needed since temporary document is removed when navigating to any website and thus it needs
+            // to be restored, otherwise the share sheet will try to share a link and not the actual doc.
+            addTemporaryDocumentIfNeeded(request)
+            return !fileExists
+        }
         return temporaryDocument?.canDownload(request: request) ?? true
+    }
+
+    private func addTemporaryDocumentIfNeeded(_ request: URLRequest) {
+        guard temporaryDocument == nil else { return }
+        let mimeType = MIMEType.mimeTypeFromFileExtension(request.url?.pathExtension ?? "")
+        temporaryDocument = DefaultTemporaryDocument(filename: request.url?.lastPathComponent,
+                                                     request: request,
+                                                     mimeType: mimeType)
     }
 
     func enqueueDocument(_ document: TemporaryDocument) {
@@ -965,11 +988,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
-            self?.webView?.load(URLRequest(url: url))
+            self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
 
             // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
             guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
-            self?.downloadedTemporaryDocs[url] = sourceURL
+            self?.temporaryDocumentsSession[url] = sourceURL
             self?.documentLogger.registerDownloadFinish(url: sourceURL)
         }
     }
@@ -988,6 +1011,14 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func isDownloadingDocument() -> Bool {
         return temporaryDocument?.isDownloading ?? false
+    }
+
+    func getTemporaryDocumentsSession() -> TemporaryDocumentSession {
+        return temporaryDocumentsSession
+    }
+
+    func restoreTemporaryDocumentSession(_ session: TemporaryDocumentSession) {
+        temporaryDocumentsSession = session
     }
 }
 

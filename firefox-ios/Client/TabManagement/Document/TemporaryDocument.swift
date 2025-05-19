@@ -269,3 +269,19 @@ class DefaultTemporaryDocument: NSObject,
         }
     }
 }
+
+import WebEngine
+
+class TemporaryDocumentBackForwardListItem: EngineSessionBackForwardListItem {
+    let url: URL
+    let title: String?
+    let localItem: WKBackForwardListItem
+
+    init(url: URL,
+         title: String?,
+         localItem: WKBackForwardListItem) {
+        self.url = url
+        self.title = title
+        self.localItem = localItem
+    }
+}

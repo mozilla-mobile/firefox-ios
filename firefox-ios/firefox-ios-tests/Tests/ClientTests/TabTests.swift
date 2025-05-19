@@ -268,7 +268,7 @@ class TabTests: XCTestCase {
 
         subject.enqueueDocument(document)
 
-        XCTAssertFalse(subject.canLoadDocumentRequest(URLRequest(url: url)))
+        XCTAssertFalse(subject.shouldDownloadDocument(URLRequest(url: url)))
         XCTAssertNotNil(subject.temporaryDocument)
     }
 
