@@ -101,8 +101,7 @@ final class AddressBarPanGestureHandler: NSObject {
 
         switch gesture.state {
         case .began:
-            let translationX = calculateX(translation: translation, width: contentContainer.frame.width)
-            webPagePreview.transform = CGAffineTransform(translationX: translationX, y: 0)
+            applyPreviewTransform(translation: translation)
             screenshotHelper?.takeScreenshot(selectedTab, windowUUID: windowUUID)
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
@@ -117,10 +116,8 @@ final class AddressBarPanGestureHandler: NSObject {
         webPagePreview.isHidden = false
 
         let currentTabTransform = CGAffineTransform(translationX: translation.x, y: 0)
-        let previewTransform = CGAffineTransform(translationX: calculateX(translation: translation,
-                                                                          width: contentContainer.frame.width), y: 0)
-        applyTransformToCurrentTab(transform: currentTabTransform)
-        webPagePreview.transform = previewTransform
+        applyCurrentTabTransform(currentTabTransform)
+        applyPreviewTransform(translation: translation)
 
         if let nextTab {
             webPagePreview.setScreenshot(nextTab.screenshot)
@@ -145,10 +142,9 @@ final class AddressBarPanGestureHandler: NSObject {
         let previewTransform = CGAffineTransform(translationX: -targetX, y: 0)
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
-            applyTransformToCurrentTab(transform: shouldCompleteTransition ? currentTabTransform : .identity)
+            applyCurrentTabTransform(shouldCompleteTransition ? currentTabTransform : .identity)
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
         }) { [self] _ in
-            // Hide the webPagePreview after the animation.
             webPagePreview.isHidden = true
 
             if shouldCompleteTransition, let nextTab {
@@ -160,22 +156,24 @@ final class AddressBarPanGestureHandler: NSObject {
                     )
                 )
                 // Reset the positions and select the new tab if the transition was completed.
-                applyTransformToCurrentTab(transform: .identity)
+                applyCurrentTabTransform(.identity)
                 tabManager.selectTab(nextTab)
             }
         }
     }
 
     /// Applies the provided transform to the all the views representing the current tab.
-    private func applyTransformToCurrentTab(transform: CGAffineTransform) {
+    private func applyCurrentTabTransform(_ transform: CGAffineTransform) {
         contentContainer.transform = transform
         addressBarContainer.transform = transform
         blurView?.transform = transform
     }
 
-    /// Helper function to calculate the x-position based on swipe direction.
-    private func calculateX(translation: CGPoint = .zero, width: CGFloat) -> CGFloat {
+    /// Applies a translation transform to the `webPagePreview`
+    private func applyPreviewTransform(translation: CGPoint) {
         let isSwipingLeft = translation.x < 0
-        return isSwipingLeft ? width + translation.x + UX.offset : -width + translation.x - UX.offset
+        let width = contentContainer.frame.width
+        let xTranslation = isSwipingLeft ? width + translation.x + UX.offset : -width + translation.x - UX.offset
+        webPagePreview.transform = CGAffineTransform(translationX: xTranslation, y: 0)
     }
 }
