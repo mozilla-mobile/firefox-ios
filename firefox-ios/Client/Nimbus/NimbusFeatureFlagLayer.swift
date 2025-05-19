@@ -59,6 +59,9 @@ final class NimbusFeatureFlagLayer {
         case .menuRefactorHint:
             return checkMenuRefactorHint(from: nimbus)
 
+        case .menuRedesign:
+            return checkMenuRedesign(from: nimbus)
+
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
@@ -355,6 +358,11 @@ final class NimbusFeatureFlagLayer {
     private func checkMenuRefactorHint(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.menuRefactorFeature.value()
         return config.menuHint
+    }
+
+    private func checkMenuRedesign(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.menuRefactorFeature.value()
+        return config.menuRedesign
     }
 
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
