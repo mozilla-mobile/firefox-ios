@@ -133,15 +133,14 @@ class BrowserViewController: UIViewController,
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
+    lazy var screenshotHelper = ScreenshotHelper(controller: self)
 
     // MARK: Lazy loading UI elements
-
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
-    private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -622,7 +621,9 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
 
-        if let tab = tabManager.selectedTab, let screenshotHelper {
+        // No need to take a screenshot if a view is presented over the current tab
+        // because a screenshot will already have been taken when we navigate away
+        if let tab = tabManager.selectedTab, presentedViewController == nil {
             screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
@@ -1119,7 +1120,7 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?) {
         if let tab {
-            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
     }
 
@@ -3019,7 +3020,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
+                    self.screenshotHelper.takeScreenshot(tab, windowUUID: self.windowUUID)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
