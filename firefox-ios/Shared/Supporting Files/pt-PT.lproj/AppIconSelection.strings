@@ -14,7 +14,7 @@
 "Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137" = "Hora azul";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a cute cartoony fox artwork app icon. */
-"Settings.AppIconSelection.AppIconNames.Cute.Title.v139" = "Fofa";
+"Settings.AppIconSelection.AppIconNames.Cute.Title.v139" = "Fofo";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background. */
 "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137" = "Ciano";
@@ -50,7 +50,7 @@
 "Settings.AppIconSelection.AppIconNames.Midnight.Title.v137" = "Meia noite";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a minimal version of the Firefox for iOS app icon which flattens and simplifies the default icon. */
-"Settings.AppIconSelection.AppIconNames.Minimal.Title.v139" = "Mín.";
+"Settings.AppIconSelection.AppIconNames.Minimal.Title.v139" = "Minimalista";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green. */
 "Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137" = "Luzes do Norte";
@@ -98,7 +98,7 @@
 "Settings.AppIconSelection.AppIconNames.Yellow.Title.v137" = "Amarelo";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the subtitle shown on alternative app icons added by contributors which credit them for their design work. The parameter %@ specifies the creator's name, @ handle, or other personal identifier. */
-"Settings.AppIconSelection.ContributorCredit.Subtitle.v139" = "Criada por %@";
+"Settings.AppIconSelection.ContributorCredit.Subtitle.v139" = "Criado por %@";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred. */
 "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "Ok";
