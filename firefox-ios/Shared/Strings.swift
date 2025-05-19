@@ -316,12 +316,12 @@ extension String {
             public static let ToolbarUpdateTitle = MZLocalizedString(
                 key: "ContextualHints.Toolbar.Update.Title.v139",
                 tableName: "ToolbarLocation",
-                value: "We’ve moved a couple of things.",
+                value: "We moved a few things",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
             public static let ToolbarUpdateBody = MZLocalizedString(
                 key: "ContextualHints.Toolbar.Update.Description.v139",
                 tableName: "ToolbarLocation",
-                value: "Tabs are now on the left, and the Menu is on the right. Lots of updates are coming to make the app faster, more polished, and easier to use.",
+                value: "Tabs and menu have switched places for easier access as you browse.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
