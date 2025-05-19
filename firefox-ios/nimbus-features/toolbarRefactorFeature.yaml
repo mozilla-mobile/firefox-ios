@@ -54,7 +54,7 @@ features:
           navigation_hint: true
           toolbar_update_hint: true
           swiping_tabs: false
-          translucency: false
+          translucency: true
           layout: version1
       - channel: developer
         value:
@@ -64,7 +64,7 @@ features:
           navigation_hint: true
           toolbar_update_hint: true
           swiping_tabs: true
-          translucency: false
+          translucency: true
           layout: baseline
 
 enums:
