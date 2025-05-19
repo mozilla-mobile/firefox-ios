@@ -34,6 +34,9 @@
 /* Label for the Do/Si field, pertinent to addresses in South Korea. Do/Si refers to provincial level divisions, and specifying this enhances address accuracy in autofill settings. */
 "Addresses.EditAddress.AutofillAddressDoSi.v129" = "පළා/කොට්ඨා";
 
+/* Label for the Eircode field, specific to Ireland. It's a unique postal code system that helps in precise location identification, enhancing the effectiveness of autofill. */
+"Addresses.EditAddress.AutofillAddressEircode.v129" = "Eirකේතය";
+
 /* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
 "Addresses.EditAddress.AutofillAddressEmail.v129" = "වි-තැපෑල";
 
