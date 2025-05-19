@@ -170,7 +170,6 @@ extension PreviewModel {
     ]
 }
 
-
 #Preview {
     ZStack {
         MilkyWayMetalView()

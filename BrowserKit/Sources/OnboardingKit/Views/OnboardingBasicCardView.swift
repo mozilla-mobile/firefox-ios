@@ -18,7 +18,7 @@ private enum UX {
     static let cornerRadius: CGFloat = 20
     static let shadowRadius: CGFloat = 8
     static let shadowOffsetY: CGFloat = 4
-    static let shadowOpacity: Double = 0.1
+    static let shadowOpacity = 0.1
     static let secondaryButtonTopPadding: CGFloat = 8
     static let secondaryButtonBottomPadding: CGFloat = 24
 
@@ -57,6 +57,59 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
         self.windowUUID = windowUUID
     }
 
+    var titleView: some View {
+        Text(viewModel.title)
+            .font(.title)
+            .fontWeight(.semibold)
+            .foregroundColor(textColor)
+            .multilineTextAlignment(.center)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
+            .accessibility(addTraits: .isHeader)
+    }
+
+    @ViewBuilder
+    func imageView(scale: CGFloat) -> some View {
+        if let img = viewModel.image {
+            Image(uiImage: img)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: UX.imageHeight * scale)
+                .accessibilityLabel(viewModel.title)
+                .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
+        }
+    }
+
+    var bodyView: some View {
+        Text(viewModel.body)
+            .font(.subheadline)
+            .foregroundColor(secondaryTextColor)
+            .multilineTextAlignment(.center)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
+    }
+
+    @ViewBuilder var linkView: some View {
+        if let linkVM = viewModel.link {
+            LinkButton(viewModel: linkVM, action: onLink)
+        }
+    }
+
+    var primaryButton: some View {
+        Button(viewModel.buttons.primary.title, action: onPrimary)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
+            .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+    }
+
+    @ViewBuilder
+    func secondaryButton(scale: CGFloat) -> some View {
+        if let secondary = viewModel.buttons.secondary {
+            Button(secondary.title, action: onSecondary)
+                .foregroundColor(secondaryAction)
+                .padding(.top, UX.secondaryButtonTopPadding * scale)
+                .padding(.bottom, UX.secondaryButtonBottomPadding * scale)
+                .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+        }
+    }
+
     public var body: some View {
         GeometryReader { geometry in
             // Determine scale factor based on current size vs base metrics
@@ -68,43 +121,12 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 VStack {
                     VStack(spacing: UX.spacing * scale) {
                         Spacer()
-
-                        // Title
-                        Text(viewModel.title)
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .foregroundColor(textColor)
-                            .multilineTextAlignment(.center)
-                            .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
-                            .accessibility(addTraits: .isHeader)
-
-                        // Image
-                        if let img = viewModel.image {
-                            Image(uiImage: img)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: UX.imageHeight * scale)
-                                .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
-                        }
-
-                        // Body
-                        Text(viewModel.body)
-                            .font(.subheadline)
-                            .foregroundColor(secondaryTextColor)
-                            .multilineTextAlignment(.center)
-                            .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-
-                        // Link
-                        if let linkVM = viewModel.link {
-                            LinkButton(viewModel: linkVM, action: onLink)
-                        }
-
+                        titleView
+                        imageView(scale: scale)
+                        bodyView
+                        linkView
                         Spacer()
-
-                        // Primary Button
-                        Button(viewModel.buttons.primary.title, action: onPrimary)
-                            .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-                            .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+                        primaryButton
                     }
                     .frame(height: geometry.size.height * UX.cardHeightRatio)
                     .padding(UX.verticalPadding * scale)
@@ -119,16 +141,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                             )
                     )
                     .padding(.horizontal, UX.horizontalPadding * scale)
-
-                    // Secondary Button
-                    if let secondary = viewModel.buttons.secondary {
-                        Button(secondary.title, action: onSecondary)
-                            .foregroundColor(secondaryAction)
-                            .padding(.top, UX.secondaryButtonTopPadding * scale)
-                            .padding(.bottom, UX.secondaryButtonBottomPadding * scale)
-                            .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
-                    }
-
+                    secondaryButton(scale: scale)
                     Spacer()
                 }
             }
