@@ -18,6 +18,7 @@ public struct DomainZoomLevel: Codable, Equatable {
 public protocol ZoomLevelStorage {
     func save(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)?)
     func findZoomLevel(forDomain host: String) -> DomainZoomLevel?
+    func loadAll() -> [DomainZoomLevel]
 }
 
 public class ZoomLevelStore: ZoomLevelStorage {
@@ -64,7 +65,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
         }
     }
 
-    private func loadAll() -> [DomainZoomLevel] {
+    public func loadAll() -> [DomainZoomLevel] {
         var domainZoomLevels = [DomainZoomLevel]()
         let decoder = JSONDecoder()
         do {

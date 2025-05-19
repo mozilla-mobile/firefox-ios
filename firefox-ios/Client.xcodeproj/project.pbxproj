@@ -221,6 +221,7 @@
 		1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */; };
 		2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */; };
 		2109726E2DCA8831001162A2 /* ZoomTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109726D2DCA8831001162A2 /* ZoomTelemetryTests.swift */; };
+		210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */; };
 		210E0EB8298D9D4500BB4F33 /* DefaultSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */; };
 		210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */; };
 		211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */; };
@@ -243,6 +244,11 @@
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
 		213B7AF02D779D2400DF0123 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B7AEF2D779D2400DF0123 /* Download.swift */; };
 		213BF7532AC21D1B00C53A64 /* TabDisplayPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */; };
+		2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */; };
+		214099622DCE57A4004881E1 /* GenericSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */; };
+		214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */; };
+		214099672DD392D1004881E1 /* ZoomSiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099662DD392D1004881E1 /* ZoomSiteListView.swift */; };
+		214099692DD3B8AD004881E1 /* ZoomLevelCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */; };
 		21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */; };
 		21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */; };
 		2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */; };
@@ -1346,6 +1352,8 @@
 		BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */; };
 		BA1237BC2DAE608100BB6333 /* GenericSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */; };
 		BA1237BF2DAE675B00BB6333 /* GenericImageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */; };
+		BA1237C12DAE6D2C00BB6333 /* AddressBarSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */; };
+		BA1237C32DAE6D5700BB6333 /* AddressBarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */; };
 		BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */; };
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
 		BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */; };
@@ -2737,6 +2745,7 @@
 		20F2414BA51A5BFAF5098D35 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Menu.strings; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		2109726D2DCA8831001162A2 /* ZoomTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomTelemetryTests.swift; sourceTree = "<group>"; };
+		2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericItemCellView.swift; sourceTree = "<group>"; };
 		211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPopupSetting.swift; sourceTree = "<group>"; };
 		211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPAccessoryInfo.swift; sourceTree = "<group>"; };
 		21112967289480630082C08B /* HomepageMessageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModel.swift; sourceTree = "<group>"; };
@@ -2756,6 +2765,11 @@
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
 		213B7AEF2D779D2400DF0123 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayPanelViewController.swift; sourceTree = "<group>"; };
+		2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageZoomSettingView.swift; sourceTree = "<group>"; };
+		214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionHeaderView.swift; sourceTree = "<group>"; };
+		214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelPickerView.swift; sourceTree = "<group>"; };
+		214099662DD392D1004881E1 /* ZoomSiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomSiteListView.swift; sourceTree = "<group>"; };
+		214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelCellView.swift; sourceTree = "<group>"; };
 		21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinator.swift; sourceTree = "<group>"; };
 		21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinatorTests.swift; sourceTree = "<group>"; };
 		2142B1292D9F1284003AA82F /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
@@ -9005,6 +9019,8 @@
 		BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NightModeAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionView.swift; sourceTree = "<group>"; };
 		BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericImageOption.swift; sourceTree = "<group>"; };
+		BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarSelectionView.swift; sourceTree = "<group>"; };
+		BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarSettingsView.swift; sourceTree = "<group>"; };
 		BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKFrameInfoExtensionsTest.swift; sourceTree = "<group>"; };
 		BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebKit.swift; sourceTree = "<group>"; };
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -10856,6 +10872,27 @@
 				2137785E297F3B1B00D01309 /* DownloadsPanelViewModel.swift */,
 			);
 			path = Downloads;
+			sourceTree = "<group>";
+		};
+		214099602DCBF4DB004881E1 /* Zoom */ = {
+			isa = PBXGroup;
+			children = (
+				214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */,
+				214099662DD392D1004881E1 /* ZoomSiteListView.swift */,
+				2140995E2DCBEC2B004881E1 /* PageZoomSettingView.swift */,
+				214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */,
+			);
+			path = Zoom;
+			sourceTree = "<group>";
+		};
+		214099632DCE665F004881E1 /* Generic views */ = {
+			isa = PBXGroup;
+			children = (
+				2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */,
+				214099612DCE579D004881E1 /* GenericSectionHeaderView.swift */,
+				BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */,
+			);
+			path = "Generic views";
 			sourceTree = "<group>";
 		};
 		2142B12B2D9F1284003AA82F /* Zoom */ = {
@@ -13380,12 +13417,15 @@
 		BA4BB9962D7F371F006BD137 /* AppearanceSettings */ = {
 			isa = PBXGroup;
 			children = (
+				214099602DCBF4DB004881E1 /* Zoom */,
+				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
+				BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */,
+				BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */,
 				BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */,
-				BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */,
 				BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */,
 				BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */,
 				BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */,
-				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
+				214099632DCE665F004881E1 /* Generic views */,
 			);
 			path = AppearanceSettings;
 			sourceTree = "<group>";
@@ -17095,6 +17135,7 @@
 				8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */,
 				E1E5BE252A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift in Sources */,
 				E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */,
+				BA1237C12DAE6D2C00BB6333 /* AddressBarSelectionView.swift in Sources */,
 				8A4EA0D12C010BE700E4E4F1 /* MicrosurveySurfaceManager.swift in Sources */,
 				8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */,
 				5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */,
@@ -17205,6 +17246,7 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				8A0727462B4890B50071BB9F /* WebviewTelemetry.swift in Sources */,
 				8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */,
+				214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */,
 				8AC6F2242D6E243F00D10A9F /* ExperimentEmptyPrivateTabsView.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
@@ -17289,6 +17331,7 @@
 				E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
 				8C2937722BF79F0300146613 /* Address+Encodable.swift in Sources */,
+				214099622DCE57A4004881E1 /* GenericSectionHeaderView.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
@@ -17386,6 +17429,7 @@
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */,
 				0E77DF0F2CB8220000B80BA1 /* GeneratedPasswordStorage.swift in Sources */,
+				BA1237C32DAE6D5700BB6333 /* AddressBarSettingsView.swift in Sources */,
 				219A0FDB2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift in Sources */,
 				B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */,
 				63B213282CCA796D00A466DB /* NativeErrorPageAction.swift in Sources */,
@@ -17445,6 +17489,7 @@
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				217641B82D651DB900597B6F /* MIMEType.swift in Sources */,
+				214099692DD3B8AD004881E1 /* ZoomLevelCellView.swift in Sources */,
 				219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */,
 				BA4BB9A02D7FB3C9006BD137 /* ThemeOptionView.swift in Sources */,
 				8A5D1CB22A30D756005AD35C /* SiriPageSetting.swift in Sources */,
@@ -17562,6 +17607,7 @@
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
+				210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */,
 				ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */,
 				8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */,
 				1D05C9832D9CCF720081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
@@ -17816,6 +17862,7 @@
 				8A5D1CAC2A30D70B005AD35C /* OpenWithSetting.swift in Sources */,
 				8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */,
 				43D16B7A29831C7F009F8279 /* CreditCardAutofillToggle.swift in Sources */,
+				214099672DD392D1004881E1 /* ZoomSiteListView.swift in Sources */,
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
 				8AD40FCD27BADC5C00672675 /* TabLocationContainerView.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
@@ -17929,6 +17976,7 @@
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
+				2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */,
 				213B7AF02D779D2400DF0123 /* Download.swift in Sources */,
 				BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* LegacyBookmarksPanel.swift in Sources */,
@@ -28657,7 +28705,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 140.0.20250509050400;
+				version = 140.0.20250516050428;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

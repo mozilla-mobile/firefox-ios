@@ -171,7 +171,6 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         // On private mode, the closed tab on regular mode is listed in "Recently Closed" list as well
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForElementsToExist(
             [
@@ -196,7 +195,6 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         // "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForElementsToExist(
             [
@@ -396,7 +394,6 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
@@ -407,7 +404,6 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         // On regular mode, the "Recently Closed Tabs List" is empty, too
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         navigator.goto(NewTabScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
@@ -479,12 +475,6 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         } else {
             app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
-    }
-
-    private func closeKeyboard() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306894

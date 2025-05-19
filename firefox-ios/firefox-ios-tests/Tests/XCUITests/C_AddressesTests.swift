@@ -5,9 +5,7 @@
 import Foundation
 
 class O_AddressesTests: BaseTestCase {
-    let addressSavedTxt = "Address Saved"
     let savedAddressesTxt = "SAVED ADDRESSES"
-    let removedAddressTxt = "Address Removed"
 
     override func setUp() {
         super.setUp()
@@ -44,8 +42,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter valid date for all fields
         addNewAddress()
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         let addressInfo = ["Test", "test address", "city test, AL, 123456"]
@@ -63,8 +59,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typeName(name: "Test")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         mozWaitForElementToExist(app.staticTexts["Test"])
@@ -79,8 +73,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typeOrganization(organization: "organization test")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
     }
@@ -94,8 +86,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typeStreetAddress(street: "test address")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         mozWaitForElementToExist(app.staticTexts["test address"])
@@ -110,8 +100,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typeCity(city: "city test")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         mozWaitForElementToExist(app.staticTexts["city test, AL"])
@@ -126,8 +114,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typeZIP(zip: "123456")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         mozWaitForElementToExist(app.staticTexts["AL, 123456"])
@@ -142,8 +128,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typePhone(phone: "01234567")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         mozWaitForElementToExist(app.staticTexts["AL"])
@@ -158,8 +142,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Full Name and press save
         typeEmail(email: "test@mozilla.com")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         mozWaitForElementToExist(app.staticTexts["AL"])
@@ -174,8 +156,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Country and press save
         selectCountry(country: "United Kingdom")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
     }
@@ -263,8 +243,6 @@ class O_AddressesTests: BaseTestCase {
         // Enter a valid date for Country and press save
         selectCountry(country: "United Kingdom")
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
     }
@@ -575,8 +553,6 @@ class O_AddressesTests: BaseTestCase {
         tapEdit()
         // Remove address
         removeAddress()
-        // The "Address Removed" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[removedAddressTxt])
     }
 
     private func updateFieldsWithWithoutState(updateCountry: Bool, isPostalCode: Bool) {
@@ -586,8 +562,6 @@ class O_AddressesTests: BaseTestCase {
         tapEdit()
         updateAddress(updateCountry: updateCountry, isPostalCode: isPostalCode)
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         if updateCountry {
@@ -664,8 +638,6 @@ class O_AddressesTests: BaseTestCase {
         }
         app.typeText(newValue)
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         if isInfoDisplayed {
@@ -681,8 +653,6 @@ class O_AddressesTests: BaseTestCase {
             clearText()
         }
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         XCTAssertFalse(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is displayed")
@@ -691,8 +661,6 @@ class O_AddressesTests: BaseTestCase {
         app.staticTexts[field].waitAndTap()
         app.typeText(newValue)
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         if isInfoDisplayed {

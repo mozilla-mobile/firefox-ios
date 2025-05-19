@@ -29,16 +29,12 @@ enum AddressModifiedStatus {
         }
     }
 
-    case saved
     case updated
-    case removed
     case error(ErrorType)
 
     var message: String {
         switch self {
-        case .saved: return .Addresses.Settings.Edit.AddressSavedConfirmation
         case .updated: return .Addresses.Settings.Edit.AddressUpdatedConfirmationV2
-        case .removed: return .Addresses.Settings.Edit.AddressRemovedConfirmation
         case .error(let type): return type.message
         }
     }

@@ -285,7 +285,16 @@ private extension BaseTestCase {
                 )
             ]
         )
-        let collectionView = app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView]
+        // Determine which collection view to use based on the current screen
+        let collectionView: XCUIElement
+        if app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].exists {
+            collectionView = app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView]
+        } else if app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView].exists {
+            collectionView = app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView]
+        } else {
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
+            return
+        }
         let firstTabCell = collectionView.cells.element(boundBy: 0).label
         let secondTabCell = collectionView.cells.element(boundBy: 1).label
 

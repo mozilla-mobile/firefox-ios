@@ -16,6 +16,15 @@
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sekmeleri eşitle";
 
+/* The title on the button to look at regular tabs. */
+"TabTray.TabsSelectorNormalTabsTitle.v140" = "Sekmeler";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Eşitlenen";
+
+/* Text for a button in the tabs tray used to open another menu to close older tabs. */
+"TabTrayCloseOldTabsTitle.v140" = "Eski sekmeleri kapat…";
+
 /* Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total. */
 "TabTraySelectorAccessibilityHint.v139" = "%1$@ / %2$@";
 

@@ -23,7 +23,8 @@ final class SettingsCoordinator: BaseCoordinator,
                                  AboutSettingsDelegate,
                                  ParentCoordinatorDelegate,
                                  QRCodeNavigationHandler,
-                                 BrowsingSettingsDelegate {
+                                 BrowsingSettingsDelegate,
+                                 AppearanceSettingsDelegate {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -153,9 +154,14 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .theme:
-           return themeManager.isNewAppearanceMenuOn
-               ? UIHostingController(rootView: AppearanceSettingsView(windowUUID: windowUUID))
-               : ThemeSettingsController(windowUUID: windowUUID)
+            if themeManager.isNewAppearanceMenuOn {
+                let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
+                                                            shouldShowPageZoom: true,
+                                                            delegate: self)
+                return UIHostingController(rootView: appearanceView)
+            } else {
+                return ThemeSettingsController(windowUUID: windowUUID)
+            }
 
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
@@ -186,7 +192,9 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
+            return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+               ? UIHostingController(rootView: AddressBarSettingsView(windowUUID: windowUUID, viewModel: viewModel))
+               : SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
 
         case .topSites:
             let viewController = TopSitesSettingsViewController(windowUUID: windowUUID)
@@ -383,8 +391,17 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
-        router.push(viewController)
+        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly) {
+            let viewController = UIHostingController(
+                rootView: AddressBarSettingsView(
+                windowUUID: windowUUID,
+                viewModel: viewModel))
+            viewController.title = .Settings.AddressBar.AddressBarMenuTitle
+            router.push(viewController)
+        } else {
+            let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
+            router.push(viewController)
+        }
     }
 
     func pressedTheme() {
@@ -394,7 +411,10 @@ final class SettingsCoordinator: BaseCoordinator,
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
-            let viewController = UIHostingController(rootView: AppearanceSettingsView(windowUUID: windowUUID))
+            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
+                                                        shouldShowPageZoom: true,
+                                                        delegate: self)
+            let viewController = UIHostingController(rootView: appearanceView)
             viewController.title = .SettingsAppearanceTitle
             router.push(viewController)
         } else {
@@ -467,6 +487,15 @@ final class SettingsCoordinator: BaseCoordinator,
     func didFinishPasswordManager(from coordinator: PasswordManagerCoordinator) {
         didFinish()
         remove(child: coordinator)
+    }
+
+    // MARK: - AppearanceSettingsDelegate
+
+    func pressedPageZoom() {
+        let appearanceView = PageZoomSettingsView(windowUUID: windowUUID)
+        let viewController = UIHostingController(rootView: appearanceView)
+        viewController.title = .Settings.Appearance.PageZoom.PageZoomTitle
+        router.push(viewController)
     }
 
     // MARK: - AboutSettingsDelegate
