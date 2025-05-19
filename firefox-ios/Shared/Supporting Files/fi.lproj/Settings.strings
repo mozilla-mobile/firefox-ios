@@ -229,9 +229,18 @@
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Lue lisää";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
+"Settings.TechnicalData.Message.v135" = "%1$@%2$@ pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat %2$@in kehittämisessä.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Settings.TechnicalData.Message.v136" = "Tiedot laitteestasi, laitekokoonpanosta ja käytöstä auttavat meitä parantamaan %@in ominaisuuksia, suorituskykyä ja vakautta.";
+
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Tekniset ja vuorovaikutustiedot";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Lähetä teknisiä ja vuorovaikutustietoja";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "Käyttöehdot";
 

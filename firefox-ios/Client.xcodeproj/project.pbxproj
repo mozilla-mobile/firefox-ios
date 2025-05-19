@@ -4371,6 +4371,9 @@
 		434A00C929E426EA003FE690 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
 		434A2ED528CF4BD2006D3DD0 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		434A2ED628CF4BD2006D3DD0 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
+		434A38312DDB626100AD1C80 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/ExternalLink.strings; sourceTree = "<group>"; };
+		434A38322DDB626100AD1C80 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/LiveActivity.strings; sourceTree = "<group>"; };
+		434A38332DDB626100AD1C80 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/WebView.strings; sourceTree = "<group>"; };
 		434A81B62CF4989900FDB60A /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/SocialMediaApp.strings"; sourceTree = "<group>"; };
 		434A81B72CF4989900FDB60A /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/SocialShare.strings"; sourceTree = "<group>"; };
 		434AB7382CA1878F0073AC47 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/PasswordGenerator.strings"; sourceTree = "<group>"; };
@@ -19470,6 +19473,7 @@
 				43BBDA852D75C543008B06C9 /* nb */,
 				439B056F2DC50C2F0097A563 /* co */,
 				4351FEE52DC50D0E00314B9C /* kab */,
+				434A38312DDB626100AD1C80 /* si */,
 			);
 			name = ExternalLink.strings;
 			sourceTree = "<group>";
@@ -21908,6 +21912,7 @@
 				4394C1BE2DC50E1B0020ADEB /* vi */,
 				43F7227A2DC50E26005B8194 /* zh-CN */,
 				4340C6352DC50E2C00D02406 /* zh-TW */,
+				434A38322DDB626100AD1C80 /* si */,
 			);
 			name = LiveActivity.strings;
 			sourceTree = "<group>";
@@ -22494,6 +22499,7 @@
 				4351FEE72DC50D0E00314B9C /* kab */,
 				433EE5FA2DC50D6500131A43 /* nn */,
 				43DF639D2DC50E0800A6EE1E /* uk */,
+				434A38332DDB626100AD1C80 /* si */,
 			);
 			name = WebView.strings;
 			sourceTree = "<group>";

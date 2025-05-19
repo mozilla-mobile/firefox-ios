@@ -1,6 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "Poista";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "Kaikki";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "Viimeiset 4 viikkoa";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "Viimeinen tunti";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "Viimeiset 7 päivää";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Viimeiset 24 tuntia";
+
 /* Title of the “Clear browsing history“ action sheet */
 "LibraryPanel.History.Title.v138" = "Poistaa historian (mukaan lukien synkronoitu historia muista laitteista), evästeet ja muut selaustiedot.";
 

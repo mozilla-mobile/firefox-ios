@@ -223,6 +223,12 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "බෙදාගන්න";
 
+/* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
+"MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
+
+/* This string is for the Zoom tool, when Zoom value is positive. (+125%) */
+"MainMenu.Submenus.Tools.Zoom.PositiveSymbol.v137" = "+";
+
 /* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
 "MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "විශාලනය";
 
