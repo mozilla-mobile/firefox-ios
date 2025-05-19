@@ -65,7 +65,7 @@ features:
           toolbar_update_hint: true
           swiping_tabs: true
           translucency: true
-          layout: baseline
+          layout: version1
 
 enums:
   ToolbarLayoutType:
