@@ -101,7 +101,6 @@ final class AddressBarPanGestureHandler: NSObject {
 
         switch gesture.state {
         case .began:
-            applyPreviewTransform(translation: translation)
             screenshotHelper?.takeScreenshot(selectedTab, windowUUID: windowUUID)
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
