@@ -437,8 +437,8 @@ class TabTrayViewController: UIViewController,
     }
 
     func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat) {
-        guard let fromTheme = childPanelThemes?[fromIndex],
-              let toTheme = childPanelThemes?[toIndex] else { return }
+        guard let fromTheme = childPanelThemes?[safe: fromIndex],
+              let toTheme = childPanelThemes?[safe: toIndex] else { return }
 
         let swipeTheme = TabTrayPanelSwipeTheme(from: fromTheme, to: toTheme, progress: progress)
         childPanelControllers.forEach({ ($0.topViewController as? TabTrayThemeable)?.applyTheme(swipeTheme) })
