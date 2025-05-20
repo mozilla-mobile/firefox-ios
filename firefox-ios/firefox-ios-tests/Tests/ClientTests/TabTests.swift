@@ -12,25 +12,29 @@ class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    private var fileManager: MockFileManager!
     private var mockTabWebView: MockTabWebView!
-    private let url = URL(string: "https://www.example.com")!
+    private let url = URL(string: "file://test.pdf")!
 
     override func setUp() {
         super.setUp()
         mockProfile = MockProfile()
         mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
         mockTabWebView.loadedURL = url
+        fileManager = MockFileManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        DependencyHelperMock().bootstrapDependencies()
 
         // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
         UserDefaults.standard.set(nil, forKey: PrefsKeys.FasterInactiveTabsOverride)
     }
 
     override func tearDown() {
-        setIsPDFRefactorFeature(isEnabled: false)
         tabDelegate = nil
         mockProfile = nil
         mockTabWebView = nil
+        fileManager = nil
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
@@ -276,7 +280,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         document.isDownloading = true
         subject.webView = mockTabWebView
         subject.enqueueDocument(document)
@@ -285,7 +288,7 @@ class TabTests: XCTestCase {
         subject.webView = nil
 
         XCTAssertNil(subject.temporaryDocument)
-        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.loadFileURLCalled, 1)
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
     }
 
@@ -293,7 +296,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         subject.url = url
         document.isDownloading = true
@@ -304,7 +306,7 @@ class TabTests: XCTestCase {
         subject.webView = nil
 
         XCTAssertNil(subject.temporaryDocument)
-        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.loadFileURLCalled, 1)
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
         // it doesn't go back while cancelling a document
         XCTAssertEqual(mockTabWebView.goBackCalled, 0)
@@ -314,7 +316,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
         subject.enqueueDocument(document)
@@ -324,7 +325,7 @@ class TabTests: XCTestCase {
         subject.webView = nil
 
         XCTAssertNil(subject.temporaryDocument)
-        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.loadFileURLCalled, 1)
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
         // it doesn't go forward while cancelling a document
         XCTAssertEqual(mockTabWebView.goForwardCalled, 0)
@@ -334,7 +335,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
         subject.enqueueDocument(document)
@@ -344,8 +344,17 @@ class TabTests: XCTestCase {
         subject.webView = nil
 
         XCTAssertNil(subject.temporaryDocument)
-        // once for enqueuing doc and for loadRequest
-        XCTAssertEqual(mockTabWebView.loadCalled, 2)
+
+        XCTAssertEqual(
+            mockTabWebView.loadFileURLCalled,
+            1,
+            "enqueue document should call load file url on webView"
+        )
+        XCTAssertEqual(
+            mockTabWebView.loadCalled,
+            1,
+            "load request should call load on webView"
+        )
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 0)
     }
 
@@ -353,7 +362,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
 
@@ -361,7 +369,7 @@ class TabTests: XCTestCase {
         subject.stop()
         subject.webView = nil
 
-        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.loadFileURLCalled, 1)
         XCTAssertEqual(mockTabWebView.stopLoadingCalled, 1)
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
     }
@@ -371,7 +379,6 @@ class TabTests: XCTestCase {
         let request = URLRequest(url: URL(string: "https://www.example.com")!)
         let localURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
         let document = MockTemporaryDocument(withFileURL: localURL, request: request)
-        setIsPDFRefactorFeature(isEnabled: true)
 
         subject.enqueueDocument(document)
 
@@ -410,16 +417,49 @@ class TabTests: XCTestCase {
         XCTAssertEqual(document.cancelDownloadCalled, 1)
     }
 
-    private func createSubject() -> Tab {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
-        trackForMemoryLeaks(subject)
-        return subject
+    func testShouldDownloadDocument_whenDocumentInSession_addsTemporaryDocument() {
+        let subject = createSubject()
+
+        let localPDFUrl = URL(string: "file://test.pdf")!
+        let onlinePDFUrl = URL(string: "https://example.com/test.pdf")!
+
+        fileManager.fileExists = false
+        subject.restoreTemporaryDocumentSession([localPDFUrl: onlinePDFUrl])
+
+        let result = subject.shouldDownloadDocument(URLRequest(url: localPDFUrl))
+
+        XCTAssertNotNil(subject.temporaryDocument)
+        XCTAssertTrue(result, "result should be the opposite fileManager.fileExists")
     }
 
-    private func setIsPDFRefactorFeature(isEnabled: Bool) {
-        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
-            PdfRefactorFeature(enabled: isEnabled)
-        }
+    func testShouldDownloadDocument_whenDocumentNotInSession_returnsTrueForNilTemporaryDocument() {
+        let subject = createSubject()
+
+        let localPDFUrl = URL(string: "file://test.pdf")!
+
+        let result = subject.shouldDownloadDocument(URLRequest(url: localPDFUrl))
+
+        XCTAssertNil(subject.temporaryDocument)
+        XCTAssertTrue(result)
+    }
+
+    func testShouldDownloadDocument_whenDocumentNotInSession_forwardRequestToTemporaryDocument() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument()
+        subject.temporaryDocument = document
+
+        let localPDFUrl = URL(string: "file://test.pdf")!
+
+        _ = subject.shouldDownloadDocument(URLRequest(url: localPDFUrl))
+
+        XCTAssertEqual(document.canDownloadCalled, 1)
+    }
+
+    // MARK: - Helpers
+    private func createSubject() -> Tab {
+        let subject = Tab(profile: mockProfile, windowUUID: windowUUID, fileManager: fileManager)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
 

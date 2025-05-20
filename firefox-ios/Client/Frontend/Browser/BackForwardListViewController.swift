@@ -56,8 +56,8 @@ class BackForwardListViewController: UIViewController,
 
     var tabManager: TabManager?
     weak var browserFrameInfoProvider: BrowserFrameInfoProvider?
-    var currentItem: EngineSessionBackForwardListItem?
-    var listData = [EngineSessionBackForwardListItem]()
+    var currentItem: BackForwardListItem?
+    var listData = [BackForwardListItem]()
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 

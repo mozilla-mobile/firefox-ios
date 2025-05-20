@@ -12,6 +12,7 @@ import Shared
 class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     private var profile: MockProfile!
     private var tabManager: MockTabManager!
+    private var fileManager: MockFileManager!
     private var allowPolicyRawValue: Int {
         return WKNavigationActionPolicy.allow.rawValue
     }
@@ -23,15 +24,17 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = MockTabManager()
+        fileManager = MockFileManager()
     }
 
     override func tearDown() {
         profile = nil
         tabManager = nil
+        fileManager = nil
         super.tearDown()
     }
 
-    // MARK: - Decide policy
+    // MARK: - Decide policy for navigation action
     func testWebViewDecidePolicyForNavigationAction_cancelWhenTabNotInTabManager() {
         let subject = createSubject()
         let url = URL(string: "https://example.com")!
@@ -162,7 +165,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobURLsWithNavigationTypeOther() {
+    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobSchemeWithNavigationTypeOther() {
         let subject = createSubject()
         let tab = createTab()
         let blob = URL(string: "blob://blobfile")!
@@ -175,7 +178,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    func testWebViewDecidePolicyForNavigationAction_cancelLoading() {
+    func testWebViewDecidePolicyForNavigationAction_cancelLoading_withBlobScheme() {
         let subject = createSubject()
         let tab = createTab()
         let blob = URL(string: "blob://blobfile")!
@@ -185,6 +188,78 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
                         decidePolicyFor: MockNavigationAction(url: blob,
                                                               type: .backForward)) { policy in
             XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelLoading_whenLoadingLocalPDFurlPreviouslyDeleted() {
+        let subject = createSubject()
+        let tab = createTab()
+
+        let pdfURL = URL(string: "file://test.pdf")!
+        let sourceURL = URL(string: "https://www.example.com")!
+        tab.restoreTemporaryDocumentSession([pdfURL: sourceURL])
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: pdfURL,
+                                                              type: .other)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenLoadingLocalPDFurlPreviouslyDownloaded() {
+        let subject = createSubject()
+        let tab = createTab()
+
+        let pdfURL = URL(string: "file://test.pdf")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: pdfURL,
+                                                              type: .other)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    // MARK: - Decide policy for navigation response
+    func testWebViewDecidePolicyForNavigationResponse_cancelLoading_whenResponseIsPDFThatWasntDownloadedPreviously() {
+        let subject = createSubject()
+        let tab = createTab()
+        
+        let pdfURL = URL(string: "https://example.com/test.pdf")!
+        let response = URLResponse(
+            url: pdfURL,
+            mimeType: MIMEType.PDF,
+            expectedContentLength: 0,
+            textEncodingName: nil
+        )
+        subject.pendingRequests[pdfURL.absoluteString] = URLRequest(url: pdfURL)
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, decidePolicyFor: MockNavigationResponse(response: response)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationResponse_allowsLoading_whenResponseIsLocalPDFFileAlreadyDownloaded() {
+        let subject = createSubject()
+        let tab = createTab()
+
+        let pdfURL = URL(string: "https://example.com/test.pdf")!
+        let localPDFURL = URL(string: "file://test.pdf")!
+        let response = URLResponse(
+            url: localPDFURL,
+            mimeType: MIMEType.PDF,
+            expectedContentLength: 0,
+            textEncodingName: nil
+        )
+        fileManager.fileExists = true
+        subject.pendingRequests[pdfURL.absoluteString] = URLRequest(url: pdfURL)
+        tab.restoreTemporaryDocumentSession([localPDFURL: pdfURL])
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, decidePolicyFor: MockNavigationResponse(response: response)) { policy in
+            XCTAssertEqual(policy, .allow)
         }
     }
 
@@ -251,7 +326,12 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     private func createTab(isPrivate: Bool = false) -> Tab {
-        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(
+            profile: profile,
+            isPrivate: isPrivate,
+            windowUUID: .XCTestDefaultUUID,
+            fileManager: fileManager
+        )
         let webView = MockTabWebView(tab: tab)
         tab.webView = webView
         return tab
@@ -296,10 +376,89 @@ class MockNavigationAction: WKNavigationAction {
     }
 }
 
+class MockNavigationResponse: WKNavigationResponse {
+    private let _response: URLResponse
+    private let _isMainFrame: Bool
+    private let _canShowMIMEType: Bool
+
+    override var response: URLResponse {
+        return _response
+    }
+
+    override var isForMainFrame: Bool {
+        return _isMainFrame
+    }
+
+    override var canShowMIMEType: Bool {
+        return _canShowMIMEType
+    }
+
+    init(response: URLResponse,
+         canShowMIMEType: Bool = true,
+         isMainFrame: Bool = true) {
+        self._response = response
+        self._isMainFrame = isMainFrame
+        self._canShowMIMEType = canShowMIMEType
+        super.init()
+    }
+}
+
 class MockURLAuthenticationChallengeSender: NSObject, URLAuthenticationChallengeSender {
     func use(_ credential: URLCredential, for challenge: URLAuthenticationChallenge) {}
 
     func continueWithoutCredential(for challenge: URLAuthenticationChallenge) {}
 
     func cancel(_ challenge: URLAuthenticationChallenge) {}
+}
+
+
+class MockFileManager: FileManagerProtocol {
+    var fileExistsCalled = 0
+    var fileExists = false
+    var urlsForDirectoryCalled = 0
+    var contentOfDirectoryCalled = 0
+    var removeItemAtPathCalled = 0
+    var removeItemAtURLCalled = 0
+    var copyItemCalled = 0
+    var createDirectoryCalled = 0
+    var contentOfDirectoryAtPathCalled = 0
+
+    func fileExists(atPath path: String) -> Bool {
+        fileExistsCalled += 1
+        return fileExists
+    }
+    
+    func urls(for directory: FileManager.SearchPathDirectory,
+              in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+        urlsForDirectoryCalled += 1
+        return []
+    }
+    
+    func contentsOfDirectory(atPath path: String) throws -> [String] {
+        contentOfDirectoryCalled += 1
+        return []
+    }
+
+    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
+        contentOfDirectoryAtPathCalled += 1
+        return []
+    }
+
+    func removeItem(atPath path: String) throws {
+        removeItemAtPathCalled += 1
+    }
+    
+    func removeItem(at url: URL) throws {
+        removeItemAtURLCalled += 1
+    }
+    
+    func copyItem(at srcURL: URL, to dstURL: URL) throws {
+        copyItemCalled += 1
+    }
+    
+    func createDirectory(atPath path: String,
+                         withIntermediateDirectories createIntermediates: Bool,
+                         attributes: [FileAttributeKey : Any]?) throws {
+        createDirectoryCalled += 1
+    }
 }

@@ -146,6 +146,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var shouldScrollToTop = false
     var isFindInPageMode = false
 
+    private let fileManager: FileManagerProtocol
     private var logger: Logger
     private let documentLogger: DocumentLogger
 
@@ -197,7 +198,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var historyList: [URL] {
-        func listToUrl(_ item: EngineSessionBackForwardListItem) -> URL { return item.url }
+        func listToUrl(_ item: BackForwardListItem) -> URL { return item.url }
 
         var historyUrls = self.backForwardList?.backList.map(listToUrl) ?? [URL]()
         if let url = url {
@@ -478,6 +479,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
+         fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
         self.nightMode = false
@@ -487,6 +489,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.faviconHelper = faviconHelper
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
+        self.fileManager = fileManager
         self.logger = logger
         self.documentLogger = documentLogger
         super.init()
@@ -956,17 +959,17 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     private func deleteDownloadedDocuments() {
         let docsURL = temporaryDocumentsSession
         guard !docsURL.isEmpty else { return }
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .background).async { [fileManager] in
             docsURL.forEach { url in
-                try? FileManager.default.removeItem(at: url.key)
+                try? fileManager.removeItem(at: url.key)
             }
         }
     }
 
     func shouldDownloadDocument(_ request: URLRequest) -> Bool {
         if let url = request.url, url.isFileURL, temporaryDocumentsSession[url] != nil {
-            let fileExists = FileManager.default.fileExists(atPath: url.path)
-            // Add a temporary document when the request is pointing to a document to was previously viewed.
+            let fileExists = fileManager.fileExists(atPath: url.path)
+            // Add a temporary document when the request is pointing to a document that was previously viewed.
             // This is needed since temporary document is removed when navigating to any website and thus it needs
             // to be restored, otherwise the share sheet will try to share a link and not the actual doc.
             addTemporaryDocumentIfNeeded(request)
