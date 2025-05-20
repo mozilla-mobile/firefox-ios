@@ -15,6 +15,9 @@ protocol BackForwardList {
 
     var backList: [BackForwardListItem] { get }
     var forwardList: [BackForwardListItem] { get }
+
+    /// Returns the first item in the back and forward list that matches the provided URL.
+    func firstItem(with url: URL) -> BackForwardListItem?
 }
 
 /// The back and forward list managed by a `Tab`.
@@ -50,6 +53,14 @@ class TabBackForwardList: BackForwardList {
         if item.url.isFileURL, let sourceURL = documentSession[item.url] {
             return TemporaryDocumentBackForwardListItem(url: sourceURL, title: item.title, localItem: item)
         }
+        return item
+    }
+
+    func firstItem(with url: URL) -> BackForwardListItem? {
+        // Look for the item into the source list since that is the source of truth.
+        let item = sourceBackForwardList.backList.first { $0.url == url } ??
+        sourceBackForwardList.forwardList.first { $0.url == url }
+
         return item
     }
 }

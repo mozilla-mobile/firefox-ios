@@ -988,7 +988,13 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
-            self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
+
+            // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.
+            if let item = self?.backForwardList?.firstItem(with: url) as? WKBackForwardListItem {
+                self?.webView?.go(to: item)
+            } else {
+                self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
+            }
 
             // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
             guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
