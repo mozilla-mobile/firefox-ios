@@ -142,7 +142,8 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             LinkButtonView(
                 viewModel: .init(
                     title: linkVM.title,
-                    url: linkVM.url
+                    url: linkVM.url,
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)LinkButton"
                 ),
                 action: onLinkTap
             )

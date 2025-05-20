@@ -6,18 +6,18 @@ import SwiftUI
 import Common
 
 public struct PrimaryButtonStyle: ButtonStyle {
-    let theme: Theme
-
-    public init(theme: Theme) {
-        self.theme = theme
-    }
-
     // MARK: – UX Constants
     private enum UX {
         static let verticalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 8
         static let pressedScale: CGFloat = 0.97
         static let defaultScale: CGFloat = 1.0
+    }
+
+    let theme: Theme
+
+    public init(theme: Theme) {
+        self.theme = theme
     }
 
     public func makeBody(configuration: Configuration) -> some View {

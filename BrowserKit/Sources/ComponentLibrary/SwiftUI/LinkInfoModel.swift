@@ -7,9 +7,11 @@ import Foundation
 public struct LinkInfoModel {
     let title: String
     let url: URL
+    let accessibilityIdentifier: String
 
-    public init(title: String, url: URL) {
+    public init(title: String, url: URL, accessibilityIdentifier: String) {
         self.title = title
         self.url = url
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 }

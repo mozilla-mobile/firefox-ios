@@ -27,6 +27,6 @@ public struct LinkButtonView: View {
                 .padding(.horizontal, UX.horizontalPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .accessibility(identifier: viewModel.title)
+        .accessibility(identifier: viewModel.accessibilityIdentifier)
     }
 }
