@@ -44,6 +44,7 @@ class TabTrayViewController: UIViewController,
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
         static let segmentedControlMinHeight: CGFloat = 45
+        static let themeAnimationDuration: CFTimeInterval = 0.25
     }
 
     // MARK: Theme
@@ -63,7 +64,6 @@ class TabTrayViewController: UIViewController,
 
     private var themeAnimationDisplayLink: CADisplayLink?
     private var themeAnimationStartTime: CFTimeInterval = 0
-    private let themeAnimationDuration: CFTimeInterval = 0.25
     private var themeFromIndex = 0
     private var themeToIndex = 0
 
@@ -1009,7 +1009,7 @@ class TabTrayViewController: UIViewController,
     @objc
     private func handleThemeAnimationTick() {
         let elapsed = CACurrentMediaTime() - themeAnimationStartTime
-        let progress = min(max(elapsed / themeAnimationDuration, 0), 1)
+        let progress = min(max(elapsed / UX.themeAnimationDuration, 0), 1)
 
         applyTheme(fromIndex: themeFromIndex, toIndex: themeToIndex, progress: CGFloat(progress))
 
