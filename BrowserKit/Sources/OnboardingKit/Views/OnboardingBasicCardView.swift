@@ -27,7 +27,7 @@ private enum UX {
     // Font sizes for base metrics
     static let titleFontSize: CGFloat = 28
     static let bodyFontSize: CGFloat = 16
-    
+
     static let titleFont: Font = .title
     static let bodyFont: Font = .subheadline
 }
