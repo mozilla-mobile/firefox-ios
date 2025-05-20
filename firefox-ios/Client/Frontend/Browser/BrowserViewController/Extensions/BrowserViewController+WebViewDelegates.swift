@@ -787,7 +787,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    /// Handle a PDF download request by forwarding in it to the provided `Tab`.
+    /// Handle a PDF download request by forwarding it to the provided `Tab`.
     func handlePDFDownloadRequest(request: URLRequest,
                                   tab: Tab,
                                   filename: String?) {
