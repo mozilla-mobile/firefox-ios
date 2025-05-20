@@ -8,8 +8,7 @@ struct ContinuationsChecker {
     /// Always returns true except for iOS 18.0 users who are not under an experiment to revert unsafe continuation usage
     /// back to checked continuations.
     /// FXIOS-11895 This is a temp. check for reverting a continuation workaround we put in place for iOS 18.0 (beta?) users
-    @MainActor
-    static var shouldUseCheckedContinuation: Bool {
+    @MainActor static var shouldUseCheckedContinuation: Bool {
         let systemVersion = UIDevice.current.systemVersion
         let isRevertUnsafeContinuationsRefactorEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(
             .revertUnsafeContinuationsRefactor,
