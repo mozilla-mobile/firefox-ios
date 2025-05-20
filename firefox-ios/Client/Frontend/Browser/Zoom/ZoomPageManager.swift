@@ -102,7 +102,10 @@ class ZoomPageManager: TabEventHandler {
     }
 
     func getDomainLevel() -> [DomainZoomLevel] {
-        return zoomStore.getDomainZoomLevel()
+        let domainZoomLevels = zoomStore.getDomainZoomLevel()
+
+        // Filter current default zoom level from the list
+        return domainZoomLevels.filter { $0.zoomLevel != defaultZoomLevel }
     }
 
     /// Saves the zoom level for a given host and notifies other windows of the change

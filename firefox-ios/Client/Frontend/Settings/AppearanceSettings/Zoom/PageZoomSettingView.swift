@@ -21,11 +21,6 @@ class PageZoomSettingsViewModel: ObservableObject {
     }
 
     func deleteZoomLevel(at indexSet: IndexSet) {
-//        for index in offsets {
-//            let item = domainZoomLevels[index]
-//            zoomManager.deleteZoomLevel(for: item.domain) // Your DB/file logic
-//        }
-//        domainZoomLevels.remove(atOffsets: offsets)
         guard let index = indexSet.first else { return }
 
         let deleteItem = domainZoomLevels[index]
