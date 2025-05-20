@@ -77,7 +77,8 @@ func failOnNewFilesWithoutCoverage() {
 
         if let (_, coveragePercent) = matching {
             if coveragePercent == 0 {
-                warn("New file `\(file)` has 0% test coverage. Please add unit tests.")
+                let contact = "(cc: @cyndichin @yoanarios )."
+                warn("New file `\(file)` has 0% test coverage. Please add unit tests. \(contact)")
             }
         }
     }
