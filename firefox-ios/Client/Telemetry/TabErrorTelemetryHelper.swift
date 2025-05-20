@@ -66,12 +66,12 @@ final class TabErrorTelemetryHelper {
 
     @MainActor
     func recordTabCountAfterPreservingTabs(_ window: WindowUUID) async {
-        self.recordTabCount(window, entryPoint: .preserveRestore)
+        recordTabCount(window, entryPoint: .preserveRestore)
     }
 
     @MainActor
     func validateTabCountAfterRestoringTabs(_ window: WindowUUID) async {
-        self.validateTabCount(window, entryPoint: .preserveRestore)
+        validateTabCount(window, entryPoint: .preserveRestore)
     }
 
     // MARK: - Internal Utility
@@ -133,7 +133,7 @@ final class TabErrorTelemetryHelper {
 
     private func getTotalTabCount(window: WindowUUID) -> Int {
         assert(tabManagerAvailable(for: window), "getTabCount() should not be called prior to TabManager config.")
-        return windowManager.tabManager(for: window).tabs.count
+        return windowManager.tabManager(for: window).normalTabs.count
     }
 
     private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int, entryPoint: EntryPoint) {
