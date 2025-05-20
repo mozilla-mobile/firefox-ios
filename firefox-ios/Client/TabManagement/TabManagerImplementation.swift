@@ -717,7 +717,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         newTab.screenshotUUID = tabData.id
         newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
         newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
-        newTab.restoreTemporaryDocumentSession(tabData.temporaryDocumentSession)
+        if let documentSession = tabData.temporaryDocumentSession {
+            newTab.restoreTemporaryDocumentSession(documentSession)
+        }
 
         if newTab.url == nil {
             logger.log("Tab restored has empty URL",

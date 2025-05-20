@@ -15,7 +15,7 @@ public struct TabData: Codable {
     public let isPrivate: Bool
     public let lastUsedTime: Date
     public let createdAtTime: Date
-    public let temporaryDocumentSession: TemporaryDocumentSession
+    public let temporaryDocumentSession: TemporaryDocumentSession?
 
     public init(id: UUID,
                 title: String?,
