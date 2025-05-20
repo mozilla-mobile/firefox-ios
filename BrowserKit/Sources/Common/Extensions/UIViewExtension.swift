@@ -10,17 +10,30 @@ extension UIView {
     /// Calling this function creates a new view with `translatesAutoresizingMaskIntoConstraints`
     /// set to false. Passing in an optional closure to do further configuration of the view.
     ///
-    /// - Parameter builder: A function that takes the newly created view.
+    /// - Parameters:
+    ///   - builder: A function that takes the newly created view.
+    ///   - initializer: An optional closure that returns a custom instance of the view.
+    ///   If not provided, the default initializer of `T` is used.
+    /// - Returns: A newly created and configured view of type `T`.
     ///
     /// Usage:
-    /// ```
+    /// ```swift
     ///    private let button: UIButton = .build { button in
     ///        button.setTitle("Tap me!", for state: .normal)
     ///        button.backgroundColor = .systemPink
     ///    }
     /// ```
-    public static func build<T: UIView>(_ builder: ((T) -> Void)? = nil) -> T {
-        let view = T()
+    /// You can also provide a custom initializer:
+    /// ```swift
+    /// private let customView: CustomView = .build(nil) {
+    ///     CustomView(customParameter: "value")
+    /// }
+    /// ```
+    public static func build<T: UIView>(
+        _ builder: ((T) -> Void)? = nil,
+        _ initializer: (() -> T)? = nil
+    ) -> T {
+        let view: T = initializer?() ?? T()
         view.translatesAutoresizingMaskIntoConstraints = false
         builder?(view)
 

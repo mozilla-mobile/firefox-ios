@@ -22,14 +22,6 @@ class BookmarksTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    private func undoBookmarkRemoval() {
-        navigator.goto(LibraryPanel_Bookmarks)
-        app.buttons["More options"].waitAndTap()
-        app.tables["Context Menu"].otherElements["bookmarkSlashLarge"].waitAndTap()
-        app.buttons["Undo"].waitAndTap()
-        navigator.nowAt(BrowserTab)
-    }
-
     private func checkUnbookmarked() {
         navigator.goto(LibraryPanel_Bookmarks)
         app.buttons["Done"].waitAndTap()
@@ -258,17 +250,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306908
     // Smoketest
-    func testUndoDeleteBookmark() {
-        navigator.openURL(path(forTestPage: url_1))
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        bookmark()
-        checkBookmarked()
-        undoBookmarkRemoval()
-        app.buttons["Done"].waitAndTap()
-        navigator.nowAt(BrowserTab)
-    }
-
     private func addNewBookmark() {
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
@@ -403,7 +384,7 @@ class BookmarksTests: BaseTestCase {
         bookmark()
         mozWaitForElementToExist(app.staticTexts["Saved in “Bookmarks”"])
         unbookmark(url: urlLabelExample_3)
-        mozWaitForElementToExist(app.staticTexts["Deleted “Example Domain”"])
+        mozWaitForElementToExist(app.staticTexts["No bookmarks yet"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2784448

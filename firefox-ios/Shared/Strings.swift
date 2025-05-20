@@ -177,11 +177,6 @@ extension String {
                 tableName: "Bookmarks",
                 value: "DESKTOP BOOKMARKS",
                 comment: "Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop.")
-            public static let DeletedBookmark = MZLocalizedString(
-                key: "Bookmarks.Menu.DeletedBookmark.v131",
-                tableName: "Bookmarks",
-                value: "Deleted “%@”",
-                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
             public static let DeleteBookmark = MZLocalizedString(
                 key: "Bookmarks.Menu.DeleteBookmark.v132",
                 tableName: "Bookmarks",
@@ -313,6 +308,16 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Tap and hold the arrows to jump between pages in this tab’s history.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
+            public static let ToolbarUpdateTitle = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Title.v139",
+                tableName: "ToolbarLocation",
+                value: "We moved a few things",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
+            public static let ToolbarUpdateBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Description.v139",
+                tableName: "ToolbarLocation",
+                value: "Tabs and menu have switched places for easier access as you browse.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
         public struct FeltDeletion {
@@ -4909,11 +4914,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label.")
-        public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
-            key: "Menu.RemoveBookmark.Confirm",
-            tableName: nil,
-            value: "Bookmark Removed",
-            comment: "Toast displayed to the user after a bookmark has been removed.")
         public static let EditBookmarkLabel = MZLocalizedString(
             key: "Menu.EditBookmark.Label.v135",
             tableName: "Menu",
@@ -7862,6 +7862,16 @@ extension String {
                 tableName: nil,
                 value: "URL Copied To Clipboard",
                 comment: "Toast displayed to user after copy url pressed.")
+            public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
+                key: "Menu.RemoveBookmark.Confirm",
+                tableName: nil,
+                value: "Bookmark Removed",
+                comment: "Toast displayed to the user after a bookmark has been removed.")
+            public static let DeletedBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.DeletedBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Deleted “%@”",
+                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
             public static let AddressRemovedConfirmation = MZLocalizedString(
                 key: "Addresses.Toast.AddressRemovedConfirmation.v129",
                 tableName: "EditAddress",
