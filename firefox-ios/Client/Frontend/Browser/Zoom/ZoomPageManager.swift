@@ -114,7 +114,7 @@ class ZoomPageManager: TabEventHandler {
     ///   - zoomLevel: The zoom level value to save
     private func saveZoomLevel(for host: String, zoomLevel: CGFloat) {
         let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: zoomLevel)
-        zoomStore.saveDomainZoom(domainZoomLevel)
+        zoomStore.saveDomainZoom(domainZoomLevel, completion: nil)
 
         // Notify other windows of zoom change (other pages with identical host should also update)
         let userInfo: [AnyHashable: Any] = [WindowUUID.userInfoKey: windowUUID, "zoom": domainZoomLevel]

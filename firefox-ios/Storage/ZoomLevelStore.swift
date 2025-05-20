@@ -22,7 +22,7 @@ public struct DomainZoomLevel: Codable, Equatable {
 
 public protocol ZoomLevelStorage {
     func saveDefaultZoomLevel(defaultZoom: CGFloat)
-    func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel)
+    func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)?)
     func findZoomLevel(forDomain host: String) -> DomainZoomLevel?
     func getDefaultZoom() -> CGFloat
     func getDomainZoomLevel() -> [DomainZoomLevel]
@@ -57,7 +57,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
         save()
     }
 
-    public func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel) {
+    public func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)? = nil) {
         if let index = zoomSetting.zoomLevels.firstIndex(where: {
             $0.host == domainZoomLevel.host
         }) {
@@ -66,10 +66,10 @@ public class ZoomLevelStore: ZoomLevelStorage {
         if domainZoomLevel.zoomLevel != ZoomLevelStore.defaultZoomLimit {
             zoomSetting.zoomLevels.append(domainZoomLevel)
         }
-        save()
+        save(completion)
     }
 
-    private func save(completion: (() -> Void)? = nil) {
+    private func save(_ completion: (() -> Void)? = nil) {
         concurrentQueue.async(flags: .barrier) { [unowned self] in
             let encoder = JSONEncoder()
             do {
