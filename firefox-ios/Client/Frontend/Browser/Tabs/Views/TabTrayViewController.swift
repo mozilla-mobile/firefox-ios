@@ -552,20 +552,14 @@ class TabTrayViewController: UIViewController,
             return
         }
 
+        let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
+        var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
-            // Adding a delay since `tabTrayState` is not accurate otherwise
-            DispatchQueue.main.async {
-                let isSyncTabsPanel = self.tabTrayState.isSyncTabsPanel
-                let toolbarItems = isSyncTabsPanel ?
-                    self.experimentBottomToolbarItemsForSync :
-                    self.experimentBottomToolbarItems
-                self.setToolbarItems(toolbarItems, animated: true)
-            }
+            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
         } else {
-            let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
-            let toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
-            setToolbarItems(toolbarItems, animated: true)
+            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
+        setToolbarItems(toolbarItems, animated: true)
     }
 
     private func setupToolbarForIpad() {
