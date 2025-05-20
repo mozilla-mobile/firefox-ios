@@ -39,7 +39,7 @@ final class ZoomLevelStoreTests: XCTestCase {
 
     func testSaveAndFindZoomLevel() {
         let domainZoomLevel = DomainZoomLevel(host: testHost1, zoomLevel: testZoomLevel)
-        zoomLevelStore.save(domainZoomLevel)
+        zoomLevelStore.saveDomainZoom(domainZoomLevel)
 
         let retrievedZoomLevel = zoomLevelStore.findZoomLevel(forDomain: testHost1)
         XCTAssertEqual(retrievedZoomLevel, domainZoomLevel)
@@ -48,8 +48,8 @@ final class ZoomLevelStoreTests: XCTestCase {
     func testSaveMultipleZoomLevels() {
         let domainZoomLevel1 = DomainZoomLevel(host: testHost1, zoomLevel: testZoomLevel)
         let domainZoomLevel2 = DomainZoomLevel(host: testHost2, zoomLevel: testZoomLevel)
-        zoomLevelStore.save(domainZoomLevel1)
-        zoomLevelStore.save(domainZoomLevel2)
+        zoomLevelStore.saveDomainZoom(domainZoomLevel1)
+        zoomLevelStore.saveDomainZoom(domainZoomLevel2)
 
         let retrievedZoomLevel1 = zoomLevelStore.findZoomLevel(forDomain: testHost1)
         XCTAssertEqual(retrievedZoomLevel1, domainZoomLevel1)
@@ -61,8 +61,8 @@ final class ZoomLevelStoreTests: XCTestCase {
     func testSaveAndUpdateZoomLevel() {
         let domainZoomLevel1 = DomainZoomLevel(host: testHost1, zoomLevel: testZoomLevel)
         let domainZoomLevel2 = DomainZoomLevel(host: testHost1, zoomLevel: testZoomLevel + 1)
-        zoomLevelStore.save(domainZoomLevel1)
-        zoomLevelStore.save(domainZoomLevel2)
+        zoomLevelStore.saveDomainZoom(domainZoomLevel1)
+        zoomLevelStore.saveDomainZoom(domainZoomLevel2)
 
         let retrievedZoomLevel = zoomLevelStore.findZoomLevel(forDomain: testHost1)
         XCTAssertEqual(retrievedZoomLevel, domainZoomLevel2)
@@ -70,9 +70,9 @@ final class ZoomLevelStoreTests: XCTestCase {
 
     func testSaveNoZoomLevel() {
         let domainZoomLevel = DomainZoomLevel(host: testHost1, zoomLevel: 1.0)
-        zoomLevelStore.save(domainZoomLevel)
+        zoomLevelStore.saveDomainZoom(domainZoomLevel)
 
-        XCTAssertFalse(zoomLevelStore.domainZoomLevels.contains(domainZoomLevel))
+        XCTAssertFalse(zoomLevelStore.getDomainZoomLevel().contains(domainZoomLevel))
     }
 
     func testFindZoomLevelNotFound() {
@@ -86,19 +86,19 @@ final class ZoomLevelStoreTests: XCTestCase {
 
         let domainZoomLevel = DomainZoomLevel(host: testHost3, zoomLevel: 1.5)
         dispatchGroup.enter()
-        zoomLevelStore.save(domainZoomLevel) {
+        zoomLevelStore.saveDomainZoom(domainZoomLevel) {
             dispatchGroup.leave()
         }
 
         let updatedDomainZoomLevel = DomainZoomLevel(host: testHost3, zoomLevel: 2.0)
         dispatchGroup.enter()
-        zoomLevelStore.save(updatedDomainZoomLevel) {
+        zoomLevelStore.saveDomainZoom(updatedDomainZoomLevel) {
             dispatchGroup.leave()
         }
         dispatchGroup.wait()
 
-        XCTAssertTrue(zoomLevelStore.domainZoomLevels.contains(updatedDomainZoomLevel))
-        XCTAssertFalse(zoomLevelStore.domainZoomLevels.contains(domainZoomLevel))
+        XCTAssertTrue(zoomLevelStore.getDomainZoomLevel().contains(updatedDomainZoomLevel))
+        XCTAssertFalse(zoomLevelStore.getDomainZoomLevel().contains(domainZoomLevel))
     }
 
     func testSingletonInstance() {
