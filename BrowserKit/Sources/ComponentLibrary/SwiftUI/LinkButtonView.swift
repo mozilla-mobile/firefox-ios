@@ -4,11 +4,17 @@
 
 import SwiftUI
 
-public struct LinkButton: View {
-    let viewModel: OnboardingLinkInfoModel
+public struct LinkButtonView: View {
+    let viewModel: LinkInfoModel
     let action: () -> Void
 
-    public init(viewModel: OnboardingLinkInfoModel, action: @escaping () -> Void) {
+    // MARK: – UX Constants
+    private enum UX {
+        static let verticalPadding: CGFloat = 12
+        static let horizontalPadding: CGFloat = 16
+    }
+
+    public init(viewModel: LinkInfoModel, action: @escaping () -> Void) {
         self.viewModel = viewModel
         self.action = action
     }
@@ -17,8 +23,8 @@ public struct LinkButton: View {
         Button(action: action) {
             Text(viewModel.title)
                 .underline()
-                .padding(.vertical, 12)
-                .padding(.horizontal, 16)
+                .padding(.vertical, UX.verticalPadding)
+                .padding(.horizontal, UX.horizontalPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibility(identifier: viewModel.title)

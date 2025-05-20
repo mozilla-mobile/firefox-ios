@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import ComponentLibrary
 
 private enum UX {
     // Base metrics for a standard device (e.g., iPhone 11)
@@ -89,7 +90,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
 
     @ViewBuilder var linkView: some View {
         if let linkVM = viewModel.link {
-            LinkButton(viewModel: linkVM, action: onLink)
+            LinkButtonView(viewModel: .init(title: linkVM.title, url: linkVM.url), action: onLink)
         }
     }
 
