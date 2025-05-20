@@ -36,8 +36,8 @@ class EcosiaHomeViewModelTests: XCTestCase {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
-                                          referrals: .init(),
                                           theme: EcosiaLightTheme())
+        User.shared.showClimateImpact = true
 
         XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)

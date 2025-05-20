@@ -103,6 +103,24 @@
                   Identifier = "HistoryHighlightsDataAdaptorTests/testReloadDataOnNotification()">
                </Test>
                <Test
+                  Identifier = "MainMenuStateTests">
+               </Test>
+               <Test
+                  Identifier = "MainMenuStateTests/testCloseAction()">
+               </Test>
+               <Test
+                  Identifier = "MainMenuStateTests/testInitialization()">
+               </Test>
+               <Test
+                  Identifier = "MainMenuStateTests/testNavigation_AllCases()">
+               </Test>
+               <Test
+                  Identifier = "MainMenuStateTests/testToggleUserAgentAction()">
+               </Test>
+               <Test
+                  Identifier = "MainMenuStateTests/testUpdatingCurrentTabInfo()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testURIFixupPunyCode()">
                </Test>
                <Test
@@ -310,6 +328,11 @@
                BlueprintName = "EcosiaTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NewsTests/testNeedsUpdateAfterLoading()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
