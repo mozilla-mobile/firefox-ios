@@ -116,7 +116,7 @@
 "Onboarding.TermsOfService.ManageLink.v135" = "Sefrek";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Akken ad tεawneḍ deg usnerni iminig, %1$@ ad yazen isefka n tawassna akked umyigew ɣer %2$@.";
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Akken ad tεawneḍ deg usnerni iminig, %1$@ ad yazen isefka n tawassna akked umyigew ɣer %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ terḥa-t tudert-ik tabaḍnit. Ɣeṛ ugar deg %2$@.";

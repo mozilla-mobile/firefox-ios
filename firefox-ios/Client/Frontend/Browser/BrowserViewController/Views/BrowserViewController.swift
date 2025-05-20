@@ -806,6 +806,14 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
+
+        if let readerMode = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            if readerMode.state == .active && !contentContainer.hasHomepage {
+                showReaderModeBar(animated: false)
+            } else {
+                hideReaderModeBar(animated: false)
+            }
+        }
     }
 
     private func showToastType(toast: ToastType) {
@@ -887,7 +895,9 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled { webPagePreview.applyTheme(theme: theme) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            webPagePreview.applyTheme(theme: theme)
+        }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -1145,7 +1155,9 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            view.addSubviews(addressBarBackgroundView, webPagePreview)
+        }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
@@ -1649,8 +1661,6 @@ class BrowserViewController: UIViewController,
             updateBlurViews()
             return
         }
-
-        hideReaderModeBar(animated: false)
 
         // Make sure reload button is hidden on homepage
         if !isToolbarRefactorEnabled {
