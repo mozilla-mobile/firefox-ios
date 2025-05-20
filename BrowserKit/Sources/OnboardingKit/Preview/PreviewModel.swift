@@ -178,9 +178,9 @@ extension PreviewModel {
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onPrimary: { },
-            onSecondary: { },
-            onLink: { }
+            onPrimaryActionTap: { },
+            onSecondaryActionTap: { },
+            onLinkTap: { }
         )
     }
 }

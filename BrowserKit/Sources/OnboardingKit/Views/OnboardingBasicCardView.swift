@@ -18,6 +18,7 @@ private enum UX {
     static let imageHeight: CGFloat = 150
     static let cornerRadius: CGFloat = 20
     static let shadowRadius: CGFloat = 8
+    static let shadowOffsetX: CGFloat = 0
     static let shadowOffsetY: CGFloat = 4
     static let shadowOpacity = 0.1
     static let secondaryButtonTopPadding: CGFloat = 8
@@ -29,33 +30,78 @@ private enum UX {
 }
 
 public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View {
-    public let viewModel: VM
-    public let onPrimary: () -> Void
-    public let onSecondary: () -> Void
-    public let onLink: () -> Void
-
-    let windowUUID: WindowUUID
-    var themeManager: ThemeManager
-
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryAction: Color = .clear
+    private var shadowColor = Color.black.opacity(UX.shadowOpacity)
+    
+    let windowUUID: WindowUUID
+    var themeManager: ThemeManager
+    public let viewModel: VM
+    public let onPrimaryActionTap: () -> Void
+    public let onSecondaryActionTap: () -> Void
+    public let onLinkTap: () -> Void
 
     public init(
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onPrimary: @escaping () -> Void,
-        onSecondary: @escaping () -> Void,
-        onLink: @escaping () -> Void
+        onPrimaryActionTap: @escaping () -> Void,
+        onSecondaryActionTap: @escaping () -> Void,
+        onLinkTap: @escaping () -> Void
     ) {
         self.viewModel = viewModel
-        self.onPrimary = onPrimary
-        self.onSecondary = onSecondary
-        self.onLink = onLink
+        self.onPrimaryActionTap = onPrimaryActionTap
+        self.onSecondaryActionTap = onSecondaryActionTap
+        self.onLinkTap = onLinkTap
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+    }
+
+    public var body: some View {
+        GeometryReader { geometry in
+            // Determine scale factor based on current size vs base metrics
+            let widthScale = geometry.size.width / UX.baseWidth
+            let heightScale = geometry.size.height / UX.baseHeight
+            let scale = min(widthScale, heightScale)
+
+            ScrollView {
+                VStack {
+                    VStack(spacing: UX.spacing * scale) {
+                        Spacer()
+                        titleView
+                        imageView(scale: scale)
+                        bodyView
+                        linkView
+                        Spacer()
+                        primaryButton
+                    }
+                    .frame(height: geometry.size.height * UX.cardHeightRatio)
+                    .padding(UX.verticalPadding * scale)
+                    .background(
+                        RoundedRectangle(cornerRadius: UX.cornerRadius)
+                            .fill(cardBackgroundColor)
+                            .shadow(
+                                color: shadowColor,
+                                radius: UX.shadowRadius,
+                                x: UX.shadowOffsetX,
+                                y: UX.shadowOffsetY
+                            )
+                    )
+                    .padding(.horizontal, UX.horizontalPadding * scale)
+                    secondaryButton(scale: scale)
+                    Spacer()
+                }
+            }
+            .onAppear {
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+        }
     }
 
     var titleView: some View {
@@ -90,12 +136,18 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
 
     @ViewBuilder var linkView: some View {
         if let linkVM = viewModel.link {
-            LinkButtonView(viewModel: .init(title: linkVM.title, url: linkVM.url), action: onLink)
+            LinkButtonView(
+                viewModel: .init(
+                    title: linkVM.title,
+                    url: linkVM.url
+                ),
+                action: onLinkTap
+            )
         }
     }
 
     var primaryButton: some View {
-        Button(viewModel.buttons.primary.title, action: onPrimary)
+        Button(viewModel.buttons.primary.title, action: onPrimaryActionTap)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
             .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
@@ -103,56 +155,11 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     @ViewBuilder
     func secondaryButton(scale: CGFloat) -> some View {
         if let secondary = viewModel.buttons.secondary {
-            Button(secondary.title, action: onSecondary)
+            Button(secondary.title, action: onSecondaryActionTap)
                 .foregroundColor(secondaryAction)
                 .padding(.top, UX.secondaryButtonTopPadding * scale)
                 .padding(.bottom, UX.secondaryButtonBottomPadding * scale)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
-        }
-    }
-
-    public var body: some View {
-        GeometryReader { geometry in
-            // Determine scale factor based on current size vs base metrics
-            let widthScale = geometry.size.width / UX.baseWidth
-            let heightScale = geometry.size.height / UX.baseHeight
-            let scale = min(widthScale, heightScale)
-
-            ScrollView {
-                VStack {
-                    VStack(spacing: UX.spacing * scale) {
-                        Spacer()
-                        titleView
-                        imageView(scale: scale)
-                        bodyView
-                        linkView
-                        Spacer()
-                        primaryButton
-                    }
-                    .frame(height: geometry.size.height * UX.cardHeightRatio)
-                    .padding(UX.verticalPadding * scale)
-                    .background(
-                        RoundedRectangle(cornerRadius: UX.cornerRadius)
-                            .fill(cardBackgroundColor)
-                            .shadow(
-                                color: Color.black.opacity(UX.shadowOpacity),
-                                radius: UX.shadowRadius,
-                                x: 0,
-                                y: UX.shadowOffsetY
-                            )
-                    )
-                    .padding(.horizontal, UX.horizontalPadding * scale)
-                    secondaryButton(scale: scale)
-                    Spacer()
-                }
-            }
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
         }
     }
 
