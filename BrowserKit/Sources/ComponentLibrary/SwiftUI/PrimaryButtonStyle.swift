@@ -7,7 +7,7 @@ import Common
 
 public struct PrimaryButtonStyle: ButtonStyle {
     let theme: Theme
-    
+
     public init(theme: Theme) {
         self.theme = theme
     }

@@ -27,6 +27,9 @@ private enum UX {
     // Font sizes for base metrics
     static let titleFontSize: CGFloat = 28
     static let bodyFontSize: CGFloat = 16
+    
+    static let titleFont: Font = .title
+    static let bodyFont: Font = .subheadline
 }
 
 public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View {
@@ -35,7 +38,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryAction: Color = .clear
     private var shadowColor = Color.black.opacity(UX.shadowOpacity)
-    
+
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let viewModel: VM
@@ -106,7 +109,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(.title)
+            .font(UX.titleFont)
             .fontWeight(.semibold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
@@ -128,7 +131,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
 
     var bodyView: some View {
         Text(viewModel.body)
-            .font(.subheadline)
+            .font(UX.bodyFont)
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")

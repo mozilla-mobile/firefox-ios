@@ -7,7 +7,7 @@ import Foundation
 public struct LinkInfoModel {
     let title: String
     let url: URL
-    
+
     public init(title: String, url: URL) {
         self.title = title
         self.url = url
