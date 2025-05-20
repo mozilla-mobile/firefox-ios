@@ -603,7 +603,6 @@ extension BrowserViewController: WKNavigationDelegate {
                url.isFileURL,
                tab.shouldDownloadDocument(navigationAction.request),
                let sourceURL = tab.getTemporaryDocumentsSession()[url] {
-
                 let request = URLRequest(url: sourceURL)
                 let filename = url.lastPathComponent
                 handlePDFDownloadRequest(request: request, tab: tab, filename: filename)

@@ -225,7 +225,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDecidePolicyForNavigationResponse_cancelLoading_whenResponseIsPDFThatWasntDownloadedPreviously() {
         let subject = createSubject()
         let tab = createTab()
-        
+
         let pdfURL = URL(string: "https://example.com/test.pdf")!
         let response = URLResponse(
             url: pdfURL,
@@ -411,7 +411,6 @@ class MockURLAuthenticationChallengeSender: NSObject, URLAuthenticationChallenge
     func cancel(_ challenge: URLAuthenticationChallenge) {}
 }
 
-
 class MockFileManager: FileManagerProtocol {
     var fileExistsCalled = 0
     var fileExists = false
@@ -427,13 +426,13 @@ class MockFileManager: FileManagerProtocol {
         fileExistsCalled += 1
         return fileExists
     }
-    
+
     func urls(for directory: FileManager.SearchPathDirectory,
               in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
         urlsForDirectoryCalled += 1
         return []
     }
-    
+
     func contentsOfDirectory(atPath path: String) throws -> [String] {
         contentOfDirectoryCalled += 1
         return []
@@ -447,18 +446,18 @@ class MockFileManager: FileManagerProtocol {
     func removeItem(atPath path: String) throws {
         removeItemAtPathCalled += 1
     }
-    
+
     func removeItem(at url: URL) throws {
         removeItemAtURLCalled += 1
     }
-    
+
     func copyItem(at srcURL: URL, to dstURL: URL) throws {
         copyItemCalled += 1
     }
-    
+
     func createDirectory(atPath path: String,
                          withIntermediateDirectories createIntermediates: Bool,
-                         attributes: [FileAttributeKey : Any]?) throws {
+                         attributes: [FileAttributeKey: Any]?) throws {
         createDirectoryCalled += 1
     }
 }
