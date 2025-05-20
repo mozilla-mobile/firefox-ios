@@ -198,6 +198,14 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
         setupShadow(theme: theme)
+
+        if UIAccessibility.isReduceTransparencyEnabled {
+            closeButtonBlurView.backgroundColor = theme.colors.iconSecondary
+        } else {
+            closeButtonBlurView.backgroundColor = .clear
+            closeButtonBlurView.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
+        }
+
         guard let tabModel else { return }
         updateUIForSelectedState(tabModel.isSelected,
                                  isPrivate: tabModel.isPrivate,
