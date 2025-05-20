@@ -25,6 +25,7 @@ class TestHistory: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        self.clear(profile.places)
         profile.shutdown()
         profile = nil
     }
@@ -46,8 +47,6 @@ class TestHistory: XCTestCase {
         for entry in siteDictionary {
             self.checkVisits(places, url: entry.key)
         }
-
-        self.clear(places)
     }
 
     func testSearchHistory_WithResults() {
@@ -64,7 +63,6 @@ class TestHistory: XCTestCase {
             let results = result.successValue!
             XCTAssertEqual(results.count, 2)
             expectation.fulfill()
-            self.clear(places)
         }
 
         self.waitForExpectations(timeout: 10, handler: nil)
@@ -84,7 +82,6 @@ class TestHistory: XCTestCase {
             let results = result.successValue!
             XCTAssertEqual(results.count, 2)
             expectation.fulfill()
-            self.clear(places)
         }
 
         self.waitForExpectations(timeout: 10, handler: nil)
@@ -102,7 +99,6 @@ class TestHistory: XCTestCase {
             let results = result.successValue!
             XCTAssertEqual(results.count, 2)
             expectation.fulfill()
-            self.clear(places)
         }
 
         self.waitForExpectations(timeout: 10, handler: nil)
@@ -120,7 +116,6 @@ class TestHistory: XCTestCase {
             let results = result.successValue!
             XCTAssertEqual(results.count, 0)
             expectation.fulfill()
-            self.clear(places)
         }
 
         self.waitForExpectations(timeout: 100, handler: nil)
@@ -204,8 +199,11 @@ class TestHistory: XCTestCase {
         let places = profile.places
         var index = 0
 
-        self.measure({
-            () in
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            ]) { () in
             for _ in 0...self.numCmds {
                 self.addSite(
                     places,
@@ -214,8 +212,7 @@ class TestHistory: XCTestCase {
                 )
                 index += 1
             }
-            self.clear(places)
-        })
+        }
     }
 
     func testGetPerformance() {
@@ -223,7 +220,6 @@ class TestHistory: XCTestCase {
         var index = 0
         var urls = [String: String]()
 
-        self.clear(places)
         for _ in 0..<self.numCmds {
             self.addSite(
                 places,
@@ -238,8 +234,6 @@ class TestHistory: XCTestCase {
             self.checkSites(places, urls: urls)
             return
         })
-
-        self.clear(places)
     }
 
     // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads.
@@ -260,8 +254,10 @@ class TestHistory: XCTestCase {
             self.runRandom(&places, queue: queue, completion: { () in
                 counter += 1
                 if counter == self.numThreads {
-                    self.clear(places)
-                    expectation.fulfill()
+                    self.profile.places.deleteEverythingHistory().uponQueue(.global()) { result in
+                        XCTAssertTrue(result.isSuccess, "History cleared.")
+                        expectation .fulfill()
+                    }
                 }
             })
         }
@@ -285,7 +281,6 @@ class TestHistory: XCTestCase {
             self.runRandom(&places, queue: queue, completion: { () in
                 counter += 1
                 if counter == self.numThreads {
-                    self.clear(places)
                     expectation.fulfill()
                 }
             })
@@ -359,7 +354,14 @@ class TestHistory: XCTestCase {
     }
 
     private func clear(_ places: RustPlaces) {
-        XCTAssertTrue(places.deleteEverythingHistory().value.isSuccess, "History cleared.")
+        let expectation = self.expectation(description: "Wait for clear history")
+
+        profile.places.deleteEverythingHistory().uponQueue(.global()) { result in
+            expectation .fulfill()
+            XCTAssertTrue(result.isSuccess, "History cleared.")
+        }
+
+        waitForExpectations(timeout: 10)
     }
 
     private func checkVisits(_ places: RustPlaces, url: String) {
