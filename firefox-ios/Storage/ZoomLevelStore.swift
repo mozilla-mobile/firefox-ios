@@ -93,7 +93,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
     }
 
     public func deleteZoomLevel(for host: String) {
-        guard let index = zoomSetting.zoomLevels.firstIndex(where: { return $0.host == host}) else { return }
+        guard let index = zoomSetting.zoomLevels.firstIndex(where: { return $0.host == host }) else { return }
 
         zoomSetting.zoomLevels.remove(at: index)
         save()
