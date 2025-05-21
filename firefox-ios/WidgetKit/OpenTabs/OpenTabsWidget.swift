@@ -100,20 +100,7 @@ struct OpenTabsView: View {
     var body: some View {
         Group {
             if entry.tabs.isEmpty {
-                VStack {
-                    Text(String.NoOpenTabsLabel)
-                    HStack {
-                        Spacer()
-                        Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                            .foregroundColor(Color("openTabsContentColor"))
-                        Text(String.OpenFirefoxLabel)
-                            .foregroundColor(Color("openTabsContentColor"))
-                            .lineLimit(1)
-                            .font(.system(size: 13, weight: .semibold, design: .default))
-                        Spacer()
-                    }.padding(10)
-                }
-                .foregroundColor(Color("backgroundColor"))
+                emptyView
             } else {
                 VStack(spacing: 8) {
                     ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
