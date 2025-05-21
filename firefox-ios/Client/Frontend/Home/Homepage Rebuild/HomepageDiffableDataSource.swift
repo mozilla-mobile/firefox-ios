@@ -49,6 +49,7 @@ final class HomepageDiffableDataSource:
             return [
                 HomepageHeaderCell.self,
                 HomepageMessageCardCell.self,
+                LegacyTopSiteCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 JumpBackInCell.self,
@@ -121,7 +122,7 @@ final class HomepageDiffableDataSource:
         snapshot.appendSections([.customizeHomepage])
         snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
 
-        apply(snapshot, animatingDifferences: true)
+        apply(snapshot, animatingDifferences: false)
     }
 
     private func getPocketStories(

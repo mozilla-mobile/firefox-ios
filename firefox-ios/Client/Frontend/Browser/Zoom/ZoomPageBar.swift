@@ -40,6 +40,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private var stepperDefaultConstraints = [NSLayoutConstraint]()
     private var gradientViewHeightConstraint = NSLayoutConstraint()
     private let zoomManager: ZoomPageManager
+    private let zoomTelemetry: ZoomTelemetry
 
     // MARK: - UI Elements
 
@@ -96,8 +97,10 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     // MARK: - Initializers
 
-    init(zoomManager: ZoomPageManager) {
+    init(zoomManager: ZoomPageManager,
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.zoomManager = zoomManager
+        self.zoomTelemetry = ZoomTelemetry(gleanWrapper: gleanWrapper)
         super.init(frame: .zero)
 
         setupViews()
@@ -247,16 +250,18 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     @objc
     private func didPressZoomIn(_ sender: UIButton) {
-        let zoomValue = zoomManager.zoomIn()
-        updateZoomLabel(zoomValue: zoomValue)
-        updateZoomButtonEnabled(zoomValue: zoomValue)
+        let level = zoomManager.zoomIn()
+        updateZoomLabel(zoomValue: level)
+        updateZoomButtonEnabled(zoomValue: level)
+        zoomTelemetry.zoomIn(zoomLevel: ZoomLevel(from: level))
     }
 
     @objc
     private func didPressZoomOut(_ sender: UIButton) {
-        let zoomValue = zoomManager.zoomOut()
-        updateZoomLabel(zoomValue: zoomValue)
-        updateZoomButtonEnabled(zoomValue: zoomValue)
+        let level = zoomManager.zoomOut()
+        updateZoomLabel(zoomValue: level)
+        updateZoomButtonEnabled(zoomValue: level)
+        zoomTelemetry.zoomOut(zoomLevel: ZoomLevel(from: level))
     }
 
     @objc
@@ -265,6 +270,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
             zoomManager.resetZoom()
             updateZoomLabel(zoomValue: ZoomConstants.defaultZoomLimit)
             updateZoomButtonEnabled(zoomValue: ZoomConstants.defaultZoomLimit)
+            zoomTelemetry.resetZoomLevel()
         }
     }
 
@@ -274,6 +280,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .layoutChanged, argument: nil)
         }
+        zoomTelemetry.closeZoomBar()
     }
 
     // MARK: - AlphaDimmable

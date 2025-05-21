@@ -10,7 +10,7 @@ enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"
 }
 
-enum TabsDeletionPeriod {
+enum TabsDeletionPeriod: String {
     case oneDay, oneWeek, oneMonth
 }
 
@@ -36,7 +36,7 @@ protocol TabManager: AnyObject {
 
     // MARK: - Add/Remove Delegate
     func addDelegate(_ delegate: TabManagerDelegate)
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate)
+    func setNavigationDelegate(_ delegate: WKNavigationDelegate)
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
 
     // MARK: - Select Tab
@@ -71,7 +71,7 @@ protocol TabManager: AnyObject {
     func removeTabs(_ tabs: [Tab])
 
     /// Remove normal tabs older than a certain period of time
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod)
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date)
 
     // MARK: - Undo Close
     func undoCloseTab()
@@ -101,6 +101,11 @@ protocol TabManager: AnyObject {
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
+
+    /// Commits the pending changes to the persistent store.
+    func commitChanges()
+
+    func notifyCurrentTabDidFinishLoading()
     func restoreTabs(_ forced: Bool)
     func startAtHomeCheck() -> Bool
     func expireLoginAlerts()

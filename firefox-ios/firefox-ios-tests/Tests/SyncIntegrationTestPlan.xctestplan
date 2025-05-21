@@ -110,6 +110,7 @@
         "FirefoxSuggestTest",
         "FirstRunTourTests",
         "FxScreenGraphTests",
+        "HistoryTabTrayUIExperimentTests",
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests",

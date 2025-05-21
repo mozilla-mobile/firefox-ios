@@ -100,6 +100,8 @@ public struct PrefsKeys {
     public struct RemoteSettings {
         public static let lastRemoteSettingsServiceSyncTimestamp =
         "LastRemoteSettingsServiceSyncTimestamp"
+        public static let useQAStagingServerForRemoteSettings =
+        "useQAStagingServerForRemoteSettings"
     }
 
     public struct Sync {
@@ -126,6 +128,7 @@ public struct PrefsKeys {
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case mainMenuKey = "MainMenuHintKey"
         case navigationKey = "ContextualHintNavigation"
+        case toolbarUpdateKey = "ContextualHintToolbarUpdate"
     }
 
     // Firefox settings

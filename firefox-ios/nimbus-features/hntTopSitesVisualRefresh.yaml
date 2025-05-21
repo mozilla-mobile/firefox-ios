@@ -1,0 +1,16 @@
+# The configuration for the top sites visual refresh
+features:
+  hnt-top-sites-visual-refresh-feature:
+    description: This feature manages the top sites visual refresh.
+    variables:
+      enabled:
+        description: Determines whether the top sites visual refresh is shown.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

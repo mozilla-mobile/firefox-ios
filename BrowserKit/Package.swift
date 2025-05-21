@@ -41,6 +41,9 @@ let package = Package(
         .library(
             name: "ContentBlockingGenerator",
             targets: ["ContentBlockingGenerator"]),
+        .library(
+            name: "OnboardingKit",
+            targets: ["OnboardingKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -150,6 +153,17 @@ let package = Package(
         .testTarget(
             name: "ContentBlockingGeneratorTests",
             dependencies: ["ContentBlockingGenerator"]),
+        .target(
+            name: "OnboardingKit",
+            dependencies: ["Common", "ComponentLibrary"],
+            resources: [
+                .process("Shaders")
+            ],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            linkerSettings: [
+                .linkedFramework("Metal"),
+                .linkedFramework("MetalKit")
+            ]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
             dependencies: ["ContentBlockingGenerator"]),

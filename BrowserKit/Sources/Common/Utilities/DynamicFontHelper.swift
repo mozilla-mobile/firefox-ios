@@ -12,6 +12,7 @@ public protocol DynamicFontHelper {
     /// - Returns: The UIFont with the specified font size and style
     static func preferredFont(withTextStyle textStyle: UIFont.TextStyle,
                               size: CGFloat,
+                              sizeCap: CGFloat?,
                               weight: UIFont.Weight?,
                               symbolicTraits: UIFontDescriptor.SymbolicTraits?
     ) -> UIFont
@@ -29,16 +30,22 @@ public protocol DynamicFontHelper {
 public extension DynamicFontHelper {
     static func preferredFont(withTextStyle textStyle: UIFont.TextStyle,
                               size: CGFloat,
+                              sizeCap: CGFloat? = nil,
                               weight: UIFont.Weight? = nil,
                               symbolicTraits: UIFontDescriptor.SymbolicTraits? = nil
     ) -> UIFont {
-        preferredFont(withTextStyle: textStyle, size: size, weight: weight, symbolicTraits: symbolicTraits)
+        preferredFont(withTextStyle: textStyle,
+                      size: size,
+                      sizeCap: sizeCap,
+                      weight: weight,
+                      symbolicTraits: symbolicTraits)
     }
 }
 
 public struct DefaultDynamicFontHelper: DynamicFontHelper {
     public static func preferredFont(withTextStyle textStyle: UIFont.TextStyle,
                                      size: CGFloat,
+                                     sizeCap: CGFloat? = nil,
                                      weight: UIFont.Weight? = nil,
                                      symbolicTraits: UIFontDescriptor.SymbolicTraits? = nil) -> UIFont {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
@@ -48,14 +55,28 @@ public struct DefaultDynamicFontHelper: DynamicFontHelper {
             fontDescriptor = descriptor
         }
 
-        var font: UIFont
-        if let weight = weight {
-            font = UIFont.systemFont(ofSize: size, weight: weight)
-        } else {
-            font = UIFont(descriptor: fontDescriptor, size: size)
+        let font = fontForWeight(descriptor: fontDescriptor,
+                                 size: size,
+                                 weight: weight)
+        let scaledFont = fontMetrics.scaledFont(for: font)
+
+        if let sizeCap {
+            if scaledFont.pointSize > sizeCap {
+                return fontForWeight(descriptor: fontDescriptor,
+                                     size: sizeCap,
+                                     weight: weight)
+            }
         }
 
-        return fontMetrics.scaledFont(for: font)
+        return scaledFont
+    }
+
+    static func fontForWeight(descriptor: UIFontDescriptor, size: CGFloat, weight: UIFont.Weight?) -> UIFont {
+        if let weight = weight {
+            return UIFont.systemFont(ofSize: size, weight: weight)
+        } else {
+            return UIFont(descriptor: descriptor, size: size)
+        }
     }
 
     public static func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat) -> UIFont {

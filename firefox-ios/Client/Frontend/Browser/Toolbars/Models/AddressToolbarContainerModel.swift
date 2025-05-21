@@ -2,10 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import ToolbarKit
 import Shared
 
 final class AddressToolbarContainerModel: Equatable {
+    let toolbarHelper: ToolbarHelperInterface
+
     let navigationActions: [ToolbarElement]
     let leadingPageActions: [ToolbarElement]
     let trailingPageActions: [ToolbarElement]
@@ -33,12 +36,13 @@ final class AddressToolbarContainerModel: Equatable {
     let windowUUID: UUID
 
     var addressToolbarConfig: AddressToolbarConfiguration {
-        let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let term = searchTerm ?? searchTermFromURL(url)
         let isVersionLayout = toolbarLayoutStyle == .version1 || toolbarLayoutStyle == .version2
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
         let uxConfiguration: AddressToolbarUXConfiguration = if isVersionLayout {
-            .experiment
+            .experiment(backgroundAlpha: backgroundAlpha)
         } else {
-            .default
+            .default(backgroundAlpha: backgroundAlpha)
         }
 
         var droppableUrl: URL?
@@ -93,7 +97,13 @@ final class AddressToolbarContainerModel: Equatable {
             shouldAnimate: shouldAnimate)
     }
 
-    init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
+    init(
+        state: ToolbarState,
+        profile: Profile,
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
+        windowUUID: UUID
+    ) {
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          isShowingTopTabs: state.isShowingTopTabs,
@@ -110,12 +120,12 @@ final class AddressToolbarContainerModel: Equatable {
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
-                                ?? profile.searchEnginesManager.defaultEngine?.generateModel()
+                                ?? searchEnginesManager.defaultEngine?.generateModel()
 
         self.windowUUID = windowUUID
         self.searchEngineName = searchEngineModel?.name ?? ""
         self.searchEngineImage = searchEngineModel?.image ?? UIImage()
-        self.searchEnginesManager = profile.searchEnginesManager
+        self.searchEnginesManager = searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
@@ -130,17 +140,17 @@ final class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
         self.toolbarLayoutStyle = state.toolbarLayout
+        self.toolbarHelper = toolbarHelper
     }
 
-    func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {
+    func searchTermFromURL(_ url: URL?) -> String? {
         var searchURL: URL? = url
 
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
 
-        guard let query = searchEnginesManager.queryForSearchURL(searchURL) else { return nil }
-        return query
+        return searchEnginesManager.queryForSearchURL(searchURL)
     }
 
     private static func mapActions(_ actions: [ToolbarActionConfiguration],

@@ -20,22 +20,22 @@ class AccountSyncHandlerTests: XCTestCase {
         self.profile = MockProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
         self.queue = MockDispatchQueue()
+        DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
             tabManager: MockTabManager(
                 recentlyAccessedNormalTabs: [createTab(profile: profile)]
             )
         )
-        DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
     }
 
     override func tearDown() {
-        super.tearDown()
         self.syncManager = nil
         self.profile = nil
         self.queue = nil
         self.mockWindowManager = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testTabDidGainFocus_doesntSyncWithoutAccount() {

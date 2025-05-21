@@ -8,7 +8,7 @@ import XCTest
 
 class AddressToolbarContainerModelTests: XCTestCase {
     private var mockProfile: MockProfile!
-    private var searchEnginesManager: SearchEnginesManager!
+    private var searchEnginesManager: SearchEnginesManagerProvider!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -16,27 +16,30 @@ class AddressToolbarContainerModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
 
         mockProfile = MockProfile()
-
-        // The MockProfile creates a SearchEnginesManager with a `MockSearchEngineProvider`
-        searchEnginesManager = mockProfile.searchEnginesManager
+        searchEnginesManager = SearchEnginesManager(
+            prefs: mockProfile.prefs,
+            files: mockProfile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
         searchEnginesManager = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testSearchWordFromURLWhenUrlIsNilThenSearchWordIsNil() {
         let viewModel = createSubject(withState: createBasicToolbarState())
-        XCTAssertNil(viewModel.searchTermFromURL(nil, searchEnginesManager: searchEnginesManager))
+        XCTAssertNil(viewModel.searchTermFromURL(nil))
     }
 
     func testSearchWordFromURLWhenUsingGoogleSearchThenSearchWordIsCorrect() {
         let viewModel = createSubject(withState: createBasicToolbarState())
         let searchTerm = "test"
         let url = URL(string: "http://firefox.com/find?q=\(searchTerm)")
-        let result = viewModel.searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let result = viewModel.searchTermFromURL(url)
         XCTAssertEqual(searchTerm, result)
     }
 
@@ -44,7 +47,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
         let viewModel = createSubject(withState: createBasicToolbarState())
         let searchTerm = "test"
         let url = URL(string: "internal://local?q=\(searchTerm)")
-        XCTAssertNil(viewModel.searchTermFromURL(url, searchEnginesManager: searchEnginesManager))
+        XCTAssertNil(viewModel.searchTermFromURL(url))
     }
 
     func testUsesDefaultSearchEngine_WhenNoSearchEngineSelected() {
@@ -123,7 +126,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                             isNewTabFeatureEnabled: false,
                             canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
-                            shouldAnimate: false)
+                            shouldAnimate: false,
+                            isTranslucent: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -142,6 +146,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                             isNewTabFeatureEnabled: false,
                             canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
-                            shouldAnimate: false)
+                            shouldAnimate: false,
+                            isTranslucent: false)
     }
 }

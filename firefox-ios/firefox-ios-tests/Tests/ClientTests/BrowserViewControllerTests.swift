@@ -14,6 +14,7 @@ import Shared
 class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     var tabManager: MockTabManager!
+    var screenshotHelper: MockScreenshotHelper!
     var browserCoordinator: MockBrowserCoordinator!
     var mockStore: MockStoreForMiddleware<AppState>!
     var appState: AppState!
@@ -77,6 +78,25 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         ))
 
         wait(for: [expectation], timeout: 5.0)
+    }
+
+    func testAppWillResignActiveNotification_takesScreenshot_ifNoViewIsPresented() {
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        subject.appWillResignActiveNotification()
+        XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
+
+    func testAppWillResignActiveNotification_doesNotTakeScreenshot_ifAViewIsPresented() {
+        // Using the mock BVC here so we can "present" a view controller without loading it
+        // into the window. The function under test `appWillResignActiveNotification` is not stubbed out
+        let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        screenshotHelper = MockScreenshotHelper(controller: mockBVC)
+        mockBVC.screenshotHelper = screenshotHelper
+        mockBVC.viewControllerToPresent = UIViewController()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        mockBVC.appWillResignActiveNotification()
+        XCTAssertFalse(screenshotHelper.takeScreenshotCalled)
     }
 
     func testOpenURLInNewTab_withPrivateModeEnabled() {
@@ -147,12 +167,24 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Handle PDF
 
-    func testHandlePDF_showsDocumentLoadingView() {
+    func testHandlePDF_doesntDocumentLoadingView_whenTabNotSelected() {
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         let response = URLResponse()
         let request = URLRequest(url: URL(fileURLWithPath: "test"))
 
+        subject.handlePDFResponse(tab: tab, response: response, request: request)
+
+        XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 0)
+    }
+
+    func testHandlePDF_showDocumentLoadingView_whenTabSelected() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let response = URLResponse()
+        let request = URLRequest(url: URL(fileURLWithPath: "test"))
+
+        tabManager.selectedTab = tab
         subject.handlePDFResponse(tab: tab, response: response, request: request)
 
         XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 1)
@@ -172,6 +204,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile, tabManager: tabManager)
+        screenshotHelper = MockScreenshotHelper(controller: subject)
+        subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
         trackForMemoryLeaks(subject)
         return subject
@@ -213,5 +247,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
+    }
+}
+
+class MockScreenshotHelper: ScreenshotHelper {
+    var takeScreenshotCalled = false
+
+    override func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID) {
+        takeScreenshotCalled = true
     }
 }

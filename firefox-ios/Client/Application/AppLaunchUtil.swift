@@ -10,7 +10,7 @@ import Account
 import Glean
 import MozillaAppServices
 
-class AppLaunchUtil {
+final class AppLaunchUtil {
     private var logger: Logger
 //    private var adjustHelper: AdjustHelper
     private var profile: Profile
@@ -36,11 +36,6 @@ class AppLaunchUtil {
         }
 
         DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
-
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true

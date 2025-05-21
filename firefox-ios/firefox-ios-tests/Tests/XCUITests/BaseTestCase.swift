@@ -103,7 +103,6 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        setUpExperimentVariables()
         setUpApp()
         setUpScreenGraph()
     }
@@ -419,6 +418,8 @@ class BaseTestCase: XCTestCase {
             app.buttons["Done"].waitAndTap()
         }
         navigator.nowAt(BrowserTab)
+        // Dismiss new changes pop up if exists
+        app.buttons["Close"].tapIfExists()
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
         sleep(3)

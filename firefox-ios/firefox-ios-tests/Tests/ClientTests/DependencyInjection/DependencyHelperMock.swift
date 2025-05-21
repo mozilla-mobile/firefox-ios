@@ -20,6 +20,13 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
+        let searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
+        AppContainer.shared.register(service: searchEnginesManager)
+
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,
             namespace: TabManagerConstants.tabScreenshotNamespace,
@@ -52,6 +59,9 @@ class DependencyHelperMock {
 
         let pocketManager: PocketManagerProvider = injectedPocketManager ?? MockPocketManager()
         AppContainer.shared.register(service: pocketManager)
+
+        let documentLogger = DocumentLogger(logger: MockLogger())
+        AppContainer.shared.register(service: documentLogger)
 
         let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService =
         MockGleanUsageReportingMetricsService(profile: profile)

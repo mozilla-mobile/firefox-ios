@@ -177,11 +177,6 @@ extension String {
                 tableName: "Bookmarks",
                 value: "DESKTOP BOOKMARKS",
                 comment: "Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop.")
-            public static let DeletedBookmark = MZLocalizedString(
-                key: "Bookmarks.Menu.DeletedBookmark.v131",
-                tableName: "Bookmarks",
-                value: "Deleted “%@”",
-                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
             public static let DeleteBookmark = MZLocalizedString(
                 key: "Bookmarks.Menu.DeleteBookmark.v132",
                 tableName: "Bookmarks",
@@ -313,6 +308,16 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Tap and hold the arrows to jump between pages in this tab’s history.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
+            public static let ToolbarUpdateTitle = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Title.v139",
+                tableName: "ToolbarLocation",
+                value: "We moved a few things",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
+            public static let ToolbarUpdateBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Description.v139",
+                tableName: "ToolbarLocation",
+                value: "Tabs and menu have switched places for easier access as you browse.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
         public struct FeltDeletion {
@@ -381,18 +386,6 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public struct Edit {
-                public static let AddressRemovedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressRemovedConfirmation.v129",
-                    tableName: "EditAddress",
-                    value: "Address Removed",
-                    comment: "Toast message confirming that an address has been successfully removed."
-                )
-                public static let AddressSavedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressSavedConfirmation.v129",
-                    tableName: "EditAddress",
-                    value: "Address Saved",
-                    comment: "Toast message confirming that an address has been successfully saved."
-                )
                 public static let AddressRemoveError = MZLocalizedString(
                     key: "Addresses.Toast.AddressSaveError.v130",
                     tableName: "EditAddress",
@@ -2121,6 +2114,46 @@ extension String {
             )
         }
 
+        public struct Appearance {
+            public struct PageZoom {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.SectionHeader.v140",
+                    tableName: "Settings",
+                    value: "Zoom Settings",
+                    comment: "Page zoom section header title in Appearance settings")
+                public static let PageZoomTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.Title.v140",
+                    tableName: "Settings",
+                    value: "Page Zoom",
+                    comment: "Page zoom settings title in Appearance settings")
+                public static let DefaultSectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.Default.Title.v140",
+                    tableName: "Settings",
+                    value: "Default",
+                    comment: "Default section header title under page zoom settings. Indicates the default value for all websites")
+                public static let ZoomLevelSelectorTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.ZoomLevelTitle.v140",
+                    tableName: "Settings",
+                    value: "Zoom Level",
+                    comment: "Zoom level title under page zoom settings to select the default zoom level for all websites")
+                public static let SpecificSiteSectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140",
+                    tableName: "Settings",
+                    value: "Specific site settings",
+                    comment: "Specific site settings section header title under page zoom settings. List all websites with custom zoom level")
+                public static let SpecificSiteFooterTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140",
+                    tableName: "Settings",
+                    value: "To add to this list, visit a site and adjust the page zoom from the menu",
+                    comment: "Specific site settings section footer title under page zoom settings. Explain how to add elements to the list")
+                public static let ResetButtonTitle = MZLocalizedString(
+                    key: "Settings.Appearance.Zoom.Reset.Button.v140",
+                    tableName: "Settings",
+                    value: "Reset site Settings",
+                    comment: "Button to reset specific zoom site levels back to default")
+            }
+        }
+
         public struct AutofillAndPassword {
             public static let Title = MZLocalizedString(
                 key: "Settings.AutofillAndPassword.Title.v137",
@@ -2750,8 +2783,8 @@ extension String {
         public static let TabsSelectorNormalTabsTitle = MZLocalizedString(
             key: "TabTray.TabsSelectorNormalTabsTitle.v140",
             tableName: "TabsTray",
-            value: "%@ Tabs",
-            comment: "The title on the button to look at regular tabs. %@ is the number of regular tabs.")
+            value: "Tabs",
+            comment: "The title on the button to look at regular tabs.")
         public static let TabsSelectorSyncedTabsTitle = MZLocalizedString(
             key: "TabTray.TabsSelectorSyncedTabsTitle.v140",
             tableName: "TabsTray",
@@ -4797,11 +4830,6 @@ extension String {
             tableName: nil,
             value: "Passwords",
             comment: "Label for the button, displayed in the menu, takes you to passwords screen when pressed.")
-        public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
-            key: "Menu.CopyURL.Confirm",
-            tableName: nil,
-            value: "URL Copied To Clipboard",
-            comment: "Toast displayed to user after copy url pressed.")
         public static let AppMenuTabSentConfirmMessage = MZLocalizedString(
             key: "Menu.TabSent.Confirm",
             tableName: nil,
@@ -4886,11 +4914,6 @@ extension String {
             tableName: nil,
             value: "Remove",
             comment: "Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label.")
-        public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
-            key: "Menu.RemoveBookmark.Confirm",
-            tableName: nil,
-            value: "Bookmark Removed",
-            comment: "Toast displayed to the user after a bookmark has been removed.")
         public static let EditBookmarkLabel = MZLocalizedString(
             key: "Menu.EditBookmark.Label.v135",
             tableName: "Menu",
@@ -7832,6 +7855,35 @@ extension String {
                 tableName: nil,
                 value: "Tabs",
                 comment: "The title on the button to look at regular tabs.")
+        }
+        struct v140 {
+            public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
+                key: "Menu.CopyURL.Confirm",
+                tableName: nil,
+                value: "URL Copied To Clipboard",
+                comment: "Toast displayed to user after copy url pressed.")
+            public static let RemoveBookmarkConfirmMessage = MZLocalizedString(
+                key: "Menu.RemoveBookmark.Confirm",
+                tableName: nil,
+                value: "Bookmark Removed",
+                comment: "Toast displayed to the user after a bookmark has been removed.")
+            public static let DeletedBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.DeletedBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Deleted “%@”",
+                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
+            public static let AddressRemovedConfirmation = MZLocalizedString(
+                key: "Addresses.Toast.AddressRemovedConfirmation.v129",
+                tableName: "EditAddress",
+                value: "Address Removed",
+                comment: "Toast message confirming that an address has been successfully removed."
+            )
+            public static let AddressSavedConfirmation = MZLocalizedString(
+                key: "Addresses.Toast.AddressSavedConfirmation.v129",
+                tableName: "EditAddress",
+                value: "Address Saved",
+                comment: "Toast message confirming that an address has been successfully saved."
+            )
         }
     }
 }

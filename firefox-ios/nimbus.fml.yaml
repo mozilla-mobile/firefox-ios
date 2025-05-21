@@ -21,18 +21,21 @@ include:
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
+  - nimbus-features/hntContentFeedCleanupFeature.yaml
+  - nimbus-features/hntTopSitesVisualRefresh.yaml
   - nimbus-features/homepageRebuildFeature.yaml
-  - nimbus-features/homescreenFeature.yaml
+  - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
-  - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
+  - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
+  - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/rustKeychainRefactor.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
@@ -45,6 +48,5 @@ include:
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
-  - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/unifiedAds.yaml
   - nimbus-features/updatedPasswordManager.yaml

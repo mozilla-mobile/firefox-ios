@@ -24,7 +24,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         dataClearanceContextHintVC.configure(
             anchor: view,
-            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
@@ -54,7 +54,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
         navigationContextHintVC.configure(
             anchor: view,
-            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
             actionOnDismiss: {
@@ -88,6 +88,37 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                        actionType: ToolbarActionType.navigationHintFinishedPresenting)
             store.dispatch(action)
         }
+    }
+
+    func configureToolbarUpdateContextualHint(addressToolbarView: UIView, navigationToolbarView: UIView) {
+        guard let state = store.state.screenState(ToolbarState.self,
+                                                  for: .toolbar,
+                                                  window: windowUUID),
+              isToolbarRefactorEnabled,
+              isToolbarUpdateHintEnabled
+        else { return }
+
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let view = state.toolbarPosition == .top && showNavToolbar ? navigationToolbarView : addressToolbarView
+        let arrowDirection: UIPopoverArrowDirection = state.toolbarPosition == .top && !showNavToolbar ? .up : .down
+
+        toolbarUpdateContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: arrowDirection,
+            andDelegate: self,
+            presentedUsing: { [weak self] in self?.presentToolbarUpdateContextualHint() },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
+
+    private func presentToolbarUpdateContextualHint() {
+        guard !IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen,
+              let selectedTab = tabManager.selectedTab,
+              selectedTab.isFxHomeTab || selectedTab.isCustomHomeTab
+        else { return }
+
+        present(toolbarUpdateContextHintVC, animated: true)
+        UIAccessibility.post(notification: .layoutChanged, argument: toolbarUpdateContextHintVC)
     }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -161,7 +192,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let dataClearanceAnimation = DataClearanceAnimation()
         dataClearanceAnimation.startAnimation(
             with: view,
-            for: ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+            for: toolbarHelper.shouldShowTopTabs(for: traitCollection)
         )
 
         completion(timingToMatchGradientOverlay)
@@ -319,6 +350,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
+                self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
                     self.updateTabCountUsingTabManager(self.tabManager)
 
@@ -440,5 +472,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     func showEditBookmark() {
         guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
         openBookmarkEditPanel(urlString: urlString)
+    }
+
+    func showTrackingProtection() {
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
     }
 }

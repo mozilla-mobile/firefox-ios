@@ -85,10 +85,6 @@ class TabTrayViewController: UIViewController,
         return childPanelControllers[index]
     }
 
-    var toolbarHeight: CGFloat {
-        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
-    }
-
     var shownToast: Toast?
     var logger: Logger
 
@@ -111,8 +107,9 @@ class TabTrayViewController: UIViewController,
         let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
-                          String(format: TabTrayPanelType.tabs.label, "0"),
+                          TabTrayPanelType.tabs.label,
                           TabTrayPanelType.syncedTabs.label]
+        selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
@@ -147,8 +144,16 @@ class TabTrayViewController: UIViewController,
         let iPhoneItems = [
             TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
             TabTrayPanelType.privateTabs.image!,
-            TabTrayPanelType.syncedTabs.image!]
-        return isRegularLayout ? TabTrayPanelType.allCases.map { $0.label } : iPhoneItems
+            TabTrayPanelType.syncedTabs.image!
+        ]
+
+        let regularLayoutItems = [
+            TabTrayPanelType.tabs.label,
+            TabTrayPanelType.privateTabs.label,
+            TabTrayPanelType.syncedTabs.label,
+        ]
+
+        return isRegularLayout ? regularLayoutItems : iPhoneItems
     }
 
     private lazy var deleteButton: UIBarButtonItem = {
@@ -288,13 +293,6 @@ class TabTrayViewController: UIViewController,
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateLayout()
         }
-
-        if isTabTrayUIExperimentsEnabled {
-            // Needs to execute the layout pass after the orientation has changed
-            DispatchQueue.main.async {
-                self.experimentSegmentControl.scrollToCenter()
-            }
-        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -385,9 +383,6 @@ class TabTrayViewController: UIViewController,
         countLabel.text = count
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
-        if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = String(format: TabTrayPanelType.tabs.label, count)
-        }
     }
 
     // MARK: Themeable
@@ -511,7 +506,6 @@ class TabTrayViewController: UIViewController,
         var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
-            experimentSegmentControl.scrollToCenter()
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
@@ -607,8 +601,7 @@ class TabTrayViewController: UIViewController,
             let toast = SimpleToast()
             toast.showAlertWithText(toastType.title,
                                     bottomContainer: view,
-                                    theme: retrieveTheme(),
-                                    bottomConstraintPadding: -toolbarHeight)
+                                    theme: retrieveTheme())
         }
     }
 
@@ -709,8 +702,14 @@ class TabTrayViewController: UIViewController,
         }), accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton
         )
 
-        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
-                        accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+        alert.addAction(
+            UIAlertAction(
+                title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
+                style: .cancel,
+                handler: { _ in self.cancelCloseAll() }
+            ),
+            accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton
+        )
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
     }
@@ -745,11 +744,24 @@ class TabTrayViewController: UIViewController,
             alert.addAction(action, accessibilityIdentifier: option.accessibilityID)
         }
 
-        alert.addAction(UIAlertAction(title: .TabsTray.TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil),
-                        accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
+        alert.addAction(
+            UIAlertAction(
+                title: .TabsTray.TabTrayCloseAllTabsPromptCancel,
+                style: .cancel,
+                handler: { _ in self.cancelCloseAll() }
+            ),
+            accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton
+        )
 
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
+    }
+
+    private func cancelCloseAll() {
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.cancelCloseAllTabs)
+        store.dispatch(action)
     }
 
     private func confirmCloseAll() {
@@ -780,6 +792,7 @@ class TabTrayViewController: UIViewController,
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         store.dispatch(
             TabTrayAction(
+                panelType: tabTrayState.selectedPanel,
                 windowUUID: windowUUID,
                 actionType: TabTrayActionType.doneButtonTapped
             )

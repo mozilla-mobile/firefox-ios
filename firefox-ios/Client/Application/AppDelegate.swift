@@ -34,10 +34,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         rustKeychainEnabled: rustKeychainEnabled,
         loginsVerificationEnabled: loginsVerificationEnabled)
 
+    lazy var searchEnginesManager = SearchEnginesManager(
+        prefs: profile.prefs,
+        files: profile.files
+    )
+
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
         isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
     )
+    lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
@@ -88,6 +94,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             .accountManagerInitialized,
             .browserIsReady
         ])
+
+        // Initialize the feature flag subsystem.
+        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
+        // i.e. this must be run before initializing those systems.
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
@@ -204,7 +215,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         updateWallpaperMetadata()
         loadBackgroundTabs()
-
+        /// On first run (when suggest‑data.db is empty) this populates the db; later calls are no‑ops due to `emptyOnly`.
+        /// For details, see:
+        ///     https://github.com/mozilla/application-services/blob/5aade8c09653ad2a2ec02746dc6bcf80dc8434c2/components/suggest/src/store.rs#L597-L599
+        /// Actual periodic refreshing happens in the background in `BackgroundFirefoxSuggestIngestUtility.swift`.
+        /// `.utility` priority is used here because this blocks on network calls and would otherwise trigger a
+        /// priority‑inversion warning if run at user‑initiated QoS.
+        Task(priority: .utility) {
+            try await self.profile.firefoxSuggest?.ingest(emptyOnly: true)
+        }
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -242,6 +261,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // We have only five seconds here, so let's hope this doesn't take too long.
         logger.log("applicationWillTerminate", level: .info, category: .lifecycle)
         profile.shutdown()
+        documentLogger.logPendingDownloads()
     }
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {

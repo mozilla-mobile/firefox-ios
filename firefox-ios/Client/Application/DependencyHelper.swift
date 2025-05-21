@@ -15,6 +15,8 @@ class DependencyHelper {
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile)
 
+        AppContainer.shared.register(service: appDelegate.searchEnginesManager)
+
         let diskImageStore: DiskImageStore =
         DefaultDiskImageStore(files: profile.files,
                               namespace: TabManagerConstants.tabScreenshotNamespace,
@@ -40,6 +42,9 @@ class DependencyHelper {
             pocketAPI: PocketProvider(prefs: profile.prefs)
         )
         AppContainer.shared.register(service: pocketManager)
+
+        let documentLogger = appDelegate.documentLogger
+        AppContainer.shared.register(service: documentLogger)
 
         let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService =
         appDelegate.gleanUsageReportingMetricsService

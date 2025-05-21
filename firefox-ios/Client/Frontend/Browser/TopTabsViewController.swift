@@ -21,7 +21,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
         static let topTabsBackgroundShadowWidth: CGFloat = 12
-        static let faderPading: CGFloat = 8
+        static let faderPadding: CGFloat = 8
         static let animationSpeed: TimeInterval = 0.1
     }
 
@@ -44,6 +44,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     var notificationCenter: NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
     var windowUUID: WindowUUID { tabManager.windowUUID }
+
+    private var toolbarHelper: ToolbarHelperInterface
 
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
@@ -116,11 +118,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     init(tabManager: TabManager,
          profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.tabManager = tabManager
         self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.toolbarHelper = toolbarHelper
         super.init(nibName: nil, bundle: nil)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -183,11 +187,21 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
-        view.backgroundColor = colors.layer3
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+
+        if isToolbarRefactorEnabled,
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           toolbarState.isTranslucent {
+            view.backgroundColor = colors.layer3.withAlphaComponent(toolbarHelper.backgroundAlpha())
+            collectionView.backgroundColor = .clear
+        } else {
+            view.backgroundColor = colors.layer3
+            collectionView.backgroundColor = view.backgroundColor
+        }
+
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
         newTab.tintColor = colors.iconPrimary
-        collectionView.backgroundColor = view.backgroundColor
         collectionView.reloadData()
         topTabDisplayManager.refreshStore()
     }
@@ -249,7 +263,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
                 } else {
                     // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                     let padFrame = frame.insetBy(
-                        dx: -(UX.topTabsBackgroundShadowWidth+UX.faderPading),
+                        dx: -(UX.topTabsBackgroundShadowWidth+UX.faderPadding),
                         dy: 0
                     )
                     if animated {

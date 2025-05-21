@@ -181,6 +181,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Mdel";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Yettban tuqqna Internet tensa.";
+
 /* Button text for retrying network connection */
 "Network.Offline.RetryButton" = "Ɛreḍ tikkelt niḍen";
 
@@ -223,6 +226,9 @@
 /* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
 "Onboarding.PrivacyNotice.LinkText" = "Tasertit n tbaḍnit";
 
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Firefox terḥa-t tudert-ik tabaḍnit. Ɣeṛ ugar deg %@.";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Swel iɣewwaren akken ara tferneḍ acḥal i terniḍ tebḍiḍ-t neɣ tesneqdeḍ.";
 
@@ -235,11 +241,20 @@
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Qbel syen kemmel";
 
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Kemmel";
+
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "Immed";
 
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Tiwtiln n useqdec n Fiefox";
+
 /* Subtitle for the Terms of Use screen during onboarding. */
 "Onboarding.TermsOfUse.Subtitle" = "D arurad. D uslig. Ulac yesruḥuyen ddehn.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "S ukemmel, ad tqebleḍ %@.";
 
 /* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.TermsOfUse.Title" = "Ansuf ɣer %@";
@@ -295,8 +310,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Sewḥel inedfaṛen n ugbur";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Aya yettallel Mozilla ad tessekyed amḍan n yiseqdacen urmiden.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping n Useqdec n Yal ass";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Aberkan";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Aya yettall-aneɣ ad neg tawassna, ad nṣeggem  uguren akked yiminig.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ad ak-n-yazen tawsit-inek deg ufeggag n tansiwin ɣer umsedday-inek n unadi.";
@@ -402,6 +426,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Anmetti";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Azen s wudem awurman ineqqisen n truẓi";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Seqdec Face ID akken ad tserḥeḍ i usnas";

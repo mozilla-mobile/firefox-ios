@@ -6747,7 +6747,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-03-28T15:18:17Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-04-30T15:19:32Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7128,10 +7128,6 @@ beauty
 // beer : Registry Services, LLC
 // https://www.iana.org/domains/root/db/beer.html
 beer
-
-// bentley : Bentley Motors Limited
-// https://www.iana.org/domains/root/db/bentley.html
-bentley
 
 // berlin : dotBERLIN GmbH & Co. KG
 // https://www.iana.org/domains/root/db/berlin.html
@@ -8837,10 +8833,6 @@ lamborghini
 // https://www.iana.org/domains/root/db/lamer.html
 lamer
 
-// lancaster : LANCASTER
-// https://www.iana.org/domains/root/db/lancaster.html
-lancaster
-
 // land : Binky Moon, LLC
 // https://www.iana.org/domains/root/db/land.html
 land
@@ -9545,7 +9537,7 @@ physio
 // https://www.iana.org/domains/root/db/pics.html
 pics
 
-// pictet : Pictet Europe S.A.
+// pictet : Banque Pictet & Cie SA
 // https://www.iana.org/domains/root/db/pictet.html
 pictet
 
@@ -12001,11 +11993,6 @@ analytics-gateway.us-east-1.amazonaws.com
 analytics-gateway.us-east-2.amazonaws.com
 analytics-gateway.us-west-2.amazonaws.com
 
-// Appwrite : https://appwrite.io
-// Submitted by Steven Nguyen <security@appwrite.io>
-appwrite.global
-*.appwrite.run
-
 // AWS Amplify
 // Submitted by AWS Security <psl-maintainers@amazon.com>
 // Reference: c35bed18-6f4f-424f-9298-5756f2f7d72b
@@ -12179,6 +12166,11 @@ appspaceusercontent.com
 // Appudo UG (haftungsbeschränkt) : https://www.appudo.com
 // Submitted by Alexander Hochbaum <admin@appudo.com>
 appudo.net
+
+// Appwrite : https://appwrite.io
+// Submitted by Steven Nguyen <security@appwrite.io>
+appwrite.global
+*.appwrite.run
 
 // Aptible : https://www.aptible.com/
 // Submitted by Thomas Orozco <thomas@aptible.com>
@@ -12502,6 +12494,8 @@ cdn.cloudflareglobal.net
 cust.cloudscale.ch
 objects.lpg.cloudscale.ch
 objects.rma.cloudscale.ch
+lpg.objectstorage.ch
+rma.objectstorage.ch
 
 // Clovyr : https://clovyr.io
 // Submitted by Patrick Nielsen <patrick@clovyr.io>
@@ -12686,7 +12680,9 @@ ondigitalocean.app
 
 // DigitalPlat : https://www.digitalplat.org/
 // Submitted by Edward Hsing <contact@digitalplat.org>
+qzz.io
 us.kg
+xx.kg
 dpdns.org
 
 // Discord Inc : https://discord.com
@@ -13083,10 +13079,11 @@ en-root.fr
 mytuleap.com
 tuleap-partners.com
 
-// Encoretivity AB : https://encore.dev
-// Submitted by André Eriksson <andre@encore.dev>
+// Encoretivity AB : https://encore.cloud
+// Submitted by André Eriksson <security@encore.cloud>
 encr.app
 encoreapi.com
+lp.dev
 
 // encoway GmbH : https://www.encoway.de
 // Submitted by Marcel Daus <cloudops@encoway.de>
@@ -13310,6 +13307,7 @@ fh-muenster.io
 // Figma : https://www.figma.com
 // Submitted by Nick Frost <psl@figma.com>
 figma.site
+preview.site
 
 // Filegear Inc. : https://www.filegear.com
 // Submitted by Jason Zhu <jason@owtware.com>
@@ -13646,10 +13644,6 @@ günstigliefern.de
 // Submitted by Eero Häkkinen <Eero+psl@Häkkinen.fi>
 häkkinen.fi
 
-// Harrison Network : https://hrsn.net
-// Submitted by William Harrison <psl@hrsn.net>
-hrsn.dev
-
 // Hashbang : https://hashbang.sh
 hashbang.sh
 
@@ -13731,10 +13725,6 @@ gen.ng
 ltd.ng
 ngo.ng
 plc.ng
-
-// HostFly : https://www.ie.ua
-// Submitted by Bohdan Dub <support@hostfly.com.ua>
-ie.ua
 
 // HostyHosting : https://hostyhosting.com
 hostyhosting.io
@@ -13886,7 +13876,7 @@ ir.md
 is-a-good.dev
 
 // is-a.dev : https://is-a.dev
-// Submitted by William Harrison <psl@is-a.dev>
+// Submitted by William Harrison <security@is-a.dev>
 is-a.dev
 
 // IServ GmbH : https://iserv.de
@@ -14102,9 +14092,8 @@ ggff.net
 *.user.localcert.dev
 
 // LocalCert : https://localcert.net
-// Submitted by William Harrison <psl@localcert.net>
+// Submitted by William Harrison <security@localcert.net>
 localcert.net
-localhostcert.net
 
 // Localtonet : https://localtonet.com/
 // Submitted by Burak Isleyici <support@localtonet.com>
@@ -14188,6 +14177,11 @@ barsy.support
 barsy.uk
 barsy.co.uk
 barsyonline.co.uk
+
+// Luyani Inc. : https://luyani.com/
+// Submitted by Umut Gumeli <public-suffix-list@luyani.com>
+luyani.app
+luyani.net
 
 // Magento Commerce
 // Submitted by Damien Tournoud <dtournoud@magento.cloud>
@@ -14590,6 +14584,10 @@ simplesite.pl
 123paginaweb.pt
 123minsida.se
 
+// ONID : https://get.onid.ca
+// Submitted by ONID Engineering Team <psl@onid.ca>
+onid.ca
+
 // Open Domains : https://open-domains.net
 // Submitted by William Harrison <admin@open-domains.net>
 is-a-fullstack.dev
@@ -14761,21 +14759,19 @@ xen.prgmr.com
 priv.at
 
 // PROJECT ELIV : https://eliv.kr/
-// Submitted by ELIV Team <team@eliv.kr>
+// Submitted by PROJECT ELIV Domain Team <team@eliv.kr>
 c01.kr
 eliv-dns.kr
+mmv.kr
+vki.kr
+
+// project-study : https://project-study.com
+// Submitted by yumenewa <admin@project-study.com>
+dev.project-study.com
 
 // Protonet GmbH : http://protonet.io
 // Submitted by Martin Meier <admin@protonet.io>
 protonet.io
-
-// PSL Sandbox : https://psl.hrsn.dev
-// Submitted by William Harrison <psl@hrsn.net>
-sub.psl.hrsn.dev
-*.wc.psl.hrsn.dev
-!ignored.wc.psl.hrsn.dev
-*.sub.wc.psl.hrsn.dev
-!ignored.sub.wc.psl.hrsn.dev
 
 // Publication Presse Communication SARL : https://ppcom.fr
 // Submitted by Yaacov Akiba Slama <admin@chirurgiens-dentistes-en-france.fr>
@@ -15580,7 +15576,7 @@ v.ua
 
 // Val Town, Inc : https://val.town/
 // Submitted by Tom MacWright <security@val.town>
-express.val.run
+val.run
 web.val.run
 
 // Vercel, Inc : https://vercel.com/
@@ -15664,8 +15660,9 @@ wmcloud.org
 wmflabs.org
 
 // William Harrison : https://wharrison.com.au
-// Submitted by William Harrison <psl@wharrison.com.au>
+// Submitted by William Harrison <security@wharrison.com.au>
 wdh.app
+hrsn.dev
 
 // Windsurf : https://windsurf.com
 // Submitted by Douglas Chen <psl@windsurf.com>

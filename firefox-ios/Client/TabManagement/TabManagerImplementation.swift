@@ -106,7 +106,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private let windowManager: WindowManager
     private let windowIsNew: Bool
     private let profile: Profile
-    private let navDelegate: TabManagerNavDelegate
+    private weak var navigationDelegate: WKNavigationDelegate?
     private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
@@ -156,7 +156,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         self.windowIsNew = uuid.isNew
         self.windowUUID = uuid.uuid
         self.profile = profile
-        self.navDelegate = TabManagerNavDelegate()
         self.logger = logger
         self.tabs = tabs
 
@@ -164,7 +163,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         GlobalTabEventHandlers.configure(with: profile)
 
-        addNavigationDelegate(self)
         setupNotifications(
             forObserver: self,
             observing: [
@@ -232,8 +230,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         self.delegates.append(WeakTabManagerDelegate(value: delegate))
     }
 
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
-        self.navDelegate.insert(delegate)
+    func setNavigationDelegate(_ delegate: WKNavigationDelegate) {
+        navigationDelegate = delegate
     }
 
     // MARK: - Remove Tab
@@ -251,13 +249,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         self.removeTab(tab, flushToDisk: true)
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
@@ -269,20 +260,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
         }
-        storeChanges()
+        commitChanges()
     }
 
     @MainActor
@@ -318,7 +302,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
 
-        storeChanges()
+        commitChanges()
     }
 
     /// Remove a tab, will notify delegate of the tab removal
@@ -360,27 +344,25 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         if flushToDisk {
-            storeChanges()
+            commitChanges()
         }
     }
 
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod) {
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
-        let now = Date()
         let cutoffDate: Date
-
         switch period {
         case .oneDay:
-            cutoffDate = calendar.date(byAdding: .day, value: -1, to: now) ?? now
+            cutoffDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? currentDate
         case .oneWeek:
-            cutoffDate = calendar.date(byAdding: .day, value: -7, to: now) ?? now
+            cutoffDate = calendar.date(byAdding: .day, value: -7, to: currentDate) ?? currentDate
         case .oneMonth:
-            cutoffDate = calendar.date(byAdding: .month, value: -1, to: now) ?? now
+            cutoffDate = calendar.date(byAdding: .month, value: -1, to: currentDate) ?? currentDate
         }
 
         let tabsToRemove = normalTabs.filter { tab in
             let lastUsed = Date.fromTimestamp(tab.lastExecutedTime)
-            return lastUsed < cutoffDate
+            return lastUsed <= cutoffDate
         }
 
         guard !tabsToRemove.isEmpty else { return }
@@ -428,7 +410,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
 
         // Flush.
-        storeChanges()
+        commitChanges()
     }
 
     private func addTab(_ request: URLRequest? = nil,
@@ -479,13 +461,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
-        storeChanges()
+        commitChanges()
     }
 
     func undoCloseAllTabs() {
         guard !backupCloseTabs.isEmpty else { return }
         tabs = backupCloseTabs
-        storeChanges()
+        commitChanges()
         backupCloseTabs = [Tab]()
         if backupCloseTab != nil {
             selectTab(backupCloseTab?.tab)
@@ -858,10 +840,15 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         return tabData
     }
 
-    /// storeChanges is called when a web view has finished loading a page, or when a tab is removed, and in other cases.
-    private func storeChanges() {
+    func commitChanges() {
         preserveTabs()
         saveSessionData(forTab: selectedTab)
+    }
+
+    func notifyCurrentTabDidFinishLoading() {
+        delegates.forEach {
+            $0.get()?.tabManagerTabDidFinishLoading()
+        }
     }
 
     private func saveSessionData(forTab tab: Tab?) {
@@ -958,7 +945,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
 
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know
@@ -1071,13 +1057,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
-        storeChanges()
+        commitChanges()
     }
 
     @MainActor
     func undoCloseInactiveTabs() async {
         tabs.append(contentsOf: backupCloseTabs)
-        storeChanges()
+        commitChanges()
         backupCloseTabs = [Tab]()
     }
 
@@ -1120,7 +1106,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             selectedIndex = previousSelectedIndex
         }
 
-        storeChanges()
+        commitChanges()
     }
 
     func startAtHomeCheck() -> Bool {
@@ -1243,7 +1229,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             }
             tab.createWebview(configuration: configuration)
         }
-        tab.navigationDelegate = self.navDelegate
+        tab.navigationDelegate = navigationDelegate
 
         if let request = request {
             tab.loadRequest(request)
@@ -1272,7 +1258,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if flushToDisk {
-            storeChanges()
+            commitChanges()
         }
     }
 
@@ -1352,64 +1338,6 @@ extension TabManagerImplementation: Notifiable {
             autoPlayDidChange()
         default:
             break
-        }
-    }
-}
-
-// MARK: - WKNavigationDelegate
-extension TabManagerImplementation: WKNavigationDelegate {
-    // Note the main frame JSContext (i.e. document, window) is not available yet.
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
-        if let tab = self[webView], let blocker = tab.contentBlocker {
-            blocker.clearPageStats()
-        }
-    }
-
-    // The main frame JSContext is available, and DOM parsing has begun.
-    // Do not execute JS at this point that requires running prior to DOM parsing.
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
-        guard let tab = self[webView] else { return }
-
-        if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
-            webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))")
-        }
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-        // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
-        if let url = webView.url {
-            if InternalURL(url) != nil {
-                return
-            }
-
-            if let title = webView.title, selectedTab?.webView == webView {
-                selectedTab?.lastTitle = title
-                delegates.forEach { $0.get()?.tabManagerTabDidFinishLoading() }
-            }
-
-            storeChanges()
-        }
-    }
-
-    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
-    /// then we immediately reload it.
-    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        if let tab = selectedTab, tab.webView == webView {
-            tab.consecutiveCrashes += 1
-
-            // Only automatically attempt to reload the crashed
-            // tab three times before giving up.
-            if tab.consecutiveCrashes < 3 {
-                logger.log("The webview has crashed, trying to reload.",
-                           level: .warning,
-                           category: .webview,
-                           extra: ["Attempt number": "\(tab.consecutiveCrashes)"])
-                tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
-
-                webView.reload()
-            } else {
-                tab.consecutiveCrashes = 0
-            }
         }
     }
 }

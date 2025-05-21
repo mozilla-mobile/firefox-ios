@@ -100,9 +100,4 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         DefaultSiteImageHandler.requestQueue[requestKey] = nil
         return image
     }
-
-    private func generateDomainURL(siteURL: URL) -> ImageDomain {
-        let bundleDomains = BundleDomainBuilder().buildDomains(for: siteURL)
-        return ImageDomain(bundleDomains: bundleDomains)
-    }
 }

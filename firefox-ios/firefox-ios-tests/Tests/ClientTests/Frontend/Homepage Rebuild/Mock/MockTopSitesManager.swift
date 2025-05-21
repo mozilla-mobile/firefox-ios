@@ -10,7 +10,7 @@ import Storage
 final class MockTopSitesManager: TopSitesManagerInterface {
     var getOtherSitesCalledCount = 0
     var fetchSponsoredSitesCalledCount = 0
-    var recalculateTopSitesCalledCount = 0
+    var recalculateTopSitesCalled: () -> Void = {}
 
     var removeTopSiteCalledCount = 0
     var pinTopSiteCalledCount = 0
@@ -31,12 +31,8 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     }
 
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
-        // We add this lock because while it is okay for production code to not happen synchronously,
-        // we need a way to mock and confirm that this method has been called three times.
-        // Without the lock then we two threads simultaneously setting `recalculateTopSitesCalledCount` to 1.
-        lock.lock()
-        defer { lock.unlock() }
-        recalculateTopSitesCalledCount += 1
+        // We add this completion since this method is called in an asynchronous
+        recalculateTopSitesCalled()
         return createSites(subtitle: ": total top sites")
     }
 

@@ -34,6 +34,11 @@ final class RemoteSettingsServiceSyncCoordinator {
         ) { [weak self] _ in self?.willResignActive() }
     }
 
+    // This is primarily for internal testing or QA purposes.
+    func forceImmediateSync() async {
+        await performSync()
+    }
+
     // MARK: - Private API
 
     private func willResignActive() {

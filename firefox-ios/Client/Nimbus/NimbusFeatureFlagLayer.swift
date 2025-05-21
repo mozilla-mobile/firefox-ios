@@ -9,6 +9,7 @@ final class NimbusFeatureFlagLayer {
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
+        // For better code readability, please keep in alphabetical order by NimbusFeatureFlagID
         switch featureID {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
@@ -40,6 +41,12 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+        case .hntContentFeedRefresh:
+            return checkHNTContentFeedRefreshFeature(from: nimbus)
+
+        case .hntTopSitesVisualRefresh:
+            return checkHntTopSitesVisualRefreshFeature(from: nimbus)
+
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
 
@@ -51,6 +58,9 @@ final class NimbusFeatureFlagLayer {
 
         case .menuRefactorHint:
             return checkMenuRefactorHint(from: nimbus)
+
+        case .menuRedesign:
+            return checkMenuRedesign(from: nimbus)
 
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
@@ -109,8 +119,14 @@ final class NimbusFeatureFlagLayer {
         case .toolbarSwipingTabs:
             return checkToolbarSwipingTabsFeature(from: nimbus)
 
+        case .toolbarTranslucency:
+            return checkToolbarTranslucencyFeature(from: nimbus)
+
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
+
+        case .toolbarUpdateHint:
+            return checkToolbarUpdateHintFeature(from: nimbus)
 
         case .tosFeature:
             return checkTosFeature(from: nimbus)
@@ -171,6 +187,14 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
+    public func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntContentFeedCleanupFeature.value().enabled
+    }
+
+    public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
+    }
+
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homepageRebuildFeature.value()
         return config.enabled
@@ -211,9 +235,19 @@ final class NimbusFeatureFlagLayer {
         return config.swipingTabs
     }
 
+    private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.translucency
+    }
+
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.navigationHint
+    }
+
+    private func checkToolbarUpdateHintFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.toolbarUpdateHint
     }
 
     private func checkTosFeature(from nimbus: FxNimbus) -> Bool {
@@ -324,6 +358,11 @@ final class NimbusFeatureFlagLayer {
     private func checkMenuRefactorHint(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.menuRefactorFeature.value()
         return config.menuHint
+    }
+
+    private func checkMenuRedesign(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.menuRefactorFeature.value()
+        return config.menuRedesign
     }
 
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {

@@ -6,6 +6,7 @@ import Foundation
 
 struct TabPeekModel {
     let canTabBeSaved: Bool
+    let canCopyURL: Bool
     let isSyncEnabled: Bool
     let screenshot: UIImage
     let accessiblityLabel: String

@@ -109,8 +109,17 @@
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v136" = "Qbel syen kemmel";
 
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v140" = "Kemmel";
+
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "Sefrek";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Akken ad tεawneḍ deg usnerni iminig, %1$@ ad yazen isefka n tawassna akked umyigew ɣer %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ terḥa-t tudert-ik tabaḍnit. Ɣeṛ ugar deg %2$@.";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Tasertit n tbaḍnit.";
@@ -121,14 +130,26 @@
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Issin ugar";
 
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Ineqqisen n truẓi ttallen-aɣ ad neg tawassna, ad nṣeggem uguren akked yiminig. %@";
+
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Azen s wudem awurman ineqqisen n truẓi";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Isefka yerzan ibenk-ik, tawila n warrum akked wamek i tesseqdaceḍ %1$@ yettal-aneɣ ad nesnerni timahilin, tamlellit akked urkad i yal yiwen. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Azen isefka itiknikanen akked wid n umyigew %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "All-aneɣ ad nerr %@ igerrez ugar";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. */
 "Onboarding.TermsOfService.Subtitle.v136" = "Tinigin taruradt, taɣellsant deg uẓeṭṭa";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "S ukemmel, ad tqebleḍ %@..";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Tiwtilin n useqdec n %@.";

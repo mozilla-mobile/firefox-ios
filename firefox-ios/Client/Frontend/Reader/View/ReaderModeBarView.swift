@@ -43,7 +43,7 @@ protocol ReaderModeBarViewDelegate: AnyObject {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider {
+class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider, ThemeApplicable {
     private struct UX {
         static let buttonWidth: CGFloat = 80
     }
@@ -57,6 +57,12 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     var readStatusButton: UIButton?
     var settingsButton: UIButton?
     var listStatusButton: UIButton?
+
+    lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
+
+    private var toolbarLayoutType: ToolbarLayoutType? {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+    }
 
     @objc dynamic var buttonTintColor = UIColor.clear {
         didSet {
@@ -159,12 +165,16 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
             listStatusButton?.setImage(buttonType.image, for: .normal)
         }
     }
-}
 
-extension ReaderModeBarView: ThemeApplicable {
+    // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        backgroundColor = colors.layer1
+
+        let isVersionLayout = toolbarLayoutType == .version1 || toolbarLayoutType == .version2
+        let color: UIColor = isVersionLayout ? colors.layer3 : colors.layer1
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+
+        backgroundColor = color.withAlphaComponent(backgroundAlpha)
         buttonTintColor = colors.textPrimary
         contextStrokeColor = colors.textSecondary
     }

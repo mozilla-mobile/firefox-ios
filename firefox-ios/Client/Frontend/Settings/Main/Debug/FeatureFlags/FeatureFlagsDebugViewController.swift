@@ -23,6 +23,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagToggleSettings() -> SettingSection {
+        // For better code readability and parsability in-app, please keep in alphabetical order by title
         return SettingSection(
             title: nil,
             children: [
@@ -35,29 +36,15 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 },
                 FeatureFlagsBoolSetting(
                     with: .appearanceMenu,
-                    titleText: format(string: "Enable New Appearance Menu"),
+                    titleText: format(string: "Appearance Menu"),
                     statusText: format(string: "Toggle to show the new apperance menu")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .tabTrayUIExperiments,
-                    titleText: format(string: "Enable Tab Tray UI Experiment"),
-                    statusText: format(string: "Toggle to use the new tab tray UI")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .tabAnimation,
-                    titleText: format(string: "Enable Tab Tray Animation"),
-                    statusText: format(string: "Toggle to use the new tab tray animation when new tab experiment is enabled")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .bookmarksRefactor,
-                    titleText: format(string: "Enable Bookmarks Redesign"),
-                    statusText: format(string: "Toggle to use the new bookmarks design")
+                    titleText: format(string: "Bookmarks Redesign"),
+                    statusText: format(string: "Toggle to use the bookmarks redesign")
                 ) { [weak self] _ in
                     guard let self else { return }
                     self.reloadView()
@@ -66,66 +53,129 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
+                    with: .searchEngineConsolidation,
+                    titleText: format(string: "Consolidated Search"),
+                    statusText: format(string: "Toggle to use Consolidated Search")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .deeplinkOptimizationRefactor,
+                    titleText: format(string: "Deeplink Optimization Refactor"),
+                    statusText: format(string: "Toggle to enable deeplink optimization refactor")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .downloadLiveActivities,
+                    titleText: format(string: "Download Live Activities"),
+                    statusText: format(string: "Toggle to enable download live activities")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .trackingProtectionRefactor,
+                    titleText: format(string: "Enhanced Tracking Protection"),
+                    statusText: format(string: "Toggle to use enhanced tracking protection")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacyFeltDeletion,
+                    titleText: format(string: "Felt Privacy Deletion"),
+                    statusText: format(string: "Toggle to enable felt privacy deletion")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacySimplifiedUI,
+                    titleText: format(string: "Felt Privacy UI"),
+                    statusText: format(string: "Toggle to enable felt privacy UI")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .hntContentFeedRefresh,
+                    titleText: format(string: "Homepage Content Feed Refresh"),
+                    statusText: format(string: "Toggle to enable the content feed refresh")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .homepageRebuild,
+                    titleText: format(string: "Homepage Rebuild"),
+                    statusText: format(string: "Toggle to use the homepage rebuild")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .loginsVerificationEnabled,
+                    titleText: format(string: "Logins Verification"),
+                    statusText: format(string: "Toggle to enable logins verification")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .menuRefactor,
+                    titleText: format(string: "Menu Redesign"),
+                    statusText: format(string: "Toggle to use the menu redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .microsurvey,
-                    titleText: format(string: "Enable Microsurvey"),
+                    titleText: format(string: "Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
                 ) { [weak self] _ in
                     UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .homepageRebuild,
-                    titleText: format(string: "Enable New Homepage"),
-                    statusText: format(string: "Toggle to use the new homepage")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .menuRefactor,
-                    titleText: format(string: "Enable New Menu"),
-                    statusText: format(string: "Toggle to use the new menu")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .loginsVerificationEnabled,
-                    titleText: format(string: "Enable Logins Verification"),
-                    statusText: format(string: "Toggle to enable logins verification")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .trackingProtectionRefactor,
-                    titleText: format(string: "Enable New Tracking Protection"),
-                    statusText: format(string: "Toggle to use the new tracking protection")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .nativeErrorPage,
-                    titleText: format(string: "Enable Native Error Page"),
+                    titleText: format(string: "Native Error Page"),
                     statusText: format(string: "Toggle to display natively created error pages")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
                     with: .noInternetConnectionErrorPage,
-                    titleText: format(string: "Enable NIC Native Error Page"),
+                    titleText: format(string: "NIC Native Error Page"),
                     statusText: format(string: "Toggle to display natively created no internet connection error page")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .feltPrivacyFeltDeletion,
-                    titleText: format(string: "Enable Felt Privacy Deletion"),
-                    statusText: format(string: "Toggle to felt privacy deletion")
+                    with: .pdfRefactor,
+                    titleText: format(string: "PDF Refactor"),
+                    statusText: format(string: "Toggle to enable PDF Refactor feature")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .feltPrivacySimplifiedUI,
-                    titleText: format(string: "Enable Felt Privacy UI"),
-                    statusText: format(string: "Toggle to felt privacy UI")
+                    with: .useRustKeychain,
+                    titleText: format(string: "Rust Keychain"),
+                    statusText: format(string: "Toggle to enable rust keychain")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .sentFromFirefox,
+                    titleText: format(string: "Sent from Firefox"),
+                    statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .tabTrayUIExperiments,
+                    titleText: format(string: "Tab Tray UI Experiment"),
+                    statusText: format(string: "Toggle to use the new tab tray UI")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .tabAnimation,
+                    titleText: format(string: "Tab Tray Animation"),
+                    statusText: format(string: "Toggle to use the new tab tray animation when new tab experiment is enabled")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
@@ -137,58 +187,30 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .hntTopSitesVisualRefresh,
+                    titleText: format(string: "Top Sites Visual Refresh"),
+                    statusText: format(string: "Toggle to enable the top sites visual refresh")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .unifiedAds,
-                    titleText: format(string: "Enable Unified Ads"),
+                    titleText: format(string: "Unified Ads"),
                     statusText: format(string: "Toggle to use unified ads API")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
                     with: .unifiedSearch,
-                    titleText: format(string: "Enable Unified Search"),
+                    titleText: format(string: "Unified Search"),
                     statusText: format(string: "Toggle to use unified search within the new toolbar")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .pdfRefactor,
-                    titleText: format(string: "Enable PDF Refactor"),
-                    statusText: format(string: "Toggle to enable PDF Refactor feature")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .downloadLiveActivities,
-                    titleText: format(string: "Enable Download Live Activities"),
-                    statusText: format(string: "Toggle to enable download live activities")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .useRustKeychain,
-                    titleText: format(string: "Enable Rust Keychain"),
-                    statusText: format(string: "Toggle to enable rust keychain")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .updatedPasswordManager,
-                    titleText: format(string: "Enable Updated Password Manager"),
-                    statusText: format(string: "Toggle to enable updated password manager")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .sentFromFirefox,
-                    titleText: format(string: "Enable Sent from Firefox"),
-                    statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
-                    with: .deeplinkOptimizationRefactor,
-                    titleText: format(string: "Enable Deeplink Optimization Refactor"),
-                    statusText: format(string: "Toggle to enable deeplink optimization refactor")
+                    titleText: format(string: "Updated Password Manager"),
+                    statusText: format(string: "Toggle to enable the updated password manager")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

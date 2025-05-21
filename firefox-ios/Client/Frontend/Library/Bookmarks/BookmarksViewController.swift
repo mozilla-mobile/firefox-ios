@@ -217,7 +217,7 @@ final class BookmarksViewController: SiteTableViewController,
             return
         }
 
-        deleteBookmarkWithUndo(indexPath: indexPath, bookmarkNode: bookmarkNode)
+        self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
     }
 
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
@@ -252,48 +252,9 @@ final class BookmarksViewController: SiteTableViewController,
                                                 style: .default))
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel,
                                                 style: .destructive) { [weak self] action in
-            self?.deleteBookmarkWithUndo(indexPath: indexPath, bookmarkNode: bookmarkNode)
+            self?.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
         })
         present(alertController, animated: true, completion: nil)
-    }
-
-    private func deleteBookmarkWithUndo(indexPath: IndexPath,
-                                        bookmarkNode: FxBookmarkNode) {
-        profile.places.getBookmarksTree(rootGUID: bookmarkNode.guid, recursive: true).uponQueue(.main) { result in
-            guard let maybeBookmarkTreeRoot = result.successValue,
-                  let bookmarkTreeRoot = maybeBookmarkTreeRoot else { return }
-
-            let recentBookmarkFolderGUID = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-
-            self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
-
-            let toastVM = ButtonToastViewModel(
-                labelText: String(format: .Bookmarks.Menu.DeletedBookmark, bookmarkNode.title),
-                buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: toastVM,
-                                    theme: self.currentTheme(),
-                                    completion: { buttonPressed in
-                guard buttonPressed, let parentGUID = bookmarkTreeRoot.parentGUID else { return }
-                self.restoreBookmarkTree(bookmarkTreeRoot: bookmarkTreeRoot,
-                                         parentFolderGUID: parentGUID,
-                                         recentBookmarkFolderGUID: recentBookmarkFolderGUID) { guid in
-                    self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
-                        guard let newBookmarkNode = result.successValue ?? nil,
-                              let fxBookmarkNode = newBookmarkNode as? FxBookmarkNode else { return }
-                        self.addBookmarkNodeToTable(bookmarkNode: fxBookmarkNode)
-                    }
-                }
-            })
-            toast.showToast(viewController: self, delay: UX.toastDelayBefore, duration: UX.toastDismissDelay) { toast in
-                [
-                    toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                                   constant: Toast.UX.toastSidePadding),
-                    toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                    constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-                ]
-            }
-        }
     }
 
     private func addBookmarkNodeToTable(bookmarkNode: FxBookmarkNode) {

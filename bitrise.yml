@@ -168,16 +168,18 @@ workflows:
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun
         - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - shard_count: 5
         - destination: $BITRISE_DESTINATION
         outputs:
-        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX 
+        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
         is_always_run: true
     - save-spm-cache@1.3.1:
         is_always_run: true
     - deploy-to-bitrise-io@2.10.0:
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - pipeline_intermediate_files: |-
             BITRISE_TEST_SHARDS_PATH_FIREFOX
@@ -1268,7 +1270,9 @@ workflows:
             #!/usr/bin/env bash
             pwd
             ls
-            version=$(cat /Users/vagrant/git/version.txt)
+            # Read and trim version string
+            full_version=$(tr -d '[:space:]' < /Users/vagrant/git/version.txt)
+            version=$(echo "$full_version" | sed -E 's/^([0-9]+(\.[0-9]+)*).*/\1/')
             echo "Version: $version"
             # Save version in BITRISE_RELEASE_VERSION
             envman add --key BITRISE_RELEASE_VERSION --value "$version"
@@ -2161,7 +2165,17 @@ workflows:
             envman add --key BITRISE_SCHEME --value FirefoxStaging
             envman add --key EXPORT_METHOD --value development
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "staging-firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "staging-firefox-ios"}}
+    - script@1.2.1:
+        title: Override default bitrise scheme
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            if [[ ! -z "${API_BITRISE_SCHEME}" ]]; then
+              envman add --key BITRISE_SCHEME --value "${API_BITRISE_SCHEME}"
+            fi
     - script@1.2.1:
         inputs:
         - content: |-
@@ -2173,7 +2187,7 @@ workflows:
             cd -
         title: Set xcodeproj code_sign_identity
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
     - script@1.2.1:
         title: NPM, ContentBlockerGen
         inputs:
@@ -2234,6 +2248,8 @@ workflows:
     description: This step is used during release promotion to build a firefox release
 
   release_promotion_push:
+    before_run:
+    - SPM_Common_Steps
     envs:
     - IPA_PATH: /tmp/Client.ipa
     - DSYM_PATH: /tmp/symbols.zip
@@ -2267,7 +2283,7 @@ workflows:
     - script@1.2.1:
         title: Upload Firefox Prod Beta Symbols
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -2277,7 +2293,7 @@ workflows:
     - deploy-to-itunesconnect-application-loader@1:
         title: Deploy to AppStoreConnect
         run_if: |-
-          {{enveq "BITRISE_APP_SLUG" "firefox-ios"}}
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
         inputs:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"

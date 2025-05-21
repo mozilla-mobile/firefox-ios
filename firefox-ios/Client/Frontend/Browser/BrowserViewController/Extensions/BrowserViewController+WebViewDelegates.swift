@@ -140,6 +140,7 @@ extension BrowserViewController: WKUIDelegate {
             if let tab = tabManager[webView] {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
                 try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 await tabManager.removeTab(tab.tabUUID)
             }
         }
@@ -382,6 +383,29 @@ extension BrowserViewController: WKUIDelegate {
 
 // MARK: - WKNavigationDelegate
 extension BrowserViewController: WKNavigationDelegate {
+    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
+    /// then we immediately reload it.
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        if let tab = tabManager.selectedTab, tab.webView == webView {
+            tab.consecutiveCrashes += 1
+
+            // Only automatically attempt to reload the crashed
+            // tab three times before giving up.
+            if tab.consecutiveCrashes < 3 {
+                logger.log("The webview has crashed, trying to reload.",
+                           level: .warning,
+                           category: .webview,
+                           extra: ["Attempt number": "\(tab.consecutiveCrashes)"])
+
+                tabsTelemetry.trackConsecutiveCrashTelemetry(attemptNumber: tab.consecutiveCrashes)
+
+                webView.reload()
+            } else {
+                tab.consecutiveCrashes = 0
+            }
+        }
+    }
+
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation?) {
         guard let tab = tabManager[webView] else { return }
 
@@ -394,6 +418,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
         if tabManager.selectedTab?.webView !== webView { return }
+
+        // Note the main frame JSContext (i.e. document, window) is not available yet.
+        if let tab = tabManager[webView], let blocker = tab.contentBlocker {
+            blocker.clearPageStats()
+        }
 
         updateFindInPageVisibility(isVisible: false)
 
@@ -418,13 +447,16 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+        // prevent the App from opening universal links
+        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
+        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
             decisionHandler(.cancel)
             return
         }
-
+        updateZoomPageBarVisibility(visible: false)
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -502,6 +534,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     if let currentTab = self?.tabManager.selectedTab,
                        currentTab.historyList.count == 1,
                        self?.isStoreURL(currentTab.historyList[0]) ?? false {
+                        self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
                         self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
                     }
                 }
@@ -548,6 +581,8 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
         if let scheme = url.scheme, ["http", "https", "blob", "file"].contains(scheme) {
@@ -575,19 +610,19 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            if navigationAction.navigationType == .linkActivated && url != webView.url {
-                if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
-                    decisionHandler(.cancel)
-                    webView.load(navigationAction.request)
-                    return
-                }
+            let isGoogleDomain = url.host?.contains("google") ?? false
+            let isPrivate = tab.isPrivate
+
+            if isPrivate || isGoogleDomain || shouldBlockExternalApps {
+                decisionHandler(allowPolicy)
+                return
             }
 
             decisionHandler(.allow)
             return
         }
 
-        if !(url.scheme?.contains("firefox") ?? true) {
+        if let scheme = url.scheme, !scheme.contains("firefox"), !shouldBlockExternalApps, !tab.isPrivate {
             // Try to open the custom scheme URL, if it doesn't work we show an error alert
             UIApplication.shared.open(url, options: [:]) { openedURL in
                 // Do not show error message for JS navigated links or
@@ -744,8 +779,12 @@ extension BrowserViewController: WKNavigationDelegate {
     func handlePDFResponse(tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
-        navigationHandler?.showDocumentLoading()
-        scrollController.showToolbars(animated: false)
+        let shouldUpdateUI = tab === tabManager.selectedTab
+
+        if shouldUpdateUI {
+            navigationHandler?.showDocumentLoading()
+            scrollController.showToolbars(animated: false)
+        }
 
         tab.getSessionCookies { [weak tab, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -765,9 +804,18 @@ extension BrowserViewController: WKNavigationDelegate {
                                    of: tab?.webView,
                                    change: [.newKey: true],
                                    context: nil)
+                if let url = request.url {
+                    self?.documentLogger.registerDownloadStart(url: url)
+                }
             }
             tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
+                self?.logger.log("Failed to download Document",
+                                 level: .warning,
+                                 category: .webview,
+                                 extra: [
+                                    "error": error?.localizedDescription ?? "",
+                                    "url": request.url?.absoluteString ?? "Unknown URL"])
                 guard let error, let webView = tab?.webView else { return }
                 self?.showErrorPage(webView: webView, error: error)
             }
@@ -975,6 +1023,13 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
         guard let tab = tabManager[webView] else { return }
 
+        // The main frame JSContext is available, and DOM parsing has begun.
+        // Do not execute JS at this point that requires running prior to DOM parsing.
+        if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
+            let js = "window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))"
+            webView.evaluateJavascriptInDefaultContentWorld(js)
+        }
+
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
@@ -994,6 +1049,16 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
+
+        if let url = webView.url, InternalURL(url) == nil {
+            if let title = webView.title,
+               tabManager.selectedTab?.webView == webView {
+                tabManager.selectedTab?.lastTitle = title
+                tabManager.notifyCurrentTabDidFinishLoading()
+            }
+
+            tabManager.commitChanges()
+        }
 
         if isPDFRefactorEnabled {
             scrollController.configureRefreshControl()
@@ -1048,7 +1113,8 @@ private extension BrowserViewController {
     }
 
     // Use for sms and mailto, which do not show a confirmation before opening.
-    func showExternalAlert(withText text: String, completion: @escaping (UIAlertAction) -> Void) {
+    func showExternalAlert(withText text: String,
+                           completion: @escaping (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: nil,
                                       message: text,
                                       preferredStyle: .alert)
@@ -1061,8 +1127,7 @@ private extension BrowserViewController {
 
         let cancelOption = UIAlertAction(
             title: .CancelString,
-            style: .cancel,
-            handler: nil
+            style: .cancel
         )
 
         alert.addAction(okOption)

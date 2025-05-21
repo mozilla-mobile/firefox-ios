@@ -52,6 +52,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private let logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     private var hasAppearedBefore = false
+    private let searchEnginesManager: SearchEnginesManagerProvider
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -70,12 +71,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
     ) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
         self.logger = logger
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
+        self.searchEnginesManager = searchEnginesManager
 
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
@@ -318,7 +321,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func getGeneralSettings() -> [SettingSection] {
         var generalSettings: [Setting] = [
             BrowsingSetting(settings: self, settingsDelegate: parentCoordinator),
-            SearchSetting(settings: self, settingsDelegate: parentCoordinator),
+            SearchSetting(
+                settingsDelegate: parentCoordinator,
+                searchEnginesManager: searchEnginesManager,
+                theme: themeManager.getCurrentTheme(for: windowUUID)
+            ),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
@@ -447,6 +454,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             AppDataUsageReportSetting(settings: self),
             DeleteExportedDataSetting(settings: self),
             ForceCrashSetting(settings: self),
+            ForceRSSyncSetting(settings: self),
             ChangeToChinaSetting(settings: self),
             AppReviewPromptSetting(settings: self, settingsDelegate: self),
             ToggleInactiveTabs(settings: self, settingsDelegate: self),
@@ -457,7 +465,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
-            DeleteLoginsKeysSetting(settings: self)
+            DeleteLoginsKeysSetting(settings: self),
+            ChangeRSServerSetting(settings: self),
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

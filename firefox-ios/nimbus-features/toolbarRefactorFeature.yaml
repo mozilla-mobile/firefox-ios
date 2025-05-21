@@ -19,6 +19,11 @@ features:
           If true, enables the navigation contextual hint.
         type: Boolean
         default: false
+      toolbar_update_hint:
+        description: >
+          If true, enables the toolbar update contextual hint.
+        type: Boolean
+        default: false
       unified_search:
         description: >
           Enables the unified search feature.
@@ -27,6 +32,11 @@ features:
       swiping_tabs:
         description: >
           Enables swipe gestures to switch between browser tabs.
+        type: Boolean
+        default: false
+      translucency:
+        description: >
+          Enables translucency for toolbars.
         type: Boolean
         default: false
       layout:
@@ -42,7 +52,9 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          swiping_tabs: true
+          toolbar_update_hint: true
+          swiping_tabs: false
+          translucency: true
           layout: version1
       - channel: developer
         value:
@@ -50,7 +62,9 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
+          toolbar_update_hint: true
           swiping_tabs: true
+          translucency: true
           layout: baseline
 
 enums:

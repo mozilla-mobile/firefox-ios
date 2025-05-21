@@ -13,6 +13,7 @@ final class HomepageViewController: UIViewController,
                                     UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
+                                    Notifiable,
                                     Themeable,
                                     StoreSubscriber {
     // MARK: - Typealiases
@@ -144,6 +145,7 @@ final class HomepageViewController: UIViewController,
             )
         )
 
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
@@ -306,6 +308,16 @@ final class HomepageViewController: UIViewController,
         store.dispatch(action)
     }
 
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            dynamicTypeChanged()
+        default:
+            break
+        }
+    }
+
     // MARK: - Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -451,17 +463,22 @@ final class HomepageViewController: UIViewController,
             messageCardCell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
             return messageCardCell
         case .topSite(let site, let textColor):
-            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
+            let isTopSitesRefreshEnabled = featureFlags.isFeatureEnabled(.hntTopSitesVisualRefresh, checking: .buildOnly)
+            let cellType: ReusableCell.Type = isTopSitesRefreshEnabled ? TopSiteCell.self : LegacyTopSiteCell.self
+
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
-            topSiteCell.configure(
-                site,
-                position: indexPath.row,
-                theme: currentTheme,
-                textColor: textColor
-            )
-            return topSiteCell
+            if let topSiteCell = topSiteCell as? TopSiteCell {
+                topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
+                return topSiteCell
+            } else if let legacyTopSiteCell = topSiteCell as? LegacyTopSiteCell {
+                legacyTopSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
+                return legacyTopSiteCell
+            }
+
+            return UICollectionViewCell()
 
         case .topSiteEmpty:
             guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
@@ -623,6 +640,13 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         default:
             return nil
+        }
+    }
+
+    private func dynamicTypeChanged() {
+        collectionView?.visibleCells.forEach { cell in
+            guard let customCell = cell as? TopSiteCell else { return }
+            customCell.updateDynamicConstraints()
         }
     }
 
