@@ -105,7 +105,8 @@ class ZoomPageManager: TabEventHandler {
         let domainZoomLevels = zoomStore.getDomainZoomLevel()
 
         // Filter current default zoom level from the list
-        return domainZoomLevels.filter { $0.zoomLevel != defaultZoomLevel }
+        let filterList = domainZoomLevels.filter { $0.zoomLevel != defaultZoomLevel }
+        return filterList
     }
 
     /// Saves the zoom level for a given host and notifies other windows of the change
