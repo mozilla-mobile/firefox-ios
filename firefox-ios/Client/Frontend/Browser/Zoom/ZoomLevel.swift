@@ -13,7 +13,9 @@ enum ZoomLevel: CGFloat, CaseIterable, Identifiable {
     case oneHundredTwentyFivePercent = 1.25
     case oneHundredFiftyPercent = 1.5
     case oneHundredSeventyFivePercent = 1.75
-    case twoHundred = 2.0
+    case twoHundredPercent = 2.0
+    case twoHundredFiftyPercent = 2.5
+    case threeHundredPercent = 3.0
 
     var displayName: String {
          let text = NumberFormatter.localizedString(
@@ -34,7 +36,9 @@ enum ZoomLevel: CGFloat, CaseIterable, Identifiable {
         case .oneHundredTwentyFivePercent: return 125
         case .oneHundredFiftyPercent: return 150
         case .oneHundredSeventyFivePercent: return 175
-        case .twoHundred: return 200
+        case .twoHundredPercent: return 200
+        case .twoHundredFiftyPercent: return 250
+        case .threeHundredPercent: return 300
         }
     }
 
