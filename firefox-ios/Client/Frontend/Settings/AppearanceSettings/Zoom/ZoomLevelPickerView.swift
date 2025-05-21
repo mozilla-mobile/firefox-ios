@@ -15,7 +15,7 @@ struct ZoomLevelPickerView: View {
     }
 
     var backgroundColor: Color {
-        return theme.colors.layer1.color
+        return .white // theme.colors.layer1.color
     }
 
     var sectionTitleColor: Color {
@@ -35,20 +35,25 @@ struct ZoomLevelPickerView: View {
 
     var body: some View {
         Section {
-            Picker(pickerText, selection: $selectedZoomLevel) {
-                ForEach(ZoomLevel.allCases, id: \.self) { item in
-                    Text(item.displayName)
-                        .font(.body)
-                        .foregroundColor(textColor)
-                        .tag(item)
+            ZStack {
+                backgroundColor
+
+                Picker(pickerText, selection: $selectedZoomLevel) {
+                    ForEach(ZoomLevel.allCases, id: \.self) { item in
+                        Text(item.displayName)
+                            .font(.body)
+                            .foregroundColor(textColor)
+                            .tag(item)
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity)
-            .background(backgroundColor)
-            .accentColor(textColor)
-            .pickerStyle(.menu)
-            .onChange(of: selectedZoomLevel) { newValue in
-                zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+                .frame(maxWidth: .infinity)
+                .accentColor(textColor)
+                .pickerStyle(.menu)
+                .onChange(of: selectedZoomLevel) { newValue in
+                    zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+                }
+                .background(backgroundColor)
+                .listRowInsets(EdgeInsets())
             }
         }
         header: {

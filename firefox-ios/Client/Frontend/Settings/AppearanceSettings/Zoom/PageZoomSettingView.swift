@@ -46,13 +46,15 @@ struct PageZoomSettingsView: View {
                 ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
                     .background(viewBackground)
 
-                // Specific site zoom levels
-                ZoomSiteListView(theme: theme,
-                                 domainZoomLevels: $viewModel.domainZoomLevels,
-                                 onDelete: viewModel.deleteZoomLevel)
+                if !viewModel.domainZoomLevels.isEmpty {
+                    // Specific site zoom levels
+                    ZoomSiteListView(theme: theme,
+                                     domainZoomLevels: $viewModel.domainZoomLevels,
+                                     onDelete: viewModel.deleteZoomLevel)
 
-                // Reset Zoom
-                resetButton(String.Settings.Appearance.PageZoom.ResetButtonTitle)
+                    // Reset Zoom
+                    resetButton(String.Settings.Appearance.PageZoom.ResetButtonTitle)
+                }
             }
             .background(viewBackground)
             .listStyle(.plain)
