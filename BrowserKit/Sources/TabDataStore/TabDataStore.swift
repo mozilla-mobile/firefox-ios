@@ -139,7 +139,12 @@ public actor DefaultTabDataStore: TabDataStore {
     // MARK: - Saving Data
 
     public func saveWindowData(window: WindowData, forced: Bool) async {
-        guard let windowSavingPath = windowURLPath(for: window.id, isBackup: false) else { return }
+        guard let windowSavingPath = windowURLPath(for: window.id, isBackup: false) else {
+            logger.log("Not saving window data. Could not build window saving path.",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
 
         // Hold onto a copy of the latest window data so whenever the save happens it is using the latest
         windowDataToSave = window
@@ -160,10 +165,26 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     private func createWindowDataBackup(windowPath: URL) {
-        guard let windowID = windowDataToSave?.id,
-              let backupWindowSavingPath = windowURLPath(for: windowID, isBackup: true),
-              let backupDirectoryPath = fileManager.windowDataDirectory(isBackup: true)
-        else { return }
+        guard let windowID = windowDataToSave?.id else {
+            logger.log("Failed to create window data backup. Window to save is nil",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
+
+        guard let backupWindowSavingPath = windowURLPath(for: windowID, isBackup: true) else {
+            logger.log("Failed to create window data backup. Could not create windowURLPath.",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
+
+        guard let backupDirectoryPath = fileManager.windowDataDirectory(isBackup: true) else {
+            logger.log("Failed to create window data backup. No backup directory path.",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
 
         if !fileManager.fileExists(atPath: backupDirectoryPath) {
             fileManager.createDirectoryAtPath(path: backupDirectoryPath)
