@@ -77,6 +77,36 @@ struct OpenTabsView: View {
         .foregroundColor(Color("backgroundColor"))
     }
 
+    var tabsView: some View {
+        VStack(spacing: 8) {
+            ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
+                lineItemForTab(tab)
+            }
+
+            if entry.tabs.count > numberOfTabsToDisplay {
+                HStack(alignment: .center, spacing: 15) {
+                    Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                        .foregroundColor(Color("openTabsContentColor"))
+                        .frame(width: 16, height: 16)
+                    Text(
+                        String.localizedStringWithFormat(
+                            String.MoreTabsLabel,
+                            (entry.tabs.count - numberOfTabsToDisplay)
+                        )
+                    )
+                    .foregroundColor(Color("openTabsContentColor"))
+                    .lineLimit(1)
+                    .font(.system(size: 13, weight: .semibold, design: .default))
+                    Spacer()
+                }.padding([.horizontal])
+            } else {
+                openFirefoxButton
+            }
+
+            Spacer()
+        }.padding(.top, 14)
+    }
+
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink)
