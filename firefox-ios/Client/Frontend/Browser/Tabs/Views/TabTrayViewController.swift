@@ -918,7 +918,7 @@ class TabTrayViewController: UIViewController,
         guard let viewController = viewController as? UINavigationController,
               let index = childPanelControllers.firstIndex(of: viewController),
               index > 0 else { return nil }
-        return childPanelControllers[index - 1]
+        return childPanelControllers[safe: index - 1]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController,
@@ -926,7 +926,7 @@ class TabTrayViewController: UIViewController,
         guard let viewController = viewController as? UINavigationController,
               let index = childPanelControllers.firstIndex(of: viewController),
               index < childPanelControllers.count - 1 else { return nil }
-        return childPanelControllers[index + 1]
+        return childPanelControllers[safe: index + 1]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController,
