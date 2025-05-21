@@ -19,7 +19,7 @@ class TestHistory: XCTestCase {
         continueAfterFailure = false
 
         // Setup mock profile
-        profile = MockProfile(databasePrefix: "profile-test")
+        profile = MockProfile(databasePrefix: "history-test")
         profile.reopen()
     }
 
