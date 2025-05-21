@@ -62,7 +62,8 @@ extension UIImage {
         let bitsPerChannel = 8 // 8 bits (1 byte) for each channel in RGBA which represents the 0-255 (2^8) value
         let bytesPerRow = imageWidth * bytesPerPixel
 
-        var pixelData = [UInt8](repeating: 0, count: imageWidth * imageHeight * bytesPerPixel)
+        let pixelCount = imageWidth * imageHeight
+        var pixelData = [UInt8](repeating: 0, count: pixelCount * bytesPerPixel)
 
         guard let context = CGContext(
             data: &pixelData,
@@ -88,7 +89,6 @@ extension UIImage {
              }
          }
 
-         let pixelCount = imageWidth * imageHeight
          let percentageTransparent = CGFloat(transparentPixelCount) / CGFloat(pixelCount)
 
          return percentageTransparent * 100
