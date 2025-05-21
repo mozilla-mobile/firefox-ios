@@ -72,13 +72,13 @@ final class DataSchemePolicyDeciderTests: XCTestCase {
         XCTAssertEqual(policy, .cancel)
     }
 
-    func testPolicyForPopupNavigation_AllowAnyScheme_whenTargetIsNotMainFrame() {
+    func testPolicyForPopupNavigation_CancelAnyScheme_whenTargetIsNotMainFrame() {
         let subject = createSubject()
         let url = URL(string: "data:video/")!
 
         let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url, isMainFrame: false))
 
-        XCTAssertEqual(policy, .allow)
+        XCTAssertEqual(policy, .cancel)
     }
 
     func testPolicyForPopupNavigation_forwardsToNextDecider_whenTargetIsNotMainFrame() {
@@ -110,6 +110,6 @@ final class DataSchemePolicyDeciderTests: XCTestCase {
     }
 
     private func createSubject(next: WKPolicyDecider? = nil) -> DataSchemePolicyDecider {
-        return DataSchemePolicyDecider(next: next)
+        return DataSchemePolicyDecider(nextDecider: next)
     }
 }

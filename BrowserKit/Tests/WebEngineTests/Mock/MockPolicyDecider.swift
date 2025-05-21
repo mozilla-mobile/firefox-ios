@@ -6,7 +6,7 @@ import WebKit
 @testable import WebEngine
 
 class MockPolicyDecider: WKPolicyDecider {
-    var next: (any WKPolicyDecider)?
+    var nextDecider: (any WKPolicyDecider)?
 
     var policyForNavigationActionCalled = 0
     var policyForNavigationResponseCalled = 0

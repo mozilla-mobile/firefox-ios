@@ -5,7 +5,7 @@
 import WebKit
 
 struct LocalRequestPolicyDecider: WKPolicyDecider {
-    var next: (any WKPolicyDecider)?
+    var nextDecider: (any WKPolicyDecider)?
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
         return .allow
@@ -17,7 +17,7 @@ struct LocalRequestPolicyDecider: WKPolicyDecider {
 
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
         guard isRequestInternalPrivileged(action.request) else {
-            return next?.policyForPopupNavigation(action: action) ?? .cancel
+            return nextDecider?.policyForPopupNavigation(action: action) ?? .cancel
         }
         return .allow
     }

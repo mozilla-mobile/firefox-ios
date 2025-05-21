@@ -11,7 +11,7 @@ enum SupportedAppScheme: String, CaseIterable {
 }
 
 struct AppLaunchPolicyDecider: WKPolicyDecider {
-    var next: (any WKPolicyDecider)?
+    var nextDecider: (any WKPolicyDecider)?
 
     // TODO: - FXIOS-11259 - add market place kit
     private let supportedSchemes = SupportedAppScheme.allCases
@@ -32,7 +32,7 @@ struct AppLaunchPolicyDecider: WKPolicyDecider {
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
         guard let url = action.request.url,
               isSupportedHost(url) || isSupportedScheme(url) else {
-            return next?.policyForPopupNavigation(action: action) ?? .cancel
+            return nextDecider?.policyForPopupNavigation(action: action) ?? .cancel
         }
 
         return .launchExternalApp

@@ -82,6 +82,6 @@ final class HTTPSchemePolicyDeciderTests: XCTestCase {
     }
 
     private func createSubject(next: WKPolicyDecider? = nil) -> HTTPSchemePolicyDecider {
-        return HTTPSchemePolicyDecider(next: next)
+        return HTTPSchemePolicyDecider(nextDecider: next)
     }
 }

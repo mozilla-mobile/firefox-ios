@@ -9,29 +9,29 @@ import WebKit
 ///
 /// The class decides a `WKPolicy` for each type of navigation by asking it to it's managed chain.
 class WKPolicyDeciderFactory: WKPolicyDecider {
-    var next: WKPolicyDecider?
+    var nextDecider: WKPolicyDecider?
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
-        guard let next else { return .cancel }
-        return next.policyForNavigation(action: action)
+        guard let nextDecider else { return .cancel }
+        return nextDecider.policyForNavigation(action: action)
     }
 
     func policyForNavigation(response: NavigationResponse) -> WKPolicy {
-        guard let next else { return .cancel }
-        return next.policyForNavigation(response: response)
+        guard let nextDecider else { return .cancel }
+        return nextDecider.policyForNavigation(response: response)
     }
 
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
-        next = popupNavigationResponderChain()
-        guard let next else { return .cancel }
-        return next.policyForPopupNavigation(action: action)
+        nextDecider = popupNavigationResponderChain()
+        guard let nextDecider else { return .cancel }
+        return nextDecider.policyForPopupNavigation(action: action)
     }
 
     private func popupNavigationResponderChain() -> WKPolicyDecider? {
         let appLaunch = AppLaunchPolicyDecider()
-        let data = DataSchemePolicyDecider(next: appLaunch)
-        let http = HTTPSchemePolicyDecider(next: data)
-        let local = LocalRequestPolicyDecider(next: http)
+        let data = DataSchemePolicyDecider(nextDecider: appLaunch)
+        let http = HTTPSchemePolicyDecider(nextDecider: data)
+        let local = LocalRequestPolicyDecider(nextDecider: http)
         return local
     }
 }

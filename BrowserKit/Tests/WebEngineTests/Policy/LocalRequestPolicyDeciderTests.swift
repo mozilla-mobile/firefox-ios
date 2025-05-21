@@ -55,6 +55,6 @@ final class LocalRequestPolicyDeciderTests: XCTestCase {
     }
 
     private func createSubject(next: WKPolicyDecider? = nil) -> LocalRequestPolicyDecider {
-        return LocalRequestPolicyDecider(next: next)
+        return LocalRequestPolicyDecider(nextDecider: next)
     }
 }
