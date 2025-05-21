@@ -10,16 +10,12 @@ struct ZoomLevelPickerView: View {
     private let theme: Theme
     private let zoomManager: ZoomPageManager
 
-    var textColor: Color {
-        return theme.colors.textPrimary.color
+    private struct UX {
+        static var sectionPadding: CGFloat { 16 }
     }
 
     var backgroundColor: Color {
-        return .white // theme.colors.layer1.color
-    }
-
-    var sectionTitleColor: Color {
-        return theme.colors.textSecondary.color
+        return theme.colors.layer5.color
     }
 
     var pickerText: String {
@@ -42,23 +38,24 @@ struct ZoomLevelPickerView: View {
                     ForEach(ZoomLevel.allCases, id: \.self) { item in
                         Text(item.displayName)
                             .font(.body)
-                            .foregroundColor(textColor)
+                            .foregroundColor(theme.colors.textSecondary.color)
                             .tag(item)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .accentColor(textColor)
+                .accentColor(theme.colors.textPrimary.color)
                 .pickerStyle(.menu)
                 .onChange(of: selectedZoomLevel) { newValue in
                     zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
                 }
+                .padding([.leading, .trailing], UX.sectionPadding)
                 .background(backgroundColor)
-                .listRowInsets(EdgeInsets())
             }
         }
         header: {
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
-                                     sectionTitleColor: sectionTitleColor)
+                                     sectionTitleColor: theme.colors.textSecondary.color)
+            .background(theme.colors.layer1.color)
+            .padding([.leading, .trailing], UX.sectionPadding)
         }
     }
 }
