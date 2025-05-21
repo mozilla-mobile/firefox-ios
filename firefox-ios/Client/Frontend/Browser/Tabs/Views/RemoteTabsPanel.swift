@@ -140,7 +140,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
     }
 
     var shouldBeInPrivateTheme: Bool {
@@ -150,7 +150,7 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - TabTrayThemeable
 
     func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             return themeManager.resolvedTheme(with: false)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)

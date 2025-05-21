@@ -208,6 +208,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
         accessibilityIdentifier = item.accessibilityId ?? item.iconString
         accessibilityLabel = item.currentTitle
+        accessibilityTraits = .button
 
         if item.isFlipped {
             transform = CGAffineTransform(scaleX: 1, y: -1)

@@ -436,14 +436,14 @@ class BookmarksTests: BaseTestCase {
         waitForElementsToExist(
             [
                 contextMenuTable,
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmarkSlash],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
         // Tap to "Open in New Tab"
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
+        contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
         // The webpage opens in a new tab
         if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
             switchToTabAndValidate(nrOfTabs: "3")
@@ -461,7 +461,7 @@ class BookmarksTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         longPressBookmarkCell()
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
+        contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         // The webpage opens in a new private tab
         switchToTabAndValidate(nrOfTabs: "1", isPrivate: true)
         if #unavailable(iOS 16) {
@@ -475,7 +475,7 @@ class BookmarksTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         longPressBookmarkCell()
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
+        contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
         // The bookmark is removed
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()
