@@ -10,7 +10,7 @@ enum UX {
         // Base metrics for a standard device (e.g., iPhone 11)
         static let baseWidth: CGFloat = 375
         static let baseHeight: CGFloat = 812
-        
+
         static let cardHeightRatio: CGFloat = 0.7
         static let spacing: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
@@ -23,11 +23,11 @@ enum UX {
         static let shadowOpacity = 0.1
         static let secondaryButtonTopPadding: CGFloat = 8
         static let secondaryButtonBottomPadding: CGFloat = 24
-        
+
         // Font sizes for base metrics
         static let titleFontSize: CGFloat = 28
         static let bodyFontSize: CGFloat = 16
-        
+
         static let titleFont: Font = .title
         static let bodyFont: Font = .subheadline
     }
@@ -38,10 +38,9 @@ enum UX {
         static let imageHeight: CGFloat = 150
         static let verticalPadding: CGFloat = 10
         static let checkmarkFontSize: CGFloat = 20
-        
+
         static let selectedImageSuffix = "Selected"
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
     }
 }
-

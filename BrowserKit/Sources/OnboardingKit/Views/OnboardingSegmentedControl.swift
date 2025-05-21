@@ -11,7 +11,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    
+
     init(
         selection: Binding<Action>,
         items: [OnboardingMultipleChoiceButtonModel<Action>],
@@ -34,7 +34,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                 } label: {
                     VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
                         let isSelected = (item.action == selection)
-                        
+
                         Image(assetOrSymbol: item.imageID, bundle: .module)
                             .resizable()
                             .colorMultiply(isSelected ? actionPrimary : .white)
@@ -68,7 +68,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
-    
+
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
     }
