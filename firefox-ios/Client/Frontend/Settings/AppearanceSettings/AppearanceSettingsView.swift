@@ -11,17 +11,18 @@ protocol AppearanceSettingsDelegate: AnyObject {
 }
 
 /// The main view displaying the settings for the appearance menu.
-struct AppearanceSettingsView: View {
+struct AppearanceSettingsView: View, FeatureFlaggable {
     let windowUUID: WindowUUID
-    var shouldShowPageZoom: Bool {
-        return ZoomPageManager(windowUUID: windowUUID).defaultZoomIsEnabled
-    }
     let delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
     var themeManager
 
     @State private var currentTheme: Theme?
+
+    var shouldShowPageZoom: Bool {
+        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
+    }
 
     /// Compute the theme option to display in the ThemeSelectionView.
     /// - Returns: .automatic if system theme or automatic brightness is enabled;
