@@ -13,21 +13,16 @@ struct ZoomSiteListView: View {
 
     private struct UX {
         static var sectionPadding: CGFloat { 16 }
+        static var footerBottomPadding: CGFloat { 40 }
+        static var footerTopPadding: CGFloat { 8 }
     }
 
-    var textColor: Color {
-        return theme.colors.textPrimary.color
-    }
     var cellBackground: Color {
-        return theme.colors.layer2.color
+        return theme.colors.layer5.color
     }
 
-    var sectionTitleColor: Color {
-        return theme.colors.textSecondary.color
-    }
-
-    var footerTextColor: Color {
-        return theme.colors.textSecondary.color
+    var sectionBackground: Color {
+        return theme.colors.layer1.color
     }
 
     init(theme: Theme,
@@ -40,27 +35,36 @@ struct ZoomSiteListView: View {
 
     var body: some View {
         Section {
-            ForEach(domainZoomLevels, id: \.host) { zoomItem in
-                ZoomLevelCellView(domainZoomLevel: zoomItem, textColor: textColor)
+            ZStack {
+                cellBackground
+                ForEach(domainZoomLevels, id: \.host) { zoomItem in
+                    ZoomLevelCellView(domainZoomLevel: zoomItem,
+                                      textColor: theme.colors.textPrimary.color)
+                }
+                .onDelete(perform: onDelete)
+                .background(cellBackground)
             }
-            .onDelete(perform: onDelete)
+            .padding([.leading, .trailing], UX.sectionPadding)
             .background(cellBackground)
         } header: {
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
-                                     sectionTitleColor: sectionTitleColor)
+                                     sectionTitleColor: theme.colors.textSecondary.color)
+                .padding([.leading, .trailing], UX.sectionPadding)
         } footer: {
             footerView()
         }
     }
 
     private func footerView() -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        ZStack {
+            sectionBackground
+
             Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
                 .font(.caption)
-                .padding([.leading, .trailing], UX.sectionPadding)
-                .foregroundColor(footerTextColor)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(theme.colors.textSecondary.color)
+                .padding([.top], UX.footerTopPadding)
+                .padding([.bottom], UX.footerBottomPadding)
         }
-        .listRowInsets(EdgeInsets())
+        .background(sectionBackground)
     }
 }

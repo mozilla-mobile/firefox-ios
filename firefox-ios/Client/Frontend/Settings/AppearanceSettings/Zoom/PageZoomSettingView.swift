@@ -14,7 +14,6 @@ struct PageZoomSettingsView: View {
 
     private struct UX {
         static var dividerHeight: CGFloat { 0.7 }
-        static var buttonPadding: CGFloat { 4 }
         static var sectionPadding: CGFloat { 16 }
     }
 
@@ -44,16 +43,19 @@ struct PageZoomSettingsView: View {
             List {
                 // Default level picker
                 ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
-                    .background(viewBackground)
+                    .listRowInsets(EdgeInsets())
 
                 if !viewModel.domainZoomLevels.isEmpty {
                     // Specific site zoom levels
                     ZoomSiteListView(theme: theme,
                                      domainZoomLevels: $viewModel.domainZoomLevels,
                                      onDelete: viewModel.deleteZoomLevel)
+                        .listRowInsets(EdgeInsets())
 
                     // Reset Zoom
-                    resetButton(String.Settings.Appearance.PageZoom.ResetButtonTitle)
+                    GenericButtonCellView(theme: theme,
+                                          title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
+                                          onTap: viewModel.resetDomainZoomLevel)
                 }
             }
             .background(viewBackground)
@@ -66,25 +68,5 @@ struct PageZoomSettingsView: View {
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }
-    }
-
-    private func resetButton(_ title: String) -> some View {
-        VStack {
-            Divider()
-                .frame(height: UX.dividerHeight)
-
-            Button(action: {
-                viewModel.resetDomainZoomLevel()
-            }) {
-                Text(title)
-                    .foregroundColor(theme.colors.textCritical.color)
-            }
-            .background(themeColors.layer1.color)
-            .padding([.top, .bottom], UX.buttonPadding)
-
-            Divider()
-                .frame(height: UX.dividerHeight)
-        }
-        .background(viewBackground)
     }
 }
