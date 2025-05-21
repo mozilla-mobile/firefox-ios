@@ -191,7 +191,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     private func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
@@ -199,7 +199,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
     }
 
     var shouldBeInPrivateTheme: Bool {
