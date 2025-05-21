@@ -482,9 +482,9 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            let blurView = isToolbarTranslucencyEnabled ? newPositionIsBottom ? bottomBlurView : topBlurView : nil
+//            let blurView = isToolbarTranslucencyEnabled ? newPositionIsBottom ? bottomBlurView : topBlurView : nil
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-            addressBarPanGestureHandler?.updateAddressBarContainer(newParent, blurView: blurView)
+//            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer, blurView: blurView)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
 
@@ -1144,7 +1144,7 @@ class BrowserViewController: UIViewController,
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
             contentContainer: contentContainer,
-            addressBarContainer: isBottomSearchBar ? overKeyboardContainer : header,
+            addressBarContainer: addressToolbarContainer,// isBottomSearchBar ? overKeyboardContainer : header,
             blurView: blurView,
             webPagePreview: webPagePreview,
             tabManager: tabManager,

@@ -125,6 +125,11 @@ final class TabWebViewPreview: UIView, Notifiable, ThemeApplicable {
         webPageScreenshotImageView.image = image
     }
 
+    func applyTransform(translationX: CGFloat, velocityX: CGFloat) {
+        webPageScreenshotImageView.transform = CGAffineTransform(translationX: translationX, y: 0)
+        skeletonAddressBar.transform = CGAffineTransform(translationX: translationX * 0.9, y: 0.0)
+    }
+
     // MARK: - Helper Functions
     private func createStackView() -> UIStackView {
         return .build { stackView in

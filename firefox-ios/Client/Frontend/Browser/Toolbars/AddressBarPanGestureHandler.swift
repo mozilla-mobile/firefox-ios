@@ -17,7 +17,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private let contentContainer: ContentContainer
     private let webPagePreview: TabWebViewPreview
     private var panGestureRecognizer: UIPanGestureRecognizer?
-    private var addressBarContainer: BaseAlphaStackView
+    private var addressBarContainer: AddressToolbarContainer
     private var blurView: UIVisualEffectView?
 
     // MARK: - Properties
@@ -28,7 +28,7 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - Init
     init(
         contentContainer: ContentContainer,
-        addressBarContainer: BaseAlphaStackView,
+        addressBarContainer: AddressToolbarContainer,
         blurView: UIVisualEffectView?,
         webPagePreview: TabWebViewPreview,
         tabManager: TabManager,
@@ -51,8 +51,8 @@ final class AddressBarPanGestureHandler: NSObject {
     ///   - newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
     ///   - blurView: The new blur view is shown behind the address bar container.
     ///
-    func updateAddressBarContainer(_ newContainer: BaseAlphaStackView,
-                                   blurView: UIVisualEffectView?) {
+    private func updateAddressBarContainer(_ newContainer: AddressToolbarContainer,
+                                           blurView: UIVisualEffectView?) {
         if let panGestureRecognizer {
             addressBarContainer.removeGestureRecognizer(panGestureRecognizer)
         }
