@@ -31,6 +31,7 @@ struct GenericButtonCellView: View {
             }) {
                 Text(title)
                     .foregroundColor(theme.colors.textCritical.color)
+                    .font(.callout)
             }
             .background(theme.colors.layer5.color)
             .padding([.top, .bottom], UX.buttonPadding)
