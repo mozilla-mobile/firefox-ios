@@ -6,11 +6,17 @@ import Common
 import Redux
 import UIKit
 
+protocol TabTrayThemeable {
+    func retrieveTheme() -> Theme
+    func applyTheme(_ theme: Theme)
+}
+
 class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
-                                     FeatureFlaggable {
+                                     FeatureFlaggable,
+                                     TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
@@ -158,6 +164,37 @@ class TabDisplayPanelViewController: UIViewController,
         tabDisplayView.isHidden = shouldShowEmptyView
     }
 
+<<<<<<< HEAD
+=======
+    func removeTabPanel() {
+        guard isViewLoaded else { return }
+        view.removeConstraints(view.constraints)
+        view.subviews.forEach { $0.removeFromSuperview() }
+        view.removeFromSuperview()
+    }
+
+    // MARK: - Themeable
+
+    func applyTheme() {
+        let theme = retrieveTheme()
+        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: theme)
+        emptyPrivateTabsView.applyTheme(theme: theme)
+        adjustFadeView(theme: theme)
+    }
+
+    var shouldUsePrivateOverride: Bool {
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        return tabTrayState?.isPrivateMode ?? false
+    }
+
+    // MARK: - Fade view & status bar view
+
+>>>>>>> 8bab1969c ( Add FXIOS-11604 #25264 [Tab tray UI experiment] tab tray animation (#26583))
     private func setupFadeView() {
         guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
         gradientLayer.locations = [0.0, 0.02, 0.08, 0.12]
@@ -180,9 +217,24 @@ class TabDisplayPanelViewController: UIViewController,
         fadeView.isHidden = !shouldShow
     }
 
+<<<<<<< HEAD
     private func retrieveTheme() -> Theme {
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
+=======
+    // MARK: Themeable
+
+    private func adjustFadeView(theme: Theme) {
+        guard isTabTrayUIExperimentsEnabled else { return }
+
+        if UIAccessibility.isReduceTransparencyEnabled {
+            gradientLayer.isHidden = true
+            if statusBarView.superview == nil {
+                view.addSubview(statusBarView)
+            }
+            statusBarView.backgroundColor = theme.colors.layer3
+            adjustStatusBarFrameIfNeeded()
+>>>>>>> 8bab1969c ( Add FXIOS-11604 #25264 [Tab tray UI experiment] tab tray animation (#26583))
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
         }
@@ -212,6 +264,25 @@ class TabDisplayPanelViewController: UIViewController,
                 theme.colors.layer3.withAlphaComponent(0.0).cgColor
             ]
         }
+    }
+
+    // MARK: - TabTrayThemeable
+
+    func retrieveTheme() -> Theme {
+        if shouldUsePrivateOverride {
+            return themeManager.resolvedTheme(with: panelType == .privateTabs)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    func applyTheme(_ theme: Theme) {
+        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: theme)
+        emptyPrivateTabsView.applyTheme(theme: theme)
+
+        // Hide the fadeview when animating the transition of panels
+        fadeView.isHidden = true
     }
 
     // MARK: - Redux
@@ -247,10 +318,13 @@ class TabDisplayPanelViewController: UIViewController,
 
         tabsState = state
         tabDisplayView.newState(state: tabsState)
-        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        if panelType == .privateTabs, tabsState.isPrivateMode {
+            // Only adjust the empty view if we are in private mode
+            shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        }
         shouldShowFadeView()
 
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             applyTheme()
         }
     }
