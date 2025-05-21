@@ -140,7 +140,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     @ViewBuilder var linkView: some View {
         if let linkVM = viewModel.link {
             LinkButtonView(
-                viewModel: .init(
+                viewModel: LinkInfoModel(
                     title: linkVM.title,
                     url: linkVM.url,
                     accessibilityIdentifier: "\(viewModel.a11yIdRoot)LinkButton"
