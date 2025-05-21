@@ -22,6 +22,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         static let textSafeSpace: CGFloat = 6
         static let faviconCornerRadius: CGFloat = 16
         static let faviconTransparentBackgroundInset: CGFloat = 8
+        static let transparencyThreshold: CGFloat = 10
     }
 
     private var rootContainer: UIView = .build { view in
@@ -297,10 +298,9 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     // Add insets to favicons with transparent backgrounds
     private func configureFaviconWithTransparency() {
-        let transparencyThreshold: CGFloat = 10
         guard let image = imageView.image,
               let percentTransparent = image.percentTransparent,
-              percentTransparent > transparencyThreshold else { return }
+              percentTransparent > UX.transparencyThreshold else { return }
 
         self.imageViewConstraints.forEach { constraint in
             if constraint.firstAttribute == .trailing || constraint.firstAttribute == .bottom {

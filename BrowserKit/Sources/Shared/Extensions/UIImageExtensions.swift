@@ -82,15 +82,15 @@ extension UIImage {
         var transparentPixelCount = 0
 
         // Step by 4 since each pixel is 4 bytes
-         for i in stride(from: 0, to: pixelData.count, by: bytesPerPixel) {
-             let alpha = pixelData[i + 3] // Alpha channel is the last byte since we are using CGContext
-             if alpha == 0 { // 0 = transparent, 255 = opaque
-                 transparentPixelCount += 1
-             }
-         }
+        for i in stride(from: 0, to: pixelData.count, by: bytesPerPixel) {
+            let alpha = pixelData[i + 3] // Alpha channel is the last byte since we are using CGContext
+            if alpha == 0 { // 0 = transparent, 255 = opaque
+                transparentPixelCount += 1
+            }
+        }
 
-         let percentageTransparent = CGFloat(transparentPixelCount) / CGFloat(pixelCount)
+        let percentageTransparent = CGFloat(transparentPixelCount) / CGFloat(pixelCount)
 
-         return percentageTransparent * 100
+        return percentageTransparent * 100
     }
 }
