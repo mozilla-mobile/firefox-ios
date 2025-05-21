@@ -33,13 +33,14 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                     }
                 } label: {
                     VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
-                        let isSelected = (item.action == selection)
+                        let isSelected = item.action == selection
 
                         Image(assetOrSymbol: item.imageID, bundle: .module)
                             .resizable()
                             .colorMultiply(isSelected ? actionPrimary : .white)
                             .aspectRatio(contentMode: .fit)
                             .frame(height: UX.SegmentedControl.imageHeight)
+                            .accessibilityHidden(true)
 
                         VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
                             Text(item.title)
@@ -52,12 +53,19 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                                 bundle: .module
                             )
                             .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
+                            .accessibilityHidden(true)
                         }
                     }
                     .padding(.vertical, UX.SegmentedControl.verticalPadding)
                     .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(PlainButtonStyle())
+                .accessibilityElement()
+                .accessibilityLabel(Text(item.title))
+                .accessibilityAddTraits(.isButton)
+                .accessibilityAddTraits(
+                    item.action == selection ? .isSelected : []
+                )
             }
         }
         .onAppear {
