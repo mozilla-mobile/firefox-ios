@@ -99,7 +99,11 @@ class MainMenuViewController: UIViewController,
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
 
-        isMenuRedesign ? setupRedesignView() : setupView()
+        if isMenuRedesign {
+            setupRedesignView()
+        } else {
+            setupView()
+        }
         setupTableView()
         listenForThemeChange(view)
         store.dispatch(
@@ -424,7 +428,11 @@ class MainMenuViewController: UIViewController,
     }
 
     private func adjustLayout(isDeviceRotating: Bool = false) {
-        isMenuRedesign ? menuRedesignContent.accountHeaderView.adjustLayout() : menuContent.accountHeaderView.adjustLayout()
+        if isMenuRedesign {
+            menuRedesignContent.accountHeaderView.adjustLayout()
+        } else {
+            menuContent.accountHeaderView.adjustLayout()
+        }
         if isDeviceRotating {
             hintView.removeFromSuperview()
         } else {
@@ -484,6 +492,10 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - MenuTableViewDelegate
     func reloadTableView(with data: [MenuSection]) {
-        isMenuRedesign ? menuRedesignContent.reloadDataView(with: data) : menuContent.reloadTableView(with: data)
+        if isMenuRedesign {
+            menuRedesignContent.reloadDataView(with: data)
+        } else {
+            menuContent.reloadTableView(with: data)
+        }
     }
 }
