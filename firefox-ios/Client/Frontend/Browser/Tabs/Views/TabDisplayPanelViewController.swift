@@ -61,11 +61,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     private lazy var gradientLayer = CAGradientLayer()
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        gradientLayer.frame = fadeView.bounds
-    }
+    private lazy var statusBarView: UIView = .build { _ in }
 
     init(isPrivateMode: Bool,
          windowUUID: WindowUUID,
@@ -83,12 +79,7 @@ class TabDisplayPanelViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func removeTabPanel() {
-        guard isViewLoaded else { return }
-        view.removeConstraints(view.constraints)
-        view.subviews.forEach { $0.removeFromSuperview() }
-        view.removeFromSuperview()
-    }
+    // MARK: - Lifecycle methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +105,29 @@ class TabDisplayPanelViewController: UIViewController,
         }
     }
 
+<<<<<<< HEAD
+=======
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard isToolbarRefactorEnabled, isTabTrayUIExperimentsEnabled else { return }
+        store.dispatch(
+            ToolbarAction(
+                shouldAnimate: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged
+            )
+        )
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = fadeView.bounds
+        adjustStatusBarFrameIfNeeded()
+    }
+
+    // MARK: - Setup
+
+>>>>>>> c89c219bd (Refactor FXIOS-12276 [Tab tray UI experiment] Adjust gradient layer look and a11y (#26752))
     private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
@@ -158,9 +172,44 @@ class TabDisplayPanelViewController: UIViewController,
         tabDisplayView.isHidden = shouldShowEmptyView
     }
 
+    func removeTabPanel() {
+        guard isViewLoaded else { return }
+        view.removeConstraints(view.constraints)
+        view.subviews.forEach { $0.removeFromSuperview() }
+        view.removeFromSuperview()
+    }
+
+    // MARK: - Themeable
+
+    func applyTheme() {
+        let theme = retrieveTheme()
+        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: theme)
+        emptyPrivateTabsView.applyTheme(theme: theme)
+        adjustFadeView(theme: theme)
+    }
+
+    private func retrieveTheme() -> Theme {
+        if shouldUsePrivateOverride {
+            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    var shouldUsePrivateOverride: Bool {
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        return tabTrayState?.isPrivateMode ?? false
+    }
+
+    // MARK: - Fade view & status bar view
+
     private func setupFadeView() {
         guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
-        gradientLayer.locations = [0.0, 0.02, 0.08, 0.12]
         fadeView.layer.addSublayer(gradientLayer)
         view.addSubview(fadeView)
 
@@ -180,37 +229,37 @@ class TabDisplayPanelViewController: UIViewController,
         fadeView.isHidden = !shouldShow
     }
 
-    private func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
+    private func adjustFadeView(theme: Theme) {
+        guard isTabTrayUIExperimentsEnabled else { return }
+
+        if UIAccessibility.isReduceTransparencyEnabled {
+            gradientLayer.isHidden = true
+            if statusBarView.superview == nil {
+                view.addSubview(statusBarView)
+            }
+            statusBarView.backgroundColor = theme.colors.layer3
+            adjustStatusBarFrameIfNeeded()
         } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
+            gradientLayer.isHidden = false
+            statusBarView.removeFromSuperview()
+            gradientLayer.locations = [0.0, 0.12]
+            gradientLayer.colors = [
+                theme.colors.layer3.cgColor,
+                theme.colors.layer3.withAlphaComponent(0.0).cgColor
+            ]
         }
     }
 
-    // MARK: Themeable
-    var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
-    }
+    private func adjustStatusBarFrameIfNeeded() {
+        guard isTabTrayUIExperimentsEnabled, UIAccessibility.isReduceTransparencyEnabled else { return }
 
-    var shouldBeInPrivateTheme: Bool {
-        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
-        return tabTrayState?.isPrivateMode ?? false
-    }
+        let isLandscape = UIDevice.current.orientation.isLandscape
+        statusBarView.isHidden = isLandscape
+        guard !isLandscape else { return }
 
-    func applyTheme() {
-        let theme = retrieveTheme()
-        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
-        tabDisplayView.applyTheme(theme: theme)
-        emptyPrivateTabsView.applyTheme(theme: theme)
-
-        if isTabTrayUIExperimentsEnabled {
-            gradientLayer.colors = [
-                theme.colors.layer3.cgColor,
-                theme.colors.layer3.cgColor,
-                theme.colors.layer3.withAlphaComponent(0.95).cgColor,
-                theme.colors.layer3.withAlphaComponent(0.0).cgColor
-            ]
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height {
+            statusBarView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight)
         }
     }
 
@@ -255,7 +304,7 @@ class TabDisplayPanelViewController: UIViewController,
         }
     }
 
-    // MARK: EmptyPrivateTabsViewDelegate
+    // MARK: - EmptyPrivateTabsViewDelegate
 
     func didTapLearnMore(urlRequest: URLRequest) {
         let action = TabPanelViewAction(panelType: panelType,

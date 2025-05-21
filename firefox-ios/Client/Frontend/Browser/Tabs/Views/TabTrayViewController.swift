@@ -385,7 +385,7 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Themeable
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
     }
 
     var shouldBeInPrivateTheme: Bool {
@@ -402,7 +402,7 @@ class TabTrayViewController: UIViewController,
         doneButton.tintColor = theme.colors.iconPrimary
         syncTabButton.tintColor = theme.colors.iconPrimary
 
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             experimentSegmentControl.applyTheme(theme: theme)
 
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
@@ -553,7 +553,7 @@ class TabTrayViewController: UIViewController,
     }
 
     internal func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             return themeManager.resolvedTheme(with: tabTrayState.isPrivateMode)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
