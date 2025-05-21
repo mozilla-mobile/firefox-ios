@@ -681,7 +681,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     /// Creates the webview so needs to live on the main thread
     @MainActor
-    private func generateTabs(from windowData: WindowData) {
+    private func generateTabs(from windowData: WindowData) async {
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
