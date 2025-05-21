@@ -5,9 +5,11 @@
 import Foundation
 
 public struct MenuSection: Equatable {
+    public let isTopTabsSection: Bool
     public let options: [MenuElement]
 
-    public init(options: [MenuElement]) {
+    public init(isTopTabsSection: Bool = false, options: [MenuElement]) {
+        self.isTopTabsSection = isTopTabsSection
         self.options = options
     }
 }

@@ -78,13 +78,13 @@ final class MenuCollectionView: UIView,
         collectionView.accessibilityLabel = menuA11yLabel
     }
 
-    // TODO: FXIOS-12303 [Menu Redesign] Implement the logic for displaying items in horizontal options section
     // MARK: - UICollectionView Methods
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return 10
+        guard let section = menuData.first(where: { $0.isTopTabsSection }) else { return 0 }
+        return section.options.count
     }
 
     func collectionView(
@@ -98,19 +98,17 @@ final class MenuCollectionView: UIView,
             return UICollectionViewCell()
         }
 
-        cell.configureCellWith(model:
-                                MenuElement(
-                                    title: "Title Test",
-                                    iconName: StandardImageIdentifiers.Large.readingList,
-                                    isEnabled: true,
-                                    isActive: false,
-                                    a11yLabel: "A11yLabel",
-                                    a11yHint: "",
-                                    a11yId: "A11yId",
-                                    action: {}
-                                ))
+        guard let section = menuData.first(where: { $0.isTopTabsSection }) else { return UICollectionViewCell() }
+        cell.configureCellWith(model: section.options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: false)
+        guard let section = menuData.first(where: { $0.isTopTabsSection }),
+              let action = section.options[indexPath.row].action else { return }
+        action()
     }
 
     func reloadCollectionView(with data: [MenuSection]) {
