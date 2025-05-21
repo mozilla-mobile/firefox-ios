@@ -76,7 +76,6 @@ class ScreenshotHelper {
             let configuration = WKSnapshotConfiguration()
             configuration.afterScreenUpdates = true
             configuration.snapshotWidth = 320
-            /// Take snapshot is ASYNC
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image = image {
                     tab.hasHomeScreenshot = false
