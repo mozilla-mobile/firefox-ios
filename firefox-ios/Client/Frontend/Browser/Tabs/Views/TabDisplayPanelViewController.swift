@@ -105,20 +105,6 @@ class TabDisplayPanelViewController: UIViewController,
         }
     }
 
-<<<<<<< HEAD
-=======
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard isToolbarRefactorEnabled, isTabTrayUIExperimentsEnabled else { return }
-        store.dispatch(
-            ToolbarAction(
-                shouldAnimate: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.animationStateChanged
-            )
-        )
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = fadeView.bounds
@@ -127,7 +113,6 @@ class TabDisplayPanelViewController: UIViewController,
 
     // MARK: - Setup
 
->>>>>>> c89c219bd (Refactor FXIOS-12276 [Tab tray UI experiment] Adjust gradient layer look and a11y (#26752))
     private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
