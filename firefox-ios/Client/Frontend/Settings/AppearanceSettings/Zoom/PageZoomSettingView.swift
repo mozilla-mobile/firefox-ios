@@ -56,6 +56,7 @@ struct PageZoomSettingsView: View {
                     GenericButtonCellView(theme: theme,
                                           title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
                                           onTap: viewModel.resetDomainZoomLevel)
+                        .listRowInsets(EdgeInsets())
                 }
             }
             .background(viewBackground)

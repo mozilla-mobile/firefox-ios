@@ -35,16 +35,12 @@ struct ZoomSiteListView: View {
 
     var body: some View {
         Section {
-            ZStack {
-                cellBackground
-                ForEach(domainZoomLevels, id: \.host) { zoomItem in
-                    ZoomLevelCellView(domainZoomLevel: zoomItem,
-                                      textColor: theme.colors.textPrimary.color)
-                }
-                .onDelete(perform: onDelete)
-                .background(cellBackground)
+            ForEach(domainZoomLevels, id: \.host) { zoomItem in
+                ZoomLevelCellView(domainZoomLevel: zoomItem,
+                                  textColor: theme.colors.textPrimary.color)
+                .padding([.leading, .trailing], UX.sectionPadding)
             }
-            .padding([.leading, .trailing], UX.sectionPadding)
+            .onDelete(perform: onDelete)
             .background(cellBackground)
         } header: {
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),

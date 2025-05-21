@@ -32,12 +32,12 @@ struct GenericButtonCellView: View {
                 Text(title)
                     .foregroundColor(theme.colors.textCritical.color)
             }
-            .background(theme.colors.layer1.color)
+            .background(theme.colors.layer5.color)
             .padding([.top, .bottom], UX.buttonPadding)
 
             Divider()
                 .frame(height: UX.dividerHeight)
         }
-        .background(theme.colors.layer1.color)
+        .background(theme.colors.layer5.color)
     }
 }
