@@ -268,7 +268,7 @@ class TabDisplayPanelViewController: UIViewController,
 
     func retrieveTheme() -> Theme {
         if shouldUsePrivateOverride {
-            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
+            return themeManager.resolvedTheme(with: panelType == .privateTabs)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
         }
@@ -322,7 +322,7 @@ class TabDisplayPanelViewController: UIViewController,
         }
         shouldShowFadeView()
 
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             applyTheme()
         }
     }
