@@ -14,6 +14,7 @@ class TabTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     private var fileManager: MockFileManager!
     private var mockTabWebView: MockTabWebView!
+    private var dispatchQueue: MockDispatchQueue!
     private let url = URL(string: "file://test.pdf")!
 
     override func setUp() {
@@ -22,6 +23,7 @@ class TabTests: XCTestCase {
         mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
         mockTabWebView.loadedURL = url
         fileManager = MockFileManager()
+        dispatchQueue = MockDispatchQueue()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies()
 
@@ -34,6 +36,8 @@ class TabTests: XCTestCase {
         mockProfile = nil
         mockTabWebView = nil
         fileManager = nil
+        dispatchQueue = nil
+        setIsPDFRefactorFeature(isEnabled: false)
         DependencyHelperMock().reset()
         super.tearDown()
     }
@@ -280,6 +284,7 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
+        setIsPDFRefactorFeature(isEnabled: true)
         document.isDownloading = true
         subject.webView = mockTabWebView
         subject.enqueueDocument(document)
@@ -296,6 +301,7 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
+        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         subject.url = url
         document.isDownloading = true
@@ -316,6 +322,7 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
+        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
         subject.enqueueDocument(document)
@@ -335,6 +342,7 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
+        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
         subject.enqueueDocument(document)
@@ -362,6 +370,7 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
+        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
 
@@ -380,6 +389,7 @@ class TabTests: XCTestCase {
         let localURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
         let document = MockTemporaryDocument(withFileURL: localURL, request: request)
 
+        setIsPDFRefactorFeature(isEnabled: true)
         subject.enqueueDocument(document)
 
         subject.url = localURL
@@ -455,11 +465,36 @@ class TabTests: XCTestCase {
         XCTAssertEqual(document.canDownloadCalled, 1)
     }
 
+    func testDeinit_removesAllDocumentInSession() {
+        var subject: Tab? = createSubject()
+        let session = [
+            URL(string: "file://local.pdf")!: URL(string: "https://www.example.com")!
+        ]
+        subject?.restoreTemporaryDocumentSession(session)
+
+        // deallocate object
+        subject = nil
+
+        XCTAssertEqual(dispatchQueue.asyncCalled, 1)
+        XCTAssertEqual(fileManager.removeItemAtURLCalled, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> Tab {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID, fileManager: fileManager)
+        let subject = Tab(
+            profile: mockProfile,
+            windowUUID: windowUUID,
+            backgroundDispatchQueue: dispatchQueue,
+            fileManager: fileManager
+        )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setIsPDFRefactorFeature(isEnabled: Bool) {
+        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
+            PdfRefactorFeature(enabled: isEnabled)
+        }
     }
 }
 

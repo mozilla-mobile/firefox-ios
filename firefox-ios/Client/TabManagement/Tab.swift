@@ -82,10 +82,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    var isInactiveTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
-    }
-
     var isNormal: Bool {
         return !isPrivate
     }
@@ -146,10 +142,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var shouldScrollToTop = false
     var isFindInPageMode = false
 
-    private let fileManager: FileManagerProtocol
-    private var logger: Logger
-    private let documentLogger: DocumentLogger
-
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }
@@ -188,13 +180,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var backForwardList: BackForwardList? {
-        if let backForwardList = webView?.backForwardList {
-            return TabBackForwardList(
-                backForwardList: backForwardList,
-                temporaryDocumentSession: temporaryDocumentsSession
-            )
-        }
-        return nil
+        guard let backForwardList = webView?.backForwardList else { return nil }
+        return TabBackForwardList(
+            backForwardList: backForwardList,
+            temporaryDocumentSession: temporaryDocumentsSession
+        )
     }
 
     var historyList: [URL] {
@@ -418,30 +408,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    fileprivate(set) var screenshot: UIImage?
-
-    // If this tab has been opened from another, its parent will point to the tab from which it was opened
-    weak var parent: Tab?
-
-    private var contentScriptManager = TabContentScriptManager()
-
-    private var configuration: WKWebViewConfiguration?
-
-    /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
-    /// tab instance, queue it for later until we become foregrounded.
-    private var alertQueue = [JSAlertInfo]()
-
-    var onLoading: VoidReturnCallback?
-    private var webViewLoadingObserver: NSKeyValueObservation?
-
-    private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
-
-    private var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
-
-    var profile: Profile
-
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
     /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
     var isInactive: Bool {
@@ -474,11 +440,47 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return !isInactive
     }
 
+    fileprivate(set) var screenshot: UIImage?
+
+    // If this tab has been opened from another, its parent will point to the tab from which it was opened
+    weak var parent: Tab?
+
+    private var contentScriptManager = TabContentScriptManager()
+
+    private var configuration: WKWebViewConfiguration?
+
+    /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
+    /// tab instance, queue it for later until we become foregrounded.
+    private var alertQueue = [JSAlertInfo]()
+
+    var onWebViewLoadingStateChanged: VoidReturnCallback?
+    private var webViewLoadingObserver: NSKeyValueObservation?
+
+    private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
+
+    // MARK: - Feature flags
+
+    private var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
+    // MARK: - Dependencies
+    var profile: Profile
+    private let fileManager: FileManagerProtocol
+    private let backgroundDispatchQueue: DispatchQueueInterface
+    private var logger: Logger
+    private let documentLogger: DocumentLogger
+
     init(profile: Profile,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
+         backgroundDispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background),
          fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
@@ -492,6 +494,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.fileManager = fileManager
         self.logger = logger
         self.documentLogger = documentLogger
+        self.backgroundDispatchQueue = backgroundDispatchQueue
         super.init()
         self.isPrivate = isPrivate
 
@@ -597,7 +600,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             tabDelegate?.tab(self, didCreateWebView: webView)
             webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
-                self?.onLoading?()
+                self?.onWebViewLoadingStateChanged?()
             }
         }
     }
@@ -959,7 +962,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     private func deleteDownloadedDocuments() {
         let docsURL = temporaryDocumentsSession
         guard !docsURL.isEmpty else { return }
-        DispatchQueue.global(qos: .background).async { [fileManager] in
+        backgroundDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in
                 try? fileManager.removeItem(at: url.key)
             }

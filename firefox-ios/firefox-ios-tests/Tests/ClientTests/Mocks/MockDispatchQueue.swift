@@ -6,10 +6,16 @@ import Foundation
 import Common
 
 class MockDispatchQueue: DispatchQueueInterface {
+    var asyncCalled = 0
+    var asyncAferCalled = 0
+    var ensureMainThreadCalled = 0
+    var asyncAfterDispatchWorkItemCalled = 0
+
     func async(group: DispatchGroup?,
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
                execute work: @escaping @convention(block) () -> Void) {
+        asyncCalled += 1
         work()
     }
 
@@ -17,14 +23,17 @@ class MockDispatchQueue: DispatchQueueInterface {
                     qos: DispatchQoS,
                     flags: DispatchWorkItemFlags,
                     execute work: @escaping @convention(block) () -> Void) {
+        asyncAferCalled += 1
         work()
     }
 
     func ensureMainThread(execute work: @escaping () -> Void) {
+        ensureMainThreadCalled += 1
         work()
     }
 
     func asyncAfter(deadline: DispatchTime, execute: DispatchWorkItem) {
+        asyncAfterDispatchWorkItemCalled += 1
         execute.perform()
     }
 }
