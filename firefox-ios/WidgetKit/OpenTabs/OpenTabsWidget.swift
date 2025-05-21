@@ -60,6 +60,23 @@ struct OpenTabsView: View {
         }
     }
 
+    var emptyView: some View {
+        VStack {
+            Text(String.NoOpenTabsLabel)
+            HStack {
+                Spacer()
+                Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                    .foregroundColor(Color("openTabsContentColor"))
+                Text(String.OpenFirefoxLabel)
+                    .foregroundColor(Color("openTabsContentColor"))
+                    .lineLimit(1)
+                    .font(.system(size: 13, weight: .semibold, design: .default))
+                Spacer()
+            }.padding(10)
+        }
+        .foregroundColor(Color("backgroundColor"))
+    }
+
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink)
