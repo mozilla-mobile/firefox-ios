@@ -638,16 +638,33 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
 
-        guard let windowData = window,
-              let nonPrivateTabs,
-              !nonPrivateTabs.isEmpty,
-              tabs.isEmpty
-        else {
+        guard let windowData = window else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
             await generateEmptyTab()
-            logger.log("There was no tabs restored, creating a normal tab",
-                       level: .debug,
+            logger.log("Not restoring tabs because there is no window data.",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
+
+        guard let nonPrivateTabs,
+              !nonPrivateTabs.isEmpty else {
+            // Always make sure there is a single normal tab
+            // Note: this is where the first tab in a newly-created browser window will be added
+            await generateEmptyTab()
+            logger.log("Not restoring tabs because there is no tab data on the window data.",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
+
+        guard tabs.isEmpty else {
+            // Always make sure there is a single normal tab
+            // Note: this is where the first tab in a newly-created browser window will be added
+            await generateEmptyTab()
+            logger.log("Not restoring tabs because there are in memory tabs already.",
+                       level: .warning,
                        category: .tabs)
 
             return
