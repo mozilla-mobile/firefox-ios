@@ -200,7 +200,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         guard let panel = currentExperimentPanel as? ThemedNavigationController,
               let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else { return }
-        panelViewController.isAnimating = true
 
         let cv = panelViewController.tabDisplayView.collectionView
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
@@ -228,6 +227,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.alpha = 0.5
 
         let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
+            panelViewController.isAnimating = true
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
                 snapshotContainer.frame = frame
@@ -276,10 +276,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             snapshotContainer.removeFromSuperview()
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
             panelViewController.isAnimating = false
-
-            store.dispatch(TabPanelViewAction(panelType: panelViewController.panelType,
-                                              windowUUID: self?.windowUUID ?? UUID(),
-                                              actionType: TabPanelViewActionType.tabPanelWillAppear))
             context.completeTransition(true)
         }
 
