@@ -637,7 +637,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             // Note: this is where the first tab in a newly-created browser window will be added
             await generateEmptyTab()
             logger.log("Not restoring tabs because there is no window data.",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             return
         }
@@ -648,7 +648,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             // Note: this is where the first tab in a newly-created browser window will be added
             await generateEmptyTab()
             logger.log("Not restoring tabs because there is no tab data on the window data.",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             return
         }
@@ -658,7 +658,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             // Note: this is where the first tab in a newly-created browser window will be added
             await generateEmptyTab()
             logger.log("Not restoring tabs because there are in memory tabs already.",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
 
             return
@@ -681,7 +681,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     /// Creates the webview so needs to live on the main thread
     @MainActor
-    private func generateTabs(from windowData: WindowData) async {
+    private func generateTabs(from windowData: WindowData) {
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?

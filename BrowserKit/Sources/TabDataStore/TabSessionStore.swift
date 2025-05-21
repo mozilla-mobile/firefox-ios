@@ -34,7 +34,12 @@ public class DefaultTabSessionStore: TabSessionStore {
     }
 
     public func saveTabSession(tabID: UUID, sessionData: Data) {
-        guard let directory = fileManager.tabSessionDataDirectory() else { return }
+        guard let directory = fileManager.tabSessionDataDirectory() else {
+            logger.log("Failed to save session data. No tab session data directory path.",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
 
         if !fileManager.fileExists(atPath: directory) {
             fileManager.createDirectoryAtPath(path: directory)
@@ -54,7 +59,12 @@ public class DefaultTabSessionStore: TabSessionStore {
 
     public func fetchTabSession(tabID: UUID) -> Data? {
         guard let path = fileManager.tabSessionDataDirectory()?.appendingPathComponent(filePrefix + tabID.uuidString)
-        else { return nil }
+        else {
+            logger.log("Failed to decode session data. No tab session data directory path.",
+                       level: .warning,
+                       category: .tabs)
+            return nil
+        }
 
         do {
             lock.lock()

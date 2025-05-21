@@ -141,7 +141,7 @@ public actor DefaultTabDataStore: TabDataStore {
     public func saveWindowData(window: WindowData, forced: Bool) async {
         guard let windowSavingPath = windowURLPath(for: window.id, isBackup: false) else {
             logger.log("Not saving window data. Could not build window saving path.",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             return
         }
@@ -180,6 +180,9 @@ public actor DefaultTabDataStore: TabDataStore {
         }
 
         guard let backupDirectoryPath = fileManager.windowDataDirectory(isBackup: true) else {
+            logger.log("Failed to create window data backup. No backup directory path.",
+                       level: .warning,
+                       category: .tabs)
             return
         }
 
