@@ -29,7 +29,8 @@ class TabTrayViewController: UIViewController,
                              UIScrollViewDelegate,
                              StoreSubscriber,
                              FeatureFlaggable,
-                             TabTraySelectorDelegate {
+                             TabTraySelectorDelegate,
+                             TabTrayAnimationDelegate {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -44,7 +45,6 @@ class TabTrayViewController: UIViewController,
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
         static let segmentedControlMinHeight: CGFloat = 45
-        static let themeAnimationDuration: CFTimeInterval = 0.25
     }
 
     // MARK: Theme
@@ -62,14 +62,10 @@ class TabTrayViewController: UIViewController,
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
 
-    private var themeAnimationDisplayLink: CADisplayLink?
-    private var themeAnimationStartTime: CFTimeInterval = 0
-    private var themeFromIndex = 0
-    private var themeToIndex = 0
-
     private lazy var panelContainer: UIView = .build { _ in }
     private var pageViewController: UIPageViewController?
     private var swipeFromIndex: Int?
+    private lazy var themeAnimator = TabTrayThemeAnimator()
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
@@ -274,7 +270,8 @@ class TabTrayViewController: UIViewController,
         self.windowUUID = windowUUID
 
         super.init(nibName: nil, bundle: nil)
-        self.applyTheme()
+        themeAnimator.delegate = self
+        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -393,7 +390,7 @@ class TabTrayViewController: UIViewController,
         }
 
         // Only apply normal theme when there's no on going animations
-        if themeAnimationDisplayLink == nil {
+        if !themeAnimator.isAnimating {
             applyTheme()
         }
     }
@@ -897,7 +894,7 @@ class TabTrayViewController: UIViewController,
 
             let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
             if !reduceMotionEnabled {
-                animateThemeTransition(fromIndex: currentIndex, toIndex: targetIndex)
+                themeAnimator.animateThemeTransition(fromIndex: currentIndex, toIndex: targetIndex)
             }
 
             let direction: UIPageViewController.NavigationDirection = targetIndex > currentIndex ? .forward : .reverse
@@ -993,29 +990,5 @@ class TabTrayViewController: UIViewController,
             progress: progress
         )
         applyTheme(fromIndex: fromIndex, toIndex: toIndex, progress: abs(progress))
-    }
-
-    private func animateThemeTransition(fromIndex: Int, toIndex: Int) {
-        themeAnimationDisplayLink?.invalidate()
-
-        themeFromIndex = fromIndex
-        themeToIndex = toIndex
-        themeAnimationStartTime = CACurrentMediaTime()
-
-        themeAnimationDisplayLink = CADisplayLink(target: self, selector: #selector(handleThemeAnimationTick))
-        themeAnimationDisplayLink?.add(to: .main, forMode: .common)
-    }
-
-    @objc
-    private func handleThemeAnimationTick() {
-        let elapsed = CACurrentMediaTime() - themeAnimationStartTime
-        let progress = min(max(elapsed / UX.themeAnimationDuration, 0), 1)
-
-        applyTheme(fromIndex: themeFromIndex, toIndex: themeToIndex, progress: CGFloat(progress))
-
-        if progress >= 1 {
-            themeAnimationDisplayLink?.invalidate()
-            themeAnimationDisplayLink = nil
-        }
     }
 }
