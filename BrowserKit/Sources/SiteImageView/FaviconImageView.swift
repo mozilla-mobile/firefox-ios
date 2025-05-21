@@ -25,6 +25,10 @@ public class FaviconImageView: UIImageView, SiteImageView {
         setupUI()
     }
 
+    public convenience init(completionHandler: @escaping () -> Void) {
+        self.init(frame: .zero, imageFetcher: DefaultSiteImageHandler(), completionHandler: completionHandler)
+    }
+
     // Internal init used in unit tests only
     init(frame: CGRect,
          imageFetcher: SiteImageHandler,
