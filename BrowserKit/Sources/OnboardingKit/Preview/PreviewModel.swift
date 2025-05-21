@@ -170,7 +170,7 @@ extension PreviewModel {
     ]
 }
 
-#Preview {
+#Preview("Onboarding Card") {
     ZStack {
         MilkyWayMetalView()
             .edgesIgnoringSafeArea(.all)
@@ -183,6 +183,64 @@ extension PreviewModel {
             onLinkTap: { }
         )
     }
+}
+
+#Preview("Multiple Choice Onboarding Card") {
+    ZStack {
+        MilkyWayMetalView()
+            .edgesIgnoringSafeArea(.all)
+        OnboardingMultipleChoiceCardView(
+            viewModel: PreviewModel.customizationToolbar,
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            onPrimaryActionTap: { },
+            onSecondaryActionTap: { },
+            onLinkTap: { }
+        )
+    }
+}
+
+struct OnboardingMultipleChoiceButtonModelExampleView: View {
+    @State private var selectedAction: OnboardingMultipleChoiceAction = .toolbarBottom
+
+    // configure these however you like—titles, SF Symbol names, etc.
+    private let toolbarOptions = [
+        OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
+            title: "Bottom",
+            action: .toolbarBottom,
+            imageID: "rectangle.bottomthird.inset.filled"
+        ),
+        OnboardingMultipleChoiceButtonModel(
+            title: "Top",
+            action: .toolbarTop,
+            imageID: "rectangle.topthird.inset.filled"
+        )
+    ]
+
+    var body: some View {
+        VStack(spacing: 20) {
+            OnboardingSegmentedControl(
+                selection: $selectedAction,
+                items: toolbarOptions,
+                windowUUID: .XCTestDefaultUUID,
+                themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+            )
+            .padding()
+
+            Text("You picked: \(selectedAction.rawValue)")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .onChange(of: selectedAction) { newAction in
+            // here’s where you get the callback
+            // e.g. apply your toolbar position or theme
+            print("Did pick:", newAction)
+        }
+    }
+}
+
+#Preview(" Multiple Choice Button") {
+    OnboardingMultipleChoiceButtonModelExampleView()
 }
 
 #endif
