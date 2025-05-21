@@ -7,8 +7,8 @@ import Storage
 
 struct ZoomConstants {
     static let defaultZoomLimit: CGFloat = 1.0
-    static let lowerZoomLimit: CGFloat = 0.5
-    static let upperZoomLimit: CGFloat = 2.0
+    static let lowerZoomLimit: CGFloat = ZoomLevel.fiftyPercent.rawValue
+    static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue
 }
 
 class ZoomPageManager: TabEventHandler {
