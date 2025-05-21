@@ -6,11 +6,17 @@ import Common
 import Redux
 import UIKit
 
+protocol TabTrayThemeable {
+    func retrieveTheme() -> Theme
+    func applyTheme(_ theme: Theme)
+}
+
 class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
-                                     FeatureFlaggable {
+                                     FeatureFlaggable,
+                                     TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
@@ -190,14 +196,6 @@ class TabDisplayPanelViewController: UIViewController,
         adjustFadeView(theme: theme)
     }
 
-    private func retrieveTheme() -> Theme {
-        if shouldUsePrivateOverride {
-            return themeManager.resolvedTheme(with: tabsState.isPrivateMode)
-        } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
-        }
-    }
-
     var shouldUsePrivateOverride: Bool {
         return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
     }
@@ -229,6 +227,8 @@ class TabDisplayPanelViewController: UIViewController,
         let shouldShow = !tabsState.isPrivateMode || isPrivateModeFadeViewNeeded
         fadeView.isHidden = !shouldShow
     }
+
+    // MARK: Themeable
 
     private func adjustFadeView(theme: Theme) {
         guard isTabTrayUIExperimentsEnabled else { return }
@@ -264,6 +264,25 @@ class TabDisplayPanelViewController: UIViewController,
         }
     }
 
+    // MARK: - TabTrayThemeable
+
+    func retrieveTheme() -> Theme {
+        if shouldUsePrivateOverride {
+            return themeManager.resolvedTheme(with: panelType == .privateTabs)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    func applyTheme(_ theme: Theme) {
+        backgroundPrivacyOverlay.backgroundColor = theme.colors.layerScrim
+        tabDisplayView.applyTheme(theme: theme)
+        emptyPrivateTabsView.applyTheme(theme: theme)
+
+        // Hide the fadeview when animating the transition of panels
+        fadeView.isHidden = true
+    }
+
     // MARK: - Redux
 
     func subscribeToRedux() {
@@ -297,10 +316,13 @@ class TabDisplayPanelViewController: UIViewController,
 
         tabsState = state
         tabDisplayView.newState(state: tabsState)
-        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        if panelType == .privateTabs, tabsState.isPrivateMode {
+            // Only adjust the empty view if we are in private mode
+            shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        }
         shouldShowFadeView()
 
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             applyTheme()
         }
     }
