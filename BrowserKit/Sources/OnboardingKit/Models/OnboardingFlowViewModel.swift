@@ -5,7 +5,7 @@
 import SwiftUI
 
 public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: ObservableObject {
-    @Published public var pageCount: Int = 0
+    @Published public var pageCount = 0
     public let onboardingCards: [VM]
     public let onComplete: () -> Void
     public private(set) var multipleChoiceSelections: [String: VM.OnboardingMultipleChoiceActionType] = [:]

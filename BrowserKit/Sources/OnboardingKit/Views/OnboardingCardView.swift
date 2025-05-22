@@ -9,9 +9,6 @@
 
 import SwiftUI
 import Common
-
-import SwiftUI
-import Common
 import ComponentLibrary
 
 public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
