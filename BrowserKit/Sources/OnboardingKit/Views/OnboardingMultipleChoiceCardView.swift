@@ -9,6 +9,7 @@ import ComponentLibrary
 public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
+    @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
     private var shadowColor = Color.black.opacity(UX.CardView.shadowOpacity)
     @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
 
