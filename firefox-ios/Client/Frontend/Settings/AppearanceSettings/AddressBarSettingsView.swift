@@ -32,7 +32,9 @@ struct AddressBarSettingsView: View {
 
     var body: some View {
         VStack {
-            GenericSectionView(theme: currentTheme, title: .Settings.AddressBar.AddressBarSectionTitle) {
+            GenericSectionView(theme: currentTheme,
+                               title: .Settings.AddressBar.AddressBarSectionTitle,
+                               identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting) {
                 AddressBarSelectionView(
                     theme: currentTheme,
                     selectedAddressBarPosition: addressBarPosition,

@@ -413,6 +413,7 @@ class BaseTestCase: XCTestCase {
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
 
+    // Theme settings has been replaced with Appearance screen
     func switchThemeToDarkOrLight(theme: String) {
         if !app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].isHittable {
             app.buttons["Done"].waitAndTap()
@@ -423,17 +424,14 @@ class BaseTestCase: XCTestCase {
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
         sleep(3)
-        if !app.switches["SystemThemeSwitchValue"].exists {
+        if !app.navigationBars["Appearance"].exists {
             navigator.goto(DisplaySettings)
         }
-        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
-        if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
-            navigator.performAction(Action.SystemThemeSwitch)
-        }
+        mozWaitForElementToExist(app.navigationBars["Appearance"])
         if theme == "Dark" {
-            app.cells.staticTexts["Dark"].waitAndTap()
+            navigator.performAction(Action.SelectDarkTheme)
         } else {
-            app.cells.staticTexts["Light"].waitAndTap()
+            navigator.performAction(Action.SelectLightTheme)
         }
         app.buttons["Settings"].waitAndTap()
         navigator.nowAt(SettingsScreen)

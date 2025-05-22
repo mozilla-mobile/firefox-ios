@@ -19,10 +19,6 @@ public protocol ThemeManager {
     /// - Returns: The resolved theme—either the private or default user theme depending on context.
     func resolvedTheme(with shouldShowPrivateTheme: Bool) -> Theme
 
-    /// TODO(FXIOS-11655): Making this a prop of ThemeManager since it's easier to get the flag value this way
-    /// instead of having to call the nimbus API each time. This should be removed once experiment is over.
-    var isNewAppearanceMenuOn: Bool { get }
-
     // System theme and brightness settings
     var systemThemeIsOn: Bool { get }
     var automaticBrightnessIsOn: Bool { get }

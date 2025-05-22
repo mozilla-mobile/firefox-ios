@@ -14,7 +14,7 @@ protocol AppearanceSettingsDelegate: AnyObject {
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
     var shouldShowPageZoom: Bool
-    let delegate: AppearanceSettingsDelegate?
+    weak var delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
     var themeManager
@@ -43,7 +43,9 @@ struct AppearanceSettingsView: View {
     var body: some View {
         VStack {
             // Section for selecting the browser theme.
-            GenericSectionView(theme: currentTheme, title: String.BrowserThemeSectionHeader) {
+            GenericSectionView(theme: currentTheme,
+                               title: String.BrowserThemeSectionHeader,
+                               identifier: AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle) {
                 ThemeSelectionView(theme: currentTheme,
                                    selectedThemeOption: themeOption,
                                    onThemeSelected: updateBrowserTheme)
@@ -51,13 +53,16 @@ struct AppearanceSettingsView: View {
             // Section for toggling website appearance (e.g., dark mode).
             GenericSectionView(theme: currentTheme,
                                title: String.WebsiteAppearanceSectionHeader,
-                               description: String.WebsiteDarkModeDescription) {
+                               description: String.WebsiteDarkModeDescription,
+                               identifier: AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle) {
                 DarkModeToggleView(theme: currentTheme,
                                    isEnabled: NightModeHelper.isActivated(),
                                    onChange: setWebsiteDarkMode)
             }
             if shouldShowPageZoom {
-                GenericSectionView(theme: currentTheme, title: .Settings.Appearance.PageZoom.SectionHeader) {
+                GenericSectionView(theme: currentTheme,
+                                   title: .Settings.Appearance.PageZoom.SectionHeader,
+                                   identifier: .Settings.Appearance.PageZoom.SectionHeader) {
                     GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
                                         image: .chevronRightLarge,
                                         theme: currentTheme) {
