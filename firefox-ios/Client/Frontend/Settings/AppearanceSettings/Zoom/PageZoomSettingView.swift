@@ -60,7 +60,7 @@ struct PageZoomSettingsView: View {
                 }
             }
             .background(viewBackground)
-            .listStyle(.plain)
+            .listStyle(.inset)
         }
         .onAppear {
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
