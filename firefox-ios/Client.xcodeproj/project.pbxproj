@@ -14089,6 +14089,7 @@
 			isa = PBXGroup;
 			children = (
 				D03F8F20200EABB0003C2224 /* __firefox__.js */,
+				D03F8F24200EACD8003C2224 /* ContextMenu.js */,
 			);
 			path = AtDocumentStart;
 			sourceTree = "<group>";
@@ -14164,7 +14165,6 @@
 			isa = PBXGroup;
 			children = (
 				D000661320472890009BA6F6 /* __firefox__.js */,
-				D03F8F24200EACD8003C2224 /* ContextMenu.js */,
 				39F4C0F92045D87400746155 /* FocusHelper.js */,
 				D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */,
 				43175DB526B8774D00C41C31 /* Ads.js */,
