@@ -12,9 +12,9 @@ struct ZoomSiteListView: View {
     let onDelete: (IndexSet) -> Void
 
     private struct UX {
-        static var sectionPadding: CGFloat { 16 }
-        static var footerBottomPadding: CGFloat { 40 }
-        static var footerTopPadding: CGFloat { 8 }
+        static var sectionPadding: CGFloat = 16
+        static var footerBottomPadding: CGFloat = 40
+        static var footerTopPadding: CGFloat = 8
     }
 
     var cellBackground: Color {

@@ -11,7 +11,7 @@ struct ZoomLevelPickerView: View {
     private let zoomManager: ZoomPageManager
 
     private struct UX {
-        static var sectionPadding: CGFloat { 16 }
+        static var sectionPadding: CGFloat = 16
     }
 
     var backgroundColor: Color {
