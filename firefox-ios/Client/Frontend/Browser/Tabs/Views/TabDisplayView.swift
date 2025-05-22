@@ -18,8 +18,6 @@ class TabDisplayView: UIView,
         static let cornerRadius: CGFloat = 6.0
     }
 
-    // TODO: Laurie - draggedTabUUID doesnt work in its current state. Goal was to hide the title when dragging
-    private var draggedTabUUID: TabUUID?
     let panelType: TabTrayPanelType
     private(set) var tabsState: TabsPanelState
     private var performingChainedOperations = false
@@ -241,8 +239,7 @@ class TabDisplayView: UIView,
             guard let tab = tabsState.tabs[safe: indexPath.row] else {
                 return nil
             }
-            let isBeingDragged = self.draggedTabUUID == tab.tabUUID
-            titleView?.configure(with: tab, theme: theme, isBeingDragged: isBeingDragged)
+            titleView?.configure(with: tab, theme: theme)
             return titleView
 
         case UICollectionView.elementKindSectionFooter:
@@ -420,23 +417,24 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         return [dragItem]
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        dragSessionWillBegin session: UIDragSession) {
-        guard let dragItem = session.items.first,
-              let tab = dragItem.localObject as? TabModel else {
-            return
-        }
-
-        draggedTabUUID = tab.tabUUID
-        dataSource.apply(dataSource.snapshot(), animatingDifferences: false)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        dragSessionDidEnd session: UIDragSession) {
-        guard draggedTabUUID != nil else { return }
-        draggedTabUUID = nil
-        dataSource.apply(dataSource.snapshot(), animatingDifferences: false)
-    }
+    // TODO: Laurie - this didnt work
+//    func collectionView(_ collectionView: UICollectionView,
+//                        dragSessionWillBegin session: UIDragSession) {
+//        guard let dragItem = session.items.first,
+//              let tab = dragItem.localObject as? TabModel else {
+//            return
+//        }
+//
+//        draggedTabUUID = tab.tabUUID
+//        dataSource.apply(dataSource.snapshot(), animatingDifferences: false)
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView,
+//                        dragSessionDidEnd session: UIDragSession) {
+//        guard draggedTabUUID != nil else { return }
+//        draggedTabUUID = nil
+//        dataSource.apply(dataSource.snapshot(), animatingDifferences: false)
+//    }
 
     func collectionView(_ collectionView: UICollectionView,
                         dropSessionDidUpdate session: UIDropSession,
