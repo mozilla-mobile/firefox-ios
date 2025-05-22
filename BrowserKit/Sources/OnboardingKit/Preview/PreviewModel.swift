@@ -193,7 +193,9 @@ extension PreviewModel {
             viewModel: PreviewModel.customizationToolbar,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onPrimaryActionTap: { },
+            selectedAction: .constant(.toolbarTop),
+            onPrimaryActionTap: {
+            },
             onSecondaryActionTap: { },
             onLinkTap: { }
         )
@@ -231,10 +233,9 @@ struct OnboardingMultipleChoiceButtonModelExampleView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
-        .onChange(of: selectedAction) { newAction in
+        .onChange(of: selectedAction) { _ in
             // here’s where you get the callback
             // e.g. apply your toolbar position or theme
-            print("Did pick:", newAction)
         }
     }
 }

@@ -11,7 +11,6 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryAction: Color = .clear
-    private var shadowColor = Color.black.opacity(UX.CardView.shadowOpacity)
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -59,12 +58,6 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                     .background(
                         RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                             .fill(cardBackgroundColor)
-                            .shadow(
-                                color: shadowColor,
-                                radius: UX.CardView.shadowRadius,
-                                x: UX.CardView.shadowOffsetX,
-                                y: UX.CardView.shadowOffsetY
-                            )
                     )
                     .padding(.horizontal, UX.CardView.horizontalPadding * scale)
                     secondaryButton(scale: scale)

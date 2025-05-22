@@ -9,9 +9,7 @@ import ComponentLibrary
 public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
-    private var shadowColor = Color.black.opacity(UX.CardView.shadowOpacity)
-    @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
+    @Binding private var selectedAction: VM.OnboardingMultipleChoiceActionType
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -24,6 +22,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
+        selectedAction: Binding<VM.OnboardingMultipleChoiceActionType>,
         onPrimaryActionTap: @escaping () -> Void,
         onSecondaryActionTap: @escaping () -> Void,
         onLinkTap: @escaping () -> Void
@@ -34,7 +33,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
         self.onLinkTap = onLinkTap
         self.themeManager = themeManager
         self.windowUUID = windowUUID
-        self._selectedAction = State(initialValue: viewModel.multipleChoiceButtons.first!.action)
+        self._selectedAction = selectedAction
     }
 
     public var body: some View {
@@ -64,12 +63,6 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
                     .background(
                         RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                             .fill(cardBackgroundColor)
-                            .shadow(
-                                color: shadowColor,
-                                radius: UX.CardView.shadowRadius,
-                                x: UX.CardView.shadowOffsetX,
-                                y: UX.CardView.shadowOffsetY
-                            )
                     )
                     .padding(.horizontal, UX.CardView.horizontalPadding * scale)
                 }

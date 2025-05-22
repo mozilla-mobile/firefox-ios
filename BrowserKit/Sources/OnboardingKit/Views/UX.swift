@@ -17,10 +17,6 @@ enum UX {
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
         static let cornerRadius: CGFloat = 20
-        static let shadowRadius: CGFloat = 8
-        static let shadowOffsetX: CGFloat = 0
-        static let shadowOffsetY: CGFloat = 4
-        static let shadowOpacity = 0.1
         static let secondaryButtonTopPadding: CGFloat = 8
         static let secondaryButtonBottomPadding: CGFloat = 24
 
@@ -39,7 +35,6 @@ enum UX {
         static let verticalPadding: CGFloat = 10
         static let checkmarkFontSize: CGFloat = 20
 
-        static let selectedImageSuffix = "Selected"
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
     }

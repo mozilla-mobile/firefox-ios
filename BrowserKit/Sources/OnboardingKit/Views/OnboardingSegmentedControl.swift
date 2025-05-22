@@ -7,6 +7,7 @@ import Common
 
 struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
     @State private var actionPrimary: Color = .clear
+    @State private var noSelection: Color = .clear
     @Binding var selection: Action
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
     let windowUUID: WindowUUID
@@ -37,7 +38,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
 
                         Image(assetOrSymbol: item.imageID, bundle: .module)
                             .resizable()
-                            .colorMultiply(isSelected ? actionPrimary : .white)
+                            .colorMultiply(isSelected ? actionPrimary : noSelection)
                             .aspectRatio(contentMode: .fit)
                             .frame(height: UX.SegmentedControl.imageHeight)
                             .accessibilityHidden(true)
@@ -79,5 +80,6 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
 
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
+        noSelection = Color(theme.colors.textOnDark)
     }
 }
