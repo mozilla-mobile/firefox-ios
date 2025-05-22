@@ -10,29 +10,26 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryAction: Color = .clear
+    @State private var secondaryActionColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let viewModel: VM
-    public let onPrimaryActionTap: () -> Void
-    public let onSecondaryActionTap: () -> Void
-    public let onLinkTap: () -> Void
+    public let onBottomButtonAction: (VM.OnboardingActionType, String, Bool) -> Void
+    public let onLinkTap: (String) -> Void
 
     public init(
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onPrimaryActionTap: @escaping () -> Void,
-        onSecondaryActionTap: @escaping () -> Void,
-        onLinkTap: @escaping () -> Void
+        onBottomButtonAction: @escaping (VM.OnboardingActionType, String, Bool) -> Void,
+        onLinkTap: @escaping (String) -> Void
     ) {
         self.viewModel = viewModel
-        self.onPrimaryActionTap = onPrimaryActionTap
-        self.onSecondaryActionTap = onSecondaryActionTap
-        self.onLinkTap = onLinkTap
-        self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        self.onBottomButtonAction = onBottomButtonAction
+        self.onLinkTap = onLinkTap
     }
 
     public var body: some View {
@@ -112,22 +109,39 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                     url: linkVM.url,
                     accessibilityIdentifier: "\(viewModel.a11yIdRoot)LinkButton"
                 ),
-                action: onLinkTap
+                action: { onLinkTap(viewModel.name) }
             )
         }
     }
 
     var primaryButton: some View {
-        Button(viewModel.buttons.primary.title, action: onPrimaryActionTap)
-            .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-            .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        Button(
+            viewModel.buttons.primary.title,
+            action: {
+                onBottomButtonAction(
+                    viewModel.buttons.primary.action,
+                    viewModel.name,
+                    true
+                )
+            }
+        )
+        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
+        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     @ViewBuilder
     func secondaryButton(scale: CGFloat) -> some View {
         if let secondary = viewModel.buttons.secondary {
-            Button(secondary.title, action: onSecondaryActionTap)
-                .foregroundColor(secondaryAction)
+            Button(
+                secondary.title,
+                action: {
+                    onBottomButtonAction(
+                        secondary.action,
+                        viewModel.name,
+                        false
+                    )
+                })
+                .foregroundColor(secondaryActionColor)
                 .padding(.top, UX.CardView.secondaryButtonTopPadding * scale)
                 .padding(.bottom, UX.CardView.secondaryButtonBottomPadding * scale)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
@@ -139,6 +153,6 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        secondaryAction = Color(color.textInverted)
+        secondaryActionColor = Color(color.textInverted)
     }
 }

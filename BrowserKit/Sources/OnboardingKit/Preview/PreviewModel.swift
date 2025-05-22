@@ -178,9 +178,8 @@ extension PreviewModel {
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onPrimaryActionTap: { },
-            onSecondaryActionTap: { },
-            onLinkTap: { }
+            onBottomButtonAction: { _, _, _ in },
+            onLinkTap: { _ in }
         )
     }
 }
@@ -193,11 +192,9 @@ extension PreviewModel {
             viewModel: PreviewModel.customizationToolbar,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            selectedAction: .constant(.toolbarTop),
-            onPrimaryActionTap: {
-            },
-            onSecondaryActionTap: { },
-            onLinkTap: { }
+            onBottomButtonAction: { _, _, _ in },
+            onMultipleChoiceAction: { _, _ in },
+            onLinkTap: { _ in }
         )
     }
 }
@@ -242,6 +239,19 @@ struct OnboardingMultipleChoiceButtonModelExampleView: View {
 
 #Preview(" Multiple Choice Button") {
     OnboardingMultipleChoiceButtonModelExampleView()
+}
+
+#Preview {
+    OnboardingView<PreviewModel>(
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+        viewModel: OnboardingFlowViewModel(
+            onboardingCards: PreviewModel.all,
+            onComplete: {
+                print("onComplete() called – advancing or finishing onboarding")
+            }
+        )
+    )
 }
 
 #endif
