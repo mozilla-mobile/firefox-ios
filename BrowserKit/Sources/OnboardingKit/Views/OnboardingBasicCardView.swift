@@ -74,7 +74,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.semibold)
+            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -125,6 +125,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 )
             }
         )
+        .font(UX.CardView.primaryActionFont)
         .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
         .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
@@ -141,10 +142,11 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                         false
                     )
                 })
-                .foregroundColor(secondaryActionColor)
-                .padding(.top, UX.CardView.secondaryButtonTopPadding * scale)
-                .padding(.bottom, UX.CardView.secondaryButtonBottomPadding * scale)
-                .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+            .font(UX.CardView.secondaryActionFont)
+            .foregroundColor(secondaryActionColor)
+            .padding(.top, UX.CardView.secondaryButtonTopPadding * scale)
+            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding * scale)
+            .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
         }
     }
 

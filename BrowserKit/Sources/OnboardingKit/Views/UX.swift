@@ -26,6 +26,8 @@ enum UX {
 
         static let titleFont: Font = .title
         static let bodyFont: Font = .subheadline
+        static let primaryActionFont: Font = .callout.bold()
+        static let secondaryActionFont: Font = .callout.bold()
     }
 
     enum SegmentedControl {

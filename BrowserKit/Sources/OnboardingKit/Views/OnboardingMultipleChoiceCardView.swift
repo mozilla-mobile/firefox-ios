@@ -82,7 +82,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.semibold)
+            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -100,8 +100,9 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
                 )
             }
         )
-            .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-            .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        .font(UX.CardView.primaryActionFont)
+        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
+        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     private func applyTheme(theme: Theme) {
