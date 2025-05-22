@@ -11,16 +11,15 @@ struct ZoomConstants {
     static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue
 }
 
-class ZoomPageManager: TabEventHandler {
+class ZoomPageManager: TabEventHandler, FeatureFlaggable {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     let windowUUID: WindowUUID
     let zoomStore: ZoomLevelStorage
     var tab: Tab?
 
-    // TODO: Implement feature flag properly
     var defaultZoomIsEnabled: Bool {
-        return true
+        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
     }
 
     var defaultZoomLevel: CGFloat {

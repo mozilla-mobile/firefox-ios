@@ -36,9 +36,12 @@ struct ZoomSiteListView: View {
     var body: some View {
         Section {
             ForEach(domainZoomLevels, id: \.host) { zoomItem in
-                ZoomLevelCellView(domainZoomLevel: zoomItem,
-                                  textColor: theme.colors.textPrimary.color)
-                .padding([.leading, .trailing], UX.sectionPadding)
+                ZStack {
+                    cellBackground
+                    ZoomLevelCellView(domainZoomLevel: zoomItem,
+                                      textColor: theme.colors.textPrimary.color)
+                    .padding([.leading, .trailing], UX.sectionPadding)
+                }
             }
             .onDelete(perform: onDelete)
             .background(cellBackground)
