@@ -192,13 +192,13 @@ enum Experiments {
     }
 
     private static func isBottomToolbarUser() -> Bool {
-        return UserDefaults.standard
-            .bool(forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.isBottomToolbarUser()
     }
 
     private static func hasEnabledTipsNotifications() -> Bool {
-        return UserDefaults.standard
-            .bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.hasEnabledTipsNotifications()
     }
 
     private static func buildNimbus(dbPath: String,
