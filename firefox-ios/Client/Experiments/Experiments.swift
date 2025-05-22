@@ -171,13 +171,7 @@ enum Experiments {
         let customTargetingAttributes: [String: Any] = [
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
-<<<<<<< HEAD
-            "is_phone": isPhone,
-            "is_default_browser": isDefaultBrowser(),
-            "is_bottom_toolbar_user": isBottomToolbarUser(),
-=======
             "is_phone": isPhone
->>>>>>> 980e33cff (Bugfix FXIOS-12274 [Experiment] Advanced targeting for bottom toolbar and tips notification (#26832))
         ]
 
         // App settings, to allow experiments to target the app name and the
@@ -199,14 +193,6 @@ enum Experiments {
         return prefsReader.isBottomToolbarUser()
     }
 
-<<<<<<< HEAD
-=======
-    private static func hasEnabledTipsNotifications() -> Bool {
-        let prefsReader = ProfilePrefsReader()
-        return prefsReader.hasEnabledTipsNotifications()
-    }
-
->>>>>>> 980e33cff (Bugfix FXIOS-12274 [Experiment] Advanced targeting for bottom toolbar and tips notification (#26832))
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
