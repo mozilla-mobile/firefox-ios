@@ -41,6 +41,14 @@ class ProfilePrefsReaderTests: XCTestCase {
         XCTAssertFalse(prefsReader.isBottomToolbarUser())
     }
 
+    func testIsBottomToolbarUser_savesIntoProfile_thenRetrievesThePrefs() {
+        let profile = BrowserProfile(localName: "profile").makePrefs()
+        profile.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        let prefs = ProfilePrefsReader()
+        XCTAssertTrue(prefs.isBottomToolbarUser())
+    }
+
     func testHasEnabledTipsNotifications_returnsTrue_whenFlagIsTrue() {
         let key = ProfilePrefsReader.prefix + PrefsKeys.Notifications.TipsAndFeaturesNotifications
         mockUserDefaults.set(true, forKey: key)
@@ -57,5 +65,13 @@ class ProfilePrefsReaderTests: XCTestCase {
 
     func testHasEnabledTipsNotifications_returnsFalse_whenNoFlagIsSet() {
         XCTAssertFalse(prefsReader.hasEnabledTipsNotifications())
+    }
+
+    func testHasEnabledTipsNotifications_savesIntoProfile_thenRetrievesThePrefs() {
+        let profile = BrowserProfile(localName: "profile").makePrefs()
+        profile.setBool(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+
+        let prefs = ProfilePrefsReader()
+        XCTAssertTrue(prefs.hasEnabledTipsNotifications())
     }
 }
