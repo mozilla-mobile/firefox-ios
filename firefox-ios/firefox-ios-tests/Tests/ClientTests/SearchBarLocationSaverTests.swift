@@ -23,6 +23,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         profile = nil
 
         DependencyHelperMock().reset()
+        resetNimbusToolbarLayoutTesting()
         super.tearDown()
     }
 
@@ -227,6 +228,19 @@ class SearchBarLocationSaverTests: XCTestCase {
                 oneTapNewTab: true,
                 swipingTabs: false,
                 translucency: false,
+                unifiedSearch: false)
+        }
+    }
+
+    private func resetNimbusToolbarLayoutTesting() {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(
+                enabled: true,
+                layout: .baseline,
+                navigationHint: true,
+                oneTapNewTab: false,
+                swipingTabs: true,
+                translucency: true,
                 unifiedSearch: false)
         }
     }
