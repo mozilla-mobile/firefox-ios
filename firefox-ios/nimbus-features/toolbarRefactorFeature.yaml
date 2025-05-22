@@ -52,7 +52,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          toolbar_update_hint: true
+          toolbar_update_hint: false
           swiping_tabs: false
           translucency: true
           layout: version1
@@ -62,7 +62,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          toolbar_update_hint: true
+          toolbar_update_hint: false
           swiping_tabs: true
           translucency: true
           layout: baseline
