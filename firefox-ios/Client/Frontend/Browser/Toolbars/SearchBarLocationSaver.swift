@@ -4,7 +4,7 @@
 
 import Shared
 
-class SearchBarLocationMigrator: SearchBarLocationProvider, FeatureFlaggable {
+class SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable {
     /// Saves the search bar location position to user preferences for existing users
     /// that didn't have the position saved yet. For users on iPhone with version1 or version2 as layout the
     /// search bar location position is set to bottom, otherwise the default is used.

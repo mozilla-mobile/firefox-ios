@@ -84,7 +84,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     func saveSearchBarPosition() {
-        SearchBarLocationMigrator().saveUserSearchBarLocation(profile: profile)
+        SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
     }
 
     // MARK: SkAdNetwork

@@ -8,7 +8,7 @@ import Common
 import Shared
 import XCTest
 
-class SearchBarLocationMigratorTests: XCTestCase {
+class SearchBarLocationSaverTests: XCTestCase {
     private var profile: MockProfile!
 
     override func setUp() {
@@ -212,8 +212,8 @@ class SearchBarLocationMigratorTests: XCTestCase {
     }
 
     // MARK: - Helper
-    private func createSubject() -> SearchBarLocationMigrator {
-        let subject = SearchBarLocationMigrator()
+    private func createSubject() -> SearchBarLocationSaver {
+        let subject = SearchBarLocationSaver()
         trackForMemoryLeaks(subject)
         return subject
     }
