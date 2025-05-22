@@ -54,7 +54,6 @@ struct ZoomLevelPickerView: View {
         header: {
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
                                      sectionTitleColor: theme.colors.textSecondary.color)
-            .background(theme.colors.layer1.color)
             .padding([.leading, .trailing], UX.sectionPadding)
         }
     }

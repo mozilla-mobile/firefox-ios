@@ -45,12 +45,13 @@ struct ZoomSiteListView: View {
             }
             .onDelete(perform: onDelete)
             .background(cellBackground)
+
+            // Footer as a final row
+            footerView()
         } header: {
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
                                      sectionTitleColor: theme.colors.textSecondary.color)
                 .padding([.leading, .trailing], UX.sectionPadding)
-        } footer: {
-            footerView()
         }
     }
 
@@ -61,8 +62,11 @@ struct ZoomSiteListView: View {
             Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
                 .font(.caption)
                 .foregroundColor(theme.colors.textSecondary.color)
-                .padding([.top], UX.footerTopPadding)
-                .padding([.bottom], UX.footerBottomPadding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(EdgeInsets(top: UX.footerTopPadding,
+                                    leading: UX.sectionPadding,
+                                    bottom: UX.footerBottomPadding,
+                                    trailing: UX.sectionPadding))
         }
         .background(sectionBackground)
     }
