@@ -15,7 +15,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let unselectedBorderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
-        static let faviconSize = CGSize(width: 16, height: 16)
         static let fallbackFaviconSize = CGSize(width: 24, height: 24)
         static let closeButtonSize: CGFloat = 24
         static let closeButtonHitTarget: CGFloat = 44
@@ -41,22 +40,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         view.isHidden = true
     }
 
-    private lazy var favicon: FaviconImageView = .build()
-    private lazy var faviconContainer: UIView = .build()
-
     // MARK: - UI
-
-    // Contains the title and the favicon under the tab screenshot view
-    private lazy var footerView: UIStackView = .build { stackView in
-        stackView.axis = .horizontal
-        stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.spacing = UX.tabViewFooterSpacing
-        stackView.backgroundColor = .clear
-        stackView.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-    }
-
     lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.layer.borderWidth = UX.unselectedBorderWidth
@@ -68,15 +52,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         view.clipsToBounds = true
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
-    }
-
-    private lazy var titleText: UILabel = .build { label in
-        label.numberOfLines = 1
-        label.font = FXFontStyles.Regular.footnote.scaledFont()
-        label.adjustsFontForContentSizeCategory = true
-        label.isAccessibilityElement = false
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     /// Invisible button without corner radius to ensure the button has the required hitbox size
@@ -97,7 +72,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        favicon.layer.cornerRadius = UX.faviconSize.height / 2
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
 
         backgroundHolder.layoutIfNeeded()
@@ -119,11 +93,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         layer.cornerRadius = UX.cornerRadius
         contentView.addSubview(backgroundHolder)
-        contentView.addSubview(footerView)
-
-        footerView.addArrangedSubview(faviconContainer)
-        footerView.addArrangedSubview(titleText)
-        faviconContainer.addSubview(favicon)
 
         backgroundHolder.addSubviews(screenshotView,
                                      smallFaviconView,
@@ -154,20 +123,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         animator?.animateBackToCenter()
 
-        titleText.text = tabModel.tabTitle
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
         isAccessibilityElement = true
         accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
         accessibilityIdentifier = a11yId
-
-        let identifier = StandardImageIdentifiers.Large.globe
-        if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
-            favicon.manuallySetImage(globeFavicon)
-        }
-
-        if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
-            favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
-        }
 
         updateUIForSelectedState(tabModel.isSelected,
                                  isPrivate: tabModel.isPrivate,
@@ -193,9 +152,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButtonImageOverlay.tintColor = theme.colors.textOnDark
-        titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
-        favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
         setupShadow(theme: theme)
 
@@ -294,21 +251,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundHolder.heightAnchor.constraint(equalToConstant: UX.thumbnailScreenshotHeight),
-
-            footerView.topAnchor.constraint(equalTo: backgroundHolder.bottomAnchor,
-                                            constant: UX.tabViewFooterSpacing),
-            footerView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
-            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            footerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
-
-            faviconContainer.topAnchor.constraint(lessThanOrEqualTo: favicon.topAnchor),
-            faviconContainer.bottomAnchor.constraint(greaterThanOrEqualTo: favicon.bottomAnchor),
-            faviconContainer.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
-            faviconContainer.trailingAnchor.constraint(equalTo: favicon.trailingAnchor),
-            favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
-            favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
-            favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),
+            backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),
@@ -368,5 +311,103 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         } else {
             return baseName
         }
+    }
+}
+
+final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable, ReusableCell {
+    struct UX {
+        static let tabViewFooterSpacing: CGFloat = 4
+        static let faviconSize = CGSize(width: 16, height: 16)
+    }
+
+    private lazy var containerView: UIView = .build { _ in }
+
+    // Contains the title and the favicon under the tab screenshot view
+    private lazy var footerView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.spacing = UX.tabViewFooterSpacing
+        stackView.backgroundColor = .clear
+        stackView.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+    }
+
+    private lazy var titleText: UILabel = .build { label in
+        label.numberOfLines = 1
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
+        label.textAlignment = .center
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+    }
+
+    private lazy var favicon: FaviconImageView = .build()
+    private lazy var faviconContainer: UIView = .build()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        addSubview(containerView)
+        containerView.addSubview(footerView)
+        footerView.addArrangedSubview(faviconContainer)
+        footerView.addArrangedSubview(titleText)
+        faviconContainer.addSubview(favicon)
+
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            // TODO: Laurie - this is cheating
+            footerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 25),
+//            footerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            footerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            footerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+
+            faviconContainer.topAnchor.constraint(lessThanOrEqualTo: favicon.topAnchor),
+            faviconContainer.bottomAnchor.constraint(greaterThanOrEqualTo: favicon.bottomAnchor),
+            faviconContainer.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
+            faviconContainer.trailingAnchor.constraint(equalTo: favicon.trailingAnchor),
+            favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
+            favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+            favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        favicon.layer.cornerRadius = UX.faviconSize.height / 2
+    }
+
+    func configure(with tabModel: TabModel, theme: Theme?, isBeingDragged: Bool) {
+        titleText.text = tabModel.tabTitle
+
+        let identifier = StandardImageIdentifiers.Large.globe
+        if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
+            favicon.manuallySetImage(globeFavicon)
+        }
+
+        if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))
+        }
+
+        if let theme {
+            applyTheme(theme: theme)
+        }
+
+        titleText.isHidden = isBeingDragged
+        favicon.isHidden = isBeingDragged
+    }
+
+    func applyTheme(theme: Theme) {
+        titleText.textColor = theme.colors.textPrimary
+        favicon.tintColor = theme.colors.textPrimary
     }
 }

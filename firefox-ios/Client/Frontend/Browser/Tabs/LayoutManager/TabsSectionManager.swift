@@ -31,42 +31,46 @@ class TabsSectionManager: FeatureFlaggable {
         return traitCollection.horizontalSizeClass == .regular ? UX.iPadInset : UX.standardInset
     }
 
+    // TODO: Laurie - This isn't right with absolute
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
         let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
-        let minNumberOfCellsPerRow = 2
+        let numberOfCellsPerRow = max(maxNumberOfCellsPerRow, 2)
 
-        // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
-        // so here we check we have 2 cells per row at minimum.
-        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
-                                  ? minNumberOfCellsPerRow
-                                  : maxNumberOfCellsPerRow
+        let cellHeight: CGFloat = isTabTrayUIExperimentsEnabled ? UX.experimentCellEstimatedHeight : UX.cellAbsoluteHeight
+        let itemWidth: CGFloat = 1.0 / CGFloat(numberOfCellsPerRow)
 
-        let itemSize: NSCollectionLayoutSize
-        let cellHeight: CGFloat
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(itemWidth),
+            heightDimension: .absolute(cellHeight)
+        )
+
+        let item: NSCollectionLayoutItem
         if isTabTrayUIExperimentsEnabled {
-            cellHeight = UX.experimentCellEstimatedHeight
-            itemSize = NSCollectionLayoutSize(
-                widthDimension: .estimated(UX.cellEstimatedWidth),
-                heightDimension: .estimated(cellHeight)
+            let titleSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(20)
             )
+
+            let titleSupplementary = NSCollectionLayoutSupplementaryItem(
+                layoutSize: titleSize,
+                elementKind: TabTitleSupplementaryView.cellIdentifier,
+                containerAnchor: NSCollectionLayoutAnchor(edges: [.bottom])
+            )
+            item = NSCollectionLayoutItem(layoutSize: itemSize, supplementaryItems: [titleSupplementary])
         } else {
-            cellHeight = UX.cellAbsoluteHeight
-            itemSize = NSCollectionLayoutSize(
-                widthDimension: .estimated(UX.cellEstimatedWidth),
-                heightDimension: .absolute(cellHeight)
-            )
+            item = NSCollectionLayoutItem(layoutSize: itemSize)
         }
 
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(cellHeight)
+            heightDimension: .absolute(cellHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
                                                        count: numberOfCellsPerRow)
         group.interItemSpacing = .fixed(UX.cardSpacing)
+
         let section = NSCollectionLayoutSection(group: group)
 
         let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
