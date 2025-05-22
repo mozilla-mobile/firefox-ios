@@ -1794,7 +1794,8 @@ class TabManagerTests: XCTestCase {
                               faviconURL: "",
                               isPrivate: false,
                               lastUsedTime: Date(),
-                              createdAtTime: Date())
+                              createdAtTime: Date(),
+                              temporaryDocumentSession: [:])
             tabData.append(tab)
         }
         return tabData

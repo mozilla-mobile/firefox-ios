@@ -153,7 +153,8 @@ final class TabFileManagerTests: XCTestCase {
                                 faviconURL: "https://test.com/favicon.ico",
                                 isPrivate: false,
                                 lastUsedTime: Date(),
-                                createdAtTime: Date()))
+                                createdAtTime: Date(),
+                                temporaryDocumentSession: [:]))
         }
         return tabs
     }
