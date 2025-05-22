@@ -227,7 +227,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.alpha = 0.5
 
         let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
-            panelViewController.isAnimating = true
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
                 snapshotContainer.frame = frame
@@ -275,7 +274,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             tabSnapshot.removeFromSuperview()
             snapshotContainer.removeFromSuperview()
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
-            panelViewController.isAnimating = false
             context.completeTransition(true)
         }
 
