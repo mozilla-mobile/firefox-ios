@@ -823,7 +823,7 @@ extension BrowserViewController: WKNavigationDelegate {
             tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
                 self?.logger.log("Failed to download Document",
-                                 level: .fatal,
+                                 level: .warning,
                                  category: .webview,
                                  extra: [
                                     "error": error?.localizedDescription ?? "",
