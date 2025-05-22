@@ -13,33 +13,37 @@ public struct AddressToolbarUXConfiguration {
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
 
-    public static func experiment(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
+    public static func experiment(backgroundAlpha: CGFloat = 1.0,
+                                  shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 12.0,
             browserActionsAddressBarDividerWidth: 0.0,
             isLocationTextCentered: true,
             locationTextFieldTrailingPadding: 0,
-            shouldBlur: true,
+            shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha
         )
     }
 
-    public static func `default`(backgroundAlpha: CGFloat = 1.0) -> AddressToolbarUXConfiguration {
+    public static func `default`(backgroundAlpha: CGFloat = 1.0,
+                                 shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
             browserActionsAddressBarDividerWidth: 4.0,
             isLocationTextCentered: false,
             locationTextFieldTrailingPadding: 8.0,
-            shouldBlur: false,
+            shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha
         )
     }
 
     func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {
-        let blurBackgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha)
-        let centerBackgroundColor = shouldBlur ? blurBackgroundColor : theme.colors.layer3
+        var backgroundColor = isLocationTextCentered ? theme.colors.layer3 : theme.colors.layer1
+        if shouldBlur {
+            backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
+        }
 
-        return isLocationTextCentered ? centerBackgroundColor : theme.colors.layer1
+        return backgroundColor
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {

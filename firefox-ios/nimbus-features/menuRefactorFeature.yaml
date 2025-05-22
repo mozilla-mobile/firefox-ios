@@ -14,12 +14,19 @@ features:
           If true, enables the menu contextual hint.
         type: Boolean
         default: false
+      menu-redesign:
+        description: >
+          If true, enables the menu redesign.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
           menu-hint: false
+          menu-redesign: false
       - channel: developer
         value:
           enabled: true
           menu-hint: true
+          menu-redesign: false

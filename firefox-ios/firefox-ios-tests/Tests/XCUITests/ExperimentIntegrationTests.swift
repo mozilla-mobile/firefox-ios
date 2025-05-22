@@ -10,12 +10,19 @@ final class ExperimentIntegrationTests: BaseTestCase {
 
     override func setUpApp() {
         app.activate()
+
         let closeButton = app.buttons["CloseButton"]
+        let menuPromoBox = app.buttons["Close"]
+
         if closeButton.waitForExistence(timeout: TIMEOUT) {
             closeButton.waitAndTap()
         }
         super.setUpScreenGraph()
         UIView.setAnimationsEnabled(false) // IMPORTANT
+
+        if menuPromoBox.waitForExistence(timeout: TIMEOUT) {
+            menuPromoBox.waitAndTap()
+        }
     }
 
     func enableSecretMenu() {

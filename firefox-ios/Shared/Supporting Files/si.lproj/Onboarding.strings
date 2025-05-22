@@ -37,6 +37,9 @@
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "මඟහරින්න";
 
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "පද්ධතිය ස්වයං";
+
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "තේමාවක් තෝරන්න";
 
@@ -85,8 +88,38 @@
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "ඔබ උපාංග අතර පනින විට සංකේතිතව සිටින්න";
 
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v135" = "එකඟ වී ඉදිරියට";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v136" = "එකඟ වී ඉදිරියට";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v140" = "ඉදිරියට";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.TermsOfService.ManageLink.v135" = "කළමනාකරණය";
+
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "රහස්‍යතා දැන්වීම";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "තව දැනගන්න";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "තව දැනගන්න";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "ඉදිරියට යාමෙන් ඔබ %@ සඳහා එකඟ වේ";
+
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ සේවාවේ නියම";
+
+/* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.Title.v135" = "%@ වෙත පිළිගනිමු!";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ භාවිත නියම";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "සම්භාව්‍ය බිතුපත";

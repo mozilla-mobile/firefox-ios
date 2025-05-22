@@ -998,7 +998,7 @@
 "Search" = "Ricercà";
 
 /* The text shown in the URL bar on about:home */
-"Search or enter address" = "Ricerca o indirizzu";
+"Search or enter address" = "Circà o stampittà un indirizzu";
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "Passà à l’unghjetta";
