@@ -8,6 +8,8 @@ import Common
 final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
+        // Offset used to ensure the skeleton address bar animates in alignment with the address bar.
+        static let transformOffset: CGFloat = 24
         static let offset: CGFloat = 48
         static let swipingDuration: TimeInterval = 0.3
         static let swipingVelocity: CGFloat = 250
@@ -16,9 +18,10 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UI Properties
     private let contentContainer: ContentContainer
     private let webPagePreview: TabWebViewPreview
+    private let leftSkeletonAddressBar: UIView
+    private let rightSkeletonAddressBar: UIView
+    private var addressToolbarContainer: AddressToolbarContainer
     private var panGestureRecognizer: UIPanGestureRecognizer?
-    private var addressBarContainer: BaseAlphaStackView
-    private var blurView: UIVisualEffectView?
 
     // MARK: - Properties
     private let tabManager: TabManager
@@ -27,40 +30,38 @@ final class AddressBarPanGestureHandler: NSObject {
 
     // MARK: - Init
     init(
+        leftSkeletonAddressBar: UIView,
+        rightSkeletonAddressBar: UIView,
+        addressToolbarContainer: AddressToolbarContainer,
         contentContainer: ContentContainer,
-        addressBarContainer: BaseAlphaStackView,
-        blurView: UIVisualEffectView?,
         webPagePreview: TabWebViewPreview,
         tabManager: TabManager,
         windowUUID: WindowUUID,
         screenshotHelper: ScreenshotHelper?
     ) {
+        self.leftSkeletonAddressBar = leftSkeletonAddressBar
+        self.rightSkeletonAddressBar = rightSkeletonAddressBar
+        self.addressToolbarContainer = addressToolbarContainer
         self.contentContainer = contentContainer
-        self.addressBarContainer = addressBarContainer
         self.webPagePreview = webPagePreview
         self.tabManager = tabManager
         self.windowUUID = windowUUID
         self.screenshotHelper = screenshotHelper
         super.init()
-        updateAddressBarContainer(addressBarContainer, blurView: blurView)
+        updateAddressBarContainer(addressToolbarContainer)
     }
 
     /// Updates the address bar container with a new container view and reattaches the pan gesture recognizer.
     ///
-    /// - Parameters:
-    ///   - newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
-    ///   - blurView: The new blur view is shown behind the address bar container.
-    ///
-    func updateAddressBarContainer(_ newContainer: BaseAlphaStackView,
-                                   blurView: UIVisualEffectView?) {
+    /// - Parameter newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
+    func updateAddressBarContainer(_ newContainer: AddressToolbarContainer) {
         if let panGestureRecognizer {
-            addressBarContainer.removeGestureRecognizer(panGestureRecognizer)
+            addressToolbarContainer.removeGestureRecognizer(panGestureRecognizer)
         }
-        addressBarContainer = newContainer
-        self.blurView = blurView
+        addressToolbarContainer = newContainer
 
         let newPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addressBarContainer.addGestureRecognizer(newPanGesture)
+        addressToolbarContainer.addGestureRecognizer(newPanGesture)
 
         panGestureRecognizer = newPanGesture
         panGestureRecognizer?.isEnabled = true
@@ -141,7 +142,11 @@ final class AddressBarPanGestureHandler: NSObject {
         let previewTransform = CGAffineTransform(translationX: -targetX, y: 0)
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
-            applyCurrentTabTransform(shouldCompleteTransition ? currentTabTransform : .identity)
+            if shouldCompleteTransition {
+                applyCurrentTabTransform(currentTabTransform, translatedByX: UX.transformOffset)
+            } else {
+                applyCurrentTabTransform(.identity)
+            }
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
         }) { [self] _ in
             webPagePreview.isHidden = true
@@ -162,10 +167,11 @@ final class AddressBarPanGestureHandler: NSObject {
     }
 
     /// Applies the provided transform to the all the views representing the current tab.
-    private func applyCurrentTabTransform(_ transform: CGAffineTransform) {
+    private func applyCurrentTabTransform(_ transform: CGAffineTransform, translatedByX: CGFloat = 0) {
+        leftSkeletonAddressBar.transform = transform.translatedBy(x: -translatedByX, y: 0)
+        rightSkeletonAddressBar.transform = transform.translatedBy(x: translatedByX, y: 0)
         contentContainer.transform = transform
-        addressBarContainer.transform = transform
-        blurView?.transform = transform
+        addressToolbarContainer.transform = transform
     }
 
     /// Applies a translation transform to the `webPagePreview`

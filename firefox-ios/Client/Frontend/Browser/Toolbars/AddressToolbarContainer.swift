@@ -157,6 +157,11 @@ final class AddressToolbarContainer: UIView,
         return toolbar.resignFirstResponder()
     }
 
+    override var transform: CGAffineTransform {
+        get { toolbar.transform }
+        set { toolbar.transform = newValue }
+    }
+
     // MARK: - Redux
 
     func subscribeToRedux() {

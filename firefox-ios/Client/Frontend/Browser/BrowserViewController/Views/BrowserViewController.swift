@@ -42,6 +42,8 @@ class BrowserViewController: UIViewController,
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
+        static let skeletonAddressBarOffset: CGFloat = 8
+        static let skeletonAddressBarWidthOffset: CGFloat = 32
     }
 
     /// Describes the state of the current search session. This state is used
@@ -482,10 +484,10 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            let blurView = isToolbarTranslucencyEnabled ? newPositionIsBottom ? bottomBlurView : topBlurView : nil
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-            addressBarPanGestureHandler?.updateAddressBarContainer(newParent, blurView: blurView)
+            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
+            configureSkeletonAddressBarsConstraints(by: newSearchBarPosition)
         }
 
         if let readerModeBar = readerModeBar {
@@ -593,11 +595,14 @@ class BrowserViewController: UIViewController,
                    let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
                    !toolbarState.addressToolbar.isEditing {
                     addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                    updateSkeletonAddressBarsVisibility(tabManager: tabManager)
                 }
             } else {
                 navigationToolbarContainer.isHidden = true
                 if isSwipingTabsEnabled {
                     addressBarPanGestureHandler?.disablePanGestureRecognizer()
+                    leftSkeletonAddressBar.isHidden = true
+                    rightSkeletonAddressBar.isHidden = true
                 }
             }
             updateToolbarStateTraitCollectionIfNecessary(newCollection)
@@ -895,9 +900,7 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.applyTheme(theme: theme)
-        }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { webPagePreview.applyTheme(theme: theme) }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -1139,13 +1142,12 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
 
-        let blurView = isToolbarTranslucencyEnabled ? isBottomSearchBar ? bottomBlurView : topBlurView : nil
-
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
+            leftSkeletonAddressBar: leftSkeletonAddressBar,
+            rightSkeletonAddressBar: rightSkeletonAddressBar,
+            addressToolbarContainer: addressToolbarContainer,
             contentContainer: contentContainer,
-            addressBarContainer: isBottomSearchBar ? overKeyboardContainer : header,
-            blurView: blurView,
             webPagePreview: webPagePreview,
             tabManager: tabManager,
             windowUUID: windowUUID,
@@ -1154,10 +1156,16 @@ class BrowserViewController: UIViewController,
         webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
     }
 
+    private lazy var leftSkeletonAddressBar: UIView = .build { addressBar in
+        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
+    }
+
+    private lazy var rightSkeletonAddressBar: UIView = .build { addressBar in
+        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
+    }
+
     func addSubviews() {
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            view.addSubviews(addressBarBackgroundView, webPagePreview)
-        }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
@@ -1176,6 +1184,9 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContentStackView)
         view.addSubview(overKeyboardContainer)
 
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            view.addSubviews(leftSkeletonAddressBar, rightSkeletonAddressBar)
+        }
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
         bottomContainer.addArrangedSubview(toolbarToShow)
@@ -1397,6 +1408,9 @@ class BrowserViewController: UIViewController,
     private var addressBarBackgroundViewTopConstraint: NSLayoutConstraint?
     private var addressBarBackgroundViewBottomConstraint: NSLayoutConstraint?
 
+    private var leftSkeletonConstraints: [NSLayoutConstraint] = []
+    private var rightSkeletonConstraints: [NSLayoutConstraint] = []
+
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1424,10 +1438,41 @@ class BrowserViewController: UIViewController,
             addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor
                 .constraint(equalTo: bottomContainer.topAnchor)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: searchBarPosition)
+
+            configureSkeletonAddressBarsConstraints(by: searchBarPosition)
         }
 
         updateHeaderConstraints()
         setupBlurViews()
+    }
+
+    private func configureSkeletonAddressBarsConstraints(by searchBarPosition: SearchBarPosition) {
+        NSLayoutConstraint.deactivate(leftSkeletonConstraints + rightSkeletonConstraints)
+        let bottomConstant: CGFloat = searchBarPosition == .bottom ? 4 : 8
+
+        leftSkeletonConstraints = [
+            leftSkeletonAddressBar.topAnchor.constraint(equalTo: addressToolbarContainer.topAnchor,
+                                                        constant: UX.skeletonAddressBarOffset),
+            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor,
+                                                           constant: -bottomConstant),
+            leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: addressToolbarContainer.leadingAnchor,
+                                                             constant: UX.skeletonAddressBarOffset),
+            leftSkeletonAddressBar.widthAnchor.constraint(equalTo: addressToolbarContainer.widthAnchor,
+                                                          constant: -UX.skeletonAddressBarWidthOffset)
+        ]
+
+        rightSkeletonConstraints = [
+            rightSkeletonAddressBar.topAnchor.constraint(equalTo: addressToolbarContainer.topAnchor,
+                                                         constant: UX.skeletonAddressBarOffset),
+            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor,
+                                                            constant: -bottomConstant),
+            rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: addressToolbarContainer.trailingAnchor,
+                                                             constant: -UX.skeletonAddressBarOffset),
+            rightSkeletonAddressBar.widthAnchor.constraint(equalTo: addressToolbarContainer.widthAnchor,
+                                                           constant: -UX.skeletonAddressBarWidthOffset)
+        ]
+
+        NSLayoutConstraint.activate(leftSkeletonConstraints + rightSkeletonConstraints)
     }
 
     private func setupBlurViews() {
@@ -3455,6 +3500,19 @@ class BrowserViewController: UIViewController,
         updateForZoomChangedInOtherIPadWindow(zoom: zoomSetting)
     }
 
+    // MARK: - Skeleton Address Bars
+    private func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
+        guard isToolbarRefactorEnabled,
+              isSwipingTabsEnabled,
+              let selectedTab = tabManager.selectedTab else { return }
+
+        let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
+
+        leftSkeletonAddressBar.isHidden = tabs[safe: index - 1] == nil
+        rightSkeletonAddressBar.isHidden = tabs[safe: index + 1] == nil
+    }
+
     // MARK: Themeable
 
     func currentTheme() -> Theme {
@@ -3486,6 +3544,11 @@ class BrowserViewController: UIViewController,
             legacyUrlBar?.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         } else {
             addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
+            if isSwipingTabsEnabled {
+                let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: currentTheme)
+                leftSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
+                rightSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
+            }
         }
 
         documentLoadingView?.applyTheme(theme: currentTheme)
@@ -4311,6 +4374,8 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
+        } else {
+            updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
         /// If the selectedTab is showing an error page trigger a reload
