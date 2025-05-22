@@ -25,7 +25,7 @@ struct ProfilePrefsReader {
     /// Returns `true` if the saved search bar position for the user is `.bottom`.
     ///
     /// This checks the `SearchBarPositionUsersPrefsKey` and deserializes it into
-    /// a `SearchBarPosition` enum. If the key is missing or not `"bottom"`, it returns `false`.
+    /// a `SearchBarPosition` enum. If the key is missing or not `SearchBarPosition.bottom`, it returns `false`.
     func isBottomToolbarUser() -> Bool {
         let key = ProfilePrefsReader.prefix + PrefsKeys.FeatureFlags.SearchBarPosition
         if let rawValue = userDefaults.string(forKey: key),
