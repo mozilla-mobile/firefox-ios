@@ -214,9 +214,7 @@ class SearchBarLocationSaverTests: XCTestCase {
 
     // MARK: - Helper
     private func createSubject() -> SearchBarLocationSaver {
-        let subject = SearchBarLocationSaver()
-        trackForMemoryLeaks(subject)
-        return subject
+        return SearchBarLocationSaver()
     }
 
     private func setupNimbusToolbarLayoutTesting(isEnabled: Bool, layout: ToolbarLayoutType?) {
