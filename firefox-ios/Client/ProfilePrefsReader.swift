@@ -9,7 +9,7 @@ import Shared
 /// without requiring access to the `Profile` object.
 ///
 /// This is useful in contexts where only the app group suite is available (e.g., startup code,
-/// onboarding, remote config logic), and certain known preference keys need to be queried.
+/// experiments), and certain known preference keys need to be queried.
 struct ProfilePrefsReader {
     /// Prefix used to simulate the `NSUserDefaultsPrefs` profile key namespace.
     static let prefix = "profile."
