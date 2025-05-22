@@ -2151,6 +2151,16 @@ workflows:
     - SPM_Common_Steps
     steps:
     - script@1.2.1:
+        title: Override default bitrise scheme
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            if [[ ! -z "${API_BITRISE_SCHEME}" ]]; then
+              envman add --key BITRISE_SCHEME --value "${API_BITRISE_SCHEME}"
+            fi
+    - script@1.2.1:
         # If the current bitrise application is `staging-firefox-ios`, then
         # this is a test release made from the staging repository.
         # Ignore the value passed by release promotion for `BITRISE_SCHEME` and
@@ -2166,16 +2176,6 @@ workflows:
             envman add --key EXPORT_METHOD --value development
         run_if: |-
           {{enveq "BITRISE_APP_TITLE" "staging-firefox-ios"}}
-    - script@1.2.1:
-        title: Override default bitrise scheme
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -ex
-
-            if [[ ! -z "${API_BITRISE_SCHEME}" ]]; then
-              envman add --key BITRISE_SCHEME --value "${API_BITRISE_SCHEME}"
-            fi
     - script@1.2.1:
         inputs:
         - content: |-

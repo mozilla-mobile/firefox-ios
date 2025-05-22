@@ -25,6 +25,8 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
+    // Based on the isMenuRedesign flag, we have two versions of the menu
+    private lazy var menuRedesignContent: MenuRedesignMainView = .build()
     private lazy var menuContent: MenuMainView = .build()
     private var hintView: ContextualHintView = .build { view in
         view.isAccessibilityElement = true
@@ -49,6 +51,10 @@ class MainMenuViewController: UIViewController,
     private var isPad: Bool {
         traitCollection.verticalSizeClass == .regular &&
         !(UIDevice.current.userInterfaceIdiom == .phone)
+    }
+
+    private var isMenuRedesign: Bool {
+        return featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
     // Used to save the last screen orientation
@@ -94,7 +100,11 @@ class MainMenuViewController: UIViewController,
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
 
-        setupView()
+        if isMenuRedesign {
+            setupRedesignView()
+        } else {
+            setupView()
+        }
         setupTableView()
         listenForThemeChange(view)
         store.dispatch(
@@ -104,27 +114,26 @@ class MainMenuViewController: UIViewController,
             )
         )
 
-        menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
-            guard let self else { return }
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: self.windowUUID,
-                    actionType: MainMenuActionType.tapCloseMenu,
-                    currentTabInfo: menuState.currentTabInfo
-                )
-            )
-        }
+        if isMenuRedesign {
+            menuRedesignContent.accountHeaderView.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
 
-        menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
-            guard let self else { return }
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: self.windowUUID,
-                    actionType: MainMenuActionType.tapNavigateToDestination,
-                    navigationDestination: MenuNavigationDestination(.syncSignIn),
-                    currentTabInfo: menuState.currentTabInfo
-                )
-            )
+            menuRedesignContent.accountHeaderView.mainButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchSyncSignInAction()
+            }
+        } else {
+            menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
+
+            menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchSyncSignInAction()
+            }
         }
 
         setupAccessibilityIdentifiers()
@@ -204,6 +213,23 @@ class MainMenuViewController: UIViewController,
                                  icon: icon)
     }
 
+    private func setupRedesignView() {
+        view.addSubview(menuRedesignContent)
+
+        NSLayoutConstraint.activate([
+            menuRedesignContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuRedesignContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuRedesignContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            menuRedesignContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+
+        let icon = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)?
+            .withRenderingMode(.alwaysTemplate)
+        menuRedesignContent.setupDetails(subtitle: .MainMenu.Account.SignedOutDescription,
+                                         title: .MainMenu.Account.SignedOutTitle,
+                                         icon: icon)
+    }
+
     private func setupHintView() {
         var viewModel = ContextualHintViewModel(
             actionButtonTitle: viewProvider.getCopyFor(.action),
@@ -225,17 +251,27 @@ class MainMenuViewController: UIViewController,
             if isPad {
                 NSLayoutConstraint.activate([
                     hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
-                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4),
-                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                  constant: UX.hintViewMargin)
+                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4)
                 ])
+                if isMenuRedesign {
+                    hintView.topAnchor.constraint(equalTo: menuRedesignContent.accountHeaderView.topAnchor,
+                                                  constant: UX.hintViewMargin).isActive = true
+                } else {
+                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                  constant: UX.hintViewMargin).isActive = true
+                }
             } else {
                 NSLayoutConstraint.activate([
                     hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
-                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin),
-                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                     constant: -UX.hintViewMargin)
+                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin)
                 ])
+                if isMenuRedesign {
+                    hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.accountHeaderView.topAnchor,
+                                                     constant: -UX.hintViewMargin).isActive = true
+                } else {
+                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                     constant: -UX.hintViewMargin).isActive = true
+                }
             }
             hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
             hintViewHeightConstraint?.isActive = true
@@ -298,19 +334,49 @@ class MainMenuViewController: UIViewController,
         reloadTableView(with: menuState.menuElements)
     }
 
+    private func dispatchCloseMenuAction() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapCloseMenu,
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
+    private func dispatchSyncSignInAction() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.syncSignIn),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer3
+        menuRedesignContent.applyTheme(theme: theme)
         menuContent.applyTheme(theme: theme)
     }
 
     private func updateHeaderWith(accountData: AccountData, icon: UIImage?) {
-        menuContent.accountHeaderView.setupDetails(subtitle: accountData.subtitle ?? "",
-                                                   title: accountData.title,
-                                                   icon: icon,
-                                                   warningIcon: accountData.warningIcon,
-                                                   theme: themeManager.getCurrentTheme(for: windowUUID))
+        if isMenuRedesign {
+            menuRedesignContent.accountHeaderView.setupDetails(subtitle: accountData.subtitle ?? "",
+                                                               title: accountData.title,
+                                                               icon: icon,
+                                                               warningIcon: accountData.warningIcon,
+                                                               theme: themeManager.getCurrentTheme(for: windowUUID))
+        } else {
+            menuContent.accountHeaderView.setupDetails(subtitle: accountData.subtitle ?? "",
+                                                       title: accountData.title,
+                                                       icon: icon,
+                                                       warningIcon: accountData.warningIcon,
+                                                       theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
     }
 
     // MARK: - A11y
@@ -343,17 +409,31 @@ class MainMenuViewController: UIViewController,
 
     private func setupAccessibilityIdentifiers(
         mainButtonA11yLabel: String = .MainMenu.Account.AccessibilityLabels.MainButton) {
-        menuContent.setupAccessibilityIdentifiers(
-            closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
-            mainButtonA11yLabel: mainButtonA11yLabel,
-            mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
-            menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
-            menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+            if isMenuRedesign {
+                menuRedesignContent.setupAccessibilityIdentifiers(
+                    closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
+                    closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
+                    mainButtonA11yLabel: mainButtonA11yLabel,
+                    mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
+                    menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
+                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+            } else {
+                menuContent.setupAccessibilityIdentifiers(
+                    closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
+                    closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
+                    mainButtonA11yLabel: mainButtonA11yLabel,
+                    mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
+                    menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
+                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+            }
     }
 
     private func adjustLayout(isDeviceRotating: Bool = false) {
-        menuContent.accountHeaderView.adjustLayout()
+        if isMenuRedesign {
+            menuRedesignContent.accountHeaderView.adjustLayout()
+        } else {
+            menuContent.accountHeaderView.adjustLayout()
+        }
         if isDeviceRotating {
             hintView.removeFromSuperview()
         } else {
@@ -413,6 +493,10 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - MenuTableViewDelegate
     func reloadTableView(with data: [MenuSection]) {
-        menuContent.reloadTableView(with: data)
+        if isMenuRedesign {
+            menuRedesignContent.reloadDataView(with: data)
+        } else {
+            menuContent.reloadTableView(with: data)
+        }
     }
 }

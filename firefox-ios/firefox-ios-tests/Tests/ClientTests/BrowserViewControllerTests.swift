@@ -167,36 +167,32 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Handle PDF
 
-    func testHandlePDF_doesntDocumentLoadingView_whenTabNotSelected() {
+    func testHandlePDFDownloadRequest_doesntDocumentLoadingView_whenTabNotSelected() {
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        let response = URLResponse()
         let request = URLRequest(url: URL(fileURLWithPath: "test"))
 
-        subject.handlePDFResponse(tab: tab, response: response, request: request)
-
+        subject.handlePDFDownloadRequest(request: request, tab: tab, filename: "test")
         XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 0)
     }
 
-    func testHandlePDF_showDocumentLoadingView_whenTabSelected() {
+    func testHandlePDFDownloadRequest_showDocumentLoadingView_whenTabSelected() {
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        let response = URLResponse()
         let request = URLRequest(url: URL(fileURLWithPath: "test"))
 
         tabManager.selectedTab = tab
-        subject.handlePDFResponse(tab: tab, response: response, request: request)
+        subject.handlePDFDownloadRequest(request: request, tab: tab, filename: "test")
 
         XCTAssertEqual(browserCoordinator.showDocumentLoadingCalled, 1)
     }
 
-    func testHandlePDF_callsEnqueueDocumentOnTab() {
+    func testHandlePDFDownloadRequest_callsEnqueueDocumentOnTab() {
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        let response = URLResponse()
         let request = URLRequest(url: URL(fileURLWithPath: "test"))
 
-        subject.handlePDFResponse(tab: tab, response: response, request: request)
+        subject.handlePDFDownloadRequest(request: request, tab: tab, filename: "test")
 
         XCTAssertEqual(tab.enqueueDocumentCalled, 1)
         XCTAssertNotNil(tab.temporaryDocument)

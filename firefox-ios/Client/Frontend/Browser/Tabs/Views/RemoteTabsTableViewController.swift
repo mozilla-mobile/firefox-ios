@@ -159,7 +159,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     private func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if shouldUsePrivateOverride {
             return themeManager.resolvedTheme(with: false)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
@@ -168,7 +168,7 @@ class RemoteTabsTableViewController: UITableViewController,
 
     // MARK: Themeable
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
     }
 
     var shouldBeInPrivateTheme: Bool {

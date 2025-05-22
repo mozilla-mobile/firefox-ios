@@ -42,7 +42,7 @@ class DocumentLogger {
         let pendingDownload = pending.filter { $0.value }.count
         if pendingDownload > 0 {
             logger.log("Documents Downloads not completed",
-                       level: .warning,
+                       level: .fatal,
                        category: .webview,
                        extra: [downloadExtraKey: "\(pendingDownload)"]
             )

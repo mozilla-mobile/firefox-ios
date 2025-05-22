@@ -59,6 +59,8 @@ class MockFileManager: FileManagerProtocol {
 
     func removeItem(atPath path: String) throws {}
 
+    func removeItem(at url: URL) throws {}
+
     func copyItem(at srcURL: URL, to dstURL: URL) throws {}
 
     func createDirectory(atPath path: String,
