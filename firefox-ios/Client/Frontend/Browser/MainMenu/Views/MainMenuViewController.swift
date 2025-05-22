@@ -25,6 +25,7 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
+    // Based on the isMenuRedesign flag, we have two versions of the menu
     private lazy var menuRedesignContent: MenuRedesignMainView = .build()
     private lazy var menuContent: MenuMainView = .build()
     private var hintView: ContextualHintView = .build { view in

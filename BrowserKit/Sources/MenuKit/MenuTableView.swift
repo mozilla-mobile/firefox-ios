@@ -19,14 +19,6 @@ final class MenuTableView: UIView,
     private var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
-    private var isRedesignEnabled: Bool {
-        guard let firstSection = menuData.first else {
-            tableView.showsVerticalScrollIndicator = true
-            return false
-        }
-        tableView.showsVerticalScrollIndicator = !firstSection.isTopTabsSection
-        return firstSection.isTopTabsSection
-    }
 
     var updateHeaderLineView: ((_ isHidden: Bool) -> Void)?
 
@@ -83,10 +75,6 @@ final class MenuTableView: UIView,
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        if isRedesignEnabled {
-            guard section != 0 else { return 0 }
-            return section == 1 ? UX.topPadding : UX.distanceBetweenSections
-        }
         return section == 0 ? UX.topPadding : UX.distanceBetweenSections
     }
 
@@ -94,7 +82,6 @@ final class MenuTableView: UIView,
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        if isRedesignEnabled, section == 0 { return 0 }
         return menuData[section].options.count
     }
 
@@ -109,7 +96,6 @@ final class MenuTableView: UIView,
             return UITableViewCell()
         }
 
-        if isRedesignEnabled, indexPath.section == 0 { return UITableViewCell() }
         cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }
         return cell
@@ -121,7 +107,6 @@ final class MenuTableView: UIView,
     ) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if isRedesignEnabled, indexPath.section == 0 { return }
         if let action = menuData[indexPath.section].options[indexPath.row].action {
             action()
         }
@@ -131,16 +116,22 @@ final class MenuTableView: UIView,
         _ tableView: UITableView,
         viewForHeaderInSection section: Int
     ) -> UIView? {
-        if isRedesignEnabled, section == 1 {
-            return clearBackgroundHeaderView()
-        } else if !isRedesignEnabled, section == 0 {
-            return clearBackgroundHeaderView()
+        if section == 0 {
+            let headerView = UIView()
+            headerView.backgroundColor = .clear
+            return headerView
         }
         return nil
     }
 
     func reloadTableView(with data: [MenuSection]) {
-        menuData = data
+        if let firstSection = data.first, firstSection.isTopTabsSection {
+            tableView.showsVerticalScrollIndicator = false
+            menuData = data
+            menuData.remove(at: 0)
+        } else {
+            menuData = data
+        }
         tableView.reloadData()
     }
 
@@ -150,12 +141,6 @@ final class MenuTableView: UIView,
         } else {
             updateHeaderLineView?(true)
         }
-    }
-
-    private func clearBackgroundHeaderView() -> UIView {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
     }
 
     // MARK: - Theme Applicable
