@@ -13,16 +13,12 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
         static let viewPosition: CGFloat = 25
     }
 
-    private lazy var containerView: UIView = .build { _ in }
-
     private lazy var footerView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.distribution = .fill
-        stackView.alignment = .fill
+        stackView.alignment = .center
         stackView.spacing = UX.tabViewFooterSpacing
         stackView.backgroundColor = .clear
-        stackView.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private lazy var titleText: UILabel = .build { label in
@@ -31,8 +27,7 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
         label.textAlignment = .center
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     private lazy var favicon: FaviconImageView = .build()
@@ -41,26 +36,22 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        addSubview(containerView)
-        containerView.addSubview(footerView)
+        addSubview(footerView)
         footerView.addArrangedSubview(faviconContainer)
         footerView.addArrangedSubview(titleText)
         faviconContainer.addSubview(favicon)
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            footerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.viewPosition),
-            footerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            footerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            footerView.topAnchor.constraint(equalTo: topAnchor, constant: UX.viewPosition),
+            footerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            footerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+            footerView.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             faviconContainer.topAnchor.constraint(lessThanOrEqualTo: favicon.topAnchor),
             faviconContainer.bottomAnchor.constraint(greaterThanOrEqualTo: favicon.bottomAnchor),
             faviconContainer.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
             faviconContainer.trailingAnchor.constraint(equalTo: favicon.trailingAnchor),
+
             favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
             favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
             favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),

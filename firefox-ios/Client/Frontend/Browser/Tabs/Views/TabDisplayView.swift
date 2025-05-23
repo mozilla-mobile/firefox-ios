@@ -286,7 +286,11 @@ class TabDisplayView: UIView,
             // If on private mode or regular mode but without inactive
             // tabs we return only the tabs layout
             guard !shouldHideInactiveTabs else {
-                return self.tabsSectionManager.layoutSection(layoutEnvironment)
+                if isTabTrayUIExperimentsEnabled {
+                    return self.tabsSectionManager.experimentLayoutSection(layoutEnvironment)
+                } else {
+                    return self.tabsSectionManager.layoutSection(layoutEnvironment)
+                }
             }
 
             let section = getSection(for: sectionIndex)

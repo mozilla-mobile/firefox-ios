@@ -313,4 +313,3 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         }
     }
 }
-
