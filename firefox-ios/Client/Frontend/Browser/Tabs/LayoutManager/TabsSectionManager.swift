@@ -10,7 +10,8 @@ class TabsSectionManager: FeatureFlaggable {
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
         static let cardSpacing: CGFloat = 16
-        static let experimentCardSpacing: CGFloat = 28
+        static let experimentCardSpacing: CGFloat = 40
+        static let experimentA11yCardSpacing: CGFloat = 72
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
@@ -111,7 +112,9 @@ class TabsSectionManager: FeatureFlaggable {
                                                         leading: horizontalInset,
                                                         bottom: UX.verticalInset,
                                                         trailing: horizontalInset)
-        section.interGroupSpacing = UX.experimentCardSpacing
+        let isAccessibilitySize = layoutEnvironment.traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        section.interGroupSpacing = isAccessibilitySize ? UX.experimentA11yCardSpacing : UX.experimentCardSpacing
+        section.contentInsets.bottom = isAccessibilitySize ? UX.experimentA11yCardSpacing : UX.experimentCardSpacing
 
         return section
     }
