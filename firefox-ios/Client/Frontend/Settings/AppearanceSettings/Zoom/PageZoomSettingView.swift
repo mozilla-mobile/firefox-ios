@@ -40,29 +40,17 @@ struct PageZoomSettingsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack {
                 // Default zoom level section
-                VStack {
-                    // Header
-                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
-                                             sectionTitleColor: theme.colors.textSecondary.color)
-                        .padding([.leading, .trailing, .top], UX.sectionPadding)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(viewBackground)
+                ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
+                    .background(theme.colors.layer5.color)
 
-                    // Picker
-                    ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
-                        .background(theme.colors.layer5.color)
-                }
-
+                // Specific site zoom level section
                 if !viewModel.domainZoomLevels.isEmpty {
-                    // Specific site zoom level section
-                    VStack {
-                        ZoomSiteListView(theme: theme,
-                                         domainZoomLevels: $viewModel.domainZoomLevels,
-                                         onDelete: viewModel.deleteZoomLevel,
-                                         resetDomain: viewModel.resetDomainZoomLevel)
-                    }
+                    ZoomSiteListView(theme: theme,
+                                     domainZoomLevels: $viewModel.domainZoomLevels,
+                                     onDelete: viewModel.deleteZoomLevel,
+                                     resetDomain: viewModel.resetDomainZoomLevel)
                 }
             }
             .frame(maxWidth: .infinity)
