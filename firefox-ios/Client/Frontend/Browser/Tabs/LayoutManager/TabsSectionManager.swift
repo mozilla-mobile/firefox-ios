@@ -9,13 +9,13 @@ class TabsSectionManager: FeatureFlaggable {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
-        static let experimentCellEstimatedHeight: CGFloat = 220
         static let cardSpacing: CGFloat = 16
         static let experimentCardSpacing: CGFloat = 28
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
         static let verticalInset: CGFloat = 20
+        static let experimentEstimatedTitleHeight: CGFloat = 20
     }
 
     static func leadingInset(traitCollection: UITraitCollection,
@@ -64,7 +64,6 @@ class TabsSectionManager: FeatureFlaggable {
         return section
     }
 
-    // TODO: Laurie - This isn't right with absolute
     func experimentLayoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
         let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
@@ -76,15 +75,9 @@ class TabsSectionManager: FeatureFlaggable {
                                     ? minNumberOfCellsPerRow
                                     : maxNumberOfCellsPerRow
 
-        let cellHeight: CGFloat = UX.experimentCellEstimatedHeight
+        let cellHeight: CGFloat = UX.cellAbsoluteHeight
         let itemWidth: CGFloat = 1.0 / CGFloat(numberOfCellsPerRow)
-        //        if isTabTrayUIExperimentsEnabled {
-        //            cellHeight = UX.experimentCellEstimatedHeight
-        //            itemSize = NSCollectionLayoutSize(
-        //                widthDimension: .estimated(UX.cellEstimatedWidth),
-        //                heightDimension: .estimated(cellHeight)
-        //            )
-        //        } else {
+
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(itemWidth),
             heightDimension: .absolute(cellHeight)
@@ -92,7 +85,7 @@ class TabsSectionManager: FeatureFlaggable {
 
         let titleSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(20)
+            heightDimension: .estimated(UX.experimentEstimatedTitleHeight)
         )
 
         let titleSupplementary = NSCollectionLayoutSupplementaryItem(
