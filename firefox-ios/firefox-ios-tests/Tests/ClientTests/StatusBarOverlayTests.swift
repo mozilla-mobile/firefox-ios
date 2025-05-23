@@ -43,7 +43,7 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(0.8).cgColor)
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(0).cgColor)
     }
 
     func testOnHomepage_withoutWallpaperWithTopURLBar_isOpaque() throws {

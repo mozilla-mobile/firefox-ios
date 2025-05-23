@@ -533,7 +533,6 @@ class BrowserViewController: UIViewController,
 
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = contentContainer.hasHomepage ? offset : 1
-
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
