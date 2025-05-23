@@ -94,6 +94,9 @@ final class AppLaunchUtil {
             self.runAppServicesHistoryMigration()
         }
 
+        // Save toolbar position to user prefs
+        SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+
         NotificationCenter.default.addObserver(
             forName: .FSReadingListAddReadingListItem,
             object: nil,
