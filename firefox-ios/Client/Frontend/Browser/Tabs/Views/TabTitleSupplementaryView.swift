@@ -10,7 +10,7 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
     struct UX {
         static let tabViewFooterSpacing: CGFloat = 4
         static let faviconSize = CGSize(width: 16, height: 16)
-        static let viewPosition: CGFloat = 25
+        static let viewPosition: CGFloat = 23
     }
 
     private lazy var footerView: UIStackView = .build { stackView in
