@@ -18,11 +18,6 @@ class TabsSectionManager: FeatureFlaggable {
         static let verticalInset: CGFloat = 20
     }
 
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-    }
-
     static func leadingInset(traitCollection: UITraitCollection,
                              interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {
         guard interfaceIdiom != .phone else { return UX.standardInset }
@@ -31,36 +26,81 @@ class TabsSectionManager: FeatureFlaggable {
         return traitCollection.horizontalSizeClass == .regular ? UX.iPadInset : UX.standardInset
     }
 
-    // TODO: Laurie - This isn't right with absolute
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
         let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
-        let numberOfCellsPerRow = max(maxNumberOfCellsPerRow, 2)
+        let minNumberOfCellsPerRow = 2
 
-        let cellHeight: CGFloat = isTabTrayUIExperimentsEnabled ? UX.experimentCellEstimatedHeight : UX.cellAbsoluteHeight
+        // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
+        // so here we check we have 2 cells per row at minimum.
+        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
+                                    ? minNumberOfCellsPerRow
+                                    : maxNumberOfCellsPerRow
+
+        let cellHeight = UX.cellAbsoluteHeight
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(UX.cellEstimatedWidth),
+            heightDimension: .absolute(cellHeight)
+        )
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(cellHeight)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitem: item,
+                                                       count: numberOfCellsPerRow)
+        group.interItemSpacing = .fixed(UX.cardSpacing)
+        let section = NSCollectionLayoutSection(group: group)
+
+        let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
+                                                        leading: horizontalInset,
+                                                        bottom: UX.verticalInset,
+                                                        trailing: horizontalInset)
+        section.interGroupSpacing = UX.cardSpacing
+
+        return section
+    }
+
+    // TODO: Laurie - This isn't right with absolute
+    func experimentLayoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let availableWidth = layoutEnvironment.container.effectiveContentSize.width
+        let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
+        let minNumberOfCellsPerRow = 2
+
+        // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
+        // so here we check we have 2 cells per row at minimum.
+        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
+                                    ? minNumberOfCellsPerRow
+                                    : maxNumberOfCellsPerRow
+
+        let cellHeight: CGFloat = UX.experimentCellEstimatedHeight
         let itemWidth: CGFloat = 1.0 / CGFloat(numberOfCellsPerRow)
-
+        //        if isTabTrayUIExperimentsEnabled {
+        //            cellHeight = UX.experimentCellEstimatedHeight
+        //            itemSize = NSCollectionLayoutSize(
+        //                widthDimension: .estimated(UX.cellEstimatedWidth),
+        //                heightDimension: .estimated(cellHeight)
+        //            )
+        //        } else {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(itemWidth),
             heightDimension: .absolute(cellHeight)
         )
 
-        let item: NSCollectionLayoutItem
-        if isTabTrayUIExperimentsEnabled {
-            let titleSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(20)
-            )
+        let titleSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(20)
+        )
 
-            let titleSupplementary = NSCollectionLayoutSupplementaryItem(
-                layoutSize: titleSize,
-                elementKind: TabTitleSupplementaryView.cellIdentifier,
-                containerAnchor: NSCollectionLayoutAnchor(edges: [.bottom])
-            )
-            item = NSCollectionLayoutItem(layoutSize: itemSize, supplementaryItems: [titleSupplementary])
-        } else {
-            item = NSCollectionLayoutItem(layoutSize: itemSize)
-        }
+        let titleSupplementary = NSCollectionLayoutSupplementaryItem(
+            layoutSize: titleSize,
+            elementKind: TabTitleSupplementaryView.cellIdentifier,
+            containerAnchor: NSCollectionLayoutAnchor(edges: [.bottom])
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize, supplementaryItems: [titleSupplementary])
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -78,7 +118,7 @@ class TabsSectionManager: FeatureFlaggable {
                                                         leading: horizontalInset,
                                                         bottom: UX.verticalInset,
                                                         trailing: horizontalInset)
-        section.interGroupSpacing = isTabTrayUIExperimentsEnabled ? UX.experimentCardSpacing : UX.cardSpacing
+        section.interGroupSpacing = UX.experimentCardSpacing
 
         return section
     }
