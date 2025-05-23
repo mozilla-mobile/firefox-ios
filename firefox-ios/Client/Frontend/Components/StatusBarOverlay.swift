@@ -43,7 +43,7 @@ class StatusBarOverlay: UIView,
     /// This is used as the alpha of the status bar background.
     /// 0 = no status bar background shown
     /// 1 = status bar background is opaque
-    private var scrollOffset: CGFloat = 1
+    private(set) var scrollOffset: CGFloat = 1
 
     // MARK: Initializer
 
@@ -82,7 +82,7 @@ class StatusBarOverlay: UIView,
         savedIsHomepage = isHomepage
 
         // We only need no status bar for one edge case
-        let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.hasImage && isBottomSearchBar
+        let needsNoStatusBar = isHomepage && isBottomSearchBar
         scrollOffset = needsNoStatusBar ? 0 : 1
 
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
@@ -98,8 +98,8 @@ class StatusBarOverlay: UIView,
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         // We only need no status bar for one edge case
-        let isWallpaperedHomepage = savedIsHomepage ?? false && wallpaperManager.currentWallpaper.hasImage
-        let needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
+        let isHomepage = savedIsHomepage ?? false
+        let needsNoStatusBar = isHomepage && isBottomSearchBar
 
         if needsNoStatusBar {
             let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset

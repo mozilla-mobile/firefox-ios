@@ -531,9 +531,9 @@ class BrowserViewController: UIViewController,
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
-            let isWallpaperedHomepage = contentContainer.hasHomepage && wallpaperManager.currentWallpaper.hasImage
-            let offset = scrollOffset ?? 0
-            topBlurView.alpha = isWallpaperedHomepage ? offset : 1
+            let offset = scrollOffset ?? statusBarOverlay.scrollOffset
+            topBlurView.alpha = contentContainer.hasHomepage ? offset : 1
+
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
@@ -550,7 +550,12 @@ class BrowserViewController: UIViewController,
         maskView.backgroundColor = .black
         contentContainer.mask = maskView
 
-        [header, overKeyboardContainer, bottomContainer].forEach { $0.applyTheme(theme: theme) }
+        let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
+        views.forEach {
+            ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
+            $0.setNeedsLayout()
+            $0.layoutIfNeeded()
+        }
     }
 
     @objc
