@@ -32,5 +32,8 @@ struct ZoomLevelCellView: View {
                 .font(.body)
                 .foregroundColor(textColor)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(UX.textPadding)
+        .listRowBackground(Color.clear)
     }
 }

@@ -10,6 +10,7 @@ struct ZoomSiteListView: View {
     let theme: Theme
     @Binding var domainZoomLevels: [DomainZoomLevel]
     let onDelete: (IndexSet) -> Void
+    let resetDomain: () -> Void
 
     private struct UX {
         static var sectionPadding: CGFloat = 16
@@ -27,47 +28,43 @@ struct ZoomSiteListView: View {
 
     init(theme: Theme,
          domainZoomLevels: Binding<[DomainZoomLevel]>,
-         onDelete: @escaping (IndexSet) -> Void) {
+         onDelete: @escaping (IndexSet) -> Void,
+         resetDomain: @escaping () -> Void) {
         self.theme = theme
         self._domainZoomLevels = domainZoomLevels
         self.onDelete = onDelete
+        self.resetDomain = resetDomain
     }
 
     var body: some View {
-        Section {
-            ForEach(domainZoomLevels, id: \.host) { zoomItem in
-                ZStack {
-                    cellBackground
-                    ZoomLevelCellView(domainZoomLevel: zoomItem,
-                                      textColor: theme.colors.textPrimary.color)
-                    .padding([.leading, .trailing], UX.sectionPadding)
-                }
-            }
-            .onDelete(perform: onDelete)
-            .background(cellBackground)
-
-            // Footer as a final row
-            footerView()
-        } header: {
+        VStack {
+            // Header
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
                                      sectionTitleColor: theme.colors.textSecondary.color)
-                .padding([.leading, .trailing], UX.sectionPadding)
-        }
-    }
+                .padding([.leading, .trailing, .top], UX.sectionPadding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(sectionBackground)
 
-    private func footerView() -> some View {
-        ZStack {
-            sectionBackground
+            // Domain cells
+            ForEach(domainZoomLevels, id: \.host) { zoomItem in
+                ZoomLevelCellView(domainZoomLevel: zoomItem,
+                                  textColor: theme.colors.textPrimary.color)
+                    .background(theme.colors.layer5.color)
+            }
+            .onDelete(perform: onDelete)
 
+            // Footer
             Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
                 .font(.caption)
                 .foregroundColor(theme.colors.textSecondary.color)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: UX.footerTopPadding,
-                                    leading: UX.sectionPadding,
-                                    bottom: UX.footerBottomPadding,
-                                    trailing: UX.sectionPadding))
+                .padding(EdgeInsets(top: 8, leading: UX.sectionPadding, bottom: 40, trailing: UX.sectionPadding))
+                .background(sectionBackground)
+            // Reset button
+            GenericButtonCellView(theme: theme,
+                                  title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
+                                  onTap: resetDomain)
+                .background(theme.colors.layer5.color)
         }
-        .background(sectionBackground)
     }
 }
