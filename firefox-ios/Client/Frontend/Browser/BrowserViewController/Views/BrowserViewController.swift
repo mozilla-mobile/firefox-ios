@@ -1155,7 +1155,9 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled { view.addSubviews(addressBarBackgroundView, webPagePreview) }
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            view.addSubviews(addressBarBackgroundView, webPagePreview)
+        }
         view.addSubviews(contentContainer)
 
         view.addSubview(topTouchArea)
@@ -1394,9 +1396,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Constraints
     private var addressBarBackgroundViewTopConstraint: NSLayoutConstraint?
     private var addressBarBackgroundViewBottomConstraint: NSLayoutConstraint?
-
-    private var leftSkeletonConstraints: [NSLayoutConstraint] = []
-    private var rightSkeletonConstraints: [NSLayoutConstraint] = []
 
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
