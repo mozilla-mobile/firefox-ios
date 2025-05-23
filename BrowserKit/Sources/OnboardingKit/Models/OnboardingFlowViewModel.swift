@@ -15,18 +15,20 @@ public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: Obser
         self.onComplete = onComplete
     }
 
-    public func handleBottomButtonAction(action: VM.OnboardingActionType, cardName: String, isPrimary: Bool) {
+    public func handleBottomButtonAction(
+        action: VM.OnboardingActionType,
+        cardName: String,
+        isPrimary: Bool
+    ) {
         guard let index = onboardingCards.firstIndex(where: { $0.name == cardName }) else { return }
-        if isPrimary {
-            if index < onboardingCards.count - 1 {
-                pageCount = index + 1
-            } else {
-                onComplete()
+
+        let nextIndex = index + 1
+        if nextIndex < onboardingCards.count {
+            withAnimation {
+                pageCount = nextIndex
             }
         } else {
-            if index > 0 {
-                onComplete()
-            }
+            onComplete()
         }
     }
 

@@ -199,49 +199,7 @@ extension PreviewModel {
     }
 }
 
-struct OnboardingMultipleChoiceButtonModelExampleView: View {
-    @State private var selectedAction: OnboardingMultipleChoiceAction = .toolbarBottom
-
-    // configure these however you like—titles, SF Symbol names, etc.
-    private let toolbarOptions = [
-        OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
-            title: "Bottom",
-            action: .toolbarBottom,
-            imageID: "rectangle.bottomthird.inset.filled"
-        ),
-        OnboardingMultipleChoiceButtonModel(
-            title: "Top",
-            action: .toolbarTop,
-            imageID: "rectangle.topthird.inset.filled"
-        )
-    ]
-
-    var body: some View {
-        VStack(spacing: 20) {
-            OnboardingSegmentedControl(
-                selection: $selectedAction,
-                items: toolbarOptions,
-                windowUUID: .XCTestDefaultUUID,
-                themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-            )
-            .padding()
-
-            Text("You picked: \(selectedAction.rawValue)")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        .onChange(of: selectedAction) { _ in
-            // here’s where you get the callback
-            // e.g. apply your toolbar position or theme
-        }
-    }
-}
-
-#Preview(" Multiple Choice Button") {
-    OnboardingMultipleChoiceButtonModelExampleView()
-}
-
-#Preview {
+#Preview("Onboarding Flow") {
     OnboardingView<PreviewModel>(
         windowUUID: .DefaultUITestingUUID,
         themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
