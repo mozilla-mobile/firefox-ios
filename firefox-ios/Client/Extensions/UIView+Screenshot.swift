@@ -6,6 +6,8 @@ import UIKit
 
 protocol Screenshotable {
     func screenshot(quality: CGFloat) -> UIImage?
+
+    func screenshot(quality: CGFloat, bounds: CGRect) -> UIImage?
 }
 
 extension UIView: Screenshotable {
@@ -15,7 +17,11 @@ extension UIView: Screenshotable {
     ///   The expected value is 0 to 1 and is defaulted to 1
     /// - Returns: The image that represents the screenshot
     func screenshot(quality: CGFloat = 1) -> UIImage? {
-        return screenshot(frame.size, offset: nil, quality: quality)
+        return screenshot(frame.size, offset: CGPoint(x: 0, y: 59), quality: quality)
+    }
+
+    func screenshot(quality: CGFloat = 1, bounds: CGRect) -> UIImage? {
+        return screenshot(bounds.size, offset: CGPoint(x: 0.0, y: -bounds.origin.y), quality: quality)
     }
 
     /// Takes a screenshot of the view with the given size.

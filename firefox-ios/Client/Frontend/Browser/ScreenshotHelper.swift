@@ -22,7 +22,7 @@ class ScreenshotHelper {
     /// Takes a screenshot of the WebView to be displayed on the tab view page
     /// If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
     /// If taking a screenshot of a website, uses apple's `takeSnapshot` function
-    func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID) {
+    func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID, screenshotBounds: CGRect? = nil) {
         guard let webView = tab.webView else {
             logger.log("Tab Snapshot Error",
                        level: .debug,
@@ -73,10 +73,13 @@ class ScreenshotHelper {
         } else {
             let configuration = WKSnapshotConfiguration()
             configuration.afterScreenUpdates = true
-            configuration.snapshotWidth = 320
+            let contentSize = webView.scrollView.contentSize
+            if let screenshotBounds, contentSize.height > screenshotBounds.height {
+                configuration.rect = screenshotBounds
+            }
 
             webView.takeSnapshot(with: configuration) { image, error in
-                if let image = image {
+                if let image {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
                     store.dispatch(
@@ -87,7 +90,7 @@ class ScreenshotHelper {
                                 ScreenshotActionType.screenshotTaken
                         )
                     )
-                } else if let error = error {
+                } else if let error {
                     self.logger.log("Tab Snapshot Error",
                                     level: .debug,
                                     category: .tabs,

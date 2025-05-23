@@ -90,6 +90,13 @@ class StatusBarOverlay: UIView,
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
 
+    func showOverlay(animated: Bool) {
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+        UIView.animate(withDuration: 0.3) {
+            self.backgroundColor = self.savedBackgroundColor?.withAlphaComponent(backgroundAlpha)
+        }
+    }
+
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {

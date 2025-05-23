@@ -175,10 +175,6 @@ class BrowserViewController: UIViewController,
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build()
 
-    // A view used as the background for the address bar, designed to look nice
-    // when swiping between tabs, similar to Safari.
-    private lazy var addressBarBackgroundView: UIView = .build()
-
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
@@ -482,10 +478,7 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-//            let blurView = isToolbarTranslucencyEnabled ? newPositionIsBottom ? bottomBlurView : topBlurView : nil
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-//            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer, blurView: blurView)
-            updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
+            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition, anchor: header.bottomAnchor)
         }
 
         if let readerModeBar = readerModeBar {
@@ -1139,24 +1132,21 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
 
-        let blurView = isToolbarTranslucencyEnabled ? isBottomSearchBar ? bottomBlurView : topBlurView : nil
-
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
             contentContainer: contentContainer,
-            addressBarContainer: addressToolbarContainer,// isBottomSearchBar ? overKeyboardContainer : header,
-            blurView: blurView,
+            addressBarContainer: addressToolbarContainer,
             webPagePreview: webPagePreview,
+            statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
     }
 
     func addSubviews() {
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            view.addSubviews(addressBarBackgroundView, webPagePreview)
+            view.addSubviews(webPagePreview)
         }
         view.addSubviews(contentContainer)
 
@@ -1176,6 +1166,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContentStackView)
         view.addSubview(overKeyboardContainer)
 
+        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition, anchor: header.bottomAnchor)
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
         bottomContainer.addArrangedSubview(toolbarToShow)
@@ -1394,9 +1385,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
-    private var addressBarBackgroundViewTopConstraint: NSLayoutConstraint?
-    private var addressBarBackgroundViewBottomConstraint: NSLayoutConstraint?
-
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1413,17 +1401,11 @@ class BrowserViewController: UIViewController,
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             NSLayoutConstraint.activate([
-                webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                webPagePreview.topAnchor.constraint(equalTo: view.topAnchor),
                 webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
+                webPagePreview.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
-
-            addressBarBackgroundViewTopConstraint = addressBarBackgroundView.topAnchor
-                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-            addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor
-                .constraint(equalTo: bottomContainer.topAnchor)
-            updateAddressBarBackgroundViewConstraints(searchBarPosition: searchBarPosition)
         }
 
         updateHeaderConstraints()
@@ -1472,21 +1454,6 @@ class BrowserViewController: UIViewController,
                 make.left.right.equalTo(view)
             }
         }
-    }
-
-    private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
-        guard isToolbarRefactorEnabled else { return }
-
-        let isTop = (searchBarPosition == .top)
-        addressBarBackgroundView.constraints.forEach { $0.isActive = false }
-        addressBarBackgroundViewBottomConstraint?.isActive = !isTop
-        addressBarBackgroundViewTopConstraint?.isActive = isTop
-
-        NSLayoutConstraint.activate([
-            addressBarBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            addressBarBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            addressBarBackgroundView.heightAnchor.constraint(equalTo: addressToolbarContainer.heightAnchor)
-        ])
     }
 
     override func updateViewConstraints() {
@@ -3466,7 +3433,6 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        updateAddressBarBackgroundViewColor(theme: currentTheme)
 
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         if isToolbarRefactorEnabled,
@@ -3493,14 +3459,6 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
-    }
-
-    private func updateAddressBarBackgroundViewColor(theme: Theme) {
-        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        let toolbarLayoutStyle = toolbarState?.toolbarLayout
-        let colors = theme.colors
-        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
     }
 
     // MARK: - Telemetry

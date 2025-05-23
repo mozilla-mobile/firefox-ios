@@ -313,6 +313,11 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
+    func applyTransform(_ t: CGAffineTransform) {
+        compactToolbar.transform = t
+        regularToolbar.transform = t
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)

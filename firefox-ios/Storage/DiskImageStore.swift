@@ -73,7 +73,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
 
         let imagePath = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
         let data = try Data(contentsOf: imagePath)
-        if let image = UIImage(data: data) {
+        if let image = UIImage(data: data, scale: await UIScreen.main.scale) {
             return image
         } else {
             throw DiskImageStoreErrorCase.invalidImageData(description: "Invalid image data")
