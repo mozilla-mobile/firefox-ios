@@ -157,9 +157,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306913
     func testAddBookmark() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a page as bookmarked")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
         app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
@@ -200,9 +199,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
     func testAddNewMarker() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a separator")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.AddNewSeparator)
@@ -222,9 +220,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306916
     func testDeleteBookmarkSwiping() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a page as bookmarked")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
@@ -236,9 +233,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
     func testDeleteBookmarkContextMenu() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a page as bookmarked")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         addNewBookmark()
         // Remove by long press and select option from context menu
         app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
@@ -316,9 +312,8 @@ class BookmarksTests: BaseTestCase {
     // Smoketest
     func testDesktopFoldersArePresent() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("Desktop folder is no longer available")
-        }
+        try XCTSkipIf(shouldSkipTest, "Desktop folder is no longer available")
+
         // Verify that there are only 1 cell (desktop bookmark folder)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
