@@ -9,7 +9,7 @@ const metadataParser = require("page-metadata-parser/parser.js");
 
 function MetadataWrapper() {
   this.getMetadata = function() {
-    let metadata = metadataParser.getMetadata(document, location.origin);
+    let metadata = metadataParser.getMetadata(document, new URL('.', location.href).href);
 
     // Set metadata.url to document URL by default
     metadata.url = document.URL;
