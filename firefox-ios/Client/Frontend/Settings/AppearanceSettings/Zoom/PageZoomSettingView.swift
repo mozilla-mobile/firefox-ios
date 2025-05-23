@@ -39,29 +39,35 @@ struct PageZoomSettingsView: View {
     }
 
     var body: some View {
-        VStack {
-            List {
-                // Default level picker
-                ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
-                    .listRowInsets(EdgeInsets())
+        ScrollView {
+            VStack(spacing: 0) {
+                // Default zoom level section
+                VStack {
+                    // Header
+                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
+                                             sectionTitleColor: theme.colors.textSecondary.color)
+                        .padding([.leading, .trailing, .top], UX.sectionPadding)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(viewBackground)
+
+                    // Picker
+                    ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
+                        .background(theme.colors.layer5.color)
+                }
 
                 if !viewModel.domainZoomLevels.isEmpty {
-                    // Specific site zoom levels
-                    ZoomSiteListView(theme: theme,
-                                     domainZoomLevels: $viewModel.domainZoomLevels,
-                                     onDelete: viewModel.deleteZoomLevel)
-                        .listRowInsets(EdgeInsets())
-
-                    // Reset Zoom
-                    GenericButtonCellView(theme: theme,
-                                          title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
-                                          onTap: viewModel.resetDomainZoomLevel)
-                        .listRowInsets(EdgeInsets())
+                    // Specific site zoom level section
+                    VStack {
+                        ZoomSiteListView(theme: theme,
+                                         domainZoomLevels: $viewModel.domainZoomLevels,
+                                         onDelete: viewModel.deleteZoomLevel,
+                                         resetDomain: viewModel.resetDomainZoomLevel)
+                    }
                 }
             }
-            .background(viewBackground)
-            .listStyle(.inset)
+            .frame(maxWidth: .infinity)
         }
+        .background(viewBackground)
         .onAppear {
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }

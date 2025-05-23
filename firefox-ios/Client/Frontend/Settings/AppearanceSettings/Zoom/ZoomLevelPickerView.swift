@@ -30,31 +30,46 @@ struct ZoomLevelPickerView: View {
     }
 
     var body: some View {
-        Section {
-            ZStack {
-                backgroundColor
+        HStack {
+            // Left side - text label
+            Text(pickerText)
+                .font(.body)
+                .foregroundColor(theme.colors.textPrimary.color)
 
-                Picker(pickerText, selection: $selectedZoomLevel) {
+            Spacer()
+
+            // Right side - picker with current value
+            Menu {
+                Picker(selection: $selectedZoomLevel, label: EmptyView()) {
                     ForEach(ZoomLevel.allCases, id: \.self) { item in
                         Text(item.displayName)
-                            .font(.body)
-                            .foregroundColor(theme.colors.textSecondary.color)
                             .tag(item)
                     }
                 }
-                .accentColor(theme.colors.textPrimary.color)
-                .pickerStyle(.menu)
                 .onChange(of: selectedZoomLevel) { newValue in
                     zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
                 }
-                .padding([.leading, .trailing], UX.sectionPadding)
-                .background(backgroundColor)
+                .pickerStyle(.inline)
+                .labelsHidden()
+            } label: {
+                HStack(spacing: 4) {
+                    Text(selectedZoomLevel.displayName)
+                        .font(.body)
+                        .foregroundColor(theme.colors.textPrimary.color)
+
+                    Image(StandardImageIdentifiers.Large.chevronDown)
+                        .renderingMode(.template)
+                        .font(.caption)
+                        .foregroundColor(theme.colors.textPrimary.color)
+                        .accessibilityElement()
+                        // TODO: Add label
+                        .accessibilityLabel("Show options")
+                }
             }
         }
-        header: {
-            GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
-                                     sectionTitleColor: theme.colors.textSecondary.color)
-            .padding([.leading, .trailing], UX.sectionPadding)
-        }
+        .padding(.horizontal, UX.sectionPadding)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(backgroundColor)
     }
 }
