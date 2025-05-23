@@ -107,14 +107,15 @@ class TabsSectionManager: FeatureFlaggable {
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
-                                                        leading: horizontalInset,
-                                                        bottom: UX.verticalInset,
-                                                        trailing: horizontalInset)
         let isAccessibilitySize = layoutEnvironment.traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.verticalInset,
+            leading: horizontalInset,
+            bottom: isAccessibilitySize ? UX.experimentA11yCardSpacing : UX.experimentCardSpacing,
+            trailing: horizontalInset
+        )
         section.interGroupSpacing = isAccessibilitySize ? UX.experimentA11yCardSpacing : UX.experimentCardSpacing
-        section.contentInsets.bottom = isAccessibilitySize ? UX.experimentA11yCardSpacing : UX.experimentCardSpacing
 
         return section
     }
