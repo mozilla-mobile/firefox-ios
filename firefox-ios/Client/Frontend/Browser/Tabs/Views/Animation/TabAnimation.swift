@@ -333,16 +333,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         animator.startAnimation()
     }
 
-    // TODO: Laurie - this doesnt compile
     private func findItem(by id: String, dataSource: TabDisplayDiffableDataSource) -> TabDisplayDiffableDataSource.TabItem? {
-        return nil
-//        return dataSource.snapshot().itemIdentifiers.first { item in
-//            switch item {
-//            case .tab(let model):
-//                return model.id == id
-//            case .inactiveTab(let model):
-//                return model.id == id
-//            }
-//        }
+        return dataSource.snapshot().itemIdentifiers.first { item in
+            switch item {
+            case .tab(let model):
+                return model.id == id
+            case .inactiveTab(let model):
+                return model.id == id
+            }
+        }
     }
 }
