@@ -9,6 +9,7 @@ public protocol FileManagerProtocol {
     func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL]
     func contentsOfDirectory(atPath path: String) throws -> [String]
     func removeItem(atPath path: String) throws
+    func removeItem(at url: URL) throws
     func copyItem(at srcURL: URL, to dstURL: URL) throws
     func createDirectory(atPath path: String,
                          withIntermediateDirectories createIntermediates: Bool,

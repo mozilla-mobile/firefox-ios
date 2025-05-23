@@ -54,6 +54,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
     }
 
+    private var isMenuRedesignOn: Bool {
+        featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
+    }
+
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
@@ -97,7 +101,98 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             )
         }
 
+        if isMenuRedesignOn {
+            menuSections.insert(
+                getTopTabsSection(with: uuid, tabInfo: tabInfo),
+                at: 0)
+        }
+
         return menuSections
+    }
+
+    // TODO: FXIOS-12306 Update MainMenuConfigurationUtility based on the final design
+    // MARK: - Top Tabs Section
+    private func getTopTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+        return MenuSection(
+            isTopTabsSection: true,
+            options: [
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.History,
+                iconName: Icons.history,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.history,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.history),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Bookmarks,
+                iconName: Icons.bookmarks,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.bookmarks),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Downloads,
+                iconName: Icons.downloads,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Downloads,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.downloads,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.downloads),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Passwords,
+                iconName: Icons.passwords,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Passwords,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.passwords,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.passwords),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+        ])
     }
 
     // MARK: - New Tabs Section

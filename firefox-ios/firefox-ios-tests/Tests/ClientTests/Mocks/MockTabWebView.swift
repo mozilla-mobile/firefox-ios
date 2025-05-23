@@ -10,6 +10,7 @@ import Shared
 final class MockTabWebView: TabWebView {
     var loadCalled = 0
     var loadedRequest: URLRequest?
+    var loadFileURLCalled = 0
     var goBackCalled = 0
     var goForwardCalled = 0
     var reloadFromOriginCalled = 0
@@ -54,6 +55,11 @@ final class MockTabWebView: TabWebView {
         loadCalled += 1
         loadedRequest = request
         loadedURL = request.url
+        return nil
+    }
+
+    override func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {
+        loadFileURLCalled += 1
         return nil
     }
 

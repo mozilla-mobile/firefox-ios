@@ -599,6 +599,17 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
 
+            if isPDFRefactorEnabled,
+               url.isFileURL,
+               tab.shouldDownloadDocument(navigationAction.request),
+               let sourceURL = tab.getTemporaryDocumentsSession()[url] {
+                let request = URLRequest(url: sourceURL)
+                let filename = url.lastPathComponent
+                handlePDFDownloadRequest(request: request, tab: tab, filename: filename)
+                decisionHandler(.cancel)
+                return
+            }
+
             // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
             // - If the blob response has a .pkpass MIME type (FXIOS-11684)
             // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
@@ -754,11 +765,11 @@ extension BrowserViewController: WKNavigationDelegate {
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
             if isPDFRefactorEnabled, response.mimeType == MIMEType.PDF, let request {
-                if !tab.canLoadDocumentRequest(request) {
+                if !tab.shouldDownloadDocument(request) {
                     decisionHandler(.allow)
                     return
                 }
-                handlePDFResponse(tab: tab, response: response, request: request)
+                handlePDFDownloadRequest(request: request, tab: tab, filename: response.suggestedFilename)
                 decisionHandler(.cancel)
                 return
             }
@@ -776,9 +787,10 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    func handlePDFResponse(tab: Tab,
-                           response: URLResponse,
-                           request: URLRequest) {
+    /// Handle a PDF download request by forwarding it to the provided `Tab`.
+    func handlePDFDownloadRequest(request: URLRequest,
+                                  tab: Tab,
+                                  filename: String?) {
         let shouldUpdateUI = tab === tabManager.selectedTab
 
         if shouldUpdateUI {
@@ -788,7 +800,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         tab.getSessionCookies { [weak tab, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
-                filename: response.suggestedFilename,
+                filename: filename,
                 request: request,
                 mimeType: MIMEType.PDF,
                 cookies: cookies

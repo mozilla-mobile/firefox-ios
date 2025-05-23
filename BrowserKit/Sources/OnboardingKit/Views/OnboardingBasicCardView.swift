@@ -6,38 +6,11 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-private enum UX {
-    // Base metrics for a standard device (e.g., iPhone 11)
-    static let baseWidth: CGFloat = 375
-    static let baseHeight: CGFloat = 812
-
-    static let cardHeightRatio: CGFloat = 0.7
-    static let spacing: CGFloat = 24
-    static let horizontalPadding: CGFloat = 24
-    static let verticalPadding: CGFloat = 24
-    static let imageHeight: CGFloat = 150
-    static let cornerRadius: CGFloat = 20
-    static let shadowRadius: CGFloat = 8
-    static let shadowOffsetX: CGFloat = 0
-    static let shadowOffsetY: CGFloat = 4
-    static let shadowOpacity = 0.1
-    static let secondaryButtonTopPadding: CGFloat = 8
-    static let secondaryButtonBottomPadding: CGFloat = 24
-
-    // Font sizes for base metrics
-    static let titleFontSize: CGFloat = 28
-    static let bodyFontSize: CGFloat = 16
-
-    static let titleFont: Font = .title
-    static let bodyFont: Font = .subheadline
-}
-
 public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryAction: Color = .clear
-    private var shadowColor = Color.black.opacity(UX.shadowOpacity)
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -65,13 +38,13 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     public var body: some View {
         GeometryReader { geometry in
             // Determine scale factor based on current size vs base metrics
-            let widthScale = geometry.size.width / UX.baseWidth
-            let heightScale = geometry.size.height / UX.baseHeight
+            let widthScale = geometry.size.width / UX.CardView.baseWidth
+            let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
 
             ScrollView {
                 VStack {
-                    VStack(spacing: UX.spacing * scale) {
+                    VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         titleView
                         imageView(scale: scale)
@@ -80,19 +53,13 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                         Spacer()
                         primaryButton
                     }
-                    .frame(height: geometry.size.height * UX.cardHeightRatio)
-                    .padding(UX.verticalPadding * scale)
+                    .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+                    .padding(UX.CardView.verticalPadding * scale)
                     .background(
-                        RoundedRectangle(cornerRadius: UX.cornerRadius)
+                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                             .fill(cardBackgroundColor)
-                            .shadow(
-                                color: shadowColor,
-                                radius: UX.shadowRadius,
-                                x: UX.shadowOffsetX,
-                                y: UX.shadowOffsetY
-                            )
                     )
-                    .padding(.horizontal, UX.horizontalPadding * scale)
+                    .padding(.horizontal, UX.CardView.horizontalPadding * scale)
                     secondaryButton(scale: scale)
                     Spacer()
                 }
@@ -109,7 +76,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.titleFont)
+            .font(UX.CardView.titleFont)
             .fontWeight(.semibold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
@@ -123,7 +90,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.imageHeight * scale)
+                .frame(height: UX.CardView.imageHeight * scale)
                 .accessibilityLabel(viewModel.title)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
@@ -131,7 +98,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
 
     var bodyView: some View {
         Text(viewModel.body)
-            .font(UX.bodyFont)
+            .font(UX.CardView.bodyFont)
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
@@ -161,8 +128,8 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
         if let secondary = viewModel.buttons.secondary {
             Button(secondary.title, action: onSecondaryActionTap)
                 .foregroundColor(secondaryAction)
-                .padding(.top, UX.secondaryButtonTopPadding * scale)
-                .padding(.bottom, UX.secondaryButtonBottomPadding * scale)
+                .padding(.top, UX.CardView.secondaryButtonTopPadding * scale)
+                .padding(.bottom, UX.CardView.secondaryButtonBottomPadding * scale)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
         }
     }

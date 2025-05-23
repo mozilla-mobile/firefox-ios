@@ -39,7 +39,7 @@ class TabScrollController: NSObject,
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
 
-            tab?.onLoading = { [weak self] in
+            tab?.onWebViewLoadingStateChanged = { [weak self] in
                 self?.handleOnTabContentLoading()
             }
         }

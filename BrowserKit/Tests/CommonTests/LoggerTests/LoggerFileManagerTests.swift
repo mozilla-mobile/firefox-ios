@@ -116,4 +116,9 @@ private class MockFileManager: FileManagerProtocol {
     func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
         return contentsOfDirectoryAtPath
     }
+
+    var removeItemAtURLCalled = 0
+    func removeItem(at url: URL) throws {
+        removeItemAtURLCalled += 1
+    }
 }

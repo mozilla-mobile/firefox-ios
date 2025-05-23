@@ -16,14 +16,9 @@ tasks:
     publish:
       description: Create a Github release
       from-deps:
-        group-by:
-          attribute: release-type
+        group-by: filtered-build-type
         unique-kinds: false
         copy-attributes: true
-        with-attributes:
-          release-type:
-            - beta
-            - release
       run-on-tasks-for: []
       treeherder:
         symbol: gh-r

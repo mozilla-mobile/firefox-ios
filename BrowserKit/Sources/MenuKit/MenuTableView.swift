@@ -125,7 +125,13 @@ final class MenuTableView: UIView,
     }
 
     func reloadTableView(with data: [MenuSection]) {
-        menuData = data
+        if let firstSection = data.first, firstSection.isTopTabsSection {
+            tableView.showsVerticalScrollIndicator = false
+            menuData = data
+            menuData.remove(at: 0)
+        } else {
+            menuData = data
+        }
         tableView.reloadData()
     }
 

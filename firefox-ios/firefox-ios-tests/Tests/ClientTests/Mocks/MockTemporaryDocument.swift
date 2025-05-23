@@ -15,6 +15,7 @@ class MockTemporaryDocument: TemporaryDocument {
     var isDownloading = false
     var downloadCalled = 0
     var downloadAsyncCalled = 0
+    var canDownloadCalled = 0
     var cancelDownloadCalled = 0
     var pauseDownloadCalled = 0
     var resumeDownloadCalled = 0
@@ -31,6 +32,7 @@ class MockTemporaryDocument: TemporaryDocument {
     }
 
     func canDownload(request: URLRequest) -> Bool {
+        canDownloadCalled += 1
         return request.url != self.request?.url
     }
 

@@ -9,6 +9,7 @@ import Shared
 import SiteImageView
 import WebKit
 import WebEngine
+import TabDataStore
 
 private var debugTabCount = 0
 
@@ -81,10 +82,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    var isInactiveTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
-    }
-
     var isNormal: Bool {
         return !isPrivate
     }
@@ -145,9 +142,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var shouldScrollToTop = false
     var isFindInPageMode = false
 
-    private var logger: Logger
-    private let documentLogger: DocumentLogger
-
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
         guard url != nil else { return true }
@@ -185,14 +179,18 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return webView?.estimatedProgress ?? 0
     }
 
-    private var backList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.backList
+    var backForwardList: BackForwardList? {
+        guard let backForwardList = webView?.backForwardList else { return nil }
+        return TabBackForwardList(
+            backForwardList: backForwardList,
+            temporaryDocumentSession: temporaryDocumentsSession
+        )
     }
 
     var historyList: [URL] {
-        func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
+        func listToUrl(_ item: BackForwardListItem) -> URL { return item.url }
 
-        var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
+        var historyUrls = self.backForwardList?.backList.map(listToUrl) ?? [URL]()
         if let url = url {
             historyUrls.append(url)
         }
@@ -293,7 +291,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var pendingScreenshot = false
     var url: URL? {
         didSet {
-            if isPDFRefactorEnabled, let _url = url, let sourceURL = downloadedTemporaryDocs[_url] {
+            if isPDFRefactorEnabled, let _url = url, let sourceURL = temporaryDocumentsSession[_url] {
                 url = sourceURL
             }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
@@ -410,30 +408,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    fileprivate(set) var screenshot: UIImage?
-
-    // If this tab has been opened from another, its parent will point to the tab from which it was opened
-    weak var parent: Tab?
-
-    private var contentScriptManager = TabContentScriptManager()
-
-    private var configuration: WKWebViewConfiguration?
-
-    /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
-    /// tab instance, queue it for later until we become foregrounded.
-    private var alertQueue = [JSAlertInfo]()
-
-    var onLoading: VoidReturnCallback?
-    private var webViewLoadingObserver: NSKeyValueObservation?
-    /// The dictionary containing as key the file location for a document and its corresponding source online URL.
-    private var downloadedTemporaryDocs = [URL: URL]()
-
-    private var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
-
-    var profile: Profile
-
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
     /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
     var isInactive: Bool {
@@ -466,11 +440,48 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return !isInactive
     }
 
+    fileprivate(set) var screenshot: UIImage?
+
+    // If this tab has been opened from another, its parent will point to the tab from which it was opened
+    weak var parent: Tab?
+
+    private var contentScriptManager = TabContentScriptManager()
+
+    private var configuration: WKWebViewConfiguration?
+
+    /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
+    /// tab instance, queue it for later until we become foregrounded.
+    private var alertQueue = [JSAlertInfo]()
+
+    var onWebViewLoadingStateChanged: VoidReturnCallback?
+    private var webViewLoadingObserver: NSKeyValueObservation?
+
+    private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
+
+    // MARK: - Feature flags
+
+    private var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
+    // MARK: - Dependencies
+    var profile: Profile
+    private let fileManager: FileManagerProtocol
+    private let backgroundDispatchQueue: DispatchQueueInterface
+    private var logger: Logger
+    private let documentLogger: DocumentLogger
+
     init(profile: Profile,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
+         backgroundDispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background),
+         fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
         self.nightMode = false
@@ -480,8 +491,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.faviconHelper = faviconHelper
         self.lastExecutedTime = tabCreatedTime.toTimestamp()
         self.firstCreatedTime = tabCreatedTime.toTimestamp()
+        self.fileManager = fileManager
         self.logger = logger
         self.documentLogger = documentLogger
+        self.backgroundDispatchQueue = backgroundDispatchQueue
         super.init()
         self.isPrivate = isPrivate
 
@@ -587,7 +600,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             tabDelegate?.tab(self, didCreateWebView: webView)
             webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
-                self?.onLoading?()
+                self?.onWebViewLoadingStateChanged?()
             }
         }
     }
@@ -947,17 +960,33 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     private func deleteDownloadedDocuments() {
-        let docsURL = downloadedTemporaryDocs
+        let docsURL = temporaryDocumentsSession
         guard !docsURL.isEmpty else { return }
-        DispatchQueue.global(qos: .background).async {
+        backgroundDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in
-                try? FileManager.default.removeItem(at: url.key)
+                try? fileManager.removeItem(at: url.key)
             }
         }
     }
 
-    func canLoadDocumentRequest(_ request: URLRequest) -> Bool {
+    func shouldDownloadDocument(_ request: URLRequest) -> Bool {
+        if let url = request.url, url.isFileURL, temporaryDocumentsSession[url] != nil {
+            let fileExists = fileManager.fileExists(atPath: url.path)
+            // Add a temporary document when the request is pointing to a document that was previously viewed.
+            // This is needed since temporary document is removed when navigating to any website and thus it needs
+            // to be restored, otherwise the share sheet will try to share a link and not the actual doc.
+            addTemporaryDocumentIfNeeded(request)
+            return !fileExists
+        }
         return temporaryDocument?.canDownload(request: request) ?? true
+    }
+
+    private func addTemporaryDocumentIfNeeded(_ request: URLRequest) {
+        guard temporaryDocument == nil else { return }
+        let mimeType = MIMEType.mimeTypeFromFileExtension(request.url?.pathExtension ?? "")
+        temporaryDocument = DefaultTemporaryDocument(filename: request.url?.lastPathComponent,
+                                                     request: request,
+                                                     mimeType: mimeType)
     }
 
     func enqueueDocument(_ document: TemporaryDocument) {
@@ -965,11 +994,17 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
-            self?.webView?.load(URLRequest(url: url))
+
+            // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.
+            if let item = self?.backForwardList?.firstItem(with: url) as? WKBackForwardListItem {
+                self?.webView?.go(to: item)
+            } else {
+                self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
+            }
 
             // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
             guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
-            self?.downloadedTemporaryDocs[url] = sourceURL
+            self?.temporaryDocumentsSession[url] = sourceURL
             self?.documentLogger.registerDownloadFinish(url: sourceURL)
         }
     }
@@ -988,6 +1023,14 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func isDownloadingDocument() -> Bool {
         return temporaryDocument?.isDownloading ?? false
+    }
+
+    func getTemporaryDocumentsSession() -> TemporaryDocumentSession {
+        return temporaryDocumentsSession
+    }
+
+    func restoreTemporaryDocumentSession(_ session: TemporaryDocumentSession) {
+        temporaryDocumentsSession = session
     }
 }
 
