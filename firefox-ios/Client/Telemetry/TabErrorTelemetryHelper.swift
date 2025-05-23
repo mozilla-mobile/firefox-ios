@@ -59,7 +59,14 @@ final class TabErrorTelemetryHelper {
             // fewer tabs than recorded and we'll send the event erroneously.
             invalidateTabCount(for: window)
         }
-        guard tabManagerAvailable(for: window) else { return }
+        guard tabManagerAvailable(for: window) else {
+            logger.log("Can't validate tab count. Tab manager unavailable.",
+                       level: .info,
+                       category: .tabs,
+                       extra: ["uuid": window.uuidString]
+            )
+            return
+        }
         guard let tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
         let currentTabCount = getTotalTabCount(window: window)
