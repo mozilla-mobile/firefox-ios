@@ -50,6 +50,15 @@ final class TabErrorTelemetryHelper {
     }
 
     private func validateTabCount(_ window: WindowUUID) {
+        defer {
+            // After validating the tab count, we make sure to remove the count
+            // in preferences until the next time that the app is backgrounded.
+            // This is to prevent false-positives that can occur if a stale count
+            // is still in preferences and the app crashes. If the user removed
+            // any tabs during this time, it means the next launch there will be
+            // fewer tabs than recorded and we'll send the event erroneously.
+            invalidateTabCount(for: window)
+        }
         guard tabManagerAvailable(for: window) else { return }
         guard let tabCounts = defaults.object(forKey: defaultsKey) as? [String: Int],
               let expectedTabCount = tabCounts[window.uuidString] else { return }
@@ -64,14 +73,6 @@ final class TabErrorTelemetryHelper {
                 actualNormalActive: currentActiveTabCount
             )
         }
-
-        // After validating the tab count, we make sure to remove the count
-        // in preferences until the next time that the app is backgrounded.
-        // This is to prevent false-positives that can occur if a stale count
-        // is still in preferences and the app crashes. If the user removed
-        // any tabs during this time, it means the next launch there will be
-        // fewer tabs than recorded and we'll send the event erroneously.
-        invalidateTabCount(for: window)
     }
 
     private func invalidateTabCount(for window: WindowUUID) {
