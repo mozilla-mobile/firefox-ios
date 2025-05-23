@@ -18,8 +18,6 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UI Properties
     private let contentContainer: ContentContainer
     private let webPagePreview: TabWebViewPreview
-    private let leftSkeletonAddressBar: UIView
-    private let rightSkeletonAddressBar: UIView
     private var addressToolbarContainer: AddressToolbarContainer
     private var panGestureRecognizer: UIPanGestureRecognizer?
 
@@ -30,8 +28,6 @@ final class AddressBarPanGestureHandler: NSObject {
 
     // MARK: - Init
     init(
-        leftSkeletonAddressBar: UIView,
-        rightSkeletonAddressBar: UIView,
         addressToolbarContainer: AddressToolbarContainer,
         contentContainer: ContentContainer,
         webPagePreview: TabWebViewPreview,
@@ -39,8 +35,6 @@ final class AddressBarPanGestureHandler: NSObject {
         windowUUID: WindowUUID,
         screenshotHelper: ScreenshotHelper?
     ) {
-        self.leftSkeletonAddressBar = leftSkeletonAddressBar
-        self.rightSkeletonAddressBar = rightSkeletonAddressBar
         self.addressToolbarContainer = addressToolbarContainer
         self.contentContainer = contentContainer
         self.webPagePreview = webPagePreview
@@ -143,7 +137,8 @@ final class AddressBarPanGestureHandler: NSObject {
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
             if shouldCompleteTransition {
-                applyCurrentTabTransform(currentTabTransform, translatedByX: UX.transformOffset)
+                applyCurrentTabTransform(currentTabTransform,
+                                         translatedByX: isPanningLeft ? UX.transformOffset : -UX.transformOffset)
             } else {
                 applyCurrentTabTransform(.identity)
             }
@@ -168,10 +163,8 @@ final class AddressBarPanGestureHandler: NSObject {
 
     /// Applies the provided transform to the all the views representing the current tab.
     private func applyCurrentTabTransform(_ transform: CGAffineTransform, translatedByX: CGFloat = 0) {
-        leftSkeletonAddressBar.transform = transform.translatedBy(x: -translatedByX, y: 0)
-        rightSkeletonAddressBar.transform = transform.translatedBy(x: translatedByX, y: 0)
         contentContainer.transform = transform
-        addressToolbarContainer.transform = transform
+        addressToolbarContainer.transform = transform.translatedBy(x: translatedByX, y: 0)
     }
 
     /// Applies a translation transform to the `webPagePreview`
