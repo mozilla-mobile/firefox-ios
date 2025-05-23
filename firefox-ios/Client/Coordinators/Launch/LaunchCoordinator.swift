@@ -5,6 +5,8 @@
 import Common
 import Foundation
 import Shared
+import OnboardingKit
+import SwiftUI
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishTermsOfService(from coordinator: LaunchCoordinator)
@@ -19,6 +21,7 @@ final class LaunchCoordinator: BaseCoordinator,
     private let profile: Profile
     private let isIphone: Bool
     let windowUUID: WindowUUID
+    let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
@@ -78,37 +81,107 @@ final class LaunchCoordinator: BaseCoordinator,
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
-        let introViewModel = IntroViewModel(introScreenManager: manager,
-                                            profile: profile,
-                                            model: onboardingModel,
-                                            telemetryUtility: telemetryUtility)
-        let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
-        introViewController.qrCodeNavigationHandler = self
-        introViewController.didFinishFlow = { [weak self] in
-            guard let self = self else { return }
-            self.parentCoordinator?.didFinishLaunch(from: self)
-        }
+        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
 
+//        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+//        let introViewModel = IntroViewModel(introScreenManager: manager,
+//                                            profile: profile,
+//                                            model: onboardingModel,
+//                                            telemetryUtility: telemetryUtility)
+        
+        let view = OnboardingView<OnboardingKitCardInfoModel>(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            viewModel: OnboardingFlowViewModel(
+                onboardingCards: onboardingModel.cards,
+                onComplete: {
+                    print("onComplete() called – advancing or finishing onboarding")
+                }
+            )
+        )
+        let hostingController = UIHostingController(rootView: view)
         if isFullScreen {
-            introViewController.modalPresentationStyle = .fullScreen
-            router.present(introViewController, animated: false)
+            hostingController.modalPresentationStyle = .fullScreen
+            router.present(hostingController, animated: false)
         } else {
-            introViewController.preferredContentSize = CGSize(
+            hostingController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
                 height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            introViewController.modalPresentationStyle = .formSheet
-            // Disables dismissing the view by tapping outside the view, based on
-            // Nimbus's configuration
-            if !introViewModel.isDismissable {
-                introViewController.isModalInPresentation = true
+            hostingController.modalPresentationStyle = .formSheet
+            
+            if !onboardingModel.isDismissable {
+                hostingController.isModalInPresentation = true
             }
-            router.present(introViewController, animated: true) {
-                introViewController.closeOnboarding()
+            
+            router.present(hostingController, animated: true) {
+                // SwiftUI handles its own state; optional additional UIKit logic here
             }
         }
+
+        
+//        let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
+//        introViewController.qrCodeNavigationHandler = self
+//        introViewController.didFinishFlow = { [weak self] in
+//            guard let self = self else { return }
+//            self.parentCoordinator?.didFinishLaunch(from: self)
+//        }
+//
+//        if isFullScreen {
+//            introViewController.modalPresentationStyle = .fullScreen
+//            router.present(introViewController, animated: false)
+//        } else {
+//            introViewController.preferredContentSize = CGSize(
+//                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
+//                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+//            introViewController.modalPresentationStyle = .formSheet
+//            // Disables dismissing the view by tapping outside the view, based on
+//            // Nimbus's configuration
+//            if !introViewModel.isDismissable {
+//                introViewController.isModalInPresentation = true
+//            }
+//            router.present(introViewController, animated: true) {
+//                introViewController.closeOnboarding()
+//            }
+//        }
+        
+        
     }
+    
+//    // MARK: - Intro
+//    private func presentIntroOnboarding(with manager: IntroScreenManager,
+//                                        isFullScreen: Bool) {
+//        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+//
+//        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+//        let introViewModel = IntroViewModel(introScreenManager: manager,
+//                                            profile: profile,
+//                                            model: onboardingModel,
+//                                            telemetryUtility: telemetryUtility)
+//        let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
+//        introViewController.qrCodeNavigationHandler = self
+//        introViewController.didFinishFlow = { [weak self] in
+//            guard let self = self else { return }
+//            self.parentCoordinator?.didFinishLaunch(from: self)
+//        }
+//
+//        if isFullScreen {
+//            introViewController.modalPresentationStyle = .fullScreen
+//            router.present(introViewController, animated: false)
+//        } else {
+//            introViewController.preferredContentSize = CGSize(
+//                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
+//                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+//            introViewController.modalPresentationStyle = .formSheet
+//            // Disables dismissing the view by tapping outside the view, based on
+//            // Nimbus's configuration
+//            if !introViewModel.isDismissable {
+//                introViewController.isModalInPresentation = true
+//            }
+//            router.present(introViewController, animated: true) {
+//                introViewController.closeOnboarding()
+//            }
+//        }
+//    }
 
     // MARK: - Update
     private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
