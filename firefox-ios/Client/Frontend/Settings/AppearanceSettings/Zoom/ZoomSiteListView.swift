@@ -16,6 +16,7 @@ struct ZoomSiteListView: View {
         static var sectionPadding: CGFloat = 16
         static var footerBottomPadding: CGFloat = 40
         static var footerTopPadding: CGFloat = 8
+        static var cellHeight = 44
     }
 
     var cellBackground: Color {
@@ -45,21 +46,31 @@ struct ZoomSiteListView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(sectionBackground)
 
-            // Domain cells
-            ForEach(domainZoomLevels, id: \.host) { zoomItem in
-                ZoomLevelCellView(domainZoomLevel: zoomItem,
-                                  textColor: theme.colors.textPrimary.color)
-                    .background(theme.colors.layer5.color)
+            List {
+                ForEach(domainZoomLevels, id: \.host) { zoomItem in
+                    ZoomLevelCellView(domainZoomLevel: zoomItem,
+                                      textColor: theme.colors.textPrimary.color)
+                        .background(theme.colors.layer5.color)
+                        .listRowBackground(cellBackground)
+                        .listRowInsets(EdgeInsets())
+                }
+                .onDelete(perform: onDelete)
             }
-            .onDelete(perform: onDelete)
+            .frame(height: CGFloat(domainZoomLevels.count * UX.cellHeight))
+            .listStyle(.plain)
+            .background(cellBackground)
 
             // Footer
             Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
                 .font(.caption)
                 .foregroundColor(theme.colors.textSecondary.color)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 8, leading: UX.sectionPadding, bottom: 40, trailing: UX.sectionPadding))
+                .padding(EdgeInsets(top: UX.footerTopPadding,
+                                    leading: UX.sectionPadding,
+                                    bottom: UX.footerBottomPadding,
+                                    trailing: UX.sectionPadding))
                 .background(sectionBackground)
+
             // Reset button
             GenericButtonCellView(theme: theme,
                                   title: String.Settings.Appearance.PageZoom.ResetButtonTitle,

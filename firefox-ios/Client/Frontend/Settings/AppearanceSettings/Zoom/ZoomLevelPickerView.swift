@@ -14,6 +14,10 @@ struct ZoomLevelPickerView: View {
         static var sectionPadding: CGFloat = 16
     }
 
+    private var sectionBackground: Color {
+        return theme.colors.layer1.color
+    }
+
     var backgroundColor: Color {
         return theme.colors.layer5.color
     }
@@ -30,8 +34,19 @@ struct ZoomLevelPickerView: View {
     }
 
     var body: some View {
+        VStack {
+            GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
+                                     sectionTitleColor: theme.colors.textSecondary.color)
+                .padding([.leading, .trailing, .top], UX.sectionPadding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(sectionBackground)
+
+            defaultZoomPicker
+        }
+    }
+
+    var defaultZoomPicker: some View {
         HStack {
-            // Left side - text label
             Text(pickerText)
                 .font(.body)
                 .foregroundColor(theme.colors.textPrimary.color)
@@ -61,9 +76,7 @@ struct ZoomLevelPickerView: View {
                         .renderingMode(.template)
                         .font(.caption)
                         .foregroundColor(theme.colors.textPrimary.color)
-                        .accessibilityElement()
-                        // TODO: Add label
-                        .accessibilityLabel("Show options")
+                        .accessibilityHidden(true)
                 }
             }
         }
