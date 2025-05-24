@@ -14,6 +14,12 @@ enum TabsDeletionPeriod: String {
     case oneDay, oneWeek, oneMonth
 }
 
+/// Describes the position of a tab being removed as part of a group. Index is 0-based.
+struct TabRemovalGroup {
+    let index: Int
+    let total: Int
+}
+
 // MARK: - TabManager protocol
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
@@ -59,8 +65,11 @@ protocol TabManager: AnyObject {
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?)
 
     /// Async Remove tab option using tabUUID.
-    /// - Parameter tabUUID: UUID from the tab
-    func removeTab(_ tabUUID: TabUUID) async
+    /// - Parameters:
+    ///   - tabUUID: tabUUID: UUID from the tab
+    ///   - inGroup: the tab's index within a group of tabs being removed together (or
+    ///   nil if a single tab is being removed). Index should be 0-based.
+    func removeTab(_ tabUUID: TabUUID, inGroup: TabRemovalGroup?) async
 
     /// Async Remove all tabs indicating if is on private mode or not
     /// - Parameter isPrivateMode: Is private mode enabled or not

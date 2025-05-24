@@ -141,7 +141,7 @@ extension BrowserViewController: WKUIDelegate {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
                 try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
                 tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                await tabManager.removeTab(tab.tabUUID)
+                await tabManager.removeTab(tab.tabUUID, inGroup: nil)
             }
         }
     }
