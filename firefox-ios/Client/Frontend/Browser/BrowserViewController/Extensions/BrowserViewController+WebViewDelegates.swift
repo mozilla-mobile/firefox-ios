@@ -1069,7 +1069,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 tabManager.notifyCurrentTabDidFinishLoading()
             }
 
-            tabManager.commitChanges()
+            tabManager.saveAllTabData()
         }
 
         if isPDFRefactorEnabled {
