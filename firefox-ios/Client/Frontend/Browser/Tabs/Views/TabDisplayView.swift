@@ -47,7 +47,6 @@ class TabDisplayView: UIView,
                     cell.applyTheme(theme: theme)
                 }
                 return cell
-
             case .tab(let tab):
                 if isTabTrayUIExperimentsEnabled {
                     guard let cell = collectionView.dequeueReusableCell(
@@ -105,6 +104,11 @@ class TabDisplayView: UIView,
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         if isTabTrayUIExperimentsEnabled {
             collectionView.register(cellType: ExperimentTabCell.self)
+            collectionView.register(
+                TabTitleSupplementaryView.self,
+                forSupplementaryViewOfKind: TabTitleSupplementaryView.cellIdentifier,
+                withReuseIdentifier: TabTitleSupplementaryView.cellIdentifier
+            )
         } else {
             collectionView.register(cellType: TabCell.self)
         }
@@ -193,49 +197,72 @@ class TabDisplayView: UIView,
         // swiftlint:disable line_length
         dataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             // swiftlint:enable line_length
-            let reusableView = UICollectionReusableView()
-            let section = self?.getSection(for: indexPath.section)
+            return self?.getSupplementary(collectionView: collectionView, kind: kind, indexPath: indexPath)
+        }
+    }
 
-            guard let self, section != .tabs else { return nil }
-
-            if kind == UICollectionView.elementKindSectionHeader,
-               let headerView = collectionView.dequeueReusableSupplementaryView(
+    private func getSupplementary(collectionView: UICollectionView,
+                                  kind: String,
+                                  indexPath: IndexPath) -> UICollectionReusableView? {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: InactiveTabsHeaderView.cellIdentifier,
-                for: indexPath) as? InactiveTabsHeaderView {
-                headerView.state = tabsState.isInactiveTabsExpanded ? .down : .trailing
-                if let theme = theme {
-                    headerView.applyTheme(theme: theme)
-                }
-                headerView.moreButton.isHidden = false
-                headerView.moreButton.addTarget(self,
-                                                action: #selector(toggleInactiveTab),
-                                                for: .touchUpInside)
-                headerView.accessibilityLabel = tabsState.isInactiveTabsExpanded ?
-                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
-                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
-                let tapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                  action: #selector(toggleInactiveTab))
-                headerView.addGestureRecognizer(tapGestureRecognizer)
-                return headerView
-            } else if kind == UICollectionView.elementKindSectionFooter,
-                      tabsState.isInactiveTabsExpanded,
-                      let footerView = collectionView.dequeueReusableSupplementaryView(
-                        ofKind: UICollectionView.elementKindSectionFooter,
-                        withReuseIdentifier: InactiveTabsFooterView.cellIdentifier,
-                        for: indexPath) as? InactiveTabsFooterView {
-                if let theme = theme {
-                    footerView.applyTheme(theme: theme)
-                }
-                footerView.buttonClosure = {
-                    let action = TabPanelViewAction(panelType: self.panelType,
-                                                    windowUUID: self.windowUUID,
-                                                    actionType: TabPanelViewActionType.closeAllInactiveTabs)
-                    store.dispatch(action)
-                }
-                return footerView
+                for: indexPath) as? InactiveTabsHeaderView
+            else { return nil }
+
+            headerView.state = tabsState.isInactiveTabsExpanded ? .down : .trailing
+            if let theme = theme {
+                headerView.applyTheme(theme: theme)
             }
-            return reusableView
+            headerView.moreButton.isHidden = false
+            headerView.moreButton.addTarget(self,
+                                            action: #selector(toggleInactiveTab),
+                                            for: .touchUpInside)
+            headerView.accessibilityLabel = tabsState.isInactiveTabsExpanded ?
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
+                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                              action: #selector(toggleInactiveTab))
+            headerView.addGestureRecognizer(tapGestureRecognizer)
+            return headerView
+
+        case TabTitleSupplementaryView.cellIdentifier:
+            let titleView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: TabTitleSupplementaryView.cellIdentifier,
+                withReuseIdentifier: TabTitleSupplementaryView.cellIdentifier,
+                for: indexPath
+            ) as? TabTitleSupplementaryView
+
+            guard let tab = tabsState.tabs[safe: indexPath.row] else {
+                return nil
+            }
+            titleView?.configure(with: tab, theme: theme)
+            return titleView
+
+        case UICollectionView.elementKindSectionFooter:
+            guard tabsState.isInactiveTabsExpanded,
+                  let footerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionFooter,
+                    withReuseIdentifier: InactiveTabsFooterView.cellIdentifier,
+                    for: indexPath) as? InactiveTabsFooterView
+            else { return nil }
+
+            if let theme = theme {
+                footerView.applyTheme(theme: theme)
+            }
+            footerView.buttonClosure = {
+                let action = TabPanelViewAction(panelType: self.panelType,
+                                                windowUUID: self.windowUUID,
+                                                actionType: TabPanelViewActionType.closeAllInactiveTabs)
+                store.dispatch(action)
+            }
+            return footerView
+
+        default:
+            assertionFailure("This is a developer error")
+            return nil
         }
     }
 
@@ -259,7 +286,11 @@ class TabDisplayView: UIView,
             // If on private mode or regular mode but without inactive
             // tabs we return only the tabs layout
             guard !shouldHideInactiveTabs else {
-                return self.tabsSectionManager.layoutSection(layoutEnvironment)
+                if isTabTrayUIExperimentsEnabled {
+                    return self.tabsSectionManager.experimentLayoutSection(layoutEnvironment)
+                } else {
+                    return self.tabsSectionManager.layoutSection(layoutEnvironment)
+                }
             }
 
             let section = getSection(for: sectionIndex)
@@ -269,7 +300,11 @@ class TabDisplayView: UIView,
                     layoutEnvironment,
                     isExpanded: tabsState.isInactiveTabsExpanded)
             case .tabs:
-                return self.tabsSectionManager.layoutSection(layoutEnvironment)
+                if isTabTrayUIExperimentsEnabled {
+                    return self.tabsSectionManager.experimentLayoutSection(layoutEnvironment)
+                } else {
+                    return self.tabsSectionManager.layoutSection(layoutEnvironment)
+                }
             }
         }
         return layout
