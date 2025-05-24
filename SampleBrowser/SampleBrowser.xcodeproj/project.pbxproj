@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B014E052DBB873F00B80CBB /* testPopUp.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B014E042DBB873500B80CBB /* testPopUp.html */; };
+		0B014E072DBB97CE00B80CBB /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B014E062DBB97CE00B80CBB /* PopupViewController.swift */; };
 		0B3B69D42DAD3A33005BFAAF /* PullRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */; };
 		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
 		1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */; };
@@ -58,6 +60,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B014E042DBB873500B80CBB /* testPopUp.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = testPopUp.html; sourceTree = "<group>"; };
+		0B014E062DBB97CE00B80CBB /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullRefreshView.swift; sourceTree = "<group>"; };
 		1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHandler.swift; sourceTree = "<group>"; };
 		1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAdsTrackerDefinitions.swift; sourceTree = "<group>"; };
@@ -222,6 +226,7 @@
 		8A4601E32B0FE20500FFD17F /* SampleBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				0B014E042DBB873500B80CBB /* testPopUp.html */,
 				21AE784F2D8B4AE6002FDC9E /* Dependency */,
 				8A4601E42B0FE20500FFD17F /* AppDelegate.swift */,
 				8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */,
@@ -281,6 +286,7 @@
 			children = (
 				8A7DE5372D5671A700240CFE /* ErrorPageViewController.swift */,
 				8A46021A2B0FE47C00FFD17F /* BrowserViewController.swift */,
+				0B014E062DBB97CE00B80CBB /* PopupViewController.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -365,6 +371,7 @@
 				8A4601F12B0FE20700FFD17F /* LaunchScreen.storyboard in Resources */,
 				8A4601EE2B0FE20700FFD17F /* Assets.xcassets in Resources */,
 				8ADF72C62B73DB9700530E7A /* MainFrameAtDocumentStart.js in Resources */,
+				0B014E052DBB873F00B80CBB /* testPopUp.html in Resources */,
 				8ADF72C72B73DB9700530E7A /* AllFramesAtDocumentStart.js in Resources */,
 				8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */,
 			);
@@ -413,6 +420,7 @@
 				8A0F44752B56FD5300438589 /* SearchViewModel.swift in Sources */,
 				8A0F44772B56FD6300438589 /* SuggestionDataSource.swift in Sources */,
 				8A4601E92B0FE20500FFD17F /* RootViewController.swift in Sources */,
+				0B014E072DBB97CE00B80CBB /* PopupViewController.swift in Sources */,
 				8A4601E52B0FE20500FFD17F /* AppDelegate.swift in Sources */,
 				8A0F447D2B56FD9600438589 /* SearchModel.swift in Sources */,
 				8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */,

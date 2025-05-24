@@ -102,6 +102,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
             delegate?.increaseZoom()
         case .zoomDecrease:
             delegate?.decreaseZoom()
+        case .loadPopWebSource:
+            delegate?.loadPopupWebSource()
         }
 
         dismiss(animated: true)

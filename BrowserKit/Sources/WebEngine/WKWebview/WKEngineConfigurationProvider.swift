@@ -58,12 +58,13 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     private static let nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     private static let defaultStore = WKWebsiteDataStore.default()
+    private let configuration: WKWebViewConfiguration
 
-    public init() {}
+    public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
+        self.configuration = configuration
+    }
 
     public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
-        let configuration = WKWebViewConfiguration()
-
         // Since our app creates multiple web views, we assign the same WKProcessPool object to web views that
         // may safely share a process space
         configuration.processPool = parameters.isPrivate
@@ -89,8 +90,13 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         ? DefaultWKEngineConfigurationProvider.nonPersistentStore
         : DefaultWKEngineConfigurationProvider.defaultStore
 
-        configuration.setURLSchemeHandler(parameters.schemeHandler,
-                                          forURLScheme: parameters.schemeHandler.scheme)
+        // Popup WKWebViewConfiguration can have the scheme already registered thus registering again
+        // leads to crash
+        if configuration.urlSchemeHandler(forURLScheme: parameters.schemeHandler.scheme) == nil {
+            configuration.setURLSchemeHandler(parameters.schemeHandler,
+                                              forURLScheme: parameters.schemeHandler.scheme)
+        }
+
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
 }

@@ -2,7 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import WebKit
+@preconcurrency import WebKit
+import Common
 
 protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
@@ -55,13 +56,49 @@ protocol WKUIHandler: WKUIDelegate {
 class DefaultUIHandler: NSObject, WKUIHandler {
     weak var delegate: EngineSessionDelegate?
     public var isActive = false
+    private let sessionDependencies: EngineSessionDependencies
+    private let application: Application
+    private let policyDecider: WKPolicyDecider
+
+    init(sessionDependencies: EngineSessionDependencies,
+         application: Application = UIApplication.shared,
+         policyDecider: WKPolicyDecider = WKPolicyDeciderFactory()) {
+        self.sessionDependencies = sessionDependencies
+        self.policyDecider = policyDecider
+        self.application = application
+    }
 
     func webView(_ webView: WKWebView,
                  createWebViewWith configuration: WKWebViewConfiguration,
                  for navigationAction: WKNavigationAction,
                  windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // TODO: FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
-        return nil
+        let policy = policyDecider.policyForPopupNavigation(action: navigationAction)
+        switch policy {
+        case .cancel:
+            return nil
+        case .allow:
+            let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
+            let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
+                                                         dependencies: sessionDependencies,
+                                                         configurationProvider: configurationProvider)
+
+            guard let session, let webView = session.webView as? WKWebView else { return nil }
+            let url = navigationAction.request.url
+            let urlString = url?.absoluteString ?? ""
+
+            if url == nil || urlString.isEmpty,
+               let blank = URL(string: EngineConstants.aboutBlank),
+               let url = BrowserURL(browsingContext: BrowsingContext(type: .internalNavigation, url: blank)) {
+                session.load(browserURL: url)
+            }
+
+            delegate?.onRequestOpenNewSession(session)
+            return webView
+        case .launchExternalApp:
+            guard let url = navigationAction.request.url, application.canOpen(url: url) else { return nil }
+            application.open(url: url)
+            return nil
+        }
     }
 
     func webView(
