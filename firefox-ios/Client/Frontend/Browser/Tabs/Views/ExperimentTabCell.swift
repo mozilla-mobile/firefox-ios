@@ -60,11 +60,12 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.layer.borderWidth = UX.unselectedBorderWidth
-        view.clipsToBounds = true
+        view.clipsToBounds = false
     }
 
     private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = UX.cornerRadius
         view.clipsToBounds = true
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
@@ -263,13 +264,52 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            backgroundHolder.layer.borderColor = borderColor.cgColor
-            backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
+            setSelectedState(isPrivate: isPrivate, theme: theme)
         } else {
-            backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
-            backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
+            setUnselectedState(theme: theme)
         }
+    }
+
+    private func addExternalBorder(to view: UIView, color: UIColor, width: CGFloat) {
+        let borderLayer = CAShapeLayer()
+
+        // Expand the border frame slightly outward
+        let borderRect = view.bounds.insetBy(dx: -width / 2, dy: -width / 2)
+
+        borderLayer.path = UIBezierPath(
+            roundedRect: borderRect,
+            cornerRadius: UX.cornerRadius
+        ).cgPath
+
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = color.cgColor
+        borderLayer.lineWidth = width
+        borderLayer.frame = view.bounds // Stay in sync with the view
+        borderLayer.name = "externalBorder"
+
+        // Avoid clipping the border
+        view.clipsToBounds = false
+
+        // Optional: remove old border if it exists
+        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+
+        view.layer.addSublayer(borderLayer)
+    }
+
+    private func removeExternalBorder(from view: UIView) {
+        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+    }
+
+    func setSelectedState(isPrivate: Bool, theme: Theme) {
+        backgroundHolder.layer.borderWidth = 0
+        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
+    }
+
+    func setUnselectedState(theme: Theme) {
+        removeExternalBorder(from: backgroundHolder)
+        backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
+        backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
     }
 
     // MARK: - UICollectionViewCell
@@ -279,6 +319,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         super.prepareForReuse()
         screenshotView.image = nil
         smallFaviconView.isHidden = true
+        removeExternalBorder(from: backgroundHolder)
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0

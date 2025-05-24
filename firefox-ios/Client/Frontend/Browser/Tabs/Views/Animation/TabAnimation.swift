@@ -152,19 +152,45 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
-        // BVC snapshot animates to the cell
+        // Snapshot of the BVC view
         let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
         bvcSnapshot.layer.cornerCurve = .continuous
+        bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
         bvcSnapshot.clipsToBounds = true
+        bvcSnapshot.contentMode = .scaleAspectFill
 
-        // This background view is needed for animation between the tab tray and the bvc
+        // Wrap bvcSnapshot in a container to support external border
+        let snapshotContainer = UIView(frame: bvcSnapshot.frame)
+        snapshotContainer.layer.cornerRadius = bvcSnapshot.layer.cornerRadius
+        snapshotContainer.layer.cornerCurve = .continuous
+        snapshotContainer.clipsToBounds = false
+        bvcSnapshot.frame = snapshotContainer.bounds
+
+        // Create border layer
+        let theme = retrieveTheme()
+        let borderColor = selectedTab.isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let borderLayer = CAShapeLayer()
+        borderLayer.path = UIBezierPath(
+            roundedRect: snapshotContainer.bounds,
+            cornerRadius: ExperimentTabCell.UX.cornerRadius
+        ).cgPath
+        borderLayer.strokeColor = borderColor.cgColor
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.lineWidth = 0
+        borderLayer.opacity = 0
+
+        snapshotContainer.layer.addSublayer(borderLayer)
+        snapshotContainer.addSubview(bvcSnapshot)
+
+        // Dimmed background view
         let backgroundView = UIView()
         backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
         backgroundView.frame = finalFrame
 
+        // Add views to container
         context.containerView.addSubview(destinationController.view)
         context.containerView.addSubview(backgroundView)
-        context.containerView.addSubview(bvcSnapshot)
+        context.containerView.addSubview(snapshotContainer)
         context.containerView.addSubview(tabSnapshot)
 
         destinationController.view.frame = finalFrame
@@ -183,60 +209,80 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.reloadData()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
-        let theme = retrieveTheme()
 
         if let indexPath = dataSource.indexPath(for: item) {
-            // This is needed otherwise the collection views content offset is incorrect
             cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
             cv.layoutIfNeeded()
-            tabCell = cv.cellForItem(at: indexPath) as? ExperimentTabCell
-            if let cell = tabCell {
+            if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                tabCell = cell
                 cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                // Hide the cell and border that is being animated since we are making a copy of it to animate in
                 cell.isHidden = true
-                cell.backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
-                cell.backgroundHolder.layer.borderWidth = ExperimentTabCell.UX.unselectedBorderWidth
+                cell.setUnselectedState(theme: theme)
                 cell.alpha = 0.0
             }
         }
 
-        cv.transform = .init(scaleX: 1.2, y: 1.2)
+        // Animate
+        cv.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
-        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-            cv.transform = .identity
-            cv.alpha = 1
+
+        let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
-                bvcSnapshot.frame = frame
+                snapshotContainer.frame = frame
+                bvcSnapshot.frame = snapshotContainer.bounds
+
+                snapshotContainer.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+                bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+                tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+                // Animate path to match new size
+                let oldPath = borderLayer.path
+                let newPath = UIBezierPath(
+                    roundedRect: snapshotContainer.bounds,
+                    cornerRadius: ExperimentTabCell.UX.cornerRadius
+                ).cgPath
+
+                let pathAnimation = CABasicAnimation(keyPath: "path")
+                pathAnimation.fromValue = oldPath
+                pathAnimation.toValue = newPath
+                pathAnimation.duration = 0.4
+                pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+                borderLayer.add(pathAnimation, forKey: "path")
+                borderLayer.path = newPath
             } else {
                 tabSnapshot.alpha = 0.0
-                bvcSnapshot.alpha = 0.0
+                snapshotContainer.alpha = 0.0
             }
-            tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-            bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+
+            borderLayer.opacity = 1
+            borderLayer.lineWidth = 3
+            cv.transform = .identity
+            cv.alpha = 1
             backgroundView.alpha = 0
         }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             tabCell?.isHidden = false
             UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
                 tabCell?.alpha = 1
             }.startAnimation()
         }
+
         animator.addCompletion { [weak self] _ in
             backgroundView.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
-            bvcSnapshot.removeFromSuperview()
+            snapshotContainer.removeFromSuperview()
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
             context.completeTransition(true)
         }
+
         animator.startAnimation()
     }
 
     private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
         guard let tab = tabCell else { return }
-        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-        tab.backgroundHolder.layer.borderColor = borderColor.cgColor
-        tab.backgroundHolder.layer.borderWidth = ExperimentTabCell.UX.selectedBorderWidth
+        tab.setSelectedState(isPrivate: isPrivate, theme: theme)
     }
 
     private func runDismissalAnimation(
