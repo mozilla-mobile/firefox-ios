@@ -204,9 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            if self?.featureFlags.isFeatureEnabled(.cleanupHistoryReenabled, checking: .buildOnly) ?? false {
-                self?.profile.cleanupHistoryIfNeeded()
-            }
+            self?.profile.cleanupHistoryIfNeeded()
         }
 
         DispatchQueue.global().async { [weak self] in
