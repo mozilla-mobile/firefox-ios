@@ -550,6 +550,8 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
         if let scheme = url.scheme, ["http", "https", "blob", "file"].contains(scheme) {
@@ -577,19 +579,19 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            if navigationAction.navigationType == .linkActivated && url != webView.url {
-                if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
-                    decisionHandler(.cancel)
-                    webView.load(navigationAction.request)
-                    return
-                }
+            let isGoogleDomain = url.host?.contains("google") ?? false
+            let isPrivate = tab.isPrivate
+
+            if isPrivate || isGoogleDomain || shouldBlockExternalApps {
+                decisionHandler(allowPolicy)
+                return
             }
 
             decisionHandler(.allow)
             return
         }
 
-        if !(url.scheme?.contains("firefox") ?? true) {
+        if let scheme = url.scheme, !scheme.contains("firefox"), !shouldBlockExternalApps, !tab.isPrivate {
             // Try to open the custom scheme URL, if it doesn't work we show an error alert
             UIApplication.shared.open(url, options: [:]) { openedURL in
                 // Do not show error message for JS navigated links or
