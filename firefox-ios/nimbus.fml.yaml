@@ -17,6 +17,7 @@ include:
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
+  - nimbus-features/defaultZoomFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml

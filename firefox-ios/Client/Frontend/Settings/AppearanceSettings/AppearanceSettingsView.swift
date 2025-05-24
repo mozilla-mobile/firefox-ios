@@ -11,15 +11,18 @@ protocol AppearanceSettingsDelegate: AnyObject {
 }
 
 /// The main view displaying the settings for the appearance menu.
-struct AppearanceSettingsView: View {
+struct AppearanceSettingsView: View, FeatureFlaggable {
     let windowUUID: WindowUUID
-    var shouldShowPageZoom: Bool
     let delegate: AppearanceSettingsDelegate?
 
     @Environment(\.themeManager)
     var themeManager
 
     @State private var currentTheme: Theme?
+
+    var shouldShowPageZoom: Bool {
+        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
+    }
 
     /// Compute the theme option to display in the ThemeSelectionView.
     /// - Returns: .automatic if system theme or automatic brightness is enabled;
@@ -41,32 +44,33 @@ struct AppearanceSettingsView: View {
     }
 
     var body: some View {
-        VStack {
-            // Section for selecting the browser theme.
-            GenericSectionView(theme: currentTheme, title: String.BrowserThemeSectionHeader) {
-                ThemeSelectionView(theme: currentTheme,
-                                   selectedThemeOption: themeOption,
-                                   onThemeSelected: updateBrowserTheme)
-            }
-            // Section for toggling website appearance (e.g., dark mode).
-            GenericSectionView(theme: currentTheme,
-                               title: String.WebsiteAppearanceSectionHeader,
-                               description: String.WebsiteDarkModeDescription) {
-                DarkModeToggleView(theme: currentTheme,
-                                   isEnabled: NightModeHelper.isActivated(),
-                                   onChange: setWebsiteDarkMode)
-            }
-            if shouldShowPageZoom {
-                GenericSectionView(theme: currentTheme, title: .Settings.Appearance.PageZoom.SectionHeader) {
-                    GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
-                                        image: .chevronRightLarge,
-                                        theme: currentTheme) {
-                        delegate?.pressedPageZoom()
+        ScrollView {
+            VStack {
+                // Section for selecting the browser theme.
+                GenericSectionView(theme: currentTheme, title: String.BrowserThemeSectionHeader) {
+                    ThemeSelectionView(theme: currentTheme,
+                                       selectedThemeOption: themeOption,
+                                       onThemeSelected: updateBrowserTheme)
+                }
+                // Section for toggling website appearance (e.g., dark mode).
+                GenericSectionView(theme: currentTheme,
+                                   title: String.WebsiteAppearanceSectionHeader,
+                                   description: String.WebsiteDarkModeDescription) {
+                    DarkModeToggleView(theme: currentTheme,
+                                       isEnabled: NightModeHelper.isActivated(),
+                                       onChange: setWebsiteDarkMode)
+                }
+                if shouldShowPageZoom {
+                    GenericSectionView(theme: currentTheme, title: .Settings.Appearance.PageZoom.SectionHeader) {
+                        GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
+                                            image: .chevronRightLarge,
+                                            theme: currentTheme) {
+                            delegate?.pressedPageZoom()
+                        }
                     }
                 }
+                Spacer()
             }
-
-            Spacer()
         }
         .padding(.top, UX.spacing)
         .frame(maxWidth: .infinity)
