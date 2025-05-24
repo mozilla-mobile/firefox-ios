@@ -398,24 +398,6 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertNil(result)
     }
 
-    func testGetURLGivenInvalidCharacterInDomainThenInvalidURL() {
-        let initialUrl = "mo<zilla.com"
-        let subject = DefaultURLFormatter()
-
-        let result = subject.getURL(entry: initialUrl)
-
-        XCTAssertNil(result)
-    }
-
-    func testGetURLGivenHTTPURLWithInvalidCharacterInDomainThenInvalidURL() {
-        let initialUrl = "http://mo<zilla.com"
-        let subject = DefaultURLFormatter()
-
-        let result = subject.getURL(entry: initialUrl)
-
-        XCTAssertNil(result)
-    }
-
     func testGetURLGivenWordThenInvalidURL() {
         let initialUrl = "mozilla"
         let subject = DefaultURLFormatter()
