@@ -23,7 +23,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var urlRequest: URLRequest?
 
     var isPrivateTabsEmpty: Bool {
-        guard isPrivateMode else { return false }
+        guard isPrivateMode else { return true }
         return tabs.isEmpty
     }
 

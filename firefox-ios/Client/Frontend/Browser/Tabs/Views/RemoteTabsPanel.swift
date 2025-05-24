@@ -22,7 +22,8 @@ class RemoteTabsPanel: UIViewController,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
-                       FeatureFlaggable {
+                       FeatureFlaggable,
+                       TabTrayThemeable {
     typealias SubscriberStateType = RemoteTabsPanelState
 
     // MARK: - Properties
@@ -128,24 +129,35 @@ class RemoteTabsPanel: UIViewController,
         }
     }
 
-    private func retrieveTheme() -> Theme {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            return themeManager.resolvedTheme(with: false)
-        } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
-        }
+    // MARK: - Themeable
+
+    func applyTheme() {
+        let theme = retrieveTheme()
+        view.backgroundColor = theme.colors.layer4
+        tableViewController.tableView.backgroundColor = theme.colors.layer3
+        tableViewController.tableView.separatorColor = theme.colors.borderPrimary
+        statusBarBackground.backgroundColor = theme.colors.layer3
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) ? true : false
+        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
     }
 
     var shouldBeInPrivateTheme: Bool {
         return false
     }
 
-    func applyTheme() {
-        let theme = retrieveTheme()
+    // MARK: - TabTrayThemeable
+
+    func retrieveTheme() -> Theme {
+        if shouldUsePrivateOverride {
+            return themeManager.resolvedTheme(with: false)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    func applyTheme(_ theme: Theme) {
         view.backgroundColor = theme.colors.layer4
         tableViewController.tableView.backgroundColor = theme.colors.layer3
         tableViewController.tableView.separatorColor = theme.colors.borderPrimary
