@@ -17,10 +17,10 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
-          animation-feature: false
+          enabled: true
+          animation-feature: true
       - channel: developer
         value:
-          enabled: false
-          animation-feature: false
+          enabled: true
+          animation-feature: true
 
