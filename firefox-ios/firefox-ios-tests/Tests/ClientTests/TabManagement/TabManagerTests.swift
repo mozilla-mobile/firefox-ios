@@ -54,6 +54,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRecentlyAccessedNormalTabs() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .normalInactive, count: 2))
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 2))
@@ -408,6 +409,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testGetActiveAndInactiveTabs() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let totalTabCount = 3
         let subject = createSubject(tabs: generateTabs(count: totalTabCount))
 
@@ -542,6 +544,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testFindRightOrLeftTab_forDeletedIndexAtStart() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -565,6 +568,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testFindRightOrLeftTab_forDeletedIndexAtEnd() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -589,6 +593,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testFindRightOrLeftTab_prefersRightTabOverLeftTab() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -1724,7 +1729,10 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Helper methods
 
-    private func createSubject(tabs: [Tab] = [], windowUUID: WindowUUID? = nil) -> TabManagerImplementation {
+    private func createSubject(tabs: [Tab] = [],
+                               windowUUID: WindowUUID? = nil,
+                               file: StaticString = #filePath,
+                               line: UInt = #line) -> TabManagerImplementation {
         let subject = TabManagerImplementation(
             profile: mockProfile,
             imageStore: mockDiskImageStore,
@@ -1733,7 +1741,7 @@ class TabManagerTests: XCTestCase {
             tabSessionStore: mockSessionStore,
             tabs: tabs
         )
-        trackForMemoryLeaks(subject)
+        trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 
@@ -1806,7 +1814,8 @@ class TabManagerTests: XCTestCase {
         return URL(string: "https://mozilla.com?item=\(count)")!
     }
 
-    private func setupForFindRightOrLeftTab_mixedTypes() -> TabManagerImplementation {
+    private func setupForFindRightOrLeftTab_mixedTypes(file: StaticString = #filePath,
+                                                       line: UInt = #line) -> TabManagerImplementation {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -1820,10 +1829,18 @@ class TabManagerTests: XCTestCase {
 
         let tabManager = createSubject(tabs: tabs1 + tabs2 + tabs3 + tabs4 + tabs5 + tabs6 + tabs7)
         // Check preconditions
-        XCTAssertEqual(tabManager.tabs.count, 9)
-        XCTAssertEqual(tabManager.normalActiveTabs.count, 4)
-        XCTAssertEqual(tabManager.inactiveTabs.count, 2)
-        XCTAssertEqual(tabManager.privateTabs.count, 3)
+        XCTAssertEqual(tabManager.tabs.count, 9, file: file, line: line)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, 4, file: file, line: line)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 2, file: file, line: line)
+        XCTAssertEqual(tabManager.privateTabs.count, 3, file: file, line: line)
         return tabManager
+    }
+
+    private func setupNimbusTabTrayUIExperimentTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
+            return TabTrayUiExperiments(
+                enabled: isEnabled
+            )
+        }
     }
 }
