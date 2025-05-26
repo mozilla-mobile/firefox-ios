@@ -73,6 +73,12 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
 "Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "തനിമട്ടു്";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2004. */
+"Settings.AppIconSelection.AppIconNames.Retro2004.Title.v139" = "റെട്രോ 2004";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon which was default in the year 2017. */
+"Settings.AppIconSelection.AppIconNames.Retro2017.Title.v139" = "റെട്രോ 2017";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow. */
 "Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137" = "പുലരി";
 
