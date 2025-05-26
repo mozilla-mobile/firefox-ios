@@ -138,11 +138,8 @@ class TabTraySelectorView: UIView,
         let baseFontSize = preferredFont.pointSize
 
         let boldFont = UIFont.systemFont(ofSize: baseFontSize, weight: .bold)
-        let regularFont = UIFont.systemFont(ofSize: baseFontSize, weight: .regular)
         let boldWidth = title.size(withAttributes: [.font: boldFont]).width
-        let regularWidth = title.size(withAttributes: [.font: regularFont]).width
-        let maxWidth = max(boldWidth, regularWidth)
-        button.widthAnchor.constraint(equalToConstant: maxWidth).isActive = true
+        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
     }
 
     @objc
