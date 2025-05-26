@@ -9,7 +9,7 @@ import WebKit
 protocol WKPolicyDecider {
     /// The next decider in the chain, that can eventually respond with a `WKPolicy`
     /// when this decider is not able to handle it.
-    var next: WKPolicyDecider? { get set }
+    var nextDecider: WKPolicyDecider? { get set }
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy
 

@@ -5,7 +5,7 @@
 import WebKit
 
 struct HTTPSchemePolicyDecider: WKPolicyDecider {
-    var next: (any WKPolicyDecider)?
+    var nextDecider: (any WKPolicyDecider)?
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
         guard isHTTPScheme(action.request.url) else { return .cancel }
@@ -18,7 +18,7 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
 
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy {
         guard shouldRequestBeOpenedAsPopup(action.request) else {
-            return next?.policyForPopupNavigation(action: action) ?? .cancel
+            return nextDecider?.policyForPopupNavigation(action: action) ?? .cancel
         }
 
         // We don't want to open a PayPal popup since it will result in blank screen.

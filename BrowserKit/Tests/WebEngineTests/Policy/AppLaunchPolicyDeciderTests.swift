@@ -62,6 +62,6 @@ final class AppLaunchPolicyDeciderTests: XCTestCase {
     }
 
     private func createSubject(next: WKPolicyDecider? = nil) -> AppLaunchPolicyDecider {
-        return AppLaunchPolicyDecider(next: mockDecider)
+        return AppLaunchPolicyDecider(nextDecider: next)
     }
 }
