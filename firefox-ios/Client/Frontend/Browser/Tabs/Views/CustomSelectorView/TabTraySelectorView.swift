@@ -16,6 +16,7 @@ struct TabTraySelectorUX {
     static let verticalInsets: CGFloat = 4
     static let maxFontSize: CGFloat = 30
     static let horizontalInsets: CGFloat = 10
+    static let fontScaleDelta: CGFloat = 0.055
 }
 
 /// Represents the visual state of the selection indicator during a transition.
@@ -56,6 +57,7 @@ class TabTraySelectorView: UIView,
 
     func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
         updateSelectionBackground(from: fromIndex, to: toIndex, progress: abs(progress), animated: false)
+        simulateFontWeightTransition(from: fromIndex, to: toIndex, progress: abs(progress))
     }
 
     func didFinishSelection(to index: Int) {
@@ -120,8 +122,24 @@ class TabTraySelectorView: UIView,
 
     private func updateLabels() {
         for (index, title) in items.enumerated() {
-            buttons[safe: index]?.setTitle(title, for: .normal)
+            guard let button = buttons[safe: index] else { continue }
+            button.setTitle(title, for: .normal)
+            applyButtonWidthAnchor(on: button, with: title as NSString)
         }
+    }
+
+    /// Calculates and applies a fixed width constraint to a button based on the maximum
+    /// width required by its title when rendered in both regular and bold font styles.
+    ///
+    /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
+    /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
+    private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+        let preferredFont = UIFont.preferredFont(forTextStyle: .body)
+        let baseFontSize = preferredFont.pointSize
+
+        let boldFont = UIFont.systemFont(ofSize: baseFontSize, weight: .bold)
+        let boldWidth = title.size(withAttributes: [.font: boldFont]).width
+        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
     }
 
     @objc
@@ -144,9 +162,30 @@ class TabTraySelectorView: UIView,
 
     private func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
+            button.transform = .identity
             button.titleLabel?.font = index == toIndex ?
             FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
             FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        }
+    }
+
+    private func simulateFontWeightTransition(from fromIndex: Int, to toIndex: Int, progress: CGFloat) {
+        guard buttons.indices.contains(fromIndex), buttons.indices.contains(toIndex) else { return }
+
+        let easedProgress = 1 - pow(1 - progress, 2)
+        for (index, button) in buttons.enumerated() {
+            if index == fromIndex {
+                // Scale down as we move away
+                let scale = 1.0 - TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else if index == toIndex {
+                // Scale up as we approach
+                let scale = 1.0 + TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else {
+                // Reset others
+                button.transform = .identity
+            }
         }
     }
 
