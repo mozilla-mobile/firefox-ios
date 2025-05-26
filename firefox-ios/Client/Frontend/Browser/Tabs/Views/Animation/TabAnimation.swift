@@ -176,8 +176,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         ).cgPath
         borderLayer.strokeColor = borderColor.cgColor
         borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.lineWidth = 0
-        borderLayer.opacity = 0
+        borderLayer.lineWidth = ExperimentTabCell.UX.selectedBorderWidth
+        borderLayer.opacity = 1
 
         snapshotContainer.layer.addSublayer(borderLayer)
         snapshotContainer.addSubview(bvcSnapshot)
@@ -226,6 +226,29 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         cv.alpha = 0.5
 
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(0.4)
+        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
+        CATransaction.setCompletionBlock {
+            print("Animations complete")
+            snapshotContainer.removeFromSuperview()
+        }
+
+        let lineWidthAnimation = CABasicAnimation(keyPath: "lineWidth")
+        lineWidthAnimation.fromValue = 0
+        lineWidthAnimation.toValue = ExperimentTabCell.UX.selectedBorderWidth // or your desired visible width
+        lineWidthAnimation.duration = 0.4
+        lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+        borderLayer.add(lineWidthAnimation, forKey: "lineWidth")
+        borderLayer.lineWidth = ExperimentTabCell.UX.selectedBorderWidth // commit final value
+
+        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeAnimation.fromValue = 0.0
+        fadeAnimation.toValue = 1.0
+        fadeAnimation.duration = 0.4
+        fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        borderLayer.add(fadeAnimation, forKey: "opacity")
+
         let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
@@ -254,9 +277,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 tabSnapshot.alpha = 0.0
                 snapshotContainer.alpha = 0.0
             }
-
-            borderLayer.opacity = 1
-            borderLayer.lineWidth = 3
             cv.transform = .identity
             cv.alpha = 1
             backgroundView.alpha = 0
@@ -272,12 +292,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         animator.addCompletion { [weak self] _ in
             backgroundView.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
-            snapshotContainer.removeFromSuperview()
+           // snapshotContainer.removeFromSuperview()
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
             context.completeTransition(true)
         }
 
         animator.startAnimation()
+
+        CATransaction.commit()
     }
 
     private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
