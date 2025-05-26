@@ -45,6 +45,14 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
                                             version: AppInfo.appVersion,
                                             deviceType: deviceType)
 
+            // FXIOS-12307 For now we force a sync() when hitting stage server, otherwise we get API errors
+            // This should only impact QA and internal testing, not production.
+            let profile: Profile = AppContainer.shared.resolve()
+            let isStaging = profile.prefs.boolForKey(PrefsKeys.RemoteSettings.useQAStagingServerForRemoteSettings) == true
+            if isStaging {
+                _ = try? profile.remoteSettingsService?.sync()
+            }
+
             var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)
 
             // We want to be sure that our default engines list is always sorted with the default in position 0
