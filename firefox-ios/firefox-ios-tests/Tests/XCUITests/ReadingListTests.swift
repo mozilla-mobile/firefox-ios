@@ -188,7 +188,7 @@ class ReadingListTests: BaseTestCase {
 
         // Select to open in New Tab
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
+        app.tables.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
         updateScreenGraph()
         // Now there should be two tabs open
         navigator.goto(HomePanelsScreen)
@@ -208,7 +208,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.cross].waitAndTap()
+        app.tables.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])

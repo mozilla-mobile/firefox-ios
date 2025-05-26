@@ -49,4 +49,48 @@ extension UIImage {
         }
         return result
     }
+
+    // Percentage of pixels in an image that are completely transparent
+    public var percentTransparent: CGFloat? {
+        guard let cgImage = cgImage else { return nil }
+
+        let imageWidth = cgImage.width
+        let imageHeight = cgImage.height
+        let imageSize = CGSize(width: imageWidth, height: imageHeight)
+
+        let bytesPerPixel = 4 // 1 byte for each channel in a pixel
+        let bitsPerChannel = 8 // 8 bits (1 byte) for each channel in RGBA which represents the 0-255 (2^8) value
+        let bytesPerRow = imageWidth * bytesPerPixel
+
+        let pixelCount = imageWidth * imageHeight
+        var pixelData = [UInt8](repeating: 0, count: pixelCount * bytesPerPixel)
+
+        guard let context = CGContext(
+            data: &pixelData,
+            width: imageWidth,
+            height: imageHeight,
+            bitsPerComponent: bitsPerChannel,
+            bytesPerRow: bytesPerRow,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else {
+            return nil
+        }
+
+        context.draw(cgImage, in: CGRect(origin: .zero, size: imageSize))
+
+        var transparentPixelCount = 0
+
+        // Step by 4 since each pixel is 4 bytes
+        for i in stride(from: 0, to: pixelData.count, by: bytesPerPixel) {
+            let alpha = pixelData[i + 3] // Alpha channel is the last byte since we are using CGContext
+            if alpha == 0 { // 0 = transparent, 255 = opaque
+                transparentPixelCount += 1
+            }
+        }
+
+        let percentageTransparent = CGFloat(transparentPixelCount) / CGFloat(pixelCount)
+
+        return percentageTransparent * 100
+    }
 }

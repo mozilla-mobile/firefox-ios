@@ -43,6 +43,7 @@ class RecordedNimbusContext: RecordedContext {
     var isPhone: Bool
     var isDefaultBrowser: Bool
     var isBottomToolbarUser: Bool
+    var hasEnabledTipsNotifications: Bool
     var appVersion: String?
     var region: String?
     var language: String?
@@ -58,6 +59,7 @@ class RecordedNimbusContext: RecordedContext {
     init(isFirstRun: Bool,
          isDefaultBrowser: Bool,
          isBottomToolbarUser: Bool,
+         hasEnabledTipsNotifications: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
          isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
          bundle: Bundle = Bundle.main,
@@ -70,6 +72,7 @@ class RecordedNimbusContext: RecordedContext {
         self.isPhone = isPhone
         self.isDefaultBrowser = isDefaultBrowser
         self.isBottomToolbarUser = isBottomToolbarUser
+        self.hasEnabledTipsNotifications = hasEnabledTipsNotifications
 
         let info = bundle.infoDictionary ?? [:]
         appVersion = info["CFBundleShortVersionString"] as? String
@@ -137,7 +140,8 @@ class RecordedNimbusContext: RecordedContext {
                 language: language,
                 region: region,
                 isDefaultBrowser: isDefaultBrowser,
-                isBottomToolbarUser: isBottomToolbarUser
+                isBottomToolbarUser: isBottomToolbarUser,
+                hasEnabledTipsNotifications: hasEnabledTipsNotifications
             )
         )
         GleanMetrics.Pings.shared.nimbus.submit()
@@ -179,6 +183,7 @@ class RecordedNimbusContext: RecordedContext {
             "days_since_update": daysSinceUpdate as Any,
             "is_default_browser": isDefaultBrowser,
             "is_bottom_toolbar_user": isBottomToolbarUser,
+            "has_enabled_tips_notifications": hasEnabledTipsNotifications,
         ]),
             let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {

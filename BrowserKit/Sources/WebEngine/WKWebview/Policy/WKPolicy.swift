@@ -4,7 +4,8 @@
 
 import Foundation
 
-public struct OnboardingLinkInfoModel {
-    let title: String
-    let url: URL
+enum WKPolicy: Equatable {
+    case allow
+    case launchExternalApp
+    case cancel
 }

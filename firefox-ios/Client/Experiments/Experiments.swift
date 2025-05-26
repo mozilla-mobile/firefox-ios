@@ -171,9 +171,7 @@ enum Experiments {
         let customTargetingAttributes: [String: Any] = [
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
-            "is_phone": isPhone,
-            "is_default_browser": isDefaultBrowser(),
-            "is_bottom_toolbar_user": isBottomToolbarUser(),
+            "is_phone": isPhone
         ]
 
         // App settings, to allow experiments to target the app name and the
@@ -191,8 +189,13 @@ enum Experiments {
     }
 
     private static func isBottomToolbarUser() -> Bool {
-        return UserDefaults.standard
-            .bool(forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.isBottomToolbarUser()
+    }
+
+    private static func hasEnabledTipsNotifications() -> Bool {
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.hasEnabledTipsNotifications()
     }
 
     private static func buildNimbus(dbPath: String,
@@ -208,7 +211,8 @@ enum Experiments {
         let nimbusRecordedContext = RecordedNimbusContext(
             isFirstRun: isFirstRun,
             isDefaultBrowser: isDefaultBrowser(),
-            isBottomToolbarUser: isBottomToolbarUser()
+            isBottomToolbarUser: isBottomToolbarUser(),
+            hasEnabledTipsNotifications: hasEnabledTipsNotifications()
         )
 
         return NimbusBuilder(dbPath: dbPath)

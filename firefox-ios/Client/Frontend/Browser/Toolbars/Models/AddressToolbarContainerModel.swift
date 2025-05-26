@@ -38,7 +38,9 @@ final class AddressToolbarContainerModel: Equatable {
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url)
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
-        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha)
+        let shouldBlur = toolbarHelper.shouldBlur()
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
+                                                                         shouldBlur: shouldBlur)
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {

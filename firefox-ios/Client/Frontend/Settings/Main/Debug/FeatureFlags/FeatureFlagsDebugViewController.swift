@@ -29,7 +29,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             children: [
                 FeatureFlagsBoolSetting(
                     with: .addressBarMenu,
-                    titleText: format(string: "AddressBar Menu"),
+                    titleText: format(string: "Enable New AddressBar Menu"),
                     statusText: format(string: "Toggle to show the new address bar menu")
                 ) { [weak self] _ in
                     self?.reloadView()

@@ -52,6 +52,9 @@
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Opsi lainnya";
 
+/* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
+"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Hapus dari Pintasan";
+
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Disimpan dalam “Markah”";
 

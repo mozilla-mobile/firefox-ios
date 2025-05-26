@@ -35,22 +35,22 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons.element(matching: .button, identifier: reloadButton), timeout: 10)
         app.buttons.element(matching: .button, identifier: reloadButton).press(forDuration: 3)
         if label == "Without Tracking Protection" {
-            mozWaitForElementToExist(app.otherElements[reloadWithWithoutProtectionButton], timeout: 5)
+            mozWaitForElementToExist(app.buttons[reloadWithWithoutProtectionButton], timeout: 5)
             XCTAssertEqual(
                 "Reload Without Tracking Protection",
-                app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label
+                app.buttons.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label
             )
         } else {
-            mozWaitForElementToExist(app.otherElements[reloadWithWithoutProtectionButton], timeout: 5)
+            mozWaitForElementToExist(app.buttons[reloadWithWithoutProtectionButton], timeout: 5)
             XCTAssertEqual(
                 "Reload With Tracking Protection",
-                app.otherElements.element(
+                app.buttons.element(
                     matching: .any,
                     identifier: reloadWithWithoutProtectionButton
                 ).label
             )
         }
-        app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).waitAndTap()
+        app.buttons.element(matching: .any, identifier: reloadWithWithoutProtectionButton).waitAndTap()
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
         if #unavailable(iOS 16) {

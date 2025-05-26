@@ -52,9 +52,9 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          toolbar_update_hint: true
+          toolbar_update_hint: false
           swiping_tabs: false
-          translucency: false
+          translucency: true
           layout: version1
       - channel: developer
         value:
@@ -62,9 +62,9 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
-          toolbar_update_hint: true
+          toolbar_update_hint: false
           swiping_tabs: true
-          translucency: false
+          translucency: true
           layout: version1
 
 enums:

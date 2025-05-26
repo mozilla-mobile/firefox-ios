@@ -157,9 +157,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306913
     func testAddBookmark() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a page as bookmarked")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
         app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
@@ -200,9 +199,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
     func testAddNewMarker() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a separator")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.AddNewSeparator)
@@ -222,9 +220,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306916
     func testDeleteBookmarkSwiping() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a page as bookmarked")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
@@ -236,9 +233,8 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
     func testDeleteBookmarkContextMenu() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("No longer possible to add manually a page as bookmarked")
-        }
+        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
+
         addNewBookmark()
         // Remove by long press and select option from context menu
         app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
@@ -316,9 +312,8 @@ class BookmarksTests: BaseTestCase {
     // Smoketest
     func testDesktopFoldersArePresent() throws {
         let shouldSkipTest = true
-        if shouldSkipTest {
-            throw XCTSkip("Desktop folder is no longer available")
-        }
+        try XCTSkipIf(shouldSkipTest, "Desktop folder is no longer available")
+
         // Verify that there are only 1 cell (desktop bookmark folder)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -436,14 +431,14 @@ class BookmarksTests: BaseTestCase {
         waitForElementsToExist(
             [
                 contextMenuTable,
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash],
-                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmarkSlash],
+                contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
         // Tap to "Open in New Tab"
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
+        contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
         // The webpage opens in a new tab
         if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
             switchToTabAndValidate(nrOfTabs: "3")
@@ -461,7 +456,7 @@ class BookmarksTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         longPressBookmarkCell()
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
+        contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         // The webpage opens in a new private tab
         switchToTabAndValidate(nrOfTabs: "1", isPrivate: true)
         if #unavailable(iOS 16) {
@@ -475,7 +470,7 @@ class BookmarksTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         longPressBookmarkCell()
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
+        contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
         // The bookmark is removed
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()

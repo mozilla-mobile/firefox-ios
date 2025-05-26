@@ -912,6 +912,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.onEnter { userState in
+            let exists = NSPredicate(format: "exists == true")
+            let expectation = XCTNSPredicateExpectation(predicate: exists, object: app.otherElements["Tabs Tray"])
+            let _ = XCTWaiter().wait(for: [expectation], timeout: 5)
             userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
         }
     }
@@ -921,18 +924,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         map.addScreenState(TabTrayLongPressMenu) { screenState in
             screenState.dismissOnUse = true
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.plus],
+                app.buttons[StandardImageIdentifiers.Large.plus],
                 forAction: Action.OpenNewTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             )
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.cross],
+                app.buttons[StandardImageIdentifiers.Large.cross],
                 forAction: Action.CloseTabFromTabTrayLongPressMenu,
                 Action.CloseTab,
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.tables.cells.otherElements[StandardImageIdentifiers.Large.tab],
+                app.tables.cells.buttons[StandardImageIdentifiers.Large.tab],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in

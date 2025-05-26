@@ -26,7 +26,7 @@ final class DocumentLoggerTests: XCTestCase {
 
         let pendingDownloads = Int(try XCTUnwrap(logger.savedExtra?[subject.downloadExtraKey]))
 
-        XCTAssertEqual(logger.savedLevel, .warning)
+        XCTAssertEqual(logger.savedLevel, .fatal)
         XCTAssertEqual(pendingDownloads, 1)
     }
 

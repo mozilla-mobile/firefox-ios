@@ -109,7 +109,7 @@ final class TabScrollControllerTests: XCTestCase {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        XCTAssertNotNil(tab.onLoading)
+        XCTAssertNotNil(tab.onWebViewLoadingStateChanged)
     }
 
     func testScrollViewWillBeginZooming_removesPullRefresh() throws {

@@ -21,6 +21,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var onProvideContextualMenuCalled = 0
     var onWillDisplayAcccessoryViewCalled = 0
     var requestMediaCapturePermissionCalled = 0
+    var onRequestOpenNewSessionCalled = 0
 
     var savedTitleChange: String?
     var savedURL: String?
@@ -79,6 +80,10 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onErrorPageRequest(error: NSError) {
         savedError = error
         onErrorPageCalled += 1
+    }
+
+    func onRequestOpenNewSession(_ session: EngineSession) {
+        onRequestOpenNewSessionCalled += 1
     }
 
     func findInPage(with selection: String) {
