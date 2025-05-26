@@ -52,6 +52,6 @@ class ToolbarHelper: ToolbarHelperInterface {
     func backgroundAlpha() -> CGFloat {
         guard shouldBlur() else { return 1.0 }
 
-        return 0.0
+        return UX.backgroundAlphaForBlur
     }
 }

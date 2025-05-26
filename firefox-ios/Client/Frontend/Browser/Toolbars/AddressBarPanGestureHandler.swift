@@ -9,7 +9,7 @@ final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
         static let offset: CGFloat = 48
-        static let swipingDuration: TimeInterval = 0.3
+        static let swipingDuration: TimeInterval = 0.25
         static let swipingVelocity: CGFloat = 250
     }
 
@@ -24,6 +24,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
+    var screenshotHomepage: (() -> UIImage?)?
 
     // MARK: - Init
     init(
@@ -75,6 +76,8 @@ final class AddressBarPanGestureHandler: NSObject {
         enablePanGestureRecognizer()
     }
 
+    var homepage: UIImage?
+
     // MARK: - Pan Gesture Handling
     @objc
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -98,7 +101,10 @@ final class AddressBarPanGestureHandler: NSObject {
                     height: webPagePreview.frame.height
                 )
             )
-            statusBarOverlay.showOverlay(animated: true)
+            statusBarOverlay.showOverlay(animated: true, isHomepage: contentContainer.hasHomepage)
+//            if nextTab == nil {
+                homepage = screenshotHomepage?()
+//            }
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended:
@@ -113,12 +119,15 @@ final class AddressBarPanGestureHandler: NSObject {
 
         let currentTabTransform = CGAffineTransform(translationX: translation.x, y: 0)
         applyCurrentTabTransform(currentTabTransform)
+        addressBarContainer.applyTransform(currentTabTransform, shouldShowNewTab: nextTab == nil)
         applyPreviewTransform(translation: translation)
 
         if let nextTab {
             webPagePreview.setScreenshot(nextTab.screenshot)
         } else {
-            webPagePreview.isHidden = true
+            let progress = abs(translation.x) / contentContainer.frame.width
+            webPagePreview.alpha = progress
+            webPagePreview.setScreenshot(homepage)
         }
     }
 
@@ -128,7 +137,6 @@ final class AddressBarPanGestureHandler: NSObject {
         // then we can complete the transition.
         let shouldCompleteTransition = (abs(translation.x) > contentContainer.frame.width / 2
                                        || abs(velocity.x) > UX.swipingVelocity)
-                                        && nextTab != nil
 
         let contentWidth = contentContainer.frame.width
         let isPanningLeft = translation.x < 0
@@ -139,11 +147,17 @@ final class AddressBarPanGestureHandler: NSObject {
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
             applyCurrentTabTransform(shouldCompleteTransition ? currentTabTransform : .identity)
+            addressBarContainer.applyTransform(shouldCompleteTransition ? currentTabTransform : .identity,
+                                               shouldShowNewTab: nextTab == nil)
+            webPagePreview.alpha = 1.0
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
+            if shouldCompleteTransition && nextTab == nil {
+                addressBarContainer.completeAddTab()
+            }
         }) { [self] _ in
             webPagePreview.isHidden = true
 
-            if shouldCompleteTransition, let nextTab {
+            if shouldCompleteTransition {
                 store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
@@ -153,7 +167,20 @@ final class AddressBarPanGestureHandler: NSObject {
                 )
                 // Reset the positions and select the new tab if the transition was completed.
                 applyCurrentTabTransform(.identity)
-                tabManager.selectTab(nextTab)
+                if let nextTab {
+                    addressBarContainer.applyTransform(.identity, shouldShowNewTab: false)
+                    tabManager.selectTab(nextTab)
+                } else {
+                    addressBarContainer.applyTransform(.identity, shouldShowNewTab: true)
+                    store.dispatch(
+                        GeneralBrowserAction(
+                            windowUUID: self.windowUUID,
+                            actionType: GeneralBrowserActionType.addNewTab
+                        )
+                    )
+                }
+            } else {
+                statusBarOverlay.restoreOverlay(animated: true, isHomepage: contentContainer.hasHomepage)
             }
         }
     }
@@ -161,7 +188,6 @@ final class AddressBarPanGestureHandler: NSObject {
     /// Applies the provided transform to the all the views representing the current tab.
     private func applyCurrentTabTransform(_ transform: CGAffineTransform) {
         contentContainer.transform = transform
-        addressBarContainer.applyTransform(transform)
     }
 
     /// Applies a translation transform to the `webPagePreview`

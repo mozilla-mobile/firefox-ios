@@ -160,6 +160,15 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
     }
 
+    func getScreenshot() -> UIImage? {
+        return homepageViewController?.screenshot(bounds: CGRect(
+            x: 0.0,
+            y: -browserViewController.contentContainer.frame.origin.y,
+            width: browserViewController.view.frame.width,
+            height: browserViewController.view.frame.height
+        ))
+    }
+
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
         store.dispatch(
             HomepageAction(

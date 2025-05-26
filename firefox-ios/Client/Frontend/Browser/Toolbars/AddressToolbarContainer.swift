@@ -78,6 +78,10 @@ final class AddressToolbarContainer: UIView,
         bar.clipsToBounds = false
     }
 
+    private let addTabView: UIView = .build()
+    private var addTabViewLeftConstraint: NSLayoutConstraint?
+    private var addTabViewRightConstraint: NSLayoutConstraint?
+
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
@@ -297,6 +301,31 @@ final class AddressToolbarContainer: UIView,
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+
+        let image = UIImageView(image: UIImage(named: StandardImageIdentifiers.Large.plus))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.tintColor = .white
+        image.alpha = 0.0
+
+        addTabView.addSubview(image)
+        NSLayoutConstraint.activate([
+            image.centerXAnchor.constraint(equalTo: addTabView.centerXAnchor),
+            image.centerYAnchor.constraint(equalTo: addTabView.centerYAnchor)
+        ])
+
+        addTabView.backgroundColor = DarkTheme().colors.layer1
+        addTabView.layer.cornerRadius = 12.0
+        addSubview(addTabView)
+        NSLayoutConstraint.activate([
+            addTabView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            addTabView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
+        ])
+
+        addTabViewLeftConstraint = addTabView.leadingAnchor.constraint(equalTo: toolbar.trailingAnchor)
+        addTabViewRightConstraint = addTabView.trailingAnchor.constraint(equalTo: trailingAnchor)
+
+        addTabViewLeftConstraint?.isActive = true
+        addTabViewRightConstraint?.isActive = true
     }
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
@@ -313,9 +342,30 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    func applyTransform(_ t: CGAffineTransform) {
+    func completeAddTab() {
+        addTabViewLeftConstraint?.constant = -self.frame.width + 16.0
+        layoutIfNeeded()
+        addTabView.alpha = 0.0
+        addTabView.subviews.first?.alpha = 0.0
+    }
+
+    func applyTransform(_ t: CGAffineTransform, shouldShowNewTab: Bool) {
         compactToolbar.transform = t
         regularToolbar.transform = t
+
+        if #available(iOS 16, *) {
+            guard shouldShowNewTab else { return }
+            let translation = t.decomposed().translation
+            guard translation.dx <= 0 else { return }
+            let progress = abs(translation.dx) / frame.width
+            UIView.animate(withDuration: 0.3) {
+                self.addTabView.subviews.first?.alpha = progress > 0.3 ? 1.0 : 0.0
+            }
+            if t != .identity {
+                addTabView.alpha = 1.0
+            }
+            addTabViewLeftConstraint?.constant = translation.dx
+        }
     }
 
     // MARK: - ThemeApplicable

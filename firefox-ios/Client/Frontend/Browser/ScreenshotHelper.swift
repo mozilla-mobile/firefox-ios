@@ -41,8 +41,8 @@ class ScreenshotHelper {
         /// The screenshot is then set for the tab, and a TabEvent is posted to indicate
         /// that a screenshot has been set for the homepage.
         if tab.isFxHomeTab {
-            if let homeview = controller?.contentContainer.contentView {
-                let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
+            if let screenshotTool = controller?.contentContainer.contentController as? Screenshotable {
+                let screenshot = screenshotTool.screenshot(bounds: screenshotBounds ?? .zero)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
                 store.dispatch(
@@ -73,8 +73,7 @@ class ScreenshotHelper {
         } else {
             let configuration = WKSnapshotConfiguration()
             configuration.afterScreenUpdates = true
-            let contentSize = webView.scrollView.contentSize
-            if let screenshotBounds, contentSize.height > screenshotBounds.height {
+            if let screenshotBounds {
                 configuration.rect = screenshotBounds
             }
 

@@ -7,7 +7,7 @@ import UIKit
 protocol Screenshotable {
     func screenshot(quality: CGFloat) -> UIImage?
 
-    func screenshot(quality: CGFloat, bounds: CGRect) -> UIImage?
+    func screenshot(bounds: CGRect) -> UIImage?
 }
 
 extension UIView: Screenshotable {
@@ -20,8 +20,22 @@ extension UIView: Screenshotable {
         return screenshot(frame.size, offset: CGPoint(x: 0, y: 59), quality: quality)
     }
 
-    func screenshot(quality: CGFloat = 1, bounds: CGRect) -> UIImage? {
-        return screenshot(bounds.size, offset: CGPoint(x: 0.0, y: -bounds.origin.y), quality: quality)
+    func screenshot(bounds: CGRect) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        return renderer.image { context in
+            UIColor.red.setFill()
+            context.fill(CGRect(origin: .zero, size: bounds.size))
+            drawHierarchy(
+                in: CGRect(
+                    x: 0,
+                    y: -bounds.origin.y,
+                    width: bounds.width,
+                    height: frame.height
+                ),
+                afterScreenUpdates: true
+            )
+        }
     }
 
     /// Takes a screenshot of the view with the given size.

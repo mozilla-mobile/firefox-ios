@@ -1142,6 +1142,9 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
+        addressBarPanGestureHandler?.screenshotHomepage = { [weak self] in
+            return (self?.navigationHandler as? BrowserCoordinator)?.getScreenshot()
+        }
     }
 
     func addSubviews() {
@@ -1226,7 +1229,16 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?) {
         if let tab {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(
+                tab,
+                windowUUID: windowUUID,
+                screenshotBounds: CGRect(
+                    x: contentContainer.frame.origin.x,
+                    y: -contentContainer.frame.origin.y,
+                    width: view.frame.width,
+                    height: view.frame.height
+                )
+            )
         }
     }
 

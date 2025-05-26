@@ -90,10 +90,25 @@ class StatusBarOverlay: UIView,
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
 
-    func showOverlay(animated: Bool) {
-        let backgroundAlpha = toolbarHelper.backgroundAlpha()
-        UIView.animate(withDuration: 0.3) {
-            self.backgroundColor = self.savedBackgroundColor?.withAlphaComponent(backgroundAlpha)
+    func showOverlay(animated: Bool, isHomepage: Bool) {
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: .curveEaseIn
+        ) {
+            self.scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: 1.0)
+            self.backgroundColor = self.savedBackgroundColor?.withAlphaComponent(self.toolbarHelper.backgroundAlpha())
+        }
+    }
+
+    func restoreOverlay(animated: Bool, isHomepage: Bool) {
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0,
+            options: .curveEaseIn
+        ) {
+            self.scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: self.scrollOffset)
+            self.resetState(isHomepage: isHomepage)
         }
     }
 
