@@ -21,7 +21,6 @@ public struct StandardImageIdentifiers {
         public static let pinBadgeFill = "pinBadgeFillSmall"
         public static let shieldCheckmarkFill = "shieldCheckmarkFillSmall"
         public static let shieldSlashFillMulticolor = "shieldSlashFillMulticolorSmall"
-        public static let shieldSlashFill = "shieldSlashFillSmall"
         public static let sponsoredStar = "sponsoredStarSmall"
     }
 
