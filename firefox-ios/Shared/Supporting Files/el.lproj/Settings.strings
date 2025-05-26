@@ -64,6 +64,27 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Διευθύνσεις";
 
+/* Default section header title under page zoom settings. Indicates the default value for all websites */
+"Settings.Appearance.Zoom.Default.Title.v140" = "Προεπιλογή";
+
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Επαναφορά ρυθμίσεων ιστοτόπου";
+
+/* Page zoom section header title in Appearance settings */
+"Settings.Appearance.Zoom.SectionHeader.v140" = "Ρυθμίσεις ζουμ";
+
+/* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "Για προσθήκη σε αυτήν τη λίστα, επισκεφθείτε έναν ιστότοπο και προσαρμόστε το ζουμ από το μενού";
+
+/* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "Ρυθμίσεις συγκεκριμένου ιστοτόπου";
+
+/* Page zoom settings title in Appearance settings */
+"Settings.Appearance.Zoom.Title.v140" = "Ζουμ σελίδας";
+
+/* Zoom level title under page zoom settings to select the default zoom level for all websites */
+"Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "Επίπεδο ζουμ";
+
 /* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
 "Settings.AutofillAndPassword.Title.v137" = "Αυτόματη συμπλήρωση και κωδικοί πρόσβασης";
 
