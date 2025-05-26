@@ -8,6 +8,8 @@ import Common
 final class AddressBarPanGestureHandler: NSObject {
     // MARK: - UX Constants
     private struct UX {
+        // Offset used to ensure the skeleton address bar animates in alignment with the address bar.
+        static let transformOffset: CGFloat = 24
         static let offset: CGFloat = 48
         static let swipingDuration: TimeInterval = 0.25
         static let swipingVelocity: CGFloat = 250
@@ -18,6 +20,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private let webPagePreview: TabWebViewPreview
     private let addressBarContainer: AddressToolbarContainer
     private let statusBarOverlay: StatusBarOverlay
+    private var addressToolbarContainer: AddressToolbarContainer
     private var panGestureRecognizer: UIPanGestureRecognizer?
 
     // MARK: - Properties
@@ -28,30 +31,39 @@ final class AddressBarPanGestureHandler: NSObject {
 
     // MARK: - Init
     init(
+        addressToolbarContainer: AddressToolbarContainer,
         contentContainer: ContentContainer,
-        addressBarContainer: AddressToolbarContainer,
         webPagePreview: TabWebViewPreview,
         statusBarOverlay: StatusBarOverlay,
         tabManager: TabManager,
         windowUUID: WindowUUID,
         screenshotHelper: ScreenshotHelper?
     ) {
+        self.addressToolbarContainer = addressToolbarContainer
         self.contentContainer = contentContainer
-        self.addressBarContainer = addressBarContainer
         self.webPagePreview = webPagePreview
         self.tabManager = tabManager
         self.windowUUID = windowUUID
         self.screenshotHelper = screenshotHelper
         self.statusBarOverlay = statusBarOverlay
         super.init()
-        setupPanGesture()
+        updateAddressBarContainer(addressToolbarContainer)
     }
 
-    private func setupPanGesture() {
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addressBarContainer.addGestureRecognizer(gesture)
+    /// Updates the address bar container with a new container view and reattaches the pan gesture recognizer.
+    ///
+    /// - Parameter newContainer: The new `BaseAlphaStackView` to be used as the address bar container.
+    func updateAddressBarContainer(_ newContainer: AddressToolbarContainer) {
+        if let panGestureRecognizer {
+            addressToolbarContainer.removeGestureRecognizer(panGestureRecognizer)
+        }
+        addressToolbarContainer = newContainer
 
-        panGestureRecognizer = gesture
+        let newPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        addressToolbarContainer.addGestureRecognizer(newPanGesture)
+
+        panGestureRecognizer = newPanGesture
+        panGestureRecognizer?.isEnabled = true
     }
 
     // MARK: - Pan Gesture Availability
@@ -150,6 +162,12 @@ final class AddressBarPanGestureHandler: NSObject {
             addressBarContainer.applyTransform(shouldCompleteTransition ? currentTabTransform : .identity,
                                                shouldShowNewTab: nextTab == nil)
             webPagePreview.alpha = 1.0
+            if shouldCompleteTransition {
+                applyCurrentTabTransform(currentTabTransform,
+                                         translatedByX: isPanningLeft ? UX.transformOffset : -UX.transformOffset)
+            } else {
+                applyCurrentTabTransform(.identity)
+            }
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
             if shouldCompleteTransition && nextTab == nil {
                 addressBarContainer.completeAddTab()
@@ -186,8 +204,9 @@ final class AddressBarPanGestureHandler: NSObject {
     }
 
     /// Applies the provided transform to the all the views representing the current tab.
-    private func applyCurrentTabTransform(_ transform: CGAffineTransform) {
+    private func applyCurrentTabTransform(_ transform: CGAffineTransform, translatedByX: CGFloat = 0) {
         contentContainer.transform = transform
+        addressToolbarContainer.transform = transform.translatedBy(x: translatedByX, y: 0)
     }
 
     /// Applies a translation transform to the `webPagePreview`

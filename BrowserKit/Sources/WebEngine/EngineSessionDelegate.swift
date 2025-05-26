@@ -62,4 +62,10 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Allows delegate to provide custom permissions for requesting media capture (e.g. camera/microphone permissions)
     /// Returns a bool indicating whether media capture is allowed
     func requestMediaCapturePermission() -> Bool
+
+    /// An Event that indicates that a new session was created and needs to be handled.
+    ///
+    /// A new session can be requested when a navigation requests
+    /// to show its content into a new window thus a new session is generated for it.
+    func onRequestOpenNewSession(_ session: EngineSession)
 }

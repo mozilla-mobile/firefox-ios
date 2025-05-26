@@ -143,7 +143,11 @@ class BrowserViewController: UIViewController,
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
-    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
+    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
+        AddressToolbarContainer(
+            isSwipingTabsEnabled: self.isSwipingTabsEnabled
+        )
+    })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
@@ -478,7 +482,9 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition, anchor: header.bottomAnchor)
+            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
+            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer)
+            updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
 
         if let readerModeBar = readerModeBar {
@@ -586,11 +592,13 @@ class BrowserViewController: UIViewController,
                    let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
                    !toolbarState.addressToolbar.isEditing {
                     addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                    addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
                 }
             } else {
                 navigationToolbarContainer.isHidden = true
                 if isSwipingTabsEnabled {
                     addressBarPanGestureHandler?.disablePanGestureRecognizer()
+                    addressToolbarContainer.hideSkeletonBars()
                 }
             }
             updateToolbarStateTraitCollectionIfNecessary(newCollection)
@@ -1134,8 +1142,12 @@ class BrowserViewController: UIViewController,
 
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
+            addressToolbarContainer: addressToolbarContainer,
             contentContainer: contentContainer,
+<<<<<<< HEAD
             addressBarContainer: addressToolbarContainer,
+=======
+>>>>>>> main
             webPagePreview: webPagePreview,
             statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
@@ -3632,6 +3644,7 @@ class BrowserViewController: UIViewController,
         guard let profile = profile as? BrowserProfile else { return }
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            addressToolbarContainer.hideSkeletonBars()
         }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(
@@ -3651,7 +3664,11 @@ class BrowserViewController: UIViewController,
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            addressBarPanGestureHandler?.enablePanGestureRecognizer()
+            let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+            if showNavToolbar {
+                addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+            }
         }
         if searchSessionState == .active {
             // This delegate method may be called even if the user isn't
@@ -4281,6 +4298,8 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
+        } else {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
         /// If the selectedTab is showing an error page trigger a reload

@@ -169,6 +169,13 @@ public class BrowserAddressToolbar: UIView,
         return locationView.resignFirstResponder()
     }
 
+    override public var transform: CGAffineTransform {
+        get {
+            return locationContainer.transform
+        }
+        set { locationContainer.transform = newValue }
+    }
+
     // MARK: - Private
     private func setupLayout() {
         addSubview(toolbarContainerView)

@@ -83,6 +83,10 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         introScreenManager?.didSeeIntroScreen()
     }
 
+    func saveSearchBarPosition() {
+        SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+    }
+
     // MARK: SkAdNetwork
     // this event should be sent in the first 24h time window, if it's not sent the conversion value is locked by Apple
     func updateOnboardingUserActivationEvent() {
