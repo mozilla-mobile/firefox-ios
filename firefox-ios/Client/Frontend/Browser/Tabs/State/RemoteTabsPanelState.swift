@@ -105,14 +105,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         case RemoteTabsPanelActionType.refreshDidFail:
             guard let reason = action.reason else { return defaultState(from: state) }
             // Refresh failed. Show error empty state.
-            let allowsRefresh = reason.allowsRefresh
-            let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                                refreshState: .idle,
-                                                allowsRefresh: allowsRefresh,
-                                                clientAndTabs: state.clientAndTabs,
-                                                showingEmptyState: reason,
-                                                devices: state.devices)
-            return newState
+            return handleRefreshDidFailAction(reason: reason, state: state)
         case RemoteTabsPanelActionType.refreshDidSucceed:
             guard let clientAndTabs = action.clientAndTabs else { return defaultState(from: state) }
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
