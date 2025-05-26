@@ -88,6 +88,57 @@ class UserScriptManager: FeatureFlaggable {
         self.compiledUserScripts = compiledUserScripts
     }
 
+    private static func addScripts(mainFrameOnly: Bool,
+                                   injectionTime: WKUserScriptInjectionTime,
+                                   scripts: inout [String: WKUserScript]) {
+        let mainframeString = mainFrameOnly ? "MainFrame" : "AllFrames"
+        let injectionString = injectionTime == .atDocumentStart ? "Start" : "End"
+        let name = mainframeString + "AtDocument" + injectionString
+        if let source = UserScriptManager.getScriptSource(name) {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            let userScript = WKUserScript.createInDefaultContentWorld(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly
+            )
+            scripts[name] = userScript
+        }
+
+        // NightMode scripts
+        let nightModeName = "NightMode\(name)"
+        if let source = UserScriptManager.getScriptSource(nightModeName) {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            let userScript = WKUserScript(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly,
+                in: .world(name: NightModeHelper.name()))
+            scripts[nightModeName] = userScript
+        }
+
+        // Autofill scripts
+        let autofillName = "Autofill\(name)"
+        if let source = UserScriptManager.getScriptSource(autofillName) {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            let userScript = WKUserScript.createInDefaultContentWorld(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly)
+            scripts[autofillName] = userScript
+        }
+
+        let webcompatName = "Webcompat\(name)"
+        if let source = UserScriptManager.getScriptSource(webcompatName) {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            let userScript = WKUserScript.createInPageContentWorld(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly
+            )
+            scripts[webcompatName] = userScript
+        }
+    }
+
     private static func getScriptSource(_ scriptName: String) -> String? {
         guard let path = Bundle.main.path(forResource: scriptName, ofType: "js") else {
             return nil
