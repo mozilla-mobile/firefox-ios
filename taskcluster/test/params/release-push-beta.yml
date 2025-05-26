@@ -16,10 +16,10 @@ filters:
 head_ref: refs/heads/main
 head_repository: https://github.com/mozilla-mobile/staging-firefox-ios
 head_rev: 2a56c4b0e6e7737816147da950196f99895ff3d3
-head_tag: v137.0.0
+head_tag: firefox-v137.0b1
 level: '1'
 moz_build_date: '20250226191326'
-next_version: 137.0.1
+next_version: 137.0b2
 optimize_strategies: null
 optimize_target_tasks: true
 owner: nobody@mozilla.com
@@ -32,4 +32,4 @@ repository_type: git
 shipping_phase: push
 target_tasks_method: push
 tasks_for: action
-version: '137.0.0'
+version: '137.0b1'
