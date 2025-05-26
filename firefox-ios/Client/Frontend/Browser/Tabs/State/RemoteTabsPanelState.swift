@@ -151,6 +151,18 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
         return newState
     }
 
+    private static func handleRefreshDidSucceedAction(clientAndTabs: [ClientAndTabs],
+                                                      state: RemoteTabsPanelState,
+                                                      action: RemoteTabsPanelAction) -> RemoteTabsPanelState {
+        let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
+                                            refreshState: .idle,
+                                            allowsRefresh: true,
+                                            clientAndTabs: clientAndTabs,
+                                            showingEmptyState: nil,
+                                            devices: action.devices ?? state.devices)
+        return newState
+    }
+
     static func defaultState(from state: RemoteTabsPanelState) -> RemoteTabsPanelState {
         return RemoteTabsPanelState(windowUUID: state.windowUUID,
                                     refreshState: state.refreshState,
