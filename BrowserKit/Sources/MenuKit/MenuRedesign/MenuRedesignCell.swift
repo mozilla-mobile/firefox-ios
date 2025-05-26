@@ -105,7 +105,7 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         } else {
             titleLabel.textColor = theme.colors.textPrimary
             descriptionLabel.textColor = theme.colors.textSecondary
-            iconImageView.tintColor = theme.colors.iconSecondary
+            iconImageView.tintColor = theme.colors.iconPrimary
         }
     }
 }
