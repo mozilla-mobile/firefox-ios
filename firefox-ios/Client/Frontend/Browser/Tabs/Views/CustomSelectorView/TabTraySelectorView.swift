@@ -16,6 +16,7 @@ struct TabTraySelectorUX {
     static let verticalInsets: CGFloat = 4
     static let maxFontSize: CGFloat = 30
     static let horizontalInsets: CGFloat = 10
+    static let fontScaleDelta: CGFloat = 0.055
 }
 
 class TabTraySelectorView: UIView,
@@ -54,6 +55,19 @@ class TabTraySelectorView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+<<<<<<< HEAD
+=======
+    func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
+        updateSelectionBackground(from: fromIndex, to: toIndex, progress: abs(progress), animated: false)
+        simulateFontWeightTransition(from: fromIndex, to: toIndex, progress: abs(progress))
+    }
+
+    func didFinishSelection(to index: Int) {
+        selectedIndex = index
+        adjustSelectedButtonFont(toIndex: index)
+    }
+
+>>>>>>> e640ee78b (Bugfix FXIOS-12327 [Tab tray UI experiment] Fix font jitter when swiping (#26853))
     private func setup() {
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
@@ -111,8 +125,24 @@ class TabTraySelectorView: UIView,
 
     private func updateLabels() {
         for (index, title) in items.enumerated() {
-            buttons[safe: index]?.setTitle(title, for: .normal)
+            guard let button = buttons[safe: index] else { continue }
+            button.setTitle(title, for: .normal)
+            applyButtonWidthAnchor(on: button, with: title as NSString)
         }
+    }
+
+    /// Calculates and applies a fixed width constraint to a button based on the maximum
+    /// width required by its title when rendered in both regular and bold font styles.
+    ///
+    /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
+    /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
+    private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+        let preferredFont = UIFont.preferredFont(forTextStyle: .body)
+        let baseFontSize = preferredFont.pointSize
+
+        let boldFont = UIFont.systemFont(ofSize: baseFontSize, weight: .bold)
+        let boldWidth = title.size(withAttributes: [.font: boldFont]).width
+        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
     }
 
     @objc
@@ -126,14 +156,53 @@ class TabTraySelectorView: UIView,
 
         let toButton = buttons[toIndex]
         for (index, button) in buttons.enumerated() {
+            button.transform = .identity
             button.titleLabel?.font = index == toIndex ?
             FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
             FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         }
 
+<<<<<<< HEAD
         let newWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
         let toCenterX = toButton.superview!.convert(toButton.center, to: self).x
         let offsetX = toCenterX - selectionBackgroundView.center.x
+=======
+    private func simulateFontWeightTransition(from fromIndex: Int, to toIndex: Int, progress: CGFloat) {
+        guard buttons.indices.contains(fromIndex), buttons.indices.contains(toIndex) else { return }
+
+        let easedProgress = 1 - pow(1 - progress, 2)
+        for (index, button) in buttons.enumerated() {
+            if index == fromIndex {
+                // Scale down as we move away
+                let scale = 1.0 - TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else if index == toIndex {
+                // Scale up as we approach
+                let scale = 1.0 + TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else {
+                // Reset others
+                button.transform = .identity
+            }
+        }
+    }
+
+    /// Updates or animates the selection background's position and width based on transition progress.
+    ///
+    /// - Parameters:
+    ///   - fromIndex: Index of the previously selected button.
+    ///   - toIndex: Index of the target button.
+    ///   - progress: Value between 0.0 and 1.0 indicating how far the transition is.
+    ///               Use 1.0 for a completed transition.
+    ///   - animated: Whether to animate the update (used when a selection is finalized).
+    private func updateSelectionBackground(from fromIndex: Int,
+                                           to toIndex: Int,
+                                           progress: CGFloat,
+                                           animated: Bool) {
+        guard let result = calculateSelectionTransition(from: fromIndex, to: toIndex, progress: progress) else {
+            return
+        }
+>>>>>>> e640ee78b (Bugfix FXIOS-12327 [Tab tray UI experiment] Fix font jitter when swiping (#26853))
 
         selectionBackgroundWidthConstraint?.constant = newWidth
 
