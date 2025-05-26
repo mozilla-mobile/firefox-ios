@@ -244,7 +244,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
+        waitForExistence(app.staticTexts[defaultTopSite["bookmarkLabel"]!])
         if iPad() {
             navigator.goto(TabTray)
         }
