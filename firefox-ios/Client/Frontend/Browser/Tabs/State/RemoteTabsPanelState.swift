@@ -113,13 +113,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                  action: action)
         case RemoteTabsPanelActionType.remoteDevicesChanged:
             guard let devices = action.devices else { return defaultState(from: state) }
-            let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
-                                                refreshState: .idle,
-                                                allowsRefresh: state.allowsRefresh,
-                                                clientAndTabs: state.clientAndTabs,
-                                                showingEmptyState: state.showingEmptyState,
-                                                devices: devices)
-            return newState
+            return handleRemoteDevicesChangedAction(devices: devices, state: state)
         default:
             return defaultState(from: state)
         }
