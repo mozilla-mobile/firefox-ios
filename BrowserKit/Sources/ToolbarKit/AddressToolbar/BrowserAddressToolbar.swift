@@ -161,7 +161,9 @@ public class BrowserAddressToolbar: UIView,
     }
 
     override public var transform: CGAffineTransform {
-        get { locationContainer.transform }
+        get {
+            return locationContainer.transform
+        }
         set { locationContainer.transform = newValue }
     }
 

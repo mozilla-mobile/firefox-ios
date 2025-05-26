@@ -184,7 +184,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     override var transform: CGAffineTransform {
-        get { toolbar.transform }
+        get {
+            return toolbar.transform
+        }
         set {
             toolbar.transform = newValue
             leftSkeletonAddressBar.transform = newValue
