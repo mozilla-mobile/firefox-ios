@@ -58,6 +58,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
+    private var isDefaultZoomEnabled: Bool {
+        featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
+    }
+
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
@@ -521,7 +525,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             ""
         }
 
-        let title = String(format: .MainMenu.Submenus.Tools.Zoom, "\(zoomSymbol)\(zoomLevel)")
+        let formattableString: String = isDefaultZoomEnabled ?
+            .MainMenu.Submenus.Tools.PageZoom :
+            .MainMenu.Submenus.Tools.Zoom
+        let title = String(format: formattableString, "\(zoomSymbol)\(zoomLevel)")
         let icon = tabInfo.zoomLevel == regularZoom ? Icons.zoomOff : Icons.zoomOn
 
         return MenuElement(
