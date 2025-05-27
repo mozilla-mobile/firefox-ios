@@ -230,8 +230,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private func addExternalBorder(to view: UIView, color: UIColor, width: CGFloat) {
         let borderLayer = CAShapeLayer()
 
-        // Expand the border frame slightly outward
-        let borderRect = view.bounds.insetBy(dx: -width / 2, dy: -width / 2)
+        // make the frame of the borderRect slightly larger than the backgroundViewHolder
+        let borderRect = view.bounds.insetBy(dx: -width / 3, dy: -width / 3)
 
         borderLayer.path = UIBezierPath(
             roundedRect: borderRect,

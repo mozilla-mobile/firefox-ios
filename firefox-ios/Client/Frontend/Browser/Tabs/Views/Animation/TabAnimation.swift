@@ -168,6 +168,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // Create border layer
         let theme = retrieveTheme()
+        // This borderWidth multiplier needed for smooth transition between end of animation and final selected state
+        let borderWidth: CGFloat = ExperimentTabCell.UX.selectedBorderWidth * 2
+
         let borderColor = selectedTab.isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
         let borderLayer = CAShapeLayer()
         borderLayer.path = UIBezierPath(
@@ -176,7 +179,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         ).cgPath
         borderLayer.strokeColor = borderColor.cgColor
         borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.lineWidth = ExperimentTabCell.UX.selectedBorderWidth
+        borderLayer.lineWidth = borderWidth
         borderLayer.opacity = 1
 
         snapshotContainer.layer.addSublayer(borderLayer)
@@ -229,18 +232,18 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.4)
         CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
-        CATransaction.setCompletionBlock {
-            print("Animations complete")
+        CATransaction.setCompletionBlock { [weak self] in
             snapshotContainer.removeFromSuperview()
+            self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
         }
 
         let lineWidthAnimation = CABasicAnimation(keyPath: "lineWidth")
         lineWidthAnimation.fromValue = 0
-        lineWidthAnimation.toValue = ExperimentTabCell.UX.selectedBorderWidth // or your desired visible width
+        lineWidthAnimation.toValue = borderWidth
         lineWidthAnimation.duration = 0.4
         lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
         borderLayer.add(lineWidthAnimation, forKey: "lineWidth")
-        borderLayer.lineWidth = ExperimentTabCell.UX.selectedBorderWidth // commit final value
+        borderLayer.lineWidth = borderWidth
 
         let fadeAnimation = CABasicAnimation(keyPath: "opacity")
         fadeAnimation.fromValue = 0.0
@@ -289,11 +292,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             }.startAnimation()
         }
 
-        animator.addCompletion { [weak self] _ in
+        animator.addCompletion { _ in
             backgroundView.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
-           // snapshotContainer.removeFromSuperview()
-            self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
             context.completeTransition(true)
         }
 
