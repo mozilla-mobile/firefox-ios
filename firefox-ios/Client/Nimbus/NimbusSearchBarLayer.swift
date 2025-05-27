@@ -7,15 +7,7 @@ import Foundation
 final class NimbusSearchBarLayer {
     // MARK: - Public methods
     public func getDefaultPosition(from nimbus: FxNimbus = FxNimbus.shared) -> SearchBarPosition {
-        let layout = nimbus.features.toolbarRefactorFeature.value().layout
-        let isVersionLayout = layout == .version1 || layout == .version2
-
-        guard UIDevice.current.userInterfaceIdiom != .pad, isVersionLayout else {
-            let isAtBottom = nimbus.features.search.value().awesomeBar.position.isBottom
-            return isAtBottom ? .bottom : .top
-        }
-
-        // Set the address bar to the bottom for new users enrolled in `version1` or `version2` toolbar experiment.
-        return .bottom
+        let isAtBottom = nimbus.features.search.value().awesomeBar.position.isBottom
+        return isAtBottom ? .bottom : .top
     }
 }

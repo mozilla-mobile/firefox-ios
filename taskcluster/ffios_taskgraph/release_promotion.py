@@ -178,7 +178,7 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
         )
 
     parameters["version"] = version_string
-    parameters["head_tag"] = "v{}".format(version_string)
+    parameters["head_tag"] = "firefox-v{}".format(version_string)
     parameters["next_version"] = input["next_version"]
 
     release_type = "release"
