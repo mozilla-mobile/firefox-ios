@@ -371,7 +371,15 @@ class TabTrayViewController: UIViewController,
                 self.shownToast = nil
             }
         }
+<<<<<<< HEAD
         applyTheme()
+=======
+
+        // Only apply normal theme when there's no on going animations
+        if !themeAnimator.isAnimating && swipeFromIndex == nil {
+            applyTheme()
+        }
+>>>>>>> 3baba0e77 (Bugfix FXIOS-12329 [Tab tray UI experiment] Fix logic with swipeFromIndex (#26854))
     }
 
     func updateTabCountImage(count: String) {
@@ -819,4 +827,87 @@ class TabTrayViewController: UIViewController,
                                    actionType: TabTrayActionType.changePanel)
         store.dispatch(action)
     }
+<<<<<<< HEAD
+=======
+
+    // MARK: - UIPageViewControllerDataSource & UIPageViewControllerDelegate
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let viewController = viewController as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: viewController),
+              index > 0 else { return nil }
+        return childPanelControllers[safe: index - 1]
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let viewController = viewController as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: viewController),
+              index < childPanelControllers.count - 1 else { return nil }
+        return childPanelControllers[safe: index + 1]
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
+        guard completed,
+              let currentVC = pageViewController.viewControllers?.first as? UINavigationController,
+              let currentIndex = childPanelControllers.firstIndex(of: currentVC) else { return }
+
+        let newPanelType = TabTrayPanelType.getExperimentConvert(index: currentIndex)
+        if tabTrayState.selectedPanel != newPanelType {
+            tabTrayState.selectedPanel = newPanelType
+            let action = TabTrayAction(panelType: newPanelType,
+                                       windowUUID: windowUUID,
+                                       actionType: TabTrayActionType.changePanel)
+            store.dispatch(action)
+
+            experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
+
+            navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
+            swipeFromIndex = nil
+        }
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
+        guard let fromVC = pageViewController.viewControllers?.first as? UINavigationController,
+              let index = childPanelControllers.firstIndex(of: fromVC) else { return }
+
+        swipeFromIndex = index
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard isTabTrayUIExperimentsEnabled,
+              let fromIndex = swipeFromIndex,
+              let width = scrollView.superview?.bounds.width else { return }
+
+        let offsetX = scrollView.contentOffset.x
+        let progress = (offsetX - width) / width
+
+        let toIndex: Int
+        if progress > 0 {
+            toIndex = min(fromIndex + 1, childPanelControllers.count - 1)
+        } else if progress < 0 {
+            toIndex = max(fromIndex - 1, 0)
+        } else {
+            toIndex = fromIndex
+        }
+
+        experimentSegmentControl.updateSelectionProgress(
+            fromIndex: fromIndex,
+            toIndex: toIndex,
+            progress: progress
+        )
+        applyTheme(fromIndex: fromIndex, toIndex: toIndex, progress: abs(progress))
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        swipeFromIndex = nil
+    }
+>>>>>>> 3baba0e77 (Bugfix FXIOS-12329 [Tab tray UI experiment] Fix logic with swipeFromIndex (#26854))
 }
