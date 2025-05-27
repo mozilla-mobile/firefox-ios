@@ -23,6 +23,8 @@ API_KEY = base64.b64decode(os.getenv("APPSTORECONNECT_APIKEY_B64")).decode("utf-
 APPSTORE_APP_ID = os.getenv("APPSTORE_APP_ID")
 # The group name to be added to the build in TestFlight
 TEST_FLIGHT_GROUP_NAME = os.getenv("TEST_FLIGHT_EXTERNAL_GROUP_NAME", "Nightly")
+# The version of the build in TestFlight
+BUILD_VERSION = os.getenv("BITRISE_NIGHTLY_VERSION", "9000")
 
 def generate_jwt_token(issuer_id, key_id, private_key):
     """Generates a JWT token using the given credentials."""
@@ -79,6 +81,7 @@ def main():
         issuer_id=ISSUER_ID, key_id=KEY_ID, private_key=API_KEY
     )
 
+    # Fetch beta groups
     beta_groups = get_paginated_data(
         "https://api.appstoreconnect.apple.com/v1/betaGroups", jwt_token, {
             "filter[app]": APPSTORE_APP_ID,
@@ -89,10 +92,11 @@ def main():
     group = beta_groups[0]
     print(f"Found group: {group['id']} {group['attributes']['name']}")
 
+    # Fetch builds for the app with a specific pre-release version
     builds = get_paginated_data(
         "https://api.appstoreconnect.apple.com/v1/builds", jwt_token, {
             "filter[app]": APPSTORE_APP_ID,
-            "filter[preReleaseVersion.version]": "9000",
+            "filter[preReleaseVersion.version]": BUILD_VERSION,
             "fields[preReleaseVersions]": "version",
             "sort": "-version",
             "limit": "1"
@@ -102,17 +106,15 @@ def main():
     build = builds[0]
     print(f"Found build: ID<{build['id']}> version<{build['attributes']['version']}> uploaded<{build['attributes']['uploadedDate']}>")
 
-    try:
-        payload = {"data": [{"type": "betaGroups", "id": group["id"]}]}
-        api_call(
-            f"https://api.appstoreconnect.apple.com/v1/builds/{build['id']}/relationships/betaGroups",
-            jwt_token=jwt_token,
-            method="POST",
-            payload=payload,
-        )
-        print(f"Added {TEST_FLIGHT_GROUP_NAME} to build {build['attributes']['version']}")
-    except Exception as e:
-        print(e)
+    # Add the beta group to the build
+    payload = {"data": [{"type": "betaGroups", "id": group["id"]}]}
+    api_call(
+        f"https://api.appstoreconnect.apple.com/v1/builds/{build['id']}/relationships/betaGroups",
+        jwt_token=jwt_token,
+        method="POST",
+        payload=payload,
+    )
+    print(f"Added {TEST_FLIGHT_GROUP_NAME} to build {build['attributes']['version']}")
 
 if __name__ == "__main__":
     main()
