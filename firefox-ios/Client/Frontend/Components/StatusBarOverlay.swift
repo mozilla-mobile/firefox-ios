@@ -82,7 +82,10 @@ class StatusBarOverlay: UIView,
         savedIsHomepage = isHomepage
 
         // We only need no status bar for one edge case
-        let needsNoStatusBar = isHomepage && isBottomSearchBar
+        var needsNoStatusBar = isHomepage && isBottomSearchBar
+        if !isToolbarRefactorEnabled {
+            needsNoStatusBar = needsNoStatusBar && wallpaperManager.currentWallpaper.hasImage
+        }
         scrollOffset = needsNoStatusBar ? 0 : 1
 
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
@@ -99,7 +102,14 @@ class StatusBarOverlay: UIView,
 
         // We only need no status bar for one edge case
         let isHomepage = savedIsHomepage ?? false
-        let needsNoStatusBar = isHomepage && isBottomSearchBar
+        let isWallpaperedHomepage = isHomepage && wallpaperManager.currentWallpaper.hasImage
+        var needsNoStatusBar: Bool
+
+        if isToolbarRefactorEnabled {
+            needsNoStatusBar = isHomepage && isBottomSearchBar
+        } else {
+            needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
+        }
 
         if needsNoStatusBar {
             let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
