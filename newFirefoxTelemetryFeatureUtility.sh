@@ -10,33 +10,33 @@
 #
 # This script can also help you add a metrics YAML for a new feature you are working on.
 #
-# There are two possible arguments:
+# OPTIONS:
 #
-# --update: Simply re-run the script with this flag to update the glean_index.yaml file 
-#			with any manually added metrics files in the Client/Glean/probes folder.
+# --update: 			Simply re-run the script with this flag to update the glean_index.yaml file 
+#						with any manually added metrics files in the Client/Glean/probes folder.
 #
-# --new featureName: This parameter should describe the new feature or component and be input
-#					 in camelCase.
+# --new featureName: 	This parameter should describe the new feature or component and be input
+#					 	in camelCase.
 #
-#					 Creates a new metrics YAML file feature_name.yaml, adds it to the 
-#					 Client/Glean/probes folder, and appends the new filepath to the
-#					 Client/Glean/glean_index.yaml index.
+#						Creates a new metrics YAML file feature_name.yaml, adds it to the 
+#					 	Client/Glean/probes folder, and appends the new filepath to the
+#					 	Client/Glean/glean_index.yaml index.
 #
-#					 This will automatically add a tag of `FeatureName` to the metrics in
-#					 this file. The tag and its description should be added to the tags.yaml
-#					 file as well.
+#					 	This will automatically add a tag of `FeatureName` to the metrics in
+#					 	this file. The tag and its description should be added to the tags.yaml
+#					 	file as well.
 #
 
-#######################################
+##############################################################################
 # Global Constants
-#######################################
+##############################################################################
+readonly GLEAN_INDEX_FILE='firefox-ios/Client/Glean/glean_index.yaml'
 readonly PATH_TO_FEATURE_YAMLS='firefox-ios/Client/Glean/probes'
 readonly FEATURE_YAMLS="$PATH_TO_FEATURE_YAMLS/*.yaml"
-readonly GLEAN_INDEX_FILE='firefox-ios/Client/Glean/glean_index.yaml'
-
+readonly XCODE_INFILE_LIST='firefox-ios/Client/Glean/gleanProbes.xcfilelist'
 readonly DOCUMENTATION_WARNING='Please see the documentation in the script.'
 
-#######################################
+##############################################################################
 # Prints to file the YAML-formatted file paths to all the metrics files in the Glean/probes subdirectory.
 # Globals:
 #   FEATURE_YAMLS
@@ -44,9 +44,8 @@ readonly DOCUMENTATION_WARNING='Please see the documentation in the script.'
 #   A path to the output file.
 # Returns:
 #   Writes output to the file path in argument 1 and debug logs to stdout.
-#######################################
+##############################################################################
 function append_paths_to_probe_index() {
-	echo '\n'
 	echo 'Appending the following metrics files to the Glean index:'
 
 	for filename in $FEATURE_YAMLS; do
@@ -56,11 +55,9 @@ function append_paths_to_probe_index() {
 		relativeName="${filename#firefox-ios/}"
 		echo "  - $relativeName" >> $1
 	done
-
-	echo '\n'
 }
 
-#######################################
+##############################################################################
 # Removes everything in the probe index file after the `metrics_files:` YAML heading.
 # Globals:
 #   GLEAN_INDEX_FILE
@@ -68,13 +65,26 @@ function append_paths_to_probe_index() {
 #   None
 # Returns:
 #   None
-#######################################
+##############################################################################
 function clear_probe_index_file() {
 	# Pass empty string to -i to do an in-place replacement without any backup file
 	sed -i '' '/metrics_files:/q' $GLEAN_INDEX_FILE
 }
 
-#######################################
+##############################################################################
+# Entirely deletes the contents of a file.
+# Globals:
+#   None
+# Arguments:
+#   $1 : The file to clear.
+# Returns:
+#   None
+##############################################################################
+function clear_file_contents() {
+	sed -i '' d $1
+}
+
+##############################################################################
 # Converts the given camelCase string to snake_case.
 # Globals:
 #   None
@@ -82,12 +92,12 @@ function clear_probe_index_file() {
 #   $1 : The camelCase string to convert.
 # Returns:
 #   Prints to stdout the converted value.
-#######################################
+##############################################################################
 function convert_camel_case_to_snake_case() {
     echo $1 | sed -r 's/([a-z0-9])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]'
 }
 
-#######################################
+##############################################################################
 # Creates a new metrics file for the given component.
 # Globals:
 #   None
@@ -95,7 +105,7 @@ function convert_camel_case_to_snake_case() {
 #   $1 : The camelCase name of the component for which to create a metrics file.
 # Returns:
 #   Prints the new file path to stdout.
-#######################################
+##############################################################################
 function create_file_for_component() {
 	component_file_name=$(convert_camel_case_to_snake_case $component_name)
 
@@ -105,7 +115,7 @@ function create_file_for_component() {
 	echo $new_file
 }
 
-#######################################
+##############################################################################
 # Clears the metrics files from the glean index file and rewrites them again fresh.
 # Globals:
 #   GLEAN_INDEX_FILE
@@ -113,13 +123,28 @@ function create_file_for_component() {
 #   None
 # Returns:
 #   None
-#######################################
+##############################################################################
 function update_index_file() {
 	clear_probe_index_file 
 	append_paths_to_probe_index $GLEAN_INDEX_FILE
 }
 
-#######################################
+##############################################################################
+# Capitalizes the first character in a string.
+# Globals:
+#   None
+# Arguments:
+#   $1 : A camelCase name to capitalize to CamelCase.
+# Returns:
+#   Writes the capitalized string to stdout.
+##############################################################################
+
+function capitalized_tag_name() {
+	feature_name=$1
+	echo "$(tr '[:lower:]' '[:upper:]' <<< ${feature_name:0:1})${feature_name:1}"
+}
+
+##############################################################################
 # Prefills a file with a template for a new metrics file related to a feature.
 # Globals:
 #   None
@@ -128,10 +153,9 @@ function update_index_file() {
 #	$2 : The name of the new feature
 # Returns:
 #   Writes the metrics YAML template to the file given by $1.
-#######################################
+##############################################################################
 function write_new_metrics_template() {
-	feature_name=$2
-	capitalized_tag="$(tr '[:lower:]' '[:upper:]' <<< ${feature_name:0:1})${feature_name:1}"
+	capitalized_tag=$(capitalized_tag_name $2)
 
     echo """# This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -158,12 +182,37 @@ function write_new_metrics_template() {
 """ > $1
 }
 
-#######################################
+##############################################################################
+# Writes the file paths to the Xcode build phase input list for metric YAMLs.
+# Globals:
+#   XCODE_INFILE_LIST
+# Arguments:
+#	None
+# Returns:
+#   Appends to the xcode infile list.
+##############################################################################
+function write_probe_files_to_file_list() {
+	echo "Appending to xcode filelist:"
+	echo "# This is an autogenerated file using newFirefoxTelemetryFeatureUtility.sh" >> $XCODE_INFILE_LIST
+
+	for filename in $FEATURE_YAMLS; do
+		echo " * ${filename}"
+
+		# Write this path to the file passed in as argument 1
+		directory='firefox-ios'
+		prefix='$(PROJECT_DIR)'
+		relativeName="${filename#firefox-ios/}"
+		echo "$prefix/$relativeName" >> $XCODE_INFILE_LIST
+	done
+}
+
+##############################################################################
 # Main
-#######################################
+##############################################################################
 if [ "$1" == "--add" ]; then
 	if [ -z "${2}" ]; then 
 		echo $DOCUMENTATION_WARNING
+		exit 1
 	else
 		component_name=$2
 
@@ -173,20 +222,41 @@ if [ "$1" == "--add" ]; then
 			exit 1		
 		fi
 		
-		# Create file and add template
+		# Create the new metrics YAML file and populate with a basic template
+		capitalized_tag=$(capitalized_tag_name $component_name)
 		new_file=$(create_file_for_component $component_name)
 		write_new_metrics_template $new_file $component_name
 		echo "Successfully added file for the $component_name component:\n * $new_file"
 	
-		# Now update the index file as well
+		# Update the glean index file
 		update_index_file
 		echo "Successfully updated the glean index file."
+
+		# Update the Xcode `Glean SDK Generator Script` build phase input file list
+		clear_file_contents $XCODE_INFILE_LIST
+		write_probe_files_to_file_list
+		echo "Successfully updated the xcode build phase infile list."
+
+		# TODO Could add new tags to the tags.yaml file automatically for users
+		echo "\n** Please add your new \"${capitalized_tag}\" tag to the tags.yaml file with a description. **\n"		
+		
+		exit 0
 	fi
 elif [ "$1" == "--update" ]; then
+	# Update the glean index file
 	update_index_file
-	echo "Successfully updated the glean index file."
+	echo "Successfully updated the glean index file.\n"
+
+	# Update the Xcode `Glean SDK Generator Script` build phase input file list
+	clear_file_contents $XCODE_INFILE_LIST
+	write_probe_files_to_file_list
+	echo "Successfully updated the xcode build phase infile list."
+
+	exit 0
 elif [ $# -eq 0 ]; then
     echo "No arguments supplied. $DOCUMENTATION_WARNING"
+	exit 1
 else
 	echo $DOCUMENTATION_WARNING
+	exit 1
 fi
