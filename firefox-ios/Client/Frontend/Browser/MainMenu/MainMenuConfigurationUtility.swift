@@ -62,7 +62,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
         and uuid: WindowUUID,
-        readerState: ReaderModeState? = nil
+        readerState: ReaderModeState? = nil,
+        isExpanded: Bool = false
     ) -> [MenuSection] {
         switch viewType {
         case .tools:
@@ -72,7 +73,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             return getSaveSubmenu(with: uuid, and: tabInfo)
 
         default:
-            return getMainMenuElements(with: uuid, and: tabInfo)
+            return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded)
         }
     }
 
@@ -80,34 +81,145 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     private func getMainMenuElements(
         with uuid: WindowUUID,
-        and tabInfo: MainMenuTabInfo
+        and tabInfo: MainMenuTabInfo,
+        isExpanded: Bool = false
     ) -> [MenuSection] {
         // Always include these sections
-        var menuSections: [MenuSection] = [
-            getNewTabSection(with: uuid, tabInfo: tabInfo),
-            getLibrariesSection(with: uuid, tabInfo: tabInfo),
-            getOtherToolsSection(
-                with: uuid,
-                isHomepage: tabInfo.isHomepage,
-                tabInfo: tabInfo
-            )
-        ]
+        var menuSections: [MenuSection] = []
 
-        // Conditionally add tools section if this is a website
-        if !tabInfo.isHomepage {
-            menuSections.insert(
-                getToolsSection(with: uuid, and: tabInfo),
-                at: 1
-            )
-        }
-
-        if isMenuRedesignOn {
-            menuSections.insert(
-                getTopTabsSection(with: uuid, tabInfo: tabInfo),
-                at: 0)
+        if !isMenuRedesignOn {
+            menuSections.append(getNewTabSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getLibrariesSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(
+                getOtherToolsSection(
+                    with: uuid,
+                    isHomepage: tabInfo.isHomepage,
+                    tabInfo: tabInfo
+                ))
+            // Conditionally add tools section if this is a website
+            if !tabInfo.isHomepage {
+                menuSections.insert(
+                    getToolsSection(with: uuid, and: tabInfo),
+                    at: 1
+                )
+            }
+        } else {
+            menuSections.insert(getTopTabsSection(with: uuid, tabInfo: tabInfo), at: 0)
+            menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         }
 
         return menuSections
+    }
+
+    // MARK: - Site Section
+    private func getSiteSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, isExpanded: Bool) -> MenuSection {
+        return MenuSection(
+            isExpanded: isExpanded,
+            options: [
+                configureBookmarkItem(with: uuid, and: tabInfo),
+                configureShareItem(with: uuid, tabInfo: tabInfo),
+                MenuElement(
+                    title: .MainMenu.ToolsSection.FindInPage,
+                    iconName: StandardImageIdentifiers.Large.folder,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.FindInPage,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.findInPage),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+                configureUserAgentItem(with: uuid, tabInfo: tabInfo),
+                configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded),
+                MenuElement(
+                    title: .MainMenu.PanelLinkSection.History,
+                    iconName: Icons.history,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.history,
+                    isOptional: true,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.history),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.PanelLinkSection.Bookmarks,
+                    iconName: Icons.bookmarks,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
+                    isOptional: true,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.bookmarks),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.PanelLinkSection.Downloads,
+                    iconName: Icons.downloads,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Downloads,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.downloads,
+                    isOptional: true,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.downloads),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.PanelLinkSection.Passwords,
+                    iconName: Icons.passwords,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Passwords,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.passwords,
+                    isOptional: true,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.passwords),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+        ])
     }
 
     // TODO: FXIOS-12306 Update MainMenuConfigurationUtility based on the final design
@@ -385,6 +497,35 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
                                                      isDefaultUserAgentDesktop: tabInfo.isDefaultUserAgentDesktop,
                                                      hasChangedUserAgent: tabInfo.hasChangedUserAgent)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureMoreLessItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo,
+        isExpanded: Bool
+    ) -> MenuElement {
+        typealias Menu = String.MainMenu.ToolsSection
+        typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
+        typealias Icons = StandardImageIdentifiers.Large
+
+        return MenuElement(
+            title: isExpanded ? Menu.LessOptions : Menu.MoreOptions,
+            iconName: isExpanded ? Icons.chevronDown : Icons.chevronRight,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: isExpanded ? A11y.LessOptions : A11y.MoreOptions,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.moreLess,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapMoreOptions,
+                        isExpanded: isExpanded
                     )
                 )
             }

@@ -4250,6 +4250,16 @@ extension String {
                 tableName: "MainMenu",
                 value: "Save",
                 comment: "On the main menu, the title for the action that will take the user to the Save submenu in the menu.")
+            public static let MoreOptions = MZLocalizedString(
+                key: "MainMenu.ToolsSection.MoreOptions.Title.v141",
+                tableName: "MainMenu",
+                value: "More",
+                comment: "On the main menu, the title for the action that will show more menu options in the current section of the menu.")
+            public static let LessOptions = MZLocalizedString(
+                key: "MainMenu.ToolsSection.LessOptions.Title.v141",
+                tableName: "MainMenu",
+                value: "Less",
+                comment: "On the main menu, the title for the action that will hide some menu options in the current section of the menu.")
 
             public struct AccessibilityLabels {
                 public static let SwitchToDesktopSite = MZLocalizedString(
@@ -4277,6 +4287,16 @@ extension String {
                     tableName: "MainMenu",
                     value: "Save submenu",
                     comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
+                public static let MoreOptions = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141",
+                    tableName: "MainMenu",
+                    value: "More",
+                    comment: "On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu.")
+                public static let LessOptions = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141",
+                    tableName: "MainMenu",
+                    value: "Less",
+                    comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
             }
         }
 
