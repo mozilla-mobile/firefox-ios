@@ -156,7 +156,6 @@ final class SettingsCoordinator: BaseCoordinator,
         case .theme:
             if themeManager.isNewAppearanceMenuOn {
                 let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                            shouldShowPageZoom: true,
                                                             delegate: self)
                 return UIHostingController(rootView: appearanceView)
             } else {
@@ -412,7 +411,6 @@ final class SettingsCoordinator: BaseCoordinator,
 
         if themeManager.isNewAppearanceMenuOn {
             let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                        shouldShowPageZoom: true,
                                                         delegate: self)
             let viewController = UIHostingController(rootView: appearanceView)
             viewController.title = .SettingsAppearanceTitle

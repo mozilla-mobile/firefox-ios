@@ -54,7 +54,6 @@ struct GenericItemCellView: View {
         .accessibilityLabel(title)
         .accessibilityAddTraits(.isButton)
         .onTapGesture {
-            print("YRD on gesture is working")
             onTap()
         }
     }
