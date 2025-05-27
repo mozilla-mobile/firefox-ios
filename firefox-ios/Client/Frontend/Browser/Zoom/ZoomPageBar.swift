@@ -118,7 +118,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private func setupViews() {
         zoomInButton.addTarget(self, action: #selector(didPressZoomIn), for: .touchUpInside)
         zoomOutButton.addTarget(self, action: #selector(didPressZoomOut), for: .touchUpInside)
-        closeButton.addTarget(self, action: #selector(self.didPressClose), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
 
         gestureRecognizer.addTarget(self, action: #selector(didPressReset))
         zoomLevel.addGestureRecognizer(gestureRecognizer)
