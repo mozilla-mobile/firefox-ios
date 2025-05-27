@@ -991,8 +991,7 @@ class BrowserCoordinator: BaseCoordinator,
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
                          style: UIModalPresentationStyle) {
-        browserViewController.screenshotHelper.takeScreenshot(tabManager.selectedTab!,
-                                                              windowUUID: windowUUID) { [weak self] in
+        browserViewController.willNavigateAway(from: tabManager.selectedTab) { [weak self] in
             if !UIAccessibility.isReduceMotionEnabled {
                 self?.router.present(viewController,
                                      animated: true,
