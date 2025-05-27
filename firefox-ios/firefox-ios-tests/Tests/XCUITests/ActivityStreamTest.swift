@@ -13,6 +13,7 @@ let newTopSite = [
     "bookmarkLabel": "Mozilla - Internet for people, not profit (US)"
 ]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
+let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
 
 class ActivityStreamTest: FeatureFlaggedTestBase {
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
@@ -218,7 +219,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts.element(boundBy: 0))
         navigator.nowAt(TabTray)
-        app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"].waitAndTap()
+        app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
         // The website is open
         mozWaitForElementToNotExist(TopSiteCellgroup)
         waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
@@ -248,8 +249,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         if iPad() {
             navigator.goto(TabTray)
         }
-        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
-        let numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
+        waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
+        let numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
@@ -275,8 +276,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
         if iPad() {
             navigator.goto(TabTray)
-            numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
-            waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
+            numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
+            waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
         } else {
             waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
         }

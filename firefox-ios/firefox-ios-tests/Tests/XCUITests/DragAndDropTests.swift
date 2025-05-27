@@ -123,7 +123,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                     XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
                 }
             } else {
-                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+                XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
             }
         }
     }
@@ -146,7 +146,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
             )
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-            XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 
@@ -179,7 +179,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                     XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
                 }
             } else {
-                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+                XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
             }
         }
     }
@@ -203,7 +203,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
             )
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
             // Check that focus is kept on last website open
-            XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 
