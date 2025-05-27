@@ -2419,6 +2419,7 @@ class BrowserViewController: UIViewController,
 
             configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
                                                  navigationToolbarView: navigationToolbarContainer)
+            applyTheme() // update the background view to ensure translucency is displayed correctly
             return
         }
 
@@ -3478,7 +3479,11 @@ class BrowserViewController: UIViewController,
         if isToolbarRefactorEnabled,
             let toolbarState,
             toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
-            backgroundView.backgroundColor = currentTheme.colors.layer3
+            // to make sure on homepage with bottom search bar the status bar is hidden
+            // we have to adjust the background color to match the homepage background color
+            let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
+            let colors = currentTheme.colors
+            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layer3
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
