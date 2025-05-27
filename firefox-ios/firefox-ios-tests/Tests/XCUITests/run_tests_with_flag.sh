@@ -13,7 +13,7 @@ JSON_ARG="$1"
 FEATURE_ARG="$2"
 TEST_PLAN="$3"
 
-SIMULATOR_ID="3D7295F7-FC2E-486E-B95C-57C66313A06B"  # Update if needed
+SIMULATOR_NAME="iPhone 16"  # Can be changed to another available sim name
 SCHEME="Fennec"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -24,7 +24,7 @@ if [[ -z "$TESTS" ]]; then
   exit 0
 fi
 
-CMD=(xcodebuild test -scheme "$SCHEME" -testPlan "$TEST_PLAN" -destination "id=$SIMULATOR_ID")
+CMD=(xcodebuild test -scheme "$SCHEME" -testPlan "$TEST_PLAN" -destination "platform=iOS Simulator,name=$SIMULATOR_NAME,OS=latest")
 
 while read -r test; do
   CMD+=("-only-testing:$test")
@@ -34,7 +34,7 @@ echo "Running tests with:"
 echo "  JSON config     = $JSON_ARG"
 echo "  Feature name    = $FEATURE_ARG"
 echo "  Test plan       = $TEST_PLAN"
-echo "  Simulator ID    = $SIMULATOR_ID"
+echo "  Simulator name  = $SIMULATOR_NAME"
 echo ""
 printf '%q ' "${CMD[@]}"
 echo -e "\n"
