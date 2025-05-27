@@ -770,6 +770,7 @@
 		8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */; };
 		8A05B0052A69A0C40011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0042A69A0C40011B622 /* Common */; };
 		8A05B0072A69A25C0011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0062A69A25C0011B622 /* Common */; };
+		8A06DF5F2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */; };
 		8A0727462B4890B50071BB9F /* WebviewTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */; };
 		8A0727492B4898D20071BB9F /* WebviewTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0727472B4898750071BB9F /* WebviewTelemetryTests.swift */; };
 		8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07910E278F62F2005529CB /* AdjustHelper.swift */; };
@@ -8164,6 +8165,7 @@
 		8A05813728B56D9B00FD8D46 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813928B56DB900FD8D46 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813B28B56DD700FD8D46 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
+		8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTitleSupplementaryView.swift; sourceTree = "<group>"; };
 		8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewTelemetry.swift; sourceTree = "<group>"; };
 		8A0727472B4898750071BB9F /* WebviewTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewTelemetryTests.swift; sourceTree = "<group>"; };
 		8A07910E278F62F2005529CB /* AdjustHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustHelper.swift; sourceTree = "<group>"; };
@@ -11127,20 +11129,21 @@
 			children = (
 				8A8D12122DD671BE00E0B8BB /* Animation */,
 				5A96FB602D97073C00917B12 /* CustomSelectorView */,
-				8AC6F2252D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift */,
-				8AC6F2232D6E243F00D10A9F /* ExperimentEmptyPrivateTabsView.swift */,
-				8A2068362D6D52830063A77B /* ExperimentTabCell.swift */,
-				5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
+				8AC6F2232D6E243F00D10A9F /* ExperimentEmptyPrivateTabsView.swift */,
+				8AC6F2252D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift */,
+				8A2068362D6D52830063A77B /* ExperimentTabCell.swift */,
+				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
+				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
 				1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */,
 				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
-				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
+				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
+				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */,
 				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
-				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
+				5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */,
+				8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
-				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
-				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -17584,6 +17587,7 @@
 				0AFF7F682C78989000265214 /* CertificatesHeaderItem.swift in Sources */,
 				B2999FF32B194A8300F0FEC1 /* FillCreditCardForm.swift in Sources */,
 				5A64225129CB506500EEC3E5 /* TabManagerDelegate.swift in Sources */,
+				8A06DF5F2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift in Sources */,
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				217641B82D651DB900597B6F /* MIMEType.swift in Sources */,
@@ -28883,7 +28887,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 140.0.20250523140405;
+				version = 141.0.20250524050402;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
