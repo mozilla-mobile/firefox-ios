@@ -12,6 +12,9 @@ struct ZoomLevelPickerView: View {
 
     private struct UX {
         static var sectionPadding: CGFloat = 16
+        static var verticalPadding: CGFloat = 12
+        static var dividerHeight: CGFloat = 0.7
+        static var pickerLabelSpacing: CGFloat = 4
     }
 
     private var sectionBackground: Color {
@@ -34,7 +37,7 @@ struct ZoomLevelPickerView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
                                      sectionTitleColor: theme.colors.textSecondary.color)
                 .padding([.leading, .trailing, .top], UX.sectionPadding)
@@ -46,42 +49,55 @@ struct ZoomLevelPickerView: View {
     }
 
     var defaultZoomPicker: some View {
-        HStack {
-            Text(pickerText)
-                .font(.body)
-                .foregroundColor(theme.colors.textPrimary.color)
+        VStack(spacing: 0) {
+            // Top divider
+            Divider()
+                .frame(height: UX.dividerHeight)
+                .background(theme.colors.borderPrimary.color)
 
-            Spacer()
+            // Picker content
+            HStack {
+                Text(pickerText)
+                    .font(.body)
+                    .foregroundColor(theme.colors.textPrimary.color)
 
-            // Right side - picker with current value
-            Menu {
-                Picker(selection: $selectedZoomLevel, label: EmptyView()) {
-                    ForEach(ZoomLevel.allCases, id: \.self) { item in
-                        Text(item.displayName)
-                            .tag(item)
+                Spacer()
+
+                // Right side - picker with current value
+                Menu {
+                    Picker(selection: $selectedZoomLevel, label: EmptyView()) {
+                        ForEach(ZoomLevel.allCases, id: \.self) { item in
+                            Text(item.displayName)
+                                .tag(item)
+                        }
+                    }
+                    .onChange(of: selectedZoomLevel) { newValue in
+                        zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                } label: {
+                    HStack(spacing: UX.pickerLabelSpacing) {
+                        Text(selectedZoomLevel.displayName)
+                            .font(.body)
+                            .foregroundColor(theme.colors.textPrimary.color)
+
+                        Image(StandardImageIdentifiers.Large.chevronDown)
+                            .renderingMode(.template)
+                            .font(.caption)
+                            .foregroundColor(theme.colors.textPrimary.color)
+                            .accessibilityHidden(true)
                     }
                 }
-                .onChange(of: selectedZoomLevel) { newValue in
-                    zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
-                }
-                .pickerStyle(.inline)
-                .labelsHidden()
-            } label: {
-                HStack(spacing: 4) {
-                    Text(selectedZoomLevel.displayName)
-                        .font(.body)
-                        .foregroundColor(theme.colors.textPrimary.color)
-
-                    Image(StandardImageIdentifiers.Large.chevronDown)
-                        .renderingMode(.template)
-                        .font(.caption)
-                        .foregroundColor(theme.colors.textPrimary.color)
-                        .accessibilityHidden(true)
-                }
             }
+            .padding(.horizontal, UX.sectionPadding)
+            .padding(.vertical, UX.verticalPadding)
+
+            // Bottom divider
+            Divider()
+                .frame(height: UX.dividerHeight)
+                .background(theme.colors.borderPrimary.color)
         }
-        .padding(.horizontal, UX.sectionPadding)
-        .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(backgroundColor)
     }

@@ -16,7 +16,8 @@ struct ZoomSiteListView: View {
         static var sectionPadding: CGFloat = 16
         static var footerBottomPadding: CGFloat = 40
         static var footerTopPadding: CGFloat = 8
-        static var cellHeight = 44
+        static var cellHeight: CGFloat = 50
+        static var listPadding: CGFloat = 5
     }
 
     var cellBackground: Color {
@@ -25,6 +26,15 @@ struct ZoomSiteListView: View {
 
     var sectionBackground: Color {
         return theme.colors.layer1.color
+    }
+
+    // Calculate list height to avoid scroll in inner list view
+    // Base height calculation with cell height and extra padding
+    var listViewHeight: CGFloat {
+        let baseHeight = CGFloat(domainZoomLevels.count) * UX.cellHeight
+        let extraPadding = CGFloat(domainZoomLevels.count) * UX.listPadding
+
+        return baseHeight + extraPadding
     }
 
     init(theme: Theme,
@@ -56,7 +66,7 @@ struct ZoomSiteListView: View {
                 }
                 .onDelete(perform: onDelete)
             }
-            .frame(height: CGFloat(domainZoomLevels.count * UX.cellHeight))
+            .frame(height: listViewHeight)
             .listStyle(.plain)
             .background(cellBackground)
 
