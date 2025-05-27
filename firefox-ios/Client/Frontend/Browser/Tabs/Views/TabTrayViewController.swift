@@ -255,7 +255,7 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    internal let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
     init(panelType: TabTrayPanelType,
