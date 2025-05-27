@@ -34,6 +34,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let separatorWidth: CGFloat = 1
         static let separatorHeightMultiplier = 0.4
         static let closButtonSize: CGFloat = 30
+        static let closButtonLargeSize: CGFloat = 48
         static let shadowHeightOffset = 6
     }
 
@@ -79,6 +80,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     private lazy var zoomInButton: UIButton = .build { button in
@@ -129,7 +131,6 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
             a11yLabel: .LegacyAppMenu.ZoomPageCloseAccessibilityLabel,
             a11yIdentifier: AccessibilityIdentifiers.FindInPage.findInPageCloseButton)
         closeButton.configure(viewModel: closeButtonViewModel)
-        closeButton.layer.cornerRadius = 0.5 * UX.closButtonSize
 
         [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
@@ -165,6 +166,18 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                   constant: -UX.padding),
         ])
+        setupCloseButtonConstraints()
+    }
+
+    func setupCloseButtonConstraints() {
+        let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        let closeButtonSizes = isAccessibilityCategory ? UX.closButtonLargeSize : UX.closButtonSize
+        closeButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                              constant: -UX.padding).isActive = true
+        closeButton.heightAnchor.constraint(equalToConstant: closeButtonSizes).isActive = true
+        closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes).isActive = true
+        closeButton.layer.cornerRadius = 0.5 * closeButtonSizes
     }
 
     private func setupSeparator(_ separator: UIView) {
@@ -188,6 +201,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateStepperConstraintsBasedOnSizeClass()
+        setupCloseButtonConstraints()
         layoutIfNeeded()
     }
 
