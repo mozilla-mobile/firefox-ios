@@ -87,7 +87,7 @@ let middlewares = [
 #if TESTING
 var store: any DefaultDispatchStore<AppState> = Store(state: AppState(),
                                                       reducer: AppState.reducer,
-                                                      middlewares: middlewares)
+                                                      middlewares: [])
 #else
 let store: any DefaultDispatchStore<AppState> = Store(state: AppState(),
                                                       reducer: AppState.reducer,
