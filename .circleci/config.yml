@@ -76,6 +76,41 @@ jobs:
       - run:
           name: Upload to Browserstack
           command: bundle exec fastlane upload_to_browserstack
+      - run: |
+          printenv BROWSERSTACK_URL
+      - run: |
+          cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
+
+  execute-critical-health-checks-ios:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load Bash ENV from workspace
+          command: cat bash.env >> $BASH_ENV
+      - run:
+          name: Confirm BrowserStack URL
+          command: printenv BROWSERSTACK_URL
+      - run:
+          name: Confirm BROWSERSTACK_URL is available
+          command: |
+            source $BASH_ENV
+            echo "BROWSERSTACK_URL is: $BROWSERSTACK_URL"
+      - run: |
+          echo "Cloning mobile acceptance tests..."
+          git clone https://github.com/ecosia/mobile-acceptance-testing.git
+      - run: |
+          echo "Running iOS tests on BrowserStack..."
+          echo "Using App URL: $BS_URL"
+          cd mobile-acceptance-testing
+          mvn test -PiOSCHCTests -DBStackIOSAppUrl="$BROWSERSTACK_URL"
       - jira/notify:
           issue_regexp: "([A-Za-z]{2,30}-[0-9]+)"
           pipeline_id: << pipeline.id >>
@@ -111,4 +146,12 @@ workflows:
             branches:
               only: 
                 - main
+          context: napps
+
+  test-browserstack-critical-health-checks:
+    jobs:
+      - build-and-deploy-firebase-and-browserstack
+      - execute-critical-health-checks-ios:
+          requires:
+            - build-and-deploy-firebase-and-browserstack
           context: napps

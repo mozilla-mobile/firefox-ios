@@ -62,6 +62,17 @@ platform :ios do
       browserstack_access_key: ENV["BROWSERSTACK_ACCESS_KEY"],
       file_path: ENV["IPA_PATH"]
     )
+
+    persist_browserstack_id_env_var(
+      app_id: ENV["BROWSERSTACK_APP_ID"]
+    )
+  end
+
+  desc "Persist Browserstack App ID environment variable in CircleCI"
+  lane :persist_browserstack_id_env_var do |options|
+    env_var_name = options[:app_id]
+    UI.message("Persisting Browserstack App ID: #{env_var_name}")
+    sh "echo \"export BROWSERSTACK_URL=#{env_var_name}\" >> $BASH_ENV"
   end
 
   desc "Upload to Firebase"
