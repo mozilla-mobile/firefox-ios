@@ -35,10 +35,6 @@ class StatusBarOverlay: UIView,
         toolbarHelper.isToolbarRefactorEnabled
     }
 
-    private var toolbarLayoutType: ToolbarLayoutType? {
-        FxNimbus.shared.features.toolbarRefactorFeature.value().layout
-    }
-
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
     /// This is used as the alpha of the status bar background.
     /// 0 = no status bar background shown
@@ -93,8 +89,7 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        let isVersionLayout = isToolbarRefactorEnabled && (toolbarLayoutType == .version1 || toolbarLayoutType == .version2)
-        savedBackgroundColor = (hasTopTabs || isVersionLayout) ? theme.colors.layer3 : theme.colors.layer1
+        savedBackgroundColor = (hasTopTabs || isToolbarRefactorEnabled) ? theme.colors.layer3 : theme.colors.layer1
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         // We only need no status bar for one edge case

@@ -2378,17 +2378,9 @@ class BrowserViewController: UIViewController,
             var lockIconImageName: String?
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
-                    lockIconImageName = hasSecureContent ?
-                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                        StandardImageIdentifiers.Small.shieldSlashFill
-                } else {
-                    lockIconImageName = hasSecureContent ?
-                        StandardImageIdentifiers.Large.lockFill :
-                        StandardImageIdentifiers.Large.lockSlashFill
-                }
-
+                lockIconImageName = hasSecureContent ?
+                    StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                    StandardImageIdentifiers.Small.shieldSlashFill
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
             }
@@ -3470,10 +3462,7 @@ class BrowserViewController: UIViewController,
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         updateAddressBarBackgroundViewColor(theme: currentTheme)
 
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        if isToolbarRefactorEnabled,
-            let toolbarState,
-            toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
+        if isToolbarRefactorEnabled {
             backgroundView.backgroundColor = currentTheme.colors.layer3
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
@@ -3499,10 +3488,7 @@ class BrowserViewController: UIViewController,
 
     private func updateAddressBarBackgroundViewColor(theme: Theme) {
         guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        let toolbarLayoutStyle = toolbarState?.toolbarLayout
-        let colors = theme.colors
-        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
+        addressBarBackgroundView.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Telemetry
