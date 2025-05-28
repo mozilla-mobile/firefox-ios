@@ -37,6 +37,13 @@ class TabTraySelectorView: UIView,
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
 
+    private lazy var stackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.spacing = TabTraySelectorUX.horizontalPadding
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+    }
+
     var items: [String] = ["", "", ""] {
         didSet {
             updateLabels()
@@ -74,14 +81,6 @@ class TabTraySelectorView: UIView,
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
         addSubview(selectionBackgroundView)
-
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = TabTraySelectorUX.horizontalPadding
-        stackView.distribution = .equalCentering
-        stackView.alignment = .center
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
@@ -139,11 +138,12 @@ class TabTraySelectorView: UIView,
     /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
     /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
     private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
-        let preferredFont = UIFont.preferredFont(forTextStyle: .body)
-        let baseFontSize = preferredFont.pointSize
+        if let existingConstraint = button.constraints.first(where: { $0.firstAttribute == .width }) {
+            existingConstraint.isActive = false
+        }
 
-        let boldFont = UIFont.systemFont(ofSize: baseFontSize, weight: .bold)
-        let boldWidth = title.size(withAttributes: [.font: boldFont]).width
+        let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
         button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
     }
 
@@ -282,16 +282,22 @@ class TabTraySelectorView: UIView,
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
             dynamicTypeChanged()
-            break
         default:
             break
         }
     }
 
     private func dynamicTypeChanged() {
+        adjustSelectedButtonFont(toIndex: selectedIndex)
+
         for (index, title) in items.enumerated() {
             guard let button = buttons[safe: index] else { continue }
             applyButtonWidthAnchor(on: button, with: title as NSString)
         }
+
+        applyInitalSelectionBackgroundFrame()
+
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }
