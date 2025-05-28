@@ -6,7 +6,7 @@ features:
     variables:
       enabled:
         description: >
-          If true, page zoom settings and default zoom feature is shown
+          If true, page zoom settings and default zoom feature are shown
         type: Boolean
         default: false
     defaults:
