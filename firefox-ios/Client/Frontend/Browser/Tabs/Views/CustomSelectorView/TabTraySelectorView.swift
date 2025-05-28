@@ -26,7 +26,9 @@ private struct SelectionIndicatorTransition {
 }
 
 class TabTraySelectorView: UIView,
-                           ThemeApplicable {
+                           ThemeApplicable,
+                           Notifiable {
+    var notificationCenter: NotificationProtocol
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
@@ -44,10 +46,13 @@ class TabTraySelectorView: UIView,
     }
 
     init(selectedIndex: Int,
-         theme: Theme) {
+         theme: Theme,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.selectedIndex = selectedIndex
         self.theme = theme
+        self.notificationCenter = notificationCenter
         super.init(frame: .zero)
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setup()
     }
 
@@ -268,6 +273,25 @@ class TabTraySelectorView: UIView,
 
         for button in buttons {
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
+        }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            dynamicTypeChanged()
+            break
+        default:
+            break
+        }
+    }
+
+    private func dynamicTypeChanged() {
+        for (index, title) in items.enumerated() {
+            guard let button = buttons[safe: index] else { continue }
+            applyButtonWidthAnchor(on: button, with: title as NSString)
         }
     }
 }
