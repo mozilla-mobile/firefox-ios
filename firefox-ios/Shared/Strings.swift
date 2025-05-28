@@ -4379,6 +4379,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Zoom (%@)",
                     comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. %@ is the current zoom level percentage. ")
+                public static let PageZoom = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.PageZoom.Title.v140",
+                    tableName: "MainMenu",
+                    value: "Page Zoom (%@)",
+                    comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. ")
                 public static let ZoomSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.Zoom.Subtitle.v131",
                     tableName: "MainMenu",
