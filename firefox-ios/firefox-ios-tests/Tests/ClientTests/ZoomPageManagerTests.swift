@@ -76,7 +76,7 @@ class ZoomPageManagerTests: XCTestCase {
         let subject = createSubject()
         let domainZoomLevel = DomainZoomLevel(host: "www.website.com",
                                               zoomLevel: ZoomConstants.upperZoomLimit)
-        zoomStore.save(domainZoomLevel, completion: nil)
+        zoomStore.saveDomainZoom(domainZoomLevel, completion: nil)
         let tab = createTab()
         subject.tabDidGainFocus(tab)
         let newZoom = subject.zoomIn()
@@ -90,7 +90,7 @@ class ZoomPageManagerTests: XCTestCase {
         let subject = createSubject()
         let domainZoomLevel = DomainZoomLevel(host: "www.website.com",
                                               zoomLevel: ZoomConstants.lowerZoomLimit)
-        zoomStore.save(domainZoomLevel, completion: nil)
+        zoomStore.saveDomainZoom(domainZoomLevel, completion: nil)
         let tab = createTab()
         subject.tabDidGainFocus(tab)
         let newZoom = subject.zoomOut()

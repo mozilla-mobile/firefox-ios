@@ -14,7 +14,7 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - UI Elements
     private var collectionView: MenuCollectionView = .build()
-    private var tableView: MenuTableView = .build()
+    private var tableView: MenuRedesignTableView = .build()
     public var accountHeaderView: HeaderView = .build()
 
     // MARK: - Initializers

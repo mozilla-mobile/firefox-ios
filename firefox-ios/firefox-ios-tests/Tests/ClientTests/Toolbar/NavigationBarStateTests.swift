@@ -75,8 +75,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.actions[1].actionType, .forward)
         XCTAssertEqual(newState.actions[1].isEnabled, false)
         XCTAssertEqual(newState.actions[2].actionType, .home)
-        XCTAssertEqual(newState.actions[3].actionType, .tabs)
-        XCTAssertEqual(newState.actions[4].actionType, .menu)
+        XCTAssertEqual(newState.actions[3].actionType, .menu)
+        XCTAssertEqual(newState.actions[4].actionType, .tabs)
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
@@ -98,9 +98,9 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.actions[0].actionType, .back)
         XCTAssertEqual(newState.actions[1].actionType, .forward)
         XCTAssertEqual(newState.actions[2].actionType, .search)
-        XCTAssertEqual(newState.actions[3].actionType, .tabs)
-        XCTAssertEqual(newState.actions[3].numberOfTabs, 2)
-        XCTAssertEqual(newState.actions[4].actionType, .menu)
+        XCTAssertEqual(newState.actions[3].actionType, .menu)
+        XCTAssertEqual(newState.actions[4].actionType, .tabs)
+        XCTAssertEqual(newState.actions[4].numberOfTabs, 2)
     }
 
     func test_backForwardButtonStateChangedAction_returnsExpectedState() {
@@ -140,9 +140,9 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.actions[4].actionType, .menu)
-        XCTAssertNotNil(newState.actions[4].badgeImageName)
-        XCTAssertNotNil(newState.actions[4].maskImageName)
+        XCTAssertEqual(newState.actions[3].actionType, .menu)
+        XCTAssertNotNil(newState.actions[3].badgeImageName)
+        XCTAssertNotNil(newState.actions[3].maskImageName)
     }
 
     func test_borderPositionChangedAction_returnsExpectedState() {

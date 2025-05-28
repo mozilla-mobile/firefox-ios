@@ -566,9 +566,9 @@ class LoginTest: BaseTestCase {
     }
 
     func enterTextInField(typedText: String) {
+        mozWaitForElementToExist(app.keyboards.firstMatch)
         // iOS 15 does not expand the keyboard for entering the credentials sometimes.
         if #unavailable(iOS 16) {
-            mozWaitForElementToExist(app.keyboards.firstMatch)
             if app.keyboards.buttons["Continue"].exists {
                 app.keyboards.buttons["Continue"].waitAndTap()
                 mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
