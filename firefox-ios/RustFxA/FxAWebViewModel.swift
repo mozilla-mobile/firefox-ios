@@ -22,7 +22,7 @@ enum FxAPageType: Equatable {
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
 // For details on message types.
 private enum RemoteCommand: String {
-     case canLinkAccount = "fxaccounts:can_link_account"
+    case canLinkAccount = "fxaccounts:can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
     case oauthLogin = "fxaccounts:oauth_login"
@@ -31,6 +31,7 @@ private enum RemoteCommand: String {
     case signOut = "fxaccounts:logout"
     case deleteAccount = "fxaccounts:delete"
     case profileChanged = "profile:change"
+    case unknown
 }
 
 class FxAWebViewModel: FeatureFlaggable {
@@ -243,50 +244,56 @@ extension FxAWebViewModel {
 
     // Handle a message coming from the content server.
     private func handleRemote(command rawValue: String, id: Int?, data: Any?, webView: WKWebView) {
-        if let command = RemoteCommand(rawValue: rawValue) {
-            switch command {
-            case .oauthLogin:
-                if let data = data {
-                    onLoginComplete(data: data, webView: webView)
-                } else {
-                    onDismissController?()
-                }
-            case .changePassword:
-                if let data = data {
-                    onPasswordChange(data: data, webView: webView)
-                }
-            case .status:
-                if let id = id {
-                    onSessionStatus(id: id, webView: webView)
-                }
-            case .deleteAccount, .signOut:
-                profile.removeAccount()
+        logger.log("webchannel message: \(rawValue)", level: .info, category: .sync)
+        let command = RemoteCommand(rawValue: rawValue) ?? .unknown
+        switch command {
+        case .oauthLogin:
+            if let data = data {
+                onLoginComplete(data: data, webView: webView)
+            } else {
                 onDismissController?()
-            case .profileChanged:
-                profile.rustFxA.accountManager?.refreshProfile(ignoreCache: true)
-                // dismiss keyboard after changing profile in order to see notification view
-                UIApplication.shared.sendAction(
-                    #selector(UIResponder.resignFirstResponder),
-                    to: nil,
-                    from: nil,
-                    for: nil
-                )
-            case .login:
-                guard let data = data as? [String: Any],
-                      let sessionToken = data["sessionToken"] as? String,
-                      let email = data["email"] as? String,
-                      let uid = data["uid"] as? String,
-                      let verified = data["verified"] as? Bool
-                else { return }
-                let userData = UserData(sessionToken: sessionToken,
-                                        uid: uid,
-                                        email: email,
-                                        verified: verified)
-                profile.rustFxA.accountManager?.setUserData(userData: userData) { }
-            case .canLinkAccount:
-                if let id = id {
-                    onCanLinkAccount(msgId: id, webView: webView)
-                }
+            }
+        case .changePassword:
+            if let data = data {
+                onPasswordChange(data: data, webView: webView)
+            }
+        case .status:
+            if let id = id {
+                onSessionStatus(id: id, webView: webView)
+            }
+        case .deleteAccount, .signOut:
+            profile.removeAccount()
+            onDismissController?()
+        case .profileChanged:
+            profile.rustFxA.accountManager?.refreshProfile(ignoreCache: true)
+            // dismiss keyboard after changing profile in order to see notification view
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil,
+                from: nil,
+                for: nil
+            )
+        case .login:
+            guard let data = data as? [String: Any],
+                let sessionToken = data["sessionToken"] as? String,
+                let email = data["email"] as? String,
+                let uid = data["uid"] as? String,
+                let verified = data["verified"] as? Bool
+            else { return }
+            let userData = UserData(
+                sessionToken: sessionToken,
+                uid: uid,
+                email: email,
+                verified: verified
+            )
+            profile.rustFxA.accountManager?.setUserData(userData: userData) {}
+        case .canLinkAccount:
+            if let id = id {
+                onCanLinkAccount(msgId: id, webView: webView)
+            }
+        case .unknown:
+            if let id = id {
+                onUnknownMessage(msgId: id, webView: webView, rawValue: rawValue)
             }
         }
     }
@@ -408,6 +415,15 @@ extension FxAWebViewModel {
         """
 
         runJS(webView: webView, typeId: typeId, messageId: msgId, command: cmd, data: data)
+    }
+
+    private func onUnknownMessage(msgId: Int, webView: WKWebView, rawValue: String) {
+        let typeId = "account_updates"
+        let data = """
+            { "error": "Unrecognized FxAccountsWebChannel command: \(rawValue)" }
+        """
+
+        runJS(webView: webView, typeId: typeId, messageId: msgId, command: rawValue, data: data)
     }
 
     func shouldAllowRedirectAfterLogIn(basedOn navigationURL: URL?) -> WKNavigationActionPolicy {
