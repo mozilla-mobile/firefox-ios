@@ -50,17 +50,12 @@ final class AddressToolbarContainer: UIView,
         didSet {
             guard oldValue != isUnifiedSearchEnabled else { return }
 
-            compactToolbar.isUnifiedSearchEnabled = isUnifiedSearchEnabled
             regularToolbar.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         }
     }
 
     private var toolbar: BrowserAddressToolbar {
-        guard model?.toolbarLayoutStyle != .version1, model?.toolbarLayoutStyle != .version2 else {
-            return regularToolbar
-        }
-
-        return shouldDisplayCompact ? compactToolbar : regularToolbar
+        return regularToolbar
     }
 
     private var searchTerm = ""
@@ -76,7 +71,6 @@ final class AddressToolbarContainer: UIView,
     }
 
     var parent: UIStackView?
-    private lazy var compactToolbar: CompactBrowserAddressToolbar = .build()
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
@@ -105,10 +99,7 @@ final class AddressToolbarContainer: UIView,
 
     private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
         if shouldDisplayCompact {
-            guard toolbarLayoutStyle == .baseline else {
-                return UX.toolbarHorizontalPadding
-            }
-            return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
+            return UX.toolbarHorizontalPadding
         }
 
         // Provide 0 padding in iPhone landscape due to safe area insets
@@ -230,7 +221,6 @@ final class AddressToolbarContainer: UIView,
 
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
-        compactToolbar.alpha = alpha
         regularToolbar.alpha = alpha
     }
 
@@ -254,15 +244,6 @@ final class AddressToolbarContainer: UIView,
             updateSkeletonBarsBottomAnchorConstant(by: toolbarState.toolbarPosition)
         }
 
-        compactToolbar.configure(
-            config: newModel.addressToolbarConfig,
-            toolbarPosition: toolbarState.toolbarPosition,
-            toolbarDelegate: self,
-            leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
-                                                       toolbarLayoutStyle: newModel.toolbarLayoutStyle),
-            trailingSpace: calculateToolbarTrailingSpace(),
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: newModel.shouldAnimate)
         regularToolbar.configure(
             config: newModel.addressToolbarConfig,
             toolbarPosition: toolbarState.toolbarPosition,
@@ -273,38 +254,11 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: newModel.shouldAnimate)
 
-        // For the experiment we are using the regular toolbar only, which by default is not displayed
-        let shouldDisplayExperimentalToolbar = (newModel.toolbarLayoutStyle == .version1 ||
-                                                newModel.toolbarLayoutStyle == .version2) &&
-                                                compactToolbar.superview != nil &&
-                                                regularToolbar.superview == nil
-
-        // the layout (compact/regular) that should be displayed is driven by the state
-        // but we only need to switch toolbars if shouldDisplayCompact changes
-        // otherwise we needlessly add/remove toolbars from the view hierarchy,
-        // which messes with the LocationTextField first responder status
-        // (see https://github.com/mozilla-mobile/firefox-ios/issues/21676)
-        let shouldSwitchToolbars = newModel.shouldDisplayCompact != self.model?.shouldDisplayCompact
-
         // Replace the old model after we are done using it for comparison
         // All functionality that depends on the new model should come after this
         self.model = newModel
 
-        if (shouldSwitchToolbars && newModel.toolbarLayoutStyle == .baseline) || shouldDisplayExperimentalToolbar {
-            switchToolbars()
-            guard model?.shouldSelectSearchTerm == false, model?.isEditing == true else { return }
-            store.dispatch(
-                ToolbarAction(
-                    searchTerm: searchTerm,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.didSetSearchTerm
-                )
-            )
-        }
-
-        if newModel.toolbarLayoutStyle == .version1 || newModel.toolbarLayoutStyle == .version2 {
-            self.maximumContentSizeCategory = .extraExtraExtraLarge
-        }
+        self.maximumContentSizeCategory = .extraExtraExtraLarge
     }
 
     private func setupLayout() {
@@ -317,16 +271,6 @@ final class AddressToolbarContainer: UIView,
 
         setupToolbarConstraints()
         setupSkeletonAddressBarsLayout()
-    }
-
-    private func switchToolbars() {
-        if compactToolbar.isDescendant(of: self) {
-            compactToolbar.removeFromSuperview()
-        } else {
-            regularToolbar.removeFromSuperview()
-        }
-
-        setupToolbarConstraints()
     }
 
     private func setupToolbarConstraints() {
@@ -383,7 +327,6 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
         let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
         leftSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor

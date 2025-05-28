@@ -2149,7 +2149,7 @@ extension String {
                 public static let ResetButtonTitle = MZLocalizedString(
                     key: "Settings.Appearance.Zoom.Reset.Button.v140",
                     tableName: "Settings",
-                    value: "Reset site Settings",
+                    value: "Reset Site Settings",
                     comment: "Button to reset specific zoom site levels back to default")
             }
         }

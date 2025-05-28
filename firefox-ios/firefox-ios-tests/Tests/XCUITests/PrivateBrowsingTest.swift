@@ -61,13 +61,13 @@ class PrivateBrowsingTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"])
+        mozWaitForElementToExist(app.otherElements[tabsTray])
         XCTAssertNotNil(
-            app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts
+            app.otherElements[tabsTray].collectionViews.cells.staticTexts
                 .element(boundBy: 1).label
                 .range(of: url2Label)
         )
-        let numTabs = app.otherElements["Tabs Tray"].cells.count
+        let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
 
         // Open one tab in private browsing and check the total number of tabs
@@ -81,20 +81,20 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts[url1And3Label])
-        let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.staticTexts[url1And3Label])
+        let numPrivTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"])
+        mozWaitForElementToExist(app.otherElements[tabsTray])
         XCTAssertNotNil(
-            app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts
+            app.otherElements[tabsTray].collectionViews.cells.staticTexts
                 .element(boundBy: 1).label
                 .range(of: url2Label)
         )
-        mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url1And3Label])
-        let numRegularTabs = app.otherElements["Tabs Tray"].cells.count
+        mozWaitForElementToNotExist(app.otherElements[tabsTray].collectionViews.cells.staticTexts[url1And3Label])
+        let numRegularTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
 
@@ -122,7 +122,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         waitForElementsToExist(
             [
-                app.otherElements["Tabs Tray"],
+                app.otherElements[tabsTray],
                 app.staticTexts["Private Browsing"]
             ]
         )
@@ -169,7 +169,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        let numPrivTabsFirstTime = app.otherElements["Tabs Tray"].cells.count
+        let numPrivTabsFirstTime = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(
             numPrivTabsFirstTime,
             0,
@@ -188,7 +188,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.nowAt(TabTray)
-        let numPrivTabsOpen = app.otherElements["Tabs Tray"].cells.count
+        let numPrivTabsOpen = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
     }
 
@@ -227,7 +227,7 @@ class PrivateBrowsingTest: BaseTestCase {
             }
         }
         navigator.goto(TabTray)
-        var numTab = app.otherElements["Tabs Tray"].cells.count
+        var numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].waitAndTap()
 
@@ -248,10 +248,10 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForElementsToExist(
             [
                 app.staticTexts["Private Browsing"],
-                app.otherElements["Tabs Tray"]
+                app.otherElements[tabsTray]
             ]
         )
-        numTab = app.otherElements["Tabs Tray"].cells.count
+        numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
 
@@ -259,7 +259,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // All the private tabs are restored
         navigator.goto(TabTray)
-        numTab = app.otherElements["Tabs Tray"].cells.count
+        numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
 
@@ -281,7 +281,7 @@ class PrivateBrowsingTest: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
             navigator.goto(TabTray)
-            let numTab = app.otherElements["Tabs Tray"].cells.count
+            let numTab = app.otherElements[tabsTray].cells.count
             XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         }
     }
@@ -289,7 +289,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
 fileprivate extension BaseTestCase {
     func checkOpenTabsBeforeClosingPrivateMode() {
-        let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
+        let numPrivTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(
             numPrivTabs,
             0,

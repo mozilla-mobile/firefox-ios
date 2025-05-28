@@ -16,6 +16,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case bookmarksRefactor
     case bottomSearchBar
     case deeplinkOptimizationRefactor
+    case defaultZoomFeature
     case downloadLiveActivities
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
@@ -123,6 +124,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressBarMenu,
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
+                .defaultZoomFeature,
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,

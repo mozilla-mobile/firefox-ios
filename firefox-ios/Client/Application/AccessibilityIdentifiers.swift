@@ -280,6 +280,7 @@ struct AccessibilityIdentifiers {
         static let collectionView = "TabDisplayView.collectionView"
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
+        static let tabsTray = "Tabs Tray"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"

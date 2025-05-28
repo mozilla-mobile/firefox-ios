@@ -57,7 +57,7 @@ class TabCounterTests: BaseTestCase {
         navigator.goto(TabTray)
 
         if isTablet {
-            app.otherElements["Tabs Tray"]
+            app.otherElements[tabsTray]
                 .collectionViews.cells.element(boundBy: 0)
                 .buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
@@ -67,11 +67,11 @@ class TabCounterTests: BaseTestCase {
             let tabsOpenTabTray: String = navBarTabTrayButton.label
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
-            app.otherElements["Tabs Tray"].cells
+            app.otherElements[tabsTray].cells
                 .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         }
 
-        app.otherElements["Tabs Tray"].cells.element(boundBy: 0).waitAndTap()
+        app.otherElements[tabsTray].cells.element(boundBy: 0).waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 

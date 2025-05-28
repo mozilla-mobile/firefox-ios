@@ -99,7 +99,7 @@ final class AddressBarPanGestureHandler: NSObject {
             screenshotHelper?.takeScreenshot(selectedTab, windowUUID: windowUUID)
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
-        case .ended:
+        case .ended, .cancelled, .failed:
             let velocity = gesture.velocity(in: contentContainer)
             handleGestureEndedState(translation: translation, velocity: velocity, nextTab: nextTab)
         default: break

@@ -477,10 +477,10 @@ class NavigationTest: BaseTestCase {
         app.buttons["Open in New Tab"].waitAndTap()
         // A new tab loading the article page should open
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"])
-        let numTabs = app.otherElements["Tabs Tray"].cells.count
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.staticTexts["Example Domain"])
+        let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain."))
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441773
@@ -490,9 +490,9 @@ class NavigationTest: BaseTestCase {
         app.buttons["Open in New Private Tab"].waitAndTap()
         // The article is loaded in a new private tab
         navigator.goto(TabTray)
-        var numTabs = app.otherElements["Tabs Tray"].cells.count
+        var numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain."))
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
         if iPad() {
             app.buttons["Private"].waitAndTap()
         } else {
@@ -502,9 +502,9 @@ class NavigationTest: BaseTestCase {
             // workaround end
             app.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         }
-        numTabs = app.otherElements["Tabs Tray"].cells.count
+        numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).staticTexts["Example Domains"])
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.element(boundBy: 0).staticTexts["Example Domains"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774
