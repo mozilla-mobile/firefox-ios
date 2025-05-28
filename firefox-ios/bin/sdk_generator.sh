@@ -122,15 +122,15 @@ while (( "$#" )); do
 done
 
 if [ "$ACTION" = "indexbuild" ]; then
-  echo "Skipping code generation in 'indexbuild' build. See https://bugzilla.mozilla.org/show_bug.cgi?id=1744504 for more info."
-  exit 0
+    echo "Skipping code generation in 'indexbuild' build. See https://bugzilla.mozilla.org/show_bug.cgi?id=1744504 for more info."
+    exit 0
 fi
 
 if [ "${#PARAMS[@]}" -gt 0 ]; then
     YAML_FILES=("${PARAMS[@]}")
 else
     # Check if at least one input file and/or one input file list has been specified
-    if [[ (-z "$SCRIPT_INPUT_FILE_COUNT" ||  "$SCRIPT_INPUT_FILE_COUNT" -eq 0) && (-z "$SCRIPT_INPUT_FILE_LIST_COUNT"  ||  "$SCRIPT_INPUT_FILE_LIST_COUNT" -eq 0) ]]; then
+    if [[ (-z "$SCRIPT_INPUT_FILE_COUNT" || "$SCRIPT_INPUT_FILE_COUNT" -eq 0) && (-z "$SCRIPT_INPUT_FILE_LIST_COUNT" || "$SCRIPT_INPUT_FILE_LIST_COUNT" -eq 0) ]]; then
         echo "warning: No input files specified."
         exit 0
     fi
@@ -154,7 +154,7 @@ else
 
             while read line; do
                 YAML_FILES+=("${line}")
-            done <<< "$(cat $infile)"
+            done <<<"$(cat $infile)"
         done
     fi
 
