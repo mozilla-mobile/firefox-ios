@@ -13,6 +13,9 @@
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "සියල්ල";
 
+/* Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text */
+"Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "මකන්න";
+
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
 "Bookmarks.Menu.DeleteBookmark.v132" = "පොත්යොමුව මකන්න";
 
@@ -42,6 +45,12 @@
 
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "තව විකල්ප";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "“පොත්යොමු” වෙත සුරැකිණි";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "“%@” වෙත සුරැකිණි";
 
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "සංස්කරණය";

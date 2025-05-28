@@ -313,6 +313,16 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Tap and hold the arrows to jump between pages in this tab’s history.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
+            public static let ToolbarUpdateTitle = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Title.v139",
+                tableName: "ToolbarLocation",
+                value: "We moved a few things",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
+            public static let ToolbarUpdateBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Description.v139",
+                tableName: "ToolbarLocation",
+                value: "Tabs and menu have switched places for easier access as you browse.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
         public struct FeltDeletion {

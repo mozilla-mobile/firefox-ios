@@ -1,3 +1,6 @@
+/* Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu */
+"Toolbar.Menu.Button.A11y.Label.v135" = "ප්‍රධාන වට්ටෝරුව";
+
 /* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
 "Toolbar.NewTab.Button.v130" = "නව පටිත්ත";
 

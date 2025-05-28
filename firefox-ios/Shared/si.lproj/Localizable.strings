@@ -1126,6 +1126,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "ඒ.ස.නි. (විමසුම %s සමඟ ප්‍රතිස්ථාපනය)";
 
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "ලිපින තීරුව";
+
 /* Browser theme settings section title in Appearance settings */
 "Settings.Appearance.BrowserTheme.SectionHeader.v137" = "අතිරික්සුවේ තේමාව";
 

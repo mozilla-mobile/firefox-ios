@@ -66,6 +66,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
+                    with: .searchEngineConsolidation,
+                    titleText: format(string: "Consolidated Search"),
+                    statusText: format(string: "Toggle to use Consolidated Search")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")

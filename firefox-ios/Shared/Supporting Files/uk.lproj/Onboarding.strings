@@ -47,7 +47,7 @@
 "Onboarding.Customization.Theme.System.Action.v123" = "Системна";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Theme.Title.v123" = "Оберіть тему";
+"Onboarding.Customization.Theme.Title.v123" = "Вибір теми";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Внизу";
@@ -62,7 +62,7 @@
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "Пропустити";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Toolbar.Title.v123" = "Виберіть розташування панелі інструментів";
+"Onboarding.Customization.Toolbar.Title.v123" = "Розташування панелі інструментів";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "Вгорі";
@@ -108,6 +108,9 @@
 
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v136" = "Погодитись і продовжити";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v140" = "Продовжити";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "Керувати";

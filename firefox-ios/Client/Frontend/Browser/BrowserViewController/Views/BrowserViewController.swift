@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var logger: Logger
     var zoomManager: ZoomPageManager
+    let documentLogger: DocumentLogger
 
     // MARK: Optional UI elements
 
@@ -116,6 +117,7 @@ class BrowserViewController: UIViewController,
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
+    let tabsPanelTelemetry: TabsPanelTelemetry
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -131,15 +133,14 @@ class BrowserViewController: UIViewController,
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
+    lazy var screenshotHelper = ScreenshotHelper(controller: self)
 
     // MARK: Lazy loading UI elements
-
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
-    private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -212,6 +213,11 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
+    private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
+        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
+        return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
+    }()
+
     // MARK: Telemetry Variables
 
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
@@ -232,6 +238,11 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
 
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
     var isUnifiedSearchEnabled: Bool {
         return featureFlags.isFeatureEnabled(.unifiedSearch, checking: .buildOnly)
     }
@@ -246,6 +257,10 @@ class BrowserViewController: UIViewController,
 
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
+    }
+
+    var isToolbarUpdateHintEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarUpdateHint, checking: .buildOnly)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -326,7 +341,9 @@ class BrowserViewController: UIViewController,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         logger: Logger = DefaultLogger.shared,
+        documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
@@ -337,10 +354,12 @@ class BrowserViewController: UIViewController,
         self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.downloadQueue = downloadQueue
         self.logger = logger
+        self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
+        self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -604,7 +623,9 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
 
-        if let tab = tabManager.selectedTab, let screenshotHelper {
+        // No need to take a screenshot if a view is presented over the current tab
+        // because a screenshot will already have been taken when we navigate away
+        if let tab = tabManager.selectedTab, presentedViewController == nil {
             screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
 
@@ -719,8 +740,7 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .addShortcut,
-                .clearCookies,
+        case .clearCookies,
                 .addToReadingList,
                 .removeShortcut,
                 .removeFromReadingList:
@@ -1102,7 +1122,7 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?) {
         if let tab {
-            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
     }
 
@@ -1238,6 +1258,16 @@ class BrowserViewController: UIViewController,
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
             }
+        }
+
+        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
+        // as this also could change if the navigation bar is shown or not
+        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
+                                previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+
+        if toolbarUpdateContextHintVC.isPresenting,
+           UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
+            toolbarUpdateContextHintVC.dismiss(animated: true)
         }
     }
 
@@ -1506,7 +1536,9 @@ class BrowserViewController: UIViewController,
             // The web view can go gray if it was zombified due to memory pressure.
             // When this happens, the URL is nil, so try restoring the page upon selection.
             logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            selectedTab.reload()
+            if selectedTab.temporaryDocument == nil {
+                selectedTab.reload()
+            }
         }
 
         browserDelegate?.show(webView: webView)
@@ -2007,7 +2039,12 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             let isLoadingDocument = isPDFRefactorEnabled && tab.isDownloadingDocument()
-            if let url = webView.url, !InternalURL.isValid(url: url) || isLoadingDocument {
+            let isValidURL = if let url = webView.url {
+                !InternalURL.isValid(url: url)
+            } else {
+                false
+            }
+            if isValidURL || isLoadingDocument {
                 let progress = if let progress = change?[.newKey] as? Double {
                     progress
                 } else {
@@ -2223,6 +2260,8 @@ class BrowserViewController: UIViewController,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
             store.dispatch(middlewareAction)
 
+            configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
+                                                 navigationToolbarView: navigationToolbarContainer)
             return
         }
 
@@ -2983,7 +3022,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
+                    self.screenshotHelper.takeScreenshot(tab, windowUUID: self.windowUUID)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
@@ -3304,7 +3343,6 @@ class BrowserViewController: UIViewController,
 
     private func logTelemetryForAppDidEnterBackground() {
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             let windowManager: WindowManager = AppContainer.shared.resolve()
@@ -4108,6 +4146,10 @@ extension BrowserViewController: TabManagerDelegate {
             needsReload = true
         }
 
+        if selectedTab.temporaryDocument != nil, isPDFRefactorEnabled {
+            needsReload = false
+        }
+
         if needsReload {
             selectedTab.reloadPage()
         }
@@ -4207,6 +4249,11 @@ extension BrowserViewController: TabManagerDelegate {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             if isToolbarRefactorEnabled {
                 updateToolbarTabCount(count)
+            } else if !isToolbarRefactorEnabled && isTabTrayUIExperimentsEnabled, let legacyUrlBar {
+                // In the case where the tab tray experiment is enabled but toolbar refactor is
+                // not we want to not animate tab counts so that the animation between tabTray and browserVC looks better
+                toolbar.updateTabCount(count, animated: false)
+                legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)
             } else if !isToolbarRefactorEnabled, let legacyUrlBar {
                 toolbar.updateTabCount(count, animated: animated)
                 legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)

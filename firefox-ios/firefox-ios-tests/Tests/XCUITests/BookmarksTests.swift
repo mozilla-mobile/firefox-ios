@@ -403,7 +403,7 @@ class BookmarksTests: BaseTestCase {
         bookmark()
         mozWaitForElementToExist(app.staticTexts["Saved in “Bookmarks”"])
         unbookmark(url: urlLabelExample_3)
-        mozWaitForElementToExist(app.staticTexts["Deleted “Example Domain”"])
+        mozWaitForElementToExist(app.staticTexts["No bookmarks yet"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2784448

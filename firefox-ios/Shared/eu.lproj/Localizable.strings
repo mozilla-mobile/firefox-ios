@@ -1132,6 +1132,18 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URLa (ordezkatu bilaketa %s ikurrarekin)";
 
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Behean";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Helbide-barraren kokapena";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Helbide-barra";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Goian";
+
 /* Browser theme settings section title in Appearance settings */
 "Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Nabigatzailearen itxura";
 
