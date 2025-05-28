@@ -20,7 +20,6 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let padding: CGFloat = 20
         static let buttonPadding: CGFloat = 12
         static let buttonInsets = NSDirectionalEdgeInsets(top: 6, leading: buttonPadding, bottom: 6, trailing: buttonPadding)
-        static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 200
         static let stepperHeight: CGFloat = 36
         static let stepperTopBottomPadding: CGFloat = 10
