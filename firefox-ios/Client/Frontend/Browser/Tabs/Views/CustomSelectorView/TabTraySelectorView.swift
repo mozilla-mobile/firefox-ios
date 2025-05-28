@@ -19,7 +19,9 @@ struct TabTraySelectorUX {
 }
 
 class TabTraySelectorView: UIView,
-                           ThemeApplicable {
+                           ThemeApplicable,
+                           Notifiable {
+    var notificationCenter: NotificationProtocol
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
@@ -34,6 +36,13 @@ class TabTraySelectorView: UIView,
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
 
+    private lazy var stackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.spacing = TabTraySelectorUX.horizontalPadding
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+    }
+
     var items: [String] = ["", "", ""] {
         didSet {
             updateLabels()
@@ -43,10 +52,13 @@ class TabTraySelectorView: UIView,
     }
 
     init(selectedIndex: Int,
-         theme: Theme) {
+         theme: Theme,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.selectedIndex = selectedIndex
         self.theme = theme
+        self.notificationCenter = notificationCenter
         super.init(frame: .zero)
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setup()
     }
 
@@ -58,14 +70,6 @@ class TabTraySelectorView: UIView,
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
         addSubview(selectionBackgroundView)
-
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = TabTraySelectorUX.horizontalPadding
-        stackView.distribution = .equalCentering
-        stackView.alignment = .center
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
@@ -115,6 +119,24 @@ class TabTraySelectorView: UIView,
         }
     }
 
+<<<<<<< HEAD
+=======
+    /// Calculates and applies a fixed width constraint to a button based on the maximum
+    /// width required by its title when rendered in both regular and bold font styles.
+    ///
+    /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
+    /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
+    private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+        if let existingConstraint = button.constraints.first(where: { $0.firstAttribute == .width }) {
+            existingConstraint.isActive = false
+        }
+
+        let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
+        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
+    }
+
+>>>>>>> 0163457b5 (Bugfix FXIOS-12352 [Tab tray UI experiment] Tab tray selector title elided (#26927))
     @objc
     private func sectionSelected(_ sender: UIButton) {
         selectedIndex = sender.tag
@@ -159,5 +181,30 @@ class TabTraySelectorView: UIView,
         for button in buttons {
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
         }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            dynamicTypeChanged()
+        default:
+            break
+        }
+    }
+
+    private func dynamicTypeChanged() {
+        adjustSelectedButtonFont(toIndex: selectedIndex)
+
+        for (index, title) in items.enumerated() {
+            guard let button = buttons[safe: index] else { continue }
+            applyButtonWidthAnchor(on: button, with: title as NSString)
+        }
+
+        applyInitalSelectionBackgroundFrame()
+
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }
