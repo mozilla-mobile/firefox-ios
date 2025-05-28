@@ -226,31 +226,31 @@ if [ "$1" == "--add" ]; then
 		capitalized_tag=$(capitalized_tag_name $component_name)
 		new_file=$(create_file_for_component $component_name)
 		write_new_metrics_template $new_file $component_name
-		echo "Successfully added file for the $component_name component:\n * $new_file"
+		echo -e "Successfully added file for the $component_name component:\n * $new_file\n"
 
 		# Update the glean index file
 		update_index_file
-		echo "Successfully updated the glean index file."
+		echo -e "Successfully updated the glean index file.\n"
 
 		# Update the Xcode `Glean SDK Generator Script` build phase input file list
 		clear_file_contents $XCODE_INFILE_LIST
 		write_probe_files_to_file_list
-		echo "Successfully updated the xcode build phase infile list."
+		echo -e "Successfully updated the xcode build phase infile list.\n"
 
 		# TODO Could add new tags to the tags.yaml file automatically for users
-		echo "\n** Please add your new \"${capitalized_tag}\" tag to the tags.yaml file with a description. **\n"
+		echo -e "  [!] Please add your new $capitalized_tag tag to the tags.yaml file with a description. [!]\n"
 
 		exit 0
 	fi
 elif [ "$1" == "--update" ]; then
 	# Update the glean index file
 	update_index_file
-	echo "Successfully updated the glean index file.\n"
+	echo -e "Successfully updated the glean index file.\n"
 
 	# Update the Xcode `Glean SDK Generator Script` build phase input file list
 	clear_file_contents $XCODE_INFILE_LIST
 	write_probe_files_to_file_list
-	echo "Successfully updated the xcode build phase infile list."
+	echo -e "Successfully updated the xcode build phase infile list.\n"
 
 	exit 0
 elif [ $# -eq 0 ]; then
