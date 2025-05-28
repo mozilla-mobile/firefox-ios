@@ -3,9 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 enum ToolbarLayoutStyle: String {
-    /// The default layout of the toolbars.
-    case baseline
-
     /// Shows the add new tab, menu and tabs button in the navigation toolbar. The
     /// share button is displayed in the address toolbar.
     case version1
@@ -14,9 +11,8 @@ enum ToolbarLayoutStyle: String {
     case version2
 
     static func style(from type: ToolbarLayoutType?) -> ToolbarLayoutStyle {
-        guard let type else { return .baseline }
+        guard let type else { return .version1 }
         switch type {
-        case .baseline: return .baseline
         case .version1: return .version1
         case .version2: return .version2
         }
