@@ -2,14 +2,19 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import SwiftUI
 import Common
+import SwiftUI
 
 struct PageZoomSettingsView: View {
-    let windowUUID: WindowUUID
+    private let windowUUID: WindowUUID
+    @ObservedObject var viewModel: PageZoomSettingsViewModel
+    @Environment(\.themeManager)
+    var themeManager
+    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+
     private struct UX {
-        static var dividerHeight: CGFloat { 0.7 }
-        static var buttonPadding: CGFloat { 4 }
+        static var dividerHeight: CGFloat = 0.7
+        static var sectionPadding: CGFloat = 16
     }
 
     private var viewBackground: Color {
@@ -24,62 +29,33 @@ struct PageZoomSettingsView: View {
         return themeColors.textPrimary.color
     }
 
-    var descriptionTextColor: Color {
-        return themeColors.textSecondary.color
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
+        self.viewModel = PageZoomSettingsViewModel(zoomManager: ZoomPageManager(windowUUID: windowUUID))
     }
-
-    @Environment(\.themeManager)
-    var themeManager
-    @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     var theme: Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
-        VStack {
-            List {
-                // Default level picker
-                Section {
-                    ZoomLevelPickerView(theme: theme)
-                        .background(themeColors.layer1.color)
-                } header: {
-                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
-                                             sectionTitleColor: sectionTitleColor)
-                }
-
-                // Specific site zoom levels
-                Section {
-                    ZoomSiteListView(theme: theme)
-                        .background(themeColors.layer1.color)
-                } header: {
-                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
-                                             sectionTitleColor: sectionTitleColor)
-                } footer: {
-                    Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
-                        .background(themeColors.layer1.color)
-                        .font(.caption)
-                        .foregroundColor(descriptionTextColor)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            .listStyle(.plain)
-            .listRowBackground(theme.colors.layer2.color)
-
+        ScrollView {
             VStack {
-                Divider().frame(height: UX.dividerHeight)
+                // Default zoom level section
+                ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
+                    .background(theme.colors.layer5.color)
 
-                Button(action: {}) {
-                    Text(String.Settings.Appearance.PageZoom.ResetButtonTitle)
-                        .foregroundColor(theme.colors.textCritical.color)
+                // Specific site zoom level section
+                if !viewModel.domainZoomLevels.isEmpty {
+                    ZoomSiteListView(theme: theme,
+                                     domainZoomLevels: $viewModel.domainZoomLevels,
+                                     onDelete: viewModel.deleteZoomLevel,
+                                     resetDomain: viewModel.resetDomainZoomLevel)
                 }
-                .padding([.top, .bottom], UX.buttonPadding)
-
-                Divider().frame(height: UX.dividerHeight)
             }
+            .frame(maxWidth: .infinity)
         }
-        .background(themeColors.layer1.color)
-        .frame(maxWidth: .infinity)
+        .background(viewBackground)
         .onAppear {
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }
