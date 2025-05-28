@@ -88,7 +88,7 @@ final class AddressToolbarContainer: UIView,
         addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
     }
 
-    private let addTabView: UIView = .build()
+    private let addTabView: AddressBarAddTabView = .build()
     private var addTabViewLeftConstraint: NSLayoutConstraint?
     private var addTabViewRightConstraint: NSLayoutConstraint?
 
@@ -185,17 +185,6 @@ final class AddressToolbarContainer: UIView,
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return toolbar.resignFirstResponder()
-    }
-
-    override var transform: CGAffineTransform {
-        get {
-            return toolbar.transform
-        }
-        set {
-            toolbar.transform = newValue
-            leftSkeletonAddressBar.transform = newValue
-            rightSkeletonAddressBar.transform = newValue
-        }
     }
 
     // MARK: - Redux
@@ -347,19 +336,6 @@ final class AddressToolbarContainer: UIView,
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
 
-        let image = UIImageView(image: UIImage(named: StandardImageIdentifiers.Large.plus))
-        image.translatesAutoresizingMaskIntoConstraints = false
-        image.tintColor = .white
-        image.alpha = 0.0
-
-        addTabView.addSubview(image)
-        NSLayoutConstraint.activate([
-            image.centerXAnchor.constraint(equalTo: addTabView.centerXAnchor),
-            image.centerYAnchor.constraint(equalTo: addTabView.centerYAnchor)
-        ])
-
-        addTabView.backgroundColor = DarkTheme().colors.layer1
-        addTabView.layer.cornerRadius = 12.0
         addSubview(addTabView)
         NSLayoutConstraint.activate([
             addTabView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
@@ -410,16 +386,19 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    func completeAddTab() {
-        addTabViewLeftConstraint?.constant = -self.frame.width + 16.0
-        layoutIfNeeded()
-        addTabView.alpha = 0.0
-        addTabView.subviews.first?.alpha = 0.0
+    func completeAddTab(_ completion: VoidReturnCallback?) {
+        UIView.animate(withDuration: 0.1) {
+            self.addTabView.alpha = 0.0
+        } completion: { _ in
+            completion?()
+        }
     }
 
     func applyTransform(_ t: CGAffineTransform, shouldShowNewTab: Bool) {
         compactToolbar.transform = t
         regularToolbar.transform = t
+        leftSkeletonAddressBar.transform = t
+        rightSkeletonAddressBar.transform = t
 
         if #available(iOS 16, *) {
             guard shouldShowNewTab else { return }
@@ -427,7 +406,9 @@ final class AddressToolbarContainer: UIView,
             guard translation.dx <= 0 else { return }
             let progress = abs(translation.dx) / frame.width
             UIView.animate(withDuration: 0.3) {
-                self.addTabView.subviews.first?.alpha = progress > 0.3 ? 1.0 : 0.0
+                self.addTabView.plusIconView.alpha = progress > 0.3 ? 1.0 : 0.0
+                self.addTabViewRightConstraint?.constant = progress > 0.3 ? -16.0 : 0.0
+                self.layoutIfNeeded()
             }
             if t != .identity {
                 addTabView.alpha = 1.0
@@ -440,6 +421,7 @@ final class AddressToolbarContainer: UIView,
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+        addTabView.applyTheme(theme: theme)
         let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
         leftSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
         rightSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor

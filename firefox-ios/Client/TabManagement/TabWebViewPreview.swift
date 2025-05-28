@@ -72,6 +72,18 @@ final class TabWebViewPreview: UIView,
         webPageScreenshotImageView.image = image
     }
 
+    func setHomepage(_ content: HomepageViewController) {
+        guard content.view.superview != self else { return }
+        addSubview(content.view)
+        content.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            content.view.topAnchor.constraint(equalTo: topAnchor),
+            content.view.leadingAnchor.constraint(equalTo: leadingAnchor),
+            content.view.bottomAnchor.constraint(equalTo: bottomAnchor),
+            content.view.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+    }
+
     func applyTransform(translationX: CGFloat, velocityX: CGFloat) {
         webPageScreenshotImageView.transform = CGAffineTransform(translationX: translationX, y: 0)
     }

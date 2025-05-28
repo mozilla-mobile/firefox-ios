@@ -482,9 +482,8 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer)
-            updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
+            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition,
+                                               anchor: header.topAnchor)
         }
 
         if let readerModeBar = readerModeBar {
@@ -1144,10 +1143,6 @@ class BrowserViewController: UIViewController,
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
             addressToolbarContainer: addressToolbarContainer,
             contentContainer: contentContainer,
-<<<<<<< HEAD
-            addressBarContainer: addressToolbarContainer,
-=======
->>>>>>> main
             webPagePreview: webPagePreview,
             statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
