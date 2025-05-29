@@ -15,8 +15,14 @@ class FxSuggestTelemetry {
         case wikipediaAdvertiser = "wikipedia"
     }
 
+    private let systemRegion: String
+
+    init() {
+        let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        systemRegion = Self.regionCode(from: locale)
+    }
+
     func clickEvent(telemetryInfo: RustFirefoxSuggestionTelemetryInfo, position: Int) {
-        // MARK: - FX Suggest
         guard let contextIdString = TelemetryContextualIdentifier.contextId,
               let contextId = UUID(uuidString: contextIdString) else {
             return
@@ -36,6 +42,7 @@ class FxSuggestTelemetry {
         GleanMetrics.FxSuggest.pingType.set(EventInfo.pingTypeClick.rawValue)
         GleanMetrics.FxSuggest.isClicked.set(true)
         GleanMetrics.FxSuggest.position.set(Int64(position))
+        GleanMetrics.FxSuggest.country.set(systemRegion)
         switch telemetryInfo {
         case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL):
             GleanMetrics.FxSuggest.blockId.set(blockId)
@@ -76,6 +83,7 @@ class FxSuggestTelemetry {
         GleanMetrics.FxSuggest.pingType.set(EventInfo.pingTypeImpression.rawValue)
         GleanMetrics.FxSuggest.isClicked.set(didTap)
         GleanMetrics.FxSuggest.position.set(Int64(position))
+        GleanMetrics.FxSuggest.country.set(systemRegion)
         switch telemetryInfo {
         case let .amp(blockId, advertiser, iabCategory, impressionReportingURL, _):
             GleanMetrics.FxSuggest.blockId.set(blockId)
@@ -88,5 +96,15 @@ class FxSuggestTelemetry {
             GleanMetrics.FxSuggest.advertiser.set(EventInfo.wikipediaAdvertiser.rawValue)
         }
         GleanMetrics.Pings.shared.fxSuggest.submit()
+    }
+
+    private static func regionCode(from locale: Locale) -> String {
+        let systemRegion: String?
+        if #available(iOS 17, *) {
+            systemRegion = (locale as NSLocale).regionCode
+        } else {
+            systemRegion = (locale as NSLocale).countryCode
+        }
+        return systemRegion ?? locale.identifier.components(separatedBy: "-").last ?? "US"
     }
 }
