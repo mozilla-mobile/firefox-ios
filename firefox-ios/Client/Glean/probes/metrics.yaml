@@ -3532,12 +3532,12 @@ fx_suggest:
   country:
     type: string
     description: >
-      Records the home region of the user, the same used for configuring
+      Records the system region of the user, the same used for configuring
       region specific search providers.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/26928
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26949
     data_sensitivity:
       - interaction
     notification_emails:
