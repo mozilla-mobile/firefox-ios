@@ -88,7 +88,7 @@ final class LaunchCoordinator: BaseCoordinator,
 //                                            profile: profile,
 //                                            model: onboardingModel,
 //                                            telemetryUtility: telemetryUtility)
-        
+
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -108,17 +108,16 @@ final class LaunchCoordinator: BaseCoordinator,
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
                 height: ViewControllerConsts.PreferredSize.IntroViewController.height)
             hostingController.modalPresentationStyle = .formSheet
-            
+
             if !onboardingModel.isDismissable {
                 hostingController.isModalInPresentation = true
             }
-            
+
             router.present(hostingController, animated: true) {
                 // SwiftUI handles its own state; optional additional UIKit logic here
             }
         }
 
-        
 //        let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
 //        introViewController.qrCodeNavigationHandler = self
 //        introViewController.didFinishFlow = { [weak self] in
@@ -143,10 +142,9 @@ final class LaunchCoordinator: BaseCoordinator,
 //                introViewController.closeOnboarding()
 //            }
 //        }
-        
-        
+
     }
-    
+
 //    // MARK: - Intro
 //    private func presentIntroOnboarding(with manager: IntroScreenManager,
 //                                        isFullScreen: Bool) {
