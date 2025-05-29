@@ -82,7 +82,11 @@ final class MenuRedesignTableView: UIView,
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return menuData[section].options.count
+        if let isExpanded = menuData[section].isExpanded, isExpanded {
+            return menuData[section].options.count
+        } else {
+            return menuData[section].options.count(where: { !$0.isOptional })
+        }
     }
 
     func tableView(

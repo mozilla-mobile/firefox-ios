@@ -340,6 +340,8 @@ class BrowserViewController: UIViewController,
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue: DownloadQueue
+    let mainQueue: DispatchQueueInterface
+    let userInitiatedQueue: DispatchQueueInterface
 
     private let bookmarksSaver: BookmarksSaver
     let bookmarksHandler: BookmarksHandler
@@ -373,7 +375,9 @@ class BrowserViewController: UIViewController,
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -390,6 +394,8 @@ class BrowserViewController: UIViewController,
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
+        self.mainQueue = mainQueue
+        self.userInitiatedQueue = userInitiatedQueue
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -2380,11 +2386,13 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
+            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 lockIconImageName = hasSecureContent ?
                     StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                    StandardImageIdentifiers.Small.shieldSlashFill
+                    StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+                lockIconNeedsTheming = hasSecureContent
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
             }
@@ -2396,7 +2404,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: true,
+                lockIconNeedsTheming: lockIconNeedsTheming,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
