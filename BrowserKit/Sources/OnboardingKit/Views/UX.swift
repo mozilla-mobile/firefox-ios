@@ -4,6 +4,7 @@
 
 import Foundation
 import SwiftUI
+import Common
 
 enum UX {
     enum CardView {
@@ -24,10 +25,10 @@ enum UX {
         static let titleFontSize: CGFloat = 28
         static let bodyFontSize: CGFloat = 16
 
-        static let titleFont: Font = .title
-        static let bodyFont: Font = .subheadline
-        static let primaryActionFont: Font = .callout.bold()
-        static let secondaryActionFont: Font = .callout.bold()
+        static let titleFont: Font = Font(FXFontStyles.Regular.title1.scaledFont())
+        static let bodyFont: Font = Font(FXFontStyles.Regular.subheadline.scaledFont())
+        static let primaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
+        static let secondaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
     }
 
     enum SegmentedControl {
