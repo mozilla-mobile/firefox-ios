@@ -25,8 +25,8 @@ enum UX {
         static let titleFontSize: CGFloat = 28
         static let bodyFontSize: CGFloat = 16
 
-        static let titleFont: Font = Font(FXFontStyles.Regular.title1.scaledFont())
-        static let bodyFont: Font = Font(FXFontStyles.Regular.subheadline.scaledFont())
+        static let titleFont = Font(FXFontStyles.Regular.title1.scaledFont())
+        static let bodyFont = Font(FXFontStyles.Regular.subheadline.scaledFont())
         static let primaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
         static let secondaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
     }
