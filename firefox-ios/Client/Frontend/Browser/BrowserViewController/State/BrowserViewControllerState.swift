@@ -41,6 +41,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var toast: ToastType?
     var showOverlay: Bool? // use default value when re-creating
     var reloadWebView: Bool
+    var shouldStartAtHome: Bool
     var browserViewType: BrowserViewType
     var navigateTo: NavigationType? // use default value when re-creating
     var displayView: DisplayType? // use default value when re-creating
@@ -64,6 +65,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   showOverlay: bvcState.showOverlay,
                   windowUUID: bvcState.windowUUID,
                   reloadWebView: bvcState.reloadWebView,
+                  shouldStartAtHome: bvcState.shouldStartAtHome,
                   browserViewType: bvcState.browserViewType,
                   navigateTo: bvcState.navigateTo,
                   displayView: bvcState.displayView,
@@ -93,6 +95,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         showOverlay: Bool? = nil,
         windowUUID: WindowUUID,
         reloadWebView: Bool = false,
+        shouldStartAtHome: Bool = false,
         browserViewType: BrowserViewType,
         navigateTo: NavigationType? = nil,
         displayView: DisplayType? = nil,
@@ -106,6 +109,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.windowUUID = windowUUID
         self.showOverlay = showOverlay
         self.reloadWebView = reloadWebView
+        self.shouldStartAtHome = shouldStartAtHome
         self.browserViewType = browserViewType
         self.navigateTo = navigateTo
         self.displayView = displayView
@@ -124,12 +128,15 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         } else if let action = action as? GeneralBrowserAction {
             return reduceStateForGeneralBrowserAction(action: action, state: state)
         } else if let action = action as? NavigationBrowserAction {
-                return reduceStateForNavigationBrowserAction(action: action, state: state)
+            return reduceStateForNavigationBrowserAction(action: action, state: state)
+        } else if let action = action as? StartAtHomeAction {
+            return reduceStateForStartAtHomeAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
+                shouldStartAtHome: false,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: nil)
@@ -159,6 +166,19 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: action.navigationDestination
             )
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    // MARK: - Start At Home Action
+    static func reduceStateForStartAtHomeAction(
+        action: StartAtHomeAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case StartAtHomeMiddlewareActionType.startAtHomeConfigured:
+            return resolveStateForStartAtHome(action: action, state: state)
         default:
             return defaultState(from: state, action: action)
         }
@@ -429,6 +449,18 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             reloadWebView: true,
             browserViewType: browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
+    static func resolveStateForStartAtHome(
+        action: StartAtHomeAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            shouldStartAtHome: action.shouldStartAtHome ?? false,
+            browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 }

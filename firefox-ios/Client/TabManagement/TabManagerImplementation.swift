@@ -438,13 +438,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         return tabs.first(where: { $0.webView?.url == url })
     }
 
-    func getMostRecentHomepageTab() -> Tab? {
-        let tabsToFilter = selectedTab?.isPrivate ?? false ? privateTabs : normalTabs
-        let homePageTabs = tabsToFilter.filter { $0.isFxHomeTab }
-
-        return mostRecentTab(inTabs: homePageTabs)
-    }
-
     // MARK: - Undo Close Tab
     func undoCloseTab() {
         guard let backupCloseTab = self.backupCloseTab else { return }
@@ -513,35 +506,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         AppEventQueue.started(.tabRestoration(windowUUID))
 
         restoreTabs()
-    }
-
-    /// Provides a tab on which to open if the start at home feature is enabled. This tab
-    /// can be an existing one, or, if no suitable candidate exists, a new one.
-    ///
-    /// - Parameters:
-    ///   - existingTab: A `Tab` that is the user's homepage, that is already open
-    ///   - privateMode: Whether the last session was private or not, so that, if there's
-    ///   no homepage open, we open a new tab in the correct state.
-    ///   - profilePreferences: Preferences, stored in the user's `Profile`
-    /// - Returns: A selectable tab
-    private func createStartAtHomeTab(withExistingTab existingTab: Tab?,
-                                      inPrivateMode privateMode: Bool,
-                                      and profilePreferences: Prefs
-    ) -> Tab? {
-        let page = NewTabAccessors.getHomePage(profilePreferences)
-        let customUrl = HomeButtonHomePageAccessors.getHomePage(profilePreferences)
-        let homeUrl = URL(string: "internal://local/about/home")
-
-        if page == .homePage, let customUrl = customUrl {
-            return existingTab ?? addTab(URLRequest(url: customUrl), isPrivate: privateMode)
-        } else if page == .topSites, let homeUrl = homeUrl {
-            let home = existingTab ?? addTab(isPrivate: privateMode)
-            home.loadRequest(PrivilegedRequest(url: homeUrl) as URLRequest)
-            home.url = homeUrl
-            return home
-        }
-
-        return selectedTab ?? addTab()
     }
 
     private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
@@ -1132,32 +1096,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         commitChanges()
-    }
-
-    func startAtHomeCheck() -> Bool {
-        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: !tabRestoreHasFinished)
-
-        guard !startAtHomeManager.shouldSkipStartHome else {
-            logger.log("Skipping start at home", level: .debug, category: .tabs)
-            return false
-        }
-
-        if startAtHomeManager.shouldStartAtHome() {
-            let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
-            let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
-            let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
-                                                                            with: profile.prefs)
-            let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
-                                                   inPrivateMode: wasLastSessionPrivate,
-                                                   and: profile.prefs)
-
-            logger.log("Start at home triggered with last session private \(wasLastSessionPrivate)",
-                       level: .debug,
-                       category: .tabs)
-            selectTab(tabToSelect)
-            return true
-        }
-        return false
     }
 
     func expireLoginAlerts() {

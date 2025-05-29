@@ -11,6 +11,7 @@ import Common
 class MockTabManager: TabManager {
     let windowUUID: WindowUUID
     var isRestoringTabs = false
+    var tabRestoreHasFinished = false
     var selectedIndex = 0
     var selectedTab: Tab?
     var selectedTabUUID: UUID?
@@ -69,10 +70,6 @@ class MockTabManager: TabManager {
         }
     }
 
-    func getMostRecentHomepageTab() -> Tab? {
-        return addTab(nil, afterTab: nil, isPrivate: false)
-    }
-
     func addDelegate(_ delegate: TabManagerDelegate) {}
 
     func setNavigationDelegate(_ delegate: WKNavigationDelegate) {}
@@ -117,10 +114,6 @@ class MockTabManager: TabManager {
     func preserveTabs() {}
 
     func restoreTabs(_ forced: Bool) {}
-
-    func startAtHomeCheck() -> Bool {
-        false
-    }
 
     func getTabForUUID(uuid: String) -> Tab? {
         return nil
