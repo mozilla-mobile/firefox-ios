@@ -15,14 +15,14 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String, Bool) -> Void
+    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
     public let onLinkTap: (String) -> Void
 
     public init(
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String, Bool) -> Void,
+        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
         onLinkTap: @escaping (String) -> Void
     ) {
         self.viewModel = viewModel
@@ -120,8 +120,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
-                    viewModel.name,
-                    true
+                    viewModel.name
                 )
             }
         )
@@ -138,8 +137,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                 action: {
                     onBottomButtonAction(
                         secondary.action,
-                        viewModel.name,
-                        false
+                        viewModel.name
                     )
                 })
             .font(UX.CardView.secondaryActionFont)

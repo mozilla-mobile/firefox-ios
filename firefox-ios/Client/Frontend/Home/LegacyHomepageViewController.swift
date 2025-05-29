@@ -458,8 +458,11 @@ class LegacyHomepageViewController:
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if WallpaperManager().currentWallpaper.hasImage {
+        // or if the toolbar refactor feature is turned on
+        if WallpaperManager().currentWallpaper.hasImage || isToolbarRefactorEnabled {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,

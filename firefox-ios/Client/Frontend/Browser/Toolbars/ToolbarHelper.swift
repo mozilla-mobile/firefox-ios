@@ -6,9 +6,9 @@ import Common
 import Foundation
 
 protocol ToolbarHelperInterface {
-    var isToolbarRefactorEnabled: Bool { get set }
-    var isToolbarTranslucencyEnabled: Bool { get set }
-    var isReduceTransparencyEnabled: Bool { get set }
+    var isToolbarRefactorEnabled: Bool { get }
+    var isToolbarTranslucencyEnabled: Bool { get }
+    var isReduceTransparencyEnabled: Bool { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
@@ -21,17 +21,17 @@ class ToolbarHelper: ToolbarHelperInterface {
         static let backgroundAlphaForBlur: CGFloat = 0.8
     }
 
-    lazy var isToolbarRefactorEnabled: Bool = {
+    var isToolbarRefactorEnabled: Bool {
         FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }()
+    }
 
-    lazy var isToolbarTranslucencyEnabled: Bool = {
+    var isToolbarTranslucencyEnabled: Bool {
         FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
-    }()
+    }
 
-    lazy var isReduceTransparencyEnabled: Bool = {
+    var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
-    }()
+    }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass != .compact

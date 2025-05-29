@@ -7,16 +7,26 @@ import Storage
 
 struct ZoomConstants {
     static let defaultZoomLimit: CGFloat = 1.0
-    static let lowerZoomLimit: CGFloat = 0.5
-    static let upperZoomLimit: CGFloat = 2.0
+    static let lowerZoomLimit: CGFloat = ZoomLevel.fiftyPercent.rawValue
+    static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue
 }
 
-class ZoomPageManager: TabEventHandler {
+class ZoomPageManager: TabEventHandler, FeatureFlaggable {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     let windowUUID: WindowUUID
     let zoomStore: ZoomLevelStorage
     var tab: Tab?
+
+    var defaultZoomIsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
+    }
+
+    var defaultZoomLevel: CGFloat {
+        guard defaultZoomIsEnabled else { return ZoomConstants.defaultZoomLimit }
+
+        return zoomStore.getDefaultZoom()
+    }
 
     init(windowUUID: WindowUUID,
          zoomStore: ZoomLevelStorage = ZoomLevelStore.shared) {
@@ -26,14 +36,14 @@ class ZoomPageManager: TabEventHandler {
     }
 
     func getZoomLevel() -> CGFloat {
-        guard let tab else { return ZoomConstants.defaultZoomLimit}
+        guard let tab else { return defaultZoomLevel}
 
         return getZoomLevel(for: tab.url?.host)
     }
 
     func zoomIn() -> CGFloat {
         guard let tab = tab,
-              let host = tab.url?.host else { return ZoomConstants.defaultZoomLimit}
+              let host = tab.url?.host else { return defaultZoomLevel}
 
         let newZoom = ZoomLevel.getNewZoomInLevel(for: tab.pageZoom)
         tab.pageZoom = newZoom
@@ -43,7 +53,7 @@ class ZoomPageManager: TabEventHandler {
 
     func zoomOut() -> CGFloat {
         guard let tab = tab,
-              let host = tab.url?.host else { return ZoomConstants.defaultZoomLimit}
+              let host = tab.url?.host else { return defaultZoomLevel}
 
         let newZoom = ZoomLevel.getNewZoomOutLevel(for: tab.pageZoom)
         tab.pageZoom = newZoom
@@ -86,13 +96,25 @@ class ZoomPageManager: TabEventHandler {
 
     // MARK: - Store level
 
+    func saveDefaultZoomLevel(defaultZoom: CGFloat) {
+        zoomStore.saveDefaultZoomLevel(defaultZoom: defaultZoom)
+    }
+
+    func getDomainLevel() -> [DomainZoomLevel] {
+        let domainZoomLevels = zoomStore.getDomainZoomLevel()
+
+        // Filter current default zoom level from the list
+        let filterList = domainZoomLevels.filter { $0.zoomLevel != defaultZoomLevel }
+        return filterList
+    }
+
     /// Saves the zoom level for a given host and notifies other windows of the change
     /// - Parameters:
     ///   - host: The domain or host for which the zoom level is being saved
     ///   - zoomLevel: The zoom level value to save
     private func saveZoomLevel(for host: String, zoomLevel: CGFloat) {
         let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: zoomLevel)
-        zoomStore.save(domainZoomLevel, completion: nil)
+        zoomStore.saveDomainZoom(domainZoomLevel, completion: nil)
 
         // Notify other windows of zoom change (other pages with identical host should also update)
         let userInfo: [AnyHashable: Any] = [WindowUUID.userInfoKey: windowUUID, "zoom": domainZoomLevel]
@@ -105,10 +127,18 @@ class ZoomPageManager: TabEventHandler {
     private func getZoomLevel(for host: String?) -> CGFloat {
         guard let host = host,
               let domainZoomLevel = zoomStore.findZoomLevel(forDomain: host) else {
-            return ZoomConstants.defaultZoomLimit
+            return defaultZoomLevel
         }
 
         return domainZoomLevel.zoomLevel
+    }
+
+    func deleteZoomLevel(for host: String) {
+        zoomStore.deleteZoomLevel(for: host)
+    }
+
+    func resetDomainZoomLevel() {
+        zoomStore.resetDomainZoomLevel()
     }
 
     // MARK: - TabEventHandler

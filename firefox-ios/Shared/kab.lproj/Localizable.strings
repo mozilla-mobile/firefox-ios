@@ -1430,10 +1430,10 @@
 "Settings.OpenWith.SectionName" = "Asnas n imayl";
 
 /* Touch ID prompt subtitle when accessing logins and passwords */
-"Settings.Passwords.FingerPrintReason.v103" = "Seqdec adsil-ik•im umḍin i wakken ad tkecmeḍ tura ɣer wawalen uffiren.";
+"Settings.Passwords.FingerPrintReason.v103" = "Seqdec adsil-ik·im umḍin i wakken ad tkecmeḍ tura ɣer wawalen uffiren.";
 
 /* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "Awalen-ik•im uffiren tura ttwammestnen s Usulay n Face ID, Touch ID neɣ s tengalt n uɛeddi n yibenk.";
+"Settings.Passwords.OnboardingMessage.v103" = "Awalen-ik·im uffiren tura ttwammestnen s Usulay n Face ID, Touch ID neɣ s tengalt n uɛeddi n yibenk.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "Sekles awalen uffiren";
@@ -1769,7 +1769,7 @@
 "Wallpaper.Change.Error.Title.v106" = "Tegguma ad tbeddel tugna n ugilal";
 
 /* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
-"Wallpaper.Download.Error.Body.v106" = "Yella wayen ur nteddu ara d usader-inek•inem.";
+"Wallpaper.Download.Error.Body.v106" = "Yella wayen ur nteddu ara d usader-inek·inem.";
 
 /* The title of the error displayed if download fails when changing a wallpaper. */
 "Wallpaper.Download.Error.Title.v106" = "Yegguma ad d-tettusader tugna";

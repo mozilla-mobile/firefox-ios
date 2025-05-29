@@ -488,10 +488,10 @@
 "ShareMenu.RemoveShortcut.Confirm" = "Η συντόμευση αφαιρέθηκε";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Έκδοση για υπολογιστές";
+"ShareMenu.RequestDesktop" = "Απαίτηση έκδοσης υπολογιστή";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
-"ShareMenu.RequestMobile" = "Έκδοση για κινητά";
+"ShareMenu.RequestMobile" = "Έκδοση κινητής συσκευής";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Άνοιγμα στο Chrome";
@@ -572,7 +572,7 @@
 "Tip.BiometricTouchId.Description" = "Ενεργοποίηση Touch ID";
 
 /* Text for a label that indicates the description for request desktop tip. */
-"Tip.RequestDesktop.Description" = "Ενέργειες σελίδας > Έκδοση για υπολογιστές";
+"Tip.RequestDesktop.Description" = "Ενέργειες σελίδας > Απαίτηση έκδοσης υπολογιστή";
 
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "Θέλετε να δείτε την πλήρη έκδοση ενός ιστοτόπου;";

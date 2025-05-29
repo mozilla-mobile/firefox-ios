@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Tutup";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Nampaknya koneksi Internet terputus.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Coba Lagi";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Memulai";
 
@@ -234,6 +240,9 @@
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Setuju dan Lanjutkan";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Lanjutkan";
 
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "Selesai";

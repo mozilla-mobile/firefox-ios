@@ -7,3 +7,6 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
 "ContextualHints.Toolbar.Top.Description.v107" = "താങ്ങൾക്കു് വേണമെങ്കിൽ കരുപ്പട്ട താഴോട്ടു് നീക്കുക.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout. */
+"ContextualHints.Toolbar.Update.Title.v139" = "ഞങ്ങൾ ചില സാധനങ്ങളെ മാറ്റി";
+

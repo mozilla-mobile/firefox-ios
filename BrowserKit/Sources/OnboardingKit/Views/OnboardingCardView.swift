@@ -10,7 +10,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String, Bool) -> Void
+    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
     public let onMultipleChoiceAction: (VM.OnboardingMultipleChoiceActionType, String) -> Void
     public let onLinkTap: (String) -> Void
 
@@ -18,7 +18,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String, Bool) -> Void,
+        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (VM.OnboardingMultipleChoiceActionType, String) -> Void,
         onLinkTap: @escaping (String) -> Void
     ) {

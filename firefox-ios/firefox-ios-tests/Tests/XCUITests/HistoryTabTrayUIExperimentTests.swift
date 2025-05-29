@@ -384,7 +384,7 @@ class HistoryTabTrayUIExperimentTests: FeatureFlaggedTestSuite {
         // Close the private tab "Book of Mozilla" by tapping 'x' button
         waitForTabsButton()
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
+        mozWaitForElementToExist(app.staticTexts.elementContainingText(webpage["label"]!))
         if iPad() {
             app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
         } else {

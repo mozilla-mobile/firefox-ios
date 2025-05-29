@@ -1,0 +1,19 @@
+# The configuration for the defaultZoomFeature feature
+features:
+  default-zoom-feature:
+    description: >
+        The feature flag to manage the rollout of default zoom feature.
+    variables:
+      enabled:
+        description: >
+          If true, page zoom settings and default zoom feature are shown
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+            enabled: false
+      - channel: developer
+        value:
+            enabled: true
+

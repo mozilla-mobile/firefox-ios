@@ -17,8 +17,7 @@ public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: Obser
 
     public func handleBottomButtonAction(
         action: VM.OnboardingActionType,
-        cardName: String,
-        isPrimary: Bool
+        cardName: String
     ) {
         guard let index = onboardingCards.firstIndex(where: { $0.name == cardName }) else { return }
 
