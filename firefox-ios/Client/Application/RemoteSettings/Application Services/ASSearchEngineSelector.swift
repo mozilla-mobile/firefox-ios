@@ -22,9 +22,11 @@ protocol ASSearchEngineSelectorProtocol {
 final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
     private let engineSelector = SearchEngineSelector()
     private let service: RemoteSettingsService
+    private let logger: Logger
 
-    init(service: RemoteSettingsService) {
+    init(service: RemoteSettingsService, logger: Logger = DefaultLogger.shared) {
         self.service = service
+        self.logger = logger
     }
 
     // MARK: - ASSearchEngineSelectorProtocol
@@ -54,6 +56,12 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
             }
 
             var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)
+
+            let serverName = isStaging ? "STAGE" : "PROD"
+            let engineLogList = searchResultsConfig.engines.map { $0.name }
+            logger.log("Got search engines from \(serverName) for '\(locale)' and '\(region)': \(engineLogList)",
+                       level: .info,
+                       category: .remoteSettings)
 
             // We want to be sure that our default engines list is always sorted with the default in position 0
             // This is important in the case of new installs, for example, where the user does not have any
