@@ -28,6 +28,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
         static let thumbnailScreenshotHeight: CGFloat = 200
+        static let borderLayerName = "externalBorder"
     }
     // MARK: - Properties
 
@@ -242,7 +243,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         borderLayer.strokeColor = color.cgColor
         borderLayer.lineWidth = width
         borderLayer.frame = view.bounds
-        borderLayer.name = "externalBorder"
+        borderLayer.name = UX.borderLayerName
         view.clipsToBounds = false
 
         removeExternalBorder(from: view)
@@ -251,7 +252,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     private func removeExternalBorder(from view: UIView) {
-        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+        view.layer.sublayers?.removeAll(where: { $0.name == UX.borderLayerName })
     }
 
     func setSelectedState(isPrivate: Bool, theme: Theme) {
