@@ -17,8 +17,7 @@ class FxSuggestTelemetry {
 
     private let systemRegion: String
 
-    init() {
-        let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+    init(locale: Locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)) {
         systemRegion = Self.regionCode(from: locale)
     }
 
