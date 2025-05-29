@@ -5,6 +5,11 @@ features:
       The new onboarding framework feature that will allow onboarding
       to be experimentable through initial experiments.
     variables:
+      enableModernUi:
+        description: >
+          Toggle between legacy (false) and modern (true) UI variants.
+        type: Boolean
+        default: false
       conditions:
         description: >
           A collection of out the box conditional expressions to be
@@ -28,6 +33,7 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
+          enableModernUi: false
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
@@ -222,6 +228,12 @@ objects:
     description: >
       A group of properties describing the attributes of a card.
     fields:
+      uiVariant:
+        type: Option<OnboardingVariant>
+        description: >
+          If set, this card will only be shown in the specified UI variant.
+          If null, it will appear in both legacy and modern UIs.
+        default: null
       card-type:
         type: OnboardingCardType
         description: >
@@ -401,6 +413,14 @@ objects:
         default: dismiss-and-next-card
 
 enums:
+  OnboardingVariant:
+    description: >
+      Which UI style this onboarding card is designed for.
+    variants:
+      legacy:
+        description: Use the existing (legacy) onboarding UI.
+      modern:
+        description: Use the new (modern) onboarding UI.
   OnboardingActions:
     description: >
       The identifiers for the different actions available for cards in onboarding
