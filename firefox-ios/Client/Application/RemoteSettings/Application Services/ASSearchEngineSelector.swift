@@ -58,7 +58,10 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
             var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)
 
             let serverName = isStaging ? "STAGE" : "PROD"
-            let engineLogList = searchResultsConfig.engines.map { $0.name }
+            let engineLogList = searchResultsConfig.engines.map {
+                let isOptional = $0.optional ? " (OPTIONAL)" : ""
+                return $0.name + isOptional
+            }
             logger.log("Got search engines from \(serverName) for '\(locale)' and '\(region)': \(engineLogList)",
                        level: .info,
                        category: .remoteSettings)
