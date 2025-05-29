@@ -68,9 +68,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
             XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(), "test advertiser")
             XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), "999 - Test Category")
             XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(), "https://example.com/ios_test_impression_reporting_url")
+            XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
             expectation.fulfill()
         }
 
+        let locale = Locale(identifier: "en-US")
+        let telemetry = FxSuggestTelemetry(locale: locale)
         subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
             RustFirefoxSuggestionTelemetryInfo.amp(
                 blockId: 1,
@@ -81,7 +84,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
             ),
             position: 3,
             didTap: false
-        ))
+        ), suggestTelemetry: telemetry)
 
         wait(for: [expectation], timeout: 5.0)
     }
