@@ -4532,14 +4532,16 @@ extension BrowserViewController: SearchViewControllerDelegate {
         switch searchSessionState {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
-            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0,
-                                                                             suggestTelemetry: suggestTelemetry) }
+            visibleSuggestionsTelemetryInfo.forEach {
+                trackVisibleSuggestion(telemetryInfo: $0, suggestTelemetry: suggestTelemetry)
+            }
             searchViewController.searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
-            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0,
-                                                                             suggestTelemetry: suggestTelemetry) }
+            visibleSuggestionsTelemetryInfo.forEach {
+                trackVisibleSuggestion(telemetryInfo: $0, suggestTelemetry: suggestTelemetry)
+            }
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
