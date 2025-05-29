@@ -48,12 +48,34 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureCellWith(model: MenuElement) {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if model?.iconImage != nil && (model?.needsReAuth == nil || model?.needsReAuth == false) {
+            self.iconImageView.layer.cornerRadius = iconImageView.frame.size.width / 2
+            self.iconImageView.clipsToBounds = true
+        } else {
+            self.iconImageView.layer.cornerRadius = 0
+            self.iconImageView.clipsToBounds = false
+        }
+    }
+
+    func configureCellWith(model: MenuElement, theme: Theme) {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
         self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
-        self.iconImageView.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
+        if let needsReAuth = model.needsReAuth, needsReAuth {
+            typealias Icons = StandardImageIdentifiers.Large
+            if theme.type == .light {
+                self.iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLargeLight)
+            } else {
+                self.iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLargeDark)
+            }
+        } else if let iconImage = model.iconImage {
+            self.iconImageView.image = iconImage
+        } else {
+            self.iconImageView.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
+        }
         self.isAccessibilityElement = true
         self.isUserInteractionEnabled = !model.isEnabled ? false : true
         self.accessibilityIdentifier = model.a11yId
@@ -94,7 +116,9 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
-        if model.isActive {
+        if let needsReAuth = model.needsReAuth, needsReAuth {
+            descriptionLabel.textColor = theme.colors.textCritical
+        } else if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             descriptionLabel.textColor = theme.colors.textSecondary
             iconImageView.tintColor = theme.colors.iconAccentBlue
