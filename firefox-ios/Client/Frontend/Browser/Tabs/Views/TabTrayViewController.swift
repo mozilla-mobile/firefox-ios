@@ -45,6 +45,11 @@ class TabTrayViewController: UIViewController,
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
         static let segmentedControlMinHeight: CGFloat = 45
+
+        // cell animation variables
+        static let lineWidthKeyPath = "lineWidth"
+        static let opacityKeyPath = "opacity"
+        static let animationPath = "animationPath"
     }
 
     // MARK: Theme

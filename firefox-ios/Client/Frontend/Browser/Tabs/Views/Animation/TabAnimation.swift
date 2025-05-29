@@ -237,20 +237,20 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
         }
 
-        let lineWidthAnimation = CABasicAnimation(keyPath: "lineWidth")
+        let lineWidthAnimation = CABasicAnimation(keyPath: UX.lineWidthKeyPath)
         lineWidthAnimation.fromValue = 0
         lineWidthAnimation.toValue = borderWidth
         lineWidthAnimation.duration = 0.4
         lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        borderLayer.add(lineWidthAnimation, forKey: "lineWidth")
+        borderLayer.add(lineWidthAnimation, forKey: UX.lineWidthKeyPath)
         borderLayer.lineWidth = borderWidth
 
-        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        let fadeAnimation = CABasicAnimation(keyPath: UX.opacityKeyPath)
         fadeAnimation.fromValue = 0.0
         fadeAnimation.toValue = 1.0
         fadeAnimation.duration = 0.4
         fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        borderLayer.add(fadeAnimation, forKey: "opacity")
+        borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
 
         let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
             if let frame = cellFrame {
@@ -268,13 +268,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                     cornerRadius: ExperimentTabCell.UX.cornerRadius
                 ).cgPath
 
-                let pathAnimation = CABasicAnimation(keyPath: "path")
+                let pathAnimation = CABasicAnimation(keyPath: UX.animationPath)
                 pathAnimation.fromValue = oldPath
                 pathAnimation.toValue = newPath
                 pathAnimation.duration = 0.4
                 pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
-                borderLayer.add(pathAnimation, forKey: "path")
+                borderLayer.add(pathAnimation, forKey: UX.animationPath)
                 borderLayer.path = newPath
             } else {
                 tabSnapshot.alpha = 0.0
