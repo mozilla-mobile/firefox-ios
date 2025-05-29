@@ -2419,7 +2419,9 @@ class BrowserViewController: UIViewController,
 
             configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
                                                  navigationToolbarView: navigationToolbarContainer)
-            applyTheme() // update the background view to ensure translucency is displayed correctly
+
+            // update the background view to ensure translucency is displayed correctly
+            applyTheme()
             return
         }
 
