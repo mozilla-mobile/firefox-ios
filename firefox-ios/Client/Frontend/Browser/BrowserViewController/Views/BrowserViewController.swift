@@ -143,7 +143,11 @@ class BrowserViewController: UIViewController,
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
-    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
+    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
+        AddressToolbarContainer(
+            isSwipingTabsEnabled: self.isSwipingTabsEnabled
+        )
+    })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
@@ -336,6 +340,8 @@ class BrowserViewController: UIViewController,
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue: DownloadQueue
+    let mainQueue: DispatchQueueInterface
+    let userInitiatedQueue: DispatchQueueInterface
 
     private let bookmarksSaver: BookmarksSaver
     let bookmarksHandler: BookmarksHandler
@@ -369,7 +375,9 @@ class BrowserViewController: UIViewController,
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -386,6 +394,8 @@ class BrowserViewController: UIViewController,
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
+        self.mainQueue = mainQueue
+        self.userInitiatedQueue = userInitiatedQueue
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -482,9 +492,8 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            let blurView = isToolbarTranslucencyEnabled ? newPositionIsBottom ? bottomBlurView : topBlurView : nil
             webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-            addressBarPanGestureHandler?.updateAddressBarContainer(newParent, blurView: blurView)
+            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer)
             updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
         }
 
@@ -531,9 +540,8 @@ class BrowserViewController: UIViewController,
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
-            let isWallpaperedHomepage = contentContainer.hasHomepage && wallpaperManager.currentWallpaper.hasImage
-            let offset = scrollOffset ?? 0
-            topBlurView.alpha = isWallpaperedHomepage ? offset : 1
+            let offset = scrollOffset ?? statusBarOverlay.scrollOffset
+            topBlurView.alpha = contentContainer.hasHomepage ? offset : 1
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
@@ -550,7 +558,12 @@ class BrowserViewController: UIViewController,
         maskView.backgroundColor = .black
         contentContainer.mask = maskView
 
-        [header, overKeyboardContainer, bottomContainer].forEach { $0.applyTheme(theme: theme) }
+        let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
+        views.forEach {
+            ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
+            $0.setNeedsLayout()
+            $0.layoutIfNeeded()
+        }
     }
 
     @objc
@@ -593,11 +606,13 @@ class BrowserViewController: UIViewController,
                    let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
                    !toolbarState.addressToolbar.isEditing {
                     addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                    addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
                 }
             } else {
                 navigationToolbarContainer.isHidden = true
                 if isSwipingTabsEnabled {
                     addressBarPanGestureHandler?.disablePanGestureRecognizer()
+                    addressToolbarContainer.hideSkeletonBars()
                 }
             }
             updateToolbarStateTraitCollectionIfNecessary(newCollection)
@@ -1139,13 +1154,10 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
 
-        let blurView = isToolbarTranslucencyEnabled ? isBottomSearchBar ? bottomBlurView : topBlurView : nil
-
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler = AddressBarPanGestureHandler(
+            addressToolbarContainer: addressToolbarContainer,
             contentContainer: contentContainer,
-            addressBarContainer: isBottomSearchBar ? overKeyboardContainer : header,
-            blurView: blurView,
             webPagePreview: webPagePreview,
             tabManager: tabManager,
             windowUUID: windowUUID,
@@ -2374,19 +2386,13 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
+            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
-                    lockIconImageName = hasSecureContent ?
-                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                        StandardImageIdentifiers.Small.shieldSlashFill
-                } else {
-                    lockIconImageName = hasSecureContent ?
-                        StandardImageIdentifiers.Large.lockFill :
-                        StandardImageIdentifiers.Large.lockSlashFill
-                }
-
+                lockIconImageName = hasSecureContent ?
+                    StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                    StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+                lockIconNeedsTheming = hasSecureContent
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
             }
@@ -2398,7 +2404,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: true,
+                lockIconNeedsTheming: lockIconNeedsTheming,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
@@ -2413,6 +2419,9 @@ class BrowserViewController: UIViewController,
 
             configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
                                                  navigationToolbarView: navigationToolbarContainer)
+
+            // update the background view to ensure translucency is displayed correctly
+            applyTheme()
             return
         }
 
@@ -3468,11 +3477,12 @@ class BrowserViewController: UIViewController,
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         updateAddressBarBackgroundViewColor(theme: currentTheme)
 
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        if isToolbarRefactorEnabled,
-            let toolbarState,
-            toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
-            backgroundView.backgroundColor = currentTheme.colors.layer3
+        if isToolbarRefactorEnabled {
+            // to make sure on homepage with bottom search bar the status bar is hidden
+            // we have to adjust the background color to match the homepage background color
+            let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
+            let colors = currentTheme.colors
+            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layer3
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
@@ -3497,10 +3507,7 @@ class BrowserViewController: UIViewController,
 
     private func updateAddressBarBackgroundViewColor(theme: Theme) {
         guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        let toolbarLayoutStyle = toolbarState?.toolbarLayout
-        let colors = theme.colors
-        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
+        addressBarBackgroundView.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Telemetry
@@ -3662,6 +3669,7 @@ class BrowserViewController: UIViewController,
         guard let profile = profile as? BrowserProfile else { return }
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            addressToolbarContainer.hideSkeletonBars()
         }
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibility.post(
@@ -3681,7 +3689,11 @@ class BrowserViewController: UIViewController,
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            addressBarPanGestureHandler?.enablePanGestureRecognizer()
+            let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+            if showNavToolbar {
+                addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+            }
         }
         if searchSessionState == .active {
             // This delegate method may be called even if the user isn't
@@ -4311,6 +4323,8 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
+        } else {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
         /// If the selectedTab is showing an error page trigger a reload

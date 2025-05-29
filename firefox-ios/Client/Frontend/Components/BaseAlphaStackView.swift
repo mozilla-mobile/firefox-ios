@@ -14,8 +14,8 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isSpacerClearBackground = false
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
-    private var toolbarLayoutType: ToolbarLayoutType? {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+    private var isToolbarRefactorEnabled: Bool {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
     }
 
     private var isToolbarTranslucencyEnabled: Bool {
@@ -117,8 +117,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        let isVersionLayout = toolbarLayoutType == .version1 || toolbarLayoutType == .version2
-        let color: UIColor = isVersionLayout ? theme.colors.layer3 : theme.colors.layer1
+        let color: UIColor = isToolbarRefactorEnabled ? theme.colors.layer3 : theme.colors.layer1
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
 
         backgroundColor = isClearBackground ? .clear : color
