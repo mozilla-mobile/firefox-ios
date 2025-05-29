@@ -1022,6 +1022,7 @@
 		8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C5D2A4C85DA0003018A /* AccountSettingsDelegate.swift */; };
 		8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */; };
 		8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */; };
+		8A732A822DE8AFD40099F575 /* FxSuggestTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A732A812DE8AFCA0099F575 /* FxSuggestTelemetry.swift */; };
 		8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */; };
 		8A75AF9C2DE8A1CF00B2C592 /* StartAtHomeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75AF9B2DE8A1C700B2C592 /* StartAtHomeMiddleware.swift */; };
 		8A75F1B828B558E20054E34D /* MessageCardDataAdaptorImplementationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75F1B728B558E20054E34D /* MessageCardDataAdaptorImplementationTests.swift */; };
@@ -8717,6 +8718,7 @@
 		8A720C5D2A4C85DA0003018A /* AccountSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportSettingsDelegate.swift; sourceTree = "<group>"; };
+		8A732A812DE8AFCA0099F575 /* FxSuggestTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxSuggestTelemetry.swift; sourceTree = "<group>"; };
 		8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanRemoveQuickActionBookmark.swift; sourceTree = "<group>"; };
 		8A75AF9B2DE8A1C700B2C592 /* StartAtHomeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeMiddleware.swift; sourceTree = "<group>"; };
 		8A75F1B728B558E20054E34D /* MessageCardDataAdaptorImplementationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardDataAdaptorImplementationTests.swift; sourceTree = "<group>"; };
@@ -15538,6 +15540,7 @@
 		E69DB0B91E97E301008A67E6 /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				8A732A812DE8AFCA0099F575 /* FxSuggestTelemetry.swift */,
 				8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */,
 				43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */,
 				AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */,
@@ -18821,6 +18824,7 @@
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
 				E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
+				8A732A822DE8AFD40099F575 /* FxSuggestTelemetry.swift in Sources */,
 				8A9B87AD2C1B39100042B894 /* SearchViewModel.swift in Sources */,
 				8A5D1CBB2A30DC0B005AD35C /* ConnectSetting.swift in Sources */,
 				E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */,
