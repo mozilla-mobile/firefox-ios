@@ -5793,7 +5793,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5813,7 +5812,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5831,7 +5829,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5850,7 +5847,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5870,7 +5866,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5889,7 +5884,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5907,7 +5901,6 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
@@ -5926,7 +5919,24 @@ fx_suggest:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-      - lina@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
+  country:
+    type: string
+    description: >
+      Records the home region of the user, the same used for configuring
+      region specific search providers.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/26928
+    data_reviews:
+      - TODO
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
       - ttran@mozilla.com
       - najiang@mozilla.com
     expires: never
