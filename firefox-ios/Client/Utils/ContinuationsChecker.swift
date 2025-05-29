@@ -31,6 +31,8 @@ final class SafeContinuation<T>: @unchecked Sendable {
     private var checkedContinuation: CheckedContinuation<T, Never>?
     private var hasResumed = false
 
+    private let lock = NSLock()
+
     private init(continuation: UnsafeContinuation<T, Never>) {
         self.continuation = continuation
     }
@@ -40,6 +42,9 @@ final class SafeContinuation<T>: @unchecked Sendable {
     }
 
     func resume(returning value: T) {
+        lock.lock()
+        defer { lock.unlock() }
+
         guard !hasResumed else {
             assertionFailure("⚠️ Continuation already resumed.")
             return
