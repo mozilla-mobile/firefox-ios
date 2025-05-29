@@ -178,7 +178,7 @@ extension PreviewModel {
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onBottomButtonAction: { _, _, _ in },
+            onBottomButtonAction: { _, _ in },
             onLinkTap: { _ in }
         )
     }
@@ -192,7 +192,7 @@ extension PreviewModel {
             viewModel: PreviewModel.customizationToolbar,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onBottomButtonAction: { _, _, _ in },
+            onBottomButtonAction: { _, _ in },
             onMultipleChoiceAction: { _, _ in },
             onLinkTap: { _ in }
         )
@@ -205,9 +205,7 @@ extension PreviewModel {
         themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.all,
-            onComplete: {
-                print("onComplete() called – advancing or finishing onboarding")
-            }
+            onComplete: { }
         )
     )
 }

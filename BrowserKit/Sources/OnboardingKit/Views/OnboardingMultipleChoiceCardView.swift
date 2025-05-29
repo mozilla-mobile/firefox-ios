@@ -14,15 +14,15 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String, Bool) -> Void
+    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
     public let onMultipleChoiceAction: (VM.OnboardingMultipleChoiceActionType, String) -> Void
     public let onLinkTap: (String) -> Void
 
-    public init(
+    public init?(
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String, Bool) -> Void,
+        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (VM.OnboardingMultipleChoiceActionType, String) -> Void,
         onLinkTap: @escaping (String) -> Void
     ) {
@@ -32,7 +32,10 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
         self.onLinkTap = onLinkTap
-        self._selectedAction = State(initialValue: viewModel.multipleChoiceButtons.first!.action)
+        guard let firstAction = viewModel.multipleChoiceButtons.first?.action else {
+            return nil
+        }
+        _selectedAction = State(initialValue: firstAction)
     }
 
     public var body: some View {
@@ -95,8 +98,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
-                    viewModel.name,
-                    true
+                    viewModel.name
                 )
             }
         )
