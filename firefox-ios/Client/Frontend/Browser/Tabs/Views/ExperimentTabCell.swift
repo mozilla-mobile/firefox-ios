@@ -13,6 +13,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let selectedBorderWidth: CGFloat = 3.0
         static let unselectedBorderWidth: CGFloat = 1
+        static let zeroBorderWidth: CGFloat = 0
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let fallbackFaviconSize = CGSize(width: 24, height: 24)
@@ -230,7 +231,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private func addExternalBorder(to view: UIView, color: UIColor, width: CGFloat) {
         let borderLayer = CAShapeLayer()
 
-        // make the frame of the borderRect slightly larger than the backgroundViewHolder
         let borderRect = view.bounds.insetBy(dx: -width / 3, dy: -width / 3)
 
         borderLayer.path = UIBezierPath(
@@ -241,14 +241,11 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         borderLayer.fillColor = UIColor.clear.cgColor
         borderLayer.strokeColor = color.cgColor
         borderLayer.lineWidth = width
-        borderLayer.frame = view.bounds // Stay in sync with the view
+        borderLayer.frame = view.bounds
         borderLayer.name = "externalBorder"
-
-        // Avoid clipping the border
         view.clipsToBounds = false
 
-        // Optional: remove old border if it exists
-        view.layer.sublayers?.removeAll(where: { $0.name == "externalBorder" })
+        removeExternalBorder(from: view)
 
         view.layer.addSublayer(borderLayer)
     }
@@ -258,8 +255,11 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     func setSelectedState(isPrivate: Bool, theme: Theme) {
-        backgroundHolder.layer.borderWidth = 0
+        // We are using a non-CALayer borderWidth for unselected cells for reduced graphics processing
+        // we zero that value here when we are in the selected state to assign the CAShapeLayer
+        backgroundHolder.layer.borderWidth = UX.zeroBorderWidth
         let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+
         addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
     }
 
