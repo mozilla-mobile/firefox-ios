@@ -1180,12 +1180,15 @@ class BrowserViewController: UIViewController,
 
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
-        view.addSubview(overKeyboardContainer)
 
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
         bottomContainer.addArrangedSubview(toolbarToShow)
         view.addSubview(bottomContainer)
+
+        // add overKeyboardContainer after bottomContainer so the address toolbar shadow
+        // for bottom toolbar doesn't get clipped
+        view.addSubview(overKeyboardContainer)
     }
 
     private func enqueueTabRestoration() {
