@@ -74,6 +74,7 @@ struct ZoomLevelPickerView: View {
                     }
                     .onChange(of: selectedZoomLevel) { newValue in
                         zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+                        NotificationCenter.default.post(name: .PageZoomSettingsChanged, object: nil)
                     }
                     .pickerStyle(.inline)
                     .labelsHidden()
