@@ -16,23 +16,33 @@ struct TabTraySelectorUX {
     static let verticalInsets: CGFloat = 4
     static let maxFontSize: CGFloat = 30
     static let horizontalInsets: CGFloat = 10
+    static let fontScaleDelta: CGFloat = 0.055
+}
+
+/// Represents the visual state of the selection indicator during a transition.
+private struct SelectionIndicatorTransition {
+    let selectionIndicatorWidthDuringTransition: CGFloat
+    let targetOffset: CGFloat
 }
 
 class TabTraySelectorView: UIView,
-                           ThemeApplicable {
+                           ThemeApplicable,
+                           Notifiable {
+    var notificationCenter: NotificationProtocol
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
-    private var selectedIndex: Int {
-        didSet {
-            if oldValue != selectedIndex {
-                selectNewSection(from: oldValue, to: selectedIndex)
-            }
-        }
-    }
+    private var selectedIndex: Int
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
+
+    private lazy var stackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.spacing = TabTraySelectorUX.horizontalPadding
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+    }
 
     var items: [String] = ["", "", ""] {
         didSet {
@@ -43,10 +53,13 @@ class TabTraySelectorView: UIView,
     }
 
     init(selectedIndex: Int,
-         theme: Theme) {
+         theme: Theme,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.selectedIndex = selectedIndex
         self.theme = theme
+        self.notificationCenter = notificationCenter
         super.init(frame: .zero)
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setup()
     }
 
@@ -54,18 +67,20 @@ class TabTraySelectorView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
+        updateSelectionBackground(from: fromIndex, to: toIndex, progress: abs(progress), animated: false)
+        simulateFontWeightTransition(from: fromIndex, to: toIndex, progress: abs(progress))
+    }
+
+    func didFinishSelection(to index: Int) {
+        selectedIndex = index
+        adjustSelectedButtonFont(toIndex: index)
+    }
+
     private func setup() {
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
         addSubview(selectionBackgroundView)
-
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = TabTraySelectorUX.horizontalPadding
-        stackView.distribution = .equalCentering
-        stackView.alignment = .center
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
@@ -111,42 +126,142 @@ class TabTraySelectorView: UIView,
 
     private func updateLabels() {
         for (index, title) in items.enumerated() {
-            buttons[safe: index]?.setTitle(title, for: .normal)
+            guard let button = buttons[safe: index] else { continue }
+            button.setTitle(title, for: .normal)
+            applyButtonWidthAnchor(on: button, with: title as NSString)
         }
+    }
+
+    /// Calculates and applies a fixed width constraint to a button based on the maximum
+    /// width required by its title when rendered in both regular and bold font styles.
+    ///
+    /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
+    /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
+    private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+        if let existingConstraint = button.constraints.first(where: { $0.firstAttribute == .width }) {
+            existingConstraint.isActive = false
+        }
+
+        let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
+        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
     }
 
     @objc
     private func sectionSelected(_ sender: UIButton) {
+        let oldValue = selectedIndex
         selectedIndex = sender.tag
+        selectNewSection(from: oldValue, to: selectedIndex)
     }
 
     private func selectNewSection(from fromIndex: Int, to toIndex: Int) {
         guard buttons.indices.contains(fromIndex),
               buttons.indices.contains(toIndex) else { return }
 
-        let toButton = buttons[toIndex]
+        adjustSelectedButtonFont(toIndex: toIndex)
+        updateSelectionBackground(from: fromIndex, to: toIndex, progress: 1.0, animated: true)
+
+        let panelType = TabTrayPanelType.getExperimentConvert(index: toIndex)
+        delegate?.didSelectSection(panelType: panelType)
+    }
+
+    private func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
+            button.transform = .identity
             button.titleLabel?.font = index == toIndex ?
             FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
             FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         }
+    }
 
-        let newWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
-        let toCenterX = toButton.superview!.convert(toButton.center, to: self).x
-        let offsetX = toCenterX - selectionBackgroundView.center.x
+    private func simulateFontWeightTransition(from fromIndex: Int, to toIndex: Int, progress: CGFloat) {
+        guard buttons.indices.contains(fromIndex), buttons.indices.contains(toIndex) else { return }
 
-        selectionBackgroundWidthConstraint?.constant = newWidth
+        let easedProgress = 1 - pow(1 - progress, 2)
+        for (index, button) in buttons.enumerated() {
+            if index == fromIndex {
+                // Scale down as we move away
+                let scale = 1.0 - TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else if index == toIndex {
+                // Scale up as we approach
+                let scale = 1.0 + TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else {
+                // Reset others
+                button.transform = .identity
+            }
+        }
+    }
 
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       options: [.curveEaseInOut],
-                       animations: {
-            self.selectionBackgroundView.transform = CGAffineTransform(translationX: offsetX, y: 0)
-            self.layoutIfNeeded()
-        }, completion: nil)
+    /// Updates or animates the selection background's position and width based on transition progress.
+    ///
+    /// - Parameters:
+    ///   - fromIndex: Index of the previously selected button.
+    ///   - toIndex: Index of the target button.
+    ///   - progress: Value between 0.0 and 1.0 indicating how far the transition is.
+    ///               Use 1.0 for a completed transition.
+    ///   - animated: Whether to animate the update (used when a selection is finalized).
+    private func updateSelectionBackground(from fromIndex: Int,
+                                           to toIndex: Int,
+                                           progress: CGFloat,
+                                           animated: Bool) {
+        guard let result = calculateSelectionTransition(from: fromIndex, to: toIndex, progress: progress) else {
+            return
+        }
 
-        let panelType = TabTrayPanelType.getExperimentConvert(index: selectedIndex)
-        delegate?.didSelectSection(panelType: panelType)
+        selectionBackgroundWidthConstraint?.constant = result.selectionIndicatorWidthDuringTransition
+        let transform = CGAffineTransform(translationX: result.targetOffset, y: 0)
+        let shouldAnimate = animated && !UIAccessibility.isReduceMotionEnabled
+
+        if shouldAnimate {
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: [.curveEaseInOut],
+                           animations: {
+                self.selectionBackgroundView.transform = transform
+                self.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            selectionBackgroundView.transform = transform
+            layoutIfNeeded()
+        }
+    }
+
+    /// Calculates the horizontal offset and width for the selection background during a transition between two buttons.
+    ///
+    /// This is used to animate or update the selection pill's position and size as the user
+    /// swipes or taps between different segments.
+    ///
+    /// - Parameters:
+    ///   - fromIndex: The index of the starting button (currently selected).
+    ///   - toIndex: The index of the target button (being selected).
+    ///   - progress: A CGFloat between 0.0 and 1.0 representing the progress of the transition.
+    ///               Uses 0 for the start position and 1 for the final position.
+    ///
+    /// - Returns: A `SelectionIndicatorTransition` containing the calculated width and offset
+    private func calculateSelectionTransition(from fromIndex: Int,
+                                              to toIndex: Int,
+                                              progress: CGFloat) -> SelectionIndicatorTransition? {
+        guard buttons.indices.contains(fromIndex),
+              buttons.indices.contains(toIndex),
+              let parentView = buttons[fromIndex].superview else { return nil }
+
+        let fromButton = buttons[fromIndex]
+        let toButton = buttons[toIndex]
+
+        let fromX = fromButton.center.x
+        let toX = toButton.center.x
+        let buttonCenterXDuringTransition = fromX + (toX - fromX) * progress
+        let selectionTargetCenterX = parentView.convert(CGPoint(x: buttonCenterXDuringTransition, y: 0), to: self).x
+        let targetOffset = selectionTargetCenterX - selectionBackgroundView.center.x
+
+        let fromWidth = fromButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let toWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let selectionIndicatorWidthDuringTransition = fromWidth + (toWidth - fromWidth) * progress
+
+        return SelectionIndicatorTransition(selectionIndicatorWidthDuringTransition: selectionIndicatorWidthDuringTransition,
+                                            targetOffset: targetOffset)
     }
 
     // MARK: - ThemeApplicable
@@ -159,5 +274,30 @@ class TabTraySelectorView: UIView,
         for button in buttons {
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
         }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            dynamicTypeChanged()
+        default:
+            break
+        }
+    }
+
+    private func dynamicTypeChanged() {
+        adjustSelectedButtonFont(toIndex: selectedIndex)
+
+        for (index, title) in items.enumerated() {
+            guard let button = buttons[safe: index] else { continue }
+            applyButtonWidthAnchor(on: button, with: title as NSString)
+        }
+
+        applyInitalSelectionBackgroundFrame()
+
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }
