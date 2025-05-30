@@ -15,7 +15,7 @@ struct IntroScreenManager: FeatureFlaggable {
     func didSeeIntroScreen() {
         prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
     }
-    
+
     var isModernOnboardingEnabled: Bool {
         featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
     }
