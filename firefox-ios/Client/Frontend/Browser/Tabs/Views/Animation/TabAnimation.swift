@@ -8,6 +8,30 @@ import UIKit
 import Shared
 
 extension TabTrayViewController: UIViewControllerTransitioningDelegate {
+    private struct UX {
+        // Animation keyPaths
+        static let lineWidthKeyPath = "lineWidth"
+        static let opacityKeyPath = "opacity"
+        static let animationPath = "path"
+
+        // Animation Variables
+        static let clearAlpha = 0.0
+        static let dimmedAlpha = 0.3
+        static let halfAlpha = 0.5
+        static let opaqueAlpha = 1.0
+
+        static let dimmedWhiteValue = 0.0
+
+        static let presentDuration: TimeInterval = 0.4
+        static let dismissDuration: TimeInterval = 0.3
+
+        static let cvScalingFactor = 1.2
+        static let initialOpacity = 0.0
+        static let finalOpacity = 1.0
+        static let initialBorderWidth = 0.0
+
+        static let zeroCornerRadius = 0.0
+    }
     func animationController(
         forPresented presented: UIViewController,
         presenting: UIViewController,
@@ -180,14 +204,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         borderLayer.strokeColor = borderColor.cgColor
         borderLayer.fillColor = UIColor.clear.cgColor
         borderLayer.lineWidth = borderWidth
-        borderLayer.opacity = 1
+        borderLayer.opacity = Float(UX.finalOpacity)
 
         snapshotContainer.layer.addSublayer(borderLayer)
         snapshotContainer.addSubview(bvcSnapshot)
 
         // Dimmed background view
         let backgroundView = UIView()
-        backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
+        backgroundView.backgroundColor = .init(white: UX.dimmedWhiteValue, alpha: UX.dimmedAlpha)
         backgroundView.frame = finalFrame
 
         // Add views to container
@@ -221,16 +245,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
                 cell.isHidden = true
                 cell.setUnselectedState(theme: theme)
-                cell.alpha = 0.0
+                cell.alpha = UX.clearAlpha
             }
         }
 
         // Animate
-        cv.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-        cv.alpha = 0.5
+        cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+        cv.alpha = UX.halfAlpha
 
         CATransaction.begin()
-        CATransaction.setAnimationDuration(0.4)
+        CATransaction.setAnimationDuration(UX.presentDuration)
         CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
         CATransaction.setCompletionBlock { [weak self] in
             snapshotContainer.removeFromSuperview()
@@ -238,21 +262,21 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
 
         let lineWidthAnimation = CABasicAnimation(keyPath: UX.lineWidthKeyPath)
-        lineWidthAnimation.fromValue = 0
+        lineWidthAnimation.fromValue = UX.initialBorderWidth
         lineWidthAnimation.toValue = borderWidth
-        lineWidthAnimation.duration = 0.4
+        lineWidthAnimation.duration = UX.presentDuration
         lineWidthAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
         borderLayer.add(lineWidthAnimation, forKey: UX.lineWidthKeyPath)
         borderLayer.lineWidth = borderWidth
 
         let fadeAnimation = CABasicAnimation(keyPath: UX.opacityKeyPath)
-        fadeAnimation.fromValue = 0.0
-        fadeAnimation.toValue = 1.0
-        fadeAnimation.duration = 0.4
+        fadeAnimation.fromValue = UX.initialOpacity
+        fadeAnimation.toValue = UX.finalOpacity
+        fadeAnimation.duration = UX.presentDuration
         fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
 
-        let animator = UIViewPropertyAnimator(duration: 0.4, curve: .easeInOut) {
+        let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeInOut) {
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
                 snapshotContainer.frame = frame
@@ -271,24 +295,24 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 let pathAnimation = CABasicAnimation(keyPath: UX.animationPath)
                 pathAnimation.fromValue = oldPath
                 pathAnimation.toValue = newPath
-                pathAnimation.duration = 0.4
+                pathAnimation.duration = UX.presentDuration
                 pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
                 borderLayer.add(pathAnimation, forKey: UX.animationPath)
                 borderLayer.path = newPath
             } else {
-                tabSnapshot.alpha = 0.0
-                snapshotContainer.alpha = 0.0
+                tabSnapshot.alpha = UX.clearAlpha
+                snapshotContainer.alpha = UX.clearAlpha
             }
             cv.transform = .identity
-            cv.alpha = 1
-            backgroundView.alpha = 0
+            cv.alpha = UX.opaqueAlpha
+            backgroundView.alpha = UX.clearAlpha
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             tabCell?.isHidden = false
             UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
-                tabCell?.alpha = 1
+                tabCell?.alpha = UX.opaqueAlpha
             }.startAnimation()
         }
 
@@ -335,8 +359,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // This background view is needed for animation between the tab tray and the bvc
         let backgroundView = UIView()
-        backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
-        backgroundView.alpha = 0
+        backgroundView.backgroundColor = .init(white: UX.dimmedWhiteValue, alpha: UX.dimmedAlpha)
+        backgroundView.alpha = UX.clearAlpha
         backgroundView.frame = finalFrame
 
         context.containerView.addSubview(toView)
@@ -378,16 +402,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             }
         }
         tabSnapshot.isHidden = false
-        let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0) {
-            cv.transform = .init(scaleX: 1.2, y: 1.2)
-            cv.alpha = 0.5
+        let animator = UIViewPropertyAnimator(duration: UX.dismissDuration, dampingRatio: 1.0) {
+            cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+            cv.alpha = UX.halfAlpha
 
             let contentContainer = browserVC.contentContainer
             tabSnapshot.frame = contentContainer.convert(contentContainer.bounds, to: browserVC.view)
-            tabSnapshot.layer.cornerRadius = 0
+            tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
             toVCSnapshot.frame = finalFrame
-            toVCSnapshot.layer.cornerRadius = 0
-            backgroundView.alpha = 1
+            toVCSnapshot.layer.cornerRadius = UX.zeroCornerRadius
+            backgroundView.alpha = UX.opaqueAlpha
         }
 
         animator.addCompletion { _ in

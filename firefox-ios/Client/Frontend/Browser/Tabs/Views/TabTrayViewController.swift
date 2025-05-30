@@ -32,7 +32,7 @@ class TabTrayViewController: UIViewController,
                              TabTraySelectorDelegate,
                              TabTrayAnimationDelegate {
     typealias SubscriberStateType = TabTrayState
-    struct UX {
+    private struct UX {
         struct NavigationMenu {
             static let width: CGFloat = 343
         }
@@ -45,11 +45,6 @@ class TabTrayViewController: UIViewController,
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
         static let segmentedControlMinHeight: CGFloat = 45
-
-        // cell animation variables
-        static let lineWidthKeyPath = "lineWidth"
-        static let opacityKeyPath = "opacity"
-        static let animationPath = "path"
     }
 
     // MARK: Theme
