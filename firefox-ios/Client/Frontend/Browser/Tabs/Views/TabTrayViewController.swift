@@ -32,7 +32,7 @@ class TabTrayViewController: UIViewController,
                              TabTraySelectorDelegate,
                              TabTrayAnimationDelegate {
     typealias SubscriberStateType = TabTrayState
-    struct UX {
+    private struct UX {
         struct NavigationMenu {
             static let width: CGFloat = 343
         }
@@ -250,7 +250,7 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
     init(panelType: TabTrayPanelType,
