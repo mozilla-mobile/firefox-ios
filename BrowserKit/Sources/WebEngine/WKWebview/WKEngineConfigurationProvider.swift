@@ -58,6 +58,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     private static let nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     private static let defaultStore = WKWebsiteDataStore.default()
+    private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
     private let configuration: WKWebViewConfiguration
 
     public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
@@ -75,6 +76,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         configuration.mediaTypesRequiringUserActionForPlayback = parameters.autoPlay
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
+        configuration.dataDetectorTypes = DefaultWKEngineConfigurationProvider.defaultDataDetectorTypes
 
         // TODO: FXIOS-8086 - Evaluate if ignoresViewportScaleLimits is still needed
         // We do this to go against the configuration of the <meta name="viewport">
