@@ -22,7 +22,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         static let textSafeSpace: CGFloat = 6
         static let faviconCornerRadius: CGFloat = 16
         static let faviconTransparentBackgroundInset: CGFloat = 8
-        static let transparencyThreshold: CGFloat = 10
+        static let transparencyThreshold: CGFloat = 15
     }
 
     private var rootContainer: UIView = .build { view in
