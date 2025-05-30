@@ -12,19 +12,19 @@
 #
 # OPTIONS:
 #
-# --update: 			Simply re-run the script with this flag to update the glean_index.yaml file
-#						with any manually added metrics files in the Client/Glean/probes folder.
+# --update:              Simply re-run the script with this flag to update the glean_index.yaml file
+#                        with any manually added metrics files in the Client/Glean/probes folder.
 #
-# --new featureName: 	This parameter should describe the new feature or component and be input
-#					 	in camelCase.
+# --new featureName:     This parameter should describe the new feature or component and be input
+#                        in camelCase.
 #
-#						Creates a new metrics YAML file feature_name.yaml, adds it to the
-#					 	Client/Glean/probes folder, and appends the new filepath to the
-#					 	Client/Glean/glean_index.yaml index.
+#                        Creates a new metrics YAML file feature_name.yaml, adds it to the
+#                        Client/Glean/probes folder, and appends the new filepath to the
+#                        Client/Glean/glean_index.yaml index.
 #
-#					 	This will automatically add a tag of `FeatureName` to the metrics in
-#					 	this file. The tag and its description should be added to the tags.yaml
-#					 	file as well.
+#                        This will automatically add a tag of `FeatureName` to the metrics in
+#                        this file. The tag and its description should be added to the tags.yaml
+#                        file as well.
 #
 
 ##############################################################################
