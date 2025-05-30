@@ -111,6 +111,7 @@ struct AccessibilityIdentifiers {
         static let zoom = "MainMenu.Zoom"
         static let moreLess = "MainMenu.MoreLess"
         static let signIn = "MainMenu.SignIn"
+        static let trackigProtection = "shieldCheckmarkLarge"
     }
 
     struct UnifiedSearch {

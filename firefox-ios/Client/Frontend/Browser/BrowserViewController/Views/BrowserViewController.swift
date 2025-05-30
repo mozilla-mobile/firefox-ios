@@ -1186,12 +1186,15 @@ class BrowserViewController: UIViewController,
 
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
-        view.addSubview(overKeyboardContainer)
 
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
         bottomContainer.addArrangedSubview(toolbarToShow)
         view.addSubview(bottomContainer)
+
+        // add overKeyboardContainer after bottomContainer so the address toolbar shadow
+        // for bottom toolbar doesn't get clipped
+        view.addSubview(overKeyboardContainer)
     }
 
     private func enqueueTabRestoration() {
@@ -1245,9 +1248,9 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
     }
 
-    func willNavigateAway(from tab: Tab?) {
+    func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
         if let tab {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID, completion: completion)
         }
     }
 
