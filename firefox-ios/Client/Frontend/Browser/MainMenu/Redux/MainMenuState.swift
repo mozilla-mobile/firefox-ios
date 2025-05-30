@@ -130,6 +130,8 @@ struct MainMenuState: ScreenState, Equatable {
             return handleUpdateAccountHeaderAction(state: state, action: action)
         case MainMenuActionType.updateCurrentTabInfo:
             return handleUpdateCurrentTabInfoAction(state: state, action: action)
+        case MainMenuActionType.tapMoreOptions:
+            return handleShowMoreOptions(state: state, action: action)
         case MainMenuActionType.tapShowDetailsView:
             return handleTapShowDetailsViewAction(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
@@ -187,6 +189,26 @@ struct MainMenuState: ScreenState, Equatable {
                 and: state.windowUUID
             ),
             currentTabInfo: currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleShowMoreOptions(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction,
+              let currentTabInfo = state.currentTabInfo,
+              let isExpanded = action.isExpanded
+        else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                for: state.currentSubmenuView,
+                and: state.windowUUID,
+                isExpanded: !isExpanded
+            ),
+            currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
             accountIcon: state.accountIcon
         )

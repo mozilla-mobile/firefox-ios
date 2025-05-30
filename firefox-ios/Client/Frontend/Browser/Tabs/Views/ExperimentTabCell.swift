@@ -13,6 +13,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let selectedBorderWidth: CGFloat = 3.0
         static let unselectedBorderWidth: CGFloat = 1
+        static let zeroBorderWidth: CGFloat = 0
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let fallbackFaviconSize = CGSize(width: 24, height: 24)
@@ -27,6 +28,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
         static let thumbnailScreenshotHeight: CGFloat = 200
+        static let borderLayerName = "externalBorder"
     }
     // MARK: - Properties
 
@@ -44,11 +46,12 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.layer.borderWidth = UX.unselectedBorderWidth
-        view.clipsToBounds = true
+        view.clipsToBounds = false
     }
 
     private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = UX.cornerRadius
         view.clipsToBounds = true
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
@@ -70,6 +73,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         imageView.image = UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate)
     }
 
+    private var borderLayer = CAShapeLayer()
+
     override func layoutSubviews() {
         super.layoutSubviews()
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
@@ -82,6 +87,18 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         closeButtonBlurView.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
         closeButtonBlurView.layer.cornerRadius = closeButtonBlurView.frame.height / 2
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        guard isSelectedTab else { return }
+        Task {
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                redrawExternalBorder()
+            }
+        }
     }
 
     // MARK: - Initializer
@@ -220,13 +237,65 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-            backgroundHolder.layer.borderColor = borderColor.cgColor
-            backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
+            setSelectedState(isPrivate: isPrivate, theme: theme)
         } else {
-            backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
-            backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
+            setUnselectedState(theme: theme)
         }
+    }
+
+    private func addExternalBorder(to view: UIView, color: UIColor, width: CGFloat) {
+        borderLayer = CAShapeLayer()
+
+        let borderRect = view.bounds.insetBy(dx: -width / 3, dy: -width / 3)
+
+        borderLayer.path = UIBezierPath(
+            roundedRect: borderRect,
+            cornerRadius: UX.cornerRadius
+        ).cgPath
+
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = color.cgColor
+        borderLayer.lineWidth = width
+        borderLayer.frame = view.bounds
+        borderLayer.name = UX.borderLayerName
+        borderLayer.needsDisplayOnBoundsChange = true
+
+        view.clipsToBounds = false
+
+        removeExternalBorder(from: view)
+
+        view.layer.addSublayer(borderLayer)
+    }
+
+    private func redrawExternalBorder() {
+        let width = borderLayer.lineWidth
+        let borderRect = backgroundHolder.bounds.insetBy(dx: -width / 3, dy: -width / 3)
+
+        borderLayer.path = UIBezierPath(
+            roundedRect: borderRect,
+            cornerRadius: UX.cornerRadius
+        ).cgPath
+
+        borderLayer.frame = backgroundHolder.bounds
+    }
+
+    private func removeExternalBorder(from view: UIView) {
+        view.layer.sublayers?.removeAll(where: { $0.name == UX.borderLayerName })
+    }
+
+    func setSelectedState(isPrivate: Bool, theme: Theme) {
+        // We are using a non-CALayer borderWidth for unselected cells for reduced graphics processing
+        // we zero that value here when we are in the selected state to assign the CAShapeLayer
+        backgroundHolder.layer.borderWidth = UX.zeroBorderWidth
+        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+
+        addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
+    }
+
+    func setUnselectedState(theme: Theme) {
+        removeExternalBorder(from: backgroundHolder)
+        backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
+        backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
     }
 
     // MARK: - UICollectionViewCell
@@ -236,6 +305,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         super.prepareForReuse()
         screenshotView.image = nil
         smallFaviconView.isHidden = true
+        removeExternalBorder(from: backgroundHolder)
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0

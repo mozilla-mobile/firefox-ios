@@ -14,6 +14,7 @@ final class MainMenuAction: Action {
     var accountData: AccountData?
     var accountIcon: UIImage?
     var telemetryInfo: TelemetryInfo?
+    var isExpanded: Bool?
 
     init(
         windowUUID: WindowUUID,
@@ -24,7 +25,8 @@ final class MainMenuAction: Action {
         tabID: TabUUID? = nil,
         accountData: AccountData? = nil,
         accountIcon: UIImage? = nil,
-        telemetryInfo: TelemetryInfo? = nil
+        telemetryInfo: TelemetryInfo? = nil,
+        isExpanded: Bool? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
@@ -33,6 +35,7 @@ final class MainMenuAction: Action {
         self.accountData = accountData
         self.accountIcon = accountIcon
         self.telemetryInfo = telemetryInfo
+        self.isExpanded = isExpanded
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -43,6 +46,7 @@ enum MainMenuActionType: ActionType {
     case tapShowDetailsView
     case tapToggleUserAgent
     case updateCurrentTabInfo
+    case tapMoreOptions
     case didInstantiateView
     case viewDidLoad
     case menuDismissed
