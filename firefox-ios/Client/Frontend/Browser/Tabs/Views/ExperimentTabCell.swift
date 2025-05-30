@@ -73,6 +73,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         imageView.image = UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate)
     }
 
+    private var borderLayer = CAShapeLayer()
+
     override func layoutSubviews() {
         super.layoutSubviews()
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
@@ -85,6 +87,18 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         closeButtonBlurView.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
         closeButtonBlurView.layer.cornerRadius = closeButtonBlurView.frame.height / 2
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        guard isSelectedTab else { return }
+        Task {
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                redrawExternalBorder()
+            }
+        }
     }
 
     // MARK: - Initializer
@@ -230,7 +244,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     private func addExternalBorder(to view: UIView, color: UIColor, width: CGFloat) {
-        let borderLayer = CAShapeLayer()
+        borderLayer = CAShapeLayer()
 
         let borderRect = view.bounds.insetBy(dx: -width / 3, dy: -width / 3)
 
@@ -244,11 +258,25 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         borderLayer.lineWidth = width
         borderLayer.frame = view.bounds
         borderLayer.name = UX.borderLayerName
+        borderLayer.needsDisplayOnBoundsChange = true
+
         view.clipsToBounds = false
 
         removeExternalBorder(from: view)
 
         view.layer.addSublayer(borderLayer)
+    }
+
+    private func redrawExternalBorder() {
+        let width = borderLayer.lineWidth
+        let borderRect = backgroundHolder.bounds.insetBy(dx: -width / 3, dy: -width / 3)
+
+        borderLayer.path = UIBezierPath(
+            roundedRect: borderRect,
+            cornerRadius: UX.cornerRadius
+        ).cgPath
+
+        borderLayer.frame = backgroundHolder.bounds
     }
 
     private func removeExternalBorder(from view: UIView) {
