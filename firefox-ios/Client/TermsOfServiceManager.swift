@@ -40,10 +40,11 @@ struct TermsOfServiceManager: FeatureFlaggable {
         prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
     }
 
-    func shouldSendTechnicalData(value: Bool) {
+    func shouldSendTechnicalData(telemetryValue: Bool, studiesValue: Bool) {
         // AdjustHelper.setEnabled($0)
-        DefaultGleanWrapper().setUpload(isEnabled: value)
-        Experiments.setTelemetrySetting(value)
+        DefaultGleanWrapper().setUpload(isEnabled: telemetryValue)
+        Experiments.setStudiesSetting(studiesValue)
+        Experiments.setTelemetrySetting(telemetryValue)
     }
 
     // MARK: – Constants

@@ -173,6 +173,7 @@ final class PrivacyPreferencesViewController: UIViewController,
 
         technicalDataSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendUsageData)
+            self?.profile.prefs.setBool(value, forKey: AppConstants.prefStudiesToggle)
             if !value {
                 GleanMetrics.Pings.shared.onboardingOptOut.submit()
             }
