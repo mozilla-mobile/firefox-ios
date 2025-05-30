@@ -398,7 +398,7 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.updatedPasswordManagerFeature.value()
         return config.status
     }
-    
+
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
     }
