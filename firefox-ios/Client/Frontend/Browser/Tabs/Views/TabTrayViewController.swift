@@ -49,7 +49,7 @@ class TabTrayViewController: UIViewController,
         // cell animation variables
         static let lineWidthKeyPath = "lineWidth"
         static let opacityKeyPath = "opacity"
-        static let animationPath = "animationPath"
+        static let animationPath = "path"
     }
 
     // MARK: Theme
