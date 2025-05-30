@@ -53,7 +53,7 @@ function append_paths_to_probe_index() {
 
         # Write this path to the file passed in as argument 1
         relativeName="${filename#firefox-ios/}"
-        echo "  - $relativeName" >>$1
+        echo "  - $relativeName" >>"$1"
     done
 }
 
@@ -81,7 +81,7 @@ function clear_probe_index_file() {
 #   None
 ##############################################################################
 function clear_file_contents() {
-    sed -i '' d $1
+    sed -i '' d "$1"
 }
 
 ##############################################################################
@@ -94,7 +94,7 @@ function clear_file_contents() {
 #   Prints to stdout the converted value.
 ##############################################################################
 function convert_camel_case_to_snake_case() {
-    echo $1 | sed -r 's/([a-z0-9])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]'
+    echo "$1" | sed -r 's/([a-z0-9])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]'
 }
 
 ##############################################################################
@@ -107,12 +107,12 @@ function convert_camel_case_to_snake_case() {
 #   Prints the new file path to stdout.
 ##############################################################################
 function create_file_for_component() {
-    component_file_name=$(convert_camel_case_to_snake_case $component_name)
+    component_file_name=$(convert_camel_case_to_snake_case "$component_name")
 
     new_file="$PATH_TO_FEATURE_YAMLS/$component_file_name.yaml"
-    touch $new_file
+    touch "$new_file"
 
-    echo $new_file
+    echo "$new_file"
 }
 
 ##############################################################################
@@ -141,7 +141,7 @@ function update_index_file() {
 
 function capitalized_tag_name() {
     feature_name=$1
-    echo "$(tr '[:lower:]' '[:upper:]' <<<${feature_name:0:1})${feature_name:1}"
+    echo "$(tr '[:lower:]' '[:upper:]' <<<"${feature_name:0:1}")${feature_name:1}"
 }
 
 ##############################################################################
@@ -155,7 +155,7 @@ function capitalized_tag_name() {
 #   Writes the metrics YAML template to the file given by $1.
 ##############################################################################
 function write_new_metrics_template() {
-    capitalized_tag=$(capitalized_tag_name $2)
+    capitalized_tag=$(capitalized_tag_name "$2")
 
     echo """# This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -179,7 +179,7 @@ function write_new_metrics_template() {
 ###############################################################################
 
 # Add your new metrics and/or events here.
-""" >$1
+""" >"$1"
 }
 
 ##############################################################################
@@ -199,8 +199,7 @@ function write_probe_files_to_file_list() {
         echo " * ${filename}"
 
         # Write this path to the file passed in as argument 1
-        directory='firefox-ios'
-        prefix='$(PROJECT_DIR)'
+        prefix="\$(PROJECT_DIR)" # NOTE: We want this to be a string literal since it's an Xcode environment variable, so don't expand!
         relativeName="${filename#firefox-ios/}"
         echo "$prefix/$relativeName" >>$XCODE_INFILE_LIST
     done
@@ -211,7 +210,7 @@ function write_probe_files_to_file_list() {
 ##############################################################################
 if [ "$1" == "--add" ]; then
     if [ -z "${2}" ]; then
-        echo $DOCUMENTATION_WARNING
+        echo "$DOCUMENTATION_WARNING"
         exit 1
     else
         component_name=$2
@@ -223,9 +222,9 @@ if [ "$1" == "--add" ]; then
         fi
 
         # Create the new metrics YAML file and populate with a basic template
-        capitalized_tag=$(capitalized_tag_name $component_name)
-        new_file=$(create_file_for_component $component_name)
-        write_new_metrics_template $new_file $component_name
+        capitalized_tag=$(capitalized_tag_name "$component_name")
+        new_file=$(create_file_for_component "$component_name")
+        write_new_metrics_template "$new_file" "$component_name"
         echo -e "Successfully added file for the $component_name component:\n * $new_file\n"
 
         # Update the glean index file
@@ -257,6 +256,6 @@ elif [ $# -eq 0 ]; then
     echo "No arguments supplied. $DOCUMENTATION_WARNING"
     exit 1
 else
-    echo $DOCUMENTATION_WARNING
+    echo "$DOCUMENTATION_WARNING"
     exit 1
 fi
