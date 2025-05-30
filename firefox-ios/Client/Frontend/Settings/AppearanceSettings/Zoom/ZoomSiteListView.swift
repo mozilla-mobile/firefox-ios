@@ -9,8 +9,8 @@ import Storage
 struct ZoomSiteListView: View {
     let theme: Theme
     @Binding var domainZoomLevels: [DomainZoomLevel]
-    let onDelete: (IndexSet) -> Void
-    let resetDomain: () -> Void
+    private let onDelete: (IndexSet) -> Void
+    private let resetDomain: () -> Void
 
     private struct UX {
         static var sectionPadding: CGFloat = 16

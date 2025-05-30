@@ -12,6 +12,7 @@ struct ZoomTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
+    // Zoom bar actions
     func zoomIn(zoomLevel: ZoomLevel) {
         let extra = GleanMetrics.ZoomBar.ZoomInButtonTappedExtra(level: zoomLevel.telemetryQuantity)
         gleanWrapper.recordEvent(for: GleanMetrics.ZoomBar.zoomInButtonTapped, extras: extra)
@@ -28,5 +29,20 @@ struct ZoomTelemetry {
 
     func closeZoomBar() {
         gleanWrapper.recordEvent(for: GleanMetrics.ZoomBar.closeButtonTapped)
+    }
+
+    // Page Zoom Settings actions
+    func changeDefaultZoomLevel(value: Int32) {
+        let extra = GleanMetrics.SettingsZoom.UpdateDefaultLevelExtra(level: value)
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoom.updateDefaultLevel, extras: extra)
+    }
+
+    func deleteZoomDomainLevel(value: Int32) {
+        let extra = GleanMetrics.SettingsZoom.DeleteDomainLevelExtra(domainIndex: value)
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoom.deleteDomainLevel)
+    }
+
+    func resetDomainZoomLevel() {
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoom.resetDomainList)
     }
 }

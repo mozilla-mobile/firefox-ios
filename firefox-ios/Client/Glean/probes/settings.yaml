@@ -263,3 +263,58 @@ settings.app_icon:
     metadata:
       tags:
         - AppIconSelection
+        
+# Default Zoom Settings
+settings.zoom:
+  update_default_level:
+    type: event
+    description: |
+      Records when the user changes their app icon in the app settings.
+    extra_keys:
+      level:
+        type: quantity
+        description: |
+          The new default zoom level for domain that don't have a custom zoom level.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-08-01"
+    metadata:
+      tags:
+        - ZoomBar
+  delete_domain_level:
+    type: event
+    description: |
+      Records when the user deletes a specific zoom domain level in the app settings.
+    extra_keys:
+      domain_index:
+        type: quantity
+        description: |
+          The new default zoom level for domain that don't have a custom zoom level.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-08-01"
+    metadata:
+      tags:
+        - ZoomBar
+  reset_domain_list:
+    type: event
+    description: |
+      Records when the user resets the list of zoom domain level in the app settings.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-08-01"
+    metadata:
+      tags:
+        - ZoomBar
