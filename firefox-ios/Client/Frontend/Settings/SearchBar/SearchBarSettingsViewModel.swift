@@ -6,9 +6,9 @@ import Common
 import Foundation
 import Shared
 
-enum SearchBarPosition: String, FlaggableFeatureOptions {
-    case bottom
+enum SearchBarPosition: String, FlaggableFeatureOptions, CaseIterable {
     case top
+    case bottom
 
     var getLocalizedTitle: String {
         switch self {
@@ -16,6 +16,28 @@ enum SearchBarPosition: String, FlaggableFeatureOptions {
             return .Settings.Toolbar.Bottom
         case .top:
             return .Settings.Toolbar.Top
+        }
+    }
+
+    /// NOTE: To avoid duplication, this enum is reused in the new address bar setting menu.
+    /// TODO(FXIOS-12000): Once the experiment is done, we can move this enum closer to the new UI.
+    var label: String {
+        switch self {
+        case .top:
+            return .Settings.AddressBar.Top
+        case .bottom:
+            return .Settings.AddressBar.Bottom
+        }
+    }
+
+    /// NOTE: To avoid duplication, this enum is reused in the new address bar setting menu.
+    /// TODO(FXIOS-12000): Once the experiment is done, we can move this enum closer to the new UI and remove unused props.
+    var imageName: String {
+        switch self {
+        case .top:
+            return ImageIdentifiers.AddressBar.addressBarIllustrationTop
+        case .bottom:
+            return ImageIdentifiers.AddressBar.addressBarIllustrationBottom
         }
     }
 }
@@ -55,7 +77,6 @@ extension SearchBarLocationProvider {
 }
 
 final class SearchBarSettingsViewModel: FeatureFlaggable {
-    var title: String = .Settings.Toolbar.Toolbar
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs
@@ -65,8 +86,16 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         self.notificationCenter = notificationCenter
     }
 
+    var isNewAddressBarOn: Bool {
+        featureFlags.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+    }
+
+    var title: String {
+        isNewAddressBarOn ? .Settings.AddressBar.AddressBarMenuTitle : .Settings.Toolbar.Toolbar
+    }
+
     var searchBarTitle: String {
-        searchBarPosition.getLocalizedTitle
+        isNewAddressBarOn ? "" : searchBarPosition.getLocalizedTitle
     }
 
     var searchBarPosition: SearchBarPosition {
@@ -97,7 +126,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 }
 
 // MARK: Private
-private extension SearchBarSettingsViewModel {
+extension SearchBarSettingsViewModel {
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
@@ -107,7 +136,7 @@ private extension SearchBarSettingsViewModel {
         notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
-    func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
+    private func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
         let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
                       TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: searchBarPosition.rawValue]
         TelemetryWrapper.recordEvent(category: .action,
