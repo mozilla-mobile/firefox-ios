@@ -7,6 +7,7 @@ import Storage
 
 class PageZoomSettingsViewModel: ObservableObject {
     let zoomManager: ZoomPageManager
+    private let zoomTelemetry = ZoomTelemetry()
     @Published var domainZoomLevels: [DomainZoomLevel]
     public var notificationCenter: NotificationProtocol
 
@@ -17,10 +18,16 @@ class PageZoomSettingsViewModel: ObservableObject {
         self.notificationCenter = notificationCenter
     }
 
+    func updateDefaultZoomLevel(newValue: ZoomLevel) {
+        zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+        zoomTelemetry.changeDefaultZoomLevel(value: newValue.telemetryQuantity)
+    }
+
     func resetDomainZoomLevel() {
         domainZoomLevels.removeAll()
         zoomManager.resetDomainZoomLevel()
         notificationCenter.post(name: .PageZoomSettingsChanged)
+        zoomTelemetry.resetDomainZoomLevel()
     }
 
     func deleteZoomLevel(at indexSet: IndexSet) {
@@ -30,5 +37,6 @@ class PageZoomSettingsViewModel: ObservableObject {
         zoomManager.deleteZoomLevel(for: deleteItem.host)
         domainZoomLevels.remove(at: index)
         notificationCenter.post(name: .PageZoomSettingsChanged)
+        zoomTelemetry.deleteZoomDomainLevel(value: Int32(index))
     }
 }
