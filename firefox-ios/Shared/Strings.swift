@@ -2825,11 +2825,6 @@ extension String {
                 tableName: "TabsTray",
                 value: "Tabs Closed: %d",
                 comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. ")
-            public static let SingleTabTitle = MZLocalizedString(
-                key: "CloseTabsToast.SingleTabTitle.v113",
-                tableName: "TabsTray",
-                value: "Tab Closed",
-                comment: "When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup.")
             public static let Action = MZLocalizedString(
                 key: "CloseTabsToast.Button.v113",
                 tableName: "TabsTray",
@@ -7909,6 +7904,11 @@ extension String {
                 value: "Address Saved",
                 comment: "Toast message confirming that an address has been successfully saved."
             )
+            public static let SingleTabTitle = MZLocalizedString(
+                key: "CloseTabsToast.SingleTabTitle.v113",
+                tableName: "TabsTray",
+                value: "Tab Closed",
+                comment: "When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup.")
         }
     }
 }
