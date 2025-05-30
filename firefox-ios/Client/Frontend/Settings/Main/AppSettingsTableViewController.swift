@@ -228,7 +228,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
-            tableView.reloadData()
+            self.tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
