@@ -2,6 +2,33 @@ version: 2.1
 
 setup: true
 
+# Add pipeline parameters for manual triggers
+parameters:
+  run-browserstack-tests:
+    type: boolean
+    default: false
+  run-firebase-deploy:
+    type: boolean
+    default: false
+  run-testflight-beta:
+    type: boolean
+    default: false
+  run-release-deploy:
+    type: boolean
+    default: false
+  dry-run-mode:
+    type: boolean
+    default: false
+    description: "Enable dry-run mode to simulate all operations without actual deployments"
+  simulate-version-change:
+    type: boolean
+    default: false
+    description: "For dry-run mode: simulate version change (true) or no change (false)"
+  # Internal parameter - set when continuing to release pipeline
+  is-release-pipeline:
+    type: boolean
+    default: false
+
 environment_common: &environment_common
   environment:
     CI: true
@@ -12,6 +39,89 @@ macos_common: &macos_common
   resource_class: macos.m1.medium.gen1
 
 jobs:
+
+  check-version-bump:
+    <<: *environment_common
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Check for MARKETING_VERSION change
+          command: |
+            VERSION_CHANGED=false
+            
+            if [[ "<< pipeline.parameters.dry-run-mode >>" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Testing version change detection"
+              if [[ "<< pipeline.parameters.simulate-version-change >>" == "true" ]]; then
+                echo "✅ SIMULATED: Version changed"
+                VERSION_CHANGED=true
+              else
+                echo "ℹ️  SIMULATED: No version change detected"
+                VERSION_CHANGED=false
+              fi
+            else
+              echo "🚀 PRODUCTION MODE: Checking actual version change"
+              if sh ./check_marketing_version.sh; then
+                echo "✅ Version changed"
+                VERSION_CHANGED=true
+              else
+                echo "ℹ️  No version change detected"
+                VERSION_CHANGED=false
+              fi
+            fi
+            
+            # Save version change result to file
+            echo "$VERSION_CHANGED" > /tmp/version_changed
+            echo "Version change result saved: $VERSION_CHANGED"
+      - run:
+          name: Extract BrowserStack URL from workspace
+          command: |
+            # Load the bash.env from workspace to get BROWSERSTACK_URL
+            source bash.env
+            
+            # Save BROWSERSTACK_URL to file
+            echo "$BROWSERSTACK_URL" > /tmp/browserstack_url
+            echo "BrowserStack URL saved: $BROWSERSTACK_URL"
+      - run:
+          name: Create continuation parameters
+          command: |
+            VERSION_CHANGED=$(cat /tmp/version_changed)
+            BROWSERSTACK_URL_VALUE=$(cat /tmp/browserstack_url)
+            
+            if [[ "$VERSION_CHANGED" == "true" ]]; then
+              echo "Creating continuation parameters with BrowserStack URL: $BROWSERSTACK_URL_VALUE"
+              
+              # Create parameters file for continuation
+              echo "{\"is-release-pipeline\": true, \"browserstack-url\": \"$BROWSERSTACK_URL_VALUE\"}" > /tmp/continuation_params.json
+              
+              echo "Continuation parameters created"
+            else
+              echo "No version change - skipping parameter creation"
+            fi
+      - when:
+          condition:
+            or:
+              - and:
+                - << pipeline.parameters.dry-run-mode >>
+                - << pipeline.parameters.simulate-version-change >>
+              - and:
+                - not: << pipeline.parameters.dry-run-mode >>
+          steps:
+            - continuation/continue:
+                configuration_path: .circleci/release-config.yml
+                parameters: /tmp/continuation_params.json
+      - run:
+          name: Pipeline complete
+          command: |
+            VERSION_CHANGED=$(cat /tmp/version_changed)
+            if [[ "$VERSION_CHANGED" == "true" ]]; then
+              echo "🚀 Release pipeline triggered for version change"
+            else
+              echo "ℹ️  No version change - pipeline complete"
+            fi
 
   build-and-deploy-testflight-beta:
     <<: *environment_common
@@ -47,6 +157,16 @@ jobs:
     <<: *macos_common
     steps:
       - checkout
+      - run:
+          name: Check if this is a dry-run
+          command: |
+            if [[ "<< pipeline.parameters.dry-run-mode >>" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Will simulate deployments without actual uploads"
+              echo "export DEPLOYMENT_DRY_RUN=true" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION MODE: Will perform actual deployments"
+              echo "export DEPLOYMENT_DRY_RUN=false" >> $BASH_ENV
+            fi
       - macos/switch-ruby:
           version: "3.2"
       - restore_cache:
@@ -68,14 +188,37 @@ jobs:
           name: Execute bootstrap
           command: ./bootstrap.sh
       - run:
-          name: Build the Ecosia app
-          command: bundle exec fastlane build_ecosia_app
+          name: Build the Ecosia app (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating app build"
+              echo "Would run: bundle exec fastlane build_ecosia_app"
+            else
+              echo "🚀 PRODUCTION: Building Ecosia app"
+              bundle exec fastlane build_ecosia_app
+            fi
       - run:
-          name: Upload to Firebase
-          command: bundle exec fastlane upload_to_firebase
+          name: Upload to Firebase (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating Firebase upload"
+              echo "Would run: bundle exec fastlane upload_to_firebase"
+            else
+              echo "🚀 PRODUCTION: Uploading to Firebase"
+              bundle exec fastlane upload_to_firebase
+            fi
       - run:
-          name: Upload to Browserstack
-          command: bundle exec fastlane upload_to_browserstack
+          name: Upload to Browserstack (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating BrowserStack upload"
+              echo "Would run: bundle exec fastlane upload_to_browserstack"
+              # Simulate the BrowserStack URL for downstream jobs
+              echo "export BROWSERSTACK_URL=https://fake-browserstack-url-for-testing.com" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION: Uploading to BrowserStack"
+              bundle exec fastlane upload_to_browserstack
+            fi
       - run: |
           printenv BROWSERSTACK_URL
       - run: |
@@ -85,73 +228,232 @@ jobs:
           paths:
             - bash.env
 
-  execute-critical-health-checks-ios:
-    docker:
-      - image: cimg/openjdk:17.0
+  build-and-deploy-firebase:
+    <<: *environment_common
+    <<: *macos_common
     steps:
       - checkout
-      - attach_workspace:
-          at: .
       - run:
-          name: Load Bash ENV from workspace
-          command: cat bash.env >> $BASH_ENV
-      - run:
-          name: Confirm BrowserStack URL
-          command: printenv BROWSERSTACK_URL
-      - run:
-          name: Confirm BROWSERSTACK_URL is available
+          name: Check if this is a dry-run
           command: |
-            source $BASH_ENV
-            echo "BROWSERSTACK_URL is: $BROWSERSTACK_URL"
+            if [[ "<< pipeline.parameters.dry-run-mode >>" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Will simulate Firebase deployment"
+              echo "export DEPLOYMENT_DRY_RUN=true" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION MODE: Will perform actual Firebase deployment"
+              echo "export DEPLOYMENT_DRY_RUN=false" >> $BASH_ENV
+            fi
+      - macos/switch-ruby:
+          version: "3.2"
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Bundle install
+          command: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Verify github
+          command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+      - run:
+          name: Extract Staging XCConfig
+          command: echo "$STAGING_XCCONFIG" | base64 --decode > firefox-ios/Client/Configuration/Staging.xcconfig
+      - run:
+          name: Execute bootstrap
+          command: ./bootstrap.sh
+      - run:
+          name: Build the Ecosia app (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating app build"
+              echo "Would run: bundle exec fastlane build_ecosia_app"
+            else
+              echo "🚀 PRODUCTION: Building Ecosia app"
+              bundle exec fastlane build_ecosia_app
+            fi
+      - run:
+          name: Upload to Firebase (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating Firebase upload"
+              echo "Would run: bundle exec fastlane upload_to_firebase"
+            else
+              echo "🚀 PRODUCTION: Uploading to Firebase"
+              bundle exec fastlane upload_to_firebase
+            fi
+
+  build-and-deploy-browserstack:
+    <<: *environment_common
+    <<: *macos_common
+    steps:
+      - checkout
+      - run:
+          name: Check if this is a dry-run
+          command: |
+            if [[ "<< pipeline.parameters.dry-run-mode >>" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Will simulate BrowserStack deployment"
+              echo "export DEPLOYMENT_DRY_RUN=true" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION MODE: Will perform actual BrowserStack deployment"
+              echo "export DEPLOYMENT_DRY_RUN=false" >> $BASH_ENV
+            fi
+      - macos/switch-ruby:
+          version: "3.2"
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Bundle install
+          command: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Verify github
+          command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+      - run:
+          name: Extract Staging XCConfig
+          command: echo "$STAGING_XCCONFIG" | base64 --decode > firefox-ios/Client/Configuration/Staging.xcconfig
+      - run:
+          name: Execute bootstrap
+          command: ./bootstrap.sh
+      - run:
+          name: Build the Ecosia app (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating app build"
+              echo "Would run: bundle exec fastlane build_ecosia_app"
+            else
+              echo "🚀 PRODUCTION: Building Ecosia app"
+              bundle exec fastlane build_ecosia_app
+            fi
+      - run:
+          name: Upload to Browserstack (with dry-run support)
+          command: |
+            if [[ "$DEPLOYMENT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating BrowserStack upload"
+              echo "Would run: bundle exec fastlane upload_to_browserstack"
+              # Simulate the BrowserStack URL for downstream jobs
+              echo "export BROWSERSTACK_URL=https://fake-browserstack-url-for-testing.com" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION: Uploading to BrowserStack"
+              bundle exec fastlane upload_to_browserstack
+            fi
       - run: |
-          echo "Cloning mobile acceptance tests..."
-          git clone https://github.com/ecosia/mobile-acceptance-testing.git
+          printenv BROWSERSTACK_URL
       - run: |
-          echo "Running iOS tests on BrowserStack..."
-          echo "Using App URL: $BS_URL"
-          cd mobile-acceptance-testing
-          mvn test -PiOSCHCTests -DBStackIOSAppUrl="$BROWSERSTACK_URL"
-      - jira/notify:
-          issue_regexp: "([A-Za-z]{2,30}-[0-9]+)"
-          pipeline_id: << pipeline.id >>
-          pipeline_number: << pipeline.number >>
+          cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
+
 orbs:
   path-filtering: circleci/path-filtering@0.1.1
   macos: circleci/macos@2
   jira: circleci/jira@2.0
+  continuation: circleci/continuation@1.0.0
 
 workflows:
-  build-and-upload-to-delivery-platforms:
+  # Setup workflow - runs on main branch merges or manual triggers
+  setup-workflow:
+    unless: << pipeline.parameters.is-release-pipeline >>
     jobs:
-      - path-filtering/filter:
-          filters:
-            branches:
-              only:
-                - main
-                - /^main-\d+$/
-          name: Deploy release version over Testflight if MARKETING_VERSION file updated
-          config-path: .circleci/deploy-release.yml
-          mapping: |
-            firefox-ios/Client/Configuration/Common.xcconfig deploy-release true
-      - build-and-deploy-testflight-beta:
-          name: Deploy beta version over Testflight
-          filters:
-            tags:
-              only: /^beta.*/
-            branches:
-              ignore: /.*/
+      # Always run on main branch merges
       - build-and-deploy-firebase-and-browserstack:
           name: Deploy ad-hoc version over Firebase + Upload to Browserstack
           filters:
             branches:
               only: 
                 - main
+                - /^main-\d+$/
           context: napps
 
-  test-browserstack-critical-health-checks:
-    jobs:
-      - build-and-deploy-firebase-and-browserstack
-      - execute-critical-health-checks-ios:
+      # Check if version was bumped and conditionally continue to release pipeline
+      - check-version-bump:
+          name: Check for version bump
           requires:
-            - build-and-deploy-firebase-and-browserstack
+            - Deploy ad-hoc version over Firebase + Upload to Browserstack
+          filters:
+            branches:
+              only: 
+                - main
+                - /^main-\d+$/
           context: napps
+
+  # Beta deployment triggered by tags
+  beta-deployment:
+    unless: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      - build-and-deploy-testflight-beta:
+          name: Deploy beta version over Testflight (tags)
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^beta.*/
+          context: napps
+
+  # Manual triggers as separate workflows
+  manual-testflight-beta:
+    when: 
+      and:
+        - << pipeline.parameters.run-testflight-beta >>
+        - not: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      - build-and-deploy-testflight-beta:
+          name: Manual Deploy beta version over Testflight
+          context: napps
+
+  manual-firebase-deploy:
+    when: 
+      and:
+        - << pipeline.parameters.run-firebase-deploy >>
+        - not: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      - build-and-deploy-firebase:
+          name: Manual Deploy ad-hoc version over Firebase
+          context: napps
+
+  manual-browserstack-tests:
+    when: 
+      and:
+        - << pipeline.parameters.run-browserstack-tests >>
+        - not: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      - build-and-deploy-browserstack:
+          name: Manual Upload to Browserstack
+          context: napps
+
+  manual-release-deploy:
+    when: 
+      and:
+        - << pipeline.parameters.run-release-deploy >>
+        - not: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      - build-testflight-deploy:
+          name: Manual Deploy release version to TestFlight
+          context: napps
+
+  # Manual full workflow for testing
+  manual-full-workflow:
+    when: 
+      and:
+        - << pipeline.parameters.dry-run-mode >>
+        - not: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      # Always run deployment
+      - build-and-deploy-firebase-and-browserstack:
+          name: Manual Deploy ad-hoc version over Firebase + Upload to Browserstack
+          context: napps
+
+      # Check if version was bumped and conditionally continue to release pipeline
+      - check-version-bump:
+          name: Manual Check for version bump
+          requires:
+            - Manual Deploy ad-hoc version over Firebase + Upload to Browserstack
+          context: napps
+
+

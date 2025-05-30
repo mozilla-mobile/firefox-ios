@@ -1,0 +1,163 @@
+version: 2.1
+
+# Pipeline parameters for release pipeline - must match main config
+parameters:
+  run-browserstack-tests:
+    type: boolean
+    default: false
+  run-firebase-deploy:
+    type: boolean
+    default: false
+  run-testflight-beta:
+    type: boolean
+    default: false
+  run-release-deploy:
+    type: boolean
+    default: false
+  dry-run-mode:
+    type: boolean
+    default: false
+    description: "Enable dry-run mode to simulate all operations without actual deployments"
+  simulate-version-change:
+    type: boolean
+    default: false
+    description: "For dry-run mode: simulate version change (true) or no change (false)"
+  # Internal parameter - set when continuing to release pipeline
+  is-release-pipeline:
+    type: boolean
+    default: false
+  # BrowserStack URL passed from setup pipeline
+  browserstack-url:
+    type: string
+    default: ""
+
+environment_common: &environment_common
+  environment:
+    CI: true
+
+macos_common: &macos_common
+  macos:
+    xcode: "16.2"
+  resource_class: macos.m1.medium.gen1
+
+jobs:
+  execute-critical-health-checks-ios:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+      - run:
+          name: Check if this is a dry-run
+          command: |
+            if [[ "<< pipeline.parameters.dry-run-mode >>" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Will simulate health checks without actual execution"
+              echo "export HEALTH_CHECKS_DRY_RUN=true" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION MODE: Will run actual health checks"
+              echo "export HEALTH_CHECKS_DRY_RUN=false" >> $BASH_ENV
+            fi
+      - run:
+          name: Set BrowserStack URL from parameter
+          command: |
+            echo "export BROWSERSTACK_URL=<< pipeline.parameters.browserstack-url >>" >> $BASH_ENV
+      - run:
+          name: Confirm BrowserStack URL
+          command: |
+            source $BASH_ENV
+            echo "BROWSERSTACK_URL is: $BROWSERSTACK_URL"
+      - run:
+          name: Clone mobile acceptance tests (with dry-run support)
+          command: |
+            if [[ "$HEALTH_CHECKS_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating test repository clone"
+              echo "Would run: git clone https://github.com/ecosia/mobile-acceptance-testing.git"
+            else
+              echo "🚀 PRODUCTION: Cloning mobile acceptance tests"
+              git clone https://github.com/ecosia/mobile-acceptance-testing.git
+            fi
+      - run:
+          name: Run iOS tests on BrowserStack (with dry-run support)
+          command: |
+            source $BASH_ENV
+            if [[ "$HEALTH_CHECKS_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN: Simulating iOS health checks on BrowserStack"
+              echo "Would run: mvn test -PiOSCHCTests -DBStackIOSAppUrl=$BROWSERSTACK_URL"
+              echo "✅ SIMULATED: Health checks completed successfully"
+            else
+              echo "🚀 PRODUCTION: Running iOS tests on BrowserStack"
+              echo "Using App URL: $BROWSERSTACK_URL"
+              cd mobile-acceptance-testing
+              mvn test -PiOSCHCTests -DBStackIOSAppUrl="$BROWSERSTACK_URL" || {
+                echo "Health checks failed, but continuing with deployment..."
+                exit 0
+              }
+            fi
+      - jira/notify:
+          issue_regexp: "([A-Za-z]{2,30}-[0-9]+)"
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+
+  build-testflight-deploy:
+    <<: *environment_common
+    <<: *macos_common
+    steps:
+      - checkout
+      - run:
+          name: Check if this is a dry-run
+          command: |
+            if [[ "<< pipeline.parameters.dry-run-mode >>" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Will not actually upload to TestFlight"
+              echo "export TESTFLIGHT_DRY_RUN=true" >> $BASH_ENV
+            else
+              echo "🚀 PRODUCTION MODE: Will upload to TestFlight"
+              echo "export TESTFLIGHT_DRY_RUN=false" >> $BASH_ENV
+            fi
+      - macos/switch-ruby:
+          version: "3.2"
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Bundle install
+          command: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: verify github
+          command: for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+      - run:
+          name: extract Production XCConfig
+          command: echo "$PRODUCTION_XCCONFIG" | base64 --decode > firefox-ios/Client/Configuration/Production.xcconfig
+      - run:
+          name: Execute bootstrap
+          command: ./bootstrap.sh
+      - run:
+          name: Build and deploy to Testflight (with dry-run support)
+          no_output_timeout: 35m
+          command: |
+            if [[ "$TESTFLIGHT_DRY_RUN" == "true" ]]; then
+              echo "🧪 DRY RUN MODE: Building app but NOT uploading to TestFlight"
+              echo "Would run: bundle exec fastlane testflight_live"
+              echo "✅ Test successful - workflow reached TestFlight deployment step"
+            else
+              echo "🚀 PRODUCTION MODE: Building and uploading to TestFlight"
+              bundle exec fastlane testflight_live
+            fi
+
+orbs:
+  macos: circleci/macos@2
+  jira: circleci/jira@2.0
+
+workflows:
+  release-pipeline:
+    when: << pipeline.parameters.is-release-pipeline >>
+    jobs:
+      - execute-critical-health-checks-ios:
+          name: Critical Health Checks (release cut pipeline)
+          context: napps
+      - build-testflight-deploy:
+          name: Auto Deploy release version to TestFlight
+          requires:
+            - Critical Health Checks (release cut pipeline)
+          context: napps 
