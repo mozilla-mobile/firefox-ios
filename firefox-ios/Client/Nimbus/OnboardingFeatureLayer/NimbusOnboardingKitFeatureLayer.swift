@@ -94,13 +94,13 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                         format: cardData.body,
                         AppName.shortName.rawValue,
                         AppName.shortName.rawValue),
-                    link: getOnboardingLink_(from: cardData.link),
-                    buttons: getOnboardingCardButtons_(from: cardData.buttons),
+                    link: getOnboardingLink(from: cardData.link),
+                    buttons: getOnboardingCardButtons(from: cardData.buttons),
                     multipleChoiceButtons: getOnboardingMultipleChoiceButtons_(from: cardData.multipleChoiceButtons),
                     onboardingType: cardData.onboardingType,
                     a11yIdRoot: cardData.onboardingType == .freshInstall ? a11yOnboarding : a11yUpgrade,
                     imageID: getOnboardingHeaderImageID(from: cardData.image),
-                    instructionsPopup: getPopupInfoModel_(
+                    instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,
                         withA11yID: "")
                 )
@@ -112,7 +112,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
-    private func getOnboardingCardButtons_(
+    private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
     ) -> OnboardingKit.OnboardingButtons<OnboardingActions> {
         return OnboardingKit.OnboardingButtons(
@@ -137,7 +137,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
     }
 
-    private func getOnboardingLink_(
+    private func getOnboardingLink(
         from cardLink: NimbusOnboardingLink?
     ) -> OnboardingKit.OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
@@ -147,7 +147,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    private func getPopupInfoModel_(
+    private func getPopupInfoModel(
         from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
     ) -> OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
