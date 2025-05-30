@@ -6,28 +6,28 @@ pipelines:
     workflows:
         determine_apps_affected: {}
         firefox_configure_build:
-            run_if: 
+            run_if:
               expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         focus_configure_build:
-            run_if: 
+            run_if:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         klar_configure_build:
-            run_if: 
+            run_if:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
         run_firefox_ui_tests:
-            run_if: 
+            run_if:
               expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
             depends_on:
             - firefox_configure_build
             parallel: 5
         focus_ui_test:
-            run_if: 
+            run_if:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - focus_configure_build
@@ -66,7 +66,7 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
-    
+
     - script@1.2.1:
         title: Count failed tests
         is_always_run: true
@@ -77,11 +77,11 @@ workflows:
 
             echo "Search for failed tests..."
             FAILED_COUNT=$(jq -r '.metrics.testsFailedCount._value' result.json)
-          
+
             echo "Total number of failures: $FAILED_COUNT"
 
             envman add --key ACCESSIBILITY_FAILED_TEST_COUNT --value "$FAILED_COUNT"
-    
+
     - script@1.2.1:
         title: Collect All Accessibility Report Files
         is_always_run: true
@@ -96,7 +96,7 @@ workflows:
 
             echo "Files copied to $BITRISE_DEPLOY_DIR:"
             ls -lh "$BITRISE_DEPLOY_DIR"
-    
+
     - deploy-to-bitrise-io@2.9.2:
         is_always_run: true
 
@@ -293,7 +293,7 @@ workflows:
 
             # Determine which application to base configuration while comparing against branch destination:
             # Bitrise: https://devcenter.bitrise.io/en/references/available-environment-variables.html
-            #  
+            #
             # BITRISEIO_GIT_BRANCH_DEST is used only on pull requests and is set to destination/branch (i.e, release/v123 )
             # BITRISE_GIT_BRANCH is the git branch that is built by Bitrise (i.e, release/v123 )
             # BITRISE_GIT_COMMIT is the git commit hash that is built by Bitrise
@@ -632,7 +632,7 @@ workflows:
                 FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
             fi
 
-            # Manual triggers leave empty commits. 
+            # Manual triggers leave empty commits.
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
             echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
@@ -1250,12 +1250,14 @@ workflows:
             set -x
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    after_run:
+    - _testflight_add_nightly_group
     envs:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
-  
+
   SPM_Common_Steps:
     steps:
     - activate-ssh-key@4.1.1:
@@ -1353,7 +1355,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -ex
-             
+
             if [ -e $HOME/sdk/google-cloud-sdk ]; then
               echo "Google Cloud SDK found, skipping installation..."
             else
@@ -1376,7 +1378,7 @@ workflows:
             set -ex
             set -o pipefail
 
-            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL
             $HOME/sdk/google-cloud-sdk/bin/gcloud version
             $HOME/sdk/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/sdk/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
@@ -1411,7 +1413,7 @@ workflows:
             # unpack GLCOUD_EXIT_CODE from string to int, if gcloud returns string instead of int for exit code
             if [ $((GCLOUD_EXIT_CODE)) -ne 0 ]; then
                 SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :x:"
-            else 
+            else
                 SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :white_check_mark:"
             fi
             envman add --key SLACK_MESSAGE_PRETEXT --value "$SLACK_MESSAGE_PRETEXT"
@@ -1536,7 +1538,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -e
-             
+
             if [ -e $HOME/google-cloud-sdk ]; then
               echo "Google Cloud SDK found, skipping installation..."
             else
@@ -1642,7 +1644,7 @@ workflows:
             # create and print perf data object for perfherder ingest via taskcluster log output
             xcrun xcresulttool graph --path "$BITRISE_XCRESULT" --legacy
             ls ..
-            # If this ever breaks, check the xcresult_extract.py function find_xcresult_path 
+            # If this ever breaks, check the xcresult_extract.py function find_xcresult_path
             # and figure out exactly what it is doing because we are using Fennec as the scheme
             # and it works for both Fennec and Fennec_Enterprise, but I don't know why.
             # I would change it here but I am too afraid to break it.
@@ -1672,7 +1674,7 @@ workflows:
     - deploy-to-bitrise-io@2.10.0: {}
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
-  # 
+  #
   focus_configure_build:
     before_run:
     - focus-clone-and-build-dependencies
@@ -1744,7 +1746,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -x
-            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements  
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
     - xcode-build-for-test@3:
         inputs:
         - scheme: Klar
@@ -1876,7 +1878,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
 
-  # # Update the name change in Taskcluster files 
+  # # Update the name change in Taskcluster files
   # focus_l10n_build:
   #   before_run:
   #   - focus-clone-and-build-dependencies
@@ -2247,6 +2249,18 @@ workflows:
       EXPORT_METHOD: app-store
     description: This step is used during release promotion to build a firefox release
 
+  _testflight_add_nightly_group:
+    description: This step is used to add the Nightly group to the Beta build in TestFlight.
+    # Note: This step requires repository cloning
+    steps:
+    - script@1.2.1:
+        title: Add Nightly Group to Beta Build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            python3 -m pip install --upgrade pip pyjwt cryptography requests
+            python3 scripts/nightly_testflight_add_group.py
+
   release_promotion_push:
     before_run:
     - SPM_Common_Steps
@@ -2318,6 +2332,9 @@ app:
   - opts:
       is_expand: false
     BITRISE_DESTINATION: 'platform=iOS Simulator,name=Bitrise iOS default,OS=latest'
+  - opts:
+      is_expand: false
+    TEST_FLIGHT_EXTERNAL_GROUP_NAME: Nightly
 
 
 trigger_map:
