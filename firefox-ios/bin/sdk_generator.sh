@@ -152,13 +152,13 @@ else
             infilevar="SCRIPT_INPUT_FILE_LIST_${i}"
             infile="${!infilevar}"
 
-            while read line; do
+            while read -r line; do
                 YAML_FILES+=("${line}")
-            done <<<"$(cat $infile)"
+            done <"$infile"
         done
     fi
 
-    echo "Discovered YAML input files: ${YAML_FILES[@]}"
+    echo "Discovered YAML input files: ${YAML_FILES[*]}"
 fi
 
 if [ -z "$SOURCE_ROOT" ]; then
