@@ -109,11 +109,8 @@ struct AccessibilityIdentifiers {
         static let readerView = "MainMenu.ReaderViewOn"
         static let nightMode = "MainMenu.NightModeOn"
         static let zoom = "MainMenu.Zoom"
-<<<<<<< HEAD
-=======
         static let moreLess = "MainMenu.MoreLess"
         static let trackigProtection = "shieldCheckmarkLarge"
->>>>>>> 6a8b3ff52 (Fix-[MTE-4648]-tracking protection tests (#26947))
     }
 
     struct UnifiedSearch {
