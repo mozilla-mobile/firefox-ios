@@ -1243,9 +1243,7 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
         if let tab {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID) {
-                completion?()
-            }
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID, completion: completion)
         }
     }
 
