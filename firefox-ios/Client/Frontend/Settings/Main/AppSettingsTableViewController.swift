@@ -225,7 +225,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         sendTechnicalDataSettings.settingDidChange = { [weak self] value in
             guard let self, let profile = self.profile else { return }
-            TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
+            DefaultGleanWrapper().setUpload(isEnabled: value)
+            Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
             tableView.reloadData()
         }
