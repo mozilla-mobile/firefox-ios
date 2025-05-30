@@ -32,8 +32,6 @@ class URIFixup {
         // of breaking single-word hosts without a scheme (e.g., "localhost").
         if !trimmed.contains(".") { return nil }
 
-        if trimmed.contains(" ") { return nil }
-
         // If there is a ".", prepend "http://" and try again. Since this
         // is strictly an "http://" URL, we also require a host.
         if let url = punycodedURL("http://\(escaped)"), url.host != nil {
