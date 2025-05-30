@@ -30,6 +30,7 @@ final class MainMenuStateTests: XCTestCase {
     func testUpdatingCurrentTabInfo() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
+        let accountData = AccountData(title: "Test Title", subtitle: "Test Subtitle")
 
         let expectedResult = MainMenuTabInfo(
             tabID: "1234",
@@ -42,7 +43,9 @@ final class MainMenuStateTests: XCTestCase {
             readerModeIsAvailable: false,
             isBookmarked: false,
             isInReadingList: false,
-            isPinned: false
+            isPinned: false,
+            accountData: accountData,
+            accountProfileImage: nil
         )
 
         XCTAssertNil(initialState.currentTabInfo)

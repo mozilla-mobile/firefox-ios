@@ -40,6 +40,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
+        static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
+        static let avatarWarningLargeLight = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorLargeLight
+        static let avatarWarningLargeDark = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorLargeDark
 
         // These will be used in the future, but not now.
         // adding them just for completion's sake
@@ -142,6 +145,28 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     }
                 ),
                 configureUserAgentItem(with: uuid, tabInfo: tabInfo),
+                MenuElement(
+                    title: tabInfo.accountData.title,
+                    description: tabInfo.accountData.subtitle,
+                    iconName: Icons.avatarCircle,
+                    iconImage: tabInfo.accountProfileImage,
+                    needsReAuth: tabInfo.accountData.needsReAuth,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.signIn,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.syncSignIn),
+                                currentTabInfo: tabInfo
+                            )
+                        )
+                    }
+                ),
                 configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded),
                 MenuElement(
                     title: .MainMenu.PanelLinkSection.History,

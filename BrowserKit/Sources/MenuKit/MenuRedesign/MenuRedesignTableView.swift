@@ -99,9 +99,10 @@ final class MenuRedesignTableView: UIView,
         ) as? MenuRedesignCell else {
             return UITableViewCell()
         }
-
-        cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
-        if let theme { cell.applyTheme(theme: theme) }
+        if let theme {
+            cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row], theme: theme)
+            cell.applyTheme(theme: theme)
+        }
         return cell
     }
 

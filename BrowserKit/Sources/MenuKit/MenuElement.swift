@@ -8,10 +8,12 @@ public struct MenuElement: Equatable {
     let title: String
     let description: String?
     let iconName: String
+    let iconImage: UIImage?
+    let needsReAuth: Bool?
     let isEnabled: Bool
     let isActive: Bool
     let hasSubmenu: Bool
-    let a11yLabel: String
+    let a11yLabel: String?
     let a11yHint: String?
     let a11yId: String
     let isOptional: Bool
@@ -23,10 +25,12 @@ public struct MenuElement: Equatable {
         title: String,
         description: String? = nil,
         iconName: String,
+        iconImage: UIImage? = nil,
+        needsReAuth: Bool? = nil,
         isEnabled: Bool,
         isActive: Bool,
         hasSubmenu: Bool = false,
-        a11yLabel: String,
+        a11yLabel: String?,
         a11yHint: String?,
         a11yId: String,
         isOptional: Bool = false,
@@ -35,6 +39,8 @@ public struct MenuElement: Equatable {
         self.title = title
         self.description = description
         self.iconName = iconName
+        self.iconImage = iconImage
+        self.needsReAuth = needsReAuth
         self.isEnabled = isEnabled
         self.isActive = isActive
         self.hasSubmenu = hasSubmenu
@@ -49,6 +55,8 @@ public struct MenuElement: Equatable {
         return lhs.title == rhs.title &&
         lhs.description == rhs.description &&
         lhs.iconName == rhs.iconName &&
+        lhs.iconImage ==  rhs.iconImage &&
+        lhs.needsReAuth == rhs.needsReAuth &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isActive == rhs.isActive &&
         lhs.hasSubmenu == rhs.hasSubmenu &&
