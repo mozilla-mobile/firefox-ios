@@ -5,38 +5,195 @@
 import XCTest
 import Common
 import WebKit
+import Shared
 
 @testable import Client
 
 class BrowserViewControllerWebViewDelegateTests: XCTestCase {
-    var subject: BrowserViewController!
-    var profile: MockProfile!
-    var tabManager: TabManager!
-    var tabManagerDelegate: TabManagerNavDelegate!
+    private var profile: MockProfile!
+    private var tabManager: MockTabManager!
+    private var allowPolicyRawValue: Int {
+        return WKNavigationActionPolicy.allow.rawValue
+    }
+    private lazy var allowBlockingUniversalLinksPolicy = WKNavigationActionPolicy(rawValue: allowPolicyRawValue + 2)
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile,
-                                              uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
-        subject = BrowserViewController(profile: profile, tabManager: tabManager)
-        tabManagerDelegate = TabManagerNavDelegate()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        tabManager = MockTabManager()
     }
 
     override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
         profile = nil
         tabManager = nil
-        subject = nil
-        tabManagerDelegate = nil
+        super.tearDown()
     }
 
-    func testWebViewDidReceiveChallenge_MethodServerTrust() {
-        tabManagerDelegate.insert(subject)
+    // MARK: - Decide policy
+    func testWebViewDecidePolicyForNavigationAction_cancelWhenTabNotInTabManager() {
+        let subject = createSubject()
+        let url = URL(string: "https://example.com")!
+        let tab = createTab()
 
-        tabManagerDelegate.webView(
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelFacetimeScheme() {
+        let subject = createSubject()
+        let url = URL(string: "facetime://testuser")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelFacetimeAudioScheme() {
+        let subject = createSubject()
+        let url = URL(string: "facetime-audio://testuser")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelTelScheme() {
+        let subject = createSubject()
+        let url = URL(string: "tel://3484563742")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelAppStoreScheme() {
+        let subject = createSubject()
+        let url = URL(string: "itms-apps://test-app")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelAppStoreURL() {
+        let subject = createSubject()
+        let url = URL(string: "https://apps.apple.com/test-app")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsite_withNormalTabs() {
+        let subject = createSubject()
+        let tab = createTab()
+        let url = URL(string: "https://www.example.com")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsiteBlockingUniversalLink_whenOptionEnabled() {
+        let subject = createSubject()
+        let tab = createTab()
+        let url = URL(string: "https://www.example.com")!
+        tabManager.tabs = [tab]
+        profile.prefs.setBool(true, forKey: PrefsKeys.BlockOpeningExternalApps)
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, self.allowBlockingUniversalLinksPolicy)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsite_andBlockUniversalLinksWithPrivateTab() {
+        let subject = createSubject()
+        let tab = createTab(isPrivate: true)
+        let url = URL(string: "https://www.example.com")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, self.allowBlockingUniversalLinksPolicy)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_addRequestToPending() {
+        let subject = createSubject()
+        let tab = createTab()
+        let url = URL(string: "https://www.example.com")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { _ in
+            XCTAssertNotNil(subject.pendingRequests[url.absoluteString])
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobURLsWithNavigationTypeOther() {
+        let subject = createSubject()
+        let tab = createTab()
+        let blob = URL(string: "blob://blobfile")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: blob,
+                                                              type: .other)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    func testWebViewDecidePolicyForNavigationAction_cancelLoading() {
+        let subject = createSubject()
+        let tab = createTab()
+        let blob = URL(string: "blob://blobfile")!
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: blob,
+                                                              type: .backForward)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    // MARK: - Authentication
+
+    func testWebViewDidReceiveChallenge_MethodServerTrust() {
+        let subject = createSubject()
+
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
         ) { disposition, credential in
@@ -46,9 +203,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
-        tabManagerDelegate.insert(subject)
+        let subject = createSubject()
 
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
         ) { disposition, credential in
@@ -58,9 +215,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
-        tabManagerDelegate.insert(subject)
+        let subject = createSubject()
 
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
         ) { disposition, credential in
@@ -70,9 +227,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
-        tabManagerDelegate.insert(subject)
+        let subject = createSubject()
 
-        tabManagerDelegate.webView(
+        subject.webView(
             anyWebView(),
             didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
         ) { disposition, credential in
@@ -81,8 +238,23 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    private func anyWebView() -> WKWebView {
-        return WKWebView(frame: CGRect(width: 100, height: 100))
+    private func createSubject() -> BrowserViewController {
+        let subject = BrowserViewController(profile: profile, tabManager: tabManager)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    private func anyWebView(url: URL? = nil) -> MockTabWebView {
+        let tab = MockTabWebView(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        tab.loadedURL = url
+        return tab
+    }
+
+    private func createTab(isPrivate: Bool = false) -> Tab {
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: .XCTestDefaultUUID)
+        let webView = MockTabWebView(tab: tab)
+        tab.webView = webView
+        return tab
     }
 
     private func anyAuthenticationChallenge(for authenticationMethod: String) -> URLAuthenticationChallenge {
@@ -103,6 +275,24 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let path = Bundle(for: type(of: self)).path(forResource: file, ofType: "pem")
         let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
         return SecCertificateCreateWithData(nil, data! as CFData)!
+    }
+}
+
+class MockNavigationAction: WKNavigationAction {
+    private var type: WKNavigationType?
+    private var urlRequest: URLRequest
+
+    override var navigationType: WKNavigationType {
+        return type ?? .other
+    }
+
+    override var request: URLRequest {
+        return urlRequest
+    }
+
+    init(url: URL, type: WKNavigationType? = nil) {
+        self.type = type
+        self.urlRequest = URLRequest(url: url)
     }
 }
 
