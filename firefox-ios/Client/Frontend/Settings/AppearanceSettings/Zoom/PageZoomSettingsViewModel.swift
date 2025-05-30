@@ -2,20 +2,25 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Storage
 
 class PageZoomSettingsViewModel: ObservableObject {
     let zoomManager: ZoomPageManager
     @Published var domainZoomLevels: [DomainZoomLevel]
+    public var notificationCenter: NotificationProtocol
 
-    init(zoomManager: ZoomPageManager) {
+    init(zoomManager: ZoomPageManager,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.zoomManager = zoomManager
         self.domainZoomLevels = zoomManager.getDomainLevel()
+        self.notificationCenter = notificationCenter
     }
 
     func resetDomainZoomLevel() {
         domainZoomLevels.removeAll()
         zoomManager.resetDomainZoomLevel()
+        notificationCenter.post(name: .PageZoomSettingsChanged)
     }
 
     func deleteZoomLevel(at indexSet: IndexSet) {
@@ -24,5 +29,6 @@ class PageZoomSettingsViewModel: ObservableObject {
         let deleteItem = domainZoomLevels[index]
         zoomManager.deleteZoomLevel(for: deleteItem.host)
         domainZoomLevels.remove(at: index)
+        notificationCenter.post(name: .PageZoomSettingsChanged)
     }
 }

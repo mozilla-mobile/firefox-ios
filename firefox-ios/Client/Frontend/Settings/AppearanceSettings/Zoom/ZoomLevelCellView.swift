@@ -28,7 +28,6 @@ struct ZoomLevelCellView: View {
             Spacer()
 
             Text(ZoomLevel(from: domainZoomLevel.zoomLevel).displayName)
-                .padding([.trailing], UX.textPadding)
                 .font(.body)
                 .foregroundColor(textColor)
         }

@@ -11,9 +11,10 @@ struct ZoomLevelPickerView: View {
     private let zoomManager: ZoomPageManager
 
     private struct UX {
+        static let chevronImageIdentifier = "chevron.down"
         static var sectionPadding: CGFloat = 16
         static var verticalPadding: CGFloat = 12
-        static var dividerHeight: CGFloat = 0.7
+        static var dividerHeight: CGFloat = 0.5
         static var pickerLabelSpacing: CGFloat = 4
     }
 
@@ -73,6 +74,7 @@ struct ZoomLevelPickerView: View {
                     }
                     .onChange(of: selectedZoomLevel) { newValue in
                         zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+                        NotificationCenter.default.post(name: .PageZoomSettingsChanged, object: nil)
                     }
                     .pickerStyle(.inline)
                     .labelsHidden()
@@ -82,7 +84,7 @@ struct ZoomLevelPickerView: View {
                             .font(.body)
                             .foregroundColor(theme.colors.textPrimary.color)
 
-                        Image(StandardImageIdentifiers.Large.chevronDown)
+                        Image(systemName: UX.chevronImageIdentifier)
                             .renderingMode(.template)
                             .font(.caption)
                             .foregroundColor(theme.colors.textPrimary.color)

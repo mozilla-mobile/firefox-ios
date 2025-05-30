@@ -14,10 +14,11 @@ struct ZoomSiteListView: View {
 
     private struct UX {
         static var sectionPadding: CGFloat = 16
-        static var footerBottomPadding: CGFloat = 40
+        static var footerBottomPadding: CGFloat = 32
         static var footerTopPadding: CGFloat = 8
-        static var cellHeight: CGFloat = 50
+        static var cellHeight: CGFloat = 48
         static var listPadding: CGFloat = 5
+        static var dividerHeight: CGFloat = 0.5
     }
 
     var cellBackground: Color {
@@ -48,13 +49,18 @@ struct ZoomSiteListView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             // Header
             GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
                                      sectionTitleColor: theme.colors.textSecondary.color)
                 .padding([.leading, .trailing, .top], UX.sectionPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(sectionBackground)
+
+            // Top divider for the list
+            Divider()
+                .frame(height: UX.dividerHeight)
+                .background(theme.colors.borderPrimary.color)
 
             List {
                 ForEach(domainZoomLevels, id: \.host) { zoomItem in

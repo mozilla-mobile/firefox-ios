@@ -18,15 +18,12 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     private struct UX {
         static let padding: CGFloat = 20
-        static let buttonPadding: CGFloat = 12
-        static let buttonInsets = NSDirectionalEdgeInsets(top: 6, leading: buttonPadding, bottom: 6, trailing: buttonPadding)
-        static let stepperWidth: CGFloat = 200
+        static let buttonInsets = NSDirectionalEdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)
         static let stepperHeight: CGFloat = 36
-        static let stepperTopBottomPadding: CGFloat = 10
+        static let stepperTopBottomPadding: CGFloat = 12
         static let stepperCornerRadius: CGFloat = 6
         static let stepperMinTrailing: CGFloat = 10
         static let stepperSpacing: CGFloat = 8
-        static let stepperExtraSpacing: CGFloat = 16
         static let shadowRadius: CGFloat = 4
         static let shadowOpacity: Float = 1
         static let stepperShadowOffset = CGSize(width: 0, height: 3)
@@ -70,6 +67,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.configuration = .plain()
+        button.configuration?.contentInsets = UX.buttonInsets
         button.configuration?.contentInsets = UX.buttonInsets
     }
 
@@ -134,8 +132,8 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
         }
-        stepperContainer.setCustomSpacing(UX.stepperExtraSpacing, after: leftSeparator)
-        stepperContainer.setCustomSpacing(UX.stepperExtraSpacing, after: zoomLevel)
+        stepperContainer.setCustomSpacing(0, after: zoomOutButton)
+        stepperContainer.setCustomSpacing(0, after: rightSeparator)
         stepperContainer.accessibilityElements = [zoomOutButton, zoomLevel, zoomInButton]
 
         addSubviews(stepperContainer, closeButton)
@@ -158,7 +156,6 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
             stepperContainer.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
                                                        constant: -UX.stepperMinTrailing),
             stepperContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperHeight),
-            stepperContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperWidth),
             stepperContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -293,7 +290,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        backgroundColor = colors.layer1
+        backgroundColor = colors.layer2
         stepperContainer.backgroundColor = colors.layer5
         stepperContainer.layer.shadowColor = colors.shadowDefault.cgColor
         leftSeparator.backgroundColor = colors.borderPrimary
@@ -313,8 +310,8 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .withTintColor(theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
-        closeButton.backgroundColor = theme.colors.layer4
+        closeButton.backgroundColor = colors.layer4
 
-        layer.shadowColor = theme.colors.shadowDefault.cgColor
+        layer.shadowColor = colors.shadowDefault.cgColor
     }
 }
