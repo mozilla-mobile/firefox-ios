@@ -190,6 +190,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
+        // Highlight phone numbers as links in the webview
+        configuration.dataDetectorTypes = [.phoneNumber]
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
