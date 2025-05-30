@@ -224,6 +224,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         )
 
         sendTechnicalDataSettings.settingDidChange = { [weak self] value in
+            guard let self else { return }
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
