@@ -64,7 +64,7 @@ final class NimbusFeatureFlagLayer {
 
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
-            
+
         case .modernOnboardingUI:
             return checkMondernOnboardingUIFeature(from: nimbus)
 
