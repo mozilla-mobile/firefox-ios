@@ -19,4 +19,18 @@ public struct OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>: O
     var buttonTitle: String
     var buttonAction: OnboardingPopupActionType
     var a11yIdRoot: String
+
+    public init(
+        title: String,
+        instructionSteps: [String],
+        buttonTitle: String,
+        buttonAction: OnboardingPopupActionType,
+        a11yIdRoot: String
+    ) {
+        self.title = title
+        self.instructionSteps = instructionSteps
+        self.buttonTitle = buttonTitle
+        self.buttonAction = buttonAction
+        self.a11yIdRoot = a11yIdRoot
+    }
 }
