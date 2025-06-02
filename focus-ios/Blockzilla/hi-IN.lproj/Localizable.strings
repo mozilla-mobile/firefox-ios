@@ -175,6 +175,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "बंद करें";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "गोपनीयता सूचना";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "%@ में आपका स्वागत हैं";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari टैप करें, तब सामग्री ब्लॉकर्स को चुनें";
 
@@ -382,11 +388,17 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox में खोलें";
 
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "लिंक खोलें";
+
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "के साथ पृष्ठ साझा करें…";
 
 /* Text for the long press on a shortcut option in context menu. */
 "ShortcutView.RemoveFromShortcuts" = "शॉर्टकट से हटाएं";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "रद्द करें";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "जोड़ें";
