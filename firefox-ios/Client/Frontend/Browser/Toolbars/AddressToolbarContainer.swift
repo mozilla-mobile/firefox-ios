@@ -266,31 +266,31 @@ final class AddressToolbarContainer: UIView,
 
     private func configureSkeletonAddressBars(previousTab: Tab?, forwardTab: Tab?) {
         guard let model, let state else { return }
-            leftSkeletonAddressBar.configure(
-                config: model.configureSkeletonAddressBar(
-                    with: previousTab?.url?.displayURL,
-                    isReaderModeAvailableOrActive: previousTab?.readerModeAvailableOrActive
-                ),
-                toolbarPosition: state.toolbarPosition,
-                toolbarDelegate: self,
-                leadingSpace: UX.skeletonBarOffset,
-                trailingSpace: -UX.skeletonBarOffset,
-                isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                animated: model.shouldAnimate
-            )
-
-            rightSkeletonAddressBar.configure(
-                config: model.configureSkeletonAddressBar(
-                    with: forwardTab?.url?.displayURL,
-                    isReaderModeAvailableOrActive: forwardTab?.readerModeAvailableOrActive
-                ),
-                toolbarPosition: state.toolbarPosition,
-                toolbarDelegate: self,
-                leadingSpace: -UX.skeletonBarOffset,
-                trailingSpace: UX.skeletonBarOffset,
-                isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                animated: model.shouldAnimate
-            )
+        leftSkeletonAddressBar.configure(
+            config: model.configureSkeletonAddressBar(
+                with: previousTab?.url?.displayURL,
+                isReaderModeAvailableOrActive: previousTab?.readerModeAvailableOrActive
+            ),
+            toolbarPosition: state.toolbarPosition,
+            toolbarDelegate: self,
+            leadingSpace: UX.skeletonBarOffset,
+            trailingSpace: -UX.skeletonBarOffset,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            animated: model.shouldAnimate
+        )
+        
+        rightSkeletonAddressBar.configure(
+            config: model.configureSkeletonAddressBar(
+                with: forwardTab?.url?.displayURL,
+                isReaderModeAvailableOrActive: forwardTab?.readerModeAvailableOrActive
+            ),
+            toolbarPosition: state.toolbarPosition,
+            toolbarDelegate: self,
+            leadingSpace: -UX.skeletonBarOffset,
+            trailingSpace: UX.skeletonBarOffset,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            animated: model.shouldAnimate
+        )
     }
 
     private func setupLayout() {
