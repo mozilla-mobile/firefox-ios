@@ -304,7 +304,7 @@ settings.zoom_bar:
   reset_domain_list:
     type: event
     description: |
-      Records when the user resets the list of zoom domain level in the app settings.
+      Recorded when the user resets the list of zoom domain levels in the app settings.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
     data_reviews:
