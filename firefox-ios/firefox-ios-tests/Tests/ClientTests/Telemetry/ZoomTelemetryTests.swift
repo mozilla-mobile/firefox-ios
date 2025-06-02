@@ -86,4 +86,53 @@ final class ZoomTelemetryTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
+
+    func testRecordEvent_WhenDefaultZoomChanges_ThenGleanIsCalled() throws {
+        let event = GleanMetrics.SettingsZoom.updateDefaultLevel
+        typealias EventExtrasType = GleanMetrics.SettingsZoom.UpdateDefaultLevelExtra
+        let expectedZoomLevel = ZoomLevel(from: 110)
+        let expectedMetricType = type(of: event)
+
+        subject?.updateDefaultZoomLevel(value: expectedZoomLevel.telemetryQuantity)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.level, expectedZoomLevel.telemetryQuantity)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
+    func testRecordEvent_WhenSpecificZoomIsDeleted_ThenGleanIsCalled() throws {
+        let event = GleanMetrics.SettingsZoom.deleteDomainLevel
+        typealias EventExtrasType = GleanMetrics.SettingsZoom.DeleteDomainLevelExtra
+        let expectedMetricType = type(of: event)
+
+        subject?.deleteZoomDomainLevel(value: Int32(1))
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.level, expectedZoomLevel.telemetryQuantity)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
+    func testRecordEvent_WhenSpecificZoomResets_ThenGleanIsCalled() throws {
+        let event = GleanMetrics.SettingsZoom.resetDomainList
+        let expectedMetricType = type(of: event)
+
+        subject?.resetDomainZoomLevel()
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
 }
