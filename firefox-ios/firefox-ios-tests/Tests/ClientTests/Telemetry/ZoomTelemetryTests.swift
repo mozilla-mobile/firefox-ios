@@ -88,12 +88,12 @@ final class ZoomTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenDefaultZoomChanges_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.SettingsZoom.updateDefaultLevel
-        typealias EventExtrasType = GleanMetrics.SettingsZoom.UpdateDefaultLevelExtra
+        let event = GleanMetrics.Preferences.defaultZoomChanged
+        typealias EventExtrasType = GleanMetrics.Preferences.DefaultZoomChangedExtra
         let expectedZoomLevel = ZoomLevel(from: 110)
         let expectedMetricType = type(of: event)
 
-        subject?.updateDefaultZoomLevel(value: expectedZoomLevel.telemetryQuantity)
+        subject?.updateDefaultZoomLevel(zoomLevel: expectedZoomLevel)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
@@ -101,7 +101,7 @@ final class ZoomTelemetryTests: XCTestCase {
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.level, expectedZoomLevel.telemetryQuantity)
+        XCTAssertEqual(savedExtras.level, expectedZoomLevel.displayName)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
@@ -109,8 +109,9 @@ final class ZoomTelemetryTests: XCTestCase {
         let event = GleanMetrics.SettingsZoom.deleteDomainLevel
         typealias EventExtrasType = GleanMetrics.SettingsZoom.DeleteDomainLevelExtra
         let expectedMetricType = type(of: event)
+        let expectedIndex: Int32 = 1
 
-        subject?.deleteZoomDomainLevel(value: Int32(1))
+        subject?.deleteZoomDomainLevel(value: expectedIndex)
 
         let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
@@ -118,7 +119,7 @@ final class ZoomTelemetryTests: XCTestCase {
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.level, expectedZoomLevel.telemetryQuantity)
+        XCTAssertEqual(savedExtras.domainIndex, expectedIndex)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
