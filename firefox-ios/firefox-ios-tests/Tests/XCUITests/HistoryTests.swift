@@ -25,13 +25,14 @@ let bookOfMozilla = [
     "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
 ]
 
-class HistoryTests: BaseTestCase {
+class HistoryTests: FeatureFlaggedTestBase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     let testWithDB = [
         "testOpenHistoryFromBrowserContextMenuOptions",
         "testClearHistoryFromSettings",
-        "testClearRecentHistory"
+        "testClearRecentHistory_tabTrayExperimentOn",
+        "testClearRecentHistory_tabTrayExperimentOff"
     ]
 
     // This DDBB contains those 4 websites listed in the name
@@ -56,6 +57,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307300
     func testEmptyHistoryListFirstTime() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
 
         // Go to History List from Top Sites and check it is empty
@@ -71,6 +73,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307301
     func testOpenSyncDevices() {
+        app.launch()
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
@@ -85,6 +88,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
     func testClearHistoryFromSettings() throws {
+        app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             navigator.nowAt(NewTabScreen)
             // Browse to have an item in history list
@@ -119,7 +123,36 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307014
     // Smoketest
-    func testClearPrivateData() throws {
+    func testClearPrivateData_tabTrayExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        XCTExpectFailure("The app was not launched", strict: false) {
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        // Clear private data from settings and confirm
+        navigator.goto(ClearPrivateDataSettings)
+        app.tables.cells["ClearPrivateData"].waitAndTap()
+        mozWaitForElementToExist(app.tables.cells["ClearPrivateData"])
+        app.alerts.buttons["OK"].waitAndTap()
+
+        // Wait for OK pop-up to disappear after confirming
+        mozWaitForElementToNotExist(app.alerts.buttons["OK"])
+
+        // Try to tap on the disabled Clear Private Data button
+        app.tables.cells["ClearPrivateData"].waitAndTap()
+
+        // If the button is disabled, the confirmation pop-up should not exist
+        // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
+        // After this issue is clarified the assertion will be re-enabled or changed.
+        // XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307014
+    // Smoketest
+    func testClearPrivateData_tabTrayExperimentOn() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -144,6 +177,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
     func testRecentlyClosedWebsiteOpen() {
+        app.launch()
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -157,6 +191,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307463
     func testRecentlyClosedWebsiteClosed() {
+        app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -185,7 +220,9 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307475
-    func testRecentlyClosedPrivateMode() {
+    func testRecentlyClosedPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Open "Book of Mozilla" on private mode and close the tab
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -208,8 +245,60 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307475
+    func testRecentlyClosedPrivateMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla" on private mode and close the tab
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openBookOfMozilla()
+        closeFirstTabByX(isTabTrayOn: true)
+
+        // "Recently Closed Tabs List" is empty
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_History)
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg]
+            ]
+        )
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307479
-    func testRemoveAllTabsButtonRecentlyClosedHistory() {
+    func testRemoveAllTabsButtonRecentlyClosedHistory_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla"
+        openBookOfMozilla()
+
+        // Tap "Remove All Tabs" instead of close the tab individually
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        // The closed tab is listed in "Recently Closed" list
+        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_History)
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307479
+    func testRemoveAllTabsButtonRecentlyClosedHistory_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -233,6 +322,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307482
     func testClearRecentlyClosedHistory() {
+        app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -267,6 +357,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307483
     func testLongTapOptionsRecentlyClosedItem() {
+        app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -291,7 +382,9 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307484
-    func testOpenInNewTabRecentlyClosedItem() {
+    func testOpenInNewTabRecentlyClosedItem_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -328,8 +421,49 @@ class HistoryTests: BaseTestCase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307484
+    func testOpenInNewTabRecentlyClosedItem_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla" and close the tab
+        openBookOfMozilla()
+        closeFirstTabByX(isTabTrayOn: true)
+
+        // Open the page on a new tab from History Recently Closed screen
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+        // userState.numTabs does not work on iOS 15
+        if #available(iOS 16, *) {
+            XCTAssertEqual(userState.numTabs, 1)
+        }
+        app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
+        mozWaitForElementToExist(app.tables["Context Menu"])
+        app.tables.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
+
+        // The page is opened on the new tab
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(TabTray)
+        if isTablet {
+            mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
+        } else {
+            mozWaitForElementToExist(app.otherElements["navBarTabTray"])
+        }
+        mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
+        // userState.numTabs does not work on iOS 15
+        if #available(iOS 16, *) {
+            XCTAssertEqual(userState.numTabs, 2)
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307485
     func testOpenInNewPrivateTabRecentlyClosedItem() {
+        app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -368,6 +502,7 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307486
     func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
 
         // Open the two tabs in private mode. It is necessary to open two sites.
@@ -409,7 +544,9 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307025
     // Smoke
-    func testTabHistory() {
+    func testTabHistory_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.nowAt(NewTabScreen)
         openBookOfMozilla()
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
@@ -430,6 +567,31 @@ class HistoryTests: BaseTestCase {
         mozWaitForValueContains(url, value: "localhost")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307025
+    // Smoke
+    func testTabHistory_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        openBookOfMozilla()
+        let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
+        urlBarBackButton.press(forDuration: 1)
+        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
+        mozWaitForElementToNotExist(app.tables.staticTexts["The Book of Mozilla"])
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openBookOfMozilla()
+        urlBarBackButton.press(forDuration: 1)
+        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
+        urlBarBackButton.waitAndTap()
+        XCTAssertFalse(urlBarBackButton.isEnabled)
+        urlBarForwardButton.press(forDuration: 1)
+        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "localhost")
+    }
+
     // Private function created to select desired option from the "Clear Recent History" list
     // We used this approach to avoid code duplication
 
@@ -437,14 +599,16 @@ class HistoryTests: BaseTestCase {
         app.buttons[optionSelected].waitAndTap()
     }
 
-    private func navigateToPage() {
+    private func navigateToPage(isTabTrayOff: Bool = true) {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
-        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if isTabTrayOff {
+            let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+            mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
@@ -463,10 +627,14 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    private func closeFirstTabByX() {
+    private func closeFirstTabByX(isTabTrayOn: Bool = false) {
         waitForTabsButton()
         navigator.goto(TabTray)
-        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        if iPad() || isTabTrayOn == false {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+        }
     }
 
     private func closeKeyboard() {
@@ -477,7 +645,9 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306894
     // Smoke
-    func testClearRecentHistory() {
+    func testClearRecentHistory_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Visit a page to create a recent history entry.
         navigateToPage()
         navigator.performAction(Action.ClearRecentHistory)
@@ -529,10 +699,82 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Older"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306894
+    // Smoke
+    func testClearRecentHistory_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Visit a page to create a recent history entry.
+        navigateToPage(isTabTrayOff: false)
+        navigator.performAction(Action.ClearRecentHistory)
+        // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours").
+        // Older data will not be removed
+        tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours")
+        for entry in oldHistoryEntries {
+            mozWaitForElementToExist(app.tables.cells.staticTexts[entry])
+        }
+        mozWaitForElementToNotExist(app.staticTexts["Last 24 Hours"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
+
+        // Begin Test for Last 7 Days
+        // Visit a page to create a recent history entry.
+        navigateToPage(isTabTrayOff: false)
+        navigator.performAction(Action.ClearRecentHistory)
+        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
+        // Older data will not be removed
+        tapOnClearRecentHistoryOption(optionSelected: "Last 7 Days")
+        for entry in oldHistoryEntries {
+            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+        }
+        mozWaitForElementToNotExist(app.staticTexts["Last 7 Days"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
+
+        // Begin Test for Last 4 Weeks
+        // Visit a page to create a recent history entry.
+        navigateToPage(isTabTrayOff: false)
+        navigator.performAction(Action.ClearRecentHistory)
+        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
+        // Older data will not be removed
+        tapOnClearRecentHistoryOption(optionSelected: "Last 4 Weeks")
+        for entry in oldHistoryEntries {
+            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+        }
+        mozWaitForElementToNotExist(app.staticTexts["Last 4 Weeks"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
+
+        // Begin Test for All Time
+        // Visit a page to create a recent history entry.
+        navigateToPage(isTabTrayOff: false)
+        navigator.performAction(Action.ClearRecentHistory)
+        // Tapping everything removes both current data and older data.
+        tapOnClearRecentHistoryOption(optionSelected: "All Time")
+        for entry in oldHistoryEntries {
+            mozWaitForElementToNotExist(app.tables.cells.staticTexts[entry])
+        }
+        mozWaitForElementToNotExist(app.staticTexts["All Time"])
+        mozWaitForElementToNotExist(app.staticTexts["Older"])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306890
     // Smoketest
-    func testDeleteHistoryEntryBySwiping() {
+    func testDeleteHistoryEntryBySwiping_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigateToPage()
+        navigator.goto(LibraryPanel_History)
+        mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
+        app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
+        app.buttons["Delete"].waitAndTap()
+        mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306890
+    // Smoketest
+    func testDeleteHistoryEntryBySwiping_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigateToPage(isTabTrayOff: false)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
         app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()

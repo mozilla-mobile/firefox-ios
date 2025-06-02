@@ -338,7 +338,7 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(navBarTabTrayButton)
         let tabsOpenTabTray: String = navBarTabTrayButton.label
         XCTAssertTrue(tabsOpenTabTray.hasSuffix(numTab!))
-        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        let tabsTrayCell = app.otherElements[tabsTray].cells
         // Go to a tab that is below the fold of the scrollable “Open Tabs” view
         if !iPad() {
             tabsTrayCell.staticTexts.element(boundBy: 3).waitAndTap()
@@ -381,7 +381,7 @@ class TabsTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.goto(TabTray)
-        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        let tabsTrayCell = app.otherElements[tabsTray].cells
         if !iPad() {
             let button = AccessibilityIdentifiers.Toolbar.tabsButton
             let numTab = app.buttons[button].value as? String
@@ -398,7 +398,7 @@ class TabsTests: BaseTestCase {
         app.buttons["Undo"].waitAndTap()
         // Only the latest tab closed is restored
         if !iPad() {
-            let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+            let tabsTrayCell = app.otherElements[tabsTray].cells
             XCTAssertEqual(1, tabsTrayCell.count)
         }
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
@@ -503,8 +503,8 @@ class TabsTests: BaseTestCase {
         XCTAssertEqual("4", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         navigator.goto(TabTray)
         // Long press on the tab tray to open the context menu
-        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
-        app.otherElements["Tabs Tray"].cells.staticTexts.element(boundBy: 3).press(forDuration: 1.6)
+        let tabsTrayCell = app.otherElements[tabsTray].cells
+        app.otherElements[tabsTray].cells.staticTexts.element(boundBy: 3).press(forDuration: 1.6)
         // Context menu opens
         waitForElementsToExist(
             [

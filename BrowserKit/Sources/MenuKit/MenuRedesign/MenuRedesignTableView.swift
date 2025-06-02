@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Common
 
-final class MenuTableView: UIView,
+final class MenuRedesignTableView: UIView,
                            UITableViewDelegate,
                            UITableViewDataSource,
                            ThemeApplicable {
@@ -56,8 +56,8 @@ final class MenuTableView: UIView,
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(
-            MenuCell.self,
-            forCellReuseIdentifier: MenuCell.cellIdentifier
+            MenuRedesignCell.self,
+            forCellReuseIdentifier: MenuRedesignCell.cellIdentifier
         )
     }
 
@@ -82,7 +82,11 @@ final class MenuTableView: UIView,
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return menuData[section].options.count
+        if let isExpanded = menuData[section].isExpanded, isExpanded {
+            return menuData[section].options.count
+        } else {
+            return menuData[section].options.count(where: { !$0.isOptional })
+        }
     }
 
     func tableView(
@@ -90,9 +94,9 @@ final class MenuTableView: UIView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: MenuCell.cellIdentifier,
+            withIdentifier: MenuRedesignCell.cellIdentifier,
             for: indexPath
-        ) as? MenuCell else {
+        ) as? MenuRedesignCell else {
             return UITableViewCell()
         }
 
@@ -125,7 +129,14 @@ final class MenuTableView: UIView,
     }
 
     func reloadTableView(with data: [MenuSection]) {
-        menuData = data
+        // We ignore first section because it is handled in MenuCollectionView
+        if let firstSection = data.first, firstSection.isTopTabsSection {
+            tableView.showsVerticalScrollIndicator = false
+            menuData = data
+            menuData.remove(at: 0)
+        } else {
+            menuData = data
+        }
         tableView.reloadData()
     }
 
