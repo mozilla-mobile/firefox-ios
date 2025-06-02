@@ -7,6 +7,7 @@ import Glean
 
 struct ZoomTelemetry {
     private let gleanWrapper: GleanWrapper
+    static let defaultZoomExtraKey = "settings.zoom_bar.default_zoom"
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
@@ -33,8 +34,12 @@ struct ZoomTelemetry {
 
     // Page Zoom Settings actions
     func updateDefaultZoomLevel(zoomLevel: ZoomLevel) {
-        let extras = GleanMetrics.Preferences.DefaultZoomChangedExtra(level: zoomLevel.displayName)
-        gleanWrapper.recordEvent(for: GleanMetrics.Preferences.defaultZoomChanged, extras: extras)
+        let changedTo = zoomLevel.displayName
+        let preference = ZoomTelemetry.defaultZoomExtraKey
+
+        let extra = GleanMetrics.Preferences.ChangedExtra(changedTo: changedTo,
+                                                          preference: preference)
+        gleanWrapper.recordEvent(for: GleanMetrics.Preferences.changed, extras: extra)
     }
 
     func deleteZoomDomainLevel(value: Int32) {

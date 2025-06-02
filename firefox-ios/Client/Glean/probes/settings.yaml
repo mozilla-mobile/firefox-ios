@@ -231,22 +231,6 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  default_zoom_changed:
-    type: event
-    description: |
-      Records when the user changes their default zoom level in the app settings.
-    extra_keys:
-      level:
-        type: string
-        description: |
-          The default zoom value that will be used. The values range between 50% and 300%.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
 
 ###############################################################################
 # New "settings" telemetry properly nested under "settings".

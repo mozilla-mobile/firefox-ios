@@ -88,8 +88,8 @@ final class ZoomTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenDefaultZoomChanges_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.Preferences.defaultZoomChanged
-        typealias EventExtrasType = GleanMetrics.Preferences.DefaultZoomChangedExtra
+        let event = GleanMetrics.Preferences.changed
+        typealias EventExtrasType = GleanMetrics.Preferences.ChangedExtra
         let expectedZoomLevel = ZoomLevel(from: 110)
         let expectedMetricType = type(of: event)
 
@@ -101,7 +101,7 @@ final class ZoomTelemetryTests: XCTestCase {
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.level, expectedZoomLevel.displayName)
+        XCTAssertEqual(savedExtras.changedTo, expectedZoomLevel.displayName)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
