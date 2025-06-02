@@ -278,7 +278,7 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: model.shouldAnimate
         )
-        
+
         rightSkeletonAddressBar.configure(
             config: model.configureSkeletonAddressBar(
                 with: forwardTab?.url?.displayURL,
