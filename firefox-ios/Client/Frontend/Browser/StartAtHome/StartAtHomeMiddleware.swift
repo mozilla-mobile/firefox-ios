@@ -6,37 +6,20 @@ import Common
 import Redux
 import Shared
 
-final class StartAtHomeAction: Action {
-    let shouldStartAtHome: Bool?
-    init(
-        shouldStartAtHome: Bool? = nil,
-        windowUUID: WindowUUID,
-        actionType: any ActionType
-    ) {
-        self.shouldStartAtHome = shouldStartAtHome
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
-
-enum StartAtHomeActionType: ActionType {
-    case didBrowserBecomeActive
-}
-
-enum StartAtHomeMiddlewareActionType: ActionType {
-    case startAtHomeCheckCompleted
-}
-
 final class StartAtHomeMiddleware {
     private let windowManager: WindowManager
     private let logger: Logger
     private let prefs: Prefs
+    private let dateProvider: DateProvider
 
     init(profile: Profile = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         dateProvider: DateProvider = SystemDateProvider()) {
         self.windowManager = windowManager
         self.logger = logger
         self.prefs = profile.prefs
+        self.dateProvider = dateProvider
     }
 
     lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
@@ -81,7 +64,7 @@ final class StartAtHomeMiddleware {
             return false
         }
 
-        if startAtHomeManager.shouldStartAtHome() {
+        if startAtHomeManager.shouldStartAtHome(with: dateProvider.now()) {
             let wasLastSessionPrivate = tabManager.selectedTab?.isPrivate ?? false
             let scannableTabs = wasLastSessionPrivate ? tabManager.privateTabs : tabManager.normalTabs
             let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
@@ -101,7 +84,8 @@ final class StartAtHomeMiddleware {
     }
 
     /// Determines the appropriate page to load based on user preferences and whether
-    /// a suitable tab already exists. It supports loading a custom URL homepage, the default Firefox homepage (i.e. topSites),
+    /// a suitable tab already exists. It supports loading a custom URL homepage,
+    /// the default Firefox homepage (i.e. topSites),
     /// or falling back to the selected tab or a new one if necessary.
     ///
     /// - Parameters:

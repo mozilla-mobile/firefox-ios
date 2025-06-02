@@ -46,11 +46,11 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// Determines whether the Start at Home feature is enabled, how long it has been since
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
-    public func shouldStartAtHome() -> Bool {
+    public func shouldStartAtHome(with date: Date) -> Bool {
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
         let dateComponents = Calendar.current.dateComponents([.hour, .second],
                                                              from: lastActiveTimestamp,
-                                                             to: Date())
+                                                             to: date)
         switch startAtHomeSetting {
         case .afterFourHours:
             let hoursSinceLastActive = dateComponents.hour ?? 0

@@ -61,34 +61,35 @@ class StartAtHomeHelperTests: XCTestCase {
         setupHelper()
         helper.startAtHomeSetting = .afterFourHours
         setupLastActiveTimeStamp(value: -3)
-        XCTAssertFalse(helper.shouldStartAtHome(), "Expected to fail for less than 4 hours")
+        // FXIOS-12175 - we should use a test date instead of current system date
+        XCTAssertFalse(helper.shouldStartAtHome(with: Date()), "Expected to fail for less than 4 hours")
     }
 
     func testShouldStartAtHome_AfterFourHours() {
         setupHelper()
         helper.startAtHomeSetting = .afterFourHours
         setupLastActiveTimeStamp(value: -5)
-        XCTAssertTrue(helper.shouldStartAtHome(), "Expected to pass for more than 4 hours")
+        XCTAssertTrue(helper.shouldStartAtHome(with: Date()), "Expected to pass for more than 4 hours")
     }
 
     func testNotShouldStartAtHome_Always() {
         setupHelper()
         helper.startAtHomeSetting = .always
         setupLastActiveTimeStamp(value: -3, dateComponents: .second)
-        XCTAssertFalse(helper.shouldStartAtHome(), "Expected to fail for more than 5 seconds")
+        XCTAssertFalse(helper.shouldStartAtHome(with: Date()), "Expected to fail for more than 5 seconds")
     }
 
     func testShouldStartAtHome_Always() {
         setupHelper()
         helper.startAtHomeSetting = .always
         setupLastActiveTimeStamp(value: -6, dateComponents: .second)
-        XCTAssertTrue(helper.shouldStartAtHome(), "Expected to pass for more than 5 seconds")
+        XCTAssertTrue(helper.shouldStartAtHome(with: Date()), "Expected to pass for more than 5 seconds")
     }
 
     func testShouldStartAtHome_Disabled() {
         setupHelper()
         helper.startAtHomeSetting = .disabled
-        XCTAssertFalse(helper.shouldStartAtHome(), "Expected to fail for disabled state")
+        XCTAssertFalse(helper.shouldStartAtHome(with: Date()), "Expected to fail for disabled state")
     }
 
     func testScanForExistingHomeTab_ForEmptyTabs() {

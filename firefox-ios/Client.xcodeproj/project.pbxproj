@@ -834,6 +834,8 @@
 		8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5C28216C4D0061216B /* Release.xcconfig */; };
 		8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2D593D27DC0AA100713EC9 /* TopSite.swift */; };
 		8A2DAD4B2CC02AA00067ECD0 /* LabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2DAD4A2CC02AA00067ECD0 /* LabelButtonHeaderView.swift */; };
+		8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2F21C52DEDC17200C9F4DE /* StartAtHomeMiddlewareTests.swift */; };
+		8A2F21CB2DEDC2AB00C9F4DE /* StartAtHomeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2F21CA2DEDC2A800C9F4DE /* StartAtHomeAction.swift */; };
 		8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */; };
 		8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */; };
 		8A32DD5028B419B300D57C60 /* HomepageMessageCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A32DD4F28B419B300D57C60 /* HomepageMessageCardViewModelTests.swift */; };
@@ -8229,6 +8231,8 @@
 		8A2B1A5C28216C4D0061216B /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Configuration/Release.xcconfig; sourceTree = "<group>"; };
 		8A2D593D27DC0AA100713EC9 /* TopSite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSite.swift; sourceTree = "<group>"; };
 		8A2DAD4A2CC02AA00067ECD0 /* LabelButtonHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderView.swift; sourceTree = "<group>"; };
+		8A2F21C52DEDC17200C9F4DE /* StartAtHomeMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeMiddlewareTests.swift; sourceTree = "<group>"; };
+		8A2F21CA2DEDC2A800C9F4DE /* StartAtHomeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeAction.swift; sourceTree = "<group>"; };
 		8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxBookmarkNode.swift; sourceTree = "<group>"; };
 		8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDesktopFolder.swift; sourceTree = "<group>"; };
 		8A32DD4F28B419B300D57C60 /* HomepageMessageCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModelTests.swift; sourceTree = "<group>"; };
@@ -12321,6 +12325,25 @@
 			path = SearchEngines;
 			sourceTree = "<group>";
 		};
+		8A2F21C72DEDC18C00C9F4DE /* StartAtHome */ = {
+			isa = PBXGroup;
+			children = (
+				213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */,
+				8A2F21C52DEDC17200C9F4DE /* StartAtHomeMiddlewareTests.swift */,
+			);
+			path = StartAtHome;
+			sourceTree = "<group>";
+		};
+		8A2F21C82DEDC28E00C9F4DE /* StartAtHome */ = {
+			isa = PBXGroup;
+			children = (
+				8A2F21CA2DEDC2A800C9F4DE /* StartAtHomeAction.swift */,
+				8A75AF9B2DE8A1C700B2C592 /* StartAtHomeMiddleware.swift */,
+				213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */,
+			);
+			path = StartAtHome;
+			sourceTree = "<group>";
+		};
 		8A3233FF28627451003E1C33 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
@@ -12617,14 +12640,6 @@
 				8A6E63CE2D4A7FB70040D355 /* SectionHeaderConfiguration.swift */,
 			);
 			path = SectionHeader;
-			sourceTree = "<group>";
-		};
-		8A75AF9A2DE8A1C300B2C592 /* Middlewares */ = {
-			isa = PBXGroup;
-			children = (
-				8A75AF9B2DE8A1C700B2C592 /* StartAtHomeMiddleware.swift */,
-			);
-			path = Middlewares;
 			sourceTree = "<group>";
 		};
 		8A7653C028A2E54800924ABF /* Pocket */ = {
@@ -14100,7 +14115,6 @@
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8A75AF9A2DE8A1C300B2C592 /* Middlewares */,
 				5A2918C92B522326002B197E /* Actions */,
 				81122E1F2B2219AA003DD9F8 /* Views */,
 				81122E1E2B2219A0003DD9F8 /* State */,
@@ -14362,8 +14376,8 @@
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				8A9B87A92C1B30340042B894 /* Search */,
 				3BF56D261CDBBE1F00AC4D75 /* SimpleToast.swift */,
+				8A2F21C82DEDC28E00C9F4DE /* StartAtHome */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
-				213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
 				3BCE6D3B1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift */,
 				D04D1B91209790B60074B35F /* Toast.swift */,
@@ -15258,7 +15272,7 @@
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
 				EDD3348C2D109416004516D0 /* Sharing */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
-				213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */,
+				8A2F21C72DEDC18C00C9F4DE /* StartAtHome */,
 				8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */,
 				2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
@@ -17300,6 +17314,7 @@
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
 				8AAAB0592C1B7240008830B3 /* MockRustFirefoxSuggest.swift in Sources */,
 				0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */,
+				8A2F21CB2DEDC2AB00C9F4DE /* StartAtHomeAction.swift in Sources */,
 				602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */,
 				7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */,
 				4346FF08295BA6A300F4D220 /* CreditCardSettingsViewController.swift in Sources */,
@@ -18242,6 +18257,7 @@
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */,
+				8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */,
