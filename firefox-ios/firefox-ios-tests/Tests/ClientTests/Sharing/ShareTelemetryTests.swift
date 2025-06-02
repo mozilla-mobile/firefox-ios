@@ -9,6 +9,7 @@ import XCTest
 
 final class ShareTelemetryTests: XCTestCase {
     private let testWebURL = URL(string: "https://mozilla.org")!
+    var mockGleanWrapper: MockGleanWrapper!
 
     // For telemetry extras
     let activityIdentifierKey = "activity_identifier"
@@ -19,11 +20,7 @@ final class ShareTelemetryTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
+        mockGleanWrapper = MockGleanWrapper()
     }
 
     func testSharedTo_withNoActivityType() throws {
@@ -132,6 +129,6 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func createSubject() -> ShareTelemetry {
-        return ShareTelemetry()
+        return ShareTelemetry(gleanWrapper: mockGleanWrapper)
     }
 }
