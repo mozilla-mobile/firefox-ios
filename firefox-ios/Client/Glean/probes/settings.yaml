@@ -281,7 +281,7 @@ settings.app_icon:
         - AppIconSelection
         
 # Default Zoom Settings
-settings.zoom:
+settings.zoom_bar:
   delete_domain_level:
     type: event
     description: |
