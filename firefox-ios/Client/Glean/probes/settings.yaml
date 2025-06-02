@@ -282,7 +282,7 @@ settings.app_icon:
         
 # Default Zoom Settings
 settings.zoom_bar:
-  delete_domain_level:
+  domain_deleted:
     type: event
     description: |
       Records when the user deletes a specific zoom domain level in the app settings.
