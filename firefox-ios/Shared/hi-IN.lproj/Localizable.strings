@@ -181,6 +181,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "सेटिंग में बंद करें";
 
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "बंद करें";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "पृष्ठ को पठन सूची मे नहीं जोड़ा जा सकता है";
 
@@ -210,6 +213,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "तयशुदा खोज इंजन";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "बंद करें";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "डिस्प्ले सेटिंग";
@@ -303,6 +309,18 @@
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "मुखपृष्ठ मनपसंद बनाएँ";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d मिनट";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "हटाएं";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "पेज: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "सेटिंग";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "आगे बढ़ाएं";

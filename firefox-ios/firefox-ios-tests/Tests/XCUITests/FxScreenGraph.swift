@@ -980,7 +980,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+            app.buttons[AccessibilityIdentifiers.MainMenu.trackigProtection],
             to: TrackingProtectionContextMenuDetails
         )
 

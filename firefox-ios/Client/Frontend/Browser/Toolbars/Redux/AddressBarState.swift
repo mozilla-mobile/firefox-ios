@@ -28,24 +28,19 @@ struct AddressBarState: StateType, Equatable {
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
 
-    private static let shareAction = ToolbarActionConfiguration(
-        actionType: .share,
-        iconName: StandardImageIdentifiers.Large.share,
-        isEnabled: true,
-        a11yLabel: .TabLocationShareAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
-
     private static let stopLoadingAction = ToolbarActionConfiguration(
         actionType: .stopLoading,
-        iconName: StandardImageIdentifiers.Large.cross,
+        iconName: StandardImageIdentifiers.Medium.cross,
         isEnabled: true,
+        hasCustomColor: true,
         a11yLabel: .TabToolbarStopAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
 
     private static let reloadAction = ToolbarActionConfiguration(
         actionType: .reload,
-        iconName: StandardImageIdentifiers.Large.arrowClockwise,
+        iconName: StandardImageIdentifiers.Medium.arrowClockwise,
         isEnabled: true,
+        hasCustomColor: true,
         a11yLabel: .TabLocationReloadAccessibilityLabel,
         a11yHint: .TabLocationReloadAccessibilityHint,
         a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
@@ -887,22 +882,13 @@ struct AddressBarState: StateType, Equatable {
         else { return actions }
 
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
-        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
-        let isEditingBaseLayout = isEditing && layout == .baseline
-
-        guard !isEditingBaseLayout else {
-            // back caret when in edit mode
-            actions.append(cancelEditAction)
-            return actions
-        }
 
         if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
             let canGoBack = action.canGoBack ?? toolbarState.canGoBack
             let canGoForward = action.canGoForward ?? toolbarState.canGoForward
-            actions.append(backAction(enabled: canGoBack, layout: layout))
-            actions.append(forwardAction(enabled: canGoForward, layout: layout))
+            actions.append(backAction(enabled: canGoBack))
+            actions.append(forwardAction(enabled: canGoForward))
 
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
@@ -924,19 +910,8 @@ struct AddressBarState: StateType, Equatable {
         else { return actions }
 
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
-        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
-        let isVersionLayout = layout == .version1 || layout == .version2
-
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
-
-        var shareAction = shareAction
-        if isVersionLayout {
-            shareAction.iconName = StandardImageIdentifiers.Medium.share
-            shareAction.hasCustomColor = true
-        }
-
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
@@ -945,18 +920,12 @@ struct AddressBarState: StateType, Equatable {
                 actions.append(dataClearanceAction)
             }
 
-            if !isHomepage, isVersionLayout {
-                var shareAction = shareAction
-                shareAction.isEnabled = isLoading == false
-                shareAction.iconName = StandardImageIdentifiers.Medium.share
-                shareAction.hasCustomColor = true
+            if !isHomepage {
+                let shareAction = shareAction(enabled: isLoading == false)
                 actions.append(shareAction)
             }
-        } else if !isHomepage, isShowingNavigationToolbar, isVersionLayout {
-            var shareAction = shareAction
-            shareAction.isEnabled = isLoading == false
-            shareAction.hasCustomColor = true
-            shareAction.iconName = StandardImageIdentifiers.Medium.share
+        } else if !isHomepage, isShowingNavigationToolbar {
+            let shareAction = shareAction(enabled: isLoading == false)
             actions.append(shareAction)
         }
 
@@ -973,35 +942,20 @@ struct AddressBarState: StateType, Equatable {
 
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
-              !hasEmptySearchField, // When the search field is empty we show no actions
+        guard !hasEmptySearchField, // When the search field is empty we show no actions
               !isEditing
         else { return actions }
 
         switch readerModeState {
         case .active, .available:
-            guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
-            else { break }
-            let isSelected = readerModeState == .active
-            let isVersionLayout = toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2
-            let iconName: String
-            if isVersionLayout {
-                iconName = StandardImageIdentifiers.Medium.readerView
-            } else {
-                iconName = isSelected ?
-                StandardImageIdentifiers.Large.readerViewFill :
-                StandardImageIdentifiers.Large.readerView
-            }
-
             let readerModeAction = ToolbarActionConfiguration(
                 actionType: .readerMode,
-                iconName: iconName,
+                iconName: StandardImageIdentifiers.Medium.readerView,
                 isEnabled: true,
-                isSelected: isSelected,
-                hasCustomColor: isVersionLayout,
+                isSelected: readerModeState == .active,
+                hasCustomColor: true,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
@@ -1010,31 +964,12 @@ struct AddressBarState: StateType, Equatable {
         default: break
         }
 
-        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
-        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
-
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
-        if layout == .baseline {
-            var shareAction = shareAction
-            shareAction.isEnabled = isLoading == false
-            actions.append(shareAction)
-        }
-
         if isLoading == true {
-            var stopLoadingAction = stopLoadingAction
-            if layout == .version1 || layout == .version2 {
-                stopLoadingAction.iconName = StandardImageIdentifiers.Medium.cross
-                stopLoadingAction.hasCustomColor = true
-            }
             actions.append(stopLoadingAction)
         } else if isLoading == false {
-            var reloadAction = reloadAction
-            if layout == .version1 || layout == .version2 {
-                reloadAction.iconName = StandardImageIdentifiers.Medium.arrowClockwise
-                reloadAction.hasCustomColor = true
-            }
             actions.append(reloadAction)
         }
 
@@ -1059,9 +994,8 @@ struct AddressBarState: StateType, Equatable {
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
-        let isVersionLayout = layout == .version1 || layout == .version2
 
-        if isEditing, isVersionLayout {
+        if isEditing {
             // cancel button when in edit mode
             actions.append(cancelEditTextAction)
         }
@@ -1079,8 +1013,7 @@ struct AddressBarState: StateType, Equatable {
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
-        let menuIcon = isVersionLayout ? StandardImageIdentifiers.Large.moreHorizontalRound
-                                        : StandardImageIdentifiers.Large.appMenu
+        let menuIcon = StandardImageIdentifiers.Large.moreHorizontalRound
 
         switch layout {
         case .version1:
@@ -1088,7 +1021,7 @@ struct AddressBarState: StateType, Equatable {
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
             ])
-        case .version2, .baseline, .none:
+        case .version2, .none:
             actions.append(contentsOf: [
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
@@ -1130,21 +1063,10 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
-    private static func backAction(
-        enabled: Bool,
-        layout: ToolbarLayoutStyle?)
-    -> ToolbarActionConfiguration {
-        let iconName: String
-        switch layout {
-        case .version1, .version2:
-            iconName = StandardImageIdentifiers.Large.chevronLeft
-        default:
-            iconName = StandardImageIdentifiers.Large.back
-        }
-
+    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .back,
-            iconName: iconName,
+            iconName: StandardImageIdentifiers.Large.chevronLeft,
             isFlippedForRTL: true,
             isEnabled: enabled,
             contextualHintType: ContextualHintType.navigation.rawValue,
@@ -1152,24 +1074,23 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private static func forwardAction(
-        enabled: Bool,
-        layout: ToolbarLayoutStyle?)
-    -> ToolbarActionConfiguration {
-        let iconName: String
-        switch layout {
-        case .version1, .version2:
-            iconName = StandardImageIdentifiers.Large.chevronRight
-        default:
-            iconName = StandardImageIdentifiers.Large.forward
-        }
-
+    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .forward,
-            iconName: iconName,
+            iconName: StandardImageIdentifiers.Large.chevronRight,
             isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
+    }
+
+    private static func shareAction(enabled: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .share,
+            iconName: StandardImageIdentifiers.Medium.share,
+            isEnabled: enabled,
+            hasCustomColor: true,
+            a11yLabel: .TabLocationShareAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
     }
 }

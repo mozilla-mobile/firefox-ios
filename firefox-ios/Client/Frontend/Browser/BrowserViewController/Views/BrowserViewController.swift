@@ -340,6 +340,8 @@ class BrowserViewController: UIViewController,
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue: DownloadQueue
+    let mainQueue: DispatchQueueInterface
+    let userInitiatedQueue: DispatchQueueInterface
 
     private let bookmarksSaver: BookmarksSaver
     let bookmarksHandler: BookmarksHandler
@@ -373,7 +375,9 @@ class BrowserViewController: UIViewController,
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
+        searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+        mainQueue: DispatchQueueInterface = DispatchQueue.main,
+        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -390,6 +394,8 @@ class BrowserViewController: UIViewController,
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
+        self.mainQueue = mainQueue
+        self.userInitiatedQueue = userInitiatedQueue
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -534,9 +540,8 @@ class BrowserViewController: UIViewController,
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
-            let isWallpaperedHomepage = contentContainer.hasHomepage && wallpaperManager.currentWallpaper.hasImage
-            let offset = scrollOffset ?? 0
-            topBlurView.alpha = isWallpaperedHomepage ? offset : 1
+            let offset = scrollOffset ?? statusBarOverlay.scrollOffset
+            topBlurView.alpha = contentContainer.hasHomepage ? offset : 1
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
@@ -553,7 +558,12 @@ class BrowserViewController: UIViewController,
         maskView.backgroundColor = .black
         contentContainer.mask = maskView
 
-        [header, overKeyboardContainer, bottomContainer].forEach { $0.applyTheme(theme: theme) }
+        let views: [UIView] = [header, overKeyboardContainer, bottomContainer, statusBarOverlay]
+        views.forEach {
+            ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
+            $0.setNeedsLayout()
+            $0.layoutIfNeeded()
+        }
     }
 
     @objc
@@ -1176,12 +1186,15 @@ class BrowserViewController: UIViewController,
 
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
-        view.addSubview(overKeyboardContainer)
 
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
         bottomContainer.addArrangedSubview(toolbarToShow)
         view.addSubview(bottomContainer)
+
+        // add overKeyboardContainer after bottomContainer so the address toolbar shadow
+        // for bottom toolbar doesn't get clipped
+        view.addSubview(overKeyboardContainer)
     }
 
     private func enqueueTabRestoration() {
@@ -1235,9 +1248,9 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
     }
 
-    func willNavigateAway(from tab: Tab?) {
+    func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
         if let tab {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID, completion: completion)
         }
     }
 
@@ -2376,19 +2389,13 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
+            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-                if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
-                    lockIconImageName = hasSecureContent ?
-                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                        StandardImageIdentifiers.Small.shieldSlashFill
-                } else {
-                    lockIconImageName = hasSecureContent ?
-                        StandardImageIdentifiers.Large.lockFill :
-                        StandardImageIdentifiers.Large.lockSlashFill
-                }
-
+                lockIconImageName = hasSecureContent ?
+                    StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                    StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+                lockIconNeedsTheming = hasSecureContent
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
             }
@@ -2400,7 +2407,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: true,
+                lockIconNeedsTheming: lockIconNeedsTheming,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
@@ -2415,6 +2422,9 @@ class BrowserViewController: UIViewController,
 
             configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
                                                  navigationToolbarView: navigationToolbarContainer)
+
+            // update the background view to ensure translucency is displayed correctly
+            applyTheme()
             return
         }
 
@@ -3470,11 +3480,12 @@ class BrowserViewController: UIViewController,
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         updateAddressBarBackgroundViewColor(theme: currentTheme)
 
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        if isToolbarRefactorEnabled,
-            let toolbarState,
-            toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
-            backgroundView.backgroundColor = currentTheme.colors.layer3
+        if isToolbarRefactorEnabled {
+            // to make sure on homepage with bottom search bar the status bar is hidden
+            // we have to adjust the background color to match the homepage background color
+            let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
+            let colors = currentTheme.colors
+            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layer3
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
@@ -3499,10 +3510,7 @@ class BrowserViewController: UIViewController,
 
     private func updateAddressBarBackgroundViewColor(theme: Theme) {
         guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        let toolbarLayoutStyle = toolbarState?.toolbarLayout
-        let colors = theme.colors
-        addressBarBackgroundView.backgroundColor = toolbarLayoutStyle == .baseline ? colors.layer1 : colors.layer3
+        addressBarBackgroundView.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Telemetry

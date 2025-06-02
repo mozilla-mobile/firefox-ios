@@ -995,7 +995,11 @@ extension BrowserViewController: WKNavigationDelegate {
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
-            handleServerTrust(challenge: challenge, completionHandler: completionHandler)
+            handleServerTrust(
+                challenge: challenge,
+                dispatchQueue: self.userInitiatedQueue,
+                completionHandler: completionHandler
+            )
             return
         }
 
@@ -1021,7 +1025,7 @@ extension BrowserViewController: WKNavigationDelegate {
             challenge: challenge,
             loginsHelper: loginsHelper
         ) { res in
-            DispatchQueue.main.async {
+            self.mainQueue.async {
                 switch res {
                 case .success(let credentials):
                     completionHandler(.useCredential, credentials.credentials)
@@ -1213,9 +1217,10 @@ private extension BrowserViewController {
     }
 
     func handleServerTrust(challenge: URLAuthenticationChallenge,
+                           dispatchQueue: DispatchQueueInterface,
                            completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        dispatchQueue.async {
             // If this is a certificate challenge, see if the certificate has previously been
             // accepted by the user.
             let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
@@ -1224,13 +1229,13 @@ private extension BrowserViewController {
                   let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
                   self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
             else {
-                DispatchQueue.main.async {
+                self.mainQueue.async {
                     completionHandler(.performDefaultHandling, nil)
                 }
                 return
             }
 
-            DispatchQueue.main.async {
+            self.mainQueue.async {
                 completionHandler(.useCredential, URLCredential(trust: trust))
             }
         }

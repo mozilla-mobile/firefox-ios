@@ -109,6 +109,8 @@ struct AccessibilityIdentifiers {
         static let readerView = "MainMenu.ReaderViewOn"
         static let nightMode = "MainMenu.NightModeOn"
         static let zoom = "MainMenu.Zoom"
+        static let moreLess = "MainMenu.MoreLess"
+        static let trackigProtection = "shieldCheckmarkLarge"
     }
 
     struct UnifiedSearch {
