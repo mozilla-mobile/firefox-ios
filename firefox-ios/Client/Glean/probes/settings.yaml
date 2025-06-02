@@ -231,6 +231,22 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+  default_zoom_changed:
+    type: event
+    description: |
+      Records when the user changes their default zoom level in the app settings.
+    extra_keys:
+      level:
+        type: string
+        description: |
+          The default zoom value that will be used. The values range between 50% and 300%.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
 
 ###############################################################################
 # New "settings" telemetry properly nested under "settings".
@@ -266,25 +282,6 @@ settings.app_icon:
         
 # Default Zoom Settings
 settings.zoom:
-  update_default_level:
-    type: event
-    description: |
-      Records when the user changes their app icon in the app settings.
-    extra_keys:
-      level:
-        type: quantity
-        description: |
-          The new default zoom level for domain that don't have a custom zoom level.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-08-01"
-    metadata:
-      tags:
-        - ZoomBar
   delete_domain_level:
     type: event
     description: |
