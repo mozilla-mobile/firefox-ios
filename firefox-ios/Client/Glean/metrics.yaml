@@ -6083,6 +6083,8 @@ testing:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-17"
+    no_lint: 
+      - COMMON_PREFIX
   test_event_2:
     type: event
     description: |
@@ -6095,3 +6097,5 @@ testing:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-18"
+    no_lint: 
+      - COMMON_PREFIX
