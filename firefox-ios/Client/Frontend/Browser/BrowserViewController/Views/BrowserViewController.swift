@@ -4527,6 +4527,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            addressToolbarContainer.hideSkeletonBars()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -4542,6 +4545,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
