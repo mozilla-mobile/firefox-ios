@@ -290,7 +290,7 @@ settings.zoom_bar:
       index:
         type: quantity
         description: |
-          The new default zoom level for domain that don't have a custom zoom level.
+          The index of the site in the list of domains that have a user-configured page zoom level. Index 0 is the top of the list.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
     data_reviews:
