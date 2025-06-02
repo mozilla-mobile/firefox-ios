@@ -301,7 +301,7 @@ settings.zoom_bar:
     metadata:
       tags:
         - ZoomBar
-  reset_domain_list:
+  domain_list_reset_button_tapped:
     type: event
     description: |
       Recorded when the user resets the list of zoom domain levels in the app settings.
