@@ -52,7 +52,7 @@ function append_paths_to_probe_index() {
         echo " * ${filename}"
 
         # Write this path to the file passed in as argument 1
-        relativeName="${filename#firefox-ios/}"
+        relativeName="${filename}"
         echo "  - $relativeName" >>"$1"
     done
 }
