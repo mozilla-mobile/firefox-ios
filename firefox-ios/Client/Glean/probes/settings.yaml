@@ -285,7 +285,7 @@ settings.zoom_bar:
   domain_deleted:
     type: event
     description: |
-      Records when the user deletes a specific zoom domain level in the app settings.
+      Recorded when the user deletes a specific zoom domain level in the app settings.
     extra_keys:
       domain_index:
         type: quantity
