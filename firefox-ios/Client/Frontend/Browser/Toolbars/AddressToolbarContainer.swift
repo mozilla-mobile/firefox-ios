@@ -265,7 +265,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func configureSkeletonAddressBars(previousTab: Tab?, forwardTab: Tab?) {
-        if let model, let state {
+        guard let model, let state else { return }
             leftSkeletonAddressBar.configure(
                 config: model.configureSkeletonAddressBar(
                     with: previousTab?.url?.displayURL,
@@ -291,7 +291,6 @@ final class AddressToolbarContainer: UIView,
                 isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                 animated: model.shouldAnimate
             )
-        }
     }
 
     private func setupLayout() {
