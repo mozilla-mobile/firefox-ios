@@ -68,10 +68,10 @@
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Nema programa za praćenje";
 
 /* Text to let users know how many analytics trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
-"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Praćenje sadržaja: %@";
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Sadržaj za praćenje: %@";
 
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. %@ is the number of cookies of this type detected. */
-"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Kolačići za praćenje web stranica: %@";
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Međustranični kolačići za praćenje: %@";
 
 /* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Broj prikupljača digitalnih otisaka: %@";
