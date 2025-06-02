@@ -246,7 +246,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
+    expires: "2026-01-01"
 
 ###############################################################################
 # New "settings" telemetry properly nested under "settings".
@@ -297,7 +297,7 @@ settings.zoom:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-08-01"
+    expires: "2026-01-01"
     metadata:
       tags:
         - ZoomBar
@@ -311,7 +311,7 @@ settings.zoom:
       - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-08-01"
+    expires: "2026-01-01"
     metadata:
       tags:
         - ZoomBar
