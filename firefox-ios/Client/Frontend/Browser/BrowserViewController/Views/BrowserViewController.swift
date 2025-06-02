@@ -1044,6 +1044,11 @@ class BrowserViewController: UIViewController,
             object: nil)
         notificationCenter.addObserver(
             self,
+            selector: #selector(handlePageZoomSettingsChanged),
+            name: .PageZoomSettingsChanged,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
             selector: #selector(openRecentlyClosedTabs),
             name: .RemoteTabNotificationTapped,
             object: nil
@@ -3458,6 +3463,12 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: Page Zoom
+
+    @objc
+    func handlePageZoomSettingsChanged(_ notification: Notification) {
+        zoomManager.updateZoomChangedInOtherWindow()
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
+    }
 
     @objc
     func handlePageZoomLevelUpdated(_ notification: Notification) {
