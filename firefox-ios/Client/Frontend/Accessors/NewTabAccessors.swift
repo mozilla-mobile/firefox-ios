@@ -23,9 +23,7 @@ struct NewTabAccessors {
         return option
     }
 
-    /// Retrieves the user's preferred new tab page setting from preferences.
-    ///
-    /// This method reads the user's preference for the new tab page from the given `Prefs` object.
+    /// Retrieves the user's preference for the new tab page.
     /// If the preference value is invalid or missing, the default firefox homepage is returned.
     /// Additionally, if the user has selected the custom URL option, `.homePage`,
     /// but no homepage URL is configured, the method falls back to the default to ensure a valid tab experience.

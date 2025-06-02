@@ -23,7 +23,7 @@ enum StartAtHomeActionType: ActionType {
 }
 
 enum StartAtHomeMiddlewareActionType: ActionType {
-    case startAtHomeConfigured
+    case startAtHomeCheckCompleted
 }
 
 final class StartAtHomeMiddleware {
@@ -47,7 +47,7 @@ final class StartAtHomeMiddleware {
                 StartAtHomeAction(
                     shouldStartAtHome: shouldStartAtHome,
                     windowUUID: action.windowUUID,
-                    actionType: StartAtHomeMiddlewareActionType.startAtHomeConfigured
+                    actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
                 )
             )
         default: break
@@ -65,15 +65,8 @@ final class StartAtHomeMiddleware {
     }
 
     /// Checks whether the app should start at the homepage and initiates the process if applicable.
-    ///
     /// This method uses `StartAtHomeHelper` to determine if the app should launch with a homepage tab,
-    /// based on user preferences and session state. If the conditions are met:
-    /// - It identifies if the previous session was private.
-    /// - Scans the appropriate tab set (private or normal) for an existing home tab.
-    /// - Creates or reuses a homepage tab.
-    /// - Selects the homepage tab for display.
-    ///
-    /// Logging is performed for debug purposes throughout the decision flow.
+    /// based on user preferences and session state.
     ///
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
     private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
@@ -107,17 +100,15 @@ final class StartAtHomeMiddleware {
         return false
     }
 
-    /// Creates or reuses a tab to open at the configured "Start at Home" page.
-    ///
-    /// This function determines the appropriate page to load based on user preferences and whether
-    /// a suitable tab already exists. It supports loading a custom homepage, the default top sites page,
+    /// Determines the appropriate page to load based on user preferences and whether
+    /// a suitable tab already exists. It supports loading a custom URL homepage, the default Firefox homepage (i.e. topSites),
     /// or falling back to the selected tab or a new one if necessary.
     ///
     /// - Parameters:
     ///   - existingTab: An optional existing tab that may be reused.
-    ///   - privateMode: A Boolean indicating whether the tab should be opened in private mode.
+    ///   - privateMode: A Boolean indicating whether the tab is in private mode.
     ///   - profilePreferences: The user's profile preferences.
-    /// - Returns: A tab configured to show the appropriate home page content.
+    /// - Returns: A tab configured to show the appropriate homepage content.
     private func createStartAtHomeTab(tabManager: TabManager,
                                       withExistingTab existingTab: Tab?,
                                       inPrivateMode privateMode: Bool,

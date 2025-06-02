@@ -177,7 +177,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case StartAtHomeMiddlewareActionType.startAtHomeConfigured:
+        case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
         default:
             return defaultState(from: state, action: action)
