@@ -287,7 +287,7 @@ settings.zoom_bar:
     description: |
       Recorded when the user deletes a specific zoom domain level in the app settings.
     extra_keys:
-      domain_index:
+      index:
         type: quantity
         description: |
           The new default zoom level for domain that don't have a custom zoom level.
