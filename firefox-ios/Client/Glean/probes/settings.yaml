@@ -243,7 +243,7 @@ preferences:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -294,7 +294,7 @@ settings.zoom:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-08-01"
@@ -308,7 +308,7 @@ settings.zoom:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-08-01"
