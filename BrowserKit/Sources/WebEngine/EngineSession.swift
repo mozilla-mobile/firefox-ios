@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /// Protocol representing a single engine session. In browsers usually a session corresponds to a tab.
 public protocol EngineSession: NSObject {
@@ -77,6 +78,9 @@ public protocol EngineSession: NSObject {
 
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
+
+    /// Returns a print formatter for the web view's contents.
+    func viewPrintFormatter() -> UIPrintFormatter
 }
 
 public extension EngineSession {

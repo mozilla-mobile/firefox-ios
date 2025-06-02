@@ -49,6 +49,9 @@ class DefaultUserScriptManager: WKUserScriptManager {
                 webView.engineConfiguration.addUserScript(webcompatUserScript)
             }
         }
+
+        let printUserScript = injectPrintScript()
+        webView.engineConfiguration.addUserScript(printUserScript)
     }
 
     /// Cache all of the pre-compiled user scripts so they don't need re-fetched from disk for each webview.
@@ -76,6 +79,16 @@ class DefaultUserScriptManager: WKUserScriptManager {
                                       forMainFrameOnly: userScriptInfo.isMainFrame,
                                       in: .defaultClient)
         compiledUserScripts[name] = userScript
+    }
+
+    private func injectPrintScript() -> WKUserScript {
+        let source = "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }"
+        return WKUserScript(
+            source: source,
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: false,
+            in: .page
+        )
     }
 
     private func injectWebCompatScript(name: String, userScriptInfo: UserScriptInfo) {

@@ -308,6 +308,10 @@ class WKEngineSession: NSObject,
         webView.setValue(newZoom, forKey: zoomKey)
     }
 
+    func viewPrintFormatter() -> UIPrintFormatter {
+        return webView.viewPrintFormatter()
+    }
+
     // MARK: - SessionHandler
 
     func commitURLChange() {
@@ -356,6 +360,12 @@ class WKEngineSession: NSObject,
         contentScriptManager.addContentScript(readerMode,
                                               name: ReaderModeContentScript.name(),
                                               forSession: self)
+
+        contentScriptManager.addContentScriptToPage(
+            PrintContentScript(session: self),
+            name: PrintContentScript.name(),
+            forSession: self
+        )
     }
 
     func setReaderMode(style: ReaderModeStyle, namespace: ReaderModeInfo) {
