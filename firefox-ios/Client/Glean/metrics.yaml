@@ -6068,3 +6068,30 @@ nimbus_system:
     expires: never
     send_in_pings:
       - nimbus
+
+# FXIOS-12391 - Temporary metric to test notification emails
+testing:
+  test_event_1:
+    type: event
+    description: |
+      A temporary event used to test the sendability of glean notification
+      emails.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12391
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9999999
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-17"
+  test_event_2:
+    type: event
+    description: |
+      A temporary event used to test the sendability of glean notification
+      emails.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12391
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9999999
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-18"
