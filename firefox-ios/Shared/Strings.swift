@@ -1547,7 +1547,7 @@ extension String {
                     key: "Onboarding.Modern.Welcome.Description.v140",
                     tableName: "Onboarding",
                     value: "One choice protects you everywhere you go on the web. You can always change it later.",
-                    comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
+                    comment: "String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens.")
                 public static let ActionTreatementA = MZLocalizedString(
                     key: "Onboarding.Modern.Welcome.ActionTreatementA.v140",
                     tableName: "Onboarding",
@@ -1593,7 +1593,7 @@ extension String {
                     key: "Onboarding.Modern.Sync.Description.v140",
                     tableName: "Onboarding",
                     value: "Get your bookmarks, history, and passwords on any device.",
-                    comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+                    comment: "String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens.")
                 public static let SignInAction = MZLocalizedString(
                     key: "Onboarding.Modern.Sync.SignIn.Action.v140",
                     tableName: "Onboarding",
