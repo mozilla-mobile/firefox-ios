@@ -1536,6 +1536,158 @@ extension String {
             value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
 
+        public struct Modern {
+            public struct Welcome {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.Title.v140",
+                    tableName: "Onboarding",
+                    value: "Say goodbye to creepy ads",
+                    comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.Description.v140",
+                    tableName: "Onboarding",
+                    value: "One choice protects you everywhere you go on the web. You can always change it later.",
+                    comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
+                public static let ActionTreatementA = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.ActionTreatementA.v140",
+                    tableName: "Onboarding",
+                    value: "Set as Default Browser",
+                    comment: "Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox.")
+                public static let Skip = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.Skip.v140",
+                    tableName: "Onboarding",
+                    value: "Not Now",
+                    comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card.")
+            }
+
+            public struct Toolbar {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Title.v140",
+                    tableName: "Onboarding",
+                    value: "Choose where to put your address bar",
+                    comment: "String used to describe the title of the toolbar customization onboarding page in our Onboarding screens.")
+                public static let TopAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Top.Action.v140",
+                    tableName: "Onboarding",
+                    value: "Top",
+                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen.")
+                public static let BottomAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140",
+                    tableName: "Onboarding",
+                    value: "Bottom",
+                    comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Theme.Continue.Action.v123",
+                    tableName: "Onboarding",
+                    value: "Continue",
+                    comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
+            }
+
+            public struct Sync {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.Title.v140",
+                    tableName: "Onboarding",
+                    value: "Instantly pick up where you left off",
+                    comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.Description.v140",
+                    tableName: "Onboarding",
+                    value: "Get your bookmarks, history, and passwords on any device.",
+                    comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
+                public static let SignInAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.SignIn.Action.v140",
+                    tableName: "Onboarding",
+                    value: "Start Syncing",
+                    comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
+                public static let SkipAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.Skip.Action.v140",
+                    tableName: "Onboarding",
+                    value: "Not now",
+                    comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
+            }
+
+            public struct TermsOfServiceLink {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.Title.v140",
+                    tableName: "Onboarding",
+                    value: "Upgrade your browsing",
+                    comment: "Title for the Terms of Service screen in the onboarding process.")
+                public static let Subtitle = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.Subtitle.v140",
+                    tableName: "Onboarding",
+                    value: "Load sites lightning fast\nAutomatic tracking protection\nSync on all your devices",
+                    comment: "Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text.")
+                public static let AgreementButtonTitleV3 = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140",
+                    tableName: "Onboarding",
+                    value: "Continue",
+                    comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
+                public static let TermsOfServiceAgreement = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140",
+                    tableName: "Onboarding",
+                    value: "By continuing, you agree to the %@",
+                    comment: "Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page.")
+                public static let PrivacyNoticeAgreement = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140",
+                    tableName: "Onboarding",
+                    value: "%@ cares about your privacy. Read more in our %@",
+                    comment: "Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page.")
+                public static let ManagePreferenceAgreement = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140",
+                    tableName: "Onboarding",
+                    value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
+                    comment: "Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
+                public static let TermsOfUseLink = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140",
+                    tableName: "Onboarding",
+                    value: "%@ Terms of Use.",
+                    comment: "Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox).")
+                public static let PrivacyNoticeLink = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140",
+                    tableName: "Onboarding",
+                    value: "Privacy Notice.",
+                    comment: "Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page.")
+                public static let ManageLink = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.ManageLink.v140",
+                    tableName: "Onboarding",
+                    value: "Manage",
+                    comment: "Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen.")
+
+                public struct PrivacyPreferences {
+                    public static let Title = MZLocalizedString(
+                        key: "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140",
+                        tableName: "Onboarding",
+                        value: "Help us make %@ better",
+                        comment: "Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox).")
+                    public static let SendCrashReportsTitle = MZLocalizedString(
+                        key: "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140",
+                        tableName: "Onboarding",
+                        value: "Automatically send crash reports",
+                        comment: "Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                    public static let SendCrashReportsDescription = MZLocalizedString(
+                        key: "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140",
+                        tableName: "Onboarding",
+                        value: "Crash reports allow us to diagnose and fix issues with the browser. %@",
+                        comment: "Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option.")
+                    public static let SendTechnicalDataTitle = MZLocalizedString(
+                        key: "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140",
+                        tableName: "Onboarding",
+                        value: "Send technical and interaction data to %@",
+                        comment: "Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla).")
+                    public static let SendTechnicalDataDescription = MZLocalizedString(
+                        key: "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140",
+                        tableName: "Onboarding",
+                        value: "Data about your device, hardware configuration, and how you use %@ helps improve features, performance, and stability for everyone. %@",
+                        comment: "Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option.")
+                    public static let LearnMore = MZLocalizedString(
+                        key: "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140",
+                        tableName: "Onboarding",
+                        value: "Learn more",
+                        comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                }
+            }
+        }
+
         public struct TermsOfService {
             public static let Title = MZLocalizedString(
                 key: "Onboarding.TermsOfService.Title.v135",
@@ -5969,6 +6121,11 @@ extension String {
         tableName: "Default Browser",
         value: "Go to Settings",
         comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserOnboardingSkipButton = MZLocalizedString(
+        key: "DefaultBrowserOnboarding.SkipButton",
+        tableName: "Default Browser",
+        value: "I'll do this later",
+        comment: "Button title for deferring the default browser onboarding (skip setting Firefox as default for now).")
 }
 
 // MARK: - FxAWebViewController
