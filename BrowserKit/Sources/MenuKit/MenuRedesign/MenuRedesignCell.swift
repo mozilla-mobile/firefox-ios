@@ -39,6 +39,10 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Properties
     var model: MenuElement?
 
+    var shouldConfigureImageView: Bool {
+        return model?.iconImage != nil && (model?.needsReAuth == nil || model?.needsReAuth == false)
+    }
+
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -50,13 +54,12 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        if model?.iconImage != nil && (model?.needsReAuth == nil || model?.needsReAuth == false) {
-            self.iconImageView.layer.cornerRadius = iconImageView.frame.size.width / 2
-            self.iconImageView.clipsToBounds = true
+        if shouldConfigureImageView {
+            iconImageView.layer.cornerRadius = iconImageView.frame.size.width / 2
         } else {
             self.iconImageView.layer.cornerRadius = 0
-            self.iconImageView.clipsToBounds = false
         }
+        iconImageView.clipsToBounds = shouldConfigureImageView
     }
 
     func configureCellWith(model: MenuElement, theme: Theme) {
