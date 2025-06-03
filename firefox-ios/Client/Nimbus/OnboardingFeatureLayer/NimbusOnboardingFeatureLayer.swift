@@ -145,27 +145,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    private func getOnboardingHeaderImageID(
-        from identifier: NimbusOnboardingHeaderImage
-    ) -> String {
-        switch identifier {
-        case .welcomeGlobe: return ImageIdentifiers.Onboarding.HeaderImages.welcomev106
-        case .syncDevices: return ImageIdentifiers.Onboarding.HeaderImages.syncv106
-        case .notifications: return ImageIdentifiers.Onboarding.HeaderImages.notification
-        case .setDefaultSteps: return ImageIdentifiers.Onboarding.HeaderImages.setDefaultSteps
-        case .setToDock: return ImageIdentifiers.Onboarding.HeaderImages.setToDock
-        case .searchWidget: return ImageIdentifiers.Onboarding.HeaderImages.searchWidget
-        // Customization experiment
-        case .themeing: return ImageIdentifiers.Onboarding.HeaderImages.theming
-        case .toolbar: return ImageIdentifiers.Onboarding.HeaderImages.toolbar
-        case .customizeFirefox: return ImageIdentifiers.Onboarding.HeaderImages.customizeFirefox
-        // Challenge the Default experiment
-        case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
-        case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome
-        case .syncDevicesCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.sync
-        }
-    }
-
     private func getOnboardingMultipleChoiceButtonImageID(
         from identifier: NimbusOnboardingMultipleChoiceButtonImage
     ) -> String {

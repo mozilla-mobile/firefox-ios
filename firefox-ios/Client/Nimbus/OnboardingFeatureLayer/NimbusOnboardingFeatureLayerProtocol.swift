@@ -77,6 +77,8 @@ extension NimbusOnboardingFeatureLayerProtocol {
         case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
         case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome
         case .syncDevicesCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.sync
+        case .syncWithIcons: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIcons
+        case .trackers: return ImageIdentifiers.Onboarding.HeaderImages.trackers
         }
     }
 
