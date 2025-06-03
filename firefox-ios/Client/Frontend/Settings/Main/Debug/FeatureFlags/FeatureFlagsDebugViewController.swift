@@ -67,6 +67,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .defaultZoomFeature,
+                    titleText: format(string: "Default zoom"),
+                    statusText: format(string: "Toggle to enable default zoom feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .downloadLiveActivities,
                     titleText: format(string: "Download Live Activities"),
                     statusText: format(string: "Toggle to enable download live activities")

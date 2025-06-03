@@ -540,8 +540,9 @@ class BrowserViewController: UIViewController,
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
+            let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
-            topBlurView.alpha = contentContainer.hasHomepage ? offset : 1
+            topBlurView.alpha = isFxHomeTab ? offset : 1
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
@@ -1044,6 +1045,11 @@ class BrowserViewController: UIViewController,
             object: nil)
         notificationCenter.addObserver(
             self,
+            selector: #selector(handlePageZoomSettingsChanged),
+            name: .PageZoomSettingsChanged,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
             selector: #selector(openRecentlyClosedTabs),
             name: .RemoteTabNotificationTapped,
             object: nil
@@ -1248,9 +1254,9 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
     }
 
-    func willNavigateAway(from tab: Tab?) {
+    func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
         if let tab {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID, completion: completion)
         }
     }
 
@@ -3460,6 +3466,12 @@ class BrowserViewController: UIViewController,
     // MARK: Page Zoom
 
     @objc
+    func handlePageZoomSettingsChanged(_ notification: Notification) {
+        zoomManager.updateZoomChangedInOtherWindow()
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
+    }
+
+    @objc
     func handlePageZoomLevelUpdated(_ notification: Notification) {
         guard let uuid = notification.windowUUID,
               let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
@@ -4326,7 +4338,7 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
-        } else {
+        } else if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
@@ -4527,6 +4539,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
+            addressToolbarContainer.hideSkeletonBars()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -4582,8 +4597,19 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
-        guard shouldCancelEditing else { return }
+        guard shouldCancelEditing else {
+            guard isSwipingTabsEnabled,
+                  isToolbarRefactorEnabled,
+                  let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+                  toolbarState.addressToolbar.url == nil,
+                  toolbarState.isShowingNavigationToolbar == true
+            else { return }
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+            return
+        }
         overlayManager.cancelEditing(shouldCancelLoading: false)
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
+        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
     private var shouldCancelEditing: Bool {
