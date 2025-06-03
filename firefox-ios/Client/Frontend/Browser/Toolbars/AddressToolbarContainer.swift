@@ -43,6 +43,7 @@ final class AddressToolbarContainer: UIView,
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
+    private var state: ToolbarState?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
@@ -72,19 +73,14 @@ final class AddressToolbarContainer: UIView,
 
     var parent: UIStackView?
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
+    private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
+    private lazy var rightSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
-    }
-    private lazy var leftSkeletonAddressBar: UIView = .build { addressBar in
-        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
-    }
-    private lazy var rightSkeletonAddressBar: UIView = .build { addressBar in
-        addressBar.layer.cornerRadius = TabWebViewPreviewAppearanceConfiguration.addressBarCornerRadius
     }
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
-    private var skeletonConstraints = [NSLayoutConstraint]()
 
     private func calculateToolbarTrailingSpace() -> CGFloat {
         if shouldDisplayCompact {
@@ -160,8 +156,12 @@ final class AddressToolbarContainer: UIView,
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
-        leftSkeletonAddressBar.isHidden = tabs[safe: index - 1] == nil
-        rightSkeletonAddressBar.isHidden = tabs[safe: index + 1] == nil
+        let previousTab = tabs[safe: index-1]
+        let forwardTab = tabs[safe: index+1]
+
+        configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
+        leftSkeletonAddressBar.isHidden = previousTab == nil
+        rightSkeletonAddressBar.isHidden = forwardTab == nil
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -216,12 +216,18 @@ final class AddressToolbarContainer: UIView,
     }
 
     func newState(state: ToolbarState) {
+        self.state = state
         updateModel(toolbarState: state)
     }
 
+    // MARK: - AlphaDimmable
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
         regularToolbar.alpha = alpha
+        if isSwipingTabsEnabled {
+            leftSkeletonAddressBar.alpha = alpha
+            rightSkeletonAddressBar.alpha = alpha
+        }
     }
 
     private func updateModel(toolbarState: ToolbarState) {
@@ -240,9 +246,6 @@ final class AddressToolbarContainer: UIView,
             enterOverlayMode(nil, pasted: false, search: true)
         }
         updateProgressBarPosition(toolbarState.toolbarPosition)
-        if isSwipingTabsEnabled {
-            updateSkeletonBarsBottomAnchorConstant(by: toolbarState.toolbarPosition)
-        }
 
         regularToolbar.configure(
             config: newModel.addressToolbarConfig,
@@ -261,6 +264,35 @@ final class AddressToolbarContainer: UIView,
         self.maximumContentSizeCategory = .extraExtraExtraLarge
     }
 
+    private func configureSkeletonAddressBars(previousTab: Tab?, forwardTab: Tab?) {
+        guard let model, let state else { return }
+        leftSkeletonAddressBar.configure(
+            config: model.configureSkeletonAddressBar(
+                with: previousTab?.url?.displayURL,
+                isReaderModeAvailableOrActive: previousTab?.readerModeAvailableOrActive
+            ),
+            toolbarPosition: state.toolbarPosition,
+            toolbarDelegate: self,
+            leadingSpace: UX.skeletonBarOffset,
+            trailingSpace: -UX.skeletonBarOffset,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            animated: model.shouldAnimate
+        )
+
+        rightSkeletonAddressBar.configure(
+            config: model.configureSkeletonAddressBar(
+                with: forwardTab?.url?.displayURL,
+                isReaderModeAvailableOrActive: forwardTab?.readerModeAvailableOrActive
+            ),
+            toolbarPosition: state.toolbarPosition,
+            toolbarDelegate: self,
+            leadingSpace: -UX.skeletonBarOffset,
+            trailingSpace: UX.skeletonBarOffset,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            animated: model.shouldAnimate
+        )
+    }
+
     private func setupLayout() {
         addSubview(progressBar)
 
@@ -276,39 +308,37 @@ final class AddressToolbarContainer: UIView,
     private func setupToolbarConstraints() {
         addSubview(toolbar)
         if isSwipingTabsEnabled {
+            addSubviews(leftSkeletonAddressBar, rightSkeletonAddressBar)
             insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
             insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
+
+            toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
+            toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
+        } else {
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         }
 
         NSLayoutConstraint.activate([
             toolbar.topAnchor.constraint(equalTo: topAnchor),
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
     private func setupSkeletonAddressBarsLayout() {
-        addSubviews(leftSkeletonAddressBar, rightSkeletonAddressBar)
-        NSLayoutConstraint.activate([
-            leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor, constant: UX.skeletonBarOffset),
-            leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor, constant: UX.skeletonBarOffset),
-            leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
-            rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor, constant: UX.skeletonBarOffset),
-            rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.skeletonBarOffset),
-            rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
-        ])
-    }
+        if isSwipingTabsEnabled {
+            NSLayoutConstraint.activate([
+                leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
+                leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
+                leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+                leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
 
-    private func updateSkeletonBarsBottomAnchorConstant(by position: AddressToolbarPosition) {
-        let bottomConstant: CGFloat = position == .bottom ? UX.skeletonBarBottomPositionOffset : UX.skeletonBarOffset
-
-        NSLayoutConstraint.deactivate(skeletonConstraints)
-        skeletonConstraints = [
-            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomConstant),
-            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomConstant),
-        ]
-        NSLayoutConstraint.activate(skeletonConstraints)
+                rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
+                rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
+                rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+                rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
+            ])
+        }
     }
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
@@ -328,9 +358,10 @@ final class AddressToolbarContainer: UIView,
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         regularToolbar.applyTheme(theme: theme)
-        let appearance: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
-        leftSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
-        rightSkeletonAddressBar.backgroundColor = appearance.addressBarBackgroundColor
+        if isSwipingTabsEnabled {
+            leftSkeletonAddressBar.applyTheme(theme: theme)
+            rightSkeletonAddressBar.applyTheme(theme: theme)
+        }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
     }
 

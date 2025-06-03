@@ -973,20 +973,59 @@ soc.dz
 tm.dz
 
 // ec : https://www.nic.ec/
-// Submitted by registry <vabboud@nic.ec>
+// Submitted by registry <infraestructura@nic.ec>
 ec
+abg.ec
+adm.ec
+agron.ec
+arqt.ec
+art.ec
+bar.ec
+chef.ec
 com.ec
+cont.ec
+cpa.ec
+cue.ec
+dent.ec
+dgn.ec
+disco.ec
+doc.ec
 edu.ec
+eng.ec
+esm.ec
 fin.ec
+fot.ec
+gal.ec
 gob.ec
 gov.ec
+gye.ec
+ibr.ec
 info.ec
 k12.ec
+lat.ec
+loj.ec
 med.ec
 mil.ec
+mktg.ec
+mon.ec
 net.ec
+ntr.ec
+odont.ec
 org.ec
 pro.ec
+prof.ec
+psic.ec
+psiq.ec
+pub.ec
+rio.ec
+rrpp.ec
+sal.ec
+tech.ec
+tul.ec
+tur.ec
+uio.ec
+vet.ec
+xxx.ec
 
 // edu : https://www.iana.org/domains/root/db/edu.html
 edu
@@ -1134,10 +1173,12 @@ org.gg
 // Although domains directly at second level are not possible at the moment,
 // they have been possible for some time and may come back.
 gh
+biz.gh
 com.gh
 edu.gh
 gov.gh
 mil.gh
+net.gh
 org.gh
 
 // gi : http://www.nic.gi/rules.html
@@ -1341,6 +1382,7 @@ biz.id
 co.id
 desa.id
 go.id
+kop.id
 mil.id
 my.id
 net.id
@@ -6747,7 +6789,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-04-30T15:19:32Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-05-17T15:16:58Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -9609,10 +9651,6 @@ politie
 // https://www.iana.org/domains/root/db/porn.html
 porn
 
-// pramerica : Prudential Financial, Inc.
-// https://www.iana.org/domains/root/db/pramerica.html
-pramerica
-
 // praxi : Praxi S.p.A.
 // https://www.iana.org/domains/root/db/praxi.html
 praxi
@@ -12348,9 +12386,9 @@ cafjs.com
 // Canva Pty Ltd : https://canva.com/
 // Submitted by Joel Aquilina <publicsuffixlist@canva.com>
 canva-apps.cn
-*.my.canvasite.cn
+my.canvasite.cn
 canva-apps.com
-*.my.canva.site
+my.canva.site
 
 // Carrd : https://carrd.co
 // Submitted by AJ <aj@carrd.co>
@@ -12457,7 +12495,6 @@ cloudns.us
 // Submitted by Khash Sajadi <khash@cloud66.com>
 c66.me
 cloud66.ws
-cloud66.zone
 
 // CloudAccess.net : https://www.cloudaccess.net/
 // Submitted by Pawel Panek <noc@cloudaccess.net>
@@ -12663,6 +12700,17 @@ dedyn.io
 // Submitted by Aavash Shrestha <aavash@deta.sh>
 deta.app
 deta.dev
+
+// Dfinity Foundation: https://dfinity.org/
+// Submitted by Dfinity Team <domains@dfinity.org>
+caffeine.ai
+id.ai
+icp-api.io
+icp0.io
+*.raw.icp0.io
+icp1.io
+*.raw.icp1.io
+caffeine.site
 
 // dhosting.pl Sp. z o.o. : https://dhosting.pl/
 // Submitted by Michal Kokoszkiewicz <bok@dhosting.pl>
@@ -13082,8 +13130,11 @@ tuleap-partners.com
 // Encoretivity AB : https://encore.cloud
 // Submitted by André Eriksson <security@encore.cloud>
 encr.app
+frontend.encr.app
 encoreapi.com
 lp.dev
+api.lp.dev
+objects.lp.dev
 
 // encoway GmbH : https://www.encoway.de
 // Submitted by Marcel Daus <cloudops@encoway.de>
@@ -13445,6 +13496,7 @@ gsj.bz
 
 // GitHub, Inc.
 // Submitted by Patrick Toomey <security@github.com>
+github.app
 githubusercontent.com
 githubpreview.dev
 github.io
@@ -13880,13 +13932,15 @@ is-a-good.dev
 is-a.dev
 
 // IServ GmbH : https://iserv.de
-// Submitted by Mario Hoberg <info@iserv.de>
+// Submitted by Kim Brodowski <info@iserv.de>
 iservschule.de
 mein-iserv.de
+schuldock.de
 schulplattform.de
 schulserver.de
 test-iserv.de
 iserv.dev
+iserv.host
 
 // Jelastic, Inc. : https://jelastic.com/
 // Submitted by Ihor Kolodyuk <ik@jelastic.com>
@@ -14761,6 +14815,7 @@ priv.at
 // PROJECT ELIV : https://eliv.kr/
 // Submitted by PROJECT ELIV Domain Team <team@eliv.kr>
 c01.kr
+eliv-cdn.kr
 eliv-dns.kr
 mmv.kr
 vki.kr
@@ -15229,10 +15284,6 @@ srht.site
 // Submitted by Antonis Kalipetis <akalipetis@sourcelair.com>
 apps.lair.io
 *.stolos.io
-
-// SparrowHost : https://sparrowhost.in/
-// Submitted by Anant Pandey <info@sparrowhost.in>
-ind.mom
 
 // SpeedPartner GmbH : https://www.speedpartner.de/
 // Submitted by Stefan Neufeind <info@speedpartner.de>

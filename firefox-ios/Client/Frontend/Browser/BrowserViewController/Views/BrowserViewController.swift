@@ -1044,6 +1044,11 @@ class BrowserViewController: UIViewController,
             object: nil)
         notificationCenter.addObserver(
             self,
+            selector: #selector(handlePageZoomSettingsChanged),
+            name: .PageZoomSettingsChanged,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
             selector: #selector(openRecentlyClosedTabs),
             name: .RemoteTabNotificationTapped,
             object: nil
@@ -3460,6 +3465,12 @@ class BrowserViewController: UIViewController,
     // MARK: Page Zoom
 
     @objc
+    func handlePageZoomSettingsChanged(_ notification: Notification) {
+        zoomManager.updateZoomChangedInOtherWindow()
+        zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
+    }
+
+    @objc
     func handlePageZoomLevelUpdated(_ notification: Notification) {
         guard let uuid = notification.windowUUID,
               let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
@@ -4326,7 +4337,7 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
-        } else {
+        } else if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 

@@ -122,7 +122,7 @@
 "BreachAlerts.BreachDate" = "Hakiranje se dogodilo";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Lozinke su hakirane ili ukradene od zadnjeg mijenjanja lozinke. Za zaštitu ovog računa, prijavi se na web-stranicu i promijeni lozinku.";
+"BreachAlerts.Description" = "Lozinke su hakirane ili ukradene od zadnjeg mijenjanja lozinke. Za zaštitu ovog računa, prijavi se na web stranicu i promijeni lozinku.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Saznaj više";
@@ -131,7 +131,7 @@
 "BreachAlerts.Link" = "Idi na";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Hakirana web-stranica";
+"BreachAlerts.Title" = "Hakirana web stranica";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Svjetlina";
@@ -731,10 +731,10 @@
 "Menu.Downloads.Label" = "Preuzimanja";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Za ovu web-stranicu su zaštite ISKLJUČENE";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Za ovu web stranicu su zaštite ISKLJUČENE";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Za ovu web-stranicu su zaštite UKLJUČENE";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Za ovu web stranicu su zaštite UKLJUČENE";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Pomoć";
@@ -812,13 +812,13 @@
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Postavke zaštite";
 
 /* The title that shows the number of content cookies blocked */
-"Menu.TrackingProtectionBlockedContent.Title" = "Praćeni sadržaj";
+"Menu.TrackingProtectionBlockedContent.Title" = "Sadržaj za praćenje";
 
 /* The title that shows the number of social URLs blocked */
 "Menu.TrackingProtectionBlockedSocial.Title" = "Programi za praćenje na društvenim mrežama";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Program za praćenje web-mjesta";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Programi za međustranično praćenje";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Kriptorudari";
@@ -1131,6 +1131,18 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Zamijeni upit s %s)";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Dolje";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Položaj adresne trake";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Adresna traka";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Gore";
 
 /* Browser theme settings section title in Appearance settings */
 "Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Tema preglednika";
