@@ -15,12 +15,18 @@ jobs:
           type: decision-task
           target-tasks-method: bitrise_performance_test
           treeherder-symbol: bitrise-performance
-      when: 
-        - {hour: 22, minute: 0}
+      when:
+        by-project:
+          firefox-ios:
+            - {hour: 22, minute: 0}
+          default: []
     - name: firebase-performance-test
       job:
           type: decision-task
           target-tasks-method: firebase_performance_test
           treeherder-symbol: firebase-performance
       when: 
-        - {hour: 22, minute: 0}
+        by-project:
+          firefox-ios:
+            - {hour: 22, minute: 0}
+          default: []
