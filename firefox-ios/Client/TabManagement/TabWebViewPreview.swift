@@ -3,24 +3,22 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SiteImageView
 import Common
 
 final class TabWebViewPreview: UIView,
                                ThemeApplicable {
     private struct UX {
-        static let addressBarCornerRadius: CGFloat = 8
-        static let addressBarBorderHeight: CGFloat = 1
-        static let addressBarHeight: CGFloat = 44
-        static let addressBarMaxHeight: CGFloat = 54
-        static let edgePadding: CGFloat = 7
-        static let addressBarOnTopLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        static let addressBarOnBottomLayoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 4, right: 16)
+        static let faviconCornerRadius: CGFloat = 20.0
+        static let faviconImageViewSize: CGFloat = 45.0
     }
-
-    var notificationCenter: any NotificationProtocol = NotificationCenter.default
-
-    private lazy var webPageScreenshotImageView: UIImageView = .build()
-    private var previewTopConstraint: NSLayoutConstraint?
+    private lazy var webPageScreenshotImageView: UIImageView = .build {
+        $0.contentMode = .top
+        $0.clipsToBounds = true
+    }
+    private lazy var faviconImageView: FaviconImageView = .build()
+    /// Wether the next screenshot has invalid layout. When this is true we draw only the Favicon in the preview
+    private var layoutWasInvalidated = false
 
     // MARK: - Inits
     init() {
@@ -34,58 +32,61 @@ final class TabWebViewPreview: UIView,
 
     // MARK: - Layout
     private func setupLayout() {
-        webPageScreenshotImageView.contentMode = .top
-        webPageScreenshotImageView.clipsToBounds = true
-        addSubview(webPageScreenshotImageView)
+        addSubviews(webPageScreenshotImageView, faviconImageView)
 
-        previewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
-        previewTopConstraint?.isActive = true
         NSLayoutConstraint.activate([
             webPageScreenshotImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             webPageScreenshotImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor),
+
+            faviconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            faviconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            faviconImageView.heightAnchor.constraint(equalToConstant: UX.faviconImageViewSize),
+            faviconImageView.widthAnchor.constraint(equalToConstant: UX.faviconImageViewSize)
         ])
     }
 
     // MARK: - Public Functions
 
-    /// Updates the layout based on the given search bar position.
-    ///
-    /// - Parameter searchBarPosition: The position of the search bar, either `.top` or `.bottom`.
-    func updateLayoutBasedOn(searchBarPosition: SearchBarPosition, anchor: NSLayoutYAxisAnchor) {
-        previewTopConstraint?.isActive = false
-        switch searchBarPosition {
-        case .top:
-            previewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: anchor)
-        case .bottom:
-            previewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
-        }
-        previewTopConstraint?.isActive = true
+    func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
+        layoutWasInvalidated = true
     }
 
-    func setScreenshot(_ image: UIImage?) {
-        if image?.size.width ?? 0.0 > webPageScreenshotImageView.bounds.size.width {
-            webPageScreenshotImageView.contentMode = .scaleAspectFill
+    func setScreenshot(_ tab: Tab?) {
+        guard let tab else {
+            faviconImageView.isHidden = true
+            webPageScreenshotImageView.isHidden = true
+            return
+        }
+        faviconImageView.isHidden = !layoutWasInvalidated
+        webPageScreenshotImageView.isHidden = layoutWasInvalidated
+        
+        if layoutWasInvalidated {
+            if tab.isFxHomeTab {
+                faviconImageView.manuallySetImage(UIImage(resource: .appIconAlternateDefault))
+            } else {
+                faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString,
+                                                                  faviconCornerRadius: UX.faviconCornerRadius))
+            }
         } else {
-            webPageScreenshotImageView.contentMode = .top
+            if let screenshot = tab.screenshot {
+                if screenshot.size.width > webPageScreenshotImageView.bounds.size.width {
+                    webPageScreenshotImageView.contentMode = .scaleAspectFill
+                } else {
+                    webPageScreenshotImageView.contentMode = .top
+                }
+                webPageScreenshotImageView.image = screenshot
+            }
         }
-        webPageScreenshotImageView.image = image
     }
 
-    func setHomepage(_ content: HomepageViewController) {
-        guard content.view.superview != self else { return }
-        addSubview(content.view)
-        content.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            content.view.topAnchor.constraint(equalTo: topAnchor),
-            content.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-            content.view.bottomAnchor.constraint(equalTo: bottomAnchor),
-            content.view.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
-    }
-
-    func applyTransform(translationX: CGFloat, velocityX: CGFloat) {
+    func applyTransform(translationX: CGFloat) {
         webPageScreenshotImageView.transform = CGAffineTransform(translationX: translationX, y: 0)
+    }
+
+    func completeTransition() {
+        layoutWasInvalidated = false
     }
 
     // MARK: - ThemeApplicable

@@ -79,10 +79,6 @@ final class AddressToolbarContainer: UIView,
         bar.clipsToBounds = false
     }
 
-    private let addTabView: AddressBarAddTabView = .build()
-    private var addTabViewLeftConstraint: NSLayoutConstraint?
-    private var addTabViewRightConstraint: NSLayoutConstraint?
-
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
@@ -316,18 +312,6 @@ final class AddressToolbarContainer: UIView,
             toolbar.topAnchor.constraint(equalTo: topAnchor),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-
-        addSubview(addTabView)
-        NSLayoutConstraint.activate([
-            addTabView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            addTabView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
-        ])
-
-        addTabViewLeftConstraint = addTabView.leadingAnchor.constraint(equalTo: toolbar.trailingAnchor)
-        addTabViewRightConstraint = addTabView.trailingAnchor.constraint(equalTo: trailingAnchor)
-
-        addTabViewLeftConstraint?.isActive = true
-        addTabViewRightConstraint?.isActive = true
     }
 
     private func setupSkeletonAddressBarsLayout() {
@@ -360,35 +344,10 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    func completeAddTab(_ completion: VoidReturnCallback?) {
-        UIView.animate(withDuration: 0.1) {
-            self.addTabView.alpha = 0.0
-        } completion: { _ in
-            completion?()
-        }
-    }
-
-    func applyTransform(_ t: CGAffineTransform, shouldShowNewTab: Bool) {
-        compactToolbar.transform = t
-        regularToolbar.transform = t
-        leftSkeletonAddressBar.transform = t
-        rightSkeletonAddressBar.transform = t
-
-        if #available(iOS 16, *) {
-            guard shouldShowNewTab else { return }
-            let translation = t.decomposed().translation
-            guard translation.dx <= 0 else { return }
-            let progress = abs(translation.dx) / frame.width
-            UIView.animate(withDuration: 0.3) {
-                self.addTabView.plusIconView.alpha = progress > 0.3 ? 1.0 : 0.0
-                self.addTabViewRightConstraint?.constant = progress > 0.3 ? -16.0 : 0.0
-                self.layoutIfNeeded()
-            }
-            if t != .identity {
-                addTabView.alpha = 1.0
-            }
-            addTabViewLeftConstraint?.constant = translation.dx
-        }
+    func applyTransform(_ transform: CGAffineTransform) {
+        regularToolbar.transform = transform
+        leftSkeletonAddressBar.transform = transform
+        rightSkeletonAddressBar.transform = transform
     }
 
     // MARK: - ThemeApplicable

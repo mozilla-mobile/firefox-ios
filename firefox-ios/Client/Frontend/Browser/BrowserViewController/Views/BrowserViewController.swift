@@ -488,8 +488,7 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition,
-                                               anchor: header.topAnchor)
+            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
         }
 
         if let readerModeBar = readerModeBar {
@@ -1164,9 +1163,6 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-        addressBarPanGestureHandler?.screenshotHomepage = { [weak self] in
-            return (self?.navigationHandler as? BrowserCoordinator)?.getScreenshot()
-        }
     }
 
     func addSubviews() {
@@ -1190,7 +1186,6 @@ class BrowserViewController: UIViewController,
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
 
-        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition, anchor: header.bottomAnchor)
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
         bottomContainer.addArrangedSubview(toolbarToShow)
@@ -3505,7 +3500,7 @@ class BrowserViewController: UIViewController,
 
     private func updateAddressBarBackgroundViewColor(theme: Theme) {
         guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        addressBarBackgroundView.backgroundColor = theme.colors.layer3
+//        addressBarBackgroundView.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Telemetry
