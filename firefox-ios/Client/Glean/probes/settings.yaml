@@ -266,7 +266,7 @@ settings.app_icon:
         
 # Default Zoom Settings
 settings.zoom_bar:
-  domain_deleted:
+  domain_list_item_swiped:
     type: event
     description: |
       Recorded when the user swipes to delete a specific zoom domain level in the app settings.
@@ -285,7 +285,7 @@ settings.zoom_bar:
     metadata:
       tags:
         - ZoomBar
-  reset_button_tapped:
+  domain_list_reset_button_tapped:
     type: event
     description: |
       Recorded when the user resets the list of zoom domain levels in the app settings.
@@ -299,3 +299,5 @@ settings.zoom_bar:
     metadata:
       tags:
         - ZoomBar
+    no_lint:
+      - COMMON_PREFIX
