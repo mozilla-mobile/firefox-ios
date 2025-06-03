@@ -73,13 +73,15 @@ final class AddressBarPanGestureHandler: NSObject {
     /// Enables swiping gesture in overlay mode when no URL or text is in the address bar,
     /// such as after dismissing the keyboard on the homepage.
     func enablePanGestureOnHomepageIfNeeded() {
-        let addressToolbarState = store.state.screenState(
+        let toolbarState = store.state.screenState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
-        )?.addressToolbar
+        )
+        let addressToolbarState = toolbarState?.addressToolbar
         guard addressToolbarState?.didStartTyping == false,
-              addressToolbarState?.url == nil  else { return }
+              addressToolbarState?.url == nil,
+        toolbarState?.isShowingNavigationToolbar == true else { return }
         enablePanGestureRecognizer()
     }
 
