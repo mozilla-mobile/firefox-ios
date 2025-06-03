@@ -4556,9 +4556,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-        }
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -4599,8 +4596,17 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
-        guard shouldCancelEditing else { return }
+        guard shouldCancelEditing else {
+            guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
+            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+            guard toolbarState?.addressToolbar.url == nil,
+            toolbarState?.isShowingNavigationToolbar == true else { return }
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+            return
+        }
         overlayManager.cancelEditing(shouldCancelLoading: false)
+        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
+        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
     private var shouldCancelEditing: Bool {
