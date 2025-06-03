@@ -42,6 +42,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private var stepperDefaultConstraints = [NSLayoutConstraint]()
     private let zoomManager: ZoomPageManager
     private let zoomTelemetry: ZoomTelemetry
+    private let toolbarHelper: ToolbarHelperInterface
 
     // MARK: - UI Elements
 
@@ -95,9 +96,11 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     // MARK: - Initializers
 
     init(zoomManager: ZoomPageManager,
-         gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+         toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.zoomManager = zoomManager
         self.zoomTelemetry = ZoomTelemetry(gleanWrapper: gleanWrapper)
+        self.toolbarHelper = toolbarHelper
         super.init(frame: .zero)
 
         setupViews()
@@ -290,7 +293,9 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        backgroundColor = colors.layer2
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+        backgroundColor = colors.layer2.withAlphaComponent(backgroundAlpha)
+
         stepperContainer.backgroundColor = colors.layer5
         stepperContainer.layer.shadowColor = colors.shadowDefault.cgColor
         leftSeparator.backgroundColor = colors.borderPrimary
