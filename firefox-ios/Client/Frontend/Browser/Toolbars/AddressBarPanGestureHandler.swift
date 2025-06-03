@@ -111,6 +111,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
     // MARK: - Pan Gesture Handling
     @objc
+    @MainActor
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: contentContainer)
 
@@ -172,6 +173,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         }
     }
 
+    @MainActor
     private func handleGestureEndedState(translation: CGPoint, velocity: CGPoint, nextTab: Tab?) {
         let shouldShowNewTab = shouldAddNewTab(translation: translation.x, nextTab: nextTab)
 

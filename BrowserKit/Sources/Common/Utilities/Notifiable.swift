@@ -42,6 +42,7 @@ extension NotificationCenter: NotificationProtocol {
 @objc
 public protocol Notifiable {
     var notificationCenter: NotificationProtocol { get set }
+    @MainActor
     func handleNotifications(_ notification: Notification)
 }
 

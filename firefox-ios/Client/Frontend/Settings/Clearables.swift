@@ -12,6 +12,7 @@ import WebEngine
 
 // A base protocol for something that can be cleared.
 protocol Clearable {
+    @MainActor
     func clear() -> Success
     var label: String { get }
 }
@@ -35,6 +36,7 @@ class HistoryClearable: Clearable {
 
     var label: String { .ClearableHistory }
 
+    @MainActor
     func clear() -> Success {
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
@@ -45,6 +47,7 @@ class HistoryClearable: Clearable {
         }
     }
 
+    @MainActor
     func clearAfterHistory(success: Maybe<Void>) -> Success {
         // Clear image data from Site Image Helper
         siteImageHandler.clearAllCaches()
