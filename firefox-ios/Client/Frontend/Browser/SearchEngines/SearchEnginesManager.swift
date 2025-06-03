@@ -293,6 +293,16 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         return nil
     }
 
+    func resetPrefs() {
+        let keys = [
+            orderedEngineIDsPrefsKey,
+            legacy_orderedEngineNamesPrefsKey,
+            disabledEngineIDsPrefsKey,
+            legacy_disabledEngineNamesPrefsKey
+        ];
+        keys.forEach { prefs.removeObjectForKey($0) }
+    }
+
     // MARK: - Private
 
     private func getDisabledEngines() -> [String] {
