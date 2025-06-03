@@ -43,11 +43,11 @@ struct ZoomTelemetry {
     }
 
     func deleteZoomDomainLevel(value: Int32) {
-        let extra = GleanMetrics.SettingsZoom.DeleteDomainLevelExtra(domainIndex: value)
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoom.deleteDomainLevel, extras: extra)
+        let extra = GleanMetrics.SettingsZoomBar.DomainDeletedExtra(index: value)
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoomBar.domainDeleted, extras: extra)
     }
 
     func resetDomainZoomLevel() {
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoom.resetDomainList)
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsZoomBar.resetButtonTapped)
     }
 }

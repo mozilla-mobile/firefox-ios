@@ -269,7 +269,7 @@ settings.zoom_bar:
   domain_deleted:
     type: event
     description: |
-      Recorded when the user deletes a specific zoom domain level in the app settings.
+      Recorded when the user swipes to delete a specific zoom domain level in the app settings.
     extra_keys:
       index:
         type: quantity
@@ -285,7 +285,7 @@ settings.zoom_bar:
     metadata:
       tags:
         - ZoomBar
-  domain_list_reset_button_tapped:
+  reset_button_tapped:
     type: event
     description: |
       Recorded when the user resets the list of zoom domain levels in the app settings.
