@@ -61,8 +61,8 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        infoLabelView.removeFromSuperview()
-        iconImageView.removeFromSuperview()
+        infoLabelView.text = nil
+        iconImageView.image = nil
     }
 
     override func layoutSubviews() {

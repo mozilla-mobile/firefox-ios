@@ -31,6 +31,10 @@ public class BrowserAddressToolbar: UIView,
         static let toolbarAnimationTime: CGFloat = 0.15
         static let iconsAnimationTime: CGFloat = 0.1
         static let iconsAnimationDelay: CGFloat = 0.075
+
+        static let shadowRadius: CGFloat = 14
+        static let shadowOpacity: Float = 1
+        static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
     public var notificationCenter: any NotificationProtocol = NotificationCenter.default
@@ -269,6 +273,16 @@ public class BrowserAddressToolbar: UIView,
         setupAccessibility()
     }
 
+    private func setupShadow(theme: Theme) {
+        locationContainer.layer.shadowPath = UIBezierPath(roundedRect: locationContainer.bounds,
+                                                          cornerRadius: locationContainer.layer.cornerRadius).cgPath
+        locationContainer.layer.shadowRadius = UX.shadowRadius
+        locationContainer.layer.shadowOffset = UX.shadowOffset
+        locationContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
+        locationContainer.layer.shadowOpacity = UX.shadowOpacity
+        locationContainer.layer.masksToBounds = false
+    }
+
     private func setupDragInteraction() {
         // Setup UIDragInteraction to handle dragging the location
         // bar for dropping its URL into other apps.
@@ -487,6 +501,7 @@ public class BrowserAddressToolbar: UIView,
         toolbarTopBorderView.backgroundColor = colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = colors.borderPrimary
         locationView.applyTheme(theme: theme)
+        setupShadow(theme: theme)
         self.theme = theme
     }
 

@@ -39,8 +39,8 @@ class ToolbarMenuTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(tabsButton)
             XCTAssertTrue(
-                hamburgerMenu.isRightOf(rightElement: tabsButton),
-                "Menu button is not on the right side of tabs button"
+                hamburgerMenu.isLeftOf(rightElement: tabsButton),
+                "Menu button is not on the left side of tabs button"
             )
             XCTAssertTrue(
                 hamburgerMenu.isBelow(element: firstPocketCell),
@@ -63,8 +63,8 @@ class ToolbarMenuTests: BaseTestCase {
             ]
         )
         XCTAssertTrue(
-            hamburgerMenu.isRightOf(rightElement: tabsButton),
-            "Menu button is not on the right side of tabs button"
+            hamburgerMenu.isLeftOf(rightElement: tabsButton),
+            "Menu button is not on the left side of tabs button"
         )
         XCTAssertTrue(
             hamburgerMenu.isAbove(element: firstPocketCell),

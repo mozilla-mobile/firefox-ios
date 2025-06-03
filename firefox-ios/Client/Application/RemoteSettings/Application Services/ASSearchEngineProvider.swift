@@ -53,7 +53,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                                                        engineOrderingPrefs: SearchEnginePrefs,
                                                        prefsMigrator: SearchEnginePreferencesMigrator,
                                                        completion: @escaping SearchEngineCompletion) {
-        let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        let locale = Locale.current
         let prefsVersion = preferencesVersion
 
         // First load the unordered engines, based on the current locale and language
@@ -143,16 +143,23 @@ final class ASSearchEngineProvider: SearchEngineProvider {
     }
 
     private func localeCode(from locale: Locale) -> String {
-        // Per feedback from AS team, we want to pass in the 2-component BCP 47 code. In some
-        // rare cases this may include a script with the region, if so we remove that.
-        // See also: Locale+possibilitiesForLanguageIdentifier.swift
+        // Per updated discussions with AS team, for now we are using the `preferredLanguages`
+        // codes for the locale parameter as long as it's available
 
-        let identifier = locale.identifier
-        let components = identifier.components(separatedBy: "-")
-        if components.count == 3, let first = components.first, let last = components.last {
-            return "\(first)-\(last)"
+        let languages = Locale.preferredLanguages
+        if let langCode = languages.first {
+            return langCode
+        } else {
+            // Per feedback from AS team, we want to pass in the 2-component BCP 47 code. In some
+            // rare cases this may include a script with the region, if so we remove that.
+            // See also: Locale+possibilitiesForLanguageIdentifier.swift
+            let identifier = locale.identifier
+            let components = identifier.components(separatedBy: "-")
+            if components.count == 3, let first = components.first, let last = components.last {
+                return "\(first)-\(last)"
+            }
+            return identifier
         }
-        return identifier
     }
 
     private func regionCode(from locale: Locale) -> String {
