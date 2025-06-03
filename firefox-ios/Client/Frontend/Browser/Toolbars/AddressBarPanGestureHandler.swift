@@ -178,7 +178,8 @@ final class AddressBarPanGestureHandler: NSObject {
     }
 
     /// Calculates the index of the next tab to display based on the current index, swipe direction, and layout direction.
-    /// This function ensures that tab navigation behaves intuitively for both left-to-right (LTR) and right-to-left (RTL) user interfaces.
+    /// This function ensures that tab navigation behaves intuitively for
+    /// both left-to-right (LTR) and right-to-left (RTL) user interfaces.
     /// Swiping left advances to the next tab in LTR, but to the previous tab in RTL, and vice versa.
     private func nextTabIndex(from index: Int, isSwipingLeft: Bool) -> Int {
         let isRTL = UIView.userInterfaceLayoutDirection(
