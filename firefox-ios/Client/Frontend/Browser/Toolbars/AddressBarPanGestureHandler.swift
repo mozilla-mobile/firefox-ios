@@ -105,7 +105,7 @@ final class AddressBarPanGestureHandler: NSObject {
             )
             statusBarOverlay.showOverlay(animated: true, isHomepage: contentContainer.hasHomepage)
             if nextTab == nil {
-                let homepage = screenshotHomepage?() as? HomepageViewController
+//                let homepage = screenshotHomepage?() as? HomepageViewController
             }
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
@@ -129,7 +129,7 @@ final class AddressBarPanGestureHandler: NSObject {
         } else {
             let progress = abs(translation.x) / contentContainer.frame.width
             webPagePreview.alpha = progress
-            webPagePreview.setScreenshot(homepage)
+//            webPagePreview.setScreenshot(homepage)
         }
     }
 
