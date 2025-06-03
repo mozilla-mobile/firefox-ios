@@ -47,6 +47,7 @@ class TabTraySelectorView: UIView,
     var items: [String] = ["", "", ""] {
         didSet {
             updateLabels()
+            adjustSelectedButtonFont(toIndex: selectedIndex)
             // We need the labels on the buttons to adjust proper frame size
             applyInitalSelectionBackgroundFrame()
         }
@@ -89,14 +90,7 @@ class TabTraySelectorView: UIView,
             button.tag = index
             button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
 
-            button.titleLabel?.font = index == selectedIndex ?
-                FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
-                FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-
             button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
-            button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
-                                              NSNumber(value: index + 1),
-                                              NSNumber(value: items.count))
             button.translatesAutoresizingMaskIntoConstraints = false
             buttons.append(button)
             stackView.addArrangedSubview(button)
@@ -168,9 +162,15 @@ class TabTraySelectorView: UIView,
     private func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
             button.transform = .identity
-            button.titleLabel?.font = index == toIndex ?
-            FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
-            FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+            let isSelected = index == toIndex
+            button.titleLabel?.font = isSelected ?
+                FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
+                FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+            let selectedHint = isSelected ? .TabsTray.TabsPanelSelectorSelectedLabel : ""
+            let panelNumberHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                                         NSNumber(value: index + 1),
+                                         NSNumber(value: items.count))
+            button.accessibilityHint = "\(panelNumberHint), \(selectedHint)"
         }
     }
 
