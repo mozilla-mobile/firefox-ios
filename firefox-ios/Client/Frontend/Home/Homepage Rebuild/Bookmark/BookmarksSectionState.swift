@@ -21,7 +21,8 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
     )
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
-        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
+        let shouldShowSection = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.hntBookmarksSectionFeature,
+                                                                                  checking: .userOnly)
         self.init(
             windowUUID: windowUUID,
             bookmarks: [],
