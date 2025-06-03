@@ -19,7 +19,9 @@ class ChangeRSServerSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let useStaging = (prefs.boolForKey(prefsKey) == true)
-        let message = "Current: \(useStaging ? "Staging" : "Production")\n\nChanges take effect on the next app launch."
+        // swiftlint:disable line_length
+        let message = "Current: \(useStaging ? "Staging" : "Production")\n\nChanges take effect on the next app launch.\n\nTo switch to Staging and reset ordering prefs for Consolidated Search, choose the SEC Reset option."
+        // swiftlint:enable line_length
         let alert = UIAlertController(title: "Remote Settings Server",
                                       message: message,
                                       preferredStyle: .alert)
@@ -31,6 +33,12 @@ class ChangeRSServerSetting: HiddenSetting {
         alert.addAction(UIAlertAction(title: "Staging", style: .default, handler: { [weak self] _ in
             guard let self else { return }
             self.prefs.setBool(true, forKey: self.prefsKey)
+        }))
+        alert.addAction(UIAlertAction(title: "Staging + SEC Reset", style: .default, handler: { [weak self] _ in
+            guard let self else { return }
+            self.prefs.setBool(true, forKey: self.prefsKey)
+            let searchManager: SearchEnginesManager = AppContainer.shared.resolve()
+            searchManager.resetPrefs()
         }))
         settings.present(alert, animated: true)
     }
