@@ -534,8 +534,9 @@ class BrowserViewController: UIViewController,
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
 
+            let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
-            topBlurView.alpha = contentContainer.hasHomepage ? offset : 1
+            topBlurView.alpha = isFxHomeTab ? offset : 1
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
