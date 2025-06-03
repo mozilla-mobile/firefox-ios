@@ -20,7 +20,9 @@ class MockNotificationCenter: NotificationProtocol {
     func post(name: NSNotification.Name) {
         savePostName = name
         postCallCount += 1
-        notifiableListener?.handleNotifications(Notification(name: name))
+        Task { @MainActor in
+            notifiableListener?.handleNotifications(Notification(name: name))
+        }
     }
 
     func post(name aName: NSNotification.Name, withObject anObject: Any?, withUserInfo info: Any?) {
@@ -28,7 +30,9 @@ class MockNotificationCenter: NotificationProtocol {
         savePostObject = anObject
         saveUserInfo = info
         postCallCount += 1
-        notifiableListener?.handleNotifications(Notification(name: aName))
+        Task { @MainActor in
+            notifiableListener?.handleNotifications(Notification(name: aName))
+        }
     }
 
     func addObserver(
