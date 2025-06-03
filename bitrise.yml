@@ -1256,6 +1256,9 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
+    - opts:
+        is_expand: false
+      WAIT_TIME_BEFORE_NIGHTLY_GROUP: 120
     description: This step is to build, archive and upload Firefox Release and Beta
 
   SPM_Common_Steps:
@@ -2251,7 +2254,7 @@ workflows:
 
   _testflight_add_nightly_group:
     description: This step is used to add the Nightly group to the Beta build in TestFlight.
-    # Note: This step requires repository cloning
+    # Note: This step requires repository cloning and a `WAIT_TIME_BEFORE_NIGHTLY_GROUP` environment variable
     steps:
     - script@1.2.1:
         title: Add Nightly Group to Beta Build
@@ -2259,7 +2262,18 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             python3 -m pip install --upgrade pip pyjwt cryptography requests
+            echo "Waiting ${WAIT_TIME_BEFORE_NIGHTLY_GROUP}s to give apple time to process the build"
+            sleep ${WAIT_TIME_BEFORE_NIGHTLY_GROUP}
             python3 scripts/nightly_testflight_add_group.py
+
+  ForceTestFlightAddNightlyGroup:
+    before_run:
+    - SPM_Common_Steps
+    - _testflight_add_nightly_group
+    envs:
+      - opts:
+          is_expand: false
+        WAIT_TIME_BEFORE_NIGHTLY_GROUP: 0
 
   release_promotion_push:
     before_run:
