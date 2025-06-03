@@ -165,6 +165,7 @@ class TrackingProtectionModel {
         return ContentBlocker.shared.isSafelisted(url: url)
     }
 
+    @MainActor
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
         let alertMessage = String(format: clearCookiesAlertText, url.baseDomain ?? url.shortDisplayString)
         let alert = UIAlertController(
@@ -201,6 +202,7 @@ class TrackingProtectionModel {
         controller.present(alert, animated: true, completion: nil)
     }
 
+    @MainActor
     func clearCookiesAndSiteData() {
         _ = CookiesClearable().clear()
         _ = SiteDataClearable().clear()
