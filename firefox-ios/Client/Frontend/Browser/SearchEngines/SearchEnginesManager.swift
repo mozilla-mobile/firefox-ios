@@ -294,12 +294,10 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func resetPrefs() {
-        let keys = [
-            orderedEngineIDsPrefsKey,
-            legacy_orderedEngineNamesPrefsKey,
-            disabledEngineIDsPrefsKey,
-            legacy_disabledEngineNamesPrefsKey
-        ];
+        let keys = [orderedEngineIDsPrefsKey,
+                    legacy_orderedEngineNamesPrefsKey,
+                    disabledEngineIDsPrefsKey,
+                    legacy_disabledEngineNamesPrefsKey]
         keys.forEach { prefs.removeObjectForKey($0) }
     }
 
