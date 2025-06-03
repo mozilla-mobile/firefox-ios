@@ -6124,7 +6124,7 @@ extension String {
     public static let DefaultBrowserOnboardingSkipButton = MZLocalizedString(
         key: "DefaultBrowserOnboarding.SkipButton",
         tableName: "Default Browser",
-        value: "I'll do this later",
+        value: "I’ll do this later",
         comment: "Button title for deferring the default browser onboarding (skip setting Firefox as default for now).")
 }
 
