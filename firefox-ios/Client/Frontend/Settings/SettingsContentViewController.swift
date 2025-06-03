@@ -6,6 +6,7 @@ import Shared
 import UIKit
 import WebKit
 import Common
+import WebEngine
 
 let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on load times in the wild.
 
@@ -137,8 +138,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     func makeWebView() -> WKWebView {
-        let config = TabManagerImplementation.makeWebViewConfig(isPrivate: true, prefs: nil)
-        config.preferences.javaScriptCanOpenWindowsAutomatically = false
+        let parameters = WKWebViewParameters(
+            blockPopups: true,
+            isPrivate: true,
+            autoPlay: .all,
+            schemeHandler: WKInternalSchemeHandler()
+        )
+
+        let config = DefaultWKEngineConfigurationProvider().createConfiguration(parameters: parameters).webViewConfiguration
 
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
