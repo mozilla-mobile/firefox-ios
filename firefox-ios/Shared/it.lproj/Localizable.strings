@@ -311,7 +311,7 @@
 "ErrorPages.CertWarning.Description" = "Il gestore di %@ ha configurato il sito in modo non corretto. Per evitare potenziali furti di informazioni Firefox ha interrotto la connessione.";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "Questa connessione non è affidabile";
+"ErrorPages.CertWarning.Title" = "Questa connessione non è attendibile";
 
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "Torna indietro";

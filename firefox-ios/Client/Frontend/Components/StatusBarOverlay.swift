@@ -35,15 +35,11 @@ class StatusBarOverlay: UIView,
         toolbarHelper.isToolbarRefactorEnabled
     }
 
-    private var toolbarLayoutType: ToolbarLayoutType? {
-        FxNimbus.shared.features.toolbarRefactorFeature.value().layout
-    }
-
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
     /// This is used as the alpha of the status bar background.
     /// 0 = no status bar background shown
     /// 1 = status bar background is opaque
-    private var scrollOffset: CGFloat = 1
+    private(set) var scrollOffset: CGFloat = 1
 
     // MARK: Initializer
 
@@ -82,7 +78,10 @@ class StatusBarOverlay: UIView,
         savedIsHomepage = isHomepage
 
         // We only need no status bar for one edge case
-        let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.hasImage && isBottomSearchBar
+        var needsNoStatusBar = isHomepage && isBottomSearchBar
+        if !isToolbarRefactorEnabled {
+            needsNoStatusBar = needsNoStatusBar && wallpaperManager.currentWallpaper.hasImage
+        }
         scrollOffset = needsNoStatusBar ? 0 : 1
 
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
@@ -115,13 +114,19 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        let isVersionLayout = isToolbarRefactorEnabled && (toolbarLayoutType == .version1 || toolbarLayoutType == .version2)
-        savedBackgroundColor = (hasTopTabs || isVersionLayout) ? theme.colors.layer3 : theme.colors.layer1
+        savedBackgroundColor = (hasTopTabs || isToolbarRefactorEnabled) ? theme.colors.layer3 : theme.colors.layer1
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         // We only need no status bar for one edge case
-        let isWallpaperedHomepage = savedIsHomepage ?? false && wallpaperManager.currentWallpaper.hasImage
-        let needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
+        let isHomepage = savedIsHomepage ?? false
+        let isWallpaperedHomepage = isHomepage && wallpaperManager.currentWallpaper.hasImage
+        var needsNoStatusBar: Bool
+
+        if isToolbarRefactorEnabled {
+            needsNoStatusBar = isHomepage && isBottomSearchBar
+        } else {
+            needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
+        }
 
         if needsNoStatusBar {
             let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset

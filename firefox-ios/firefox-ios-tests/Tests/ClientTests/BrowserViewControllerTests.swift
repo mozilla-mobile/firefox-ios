@@ -158,10 +158,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: testTab, isRestoring: false)
         wait(for: [expectation])
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[3] as? GeneralBrowserAction)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[2] as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 6)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 5)
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
@@ -249,7 +249,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 class MockScreenshotHelper: ScreenshotHelper {
     var takeScreenshotCalled = false
 
-    override func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID) {
+    override func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID, completion: (() -> Void)? = nil) {
         takeScreenshotCalled = true
     }
 }

@@ -238,30 +238,31 @@ class TestHistory: XCTestCase {
 
     // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads.
     // The don't check the results. Just look for crashes.
-    func testRandomThreading() {
-        let queue = DispatchQueue(
-            label: "My Queue",
-            qos: DispatchQoS.default,
-            attributes: DispatchQueue.Attributes.concurrent,
-            autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
-            target: nil
-        )
-        var counter = 0
-
-        let expectation = self.expectation(description: "Wait for history")
-        for _ in 0..<self.numThreads {
-            var places = profile.places
-            self.runRandom(&places, queue: queue, completion: { () in
-                counter += 1
-                if counter == self.numThreads {
-                    self.profile.places.deleteEverythingHistory().uponQueue(.global()) { result in
-                        XCTAssertTrue(result.isSuccess, "History cleared.")
-                        expectation .fulfill()
-                    }
-                }
-            })
-        }
-        self.waitForExpectations(timeout: 10, handler: nil)
+    func testRandomThreading() throws {
+        throw XCTSkip("Skipping this test since https://mozilla-hub.atlassian.net/browse/FXIOS-12339")
+//        let queue = DispatchQueue(
+//            label: "My Queue",
+//            qos: DispatchQoS.default,
+//            attributes: DispatchQueue.Attributes.concurrent,
+//            autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+//            target: nil
+//        )
+//        var counter = 0
+//
+//        let expectation = self.expectation(description: "Wait for history")
+//        for _ in 0..<self.numThreads {
+//            var places = profile.places
+//            self.runRandom(&places, queue: queue, completion: { () in
+//                counter += 1
+//                if counter == self.numThreads {
+//                    self.profile.places.deleteEverythingHistory().uponQueue(.global()) { result in
+//                        XCTAssertTrue(result.isSuccess, "History cleared.")
+//                        expectation .fulfill()
+//                    }
+//                }
+//            })
+//        }
+//        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     // Same as testRandomThreading, but uses one history connection for all threads

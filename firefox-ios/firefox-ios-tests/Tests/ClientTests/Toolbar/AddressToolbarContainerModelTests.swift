@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
+@testable import ToolbarKit
 import Common
 import XCTest
 
-class AddressToolbarContainerModelTests: XCTestCase {
+final class AddressToolbarContainerModelTests: XCTestCase {
     private var mockProfile: MockProfile!
     private var searchEnginesManager: SearchEnginesManagerProvider!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -76,6 +77,44 @@ class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertEqual(viewModel.searchEngineImage, selectedSearchEngine.image)
     }
 
+    func testConfigureSkeletonAddressBar_withNilParameters() {
+        let model = createSubject(withState: createBasicToolbarState())
+        let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: nil)
+
+        XCTAssertTrue(config.leadingPageActions.isEmpty)
+        XCTAssertTrue(config.trailingPageActions.isEmpty)
+        XCTAssertNil(config.locationViewConfiguration.url)
+    }
+
+    func testConfigureSkeletonAddressBar_withNilURL_andReaderModeAvailable() {
+        let model = createSubject(withState: createBasicToolbarState())
+        let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: true)
+
+        XCTAssertTrue(config.leadingPageActions.isEmpty)
+        XCTAssertTrue(config.trailingPageActions.isEmpty)
+        XCTAssertNil(config.locationViewConfiguration.url)
+    }
+
+    func testConfigureSkeletonAddressBar_withURL_andReaderModeAvailable() {
+        let model = createSubject(withState: createBasicToolbarState())
+        let testURL = URL(string: "https://example.com")
+        let config = model.configureSkeletonAddressBar(with: testURL, isReaderModeAvailableOrActive: true)
+
+        XCTAssertEqual(config.leadingPageActions.count, 1)
+        XCTAssertEqual(config.trailingPageActions.count, 2)
+        XCTAssertEqual(config.locationViewConfiguration.url, testURL)
+    }
+
+    func testConfigureSkeletonAddressBar_withURL_andReaderModeNotAvailable() {
+        let model = createSubject(withState: createBasicToolbarState())
+        let testURL = URL(string: "https://example.com")
+        let config = model.configureSkeletonAddressBar(with: testURL, isReaderModeAvailableOrActive: false)
+
+        XCTAssertEqual(config.leadingPageActions.count, 1)
+        XCTAssertEqual(config.trailingPageActions.count, 1)
+        XCTAssertEqual(config.locationViewConfiguration.url, testURL)
+    }
+
     // MARK: - Private helpers
 
     private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
@@ -113,7 +152,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createBasicToolbarState() -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
-                            toolbarLayout: .baseline,
+                            toolbarLayout: .version1,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: nil),
                             navigationToolbar: createBasicNavigationBarState(),
@@ -133,7 +172,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
-                            toolbarLayout: .baseline,
+                            toolbarLayout: .version1,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: searchEngine),
                             navigationToolbar: createBasicNavigationBarState(),

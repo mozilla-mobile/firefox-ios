@@ -92,8 +92,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         closeButton.showsLargeContentViewer = true
         closeButton.largeContentTitle = .TopSitesRemoveButtonLargeContentTitle
 
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: tab.windowUUID)
-        if let toolbarState, toolbarState.toolbarLayout == .version1 || toolbarState.toolbarLayout == .version2 {
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        if isToolbarRefactorEnabled {
             closeButton.configuration?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Medium.cross)
             closeButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalPadding,
                                                                                leading: UX.tabTitlePaddingVersion,

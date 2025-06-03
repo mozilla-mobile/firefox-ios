@@ -26,11 +26,11 @@ final class NimbusFeatureFlagLayer {
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
-        case .cleanupHistoryReenabled:
-            return checkCleanupHistoryReenabled(from: nimbus)
-
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
+
+        case .defaultZoomFeature:
+            return checkDefaultZoomFeature(from: nimbus)
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
@@ -148,11 +148,6 @@ final class NimbusFeatureFlagLayer {
     // MARK: - Private methods
     private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarkRefactorFeature.value().enabled
-    }
-
-    private func checkCleanupHistoryReenabled(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.cleanupHistoryReenabled.value()
-        return config.enabled
     }
 
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
@@ -339,6 +334,10 @@ final class NimbusFeatureFlagLayer {
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkDefaultZoomFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.defaultZoomFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {

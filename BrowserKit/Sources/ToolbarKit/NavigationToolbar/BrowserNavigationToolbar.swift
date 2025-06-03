@@ -24,13 +24,6 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
     private lazy var toolbarBorderView: UIView = .build()
     private var toolbarBorderHeightConstraint: NSLayoutConstraint?
     private var theme: Theme?
-    private var isVersionLayout = false {
-        didSet {
-            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme, isVersionLayout != oldValue else { return }
-            applyTheme(theme: theme)
-        }
-    }
     private var isTranslucent = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the translucency changes.
@@ -50,11 +43,9 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
 
     public func configure(
         config: NavigationToolbarConfiguration,
-        isVersionLayout: Bool,
         toolbarDelegate: BrowserNavigationToolbarDelegate
     ) {
         self.toolbarDelegate = toolbarDelegate
-        self.isVersionLayout = isVersionLayout
         self.isTranslucent = config.isTranslucencyEnabled
         updateActionStack(toolbarElements: config.actions)
 
@@ -113,10 +104,7 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        let versionBackgroundColor = isTranslucent ? .clear : theme.colors.layer3
-        let baselineBackgroundColor = isTranslucent ? .clear : theme.colors.layer1
-
-        backgroundColor = isVersionLayout ? versionBackgroundColor : baselineBackgroundColor
+        backgroundColor = isTranslucent ? .clear : theme.colors.layer3
         toolbarBorderView.backgroundColor = theme.colors.borderPrimary
 
         actionStack.arrangedSubviews.forEach { element in

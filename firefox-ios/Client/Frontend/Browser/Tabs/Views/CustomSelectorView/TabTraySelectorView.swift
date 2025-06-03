@@ -16,6 +16,7 @@ struct TabTraySelectorUX {
     static let verticalInsets: CGFloat = 4
     static let maxFontSize: CGFloat = 30
     static let horizontalInsets: CGFloat = 10
+    static let fontScaleDelta: CGFloat = 0.055
 }
 
 /// Represents the visual state of the selection indicator during a transition.
@@ -25,7 +26,9 @@ private struct SelectionIndicatorTransition {
 }
 
 class TabTraySelectorView: UIView,
-                           ThemeApplicable {
+                           ThemeApplicable,
+                           Notifiable {
+    var notificationCenter: NotificationProtocol
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
@@ -33,6 +36,13 @@ class TabTraySelectorView: UIView,
     private var buttons: [UIButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
+
+    private lazy var stackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.spacing = TabTraySelectorUX.horizontalPadding
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+    }
 
     var items: [String] = ["", "", ""] {
         didSet {
@@ -43,10 +53,13 @@ class TabTraySelectorView: UIView,
     }
 
     init(selectedIndex: Int,
-         theme: Theme) {
+         theme: Theme,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.selectedIndex = selectedIndex
         self.theme = theme
+        self.notificationCenter = notificationCenter
         super.init(frame: .zero)
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setup()
     }
 
@@ -56,6 +69,7 @@ class TabTraySelectorView: UIView,
 
     func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
         updateSelectionBackground(from: fromIndex, to: toIndex, progress: abs(progress), animated: false)
+        simulateFontWeightTransition(from: fromIndex, to: toIndex, progress: abs(progress))
     }
 
     func didFinishSelection(to index: Int) {
@@ -67,14 +81,6 @@ class TabTraySelectorView: UIView,
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
         selectionBackgroundView.layer.cornerRadius = TabTraySelectorUX.cornerRadius
         addSubview(selectionBackgroundView)
-
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = TabTraySelectorUX.horizontalPadding
-        stackView.distribution = .equalCentering
-        stackView.alignment = .center
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
@@ -120,8 +126,25 @@ class TabTraySelectorView: UIView,
 
     private func updateLabels() {
         for (index, title) in items.enumerated() {
-            buttons[safe: index]?.setTitle(title, for: .normal)
+            guard let button = buttons[safe: index] else { continue }
+            button.setTitle(title, for: .normal)
+            applyButtonWidthAnchor(on: button, with: title as NSString)
         }
+    }
+
+    /// Calculates and applies a fixed width constraint to a button based on the maximum
+    /// width required by its title when rendered in both regular and bold font styles.
+    ///
+    /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
+    /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
+    private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+        if let existingConstraint = button.constraints.first(where: { $0.firstAttribute == .width }) {
+            existingConstraint.isActive = false
+        }
+
+        let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
+        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
     }
 
     @objc
@@ -144,9 +167,30 @@ class TabTraySelectorView: UIView,
 
     private func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
+            button.transform = .identity
             button.titleLabel?.font = index == toIndex ?
             FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
             FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        }
+    }
+
+    private func simulateFontWeightTransition(from fromIndex: Int, to toIndex: Int, progress: CGFloat) {
+        guard buttons.indices.contains(fromIndex), buttons.indices.contains(toIndex) else { return }
+
+        let easedProgress = 1 - pow(1 - progress, 2)
+        for (index, button) in buttons.enumerated() {
+            if index == fromIndex {
+                // Scale down as we move away
+                let scale = 1.0 - TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else if index == toIndex {
+                // Scale up as we approach
+                let scale = 1.0 + TabTraySelectorUX.fontScaleDelta * easedProgress
+                button.transform = CGAffineTransform(scaleX: scale, y: scale)
+            } else {
+                // Reset others
+                button.transform = .identity
+            }
         }
     }
 
@@ -230,5 +274,30 @@ class TabTraySelectorView: UIView,
         for button in buttons {
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
         }
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            dynamicTypeChanged()
+        default:
+            break
+        }
+    }
+
+    private func dynamicTypeChanged() {
+        adjustSelectedButtonFont(toIndex: selectedIndex)
+
+        for (index, title) in items.enumerated() {
+            guard let button = buttons[safe: index] else { continue }
+            applyButtonWidthAnchor(on: button, with: title as NSString)
+        }
+
+        applyInitalSelectionBackgroundFrame()
+
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }

@@ -32,7 +32,7 @@ class StoreTestUtilityHelper {
         store = Store(
             state: AppState(),
             reducer: AppState.reducer,
-            middlewares: middlewares
+            middlewares: []
         )
     }
 }

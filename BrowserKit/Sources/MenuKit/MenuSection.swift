@@ -6,10 +6,12 @@ import Foundation
 
 public struct MenuSection: Equatable {
     public let isTopTabsSection: Bool
+    public let isExpanded: Bool?
     public let options: [MenuElement]
 
-    public init(isTopTabsSection: Bool = false, options: [MenuElement]) {
+    public init(isTopTabsSection: Bool = false, isExpanded: Bool? = false, options: [MenuElement]) {
         self.isTopTabsSection = isTopTabsSection
+        self.isExpanded = isExpanded
         self.options = options
     }
 }

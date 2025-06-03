@@ -9,31 +9,33 @@ import ComponentLibrary
 public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @Binding private var selectedAction: VM.OnboardingMultipleChoiceActionType
+    @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let viewModel: VM
-    public let onPrimaryActionTap: () -> Void
-    public let onSecondaryActionTap: () -> Void
-    public let onLinkTap: () -> Void
+    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
+    public let onMultipleChoiceAction: (VM.OnboardingMultipleChoiceActionType, String) -> Void
+    public let onLinkTap: (String) -> Void
 
-    public init(
+    public init?(
         viewModel: VM,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        selectedAction: Binding<VM.OnboardingMultipleChoiceActionType>,
-        onPrimaryActionTap: @escaping () -> Void,
-        onSecondaryActionTap: @escaping () -> Void,
-        onLinkTap: @escaping () -> Void
+        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
+        onMultipleChoiceAction: @escaping (VM.OnboardingMultipleChoiceActionType, String) -> Void,
+        onLinkTap: @escaping (String) -> Void
     ) {
         self.viewModel = viewModel
-        self.onPrimaryActionTap = onPrimaryActionTap
-        self.onSecondaryActionTap = onSecondaryActionTap
-        self.onLinkTap = onLinkTap
-        self.themeManager = themeManager
         self.windowUUID = windowUUID
-        self._selectedAction = selectedAction
+        self.themeManager = themeManager
+        self.onBottomButtonAction = onBottomButtonAction
+        self.onMultipleChoiceAction = onMultipleChoiceAction
+        self.onLinkTap = onLinkTap
+        guard let firstAction = viewModel.multipleChoiceButtons.first?.action else {
+            return nil
+        }
+        _selectedAction = State(initialValue: firstAction)
     }
 
     public var body: some View {
@@ -55,6 +57,9 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
                             windowUUID: windowUUID,
                             themeManager: themeManager
                         )
+                        .onChange(of: selectedAction) { newAction in
+                            onMultipleChoiceAction(newAction, viewModel.name)
+                        }
                         Spacer()
                         primaryButton
                     }
@@ -80,7 +85,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.semibold)
+            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -88,9 +93,18 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
     }
 
     var primaryButton: some View {
-        Button(viewModel.buttons.primary.title, action: onPrimaryActionTap)
-            .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-            .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        Button(
+            viewModel.buttons.primary.title,
+            action: {
+                onBottomButtonAction(
+                    viewModel.buttons.primary.action,
+                    viewModel.name
+                )
+            }
+        )
+        .font(UX.CardView.primaryActionFont)
+        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
+        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     private func applyTheme(theme: Theme) {

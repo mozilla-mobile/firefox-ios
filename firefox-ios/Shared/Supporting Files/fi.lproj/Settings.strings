@@ -64,6 +64,9 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Osoitteet";
 
+/* Default section header title under page zoom settings. Indicates the default value for all websites */
+"Settings.Appearance.Zoom.Default.Title.v140" = "Oletus";
+
 /* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
 "Settings.AutofillAndPassword.Title.v137" = "Automaattinen täyttö ja salasanat";
 
@@ -230,7 +233,7 @@
 "Settings.TechnicalData.Link.v136" = "Lue lisää";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@%2$@ pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat %2$@in kehittämisessä.";
+"Settings.TechnicalData.Message.v135" = "%1$@ pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat %2$@in kehittämisessä.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Tiedot laitteestasi, laitekokoonpanosta ja käytöstä auttavat meitä parantamaan %@in ominaisuuksia, suorituskykyä ja vakautta.";

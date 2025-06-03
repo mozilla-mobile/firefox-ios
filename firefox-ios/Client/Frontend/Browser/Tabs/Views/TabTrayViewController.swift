@@ -32,7 +32,7 @@ class TabTrayViewController: UIViewController,
                              TabTraySelectorDelegate,
                              TabTrayAnimationDelegate {
     typealias SubscriberStateType = TabTrayState
-    struct UX {
+    private struct UX {
         struct NavigationMenu {
             static let width: CGFloat = 343
         }
@@ -255,7 +255,7 @@ class TabTrayViewController: UIViewController,
         }
     }
 
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
     init(panelType: TabTrayPanelType,
@@ -390,7 +390,7 @@ class TabTrayViewController: UIViewController,
         }
 
         // Only apply normal theme when there's no on going animations
-        if !themeAnimator.isAnimating {
+        if !themeAnimator.isAnimating && swipeFromIndex == nil {
             applyTheme()
         }
     }
@@ -933,15 +933,11 @@ class TabTrayViewController: UIViewController,
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        guard completed else {
-            swipeFromIndex = nil
-            return
-        }
+        guard completed,
+              let currentVC = pageViewController.viewControllers?.first as? UINavigationController,
+              let currentIndex = childPanelControllers.firstIndex(of: currentVC) else { return }
 
-        guard let currentVC = pageViewController.viewControllers?.first as? UINavigationController,
-              let index = childPanelControllers.firstIndex(of: currentVC) else { return }
-
-        let newPanelType = TabTrayPanelType.getExperimentConvert(index: index)
+        let newPanelType = TabTrayPanelType.getExperimentConvert(index: currentIndex)
         if tabTrayState.selectedPanel != newPanelType {
             tabTrayState.selectedPanel = newPanelType
             let action = TabTrayAction(panelType: newPanelType,
@@ -952,9 +948,8 @@ class TabTrayViewController: UIViewController,
             experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
 
             navigationHandler?.start(panelType: newPanelType, navigationController: currentVC)
+            swipeFromIndex = nil
         }
-
-        swipeFromIndex = nil
     }
 
     func pageViewController(_ pageViewController: UIPageViewController,
@@ -990,5 +985,9 @@ class TabTrayViewController: UIViewController,
             progress: progress
         )
         applyTheme(fromIndex: fromIndex, toIndex: toIndex, progress: abs(progress))
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        swipeFromIndex = nil
     }
 }

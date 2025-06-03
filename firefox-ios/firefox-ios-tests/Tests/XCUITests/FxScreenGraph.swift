@@ -912,10 +912,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.onEnter { userState in
+            let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
             let exists = NSPredicate(format: "exists == true")
-            let expectation = XCTNSPredicateExpectation(predicate: exists, object: app.otherElements["Tabs Tray"])
+            let expectation = XCTNSPredicateExpectation(predicate: exists, object: app.otherElements[tabsTray])
             let _ = XCTWaiter().wait(for: [expectation], timeout: 5)
-            userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
+            userState.numTabs = Int(app.otherElements[tabsTray].cells.count)
         }
     }
 
@@ -979,7 +980,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+            app.buttons[AccessibilityIdentifiers.MainMenu.trackigProtection],
             to: TrackingProtectionContextMenuDetails
         )
 

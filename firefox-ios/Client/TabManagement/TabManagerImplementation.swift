@@ -190,6 +190,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
+        // Highlight phone numbers as links in the webview
+        configuration.dataDetectorTypes = [.phoneNumber]
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
@@ -593,6 +595,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
             await buildTabRestore(window: windowData)
+            await TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             await MainActor.run {
                 // Log on main thread, where computed `tab` properties can be accessed without risk of races
                 logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
@@ -824,6 +827,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
+            await TabErrorTelemetryHelper.shared.recordTabCountAfterPreservingTabs(windowUUID)
         }
     }
 
