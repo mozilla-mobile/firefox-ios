@@ -2260,6 +2260,17 @@ workflows:
             #!/usr/bin/env bash
             python3 -m pip install --upgrade pip pyjwt cryptography requests
             python3 scripts/nightly_testflight_add_group.py
+  TempTestFlightAddNightlyGroup:
+    before_run:
+    - SPM_Common_Steps
+    - _testflight_add_nightly_group
+    steps:
+    - script@1.2.1:
+        title: Echo done
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            echo "Done"
 
   release_promotion_push:
     before_run:
