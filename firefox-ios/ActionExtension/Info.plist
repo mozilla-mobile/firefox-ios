@@ -16,6 +16,8 @@
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleName</key>
     <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>CFBundleDisplayName</key>
