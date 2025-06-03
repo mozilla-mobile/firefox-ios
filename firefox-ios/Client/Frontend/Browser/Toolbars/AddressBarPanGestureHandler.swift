@@ -91,8 +91,10 @@ final class AddressBarPanGestureHandler: NSObject {
         guard let selectedTab = tabManager.selectedTab else { return }
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
+
         let isSwipingLeft = translation.x < 0
-        let nextTab = tabs[safe: isSwipingLeft ? index + 1 : index - 1]
+        let nextTabIndex = nextTabIndex(from: index, isSwipingLeft: isSwipingLeft)
+        let nextTab = tabs[safe: nextTabIndex]
 
         switch gesture.state {
         case .began:
@@ -173,5 +175,19 @@ final class AddressBarPanGestureHandler: NSObject {
         let width = contentContainer.frame.width
         let xTranslation = isSwipingLeft ? width + translation.x + UX.offset : -width + translation.x - UX.offset
         webPagePreview.transform = CGAffineTransform(translationX: xTranslation, y: 0)
+    }
+
+    /// Calculates the index of the next tab to display based on the current index, swipe direction, and layout direction.
+    /// This function ensures that tab navigation behaves intuitively for both left-to-right (LTR) and right-to-left (RTL) user interfaces.
+    /// Swiping left advances to the next tab in LTR, but to the previous tab in RTL, and vice versa.
+    private func nextTabIndex(from index: Int, isSwipingLeft: Bool) -> Int {
+        let isRTL = UIView.userInterfaceLayoutDirection(
+            for: addressToolbarContainer.semanticContentAttribute
+        ) == .rightToLeft
+        if isSwipingLeft {
+            return isRTL ? index - 1 : index + 1
+        } else {
+            return isRTL ? index + 1 : index - 1
+        }
     }
 }
