@@ -6,28 +6,34 @@ import Foundation
 import Glean
 
 struct MainMenuTelemetry {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func mainMenuOptionTapped(with isHomepage: Bool, and option: String) {
         let extra = GleanMetrics.AppMenu.MainMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
-        GleanMetrics.AppMenu.mainMenuOptionSelected.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.mainMenuOptionSelected, extras: extra)
     }
 
     func saveSubmenuOptionTapped(with isHomepage: Bool, and option: String) {
         let extra = GleanMetrics.AppMenu.SaveMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
-        GleanMetrics.AppMenu.saveMenuOptionSelected.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.saveMenuOptionSelected, extras: extra)
     }
 
     func toolsSubmenuOptionTapped(with isHomepage: Bool, and option: String) {
         let extra = GleanMetrics.AppMenu.ToolsMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
-        GleanMetrics.AppMenu.toolsMenuOptionSelected.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.toolsMenuOptionSelected, extras: extra)
     }
 
     func closeButtonTapped(isHomepage: Bool) {
         let extra = GleanMetrics.AppMenu.CloseButtonExtra(isHomepage: isHomepage)
-        GleanMetrics.AppMenu.closeButton.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.closeButton, extras: extra)
     }
 
     func menuDismissed(isHomepage: Bool) {
         let extra = GleanMetrics.AppMenu.MenuDismissedExtra(isHomepage: isHomepage)
-        GleanMetrics.AppMenu.menuDismissed.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.menuDismissed, extras: extra)
     }
 }

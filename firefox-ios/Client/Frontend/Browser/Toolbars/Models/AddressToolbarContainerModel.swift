@@ -94,6 +94,94 @@ final class AddressToolbarContainerModel: Equatable {
             shouldAnimate: shouldAnimate)
     }
 
+    /// Returns a skeleton (placeholder) `AddressToolbarConfiguration` for the address bar.
+    /// This method is intended to provide a minimal configuration for loading or placeholder states,
+    /// with only essential actions and UI elements set up. Most properties are left empty or set to default values.
+    /// - Parameters:
+    ///   - url: The URL to display in the address bar, if any.
+    ///   - isReaderModeAvailableOrActive: Indicates if reader mode is available or active,
+    ///   used to determine trailing actions.
+    /// - Returns: A skeleton `AddressToolbarConfiguration` suitable for placeholder or loading UI.
+    func configureSkeletonAddressBar(
+        with url: URL?,
+        isReaderModeAvailableOrActive: Bool?
+    ) -> AddressToolbarConfiguration {
+        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+        let shouldBlur = toolbarHelper.shouldBlur()
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
+                                                                         shouldBlur: shouldBlur)
+        // Leading Page Actions
+        let shareAction: ToolbarActionConfiguration = .init(
+            actionType: .share,
+            iconName: StandardImageIdentifiers.Medium.share,
+            isEnabled: true,
+            hasCustomColor: true,
+            a11yLabel: "",
+            a11yId: AccessibilityIdentifiers.Toolbar.shareButton
+        )
+
+        // Trailing Page Actions
+        let readerModeAction: ToolbarActionConfiguration = .init(
+            actionType: .readerMode,
+            iconName: StandardImageIdentifiers.Medium.readerView,
+            isEnabled: true,
+            hasCustomColor: true,
+            a11yLabel: "",
+            a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton
+        )
+
+        let reloadAction: ToolbarActionConfiguration = .init(
+            actionType: .reload,
+            iconName: StandardImageIdentifiers.Medium.arrowClockwise,
+            isEnabled: true,
+            hasCustomColor: true,
+            a11yLabel: "",
+            a11yId: AccessibilityIdentifiers.Toolbar.reloadButton
+        )
+
+        var leadingPageElements = [ToolbarElement]()
+        var trailingPageElements = [ToolbarElement]()
+
+        if url != nil {
+            leadingPageElements = Self.mapActions([shareAction], isShowingTopTabs: false, windowUUID: windowUUID)
+            trailingPageElements = isReaderModeAvailableOrActive == true
+            ? Self.mapActions([readerModeAction, reloadAction], isShowingTopTabs: false, windowUUID: windowUUID)
+            : Self.mapActions([reloadAction], isShowingTopTabs: false, windowUUID: windowUUID)
+        }
+
+        let locationViewConfiguration = LocationViewConfiguration(
+            searchEngineImageViewA11yId: "",
+            searchEngineImageViewA11yLabel: "",
+            lockIconButtonA11yId: "",
+            lockIconButtonA11yLabel: "",
+            urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
+            urlTextFieldA11yId: "",
+            searchEngineImage: nil,
+            lockIconImageName: lockIconImageName,
+            lockIconNeedsTheming: lockIconNeedsTheming,
+            safeListedURLImageName: safeListedURLImageName,
+            url: url,
+            droppableUrl: nil,
+            searchTerm: nil,
+            isEditing: false,
+            didStartTyping: false,
+            shouldShowKeyboard: false,
+            shouldSelectSearchTerm: false,
+            onTapLockIcon: { _ in },
+            onLongPress: {})
+
+        return AddressToolbarConfiguration(
+            locationViewConfiguration: locationViewConfiguration,
+            navigationActions: [],
+            leadingPageActions: leadingPageElements,
+            trailingPageActions: trailingPageElements,
+            browserActions: [],
+            borderPosition: borderPosition,
+            uxConfiguration: uxConfiguration,
+            shouldAnimate: shouldAnimate
+        )
+    }
+
     init(
         state: ToolbarState,
         profile: Profile,
