@@ -20,6 +20,7 @@ class PageZoomSettingsViewModel: ObservableObject {
 
     func updateDefaultZoomLevel(newValue: ZoomLevel) {
         zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
+        notificationCenter.post(name: .PageZoomSettingsChanged)
         zoomTelemetry.updateDefaultZoomLevel(zoomLevel: newValue)
     }
 
