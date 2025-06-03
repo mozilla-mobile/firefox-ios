@@ -4337,7 +4337,7 @@ extension BrowserViewController: TabManagerDelegate {
             /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
             willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
-        } else {
+        } else if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
