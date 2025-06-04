@@ -266,7 +266,7 @@ settings.app_icon:
         
 # Default Zoom Settings
 settings.zoom_bar:
-  domain_list_item_swiped:
+  domain_list_item_swiped_to_delete:
     type: event
     description: |
       Recorded when the user swipes to delete a specific zoom domain level in the app settings.
