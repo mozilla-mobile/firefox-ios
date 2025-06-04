@@ -668,15 +668,12 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
 
-        let snapshotWallpaper = wallpaperView.snapshotView(afterScreenUpdates: false)
-        let snapshotView = view.snapshotView(afterScreenUpdates: false)
-
         return renderer.image { context in
             themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
             context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
             // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
             // wallpaper
-            snapshotWallpaper?.drawHierarchy(
+            wallpaperView.drawHierarchy(
                 in: CGRect(
                     x: 0,
                     y: 0,
@@ -686,14 +683,14 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
                 afterScreenUpdates: false
             )
 
-            snapshotView?.drawHierarchy(
+            view.drawHierarchy(
                 in: CGRect(
                     x: bounds.origin.x,
                     y: -bounds.origin.y,
                     width: bounds.width,
                     height: collectionView?.frame.height ?? 0.0
                 ),
-                afterScreenUpdates: true
+                afterScreenUpdates: false
             )
         }
     }
