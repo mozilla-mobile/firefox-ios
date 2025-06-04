@@ -15,7 +15,7 @@ class AddressBarAddTabView: UIView, ThemeApplicable {
         $0.alpha = 0.0
         $0.image = UIImage(named: StandardImageIdentifiers.Large.plus)
     }
-    
+
     init() {
         super.init(frame: .zero)
         setup()
@@ -24,7 +24,7 @@ class AddressBarAddTabView: UIView, ThemeApplicable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setup() {
         layer.cornerRadius = UX.cornerRadius
         addSubview(plusIconView)

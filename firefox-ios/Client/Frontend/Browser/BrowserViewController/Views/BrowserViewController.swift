@@ -488,7 +488,7 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
+            webPagePreview.invalidateScreenshotData()
         }
 
         if let readerModeBar = readerModeBar {

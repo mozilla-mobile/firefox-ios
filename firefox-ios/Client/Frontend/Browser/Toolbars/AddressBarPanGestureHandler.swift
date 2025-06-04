@@ -133,7 +133,7 @@ final class AddressBarPanGestureHandler: NSObject {
 
         let currentTabTransform = CGAffineTransform(translationX: targetTab, y: 0)
         let previewTransform = CGAffineTransform(translationX: -targetPreview, y: 0)
-        
+
         UIView.animate(withDuration: UX.swipingDuration,
                        delay: 0.0,
                        options: .curveEaseOut) { [self] in
@@ -144,7 +144,7 @@ final class AddressBarPanGestureHandler: NSObject {
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
         } completion: { [self] _ in
             webPagePreview.isHidden = true
-            webPagePreview.completeTransition()
+            webPagePreview.transitionDidEnd()
 
             if shouldCompleteTransition {
                 store.dispatch(

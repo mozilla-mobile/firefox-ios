@@ -49,7 +49,8 @@ final class TabWebViewPreview: UIView,
 
     // MARK: - Public Functions
 
-    func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
+    /// Invalidates the current screenshot data, thus showing only the Favicon as the preview for the website.
+    func invalidateScreenshotData() {
         layoutWasInvalidated = true
     }
 
@@ -61,10 +62,10 @@ final class TabWebViewPreview: UIView,
         }
         faviconImageView.isHidden = !layoutWasInvalidated
         webPageScreenshotImageView.isHidden = layoutWasInvalidated
-        
+
         if layoutWasInvalidated {
             if tab.isFxHomeTab {
-                faviconImageView.manuallySetImage(UIImage(resource: .appIconAlternateDefault))
+                faviconImageView.manuallySetImage(UIImage(resource: .faviconFox))
             } else {
                 faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString,
                                                                   faviconCornerRadius: UX.faviconCornerRadius))
@@ -85,7 +86,7 @@ final class TabWebViewPreview: UIView,
         webPageScreenshotImageView.transform = CGAffineTransform(translationX: translationX, y: 0)
     }
 
-    func completeTransition() {
+    func transitionDidEnd() {
         layoutWasInvalidated = false
     }
 
