@@ -8032,11 +8032,6 @@ extension String {
                 tableName: nil,
                 value: "Synced",
                 comment: "The title on the button to look at synced tabs.")
-            public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
-                key: "TabTray.SegmentedControlTitles.Tabs",
-                tableName: nil,
-                value: "Tabs",
-                comment: "The title on the button to look at regular tabs.")
         }
         struct v140 {
             public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
@@ -8066,6 +8061,11 @@ extension String {
                 value: "Address Saved",
                 comment: "Toast message confirming that an address has been successfully saved."
             )
+            public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
+                key: "TabTray.SegmentedControlTitles.Tabs",
+                tableName: nil,
+                value: "Tabs",
+                comment: "The title on the button to look at regular tabs.")
         }
     }
 }
