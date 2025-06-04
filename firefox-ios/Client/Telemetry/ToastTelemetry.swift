@@ -12,10 +12,6 @@ struct ToastTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func undoClosedSingleTab() {
-        gleanWrapper.recordEvent(for: GleanMetrics.ToastsCloseSingleTab.undoTapped)
-    }
-
     func undoClosedAllTabs() {
         gleanWrapper.recordEvent(for: GleanMetrics.ToastsCloseAllTabs.undoTapped)
     }

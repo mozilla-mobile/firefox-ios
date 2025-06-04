@@ -16,23 +16,6 @@ final class ToastTelemetryTests: XCTestCase {
         mockGleanWrapper = MockGleanWrapper()
     }
 
-    func testClosedSingleTabToastUndoSelected_callsGlean() throws {
-        let event = GleanMetrics.ToastsCloseSingleTab.undoTapped
-        let expectedMetricType = type(of: event)
-        let subject = createSubject()
-
-        subject.undoClosedSingleTab()
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>
-        )
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-    }
-
     func testClosedAllTabsToastUndoSelected_callsGlean() throws {
         let event = GleanMetrics.ToastsCloseAllTabs.undoTapped
         let expectedMetricType = type(of: event)
