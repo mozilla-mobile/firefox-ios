@@ -293,8 +293,6 @@ class TabTraySelectorView: UIView,
         self.theme = theme
         backgroundColor = theme.colors.layer1
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
-
-        // TODO: Laurie - change button color on theme change?
     }
 
     // MARK: - Notifiable
