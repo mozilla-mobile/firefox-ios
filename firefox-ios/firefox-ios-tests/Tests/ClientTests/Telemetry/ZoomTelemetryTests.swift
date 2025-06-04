@@ -106,8 +106,8 @@ final class ZoomTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenSpecificZoomIsDeleted_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.SettingsZoomBar.domainDeleted
-        typealias EventExtrasType = GleanMetrics.SettingsZoomBar.DomainDeletedExtra
+        let event = GleanMetrics.SettingsZoomBar.domainListItemSwipedToDelete
+        typealias EventExtrasType = GleanMetrics.SettingsZoomBar.DomainListItemSwipedToDeleteExtra
         let expectedMetricType = type(of: event)
         let expectedIndex: Int32 = 1
 
@@ -124,7 +124,7 @@ final class ZoomTelemetryTests: XCTestCase {
     }
 
     func testRecordEvent_WhenSpecificZoomResets_ThenGleanIsCalled() throws {
-        let event = GleanMetrics.SettingsZoomBar.resetButtonTapped
+        let event = GleanMetrics.SettingsZoomBar.domainListResetButtonTapped
         let expectedMetricType = type(of: event)
 
         subject?.resetDomainZoomLevel()
