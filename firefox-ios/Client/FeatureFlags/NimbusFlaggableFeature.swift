@@ -41,7 +41,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
-    case tabAnimation
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -76,7 +75,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .noInternetConnectionErrorPage,
                 .searchEngineConsolidation,
                 .sentFromFirefox,
-                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
@@ -146,7 +144,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchEngineConsolidation,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
-                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,
