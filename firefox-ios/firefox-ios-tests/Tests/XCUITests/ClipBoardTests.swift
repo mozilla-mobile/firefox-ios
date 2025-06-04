@@ -18,6 +18,7 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         urlBarAddress.waitAndTap()
         if iPad() {
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
             app.menuItems["Select All"].waitAndTap()
         }
         app.menuItems["Copy"].waitAndTap()
