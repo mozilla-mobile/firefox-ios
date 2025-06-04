@@ -659,7 +659,7 @@ final class HomepageViewController: UIViewController,
             // wallpaper
             wallpaperView.drawHierarchy(in: CGRect(x: 0, y: 0, width: bounds.width, height: wallpaperView.frame.height),
                                         afterScreenUpdates: false)
-            
+
             view.drawHierarchy(
                 in: CGRect(
                     x: bounds.origin.x,
