@@ -11,7 +11,7 @@ struct GenericButtonCellView: View {
     private let onTap: () -> Void
 
     private struct UX {
-        static let dividerHeight: CGFloat = 0.7
+        static let dividerHeight: CGFloat = 0.5
         static var buttonPadding: CGFloat = 4
     }
 
@@ -25,6 +25,7 @@ struct GenericButtonCellView: View {
         VStack {
             Divider()
                 .frame(height: UX.dividerHeight)
+                .background(theme.colors.borderPrimary.color)
 
             Button(action: {
                 onTap()
@@ -38,6 +39,7 @@ struct GenericButtonCellView: View {
 
             Divider()
                 .frame(height: UX.dividerHeight)
+                .background(theme.colors.borderPrimary.color)
         }
         .background(theme.colors.layer5.color)
     }

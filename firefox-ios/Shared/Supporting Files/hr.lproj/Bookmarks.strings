@@ -19,6 +19,9 @@
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Sve";
 
+/* Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text */
+"Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "Izbriši";
+
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
 "Bookmarks.Menu.DeleteBookmark.v132" = "Izbriši zabilješku";
 
@@ -48,6 +51,9 @@
 
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Više opcija";
+
+/* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
+"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "Ukloni iz prečaca";
 
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Spremljeno u „Zabilješke”";

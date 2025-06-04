@@ -3,4 +3,4 @@
 
 mozilla-taskgraph>=3.0.3
 mozilla-version>=4.0.0
-taskcluster-taskgraph>=13.1.0
+taskcluster-taskgraph>=14.4.0

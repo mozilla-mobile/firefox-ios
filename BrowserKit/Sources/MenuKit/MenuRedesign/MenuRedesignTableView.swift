@@ -55,10 +55,9 @@ final class MenuRedesignTableView: UIView,
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(
-            MenuRedesignCell.self,
-            forCellReuseIdentifier: MenuRedesignCell.cellIdentifier
-        )
+        tableView.register(MenuRedesignCell.self, forCellReuseIdentifier: MenuRedesignCell.cellIdentifier)
+        tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
+        tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
     }
 
     func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
@@ -93,6 +92,36 @@ final class MenuRedesignTableView: UIView,
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
+        let rowOption = menuData[indexPath.section].options[indexPath.row]
+
+        if rowOption.iconImage != nil || rowOption.needsReAuth != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MenuAccountCell.cellIdentifier,
+                for: indexPath
+            ) as? MenuAccountCell else {
+                return UITableViewCell()
+            }
+            if let theme {
+                cell.configureCellWith(model: rowOption, theme: theme)
+                cell.applyTheme(theme: theme)
+            }
+            return cell
+        }
+
+        if rowOption.infoTitle != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MenuInfoCell.cellIdentifier,
+                for: indexPath
+            ) as? MenuInfoCell else {
+                return UITableViewCell()
+            }
+            if let theme {
+                cell.configureCellWith(model: rowOption)
+                cell.applyTheme(theme: theme)
+            }
+            return cell
+        }
+
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: MenuRedesignCell.cellIdentifier,
             for: indexPath
@@ -100,7 +129,7 @@ final class MenuRedesignTableView: UIView,
             return UITableViewCell()
         }
         if let theme {
-            cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row], theme: theme)
+            cell.configureCellWith(model: rowOption, theme: theme)
             cell.applyTheme(theme: theme)
         }
         return cell
