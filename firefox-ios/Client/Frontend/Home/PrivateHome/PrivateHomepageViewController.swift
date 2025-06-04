@@ -237,6 +237,7 @@ final class PrivateHomepageViewController:
 
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
+        let snapshotView = view.snapshotView(afterScreenUpdates: true)
 
         return renderer.image { context in
             // Draw the background gradient separately, so the potential safe area coordinates is filled with the
@@ -247,7 +248,7 @@ final class PrivateHomepageViewController:
             renderedGradient.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
             renderedGradient.render(in: context.cgContext)
 
-            view.drawHierarchy(
+            snapshotView?.drawHierarchy(
                 in: CGRect(
                     x: bounds.origin.x,
                     y: -bounds.origin.y,

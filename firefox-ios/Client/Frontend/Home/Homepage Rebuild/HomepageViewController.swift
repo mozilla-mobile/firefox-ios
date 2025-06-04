@@ -652,15 +652,25 @@ final class HomepageViewController: UIViewController,
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
 
+        let snapshotWallpaper = wallpaperView.snapshotView(afterScreenUpdates: false)
+        let snapshotView = view.snapshotView(afterScreenUpdates: true)
+
         return renderer.image { context in
             themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
             context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
             // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
             // wallpaper
-            wallpaperView.drawHierarchy(in: CGRect(x: 0, y: 0, width: bounds.width, height: wallpaperView.frame.height),
-                                        afterScreenUpdates: false)
+            snapshotWallpaper?.drawHierarchy(
+                in: CGRect(
+                    x: 0,
+                    y: 0,
+                    width: bounds.width,
+                    height: bounds.height
+                ),
+                afterScreenUpdates: false
+            )
 
-            view.drawHierarchy(
+            snapshotView?.drawHierarchy(
                 in: CGRect(
                     x: bounds.origin.x,
                     y: -bounds.origin.y,

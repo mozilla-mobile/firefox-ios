@@ -13,6 +13,11 @@ class ScreenshotHelper {
     fileprivate weak var controller: BrowserViewController?
     private let logger: Logger
 
+    private var isIpad: Bool {
+        return controller?.traitCollection.userInterfaceIdiom == .pad &&
+               controller?.traitCollection.horizontalSizeClass == .regular
+    }
+
     init(controller: BrowserViewController,
          logger: Logger = DefaultLogger.shared) {
         self.controller = controller
@@ -45,7 +50,13 @@ class ScreenshotHelper {
         /// that a screenshot has been set for the homepage.
         if tab.isFxHomeTab {
             if let screenshotTool = controller?.contentContainer.contentController as? Screenshotable {
-                let screenshot = screenshotTool.screenshot(bounds: screenshotBounds)
+                // apply bounds only for iphone in portrait, as otherwise it results in
+                // bad screenshot view port.
+                let screenshot: UIImage? = if UIWindow.isPortrait && !isIpad {
+                    screenshotTool.screenshot(bounds: screenshotBounds)
+                } else {
+                    screenshotTool.screenshot(quality: 1.0)
+                }
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
                 store.dispatch(
@@ -78,7 +89,12 @@ class ScreenshotHelper {
         } else {
             let configuration = WKSnapshotConfiguration()
             configuration.afterScreenUpdates = true
-            configuration.rect = screenshotBounds
+
+            // apply bounds only for iphone in portrait, as otherwise it results in
+            // bad screenshot view port.
+            if UIWindow.isPortrait && !isIpad {
+                configuration.rect = screenshotBounds
+            }
 
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image {

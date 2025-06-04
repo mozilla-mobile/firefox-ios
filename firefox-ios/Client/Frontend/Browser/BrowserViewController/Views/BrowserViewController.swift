@@ -1370,6 +1370,7 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.showToolbars(animated: false)
         }, completion: nil)
+        webPagePreview.invalidateScreenshotData()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -1422,7 +1423,6 @@ class BrowserViewController: UIViewController,
            UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
             toolbarUpdateContextHintVC.dismiss(animated: true)
         }
-        webPagePreview.invalidateScreenshotData()
     }
 
     // MARK: - Constraints
