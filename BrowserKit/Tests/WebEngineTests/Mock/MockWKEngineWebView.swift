@@ -131,7 +131,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
         viewPrintFormatterCalled += 1
         return UIViewPrintFormatter()
     }
-    
+
     func evaluateJavaScript(_ javaScript: String,
                             in frame: WKFrameInfo?,
                             in contentWorld: WKContentWorld,

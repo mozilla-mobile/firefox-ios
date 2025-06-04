@@ -481,7 +481,7 @@ final class WKEngineSessionTests: XCTestCase {
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
     }
-    
+
     // MARK: Print Formatter
     func test_viewPrintFormatter_returnsProperValue() {
         let subject = createSubject()
