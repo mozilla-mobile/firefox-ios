@@ -653,7 +653,7 @@ final class HomepageViewController: UIViewController,
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
 
         let snapshotWallpaper = wallpaperView.snapshotView(afterScreenUpdates: false)
-        let snapshotView = view.snapshotView(afterScreenUpdates: true)
+        let snapshotView = view.snapshotView(afterScreenUpdates: false)
 
         return renderer.image { context in
             themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()

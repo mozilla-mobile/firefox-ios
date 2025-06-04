@@ -237,7 +237,7 @@ final class PrivateHomepageViewController:
 
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
-        let snapshotView = view.snapshotView(afterScreenUpdates: true)
+        let snapshotView = view.snapshotView(afterScreenUpdates: false)
 
         return renderer.image { context in
             // Draw the background gradient separately, so the potential safe area coordinates is filled with the
