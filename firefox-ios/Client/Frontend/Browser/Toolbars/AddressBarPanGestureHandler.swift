@@ -137,7 +137,7 @@ final class AddressBarPanGestureHandler: NSObject {
         UIView.animate(withDuration: UX.swipingDuration,
                        delay: 0.0,
                        options: .curveEaseOut) { [self] in
-            applyCurrentTabTransform(shouldCompleteTransition ? currentTabTransform : .identity)
+            addressToolbarContainer.applyTransform(shouldCompleteTransition ? currentTabTransform : .identity)
             contentContainer.transform = shouldCompleteTransition ?
             CGAffineTransform(translationX: targetPreview, y: 0) : .identity
 
@@ -146,7 +146,7 @@ final class AddressBarPanGestureHandler: NSObject {
             webPagePreview.isHidden = true
             webPagePreview.transitionDidEnd()
 
-            if shouldCompleteTransition {
+            if shouldCompleteTransition, let nextTab {
                 store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
@@ -155,11 +155,9 @@ final class AddressBarPanGestureHandler: NSObject {
                     )
                 )
                 // Reset the positions and select the new tab if the transition was completed.
-                applyCurrentTabTransform(.identity)
+                addressToolbarContainer.applyTransform(.identity)
                 contentContainer.transform = .identity
-                if let nextTab {
-                    tabManager.selectTab(nextTab)
-                }
+                tabManager.selectTab(nextTab)
             } else {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
                                                 isHomepage: contentContainer.hasHomepage)
@@ -167,17 +165,11 @@ final class AddressBarPanGestureHandler: NSObject {
         }
     }
 
-    /// Applies the provided transform to the all the views representing the current tab.
-    private func applyCurrentTabTransform(_ transform: CGAffineTransform) {
-        addressToolbarContainer.applyTransform(transform)
-    }
-
     private func applyCurrentTabTransform(_ translation: CGFloat) {
         contentContainer.transform = CGAffineTransform(translationX: translation, y: 0)
         addressToolbarContainer.applyTransform(CGAffineTransform(translationX: translation * 0.8, y: 0))
     }
 
-    /// Applies a translation transform to the `webPagePreview`
     private func applyPreviewTransform(translation: CGPoint) {
         let isSwipingLeft = translation.x < 0
         let width = contentContainer.frame.width
