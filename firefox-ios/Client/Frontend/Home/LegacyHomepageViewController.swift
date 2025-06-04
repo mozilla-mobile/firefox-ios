@@ -681,9 +681,9 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
                     x: bounds.origin.x,
                     y: -bounds.origin.y,
                     width: bounds.width,
-                    height: collectionView?.frame.height ?? bounds.height
+                    height: collectionView?.frame.height ?? 0.0
                 ),
-                afterScreenUpdates: false
+                afterScreenUpdates: true
             )
         }
     }

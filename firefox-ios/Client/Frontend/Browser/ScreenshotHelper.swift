@@ -24,7 +24,7 @@ class ScreenshotHelper {
     /// If taking a screenshot of a website, uses apple's `takeSnapshot` function
     func takeScreenshot(_ tab: Tab,
                         windowUUID: WindowUUID,
-                        screenshotBounds: CGRect? = nil,
+                        screenshotBounds: CGRect,
                         completion: (() -> Void)? = nil) {
         guard let webView = tab.webView else {
             logger.log("Tab Snapshot Error",
@@ -45,7 +45,7 @@ class ScreenshotHelper {
         /// that a screenshot has been set for the homepage.
         if tab.isFxHomeTab {
             if let screenshotTool = controller?.contentContainer.contentController as? Screenshotable {
-                let screenshot = screenshotTool.screenshot(bounds: screenshotBounds ?? .zero)
+                let screenshot = screenshotTool.screenshot(bounds: screenshotBounds)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
                 store.dispatch(
@@ -78,9 +78,7 @@ class ScreenshotHelper {
         } else {
             let configuration = WKSnapshotConfiguration()
             configuration.afterScreenUpdates = true
-            if let screenshotBounds {
-                configuration.rect = screenshotBounds
-            }
+            configuration.rect = screenshotBounds
 
             webView.takeSnapshot(with: configuration) { image, error in
                 if let image {

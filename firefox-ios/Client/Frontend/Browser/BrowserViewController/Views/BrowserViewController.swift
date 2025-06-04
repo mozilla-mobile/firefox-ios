@@ -712,7 +712,13 @@ class BrowserViewController: UIViewController,
         // No need to take a screenshot if a view is presented over the current tab
         // because a screenshot will already have been taken when we navigate away
         if let tab = tabManager.selectedTab, presentedViewController == nil {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab,
+                                            windowUUID: windowUUID,
+                                            screenshotBounds: CGRect(
+                                                x: contentContainer.frame.origin.x,
+                                                y: -contentContainer.frame.origin.y,
+                                                width: view.frame.width,
+                                                height: view.frame.height))
         }
 
         guard canShowPrivacyWindow else { return }
@@ -1383,6 +1389,7 @@ class BrowserViewController: UIViewController,
             self.scrollController.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()
+        webPagePreview.invalidateScreenshotData()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -1415,6 +1422,7 @@ class BrowserViewController: UIViewController,
            UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
             toolbarUpdateContextHintVC.dismiss(animated: true)
         }
+        webPagePreview.invalidateScreenshotData()
     }
 
     // MARK: - Constraints
@@ -3177,7 +3185,16 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper.takeScreenshot(tab, windowUUID: self.windowUUID)
+                    self.screenshotHelper.takeScreenshot(
+                        tab,
+                        windowUUID: self.windowUUID,
+                        screenshotBounds: CGRect(
+                            x: self.contentContainer.frame.origin.x,
+                            y: -self.contentContainer.frame.origin.y,
+                            width: self.view.frame.width,
+                            height: self.view.frame.height
+                        ),
+                    )
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }

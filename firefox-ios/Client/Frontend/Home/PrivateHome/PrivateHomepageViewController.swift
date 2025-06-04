@@ -254,7 +254,7 @@ final class PrivateHomepageViewController:
                     width: bounds.width,
                     height: view.bounds.height
                 ),
-                afterScreenUpdates: false
+                afterScreenUpdates: true
             )
         }
     }
