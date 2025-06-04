@@ -168,7 +168,6 @@ final class LocationView: UIView,
     }
 
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
-        let doesURLTextFieldExceedViewWidth = doesURLTextFieldExceedViewWidth
         var newConstraints: [NSLayoutConstraint] = []
 
         if isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
@@ -177,11 +176,11 @@ final class LocationView: UIView,
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
-        } else if !doesURLTextFieldExceedViewWidth {
+        } else if let superview, !doesURLTextFieldExceedViewWidth {
             newConstraints = [
-                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-                containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-                containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
+                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
+                containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
+                containerView.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
             ]
         }
 
