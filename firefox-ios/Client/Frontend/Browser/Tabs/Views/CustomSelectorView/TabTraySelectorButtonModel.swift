@@ -5,7 +5,6 @@
 import Common
 import UIKit
 
-/// The view model used to configure a `TabTraySelectorButton`
 struct TabTraySelectorButtonModel {
     let title: String
     let a11yIdentifier: String
@@ -49,6 +48,8 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
         layoutIfNeeded()
     }
 
+    /// The `TabTraySelectorButton` font is adjusted whenever it is selected
+    /// - Parameter font: the new font to apply on the button
     func applySelectedFontChange(font: UIFont) {
         guard let config = configuration else { return }
         var updatedConfiguration = config
@@ -79,16 +80,6 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
-    }
-
-    func applyUnderline(underlinedText: String) {
-        let attributedString = NSAttributedString(
-            string: underlinedText,
-            attributes: [
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-        )
-        setAttributedTitle(attributedString, for: .normal)
     }
 
     // MARK: ThemeApplicable
