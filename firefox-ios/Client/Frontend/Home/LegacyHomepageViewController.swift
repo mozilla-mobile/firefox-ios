@@ -667,7 +667,7 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
 
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
-        
+
         let snapshotWallpaper = wallpaperView.snapshotView(afterScreenUpdates: false)
         let snapshotView = view.snapshotView(afterScreenUpdates: false)
 
