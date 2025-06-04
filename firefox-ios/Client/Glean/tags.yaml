@@ -30,6 +30,9 @@ Homepage:
 Library:
   description: Corresponds to library, containing bookmarks, history, reading list, and downloads.
 
+Microsurvey:
+  description: Corresponds to the microsurveys shown to the user.
+
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
 
