@@ -196,7 +196,7 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
     }
 
-    public func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
+    private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntJumpBackInSectionFeature.value().enabled
     }
     
