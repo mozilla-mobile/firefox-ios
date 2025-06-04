@@ -2947,11 +2947,6 @@ extension String {
             tableName: nil,
             value: "Private",
             comment: "The title on the button to look at private tabs.")
-        public static let TabsPanelSelectorSelectedLabel = MZLocalizedString(
-            key: "Settings.TabsTray.Accessibility.TabsPanelSelectorSelectedLabel.v141",
-            tableName: "TabsTray",
-            value: "Currently selected",
-            comment: "This is the accessibility label describing the selected tabs panel on the tabs tray.")
 
         public struct InactiveTabs {
             public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(

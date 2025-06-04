@@ -89,8 +89,11 @@ class TabTraySelectorView: UIView,
             button.setTitle(title, for: .normal)
             button.tag = index
             button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
-
+            button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                                              NSNumber(value: index + 1),
+                                              NSNumber(value: items.count))
             button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
+
             button.translatesAutoresizingMaskIntoConstraints = false
             buttons.append(button)
             stackView.addArrangedSubview(button)
@@ -166,11 +169,7 @@ class TabTraySelectorView: UIView,
             button.titleLabel?.font = isSelected ?
                 FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
                 FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-            let selectedHint = isSelected ? .TabsTray.TabsPanelSelectorSelectedLabel : ""
-            let panelNumberHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
-                                         NSNumber(value: index + 1),
-                                         NSNumber(value: items.count))
-            button.accessibilityHint = "\(panelNumberHint), \(selectedHint)"
+            button.isSelected = isSelected
         }
     }
 
