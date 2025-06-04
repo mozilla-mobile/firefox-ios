@@ -223,6 +223,37 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
+    func test_shouldStartAtHome_withStartAtHomeAction_returnsTrue() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertFalse(initialState.shouldStartAtHome)
+
+        let action = StartAtHomeAction(
+            shouldStartAtHome: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.shouldStartAtHome)
+    }
+
+    func test_shouldStartAtHome_withStartAtHomeAction_returnsFalse() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertFalse(initialState.shouldStartAtHome)
+
+        let action = StartAtHomeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertFalse(newState.shouldStartAtHome)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

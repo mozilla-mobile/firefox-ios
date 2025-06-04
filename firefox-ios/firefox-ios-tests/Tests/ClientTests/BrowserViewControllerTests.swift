@@ -198,6 +198,23 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNotNil(tab.temporaryDocument)
     }
 
+    // MARK: - Start At Home
+    func test_browserDidBecomeActive_triggersAppropriateDispatchAction() throws {
+        let subject = createSubject()
+        let expectation = XCTestExpectation(description: "Start at home action is dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.browserDidBecomeActive()
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? StartAtHomeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? StartAtHomeActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, StartAtHomeActionType.didBrowserBecomeActive)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile, tabManager: tabManager)
         screenshotHelper = MockScreenshotHelper(controller: subject)

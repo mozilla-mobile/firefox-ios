@@ -238,14 +238,3 @@ public func millisecondsToSeconds(_ input: Timestamp) -> UInt64 {
     let val = input / 1000
     return val
 }
-
-public protocol DateProvider {
-    func now() -> Date
-}
-
-public struct SystemDateProvider: DateProvider {
-    public init() { }
-    public func now() -> Date {
-        return Date()
-    }
-}
