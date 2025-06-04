@@ -29,12 +29,7 @@ extension UIView: Screenshotable {
 
         return renderer.image { context in
             drawHierarchy(
-                in: CGRect(
-                    x: bounds.origin.x,
-                    y: -bounds.origin.y,
-                    width: bounds.width,
-                    height: frame.height
-                ),
+                in: bounds,
                 afterScreenUpdates: true
             )
         }

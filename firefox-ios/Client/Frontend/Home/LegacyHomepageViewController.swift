@@ -16,6 +16,7 @@ class LegacyHomepageViewController:
     FeatureFlaggable,
     Themeable,
     ContentContainable,
+    Screenshotable,
     SearchBarLocationProvider {
     // MARK: - Typealiases
 
@@ -660,6 +661,35 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
             homePanelDelegate: homePanelDelegate,
             libraryPanelDelegate: libraryPanelDelegate
         )
+    }
+
+    // MARK: - Screenshotable
+
+    func screenshot(bounds: CGRect) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        return renderer.image { context in
+            themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+            // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
+            // wallpaper
+            wallpaperView.drawHierarchy(in: CGRect(x: 0, y: 0, width: bounds.width, height: wallpaperView.frame.height),
+                                        afterScreenUpdates: false)
+
+            view.drawHierarchy(
+                in: CGRect(
+                    x: bounds.origin.x,
+                    y: -bounds.origin.y,
+                    width: bounds.width,
+                    height: collectionView?.frame.height ?? bounds.height
+                ),
+                afterScreenUpdates: false
+            )
+        }
+    }
+
+    func screenshot(quality: CGFloat) -> UIImage? {
+        screenshot(bounds: view.bounds)
     }
 }
 

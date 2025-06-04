@@ -655,14 +655,17 @@ final class HomepageViewController: UIViewController,
         return renderer.image { context in
             themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
             context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+            // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
+            // wallpaper
             wallpaperView.drawHierarchy(in: CGRect(x: 0, y: 0, width: bounds.width, height: wallpaperView.frame.height),
                                         afterScreenUpdates: false)
+            
             view.drawHierarchy(
                 in: CGRect(
-                    x: 0,
+                    x: bounds.origin.x,
                     y: -bounds.origin.y,
                     width: bounds.width,
-                    height: collectionView?.frame.height ?? 0.0
+                    height: collectionView?.frame.height ?? bounds.height
                 ),
                 afterScreenUpdates: false
             )
