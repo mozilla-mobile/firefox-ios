@@ -36,6 +36,9 @@ readonly FEATURE_YAMLS="$PATH_TO_FEATURE_YAMLS/*.yaml"
 readonly XCODE_INFILE_LIST='firefox-ios/Client/Glean/gleanProbes.xcfilelist'
 readonly DOCUMENTATION_WARNING='Please see the documentation in the script.'
 
+# Eventually we'll want to include metrics files from other targets in a better way
+readonly PATH_TO_STORAGE_METRICS_YAML='firefox-ios/Storage/metrics.yaml'
+
 ##############################################################################
 # Prints to file the YAML-formatted file paths to all the metrics files in the Glean/probes subdirectory.
 # Globals:
@@ -48,6 +51,7 @@ readonly DOCUMENTATION_WARNING='Please see the documentation in the script.'
 function append_paths_to_probe_index() {
     echo 'Appending the following metrics files to the Glean index:'
 
+    # Append the Client target's metrics files
     for filename in $FEATURE_YAMLS; do
         echo " * ${filename}"
 
@@ -55,6 +59,10 @@ function append_paths_to_probe_index() {
         relativeName="${filename}"
         echo "  - $relativeName" >>"$1"
     done
+
+    # Append the Storage target's metrics file
+    echo " * ${PATH_TO_STORAGE_METRICS_YAML}"
+    echo "  - $PATH_TO_STORAGE_METRICS_YAML" >>"$1"
 }
 
 ##############################################################################
