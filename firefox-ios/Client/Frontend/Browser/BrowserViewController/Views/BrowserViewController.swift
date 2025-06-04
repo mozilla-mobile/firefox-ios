@@ -1317,6 +1317,7 @@ class BrowserViewController: UIViewController,
 
         if !showNavToolbar && isBottomSearchBar && !isKeyboardShowing {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+            overKeyboardContainer.moveSpacerToBack()
 
             // make sure the bottom inset spacer has the right color/translucency
             overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
