@@ -68,11 +68,11 @@ final class ZoomLevelStoreTests: XCTestCase {
         XCTAssertEqual(retrievedZoomLevel, domainZoomLevel2)
     }
 
-    func testSaveNoZoomLevel() {
+    func testSaveDefaultZoomLevel() {
         let domainZoomLevel = DomainZoomLevel(host: testHost1, zoomLevel: 1.0)
         zoomLevelStore.saveDomainZoom(domainZoomLevel)
 
-        XCTAssertFalse(zoomLevelStore.getDomainZoomLevel().contains(domainZoomLevel))
+        XCTAssertTrue(zoomLevelStore.getDomainZoomLevel().contains(domainZoomLevel))
     }
 
     func testFindZoomLevelNotFound() {
