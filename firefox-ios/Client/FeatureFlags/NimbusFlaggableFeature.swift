@@ -23,6 +23,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case firefoxSuggestFeature
     case hntBookmarksSection
     case hntContentFeedRefresh
+    case hntJumpBackInSection
     case hntTopSitesVisualRefresh
     case homepageRebuild
     case inactiveTabs
@@ -116,6 +117,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.FirefoxSuggest
         case .hntBookmarksSection:
             return FlagKeys.BookmarksSection
+        case .hntJumpBackInSection:
+            return FlagKeys.JumpBackInSection
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
         case .sentFromFirefox:

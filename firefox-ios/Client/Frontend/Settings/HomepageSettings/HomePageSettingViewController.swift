@@ -131,8 +131,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             let jumpBackInSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.UserFeatureFlagPrefs.JumpBackInSection,
-                defaultValue: true,
+                prefKey: PrefsKeys.FeatureFlags.JumpBackInSection,
+                defaultValue: featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
