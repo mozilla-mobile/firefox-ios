@@ -85,16 +85,7 @@ class TabTraySelectorView: UIView,
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
-            let button = UIButton()
-            button.setTitle(title, for: .normal)
-            button.tag = index
-            button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
-            button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
-                                              NSNumber(value: index + 1),
-                                              NSNumber(value: items.count))
-            button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
-
-            button.translatesAutoresizingMaskIntoConstraints = false
+            let button = createButton(with: index, title: title)
             buttons.append(button)
             stackView.addArrangedSubview(button)
         }
@@ -111,11 +102,42 @@ class TabTraySelectorView: UIView,
         applyTheme(theme: theme)
     }
 
+    private func createButton(with index: Int, title: String) -> UIButton {
+        let button = TabTraySelectorButton()
+        let hint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                          NSNumber(value: index + 1),
+                          NSNumber(value: items.count))
+        let font = index == selectedIndex
+            ? FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+            : FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let contentInsets = NSDirectionalEdgeInsets(
+            top: TabTraySelectorUX.verticalInsets,
+            leading: TabTraySelectorUX.horizontalInsets,
+            bottom: TabTraySelectorUX.verticalInsets,
+            trailing: TabTraySelectorUX.horizontalInsets
+        )
+        let viewModel = TabTraySelectorButtonModel(
+            title: title,
+            a11yIdentifier: "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)",
+            a11yHint: hint,
+            font: font,
+            contentInsets: contentInsets
+        )
+        button.configure(viewModel: viewModel)
+        button.applyTheme(theme: theme)
+
+        button.tag = index
+        button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
+
     private func applyInitalSelectionBackgroundFrame() {
         guard buttons.indices.contains(selectedIndex) else { return }
         layoutIfNeeded()
         let selectedButton = buttons[selectedIndex]
-        let width = selectedButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        // TODO: Laurie
+        let width = selectedButton.frame.width // + (TabTraySelectorUX.horizontalInsets * 2)
 
         selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
         selectionBackgroundWidthConstraint?.isActive = true
@@ -141,7 +163,8 @@ class TabTraySelectorView: UIView,
 
         let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
-        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
+        let horizontalInsets = TabTraySelectorUX.horizontalInsets * 2
+        button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
     }
 
     @objc
@@ -255,8 +278,9 @@ class TabTraySelectorView: UIView,
         let selectionTargetCenterX = parentView.convert(CGPoint(x: buttonCenterXDuringTransition, y: 0), to: self).x
         let targetOffset = selectionTargetCenterX - selectionBackgroundView.center.x
 
-        let fromWidth = fromButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
-        let toWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        // TODO: Laurie
+        let fromWidth = fromButton.frame.width // + (TabTraySelectorUX.horizontalInsets * 2)
+        let toWidth = toButton.frame.width // + (TabTraySelectorUX.horizontalInsets * 2)
         let selectionIndicatorWidthDuringTransition = fromWidth + (toWidth - fromWidth) * progress
 
         return SelectionIndicatorTransition(selectionIndicatorWidthDuringTransition: selectionIndicatorWidthDuringTransition,
@@ -270,9 +294,7 @@ class TabTraySelectorView: UIView,
         backgroundColor = theme.colors.layer1
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
 
-        for button in buttons {
-            button.setTitleColor(theme.colors.textPrimary, for: .normal)
-        }
+        // TODO: Laurie - change button color on theme change?
     }
 
     // MARK: - Notifiable
@@ -298,5 +320,112 @@ class TabTraySelectorView: UIView,
 
         setNeedsLayout()
         layoutIfNeeded()
+    }
+}
+
+/// The view model used to configure a `TabTraySelectorButton`
+struct TabTraySelectorButtonModel {
+    struct UX {
+        static let verticalInset: CGFloat = 12
+        static let horizontalInset: CGFloat = 16
+    }
+
+    let title: String
+    let a11yIdentifier: String
+    let a11yHint: String
+    let font: UIFont
+    let contentInsets: NSDirectionalEdgeInsets
+    let contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
+
+    init(title: String,
+         a11yIdentifier: String,
+         a11yHint: String,
+         font: UIFont = FXFontStyles.Regular.callout.scaledFont(),
+         contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
+                                                                          leading: UX.horizontalInset,
+                                                                          bottom: UX.verticalInset,
+                                                                          trailing: UX.horizontalInset),
+         contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
+        self.title = title
+        self.a11yIdentifier = a11yIdentifier
+        self.font = font
+        self.contentInsets = contentInsets
+        self.contentHorizontalAlignment = contentHorizontalAlignment
+        self.a11yHint = a11yHint
+    }
+}
+
+final class TabTraySelectorButton: UIButton, ThemeApplicable {
+    private var foregroundColorNormal: UIColor = .clear
+    private var foregroundColorHighlighted: UIColor = .clear
+    private var backgroundColorNormal: UIColor = .clear
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        configuration = UIButton.Configuration.plain()
+        titleLabel?.adjustsFontForContentSizeCategory = true
+    }
+
+    func configure(viewModel: TabTraySelectorButtonModel) {
+        guard let config = configuration else {
+            return
+        }
+        var updatedConfiguration = config
+
+        updatedConfiguration.title = viewModel.title
+        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = viewModel.font
+            outgoing.underlineStyle = .single
+            return outgoing
+        }
+        updatedConfiguration.contentInsets = viewModel.contentInsets
+
+        accessibilityIdentifier = viewModel.a11yIdentifier
+        accessibilityHint = viewModel.a11yHint
+        contentHorizontalAlignment = viewModel.contentHorizontalAlignment
+
+        configuration = updatedConfiguration
+        layoutIfNeeded()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func updateConfiguration() {
+        guard var updatedConfiguration = configuration else {
+            return
+        }
+
+        switch state {
+        case [.highlighted]:
+            updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
+        default:
+            updatedConfiguration.baseForegroundColor = foregroundColorNormal
+        }
+
+        updatedConfiguration.background.backgroundColor = backgroundColorNormal
+        configuration = updatedConfiguration
+    }
+
+    func applyUnderline(underlinedText: String) {
+        let attributedString = NSAttributedString(
+            string: underlinedText,
+            attributes: [
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+        )
+        setAttributedTitle(attributedString, for: .normal)
+    }
+
+    // MARK: ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        foregroundColorNormal = theme.colors.textPrimary
+        foregroundColorHighlighted = theme.colors.actionPrimaryHover
+        backgroundColorNormal = .clear
+        setNeedsUpdateConfiguration()
     }
 }
