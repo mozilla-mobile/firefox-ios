@@ -3193,7 +3193,7 @@ class BrowserViewController: UIViewController,
                             y: -self.contentContainer.frame.origin.y,
                             width: self.view.frame.width,
                             height: self.view.frame.height
-                        ),
+                        )
                     )
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
