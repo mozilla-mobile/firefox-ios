@@ -125,6 +125,7 @@ public class BrowserAddressToolbar: UIView,
         configure(config: config,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
                   animated: animated)
+        setNeedsLayout()
     }
 
     public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
@@ -169,6 +170,13 @@ public class BrowserAddressToolbar: UIView,
             return locationContainer.transform
         }
         set { locationContainer.transform = newValue }
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+
+        guard let theme else { return }
+        setupShadow(theme: theme)
     }
 
     // MARK: - Private
