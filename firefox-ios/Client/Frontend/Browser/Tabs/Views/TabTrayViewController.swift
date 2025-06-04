@@ -788,6 +788,9 @@ class TabTrayViewController: UIViewController,
     }
 
     private func showTabsDeletionPicker() {
+        let telemetry = TabsPanelTelemetry()
+        telemetry.closeAllTabsSheetOptionSelected(option: .old, mode: .normal)
+
         let alert = AlertController(title: .TabsTray.TabTrayCloseTabsOlderThanTitle,
                                     message: nil,
                                     preferredStyle: .actionSheet)
