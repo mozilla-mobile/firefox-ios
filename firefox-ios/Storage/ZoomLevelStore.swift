@@ -63,9 +63,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
         }) {
             zoomSetting.zoomLevels.remove(at: index)
         }
-        if domainZoomLevel.zoomLevel != ZoomLevelStore.defaultZoomLimit {
-            zoomSetting.zoomLevels.append(domainZoomLevel)
-        }
+        zoomSetting.zoomLevels.append(domainZoomLevel)
         save(completion)
     }
 
