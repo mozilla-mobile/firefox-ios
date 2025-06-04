@@ -111,7 +111,7 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.hntBookmarksSectionFeature, checking: .userOnly)
+        return featureFlags.isFeatureEnabled(.hntBookmarksSection, checking: .userOnly)
     }
 
     var hasData: Bool {

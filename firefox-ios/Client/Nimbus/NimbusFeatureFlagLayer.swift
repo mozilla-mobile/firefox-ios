@@ -41,7 +41,7 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
-        case .hntBookmarksSectionFeature:
+        case .hntBookmarksSection:
             return checkHNTBookmarksSectionFeature(from: nimbus)
 
         case .hntContentFeedRefresh:
