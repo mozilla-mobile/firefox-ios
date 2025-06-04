@@ -1274,6 +1274,10 @@ class BrowserViewController: UIViewController,
         checkForJSAlerts()
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
+
+        // when toolbars are hidden/shown the mask on the content view that is used for
+        // toolbar translucency needs to be updated
+        updateBlurViews()
     }
 
     func checkForJSAlerts() {
