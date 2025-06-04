@@ -3498,11 +3498,6 @@ class BrowserViewController: UIViewController,
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 
-    private func updateAddressBarBackgroundViewColor(theme: Theme) {
-        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-//        addressBarBackgroundView.backgroundColor = theme.colors.layer3
-    }
-
     // MARK: - Telemetry
 
     private func logTelemetryForAppDidEnterBackground() {

@@ -23,6 +23,10 @@ class StatusBarOverlay: UIView,
                         StatusBarScrollDelegate,
                         SearchBarLocationProvider,
                         Notifiable {
+    private struct UX {
+        static let overlayAppearanceAnimationDuration: TimeInterval = 0.2
+    }
+
     private var savedBackgroundColor: UIColor?
     private var savedIsHomepage: Bool?
     private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
@@ -89,9 +93,14 @@ class StatusBarOverlay: UIView,
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
     }
 
-    func showOverlay(animated: Bool, isHomepage: Bool) {
+    func showOverlay(animated: Bool) {
+        guard animated else {
+            scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: 1.0)
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(toolbarHelper.backgroundAlpha())
+            return
+        }
         UIView.animate(
-            withDuration: 0.2,
+            withDuration: UX.overlayAppearanceAnimationDuration,
             delay: 0,
             options: .curveEaseIn
         ) {
@@ -101,8 +110,13 @@ class StatusBarOverlay: UIView,
     }
 
     func restoreOverlay(animated: Bool, isHomepage: Bool) {
+        guard animated else {
+            scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: scrollOffset)
+            resetState(isHomepage: isHomepage)
+            return
+        }
         UIView.animate(
-            withDuration: 0.2,
+            withDuration: UX.overlayAppearanceAnimationDuration,
             delay: 0,
             options: .curveEaseIn
         ) {

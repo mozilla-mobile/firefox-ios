@@ -100,7 +100,7 @@ final class AddressBarPanGestureHandler: NSObject {
                     height: webPagePreview.frame.height
                 )
             )
-            statusBarOverlay.showOverlay(animated: true, isHomepage: contentContainer.hasHomepage)
+            statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended, .cancelled, .failed:
@@ -161,7 +161,8 @@ final class AddressBarPanGestureHandler: NSObject {
                     tabManager.selectTab(nextTab)
                 }
             } else {
-                statusBarOverlay.restoreOverlay(animated: true, isHomepage: contentContainer.hasHomepage)
+                statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
+                                                isHomepage: contentContainer.hasHomepage)
             }
         }
     }

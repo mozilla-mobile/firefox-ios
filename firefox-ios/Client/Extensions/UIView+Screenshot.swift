@@ -20,15 +20,17 @@ extension UIView: Screenshotable {
         return screenshot(frame.size, offset: CGPoint(x: 0, y: 59), quality: quality)
     }
 
+    /// Takes a screenshot of the view by drawing it's content in the provided bounds.
+    /// - Parameters:
+    ///    - bounds: The area of the view to snapshot
+    /// - Returns: The image representing the snapshot of the view in the provided bounds.
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
 
         return renderer.image { context in
-            UIColor.red.setFill()
-            context.fill(CGRect(origin: .zero, size: bounds.size))
             drawHierarchy(
                 in: CGRect(
-                    x: 0,
+                    x: bounds.origin.x,
                     y: -bounds.origin.y,
                     width: bounds.width,
                     height: frame.height

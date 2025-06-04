@@ -160,10 +160,6 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
     }
 
-    func getScreenshot() -> Screenshotable? {
-        return homepageViewController
-    }
-
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
         store.dispatch(
             HomepageAction(
