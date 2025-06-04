@@ -185,15 +185,15 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    public func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
+    private func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntBookmarksSectionFeature.value().enabled
     }
 
-    public func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
+    private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
     }
 
-    public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 
