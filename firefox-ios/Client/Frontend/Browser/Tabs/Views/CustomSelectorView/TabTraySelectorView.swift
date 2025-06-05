@@ -85,20 +85,7 @@ class TabTraySelectorView: UIView,
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
-<<<<<<< HEAD
-            let button = UIButton()
-            button.setTitle(title, for: .normal)
-            button.tag = index
-            button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
-            button.accessibilityHint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
-                                              NSNumber(value: index + 1),
-                                              NSNumber(value: items.count))
-            button.accessibilityIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)"
-
-            button.translatesAutoresizingMaskIntoConstraints = false
-=======
             let button = createButton(with: index, title: title)
->>>>>>> 1df90c030 (Add FXIOS-12275 [Tab tray UI experiment] padding on tab tray selector view button (#27087))
             buttons.append(button)
             stackView.addArrangedSubview(button)
         }
