@@ -60,6 +60,53 @@ struct OpenTabsView: View {
         }
     }
 
+    var emptyView: some View {
+        VStack {
+            Text(String.NoOpenTabsLabel)
+            HStack {
+                Spacer()
+                Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                    .foregroundColor(Color("openTabsContentColor"))
+                Text(String.OpenFirefoxLabel)
+                    .foregroundColor(Color("openTabsContentColor"))
+                    .lineLimit(1)
+                    .font(.system(size: 13, weight: .semibold, design: .default))
+                Spacer()
+            }.padding(10)
+        }
+        .foregroundColor(Color("backgroundColor"))
+    }
+
+    var tabsView: some View {
+        VStack(spacing: 8) {
+            ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
+                lineItemForTab(tab)
+            }
+
+            if entry.tabs.count > numberOfTabsToDisplay {
+                HStack(alignment: .center, spacing: 15) {
+                    Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                        .foregroundColor(Color("openTabsContentColor"))
+                        .frame(width: 16, height: 16)
+                    Text(
+                        String.localizedStringWithFormat(
+                            String.MoreTabsLabel,
+                            (entry.tabs.count - numberOfTabsToDisplay)
+                        )
+                    )
+                    .foregroundColor(Color("openTabsContentColor"))
+                    .lineLimit(1)
+                    .font(.system(size: 13, weight: .semibold, design: .default))
+                    Spacer()
+                }.padding([.horizontal])
+            } else {
+                openFirefoxButton
+            }
+
+            Spacer()
+        }.padding(.top, 14)
+    }
+
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink)
@@ -83,48 +130,9 @@ struct OpenTabsView: View {
     var body: some View {
         Group {
             if entry.tabs.isEmpty {
-                VStack {
-                    Text(String.NoOpenTabsLabel)
-                    HStack {
-                        Spacer()
-                        Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                            .foregroundColor(Color("openTabsContentColor"))
-                        Text(String.OpenFirefoxLabel)
-                            .foregroundColor(Color("openTabsContentColor"))
-                            .lineLimit(1)
-                            .font(.system(size: 13, weight: .semibold, design: .default))
-                        Spacer()
-                    }.padding(10)
-                }
-                .foregroundColor(Color("backgroundColor"))
+                emptyView
             } else {
-                VStack(spacing: 8) {
-                    ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
-                        lineItemForTab(tab)
-                    }
-
-                    if entry.tabs.count > numberOfTabsToDisplay {
-                        HStack(alignment: .center, spacing: 15) {
-                            Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                                .foregroundColor(Color("openTabsContentColor"))
-                                .frame(width: 16, height: 16)
-                            Text(
-                                String.localizedStringWithFormat(
-                                    String.MoreTabsLabel,
-                                    (entry.tabs.count - numberOfTabsToDisplay)
-                                )
-                            )
-                            .foregroundColor(Color("openTabsContentColor"))
-                            .lineLimit(1)
-                            .font(.system(size: 13, weight: .semibold, design: .default))
-                            Spacer()
-                        }.padding([.horizontal])
-                    } else {
-                        openFirefoxButton
-                    }
-
-                    Spacer()
-                }.padding(.top, 14)
+                tabsView
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
