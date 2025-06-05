@@ -199,7 +199,7 @@ final class NimbusFeatureFlagLayer {
     private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntJumpBackInSectionFeature.value().enabled
     }
-    
+
     private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
