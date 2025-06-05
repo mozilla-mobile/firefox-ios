@@ -129,7 +129,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     func evaluateJavaScript(_ javaScript: String,
                             in frame: WKFrameInfo?,
                             in contentWorld: WKContentWorld,
-                            completionHandler: ((Result<Any, Error>) -> Void)?) {
+                            completionHandler: (@MainActor @Sendable (Result<Any, Error>) -> Void)?) {
         evaluateJavaScriptCalled += 1
         savedJavaScript = javaScript
 
