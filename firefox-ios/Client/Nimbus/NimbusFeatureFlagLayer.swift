@@ -103,9 +103,6 @@ final class NimbusFeatureFlagLayer {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
-        case .tabAnimation:
-            return checkTabAnimationFeature(from: nimbus)
-
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
 
@@ -185,6 +182,7 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+<<<<<<< HEAD
     private func checkNimbusForContextualHintsFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -206,6 +204,8 @@ final class NimbusFeatureFlagLayer {
         return config.animationFeature
     }
 
+=======
+>>>>>>> 22b5a6a48 (Remove FXIOS-12410 [Tab tray UI experiment] Remove Tab Animation Flag and put all related work under the general Tab Tray Experiment flag (#27119))
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.enabled

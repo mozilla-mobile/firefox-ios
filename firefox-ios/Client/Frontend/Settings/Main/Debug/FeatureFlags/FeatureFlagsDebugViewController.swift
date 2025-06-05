@@ -130,9 +130,29 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+<<<<<<< HEAD
                     with: .feltPrivacySimplifiedUI,
                     titleText: format(string: "Enable Felt Privacy UI"),
                     statusText: format(string: "Toggle to felt privacy UI")
+=======
+                    with: .useRustKeychain,
+                    titleText: format(string: "Rust Keychain"),
+                    statusText: format(string: "Toggle to enable rust keychain")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .sentFromFirefox,
+                    titleText: format(string: "Sent from Firefox"),
+                    statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .tabTrayUIExperiments,
+                    titleText: format(string: "Tab Tray UI Experiment"),
+                    statusText: format(string: "Toggle to use the new tab tray UI")
+>>>>>>> 22b5a6a48 (Remove FXIOS-12410 [Tab tray UI experiment] Remove Tab Animation Flag and put all related work under the general Tab Tray Experiment flag (#27119))
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

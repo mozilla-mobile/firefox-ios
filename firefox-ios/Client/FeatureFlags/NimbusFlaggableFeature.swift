@@ -39,6 +39,18 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
+<<<<<<< HEAD
+=======
+    case tabTrayUIExperiments
+    case toolbarNavigationHint
+    case toolbarUpdateHint
+    case toolbarOneTapNewTab
+    case toolbarRefactor
+    case toolbarSwipingTabs
+    case toolbarTranslucency
+    case tosFeature
+    case trackingProtectionRefactor
+>>>>>>> 22b5a6a48 (Remove FXIOS-12410 [Tab tray UI experiment] Remove Tab Animation Flag and put all related work under the general Tab Tray Experiment flag (#27119))
     case unifiedAds
     case unifiedSearch
     case tabAnimation
@@ -71,7 +83,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .noInternetConnectionErrorPage,
                 .searchEngineConsolidation,
                 .sentFromFirefox,
-                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
@@ -139,6 +150,18 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchEngineConsolidation,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
+<<<<<<< HEAD
+=======
+                .tabTrayUIExperiments,
+                .toolbarNavigationHint,
+                .toolbarUpdateHint,
+                .toolbarOneTapNewTab,
+                .toolbarRefactor,
+                .toolbarSwipingTabs,
+                .toolbarTranslucency,
+                .tosFeature,
+                .trackingProtectionRefactor,
+>>>>>>> 22b5a6a48 (Remove FXIOS-12410 [Tab tray UI experiment] Remove Tab Animation Flag and put all related work under the general Tab Tray Experiment flag (#27119))
                 .unifiedAds,
                 .unifiedSearch,
                 .tabAnimation,
