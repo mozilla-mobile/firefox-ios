@@ -11,9 +11,9 @@ protocol TabTraySelectorDelegate: AnyObject {
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
-    static let horizontalPadding: CGFloat = 40
+    static let horizontalPadding: CGFloat = 20
     static let cornerRadius: CGFloat = 12
-    static let verticalInsets: CGFloat = 4
+    static let verticalInsets: CGFloat = 8
     static let maxFontSize: CGFloat = 30
     static let horizontalInsets: CGFloat = 10
     static let fontScaleDelta: CGFloat = 0.055
@@ -33,7 +33,7 @@ class TabTraySelectorView: UIView,
 
     private var theme: Theme
     private var selectedIndex: Int
-    private var buttons: [UIButton] = []
+    private var buttons: [TabTraySelectorButton] = []
     private lazy var selectionBackgroundView: UIView = .build { _ in }
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
 
@@ -84,6 +84,7 @@ class TabTraySelectorView: UIView,
         addSubview(stackView)
 
         for (index, title) in items.enumerated() {
+<<<<<<< HEAD
             let button = UIButton()
             button.setTitle(title, for: .normal)
             button.tag = index
@@ -98,6 +99,9 @@ class TabTraySelectorView: UIView,
                                               NSNumber(value: index + 1),
                                               NSNumber(value: items.count))
             button.translatesAutoresizingMaskIntoConstraints = false
+=======
+            let button = createButton(with: index, title: title)
+>>>>>>> 1df90c030 (Add FXIOS-12275 [Tab tray UI experiment] padding on tab tray selector view button (#27087))
             buttons.append(button)
             stackView.addArrangedSubview(button)
         }
@@ -105,8 +109,7 @@ class TabTraySelectorView: UIView,
         NSLayoutConstraint.activate([
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor,
-                                                            constant: TabTraySelectorUX.verticalInsets * 2),
+            selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor),
             selectionBackgroundView.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
             selectionBackgroundView.centerXAnchor.constraint(equalTo: buttons[selectedIndex].centerXAnchor)
         ])
@@ -114,11 +117,42 @@ class TabTraySelectorView: UIView,
         applyTheme(theme: theme)
     }
 
+    private func createButton(with index: Int, title: String) -> TabTraySelectorButton {
+        let button = TabTraySelectorButton()
+        let hint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
+                          NSNumber(value: index + 1),
+                          NSNumber(value: items.count))
+        let font = index == selectedIndex
+            ? FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+            : FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let contentInsets = NSDirectionalEdgeInsets(
+            top: TabTraySelectorUX.verticalInsets,
+            leading: TabTraySelectorUX.horizontalInsets,
+            bottom: TabTraySelectorUX.verticalInsets,
+            trailing: TabTraySelectorUX.horizontalInsets
+        )
+        let viewModel = TabTraySelectorButtonModel(
+            title: title,
+            a11yIdentifier: "\(AccessibilityIdentifiers.TabTray.selectorCell)\(index)",
+            a11yHint: hint,
+            font: font,
+            contentInsets: contentInsets,
+            cornerRadius: TabTraySelectorUX.cornerRadius
+        )
+        button.configure(viewModel: viewModel)
+        button.applyTheme(theme: theme)
+
+        button.tag = index
+        button.addTarget(self, action: #selector(sectionSelected(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
+
     private func applyInitalSelectionBackgroundFrame() {
         guard buttons.indices.contains(selectedIndex) else { return }
         layoutIfNeeded()
         let selectedButton = buttons[selectedIndex]
-        let width = selectedButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let width = selectedButton.frame.width
 
         selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
         selectionBackgroundWidthConstraint?.isActive = true
@@ -144,7 +178,8 @@ class TabTraySelectorView: UIView,
 
         let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
         let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
-        button.widthAnchor.constraint(equalToConstant: boldWidth).isActive = true
+        let horizontalInsets = TabTraySelectorUX.horizontalInsets * 2
+        button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
     }
 
     @objc
@@ -168,9 +203,19 @@ class TabTraySelectorView: UIView,
     private func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
             button.transform = .identity
+<<<<<<< HEAD
             button.titleLabel?.font = index == toIndex ?
             FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize) :
             FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+=======
+            let isSelected = index == toIndex
+            button.isSelected = isSelected
+
+            let font = isSelected
+                ? FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+                : FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+            button.applySelectedFontChange(font: font)
+>>>>>>> 1df90c030 (Add FXIOS-12275 [Tab tray UI experiment] padding on tab tray selector view button (#27087))
         }
     }
 
@@ -256,8 +301,8 @@ class TabTraySelectorView: UIView,
         let selectionTargetCenterX = parentView.convert(CGPoint(x: buttonCenterXDuringTransition, y: 0), to: self).x
         let targetOffset = selectionTargetCenterX - selectionBackgroundView.center.x
 
-        let fromWidth = fromButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
-        let toWidth = toButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
+        let fromWidth = fromButton.frame.width
+        let toWidth = toButton.frame.width
         let selectionIndicatorWidthDuringTransition = fromWidth + (toWidth - fromWidth) * progress
 
         return SelectionIndicatorTransition(selectionIndicatorWidthDuringTransition: selectionIndicatorWidthDuringTransition,
@@ -270,10 +315,6 @@ class TabTraySelectorView: UIView,
         self.theme = theme
         backgroundColor = theme.colors.layer1
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
-
-        for button in buttons {
-            button.setTitleColor(theme.colors.textPrimary, for: .normal)
-        }
     }
 
     // MARK: - Notifiable
