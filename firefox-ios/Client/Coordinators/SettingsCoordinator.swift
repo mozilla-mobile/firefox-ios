@@ -349,7 +349,7 @@ final class SettingsCoordinator: BaseCoordinator,
     // MARK: GeneralSettingsDelegate
 
     func pressedCustomizeAppIcon() {
-        settingsTelemetry.tappedAppIconSetting()
+        settingsTelemetry.optionSelected(option: .AppIconSelection)
 
         let viewController = UIHostingController(
             rootView: AppIconSelectionView(
