@@ -15,6 +15,9 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 # Please add your tags alphabetically.
 ###############################################################################
 
+AppIcon:
+  description: Corresponds to interactions with the app icon on the iOS home screen (e.g. long press menu).
+
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
