@@ -191,7 +191,8 @@ extension PreviewModel {
                 action: .openPrivacyNotice
             ),
             EmbeddedLink(
-                fullText: "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage settings",
+                fullText:
+                    "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage settings",
                 linkText: "Manage settings",
                 action: .openManageSettings
             )
