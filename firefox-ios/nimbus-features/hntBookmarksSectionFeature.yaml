@@ -1,0 +1,16 @@
+# The configuration for the bookmarks homepage section feature
+features:
+  hnt-bookmarks-section-feature:
+    description: This feature manages the visibility of the bookmarks section of the homepage and the respective toggle in the homepage settings
+    variables:
+      enabled:
+        description: Setting 'enabled' to false will hide the bookmarks section of the homepage and disable the respective toggle in the homepage settings
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true

@@ -41,6 +41,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+        case .hntBookmarksSection:
+            return checkHNTBookmarksSectionFeature(from: nimbus)
+
         case .hntContentFeedRefresh:
             return checkHNTContentFeedRefreshFeature(from: nimbus)
 
@@ -182,11 +185,15 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    public func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
+    private func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntBookmarksSectionFeature.value().enabled
+    }
+
+    private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
     }
 
-    public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 
