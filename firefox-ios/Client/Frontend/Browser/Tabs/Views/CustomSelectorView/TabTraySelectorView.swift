@@ -138,6 +138,7 @@ class TabTraySelectorView: UIView,
         let selectedButton = buttons[selectedIndex]
         let width = selectedButton.frame.width
 
+        selectionBackgroundWidthConstraint?.isActive = false
         selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
         selectionBackgroundWidthConstraint?.isActive = true
     }
@@ -293,6 +294,10 @@ class TabTraySelectorView: UIView,
         self.theme = theme
         backgroundColor = theme.colors.layer1
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
+
+        for button in buttons {
+            button.applyTheme(theme: theme)
+        }
     }
 
     // MARK: - Notifiable
@@ -315,6 +320,10 @@ class TabTraySelectorView: UIView,
         }
 
         applyInitalSelectionBackgroundFrame()
+        updateSelectionBackground(from: selectedIndex,
+                                  to: selectedIndex,
+                                  progress: 1.0,
+                                  animated: false)
 
         setNeedsLayout()
         layoutIfNeeded()
