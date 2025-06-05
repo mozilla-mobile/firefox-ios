@@ -6,8 +6,7 @@ import UIKit
 import SiteImageView
 import Common
 
-final class TabWebViewPreview: UIView,
-                               ThemeApplicable {
+final class TabWebViewPreview: UIView {
     private struct UX {
         static let faviconCornerRadius: CGFloat = 20.0
         static let faviconImageViewSize: CGFloat = 45.0
@@ -70,15 +69,13 @@ final class TabWebViewPreview: UIView,
                 faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString,
                                                                   faviconCornerRadius: UX.faviconCornerRadius))
             }
-        } else {
-            if let screenshot = tab.screenshot {
-                if screenshot.size.width > webPageScreenshotImageView.bounds.size.width {
-                    webPageScreenshotImageView.contentMode = .scaleAspectFill
-                } else {
-                    webPageScreenshotImageView.contentMode = .top
-                }
-                webPageScreenshotImageView.image = screenshot
+        } else if let screenshot = tab.screenshot {
+            if screenshot.size.width > webPageScreenshotImageView.bounds.size.width {
+                webPageScreenshotImageView.contentMode = .scaleAspectFill
+            } else {
+                webPageScreenshotImageView.contentMode = .top
             }
+            webPageScreenshotImageView.image = screenshot
         }
     }
 
@@ -89,7 +86,4 @@ final class TabWebViewPreview: UIView,
     func transitionDidEnd() {
         layoutWasInvalidated = false
     }
-
-    // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {}
 }

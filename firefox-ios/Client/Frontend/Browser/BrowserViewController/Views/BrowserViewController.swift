@@ -242,7 +242,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
     private(set) lazy var tabsTelemetry = TabsTelemetry()
 
-    private lazy var appStartupTelemetry = AppStartupTelemetry()
+    private let appStartupTelemetry: AppStartupTelemetry
 
     // location label actions
     var pasteGoAction: AccessibleAction?
@@ -368,6 +368,7 @@ class BrowserViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
@@ -382,6 +383,7 @@ class BrowserViewController: UIViewController,
         self.crashTracker = DefaultCrashTracker()
         self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.downloadQueue = downloadQueue
+        self.appStartupTelemetry = appStartupTelemetry
         self.logger = logger
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
@@ -894,9 +896,9 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
 
-        Task(priority: .background) {
+        Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
-            self.trackStartupTelemetry()
+            self?.trackStartupTelemetry()
         }
     }
 
@@ -911,9 +913,6 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.applyTheme(theme: theme)
-        }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)

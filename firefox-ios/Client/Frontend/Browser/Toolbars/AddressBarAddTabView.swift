@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Common
 
-class AddressBarAddTabView: UIView, ThemeApplicable {
+final class AddressBarAddTabView: UIView, ThemeApplicable {
     private struct UX {
         static let cornerRadius: CGFloat = 12.0
     }
@@ -18,14 +18,14 @@ class AddressBarAddTabView: UIView, ThemeApplicable {
 
     init() {
         super.init(frame: .zero)
-        setup()
+        setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setup() {
+    private func setupLayout() {
         layer.cornerRadius = UX.cornerRadius
         addSubview(plusIconView)
         NSLayoutConstraint.activate([

@@ -17,7 +17,7 @@ extension UIView: Screenshotable {
     ///   The expected value is 0 to 1 and is defaulted to 1
     /// - Returns: The image that represents the screenshot
     func screenshot(quality: CGFloat = 1) -> UIImage? {
-        return screenshot(frame.size, offset: CGPoint(x: 0, y: 59), quality: quality)
+        return screenshot(frame.size, offset: nil, quality: quality)
     }
 
     /// Takes a screenshot of the view by drawing it's content in the provided bounds.

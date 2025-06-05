@@ -31,7 +31,7 @@ class StatusBarOverlay: UIView,
     private var savedIsHomepage: Bool?
     private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
     private var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
-    var scrollDelegate: BrowserStatusBarScrollDelegate?
+    weak var scrollDelegate: BrowserStatusBarScrollDelegate?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
 
