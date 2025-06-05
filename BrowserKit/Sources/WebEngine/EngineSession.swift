@@ -78,9 +78,6 @@ public protocol EngineSession: NSObject {
 
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
-
-    /// Returns a print formatter for the web view's contents.
-    func viewPrintFormatter() -> UIPrintFormatter
 }
 
 public extension EngineSession {

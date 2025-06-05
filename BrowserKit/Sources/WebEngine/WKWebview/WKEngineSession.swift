@@ -362,7 +362,7 @@ class WKEngineSession: NSObject,
                                               forSession: self)
 
         contentScriptManager.addContentScriptToPage(
-            PrintContentScript(session: self),
+            PrintContentScript(webView: webView),
             name: PrintContentScript.name(),
             forSession: self
         )

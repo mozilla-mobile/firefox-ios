@@ -5,16 +5,22 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
+@available(iOS 16.0, *)
 final class PrintContentScriptTests: XCTestCase {
-    private var session: MockEngineSession!
+    private var webView: MockWKEngineWebView!
 
     override func setUp() {
         super.setUp()
-        session = MockEngineSession()
+        let webViewProvider = MockWKWebViewProvider()
+        webView = webViewProvider.createWebview(
+            configurationProvider: MockWKEngineConfigurationProvider(),
+            parameters: WKWebViewParameters()
+        ) as? MockWKEngineWebView
     }
 
     override func tearDown() {
-        session = nil
+        webView = nil
         super.tearDown()
     }
 
@@ -23,7 +29,7 @@ final class PrintContentScriptTests: XCTestCase {
 
         subject.userContentController(didReceiveMessage: [])
 
-        XCTAssertEqual(session.viewPrintFormatterCalled, 1)
+        XCTAssertEqual(webView.viewPrintFormatterCalled, 1)
     }
 
     func test_userContentController_withMessage_returnsProperDelegateCall() {
@@ -31,11 +37,11 @@ final class PrintContentScriptTests: XCTestCase {
 
         subject.userContentController(didReceiveMessage: ["any message"])
 
-        XCTAssertEqual(session.viewPrintFormatterCalled, 1)
+        XCTAssertEqual(webView.viewPrintFormatterCalled, 1)
     }
 
     private func createSubject() -> PrintContentScript {
-        let subject = PrintContentScript(session: session)
+        let subject = PrintContentScript(webView: webView)
         trackForMemoryLeaks(subject)
         return subject
     }

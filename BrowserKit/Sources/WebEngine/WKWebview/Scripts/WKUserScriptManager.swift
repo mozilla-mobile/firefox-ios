@@ -81,8 +81,10 @@ class DefaultUserScriptManager: WKUserScriptManager {
         compiledUserScripts[name] = userScript
     }
 
+    // We inject a script that needs to be in the `page` content world in order to hook `window.print()`.
+    // Github issue: #8274
     private func injectPrintScript() -> WKUserScript {
-        let source = "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }"
+        let source = "window.print = () => window.webkit.messageHandlers.printHandler.postMessage({})"
         return WKUserScript(
             source: source,
             injectionTime: .atDocumentEnd,

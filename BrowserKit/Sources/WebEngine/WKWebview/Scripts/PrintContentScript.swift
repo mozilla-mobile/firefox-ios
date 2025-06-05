@@ -6,10 +6,10 @@ import UIKit
 
 /// Script utility to handle showing print preview options for the content via the system-provided UI on pages
 final class PrintContentScript: WKContentScript {
-    private weak var session: EngineSession?
+    private weak var webView: WKEngineWebView?
 
-    init(session: EngineSession?) {
-        self.session = session
+    init(webView: WKEngineWebView?) {
+        self.webView = webView
     }
     static func name() -> String {
         return "Print"
@@ -21,7 +21,7 @@ final class PrintContentScript: WKContentScript {
 
     func userContentController(didReceiveMessage message: Any) {
         let printController = UIPrintInteractionController.shared
-        printController.printFormatter = session?.viewPrintFormatter()
+        printController.printFormatter = webView?.viewPrintFormatter()
         printController.present(animated: true, completionHandler: nil)
     }
 }
