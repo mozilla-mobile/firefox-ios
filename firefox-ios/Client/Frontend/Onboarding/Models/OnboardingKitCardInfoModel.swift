@@ -22,6 +22,7 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
     var onboardingType: OnboardingType
     var a11yIdRoot: String
     var imageID: String
+    var embededLinkText: [OnboardingKit.EmbeddedLink]
 
     // Required initializer
     init(
@@ -36,7 +37,8 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         onboardingType: OnboardingType = .freshInstall,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil
+        instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil,
+        embededLinkText: [OnboardingKit.EmbeddedLink] = []
     ) {
         self.cardType = cardType
         self.name = name
@@ -50,5 +52,6 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         self.a11yIdRoot = a11yIdRoot
         self.imageID = imageID
         self.instructionsPopup = instructionsPopup
+        self.embededLinkText = embededLinkText
     }
 }

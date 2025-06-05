@@ -16,6 +16,7 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
     var buttons: OnboardingButtons<OnboardingActions>
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
     var onboardingType: OnboardingType
+    var embededLinkText: [EmbeddedLink]
 
     init(
         cardType: OnboardingCardType,
@@ -29,12 +30,14 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
         onboardingType: OnboardingType = .freshInstall,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? = nil,
+        embededLinkText: [EmbeddedLink] = []
     ) {
         self.cardType = cardType; self.name = name; self.order = order; self.title = title; self.body = body
         self.link = link; self.buttons = buttons; self.multipleChoiceButtons = multipleChoiceButtons
         self.onboardingType = onboardingType; self.a11yIdRoot = a11yIdRoot; self.imageID = imageID
         self.instructionsPopup = instructionsPopup
+        self.embededLinkText = embededLinkText
     }
 }
 
@@ -159,6 +162,41 @@ extension PreviewModel {
         imageID: "toolbar",
         instructionsPopup: nil
     )
+
+    static let tos = PreviewModel(
+        cardType: .basic,
+        name: "tos",
+        order: 20,
+        title: "Upgrade your browsing",
+        body: "Our fastest iOS browser yet\nAutomatic tracking protection\nSync on all your devices",
+        link: nil,
+        buttons: .init(
+            primary: .init(title: "Agree and Continue", action: OnboardingActions.syncSignIn),
+            secondary: nil
+        ),
+        multipleChoiceButtons: [],
+        onboardingType: .freshInstall,
+        a11yIdRoot: "onboarding_termsOfService",
+        imageID: "fxHomeHeaderLogoBall",
+        instructionsPopup: nil,
+        embededLinkText: [
+            EmbeddedLink(
+                fullText: "By continuing, you agree to the Firefox Terms of Use",
+                linkText: "Firefox Terms of Use",
+                action: .openTermsOfService
+            ),
+            EmbeddedLink(
+                fullText: "Firefox cares about your privacy. Read more in our Privacy Notice",
+                linkText: "Privacy Notice",
+                action: .openPrivacyNotice
+            ),
+            EmbeddedLink(
+                fullText: "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage settings",
+                linkText: "Manage settings",
+                action: .openManageSettings
+            )
+        ]
+    )
 }
 
 extension PreviewModel {
@@ -207,6 +245,21 @@ extension PreviewModel {
             onboardingCards: PreviewModel.all,
             onComplete: { }
         )
+    )
+}
+
+#Preview("Terms of service") {
+    TermsOfServiceView(
+        viewModel: TosFlowViewModel(
+            configuration: PreviewModel.tos,
+            onTermsOfServiceTap: {},
+            onPrivacyNoticeTap: {},
+            onManageSettingsTap: {},
+            onComplete: {}
+        ),
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+        onEmbededLinkAction: { _ in }
     )
 }
 

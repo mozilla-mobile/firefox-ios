@@ -8,7 +8,7 @@ public protocol OnboardingCardInfoModelProtocol {
     associatedtype OnboardingType
     associatedtype OnboardingPopupActionType
     associatedtype OnboardingMultipleChoiceActionType: Hashable
-    associatedtype OnboardingActionType
+    associatedtype OnboardingActionType: RawRepresentable where OnboardingActionType.RawValue == String
     var cardType: OnboardingCardType { get set }
     var name: String { get set }
     var order: Int { get set }
@@ -21,6 +21,7 @@ public protocol OnboardingCardInfoModelProtocol {
     var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
+    var embededLinkText: [EmbeddedLink] { get set }
 
     var image: UIImage? { get }
 
@@ -36,6 +37,7 @@ public protocol OnboardingCardInfoModelProtocol {
         onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
-        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>?
+        instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>?,
+        embededLinkText: [EmbeddedLink]
     )
 }
