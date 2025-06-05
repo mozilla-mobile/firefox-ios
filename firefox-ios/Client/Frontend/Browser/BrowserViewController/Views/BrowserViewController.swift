@@ -1179,6 +1179,13 @@ class BrowserViewController: UIViewController,
 
         if !showNavToolbar && isBottomSearchBar && !isKeyboardShowing {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+<<<<<<< HEAD
+=======
+            overKeyboardContainer.moveSpacerToBack()
+
+            // make sure the bottom inset spacer has the right color/translucency
+            overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+>>>>>>> 8966d46a6 (Bugfix FXIOS-12415 [Toolbar] Location view shadow is not updated (#27098))
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
         }
