@@ -36,7 +36,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         tab.webView = mockTabWebView
         tab.url = homeURL
 
-        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID)
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
         guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
             XCTFail("fired action was not of the expected type")
@@ -59,7 +59,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         tab.webView = mockTabWebView
         tab.url = homeURL
 
-        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID)
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
         guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
             XCTFail("fired action was not of the expected type")
@@ -81,7 +81,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         tab.webView = mockTabWebView
         tab.url = homeURL
 
-        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID)
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
         guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
             XCTFail("fired action was not of the expected type")

@@ -249,7 +249,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 class MockScreenshotHelper: ScreenshotHelper {
     var takeScreenshotCalled = false
 
-    override func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID, completion: (() -> Void)? = nil) {
+    override func takeScreenshot(_ tab: Tab,
+                                 windowUUID: WindowUUID,
+                                 screenshotBounds: CGRect,
+                                 completion: (() -> Void)? = nil) {
         takeScreenshotCalled = true
     }
 }
