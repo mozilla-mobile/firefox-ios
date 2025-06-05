@@ -38,6 +38,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView(hasInfoTitle: model?.infoTitle != nil)
     }
 
     required init?(coder: NSCoder) {
@@ -65,7 +66,6 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.accessibilityHint = model.a11yHint
         self.accessibilityTraits = .button
         self.separatorInset = .zero
-        setupView(hasInfoTitle: model.infoTitle != nil)
     }
 
     private func setupView(hasInfoTitle: Bool) {
