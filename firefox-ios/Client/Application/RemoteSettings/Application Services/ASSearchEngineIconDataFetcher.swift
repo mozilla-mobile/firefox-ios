@@ -21,6 +21,7 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     let service: RemoteSettingsService
     let client: RemoteSettingsClient?
     let logger: Logger
+    private lazy var fallbackEngineIcon: UIImage? = UIImage(named: StandardImageIdentifiers.Large.search)
 
     init?(logger: Logger = DefaultLogger.shared) {
         let profile: Profile = AppContainer.shared.resolve()
@@ -101,18 +102,20 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     private func fetchIcon(for iconRecord: ASSearchEngineIconRecord) -> UIImage? {
         guard let client else { return nil }
         do {
+            var fetchedIcon: UIImage?
             let data = try client.getAttachment(record: iconRecord.backingRecord)
             let mimeType = iconRecord.mimeType ?? ""
             if mimeType.hasPrefix("image/svg") {
-                return SVG(data: data)?.rasterize()
+                fetchedIcon = SVG(data: data)?.rasterize()
             } else if mimeType.hasPrefix("application/pdf") {
-                return UIImage.imageFromPDF(data: data, minimumSize: CGSize(width: 64.0, height: 64.0))
+                fetchedIcon = UIImage.imageFromPDF(data: data, minimumSize: CGSize(width: 64.0, height: 64.0))
             } else {
-                return UIImage(data: data)
+                fetchedIcon = UIImage(data: data)
             }
+            return fetchedIcon ?? fallbackEngineIcon
         } catch {
             logger.log("Error fetching engine icon attachment (\(iconRecord.id)).", level: .warning, category: .remoteSettings)
+            return fallbackEngineIcon
         }
-        return nil
     }
 }
