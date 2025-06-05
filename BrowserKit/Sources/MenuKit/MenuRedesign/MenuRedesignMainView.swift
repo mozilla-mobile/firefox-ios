@@ -7,13 +7,12 @@ import UIKit
 import ComponentLibrary
 
 public final class MenuRedesignMainView: UIView,
-                                 ThemeApplicable {
+                                         ThemeApplicable {
     private struct UX {
         static let headerTopMargin: CGFloat = 15
     }
 
     // MARK: - UI Elements
-    private var collectionView: MenuCollectionView = .build()
     private var tableView: MenuRedesignTableView = .build()
 
     // MARK: - Initializers
@@ -28,36 +27,28 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
-        self.addSubview(collectionView)
         self.addSubview(tableView)
-
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: self.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-
-            tableView.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
 
-    public func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
-        collectionView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
+    public func setupAccessibilityIdentifiers(menuA11yId: String,
+                                              menuA11yLabel: String) {
         tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
     }
 
     // MARK: - Interface
     public func reloadDataView(with data: [MenuSection]) {
-        collectionView.reloadCollectionView(with: data)
         tableView.reloadTableView(with: data)
     }
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = .clear
-        collectionView.applyTheme(theme: theme)
         tableView.applyTheme(theme: theme)
     }
 }
