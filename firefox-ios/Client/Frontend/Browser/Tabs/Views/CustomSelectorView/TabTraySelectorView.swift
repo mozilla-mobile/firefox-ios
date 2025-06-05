@@ -120,6 +120,7 @@ class TabTraySelectorView: UIView,
         let selectedButton = buttons[selectedIndex]
         let width = selectedButton.frame.width + (TabTraySelectorUX.horizontalInsets * 2)
 
+        selectionBackgroundWidthConstraint?.isActive = false
         selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
         selectionBackgroundWidthConstraint?.isActive = true
     }
@@ -272,7 +273,11 @@ class TabTraySelectorView: UIView,
         selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
 
         for button in buttons {
+<<<<<<< HEAD
             button.setTitleColor(theme.colors.textPrimary, for: .normal)
+=======
+            button.applyTheme(theme: theme)
+>>>>>>> 1070b475e (Bugfix FXIOS-12429 [Tab tray UI experiment] dynamic type live change (#27104))
         }
     }
 
@@ -296,6 +301,10 @@ class TabTraySelectorView: UIView,
         }
 
         applyInitalSelectionBackgroundFrame()
+        updateSelectionBackground(from: selectedIndex,
+                                  to: selectedIndex,
+                                  progress: 1.0,
+                                  animated: false)
 
         setNeedsLayout()
         layoutIfNeeded()
