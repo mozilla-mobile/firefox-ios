@@ -23,6 +23,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
@@ -230,6 +231,33 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    func test_cusomizationSectionFlagEnabled_returnsExpectedSections() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let state = HomepageState(windowUUID: .XCTestDefaultUUID)
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+        let snapshot = dataSource.snapshot()
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .customizeHomepage
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    func test_cusomizationSectionFlagDisabled_returnsExpectedSections() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: false)
+
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let state = HomepageState(windowUUID: .XCTestDefaultUUID)
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+        let snapshot = dataSource.snapshot()
+        let expectedSections: [HomepageSection] = [
+            .header,
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
         var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
@@ -268,5 +296,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!
         return tab
+    }
+
+    private func setupNimbusHNTCustomizationSectionTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.hntCustomizationSectionFeature.with { _, _ in
+            return HntCustomizationSectionFeature(
+                enabled: isEnabled
+            )
+        }
     }
 }
