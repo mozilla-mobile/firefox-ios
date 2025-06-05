@@ -9,8 +9,8 @@ import StoreKit
 
 struct UserConversionMetrics {
     private enum ConversionValue: Int {
-        case newTab = 10
-        case search = 15
+        case newTab = 21
+        case search = 20
     }
 
     func didOpenNewTab() {
