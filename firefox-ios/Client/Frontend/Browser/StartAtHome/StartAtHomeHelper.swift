@@ -9,6 +9,7 @@ class StartAtHomeHelper: FeatureFlaggable {
     private struct Constants {
         static let hoursToTriggerStartAtHome = 4
         static let secondsToTriggerStartAtHome = 5
+        static let secondsPerHour = 3600
     }
 
     private var isRestoringTabs: Bool
@@ -51,8 +52,7 @@ class StartAtHomeHelper: FeatureFlaggable {
         let timeInterval = date.timeIntervalSince(lastActiveTimestamp)
         switch startAtHomeSetting {
         case .afterFourHours:
-            let secondsPerHour = 3600
-            return timeInterval >= TimeInterval(Constants.hoursToTriggerStartAtHome * secondsPerHour)
+            return timeInterval >= TimeInterval(Constants.hoursToTriggerStartAtHome * Constants.secondsPerHour)
         case .always:
             return timeInterval >= TimeInterval(Constants.secondsToTriggerStartAtHome)
         case .disabled:
