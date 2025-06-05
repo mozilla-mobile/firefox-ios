@@ -3563,7 +3563,7 @@ tabs_panel.close_all_tabs_sheet:
         type: string
         description: |
           The option selected from the close all tabs sheet, either
-          all or cancel.
+          all, old or cancel.
       mode:
         type: string
         description: |
@@ -5668,7 +5668,7 @@ webview:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/25951
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/issues/26220
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
