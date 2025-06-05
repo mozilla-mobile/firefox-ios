@@ -1114,7 +1114,9 @@ class BrowserViewController: UIViewController,
             header.removeArrangedView(addressToolbarContainer, animated: false)
             bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
 
-            if isSwipingTabsEnabled { addressBarPanGestureHandler?.disablePanGestureRecognizer() }
+            if isSwipingTabsEnabled {
+                addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            }
             createLegacyUrlBar()
 
             legacyUrlBar?.snp.makeConstraints { make in
