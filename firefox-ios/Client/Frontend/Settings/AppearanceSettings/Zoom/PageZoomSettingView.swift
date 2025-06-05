@@ -42,7 +42,9 @@ struct PageZoomSettingsView: View {
         ScrollView {
             VStack {
                 // Default zoom level section
-                ZoomLevelPickerView(theme: theme, zoomManager: viewModel.zoomManager)
+                ZoomLevelPickerView(theme: theme,
+                                    zoomManager: viewModel.zoomManager,
+                                    onZoomLevelChanged: viewModel.updateDefaultZoomLevel)
                     .background(theme.colors.layer5.color)
 
                 // Specific site zoom level section

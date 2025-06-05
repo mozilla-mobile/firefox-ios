@@ -9,6 +9,7 @@ struct ZoomLevelPickerView: View {
     @State private var selectedZoomLevel: ZoomLevel
     private let theme: Theme
     private let zoomManager: ZoomPageManager
+    private let onZoomLevelChanged: (ZoomLevel) -> Void
 
     private struct UX {
         static let chevronImageIdentifier = "chevron.down"
@@ -30,9 +31,10 @@ struct ZoomLevelPickerView: View {
         return .Settings.Appearance.PageZoom.ZoomLevelSelectorTitle
     }
 
-    init(theme: Theme, zoomManager: ZoomPageManager) {
+    init(theme: Theme, zoomManager: ZoomPageManager, onZoomLevelChanged: @escaping(ZoomLevel) -> Void) {
         self.theme = theme
         self.zoomManager = zoomManager
+        self.onZoomLevelChanged = onZoomLevelChanged
         let currentZoom = ZoomLevel(from: zoomManager.defaultZoomLevel)
         _selectedZoomLevel = State(initialValue: currentZoom)
     }
@@ -72,10 +74,7 @@ struct ZoomLevelPickerView: View {
                                 .tag(item)
                         }
                     }
-                    .onChange(of: selectedZoomLevel) { newValue in
-                        zoomManager.saveDefaultZoomLevel(defaultZoom: newValue.rawValue)
-                        NotificationCenter.default.post(name: .PageZoomSettingsChanged, object: nil)
-                    }
+                    .onChange(of: selectedZoomLevel, perform: onZoomLevelChanged)
                     .pickerStyle(.inline)
                     .labelsHidden()
                 } label: {
