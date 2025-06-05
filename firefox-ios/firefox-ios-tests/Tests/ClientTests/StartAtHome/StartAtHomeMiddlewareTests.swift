@@ -39,7 +39,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         resetStore()
         super.tearDown()
     }
-    
+
     func test_didBrowserBecomeActiveAction_withAfterFourHours_returnsTrueStartAtHomeCheck() throws {
         mockProfile.prefs.setString(StartAtHome.afterFourHours.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
         let subject = createSubject(with: mockProfile)
@@ -91,7 +91,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted)
         XCTAssertEqual(actionCalled.shouldStartAtHome, true)
     }
-    
+
     func test_didBrowserBecomeActiveAction_withDisabled_returnsFalseStartAtHomeCheck() throws {
         mockProfile.prefs.setString(StartAtHome.disabled.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
         let subject = createSubject(with: mockProfile)
@@ -123,8 +123,8 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         /// 9 Sep 2001 8:00 pm GMT + 0
         let testDate = Date(timeIntervalSince1970: 1_000_065_600)
         let lastSessionDate = Calendar.current.date(
-            byAdding: .day,
-            value: -1,
+            byAdding: .hour,
+            value: -5,
             to: testDate
         )!
         UserDefaults.standard.setValue(lastSessionDate, forKey: "LastActiveTimestamp")

@@ -48,16 +48,13 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// should perform its function.
     public func shouldStartAtHome(with date: Date) -> Bool {
         let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? date
-        let dateComponents = Calendar.current.dateComponents([.hour, .second],
-                                                             from: lastActiveTimestamp,
-                                                             to: date)
+        let timeInterval = date.timeIntervalSince(lastActiveTimestamp)
         switch startAtHomeSetting {
         case .afterFourHours:
-            let hoursSinceLastActive = dateComponents.hour ?? 0
-            return hoursSinceLastActive >= Constants.hoursToTriggerStartAtHome
+            let secondsPerHour = 3600
+            return timeInterval >= TimeInterval(Constants.hoursToTriggerStartAtHome * secondsPerHour)
         case .always:
-            let secondsSinceLastActive = dateComponents.second ?? 0
-            return secondsSinceLastActive >= Constants.secondsToTriggerStartAtHome
+            return timeInterval >= TimeInterval(Constants.secondsToTriggerStartAtHome)
         case .disabled:
             return false
         }
