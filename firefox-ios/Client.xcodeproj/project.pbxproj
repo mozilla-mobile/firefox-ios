@@ -772,6 +772,7 @@
 		8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */; };
 		8A05B0052A69A0C40011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0042A69A0C40011B622 /* Common */; };
 		8A05B0072A69A25C0011B622 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8A05B0062A69A25C0011B622 /* Common */; };
+		8A0636F62DF0CDAD0076823A /* TabTraySelectorButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0636F52DF0CDAD0076823A /* TabTraySelectorButtonModel.swift */; };
 		8A06DF5F2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */; };
 		8A0727462B4890B50071BB9F /* WebviewTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */; };
 		8A0727492B4898D20071BB9F /* WebviewTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0727472B4898750071BB9F /* WebviewTelemetryTests.swift */; };
@@ -8169,6 +8170,7 @@
 		8A05813728B56D9B00FD8D46 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813928B56DB900FD8D46 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813B28B56DD700FD8D46 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
+		8A0636F52DF0CDAD0076823A /* TabTraySelectorButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTraySelectorButtonModel.swift; sourceTree = "<group>"; };
 		8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTitleSupplementaryView.swift; sourceTree = "<group>"; };
 		8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewTelemetry.swift; sourceTree = "<group>"; };
 		8A0727472B4898750071BB9F /* WebviewTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewTelemetryTests.swift; sourceTree = "<group>"; };
@@ -11890,6 +11892,7 @@
 		5A96FB602D97073C00917B12 /* CustomSelectorView */ = {
 			isa = PBXGroup;
 			children = (
+				8A0636F52DF0CDAD0076823A /* TabTraySelectorButtonModel.swift */,
 				5A96FB5E2D96DA9700917B12 /* TabTraySelectorView.swift */,
 			);
 			path = CustomSelectorView;
@@ -17427,6 +17430,7 @@
 				8A8904132D511E6A00A5BB29 /* TabManagerAction.swift in Sources */,
 				C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */,
 				8AB53B3E2D41463900C97590 /* MessageCardAction.swift in Sources */,
+				8A0636F62DF0CDAD0076823A /* TabTraySelectorButtonModel.swift in Sources */,
 				E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */,
 				E17798982BD6B44B00F6F0EB /* AddressToolbarContainer.swift in Sources */,
 				21D151262AFC28960062D891 /* TabManagerMiddleware.swift in Sources */,
