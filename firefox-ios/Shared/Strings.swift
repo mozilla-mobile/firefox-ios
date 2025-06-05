@@ -4315,6 +4315,16 @@ extension String {
                 tableName: "MainMenu",
                 value: "Sync passwords, tabs, and more",
                 comment: "On the main menu, at the top, when the user is signed out. The description for the sign in action")
+            public static let SignedOutDescriptionV2 = MZLocalizedString(
+                key: "MainMenu.Account.SignedOut.Description.v141",
+                tableName: "MainMenu",
+                value: "Sync bookmarks, passwords, tabs, and more",
+                comment: "On the main menu, when the user is signed out. The description for the sign in action")
+            public static let SignedInDescription = MZLocalizedString(
+                key: "MainMenu.Account.SignedIn.Description.v141",
+                tableName: "MainMenu",
+                value: "Manage what you back up and sync",
+                comment: "On the main menu, when the user is signed in.")
             public static let SyncErrorTitle = MZLocalizedString(
                 key: "MainMenu.Account.SyncError.Title.v131",
                 tableName: "MainMenu",

@@ -10,7 +10,16 @@ struct AccountData: Equatable {
     let title: String
     let subtitle: String?
     let warningIcon: String?
+    let needsReAuth: Bool?
     let iconURL: URL?
+
+    init(title: String, subtitle: String?, warningIcon: String? = nil, needsReAuth: Bool? = nil, iconURL: URL? = nil) {
+        self.title = title
+        self.subtitle = subtitle
+        self.warningIcon = warningIcon
+        self.needsReAuth = needsReAuth
+        self.iconURL = iconURL
+    }
 }
 
 struct TelemetryInfo: Equatable {
@@ -45,6 +54,8 @@ struct MainMenuTabInfo: Equatable {
     let isBookmarked: Bool
     let isInReadingList: Bool
     let isPinned: Bool
+    let accountData: AccountData
+    let accountProfileImage: UIImage?
 }
 
 struct MainMenuState: ScreenState, Equatable {

@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 16
         static let iconSize: CGFloat = 24
@@ -35,6 +35,10 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Properties
     var model: MenuElement?
 
+    var shouldConfigureImageView: Bool {
+        return model?.iconImage != nil && (model?.needsReAuth == nil || model?.needsReAuth == false)
+    }
+
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,6 +47,16 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if shouldConfigureImageView {
+            iconImageView.layer.cornerRadius = iconImageView.frame.size.width / 2
+        } else {
+            self.iconImageView.layer.cornerRadius = 0
+        }
+        iconImageView.clipsToBounds = shouldConfigureImageView
     }
 
     override func prepareForReuse() {
@@ -55,7 +69,16 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
         self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
-        self.iconImageView.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
+        if let needsReAuth = model.needsReAuth, needsReAuth {
+            typealias Icons = StandardImageIdentifiers.Large
+            if theme.type == .light {
+                self.iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLargeLight)
+            } else {
+                self.iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLargeDark)
+            }
+        } else if let iconImage = model.iconImage {
+            self.iconImageView.image = iconImage
+        }
         self.isAccessibilityElement = true
         self.isUserInteractionEnabled = !model.isEnabled ? false : true
         self.accessibilityIdentifier = model.a11yId
@@ -73,8 +96,10 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         NSLayoutConstraint.activate([
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentMargin),
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.contentMargin),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin),
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin)
+        ])
 
+        NSLayoutConstraint.activate([
             iconImageView.leadingAnchor.constraint(equalTo: contentStackView.trailingAnchor,
                                                    constant: UX.contentMargin),
             iconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.contentMargin),
@@ -95,18 +120,14 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
-        if model.isActive {
-            titleLabel.textColor = theme.colors.textAccent
+        if let needsReAuth = model.needsReAuth, needsReAuth {
+            descriptionLabel.textColor = theme.colors.textCritical
+        } else if model.iconImage != nil {
             descriptionLabel.textColor = theme.colors.textSecondary
-            iconImageView.tintColor = theme.colors.iconAccentBlue
-        } else if !model.isEnabled {
-            titleLabel.textColor = theme.colors.textDisabled
-            descriptionLabel.textColor = theme.colors.textDisabled
-            iconImageView.tintColor = theme.colors.iconDisabled
         } else {
-            titleLabel.textColor = theme.colors.textPrimary
             descriptionLabel.textColor = theme.colors.textSecondary
             iconImageView.tintColor = theme.colors.iconPrimary
         }
+        titleLabel.textColor = theme.colors.textPrimary
     }
 }

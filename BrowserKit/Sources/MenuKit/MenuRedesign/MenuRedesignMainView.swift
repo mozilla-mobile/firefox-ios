@@ -15,13 +15,11 @@ public final class MenuRedesignMainView: UIView,
     // MARK: - UI Elements
     private var collectionView: MenuCollectionView = .build()
     private var tableView: MenuRedesignTableView = .build()
-    public var accountHeaderView: HeaderView = .build()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        handleUpdateHeaderLineView()
     }
 
     required init?(coder: NSCoder) {
@@ -30,17 +28,11 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
-        accountHeaderView.updateHeaderLineView(isHidden: true)
-        self.addSubview(accountHeaderView)
         self.addSubview(collectionView)
         self.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
-            accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-
-            collectionView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: self.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 
@@ -51,31 +43,9 @@ public final class MenuRedesignMainView: UIView,
         ])
     }
 
-    public func setupDetails(subtitle: String, title: String, icon: UIImage?) {
-        accountHeaderView.setupDetails(subtitle: subtitle,
-                                       title: title,
-                                       icon: icon)
-    }
-
-    public func setupAccessibilityIdentifiers(closeButtonA11yLabel: String,
-                                              closeButtonA11yId: String,
-                                              mainButtonA11yLabel: String,
-                                              mainButtonA11yId: String,
-                                              menuA11yId: String,
-                                              menuA11yLabel: String) {
-        accountHeaderView.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
-                                             closeButtonA11yId: closeButtonA11yId,
-                                             mainButtonA11yLabel: mainButtonA11yLabel,
-                                             mainButtonA11yId: mainButtonA11yId)
+    public func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
         collectionView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
         tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
-    }
-
-    private func handleUpdateHeaderLineView() {
-        tableView.updateHeaderLineView = { [weak self] isHidden in
-            guard let self else { return }
-            self.accountHeaderView.updateHeaderLineView(isHidden: isHidden)
-        }
     }
 
     // MARK: - Interface
@@ -89,7 +59,5 @@ public final class MenuRedesignMainView: UIView,
         backgroundColor = .clear
         collectionView.applyTheme(theme: theme)
         tableView.applyTheme(theme: theme)
-        accountHeaderView.applyTheme(theme: theme)
-        accountHeaderView.setIconTheme(with: theme)
     }
 }
