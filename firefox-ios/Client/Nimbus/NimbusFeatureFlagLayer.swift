@@ -47,6 +47,9 @@ final class NimbusFeatureFlagLayer {
         case .hntContentFeedRefresh:
             return checkHNTContentFeedRefreshFeature(from: nimbus)
 
+        case .hntJumpBackInSection:
+             return checkHNTJumpBackInSectionFeature(from: nimbus)
+
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
@@ -191,6 +194,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
+    }
+
+    private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntJumpBackInSectionFeature.value().enabled
     }
 
     private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
