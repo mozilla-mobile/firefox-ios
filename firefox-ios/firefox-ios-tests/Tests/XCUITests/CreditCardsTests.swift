@@ -189,6 +189,10 @@ class CreditCardsTests: BaseTestCase {
             app.webViews["Web content"].textFields["Expiration month:"].waitAndTap()
             app.webViews["Web content"].textFields["Expiration year:"].waitAndTap()
         }
+        if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
+            app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
+            app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
+        }
         mozWaitForElementToExist(app.buttons[useSavedCard])
     }
 
@@ -246,6 +250,7 @@ class CreditCardsTests: BaseTestCase {
         if #available(iOS 16, *) {
             reachAutofillWebsite()
             app.scrollViews.otherElements.tables.cells.firstMatch.tapOnApp()
+            app.buttons["Test2"].tapIfExists()
             // The credit card's number and name are imported correctly on the designated fields
             validateAutofillCardInfo(cardNr: "4111111111111111", expYear: "2040", expMonth: "05", name: updatedName)
         }

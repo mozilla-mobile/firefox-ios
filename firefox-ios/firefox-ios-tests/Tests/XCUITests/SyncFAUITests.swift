@@ -137,6 +137,7 @@ class SyncUITests: BaseTestCase {
         let passMessage = "Your password is currently hidden."
         mozWaitForElementToExist(app.webViews.switches[passMessage])
         // Remove the password typed, Show (password) option should not be shown
+        app.secureTextFields.element(boundBy: 1).waitAndTap()
         app.keyboards.keys["delete"].waitAndTap()
         mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
     }

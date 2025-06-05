@@ -18,8 +18,16 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         urlBarAddress.waitAndTap()
         if iPad() {
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+            urlBarAddress.waitAndTap()
             app.menuItems["Select All"].waitAndTap()
+        }
+        // Retry tapping urlBarAddress if "Copy" is not visible
+        var attempts = 2
+        if !iPad() {
+            while !app.menuItems["Copy"].exists && attempts > 0 {
+                urlBarAddress.waitAndTap()
+                attempts -= 1
+            }
         }
         app.menuItems["Copy"].waitAndTap()
         app.typeText("\r")
@@ -65,11 +73,10 @@ class ClipBoardTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
         if #available(iOS 17, *) {
-            urlBarAddress.press(forDuration: 3)
-            var attempts = 3
-            while !app.otherElements.buttons["Paste"].exists && attempts > 0 {
+            if iPad() {
+                urlBarAddress.waitAndTap()
+            } else {
                 urlBarAddress.press(forDuration: 3)
-                attempts -= 1
             }
             app.otherElements.buttons["Paste"].waitAndTap()
             mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
