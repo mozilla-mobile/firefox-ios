@@ -263,3 +263,41 @@ settings.app_icon:
     metadata:
       tags:
         - AppIconSelection
+        
+# Default Zoom Settings
+settings.zoom_bar:
+  domain_list_item_swiped_to_delete:
+    type: event
+    description: |
+      Recorded when the user swipes to delete a specific zoom domain level in the app settings.
+    extra_keys:
+      index:
+        type: quantity
+        description: |
+          The index of the site in the list of domains that have a user-configured page zoom level. Index 0 is the top of the list.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - ZoomBar
+  domain_list_reset_button_tapped:
+    type: event
+    description: |
+      Recorded when the user resets the list of zoom domain levels in the app settings.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - ZoomBar
+    no_lint:
+      - COMMON_PREFIX
