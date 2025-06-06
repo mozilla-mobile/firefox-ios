@@ -25,7 +25,7 @@ struct SettingsTelemetry {
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
-    
+
     /// Records the event of a user changing a setting in one of the Settings screens.
     /// - Parameters:
     ///   - setting: A key uniquely identifying a setting in the Settings screen hierarchy irrespective of its placement.
