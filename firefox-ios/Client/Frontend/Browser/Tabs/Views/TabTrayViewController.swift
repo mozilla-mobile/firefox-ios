@@ -135,13 +135,7 @@ class TabTrayViewController: UIViewController,
                                            theme: retrieveTheme(),
                                            buttonTitles: titles)
         selector.delegate = self
-<<<<<<< HEAD
-        selector.items = [TabTrayPanelType.privateTabs.label,
-                          TabTrayPanelType.tabs.label,
-                          TabTrayPanelType.syncedTabs.label]
-=======
         selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
->>>>>>> f36176a19 (Bugfix FXIOS-12275 [Tab tray UI experiment] Tab tray selector spacing fixes and color (#27156))
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
