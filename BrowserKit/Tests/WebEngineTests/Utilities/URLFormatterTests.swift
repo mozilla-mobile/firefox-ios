@@ -35,15 +35,6 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, initialUrl)
     }
 
-    func testGetURLGivenAboutConfigSpaceURLThenValidEscapedURL() {
-        let initialUrl = "about: config"
-        let subject = DefaultURLFormatter()
-
-        let result = subject.getURL(entry: initialUrl)
-
-        XCTAssertEqual(result?.absoluteString, "about:%20config")
-    }
-
     func testGetURLGivenFileURLThenValidInitialURL() {
         let initialUrl = "file:///f/o/o"
         let subject = DefaultURLFormatter()
@@ -88,6 +79,42 @@ final class URLFormatterTests: XCTestCase {
         let result = subject.getURL(entry: givenURL)
 
         XCTAssertEqual(result?.absoluteString, "http://\(initialUrl)")
+    }
+
+    func testGetURLGivenNoHttpsURLWithSpacePathThenValidEscapedURL() {
+        let initialUrl = "foo.bar/foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
+    }
+
+    func testGetURLGivenHttpURLWithSpacePathThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
+    }
+
+    func testGetURLGivenNoHttpsURLWithInvalidCharPathThenValidEscapedURL() {
+        let initialUrl = "foo.bar/</"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%3C/")
+    }
+
+    func testGetURLGivenHttpURLWithInvalidCharPathThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/</"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%3C/")
     }
 
     func testGetURLGivenDotURLThenValidURL() {
@@ -184,6 +211,15 @@ final class URLFormatterTests: XCTestCase {
 
     func testGetURLGivenURLWithSpaceBeforeTLDThenInvalidURL() {
         let initialUrl = "mozilla. org"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertNil(result)
+    }
+
+    func testGetURLGivenURLWithoutTLDThenInvalidURL() {
+        let initialUrl = "mozilla./foo bar"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: initialUrl)
