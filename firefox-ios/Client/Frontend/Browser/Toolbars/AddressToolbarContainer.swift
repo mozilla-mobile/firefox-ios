@@ -174,17 +174,6 @@ final class AddressToolbarContainer: UIView,
         return toolbar.resignFirstResponder()
     }
 
-    override var transform: CGAffineTransform {
-        get {
-            return toolbar.transform
-        }
-        set {
-            toolbar.transform = newValue
-            leftSkeletonAddressBar.transform = newValue
-            rightSkeletonAddressBar.transform = newValue
-        }
-    }
-
     // MARK: - Redux
 
     func subscribeToRedux() {
@@ -353,6 +342,12 @@ final class AddressToolbarContainer: UIView,
             progressBarBottomConstraint = progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor)
             progressBarBottomConstraint?.isActive = true
         }
+    }
+
+    func applyTransform(_ transform: CGAffineTransform) {
+        regularToolbar.transform = transform
+        leftSkeletonAddressBar.transform = transform
+        rightSkeletonAddressBar.transform = transform
     }
 
     // MARK: - ThemeApplicable

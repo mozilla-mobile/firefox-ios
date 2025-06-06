@@ -179,10 +179,6 @@ class BrowserViewController: UIViewController,
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build()
 
-    // A view used as the background for the address bar, designed to look nice
-    // when swiping between tabs, similar to Safari.
-    private lazy var addressBarBackgroundView: UIView = .build()
-
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
@@ -246,7 +242,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
     private(set) lazy var tabsTelemetry = TabsTelemetry()
 
-    private lazy var appStartupTelemetry = AppStartupTelemetry()
+    private let appStartupTelemetry: AppStartupTelemetry
 
     // location label actions
     var pasteGoAction: AccessibleAction?
@@ -370,6 +366,7 @@ class BrowserViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
@@ -382,6 +379,7 @@ class BrowserViewController: UIViewController,
         self.crashTracker = DefaultCrashTracker()
         self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.downloadQueue = downloadQueue
+        self.appStartupTelemetry = appStartupTelemetry
         self.logger = logger
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
@@ -486,9 +484,7 @@ class BrowserViewController: UIViewController,
         searchBarView.addToParent(parent: newParent)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
-            addressBarPanGestureHandler?.updateAddressBarContainer(addressToolbarContainer)
-            updateAddressBarBackgroundViewConstraints(searchBarPosition: newSearchBarPosition)
+            webPagePreview.invalidateScreenshotData()
         }
 
         if let readerModeBar = readerModeBar {
@@ -713,7 +709,13 @@ class BrowserViewController: UIViewController,
         // No need to take a screenshot if a view is presented over the current tab
         // because a screenshot will already have been taken when we navigate away
         if let tab = tabManager.selectedTab, presentedViewController == nil {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
+            screenshotHelper.takeScreenshot(tab,
+                                            windowUUID: windowUUID,
+                                            screenshotBounds: CGRect(
+                                                x: contentContainer.frame.origin.x,
+                                                y: -contentContainer.frame.origin.y,
+                                                width: view.frame.width,
+                                                height: view.frame.height))
         }
 
         guard canShowPrivacyWindow else { return }
@@ -888,9 +890,9 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
 
-        Task(priority: .background) {
+        Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
-            self.trackStartupTelemetry()
+            self?.trackStartupTelemetry()
         }
     }
 
@@ -905,9 +907,6 @@ class BrowserViewController: UIViewController,
         // Update theme of already existing views
         let theme = currentTheme()
         contentContainer.backgroundColor = theme.colors.layer1
-        if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            webPagePreview.applyTheme(theme: theme)
-        }
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -1109,7 +1108,9 @@ class BrowserViewController: UIViewController,
             header.removeArrangedView(addressToolbarContainer, animated: false)
             bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
 
-            if isSwipingTabsEnabled { addressBarPanGestureHandler?.disablePanGestureRecognizer() }
+            if isSwipingTabsEnabled {
+                addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            }
             createLegacyUrlBar()
 
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1159,16 +1160,16 @@ class BrowserViewController: UIViewController,
             addressToolbarContainer: addressToolbarContainer,
             contentContainer: contentContainer,
             webPagePreview: webPagePreview,
+            statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
     }
 
     func addSubviews() {
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
-            view.addSubviews(addressBarBackgroundView, webPagePreview)
+            view.addSubviews(webPagePreview)
         }
         view.addSubviews(contentContainer)
 
@@ -1250,7 +1251,17 @@ class BrowserViewController: UIViewController,
 
     func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
         if let tab {
-            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID, completion: completion)
+            screenshotHelper.takeScreenshot(
+                tab,
+                windowUUID: windowUUID,
+                screenshotBounds: CGRect(
+                    x: contentContainer.frame.origin.x,
+                    y: -contentContainer.frame.origin.y,
+                    width: view.frame.width,
+                    height: view.frame.height
+                ),
+                completion: completion
+            )
         }
     }
 
@@ -1360,6 +1371,7 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.showToolbars(animated: false)
         }, completion: nil)
+        webPagePreview.invalidateScreenshotData()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -1379,6 +1391,7 @@ class BrowserViewController: UIViewController,
             self.scrollController.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()
+        webPagePreview.invalidateScreenshotData()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -1414,9 +1427,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
-    private var addressBarBackgroundViewTopConstraint: NSLayoutConstraint?
-    private var addressBarBackgroundViewBottomConstraint: NSLayoutConstraint?
-
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
@@ -1433,17 +1443,11 @@ class BrowserViewController: UIViewController,
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             NSLayoutConstraint.activate([
-                webPagePreview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                webPagePreview.topAnchor.constraint(equalTo: view.topAnchor),
                 webPagePreview.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 webPagePreview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                webPagePreview.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
+                webPagePreview.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
-
-            addressBarBackgroundViewTopConstraint = addressBarBackgroundView.topAnchor
-                .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-            addressBarBackgroundViewBottomConstraint = addressBarBackgroundView.bottomAnchor
-                .constraint(equalTo: bottomContainer.topAnchor)
-            updateAddressBarBackgroundViewConstraints(searchBarPosition: searchBarPosition)
         }
 
         updateHeaderConstraints()
@@ -1492,21 +1496,6 @@ class BrowserViewController: UIViewController,
                 make.left.right.equalTo(view)
             }
         }
-    }
-
-    private func updateAddressBarBackgroundViewConstraints(searchBarPosition: SearchBarPosition) {
-        guard isToolbarRefactorEnabled else { return }
-
-        let isTop = (searchBarPosition == .top)
-        addressBarBackgroundView.constraints.forEach { $0.isActive = false }
-        addressBarBackgroundViewBottomConstraint?.isActive = !isTop
-        addressBarBackgroundViewTopConstraint?.isActive = isTop
-
-        NSLayoutConstraint.activate([
-            addressBarBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            addressBarBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            addressBarBackgroundView.heightAnchor.constraint(equalTo: addressToolbarContainer.heightAnchor)
-        ])
     }
 
     override func updateViewConstraints() {
@@ -3197,7 +3186,16 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper.takeScreenshot(tab, windowUUID: self.windowUUID)
+                    self.screenshotHelper.takeScreenshot(
+                        tab,
+                        windowUUID: self.windowUUID,
+                        screenshotBounds: CGRect(
+                            x: self.contentContainer.frame.origin.x,
+                            y: -self.contentContainer.frame.origin.y,
+                            width: self.view.frame.width,
+                            height: self.view.frame.height
+                        )
+                    )
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
@@ -3489,7 +3487,6 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        updateAddressBarBackgroundViewColor(theme: currentTheme)
 
         if isToolbarRefactorEnabled {
             // to make sure on homepage with bottom search bar the status bar is hidden
@@ -3517,11 +3514,6 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
-    }
-
-    private func updateAddressBarBackgroundViewColor(theme: Theme) {
-        guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        addressBarBackgroundView.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Telemetry
