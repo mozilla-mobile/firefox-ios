@@ -100,7 +100,7 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     // MARK: - Private Utilities
 
     private func fetchIcon(for iconRecord: ASSearchEngineIconRecord) -> UIImage? {
-        guard let client else { return nil }
+        guard let client else { return fallbackEngineIcon }
         do {
             var fetchedIcon: UIImage?
             let data = try client.getAttachment(record: iconRecord.backingRecord)
