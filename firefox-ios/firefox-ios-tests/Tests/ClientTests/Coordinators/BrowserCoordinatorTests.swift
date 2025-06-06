@@ -402,6 +402,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testShowTabTray() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let subject = createSubject()
         subject.showTabTray(selectedPanel: .tabs)
 
@@ -409,6 +410,19 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
         let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testShowTabTray_withExperiment() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showTabTray(selectedPanel: .tabs)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 1)
         XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
     }
 
@@ -1181,6 +1195,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
+    }
+
+    private func setupNimbusTabTrayUIExperimentTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
+            return TabTrayUiExperiments(
+                enabled: isEnabled
+            )
         }
     }
 
