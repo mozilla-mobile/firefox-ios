@@ -11,10 +11,9 @@ protocol TabTraySelectorDelegate: AnyObject {
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
-    static let horizontalPadding: CGFloat = 20
+    static let horizontalPadding: CGFloat = 16
     static let cornerRadius: CGFloat = 12
     static let verticalInsets: CGFloat = 8
-    static let maxFontSize: CGFloat = 30
     static let horizontalInsets: CGFloat = 10
     static let fontScaleDelta: CGFloat = 0.055
 }
@@ -40,7 +39,7 @@ class TabTraySelectorView: UIView,
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.spacing = TabTraySelectorUX.horizontalPadding
-        stackView.distribution = .equalCentering
+        stackView.distribution = .fillProportionally
         stackView.alignment = .center
     }
 
