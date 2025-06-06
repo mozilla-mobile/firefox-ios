@@ -107,7 +107,7 @@ extension PreviewModel {
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_welcome",
-        imageID: "trackers",
+        imageID: "onboardingTrackers",
         instructionsPopup: OnboardingInstructionsPopupInfoModel(
             title: "Set as Default Browser",
             instructionSteps: [
@@ -135,7 +135,7 @@ extension PreviewModel {
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_signToSync",
-        imageID: "syncWithIcons",
+        imageID: "onboardingSyncWithIcons",
         instructionsPopup: nil
     )
 

@@ -57,6 +57,8 @@ struct ImageIdentifiers {
             public static let theming = "onboardingThemeing"
             public static let toolbar = "onboardingToolbar"
             public static let customizeFirefox = "onboardingFoxyWindow"
+            public static let syncWithIcons = "onboardingSyncWithIcons"
+            public static let trackers = "onboardingTrackers"
         }
 
         public struct MultipleChoiceButtonImages {

@@ -5,6 +5,8 @@
 import Common
 import Foundation
 import Shared
+import OnboardingKit
+import SwiftUI
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishTermsOfService(from coordinator: LaunchCoordinator)
@@ -19,6 +21,7 @@ final class LaunchCoordinator: BaseCoordinator,
     private let profile: Profile
     private let isIphone: Bool
     let windowUUID: WindowUUID
+    let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
@@ -37,7 +40,11 @@ final class LaunchCoordinator: BaseCoordinator,
         case .termsOfService(let manager):
             presentTermsOfService(with: manager, isFullScreen: isFullScreen)
         case .intro(let manager):
-            presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
+            if manager.isModernOnboardingEnabled {
+                presentModernIntroOnboarding(with: manager, isFullScreen: isFullScreen)
+            } else {
+                presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
+            }
         case .update(let viewModel):
             presentUpdateOnboarding(with: viewModel, isFullScreen: isFullScreen)
         case .defaultBrowser:
@@ -77,9 +84,41 @@ final class LaunchCoordinator: BaseCoordinator,
     }
 
     // MARK: - Intro
+    private func presentModernIntroOnboarding(with manager: IntroScreenManager,
+                                              isFullScreen: Bool) {
+        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
+
+        let view = OnboardingView<OnboardingKitCardInfoModel>(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            viewModel: OnboardingFlowViewModel(
+                onboardingCards: onboardingModel.cards,
+                onComplete: {}
+            )
+        )
+        let hostingController = UIHostingController(rootView: view)
+        if isFullScreen {
+            hostingController.modalPresentationStyle = .fullScreen
+            router.present(hostingController, animated: false)
+        } else {
+            hostingController.preferredContentSize = CGSize(
+                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
+                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+            hostingController.modalPresentationStyle = .formSheet
+
+            if !onboardingModel.isDismissable {
+                hostingController.isModalInPresentation = true
+            }
+
+            router.present(hostingController, animated: true) {}
+        }
+    }
+
+    // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
