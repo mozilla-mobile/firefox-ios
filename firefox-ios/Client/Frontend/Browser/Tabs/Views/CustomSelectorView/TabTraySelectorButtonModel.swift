@@ -23,7 +23,9 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.plain()
-        titleLabel?.adjustsFontForContentSizeCategory = true
+        titleLabel?.adjustsFontForContentSizeCategory = false
+        showsLargeContentViewer = true
+        addInteraction(UILargeContentViewerInteraction())
     }
 
     func configure(viewModel: TabTraySelectorButtonModel) {
@@ -32,6 +34,7 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
         }
         var updatedConfiguration = config
 
+        updatedConfiguration.titleLineBreakMode = .byTruncatingTail
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -86,7 +89,7 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.textPrimary
-        foregroundColorHighlighted = theme.colors.actionPrimaryHover
+        foregroundColorHighlighted = theme.colors.actionSecondaryHover
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
     }
