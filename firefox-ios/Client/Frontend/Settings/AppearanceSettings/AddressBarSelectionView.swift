@@ -33,12 +33,22 @@ struct AddressBarSelectionView: View {
                         onSelected?(selectedAddressBarPosition)
                     },
                     label: addressBarPosition.label,
-                    imageName: addressBarPosition.imageName
+                    imageName: addressBarPosition.imageName,
+                    a11yIdentifier: identifierName(for: addressBarPosition)
                 )
             }
         }
         .padding(.vertical, UX.sectionPadding)
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
+    }
+
+    func identifierName(for addressBarPosition: SearchBarPosition) -> String {
+        switch addressBarPosition {
+        case .top:
+            return AccessibilityIdentifiers.Settings.SearchBar.topSetting
+        case .bottom:
+            return AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
+        }
     }
 }

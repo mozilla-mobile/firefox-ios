@@ -8,6 +8,10 @@ import Common
 /// The main view displaying the settings for the appearance menu.
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
+<<<<<<< HEAD
+=======
+    weak var delegate: AppearanceSettingsDelegate?
+>>>>>>> 8eb9ed195 ( Refactor FXIOS-12086 [Dark Reader] Enable Appearance Screen by default (#27144))
 
     @Environment(\.themeManager)
     var themeManager
@@ -34,12 +38,46 @@ struct AppearanceSettingsView: View {
     }
 
     var body: some View {
+<<<<<<< HEAD
         VStack {
             // Section for selecting the browser theme.
             GenericSectionView(theme: currentTheme, title: String.BrowserThemeSectionHeader) {
                 ThemeSelectionView(theme: currentTheme,
                                    selectedThemeOption: themeOption,
                                    onThemeSelected: updateBrowserTheme)
+=======
+        ScrollView {
+            VStack {
+                // Section for selecting the browser theme.
+                GenericSectionView(theme: currentTheme,
+                                   title: String.BrowserThemeSectionHeader,
+                                   identifier: AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle) {
+                    ThemeSelectionView(theme: currentTheme,
+                                       selectedThemeOption: themeOption,
+                                       onThemeSelected: updateBrowserTheme)
+                }
+                // Section for toggling website appearance (e.g., dark mode).
+                GenericSectionView(theme: currentTheme,
+                                   title: String.WebsiteAppearanceSectionHeader,
+                                   description: String.WebsiteDarkModeDescription,
+                                   identifier: AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle) {
+                    DarkModeToggleView(theme: currentTheme,
+                                       isEnabled: NightModeHelper.isActivated(),
+                                       onChange: setWebsiteDarkMode)
+                }
+                if shouldShowPageZoom {
+                    GenericSectionView(theme: currentTheme,
+                                       title: .Settings.Appearance.PageZoom.SectionHeader,
+                                       identifier: .Settings.Appearance.PageZoom.SectionHeader) {
+                        GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
+                                            image: .chevronRightLarge,
+                                            theme: currentTheme) {
+                            delegate?.pressedPageZoom()
+                        }
+                    }
+                }
+                Spacer()
+>>>>>>> 8eb9ed195 ( Refactor FXIOS-12086 [Dark Reader] Enable Appearance Screen by default (#27144))
             }
             // Section for toggling website appearance (e.g., dark mode).
             GenericSectionView(theme: currentTheme,
