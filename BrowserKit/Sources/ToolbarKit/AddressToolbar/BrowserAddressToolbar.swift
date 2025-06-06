@@ -94,6 +94,15 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
+    override public var transform: CGAffineTransform {
+        get {
+            return locationContainer.transform
+        }
+        set {
+            locationContainer.transform = newValue
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
@@ -158,13 +167,6 @@ public class BrowserAddressToolbar: UIView,
     override public func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return locationView.resignFirstResponder()
-    }
-
-    override public var transform: CGAffineTransform {
-        get {
-            return locationContainer.transform
-        }
-        set { locationContainer.transform = newValue }
     }
 
     // MARK: - Private

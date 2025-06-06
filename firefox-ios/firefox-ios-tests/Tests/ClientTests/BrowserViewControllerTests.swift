@@ -17,6 +17,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var screenshotHelper: MockScreenshotHelper!
     var browserCoordinator: MockBrowserCoordinator!
     var mockStore: MockStoreForMiddleware<AppState>!
+    var appStartupTelemetry: MockAppStartupTelemetry!
     var appState: AppState!
 
     override func setUp() {
@@ -32,14 +33,17 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         profile = MockProfile()
         tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
+        appStartupTelemetry = MockAppStartupTelemetry()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setupStore()
     }
 
     override func tearDown() {
         TelemetryContextualIdentifier.clearUserDefaults()
+        profile.shutdown()
         profile = nil
         tabManager = nil
+        appStartupTelemetry = nil
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().reset()
         resetStore()
@@ -199,7 +203,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     private func createSubject() -> BrowserViewController {
-        let subject = BrowserViewController(profile: profile, tabManager: tabManager)
+        let subject = BrowserViewController(profile: profile,
+                                            tabManager: tabManager,
+                                            appStartupTelemetry: appStartupTelemetry)
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
@@ -249,7 +255,18 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 class MockScreenshotHelper: ScreenshotHelper {
     var takeScreenshotCalled = false
 
-    override func takeScreenshot(_ tab: Tab, windowUUID: WindowUUID, completion: (() -> Void)? = nil) {
+    override func takeScreenshot(_ tab: Tab,
+                                 windowUUID: WindowUUID,
+                                 screenshotBounds: CGRect,
+                                 completion: (() -> Void)? = nil) {
         takeScreenshotCalled = true
+    }
+}
+
+class MockAppStartupTelemetry: AppStartupTelemetry {
+    var sendStartupTelemetryCalled = 0
+
+    func sendStartupTelemetry() {
+        sendStartupTelemetryCalled += 1
     }
 }
