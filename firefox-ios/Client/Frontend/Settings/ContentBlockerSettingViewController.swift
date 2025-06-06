@@ -65,13 +65,15 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
                     return option == self.currentBlockingStrength
                 },
                 onChecked: {
+                    let previousOption = self.currentBlockingStrength
+
                     self.currentBlockingStrength = option
                     self.prefs.setString(self.currentBlockingStrength.rawValue,
                                          forKey: ContentBlockingConfig.Prefs.StrengthKey)
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
 
-                    self.recordEventOnChecked(option: option)
+                    self.recordEventOnChecked(option: option, fromOption: previousOption)
                 })
 
             let uuid = windowUUID
@@ -129,17 +131,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         return sections
     }
 
-    private func recordEventOnChecked(option: BlockingStrength) {
-        let extras = [
-            TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-            TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
-        ]
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .change,
-            object: .setting,
-            extras: extras
-        )
+    private func recordEventOnChecked(option: BlockingStrength, fromOption: BlockingStrength) {
+        SettingsTelemetry().changedSetting("ETP-strength", to: option.rawValue, from: fromOption.rawValue)
 
         if option == .strict {
             TelemetryWrapper.recordEvent(

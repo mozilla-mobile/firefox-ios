@@ -705,14 +705,16 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
         didSelectSearchEngine searchEngine: OpenSearchEngine?
     ) {
         if let engine = searchEngine {
+            let previousEngine = model.defaultEngine
             model.defaultEngine = engine
             NotificationCenter.default.post(name: .SearchSettingsDidUpdateDefaultSearchEngine)
             self.tableView.reloadData()
 
-            let engineID: String = engine.telemetryID
-            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
-                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engineID]
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
+            SettingsTelemetry().changedSetting(
+                "defaultSearchEngine",
+                to: engine.telemetryID,
+                from: previousEngine?.telemetryID ?? SettingsTelemetry.Placeholders.missingValue
+            )
         }
         _ = navigationController?.popViewController(animated: true)
     }

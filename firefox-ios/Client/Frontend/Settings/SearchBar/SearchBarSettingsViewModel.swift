@@ -128,21 +128,22 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 // MARK: Private
 extension SearchBarSettingsViewModel {
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
+        let previousPosition: SearchBarPosition? = featureFlags.getCustomState(for: .searchBarPosition)
+
         featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
-        recordPreferenceChange(searchBarPosition)
+        recordPreferenceChange(searchBarPosition, previousPosition: previousPosition)
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
         notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
-    private func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
-        let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
-                      TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: searchBarPosition.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .change,
-                                     object: .setting,
-                                     extras: extras)
+    private func recordPreferenceChange(_ searchBarPosition: SearchBarPosition, previousPosition: SearchBarPosition?) {
+        SettingsTelemetry().changedSetting(
+            PrefsKeys.FeatureFlags.SearchBarPosition,
+            to: searchBarPosition.rawValue,
+            from: previousPosition?.rawValue ?? SettingsTelemetry.Placeholders.missingValue
+        )
     }
 }
 

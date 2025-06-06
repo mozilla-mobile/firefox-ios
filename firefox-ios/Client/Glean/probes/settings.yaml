@@ -24,9 +24,15 @@ preferences:
   changed:
     type: event
     description: |
-      Recorded when a preference is changed and includes the
-      preference that changed as well as the value changed to
-      recorded in the extra keys.
+      Recorded when a preference is changed and includes the preference that
+      changed as well as the value changed to recorded in the extra keys.
+
+      Note: This setting will soon be deprecated in favor of
+      `settings.changed`, which also includes a new `changed_from` extra.
+
+      **Expiration:** This setting can be safely expired once the
+      `settings.changed` implementation completely shadows the old 
+      `preferences.changed` implementation.
     extra_keys:
       preference:
         type: string
@@ -236,8 +242,41 @@ preferences:
 # New "settings" telemetry properly nested under "settings".
 ###############################################################################
 
-# General settings events
+# General Settings Events
 settings:
+  changed:
+    type: event
+    description: |
+      Recorded when the user changes a setting on a Settings screen. Records
+      the new value, the previous value, and a key that uniquely identifies the
+      setting irrespective of its placement in the Settings screens hierarchy.
+
+      This setting will eventually replace `preferences.changed`.
+    extra_keys:
+      setting:
+        type: string
+        description: |
+          A unique key describing the setting that was changed.
+      changed_to:
+        type: string
+        description: |
+          The new value of the setting.
+      changed_from:
+        type: string
+        description: |
+          The previous value of the setting.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12437
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27180
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
   option_selected:
     type: event
     description: |

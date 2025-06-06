@@ -340,17 +340,15 @@ class BoolSetting: Setting, FeatureFlaggable {
     func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
-        if let featureFlagName = featureFlagName {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .change,
-                                         object: .setting,
-                                         extras: ["pref": featureFlagName.rawValue as Any,
-                                                  "to": control.isOn])
+
+        if let settingChanged = featureFlagName?.rawValue ?? prefKey {
+            SettingsTelemetry().changedSetting(
+                settingChanged,
+                to: "\(control.isOn)",
+                from: "\(!control.isOn)"
+            )
         } else {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .change,
-                                         object: .setting,
-                                         extras: ["pref": prefKey as Any, "to": control.isOn])
+            assertionFailure("We should be able to get a unique key to describe the changed setting")
         }
     }
 
