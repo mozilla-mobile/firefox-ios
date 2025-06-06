@@ -107,8 +107,8 @@ class TabTraySelectorView: UIView,
                           NSNumber(value: index + 1),
                           NSNumber(value: items.count))
         let font = index == selectedIndex
-            ? FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-            : FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+            ? FXFontStyles.Bold.body.systemFont()
+            : FXFontStyles.Regular.body.systemFont()
         let contentInsets = NSDirectionalEdgeInsets(
             top: TabTraySelectorUX.verticalInsets,
             leading: TabTraySelectorUX.horizontalInsets,
@@ -161,7 +161,7 @@ class TabTraySelectorView: UIView,
             existingConstraint.isActive = false
         }
 
-        let boldFont = FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+        let boldFont = FXFontStyles.Bold.body.systemFont()
         let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
         let horizontalInsets = TabTraySelectorUX.horizontalInsets * 2
         button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
@@ -192,8 +192,8 @@ class TabTraySelectorView: UIView,
             button.isSelected = isSelected
 
             let font = isSelected
-                ? FXFontStyles.Bold.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
-                : FXFontStyles.Regular.body.scaledFont(sizeCap: TabTraySelectorUX.maxFontSize)
+                ? FXFontStyles.Bold.body.systemFont()
+                : FXFontStyles.Regular.body.systemFont()
             button.applySelectedFontChange(font: font)
         }
     }

@@ -23,7 +23,9 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.plain()
-        titleLabel?.adjustsFontForContentSizeCategory = true
+        titleLabel?.adjustsFontForContentSizeCategory = false
+        showsLargeContentViewer = true
+        addInteraction(UILargeContentViewerInteraction())
     }
 
     func configure(viewModel: TabTraySelectorButtonModel) {
