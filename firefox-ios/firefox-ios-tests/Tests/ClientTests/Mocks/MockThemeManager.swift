@@ -7,7 +7,7 @@ import UIKit
 import Foundation
 
 class MockThemeManager: ThemeManager {
-    var isNewAppearanceMenuOn = false
+    var isNewAppearanceMenuOn = true
 
     var getCurrentThemeCallCount = 0
     private var currentThemeStorage: Theme = LightTheme()

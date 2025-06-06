@@ -11,61 +11,40 @@ class DisplaySettingTests: BaseTestCase {
         navigator.goto(DisplaySettings)
         waitForElementsToExist(
             [
-                app.navigationBars["Theme"],
-                app.tables["DisplayTheme.Setting.Options"]
+                app.navigationBars["Appearance"],
+                app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView],
+                app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle]
             ]
         )
-        let switchValue = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValue as? String, "1")
+
+        let automaticIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].value
+        XCTAssertEqual(automaticIsSelected as? String, "1")
+
+        let lightThemeValue = app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].value
+        XCTAssertEqual(lightThemeValue as? String, "0")
+
+        let darkThemeValue = app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].value
+        XCTAssertEqual(darkThemeValue as? String, "0")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2337487
     func testCheckSystemThemeChanges() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
-        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
-        navigator.performAction(Action.SystemThemeSwitch)
-        waitForElementsToExist(
-            [
-                app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"],
-                app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"]
-            ]
-        )
 
-        // Going back to Settings and Display settings keeps the value
-        navigator.goto(SettingsScreen)
-        navigator.goto(DisplaySettings)
-        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
-        let switchValue = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValue as? String, "0")
-        waitForElementsToExist(
-            [
-                app.cells.staticTexts["Light"],
-                app.cells.staticTexts["Dark"]
-            ]
-        )
+        // Select Light mode
+        navigator.performAction(Action.SelectLightTheme)
+        let lightIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].value
+        XCTAssertEqual(lightIsSelected as? String, "1")
 
-        // Select the Automatic mode
-        navigator.performAction(Action.SelectAutomatically)
-        mozWaitForElementToExist(app.tables.otherElements["THRESHOLD"])
-        mozWaitForElementToNotExist(app.cells.staticTexts["Light"])
-        mozWaitForElementToNotExist(app.cells.staticTexts["Dark"])
+        // Select Dark mode
+        navigator.performAction(Action.SelectDarkTheme)
+        let darkIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].value
+        XCTAssertEqual(darkIsSelected as? String, "1")
 
-        // Now select the Manual mode
-        navigator.performAction(Action.SelectManually)
-        mozWaitForElementToNotExist(app.tables.otherElements["THRESHOLD"])
-        waitForElementsToExist(
-            [
-                app.cells.staticTexts["Light"],
-                app.cells.staticTexts["Dark"]
-            ]
-        )
-
-        // Enable back system theme
-        navigator.performAction(Action.SystemThemeSwitch)
-        let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValueAfter as? String, "1")
-        mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
-        mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
+        // Select Automatic mode
+        navigator.performAction(Action.SelectAutomaticTheme)
+        let automaticIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].value
+        XCTAssertEqual(automaticIsSelected as? String, "1")
     }
 }
