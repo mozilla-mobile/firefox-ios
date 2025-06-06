@@ -13,15 +13,10 @@ open class Analytics {
     static let inappSearchSchema = "iglu:org.ecosia/inapp_search_event/jsonschema/1-0-1"
     private static let abTestRoot = "ab_tests"
     private static let namespace = "ios_sp"
-
-    private static var tracker: TrackerController {
-
-        return Snowplow.createTracker(namespace: namespace,
-                                      network: .init(endpoint: Environment.current.urlProvider.snowplow),
-                                      configurations: [Self.trackerConfiguration,
-                                                       Self.subjectConfiguration,
-                                                       Self.appInstallTrackingPluginConfiguration,
-                                                       Self.appResumeDailyTrackingPluginConfiguration])
+    public static var shouldUseMicroInstance: Bool = false {
+        didSet {
+            Analytics.updateTrackerController()
+        }
     }
 
     public static var shared = Analytics()
@@ -29,7 +24,7 @@ open class Analytics {
     private let notificationCenter: AnalyticsUserNotificationCenterProtocol
 
     internal init(notificationCenter: AnalyticsUserNotificationCenterProtocol = AnalyticsUserNotificationCenterWrapper()) {
-        tracker = Self.tracker
+        tracker = Self.makeTracker()
         tracker.installAutotracking = true
         tracker.screenViewAutotracking = false
         tracker.lifecycleAutotracking = false
@@ -44,6 +39,10 @@ open class Analytics {
         _ = tracker.track(event)
     }
 
+    private static func updateTrackerController() {
+        Analytics.shared.tracker = makeTracker()
+    }
+
     private static func getTestContext(from toggle: Unleash.Toggle.Name) -> SelfDescribingJson? {
         let variant = Unleash.getVariant(toggle).name
         guard variant != "disabled" else { return nil }
@@ -55,7 +54,7 @@ open class Analytics {
 
     public func reset() {
         User.shared.analyticsId = .init()
-        tracker = Self.tracker
+        tracker = Self.makeTracker()
     }
 
     // MARK: App events
@@ -349,5 +348,43 @@ extension Analytics {
             event.entities.append(userContext)
             completion()
         }
+    }
+}
+
+extension Analytics {
+
+    /// Creates and configures a new instance of `TrackerController` using Snowplow.
+    ///
+    /// - Returns: A configured `TrackerController` instance, which in non-release builds can either point to mini or micro Snowplow instance.
+    private static func makeTracker() -> TrackerController {
+        return Snowplow.createTracker(namespace: namespace,
+                                      network: makeNetworkConfig(),
+                                      configurations: [
+                                        Self.trackerConfiguration,
+                                        Self.subjectConfiguration,
+                                        Self.appInstallTrackingPluginConfiguration,
+                                        Self.appResumeDailyTrackingPluginConfiguration])
+    }
+
+    /// Factory that builds the `NetworkConfiguration` for the Snowplow tracker, optionally
+    /// including authentication headers if using a micro instance.
+    ///
+    /// - Returns: A configured `NetworkConfiguration` object.
+    /// - Parameters:
+    ///   - urlProvider: The urlProvider in use. Useful for testing purposes.
+    static func makeNetworkConfig(urlProvider: URLProvider = Environment.current.urlProvider) -> NetworkConfiguration {
+        let endpoint = shouldUseMicroInstance ? urlProvider.snowplowMicro : urlProvider.snowplow
+        var networkConfig = NetworkConfiguration(endpoint: endpoint!)
+
+        if shouldUseMicroInstance,
+           let auth = Environment.current.auth {
+            networkConfig = networkConfig
+                .requestHeaders([
+                    CloudflareKeyProvider.clientId: auth.id,
+                    CloudflareKeyProvider.clientSecret: auth.secret
+                ])
+        }
+
+        return networkConfig
     }
 }

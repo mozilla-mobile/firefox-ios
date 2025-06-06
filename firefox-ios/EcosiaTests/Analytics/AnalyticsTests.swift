@@ -146,4 +146,31 @@ final class AnalyticsTests: XCTestCase {
 
         // Then: The result should be false because it's an upgrade
         XCTAssertFalse(result, "The first install should return FALSE when it's an upgrade")
-    }}
+    }
+
+    func test_makeNetworkConfig_usesStandardEndpoint_whenShouldUseMicroIsFalse() {
+        Analytics.shouldUseMicroInstance = false
+        let mockUrlProvider: URLProvider = .staging
+        let config = Analytics.makeNetworkConfig(urlProvider: mockUrlProvider)
+        XCTAssertEqual(mockUrlProvider.snowplow, config.endpoint?.asURL?.host)
+    }
+
+    func test_makeNetworkConfig_usesMicroEndpoint_whenShouldUseMicroIsTrue() {
+        Analytics.shouldUseMicroInstance = true
+        let mockUrlProvider: URLProvider = .staging
+        let config = Analytics.makeNetworkConfig(urlProvider: mockUrlProvider)
+        XCTAssertEqual(mockUrlProvider.snowplowMicro, config.endpoint)
+        XCTAssertEqual(config.requestHeaders?.keys.contains(CloudflareKeyProvider.clientId), true)
+        XCTAssertEqual(config.requestHeaders?.keys.contains(CloudflareKeyProvider.clientSecret), true)
+    }
+
+    func test_makeNetworkConfig_usesProductionEndpoint_whenShouldUseMicroIsFalse_andUrlProvider_isProduction() {
+        Analytics.shouldUseMicroInstance = false
+        let mockUrlProvider: URLProvider = .production
+        let config = Analytics.makeNetworkConfig(urlProvider: mockUrlProvider)
+        XCTAssertEqual(mockUrlProvider.snowplow, "sp.ecosia.org")
+        XCTAssertEqual(mockUrlProvider.snowplow, config.endpoint?.asURL?.host)
+        XCTAssertNil(config.requestHeaders?.keys.contains(CloudflareKeyProvider.clientId))
+        XCTAssertNil(config.requestHeaders?.keys.contains(CloudflareKeyProvider.clientSecret))
+    }
+}

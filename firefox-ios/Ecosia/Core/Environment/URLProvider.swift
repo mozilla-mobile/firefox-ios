@@ -37,6 +37,13 @@ public enum URLProvider {
         }
     }
 
+    public var snowplowMicro: String? {
+        if case .staging = self {
+            return "https://ecosia-staging.xyz/analytics-test-micro"
+        }
+        return nil
+    }
+
     public var snowplow: String {
         switch self {
         case .production:
