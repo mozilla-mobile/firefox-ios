@@ -177,7 +177,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     func test_recalculateTopSites_shouldNotShowSponsoredSites_returnNoSponsoredSites() throws {
-        profile?.prefs.setBool(false, forKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts)
+        profile?.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
 
         let subject = try createSubject()
 
