@@ -67,6 +67,7 @@ struct GenericSectionView<Content: View>: View {
             }
         }
         .padding(.bottom, UX.sectionPadding)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier(identifier)
     }
 
