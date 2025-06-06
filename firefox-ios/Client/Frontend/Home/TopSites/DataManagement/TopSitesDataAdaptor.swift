@@ -222,7 +222,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     // MARK: - Sponsored tiles (Contiles)
 
     private var shouldLoadSponsoredTiles: Bool {
-        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
+        return profile.prefs.boolForKey(PrefsKeys.FeatureFlags.SponsoredShortcuts) ?? true
     }
 
     private var shouldAddSponsoredTiles: Bool {

@@ -50,8 +50,8 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                 BoolSetting(
                     prefs: profile.prefs,
                     theme: themeManager.getCurrentTheme(for: windowUUID),
-                    prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
-                    defaultValue: true,
+                    prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
+                    defaultValue: featureFlags.isFeatureEnabled(.hntSponsoredShortcuts, checking: .userOnly),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
                 ) { _ in
                     store.dispatch(

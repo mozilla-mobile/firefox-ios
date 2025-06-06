@@ -1,0 +1,16 @@
+# The configuration for sponsored shortcuts on the homepage
+features:
+  hnt-sponsored-shortcuts-feature:
+    description: This feature manages the visibility of sponsored shortcuts on the homepage
+    variables:
+      enabled:
+        description: Setting 'enabled' to false will hide sponsored shortcuts on the homepage and disable the respective toggle in the homepage settings
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true

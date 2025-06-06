@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .hntJumpBackInSection:
              return checkHNTJumpBackInSectionFeature(from: nimbus)
 
+        case .hntSponsoredShortcuts:
+            return checkHNTSponsoredShortcutsFeature(from: nimbus)
+
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
@@ -202,6 +205,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntJumpBackInSectionFeature.value().enabled
+    }
+
+    private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
     private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {

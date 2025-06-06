@@ -25,6 +25,7 @@ include:
   - nimbus-features/hntContentFeedCleanupFeature.yaml
   - nimbus-features/hntCustomizationSectionFeature.yaml  
   - nimbus-features/hntJumpBackInSectionFeature.yaml  
+  - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/hntTopSitesVisualRefresh.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/loginsVerificationEnabled.yaml
