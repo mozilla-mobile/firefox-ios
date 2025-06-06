@@ -5,26 +5,29 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 # Usage:
-# This script automatically updates the `Client/Glean/glean_index.yaml` file with the YAML
-# files currently located in the Firefox for iOS `Client/Glean/probes` folder.
+# This script automatically updates the `glean_index.yaml` and `gleanProbes.xcfilelist` files
+# with paths to the metric YAML files currently located in the Firefox for iOS `Client/Glean/probes`
+# subdirectory.
 #
 # This script can also help you add a metrics YAML for a new feature you are working on.
 #
 # OPTIONS:
 #
-# --update:              Simply re-run the script with this flag to update the glean_index.yaml file
-#                        with any manually added metrics files in the Client/Glean/probes folder.
+# --update:              Simply run the script with this flag to update the `glean_index.yaml` and
+#                        `gleanProbes.xcfilelist` files with file paths for any manually added metrics
+#                        files in the `Client/Glean/probes` directory.
 #
-# --new featureName:     This parameter should describe the new feature or component and be input
-#                        in camelCase.
+# --add featureName:     Creates a new metrics YAML file `feature_name.yaml`, adds it to the
+#                        `Client/Glean/probes` folder, and appends the new filepath to the
+#                        `glean_index.yaml` index and the `gleanProbes.xcfilelist` file list.
 #
-#                        Creates a new metrics YAML file feature_name.yaml, adds it to the
-#                        Client/Glean/probes folder, and appends the new filepath to the
-#                        Client/Glean/glean_index.yaml index.
+#                        The parameter should be the name the new feature or component. Please write
+#                        the name in camelCase.
 #
-#                        This will automatically add a tag of `FeatureName` to the metrics in
-#                        this file. The tag and its description should be added to the tags.yaml
-#                        file as well.
+#                        A tag of `FeatureName` will automatically be added to the top of the newly
+#                        created metrics file. This tag and an accompanying description should be
+#                        manually added to the tags.yaml file by the developer. (FXIOS-12432 will make
+#                        this process automatic in the future)
 #
 
 ##############################################################################
@@ -244,7 +247,7 @@ if [ "$1" == "--add" ]; then
         write_probe_files_to_file_list
         echo -e "Successfully updated the xcode build phase infile list.\n"
 
-        # TODO Could add new tags to the tags.yaml file automatically for users
+        # FIXME FXIOS-12432 Could add new tags to the tags.yaml file automatically for users
         echo -e "  [!] Please add your new $capitalized_tag tag to the tags.yaml file with a description. [!]\n"
 
         exit 0
