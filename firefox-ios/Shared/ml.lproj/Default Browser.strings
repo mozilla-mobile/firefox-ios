@@ -40,6 +40,9 @@
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "സ്ഥിരമായി ഉപയോഗിക്കുന്ന അന്വേഷിയന്ത്രം";
 
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "ഞാൻ ഇതു് പിന്നീടു് ചെയ്യാം";
+
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "തനതു അന്വേഷിയന്ത്രമായി സജീകരിക്കുക";
 

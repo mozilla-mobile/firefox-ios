@@ -68,7 +68,7 @@
 "Settings.Appearance.Zoom.Default.Title.v140" = "Rhagosodiad";
 
 /* Button to reset specific zoom site levels back to default */
-"Settings.Appearance.Zoom.Reset.Button.v140" = "Ailosod Gosodiadau gwefan";
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Ailosod Gosodiadau Gwefan";
 
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "Gosodiadau Chwyddo";

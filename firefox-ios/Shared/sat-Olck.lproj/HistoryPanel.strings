@@ -1,3 +1,12 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "ᱢᱮᱴᱟᱣ";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "ᱥᱟᱱᱟᱢ ᱚᱠᱛᱚ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "ᱢᱩᱪᱟᱹᱫ 4 ᱦᱟᱴ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "ᱢᱩᱪᱟᱹᱫ ᱴᱟᱲᱟᱝ";
+
