@@ -7,11 +7,11 @@ features:
       status:
         description: If true, we will show the new address bar menu entry
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
-          status: false
+          status: true
       - channel: developer
         value:
-          status: false
+          status: true
