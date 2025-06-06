@@ -15,7 +15,7 @@ class DependencyHelperMock {
     ) {
         AppContainer.shared.reset()
 
-        let profile: Client.Profile = BrowserProfile(
+        let profile: Profile = BrowserProfile(
             localName: "profile"
         )
         AppContainer.shared.register(service: profile)

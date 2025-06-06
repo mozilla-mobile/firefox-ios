@@ -7,19 +7,22 @@ import XCTest
 @testable import Client
 
 final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
-    let profile = MockProfile()
+    var profile: MockProfile!
     let tabManager = MockTabManager()
     var mockVC: MockBrowserViewController!
     var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
         super.setUp()
+        profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         setupStore()
     }
 
     override func tearDown() {
+        profile.shutdown()
+        profile = nil
         DependencyHelperMock().reset()
         mockVC = nil
         resetStore()
@@ -36,7 +39,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         tab.webView = mockTabWebView
         tab.url = homeURL
 
-        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID)
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
         guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
             XCTFail("fired action was not of the expected type")
@@ -59,7 +62,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         tab.webView = mockTabWebView
         tab.url = homeURL
 
-        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID)
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
         guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
             XCTFail("fired action was not of the expected type")
@@ -81,7 +84,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         tab.webView = mockTabWebView
         tab.url = homeURL
 
-        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID)
+        subject.takeScreenshot(tab, windowUUID: .XCTestDefaultUUID, screenshotBounds: .zero)
 
         guard let screenshotAction = mockStore.dispatchedActions.first as? ScreenshotAction else {
             XCTFail("fired action was not of the expected type")
