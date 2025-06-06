@@ -101,6 +101,11 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         layoutIfNeeded()
     }
 
+    func moveSpacerToBack() {
+        guard let insetSpacer = self.insetSpacer else { return }
+        sendSubviewToBack(insetSpacer)
+    }
+
     func removeBottomInsetSpacer() {
         guard let insetSpacer = self.insetSpacer else { return }
 

@@ -1179,6 +1179,7 @@ class BrowserViewController: UIViewController,
 
         if !showNavToolbar && isBottomSearchBar && !isKeyboardShowing {
             overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+            overKeyboardContainer.moveSpacerToBack()
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
         }
