@@ -168,7 +168,6 @@ final class LocationView: UIView,
     }
 
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
-        let doesURLTextFieldExceedViewWidth = doesURLTextFieldExceedViewWidth
         var newConstraints: [NSLayoutConstraint] = []
 
         if isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
@@ -493,7 +492,7 @@ final class LocationView: UIView,
             }
 
             if let dotImage = UIImage(named: safeListedURLImageName)?.withTintColor(safeListedURLImageColor) {
-                let image = lockImage!.overlayWith(image: dotImage, modifier: 0.4, origin: CGPoint(x: 13.5, y: 13))
+                let image = lockImage?.overlayWith(image: dotImage, modifier: 0.4, origin: CGPoint(x: 13.5, y: 13))
                 lockIconButton.setImage(image, for: .normal)
             }
         } else {
