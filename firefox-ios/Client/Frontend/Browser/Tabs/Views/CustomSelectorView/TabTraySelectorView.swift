@@ -293,7 +293,7 @@ class TabTraySelectorView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         backgroundColor = theme.colors.layer1
-        selectionBackgroundView.backgroundColor = theme.colors.actionSecondary
+        selectionBackgroundView.backgroundColor = theme.colors.layer3
 
         for button in buttons {
             button.applyTheme(theme: theme)
