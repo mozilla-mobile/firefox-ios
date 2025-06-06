@@ -34,6 +34,7 @@ struct SettingsTelemetry {
     /// Uniquely identifies a setting in the Settings screen hierarchy irrespective of its placement.
     enum SettingKey: String {
         // TODO
+        case defaultSearchEngine
         case etpStrength = "ETP-strength"
         case startAtHome = "StartAtHomeUserPrefsKey" // Formerly `PrefsKeys.FeatureFlags.StartAtHome`
     }
