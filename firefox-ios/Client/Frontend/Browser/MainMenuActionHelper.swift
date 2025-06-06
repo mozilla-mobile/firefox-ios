@@ -401,8 +401,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getTrackingProtectionAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .SettingsTrackingProtectionSectionName,
-                                     iconString: StandardImageIdentifiers.Large.shieldCheckmark,
-                                     allowIconScaling: true) { [weak self] _ in
+                                     iconString: StandardImageIdentifiers.Large.shieldCheckmark) { [weak self] _ in
             let isPrivate = self?.selectedTab?.isPrivate ?? false
             let extra = GleanMetrics.Toolbar.SiteInfoButtonTappedExtra(isPrivate: isPrivate,
                                                                        isToolbar: false)
