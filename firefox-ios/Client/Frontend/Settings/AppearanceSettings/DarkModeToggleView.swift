@@ -56,6 +56,7 @@ struct DarkModeToggleView: View {
         .padding(.vertical, UX.verticalSpacing)
         .background(backgroundColor)
         .accessibilityElement()
+        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.Appearance.darkModeToggle)
         .accessibilityLabel("\(String.WebsiteDarkModeToggleTitle)")
         .accessibilityValue("\(isEnabled ? 1 : 0)")
         .accessibilityAddTraits(traits)
