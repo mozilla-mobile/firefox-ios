@@ -35,7 +35,7 @@ struct GenericSectionView<Content: View>: View {
     }
 
     init(theme: Theme?,
-         title: String, 
+         title: String,
          description: String? = nil,
          identifier: String,
          @ViewBuilder content: @escaping () -> Content) {
