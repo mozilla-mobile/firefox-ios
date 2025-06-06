@@ -22,7 +22,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 0.4
+        static let presentDuration: TimeInterval = 0.3
         static let dismissDuration: TimeInterval = 0.3
 
         static let cvScalingFactor = 1.2
@@ -255,7 +255,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         CATransaction.begin()
         CATransaction.setAnimationDuration(UX.presentDuration)
-        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
+        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
         CATransaction.setCompletionBlock { [weak self] in
             snapshotContainer.removeFromSuperview()
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
@@ -273,10 +273,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         fadeAnimation.fromValue = UX.initialOpacity
         fadeAnimation.toValue = UX.finalOpacity
         fadeAnimation.duration = UX.presentDuration
-        fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         borderLayer.add(fadeAnimation, forKey: UX.opacityKeyPath)
 
-        let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeInOut) {
+        let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
             if let frame = cellFrame {
                 tabSnapshot.frame = frame
                 snapshotContainer.frame = frame
