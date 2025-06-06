@@ -9,8 +9,10 @@ import StoreKit
 
 struct UserConversionMetrics {
     private enum ConversionValue: Int {
-        case newTab = 21
-        case search = 20
+        /// These conversion values just need to be larger than the onboarding events
+        /// that can be as low as 1 or as high as 7.
+        case newTab = 10
+        case search = 11
     }
 
     func didOpenNewTab() {
