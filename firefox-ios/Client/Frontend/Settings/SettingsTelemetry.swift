@@ -5,30 +5,21 @@
 import Foundation
 import Glean
 
-/// Note: We will be slowly migrating our existing settings (i.e. "preferences") telemetry probes over to a "settings"
-/// namespace.
 struct SettingsTelemetry {
     private let gleanWrapper: GleanWrapper
 
-    /// Uniquely identifies a row on the settings screen (or one of its subscreens), which the user can tap to drill down
-    /// deeper into settings.
-    ///
-    /// If the row moves somewhere else due to a refactor or an experiment, the key should stay the same. The most important
-    /// feature of the key is that it identifies the tapped row irrespective of its location in the settings hierarchy.
-    ///
-    /// Note that the `option` identifies the __row tapped__, not necessarily the screen shown.
-    enum OptionIdentifiers: String {
-        case AppIconSelection = "app_icon_selection" // Tapping "App Icon >" to show the App Icon Selection screen
-    }
-    
     /// Standard fallback values to use in telemetry when needed (e.g. missing data).
     struct Placeholders {
         /// Used when a value is not available to send (e.g. settings.changed changedFrom value missing)
         static let missingValue = "unavailable"
     }
 
-    enum MainMenuOption: String {
-        case AppIcon = "app_icon"
+    /// Uniquely identifies a row on the settings screen (or one of its subscreens), which the user can tap to drill down
+    /// deeper into settings. The identifier is irrespective of the row's location in the settings hierarchy.
+    ///
+    /// Note that the `option` identifies the __row tapped__, not necessarily the screen shown.
+    enum OptionIdentifiers: String {
+        case AppIconSelection = "app_icon_selection" // Tapping "App Icon >" to show the App Icon Selection screen
     }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -68,10 +59,5 @@ struct SettingsTelemetry {
     func optionSelected(option: OptionIdentifiers) {
         let extra = GleanMetrics.Settings.OptionSelectedExtra(option: option.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Settings.optionSelected, extras: extra)
-    }
-
-    func tappedAppIconSetting() {
-        let extra = GleanMetrics.SettingsMainMenu.OptionSelectedExtra(option: MainMenuOption.AppIcon.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsMainMenu.optionSelected, extras: extra)
     }
 }

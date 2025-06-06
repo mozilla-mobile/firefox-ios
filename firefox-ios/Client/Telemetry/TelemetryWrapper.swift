@@ -835,7 +835,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .newPrivateTab, .topSite, _):
             GleanMetrics.TopSites.openInPrivateTab.record()
         // MARK: Preferences
-        case (.action, .change, .setting, _, let extras):
+        case (.action, .change, .setting, _, _):
             assertionFailure("Please record telemetry for settings using the SettingsTelemetry().changedSetting() method")
 
         // MARK: - QR Codes
