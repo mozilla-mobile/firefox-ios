@@ -217,7 +217,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             self?.tableView.reloadData()
 
             SettingsTelemetry().changedSetting(
-                .startAtHome,
+                PrefsKeys.FeatureFlags.StartAtHome,
                 to: newOption.rawValue,
                 from: previousOption?.rawValue ?? SettingsTelemetry.Placeholders.missingValue
             )

@@ -31,19 +31,19 @@ struct SettingsTelemetry {
         case AppIcon = "app_icon"
     }
 
-    /// Uniquely identifies a setting in the Settings screen hierarchy irrespective of its placement.
-    enum SettingKey: String {
-        // TODO
-        case defaultSearchEngine
-        case etpStrength = "ETP-strength"
-        case startAtHome = "StartAtHomeUserPrefsKey" // Formerly `PrefsKeys.FeatureFlags.StartAtHome`
-    }
-
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
-
-    func changedSetting(_ setting: SettingKey, to changedTo: String, from changedFrom: String) {
+    
+    /// Records the event of a user changing a setting in one of the Settings screens.
+    /// - Parameters:
+    ///   - setting: A key uniquely identifying a setting in the Settings screen hierarchy irrespective of its placement.
+    ///              This key should not change even if the setting is moved to another screen later.
+    ///              Most often these are `PrefKeys`, `AppConstants`, or feature flag names, but any unique identifier may be
+    ///              used.
+    ///   - changedTo: The new value of the setting, recorded as a string.
+    ///   - changedFrom: The previous value of the setting, recorded as a string.
+    func changedSetting(_ setting: String, to changedTo: String, from changedFrom: String) {
         if changedTo.isEmpty || changedFrom.isEmpty {
             assertionFailure("changedTo and changedFrom should be valid string extras")
         }
@@ -51,7 +51,7 @@ struct SettingsTelemetry {
         let extras = GleanMetrics.Settings.ChangedExtra(
             changedFrom: changedFrom.isEmpty ? "unavailable" : changedFrom,
             changedTo: changedTo.isEmpty ? "unavailable" : changedTo,
-            setting: setting.rawValue
+            setting: setting
         )
         gleanWrapper.recordEvent(for: GleanMetrics.Settings.changed, extras: extras)
     }

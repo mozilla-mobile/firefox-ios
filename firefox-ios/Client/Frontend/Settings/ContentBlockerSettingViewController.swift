@@ -132,7 +132,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
     }
 
     private func recordEventOnChecked(option: BlockingStrength, fromOption: BlockingStrength) {
-        SettingsTelemetry().changedSetting(.etpStrength, to: option.rawValue, from: fromOption.rawValue)
+        SettingsTelemetry().changedSetting("ETP-strength", to: option.rawValue, from: fromOption.rawValue)
 
         if option == .strict {
             TelemetryWrapper.recordEvent(

@@ -711,7 +711,7 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             self.tableView.reloadData()
 
             SettingsTelemetry().changedSetting(
-                .defaultSearchEngine,
+                "defaultSearchEngine",
                 to: engine.telemetryID,
                 from: previousEngine?.telemetryID ?? SettingsTelemetry.Placeholders.missingValue
             )
