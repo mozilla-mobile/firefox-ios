@@ -119,6 +119,10 @@ class TabManagerImplementation: NSObject,
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
+    @MainActor private lazy var tabConfigurationProvider = {
+        return TabConfigurationProvider(prefs: profile.prefs)
+    }()
+
     private var selectedTabUUID: UUID? {
         guard let selectedTab = self.selectedTab,
               let uuid = UUID(uuidString: selectedTab.tabUUID) else {
@@ -127,19 +131,6 @@ class TabManagerImplementation: NSObject,
 
         return uuid
     }
-
-    @MainActor private lazy var configurationProvider = DefaultWKEngineConfigurationProvider()
-
-    // MARK: - Webview configuration
-    // A WKWebViewConfiguration used for normal tabs
-    @MainActor private lazy var configuration: WKWebViewConfiguration = {
-        return configurationProvider.configuration(from: profile.prefs, isPrivate: false).webViewConfiguration
-    }()
-
-    // A WKWebViewConfiguration used for private mode tabs
-    @MainActor private lazy var privateConfiguration: WKWebViewConfiguration = {
-        return configurationProvider.configuration(from: profile.prefs, isPrivate: true).webViewConfiguration
-    }()
 
     init(profile: Profile,
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
@@ -570,8 +561,7 @@ class TabManagerImplementation: NSObject,
             tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
         // The default tab configurations also need to change.
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-        privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        tabConfigurationProvider.updateAllowsPopups(allowPopups)
     }
 
     @objc
@@ -582,8 +572,7 @@ class TabManagerImplementation: NSObject,
         // https://developer.apple.com/documentation/webkit/wkwebviewconfiguration
         // The web view incorporates our configuration settings only at creation time; we cannot change
         //  those settings dynamically later. So this change will apply to new webviews only.
-        configuration.mediaTypesRequiringUserActionForPlayback = mediaType
-        privateConfiguration.mediaTypesRequiringUserActionForPlayback = mediaType
+        tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
     }
 
     private func buildTabRestore(window: WindowData?) async {
@@ -953,8 +942,7 @@ class TabManagerImplementation: NSObject,
             tab.close()
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
-        // TODO: Why do we need to recreate the private configuration
-        privateConfiguration = configurationProvider.configuration(from: profile.prefs, isPrivate: true).webViewConfiguration
+        // TODO: Do we still need to recreate the private configuration?
         tabs = normalTabs
     }
 
@@ -982,8 +970,9 @@ class TabManagerImplementation: NSObject,
     @MainActor
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         assert(Thread.isMainThread, "Currently expected to be called only on main thread.")
-        let configuration: WKWebViewConfiguration = tab.isPrivate ? self.privateConfiguration : self.configuration
-
+        let configuration: WKWebViewConfiguration = tabConfigurationProvider.configuration(
+            isPrivate: tab.isPrivate
+        ).webViewConfiguration
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
         selectedTab?.lastExecutedTime = Date.now()
     }
@@ -1200,7 +1189,7 @@ class TabManagerImplementation: NSObject,
             if let required = requiredConfiguration {
                 configuration = required
             } else {
-                configuration = tab.isPrivate ? privateConfiguration : self.configuration
+                configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
             }
             tab.createWebview(configuration: configuration)
         }
