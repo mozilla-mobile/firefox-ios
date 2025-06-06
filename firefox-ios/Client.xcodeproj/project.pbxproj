@@ -1321,7 +1321,6 @@
 		AB9CBC052C53B64C00102610 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBC012C53B64B00102610 /* TrackingProtectionState.swift */; };
 		AB9CBC082C53B7CD00102610 /* TrackingProtectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */; };
 		ABB184EB2CB807B300F0689D /* CertificatesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB184EA2CB807B200F0689D /* CertificatesModel.swift */; };
-		ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */; };
 		ABCEC0292D3DE2C80040F40D /* TrackingProtectionTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCEC0282D3DE2C30040F40D /* TrackingProtectionTelemetry.swift */; };
 		ABE856AD2C75029F00C56F47 /* TrackingProtectionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE856AC2C75029F00C56F47 /* TrackingProtectionStatusView.swift */; };
 		ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEF80D02A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift */; };
@@ -8963,7 +8962,6 @@
 		AB9CBC012C53B64B00102610 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
 		AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionStateTests.swift; sourceTree = "<group>"; };
 		ABB184EA2CB807B200F0689D /* CertificatesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesModel.swift; sourceTree = "<group>"; };
-		ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConversionMetricsTests.swift; sourceTree = "<group>"; };
 		ABCEC0282D3DE2C30040F40D /* TrackingProtectionTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTelemetry.swift; sourceTree = "<group>"; };
 		ABE856AC2C75029F00C56F47 /* TrackingProtectionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionStatusView.swift; sourceTree = "<group>"; };
 		ABEF80D02A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewModel.swift; sourceTree = "<group>"; };
@@ -15274,7 +15272,6 @@
 				E16941B22C4E498600FF5F4E /* Toolbar */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
 				AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */,
-				ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
@@ -18575,7 +18572,6 @@
 				1D74FF502B2797EA00FF01D0 /* WindowManagerTests.swift in Sources */,
 				CA24B53B24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift in Sources */,
 				E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */,
-				ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */,
 				21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */,
 				8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
