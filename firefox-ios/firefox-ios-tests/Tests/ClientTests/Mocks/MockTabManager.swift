@@ -39,7 +39,7 @@ class MockTabManager: TabManager {
 
     var addTabWasCalled = false
     var notifyCurrentTabDidFinishLoadingCalled = 0
-    var commitChangesCalled = 0
+    var saveAllTabDataCalled = 0
 
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
@@ -103,8 +103,8 @@ class MockTabManager: TabManager {
 
     func clearAllTabsHistory() {}
 
-    func commitChanges() {
-        commitChangesCalled += 1
+    func saveAllTabData() {
+        saveAllTabDataCalled += 1
     }
 
     func willSwitchTabMode(leavingPBM: Bool) {}

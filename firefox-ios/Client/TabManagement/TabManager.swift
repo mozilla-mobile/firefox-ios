@@ -103,7 +103,7 @@ protocol TabManager: AnyObject {
     func preserveTabs()
 
     /// Commits the pending changes to the persistent store.
-    func commitChanges()
+    func saveAllTabData()
 
     func notifyCurrentTabDidFinishLoading()
     func restoreTabs(_ forced: Bool)

@@ -679,7 +679,6 @@ class BrowserViewController: UIViewController,
 
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
-        tabManager.preserveTabs()
         logTelemetryForAppDidEnterBackground()
     }
 
@@ -694,9 +693,11 @@ class BrowserViewController: UIViewController,
         guard let currentWindowScene = view.window?.windowScene,
               let notificationWindowScene = notification.object as? UIWindowScene,
               currentWindowScene === notificationWindowScene else { return }
-        guard canShowPrivacyWindow else { return }
 
-        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+        tabManager.saveAllTabData()
+        if canShowPrivacyWindow {
+            privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+        }
     }
 
     @objc

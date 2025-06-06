@@ -268,7 +268,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
         }
-        commitChanges()
+        saveAllTabData()
     }
 
     @MainActor
@@ -304,7 +304,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
 
-        commitChanges()
+        saveAllTabData()
     }
 
     /// Remove a tab, will notify delegate of the tab removal
@@ -346,7 +346,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         if flushToDisk {
-            commitChanges()
+            saveAllTabData()
         }
     }
 
@@ -412,7 +412,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
 
         // Flush.
-        commitChanges()
+        saveAllTabData()
     }
 
     private func addTab(_ request: URLRequest? = nil,
@@ -456,13 +456,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
-        commitChanges()
+        saveAllTabData()
     }
 
     func undoCloseAllTabs() {
         guard !backupCloseTabs.isEmpty else { return }
         tabs = backupCloseTabs
-        commitChanges()
+        saveAllTabData()
         backupCloseTabs = [Tab]()
         if backupCloseTab != nil {
             selectTab(backupCloseTab?.tab)
@@ -774,13 +774,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     func preserveTabs() {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
-
-        logger.log("Preserve tabs started", level: .debug, category: .tabs)
         preserveTabs(forced: false)
     }
 
     private func preserveTabs(forced: Bool) {
         Task {
+            logger.log("Preserve tabs started", level: .debug, category: .tabs)
             // FIXME FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
             let windowData = WindowData(id: windowUUID,
                                         activeTabId: self.selectedTabUUID ?? UUID(),
@@ -829,9 +828,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         return tabData
     }
 
-    func commitChanges() {
-        preserveTabs()
+    func saveAllTabData() {
+        // Only preserve tabs after the restore has finished
+        guard tabRestoreHasFinished else { return }
+
         saveSessionData(forTab: selectedTab)
+        preserveTabs(forced: true)
     }
 
     func notifyCurrentTabDidFinishLoading() {
@@ -847,14 +849,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         else { return }
 
         self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
-    }
-
-    private func saveAllTabData() {
-        // Only preserve tabs after the restore has finished
-        guard tabRestoreHasFinished else { return }
-
-        saveSessionData(forTab: selectedTab)
-        preserveTabs(forced: true)
     }
 
     // MARK: - Select Tab
@@ -1046,13 +1040,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
-        commitChanges()
+        saveAllTabData()
     }
 
     @MainActor
     func undoCloseInactiveTabs() async {
         tabs.append(contentsOf: backupCloseTabs)
-        commitChanges()
+        saveAllTabData()
         backupCloseTabs = [Tab]()
     }
 
@@ -1095,7 +1089,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             selectedIndex = previousSelectedIndex
         }
 
-        commitChanges()
+        saveAllTabData()
     }
 
     func expireLoginAlerts() {
@@ -1221,7 +1215,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if flushToDisk {
-            commitChanges()
+            saveAllTabData()
         }
     }
 
@@ -1290,8 +1284,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 extension TabManagerImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case UIApplication.willResignActiveNotification:
-            saveAllTabData()
         case .TabMimeTypeDidSet:
             guard windowUUID == notification.windowUUID else { return }
             updateMenuItemsForSelectedTab()
