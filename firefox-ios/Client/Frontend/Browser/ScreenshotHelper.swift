@@ -14,6 +14,8 @@ class ScreenshotHelper {
     private let logger: Logger
 
     private var isIpad: Bool {
+        // An additional check for horizontalSizeClass is needed since for iPad in multi windows state
+        // the smallest window possible has horizontalSizeClass equal to compact, thus behave like an iPhone.
         return controller?.traitCollection.userInterfaceIdiom == .pad &&
                controller?.traitCollection.horizontalSizeClass == .regular
     }

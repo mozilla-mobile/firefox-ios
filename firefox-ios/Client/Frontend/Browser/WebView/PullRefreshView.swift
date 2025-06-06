@@ -42,6 +42,8 @@ class PullRefreshView: UIView,
     }
     private var easterEggTimer: DispatchSourceTimer?
     private var isIpad: Bool {
+        // An additional check for horizontalSizeClass is needed since for iPad in multi windows state
+        // the smallest window possible has horizontalSizeClass equal to compact, thus behaving like an iPhone.
         return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
     private var isToolbarRefactorEnabled: Bool {
