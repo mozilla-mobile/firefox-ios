@@ -482,6 +482,13 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
     }
 
+    // MARK: Print Formatter
+    func test_viewPrintFormatter_returnsProperValue() {
+        let subject = createSubject()
+        _ = subject?.viewPrintFormatter()
+        XCTAssertEqual(webViewProvider.webView.viewPrintFormatterCalled, 1)
+    }
+
     // MARK: Metadata parser
 
     func testFetchMetadataGivenProperURLChangeThenFetchMetadata() {
@@ -535,10 +542,12 @@ final class WKEngineSessionTests: XCTestCase {
         _ = createSubject()
 
         XCTAssertEqual(contentScriptManager.addContentScriptCalled, 3)
+        XCTAssertEqual(contentScriptManager.addContentScriptToPageCalled, 1)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 3)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], FocusContentScript.name())
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[2], ReaderModeContentScript.name())
+        XCTAssertEqual(contentScriptManager.savedContentScriptPageNames[0], PrintContentScript.name())
     }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {

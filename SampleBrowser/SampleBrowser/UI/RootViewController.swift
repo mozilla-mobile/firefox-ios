@@ -299,6 +299,11 @@ class RootViewController: UIViewController,
         browserVC.loadUrlOrSearch(SearchTerm(term: path.absoluteString))
     }
 
+    func loadPrintWebSource() {
+        let path = URL(fileURLWithPath: Bundle.main.path(forResource: "testPrintPreview", ofType: "html") ?? "")
+        browserVC.loadUrlOrSearch(SearchTerm(term: path.absoluteString))
+    }
+
     func showErrorPage(page: ErrorPageViewController) {
         self.errorPage = page
         addChild(page)

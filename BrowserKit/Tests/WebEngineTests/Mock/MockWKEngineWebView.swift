@@ -48,6 +48,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var savedJavaScript: String?
     var javascriptResult: (Result<Any, Error>)?
     var pageZoom: CGFloat = 1.0
+    var viewPrintFormatterCalled = 0
 
     var loadFileReadAccessURL: URL?
 
@@ -124,6 +125,11 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     func close() {
         closeCalled += 1
+    }
+
+    override func viewPrintFormatter() -> UIViewPrintFormatter {
+        viewPrintFormatterCalled += 1
+        return UIViewPrintFormatter()
     }
 
     func evaluateJavaScript(_ javaScript: String,
