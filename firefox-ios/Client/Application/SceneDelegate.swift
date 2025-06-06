@@ -110,7 +110,7 @@ class SceneDelegate: UIResponder,
         let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
         logger.log("SceneDelegate: scene did enter background. UUID: \(logUUID)", level: .info, category: .lifecycle)
         if let uuid = sceneCoordinator?.windowUUID {
-            downloadQueue.pauseAll(for: uuid)
+//            downloadQueue.pauseAll(for: uuid)
             tabErrorTelemetryHelper.recordTabCountForBackgroundedScene(uuid)
         }
     }
