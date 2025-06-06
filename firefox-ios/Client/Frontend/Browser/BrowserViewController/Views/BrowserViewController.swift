@@ -764,11 +764,20 @@ class BrowserViewController: UIViewController,
             legacyUrlBar?.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        dismissModalsIfStartAtHome()
+        dispatchStartAtHomeAction()
+    }
+
+    // MARK: - Start At Home
+    private func dispatchStartAtHomeAction() {
+        let startAtHomeAction = StartAtHomeAction(
+            windowUUID: windowUUID,
+            actionType: StartAtHomeActionType.didBrowserBecomeActive
+        )
+        store.dispatch(startAtHomeAction)
     }
 
     private func dismissModalsIfStartAtHome() {
-        guard tabManager.startAtHomeCheck(), presentedViewController != nil else { return }
+        guard browserViewControllerState?.shouldStartAtHome ?? false, presentedViewController != nil else { return }
         dismissVC()
     }
 
@@ -832,6 +841,8 @@ class BrowserViewController: UIViewController,
                 hideReaderModeBar(animated: false)
             }
         }
+
+        dismissModalsIfStartAtHome()
     }
 
     private func showToastType(toast: ToastType) {
