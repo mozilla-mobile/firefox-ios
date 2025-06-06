@@ -68,7 +68,7 @@
 "Settings.Appearance.Zoom.Default.Title.v140" = "По умолчанию";
 
 /* Button to reset specific zoom site levels back to default */
-"Settings.Appearance.Zoom.Reset.Button.v140" = "Сбросить настройки сайта";
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Сбросить параметры сайта";
 
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "Настройки масштаба";
