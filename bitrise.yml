@@ -1250,15 +1250,10 @@ workflows:
             set -x
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
-    after_run:
-    - _testflight_add_nightly_group
     envs:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    - opts:
-        is_expand: false
-      WAIT_TIME_BEFORE_NIGHTLY_GROUP: 120
     description: This step is to build, archive and upload Firefox Release and Beta
 
   SPM_Common_Steps:
@@ -2252,9 +2247,10 @@ workflows:
       EXPORT_METHOD: app-store
     description: This step is used during release promotion to build a firefox release
 
-  _testflight_add_nightly_group:
+  AddNightlyGroupToTestFlightBeta:
     description: This step is used to add the Nightly group to the Beta build in TestFlight.
-    # Note: This step requires repository cloning and a `WAIT_TIME_BEFORE_NIGHTLY_GROUP` environment variable
+    before_run:
+    - SPM_Common_Steps
     steps:
     - script@1.2.1:
         title: Add Nightly Group to Beta Build
@@ -2262,18 +2258,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             python3 -m pip install --upgrade pip pyjwt cryptography requests
-            echo "Waiting ${WAIT_TIME_BEFORE_NIGHTLY_GROUP}s to give apple time to process the build"
-            sleep ${WAIT_TIME_BEFORE_NIGHTLY_GROUP}
             python3 scripts/nightly_testflight_add_group.py
-
-  ForceTestFlightAddNightlyGroup:
-    before_run:
-    - SPM_Common_Steps
-    - _testflight_add_nightly_group
-    envs:
-      - opts:
-          is_expand: false
-        WAIT_TIME_BEFORE_NIGHTLY_GROUP: 0
 
   release_promotion_push:
     before_run:
