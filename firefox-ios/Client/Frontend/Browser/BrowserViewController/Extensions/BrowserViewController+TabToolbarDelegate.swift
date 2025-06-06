@@ -126,11 +126,31 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnDataClearance()
+        didTapOnDataClearance(for: .privateHome)
     }
 
     /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
-    func didTapOnDataClearance() {
+    func didTapOnDataClearance(for type: DataClearance.ScreenType) {
+        switch type {
+        case .privateHome:
+            triggerDataClearanceForPrivateHome()
+        case .privateTab:
+            triggerDataClearanceForPrivateTab()
+        }
+    }
+
+    private func triggerDataClearanceForPrivateTab() {
+        self.setupDataClearanceAnimation(for: self.presentedViewController?.view ?? view) { timingConstant in
+            DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
+                let action = TabPanelViewAction(panelType: .privateTabs,
+                                                windowUUID: self.windowUUID,
+                                                actionType: TabPanelViewActionType.confirmCloseAllTabs)
+                store.dispatch(action)
+            }
+        }
+    }
+
+    private func triggerDataClearanceForPrivateHome() {
         guard !(profile.prefs.boolForKey(PrefsKeys.dataClearanceAlertShown) ?? false) else {
             performDeletionAction()
             return
@@ -167,7 +187,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     private func performDeletionAction() {
         self.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-        self.setupDataClearanceAnimation { timingConstant in
+        self.setupDataClearanceAnimation(for: view) { timingConstant in
             DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
                 self.closePrivateTabsAndOpenNewPrivateHomepage()
             }
@@ -181,7 +201,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     /// Setup animation for data clearance flow unless reduce motion is enabled
     /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
-    private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {
+    private func setupDataClearanceAnimation(for view: UIView, completion: @escaping (Double) -> Void) {
         let showAnimation = !UIAccessibility.isReduceMotionEnabled
         let timingToMatchGradientOverlay = showAnimation ? 0.8 : 0.0
 

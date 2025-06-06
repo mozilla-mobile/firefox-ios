@@ -2600,8 +2600,8 @@ class BrowserViewController: UIViewController,
             _ = toggleReaderModeLongPressAction()
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
-        case .dataClearance:
-            didTapOnDataClearance()
+        case .dataClearance(let type):
+            didTapOnDataClearance(for: type)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)

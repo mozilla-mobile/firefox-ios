@@ -8,6 +8,13 @@ import Shared
 import Common
 import WebKit
 
+struct DataClearance {
+    enum ScreenType {
+        case privateHome
+        case privateTab
+    }
+}
+
 struct BrowserViewControllerState: ScreenState, Equatable {
     enum NavigationType {
         case home
@@ -32,7 +39,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case readerMode
         case newTabLongPressActions
         case readerModeLongPressAction
-        case dataClearance
+        case dataClearance(DataClearance.ScreenType)
         case passwordGenerator
     }
 
@@ -397,8 +404,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                displayView: .dataClearance,
+                displayView: .dataClearance(.privateHome),
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+            
+        case GeneralBrowserActionType.didTapOnDataClearanceInTabTray:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .dataClearance(.privateTab),
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+            
         case GeneralBrowserActionType.showPasswordGenerator:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,

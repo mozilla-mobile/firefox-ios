@@ -70,9 +70,18 @@ class TabTrayViewController: UIViewController,
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
 
+    // MARK: - Feature Flags
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
         && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
+    /// We want to show the felt deletion experience only for private mode
+    private var isFeltDeletionEnabled: Bool {
+        return featureFlags.isFeatureEnabled(
+            .feltPrivacyFeltDeletion,
+            checking: .buildOnly
+        ) && tabTrayState.isPrivateMode
     }
 
     // MARK: - Redux state
@@ -169,11 +178,23 @@ class TabTrayViewController: UIViewController,
         return isRegularLayout ? regularLayoutItems : iPhoneItems
     }
 
+    private lazy var dataClearanceButton: UIBarButtonItem = {
+        let dataClearanceName = StandardImageIdentifiers.Large.dataClearance
+        return createButtonItem(
+            imageName: dataClearanceName,
+            action: #selector(deleteTabsButtonTapped),
+            a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
+            a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
+        )
+    }()
+
     private lazy var deleteButton: UIBarButtonItem = {
-        return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
-                                action: #selector(deleteTabsButtonTapped),
-                                a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
-                                a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+        return createButtonItem(
+            imageName: StandardImageIdentifiers.Large.delete,
+            action: #selector(deleteTabsButtonTapped),
+            a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
+            a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
+        )
     }()
 
     private lazy var newTabButton: UIBarButtonItem = {
@@ -248,7 +269,13 @@ class TabTrayViewController: UIViewController,
 
         return [syncTabButton, flexibleSpace, doneButton]
     }()
+    
+    private lazy var bottomToolbarItemsForPrivate: [UIBarButtonItem] = {
+        guard isTabTrayUIExperimentsEnabled else { return [dataClearanceButton, flexibleSpace, newTabButton] }
 
+        return [dataClearanceButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
+    }()
+    
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
         if hasSyncableAccount {
             return [doneButton, fixedSpace, syncTabButton]
@@ -422,6 +449,7 @@ class TabTrayViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
+        dataClearanceButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
         doneButton.tintColor = theme.colors.iconPrimary
         syncTabButton.tintColor = theme.colors.iconPrimary
@@ -445,6 +473,7 @@ class TabTrayViewController: UIViewController,
         view.backgroundColor = swipeTheme.colors.layer1
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         deleteButton.tintColor = swipeTheme.colors.iconPrimary
+        dataClearanceButton.tintColor = swipeTheme.colors.iconPrimary
         newTabButton.tintColor = swipeTheme.colors.iconPrimary
         doneButton.tintColor = swipeTheme.colors.iconPrimary
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
@@ -554,9 +583,11 @@ class TabTrayViewController: UIViewController,
         let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
         var toolbarItems: [UIBarButtonItem]
         if isTabTrayUIExperimentsEnabled {
-            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+            let otherBottomToolbarItems = isFeltDeletionEnabled ? bottomToolbarItemsForPrivate : experimentBottomToolbarItems
+            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : otherBottomToolbarItems
         } else {
-            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+            let otherBottomToolbarItems = isFeltDeletionEnabled ? bottomToolbarItemsForPrivate : bottomToolbarItems
+            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : otherBottomToolbarItems
         }
         setToolbarItems(toolbarItems, animated: true)
     }
@@ -748,9 +779,19 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeAllTabs)
+        let action: Action
+        if isFeltDeletionEnabled {
+            action = GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.didTapOnDataClearanceInTabTray
+            )
+        } else {
+            action = TabPanelViewAction(
+                panelType: tabTrayState.selectedPanel,
+                windowUUID: windowUUID,
+                actionType: TabPanelViewActionType.closeAllTabs
+            )
+        }
         store.dispatch(action)
     }
 
