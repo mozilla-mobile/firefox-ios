@@ -88,7 +88,7 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.textPrimary
-        foregroundColorHighlighted = theme.colors.actionPrimaryHover
+        foregroundColorHighlighted = theme.colors.actionSecondaryHover
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
     }
