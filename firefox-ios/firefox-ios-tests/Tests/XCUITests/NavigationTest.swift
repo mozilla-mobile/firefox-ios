@@ -119,8 +119,14 @@ class NavigationTest: BaseTestCase {
             defaultMailPlaceholder = email.label
             XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
         } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
-            defaultMailPlaceholder = email.placeholderValue!
-            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+            if let value = app.staticTexts["Enter your email"].value as? String {
+                defaultMailPlaceholder = value
+                XCTAssertEqual(mailPlaceholder,
+                               defaultMailPlaceholder,
+                               "The mail placeholder does not show the correct value")
+            } else {
+                XCTFail("The mail placeholder value is not a String")
+            }
         } else {
             mozWaitForElementToExist(app.staticTexts[mailPlaceholder])
         }

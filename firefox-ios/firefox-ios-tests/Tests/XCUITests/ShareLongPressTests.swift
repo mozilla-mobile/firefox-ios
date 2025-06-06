@@ -167,7 +167,9 @@ class ShareLongPressTests: BaseTestCase {
         app.buttons["Share Link"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
-            app.collectionViews.cells[option].tapOnApp()
+            app.collectionViews.cells[option].waitAndTap()
+            // Workaround needed for iOS 17 to make sure the element is getting tapped and to avoid using sleeps
+            app.collectionViews.cells[option].tapIfExists()
         } else {
             app.buttons[option].waitAndTap()
         }
