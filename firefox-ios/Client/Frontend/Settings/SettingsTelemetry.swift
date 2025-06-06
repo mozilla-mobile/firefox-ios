@@ -21,8 +21,27 @@ struct SettingsTelemetry {
         case AppIconSelection = "app_icon_selection" // Tapping "App Icon >" to show the App Icon Selection screen
     }
 
+    /// Uniquely identifies a setting in the Settings screen hierarchy irrespective of its placement.
+    enum SettingKey: String {
+        // TODO
+        case etpStrength = "ETP-strength"
+    }
+
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
+    }
+
+    func changedSetting(_ setting: SettingKey, to changedTo: String, from changedFrom: String) {
+        if changedTo.isEmpty || changedFrom.isEmpty {
+            assertionFailure("changedTo and changedFrom should be valid string extras")
+        }
+
+        let extras = GleanMetrics.Settings.ChangedExtra(
+            changedFrom: changedFrom.isEmpty ? "unavailable" : changedFrom,
+            changedTo: changedTo.isEmpty ? "unavailable" : changedTo,
+            setting: setting.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Settings.changed, extras: extras)
     }
 
     /// Recorded when a user taps a row on the settings screen (or one of its subscreens) to drill deeper into the settings.
@@ -30,5 +49,10 @@ struct SettingsTelemetry {
     func optionSelected(option: OptionIdentifiers) {
         let extra = GleanMetrics.Settings.OptionSelectedExtra(option: option.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Settings.optionSelected, extras: extra)
+    }
+    
+    func tappedAppIconSetting() {
+        let extra = GleanMetrics.SettingsMainMenu.OptionSelectedExtra(option: MainMenuOption.AppIcon.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.SettingsMainMenu.optionSelected, extras: extra)
     }
 }
