@@ -416,6 +416,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowTabTray_withExperiment() throws {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
+        subject.browserViewController = browserViewController
         subject.showTabTray(selectedPanel: .tabs)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
