@@ -40,6 +40,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() {
         TelemetryContextualIdentifier.clearUserDefaults()
+        profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
