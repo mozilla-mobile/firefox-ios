@@ -8,16 +8,27 @@ import UIKit
 // TODO: FXIOS-12302 Create the UI for different accessibility sizes, for horizontal options section
 final class MenuSquareCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let iconSize: CGFloat = 20
-        static let backgroundIconViewCornerRadius: CGFloat = 12
+        static let iconSize: CGFloat = 24
+        static let backgroundViewCornerRadius: CGFloat = 12
         static let horizontalMargin: CGFloat = 6
-        static let verticalMargin: CGFloat = 6
+        static let contentViewSpacing: CGFloat = 4
+        static let contentViewTopMargin: CGFloat = 12
+        static let contentViewBottomMargin: CGFloat = 8
+        static let contentViewHorizontalMargin: CGFloat = 4
     }
 
     // MARK: - UI Elements
-    private var backgroundIconView: UIView = .build()
+    private var backgroundContentView: UIView = .build()
 
-    private var icon: UIImageView = .build()
+    private var contentStackView: UIStackView = .build { stack in
+        stack.axis = .vertical
+        stack.spacing = UX.contentViewSpacing
+        stack.distribution = .fillProportionally
+    }
+
+    private var icon: UIImageView = .build { view in
+        view.contentMode = .scaleAspectFit
+    }
 
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption2.scaledFont()
@@ -34,13 +45,15 @@ final class MenuSquareCell: UICollectionViewCell, ReusableCell, ThemeApplicable 
         setupView()
     }
 
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) not yet supported")
+    }
 
     func configureCellWith(model: MenuElement) {
         self.model = model
         self.titleLabel.text = model.title
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
-        self.backgroundIconView.layer.cornerRadius = UX.backgroundIconViewCornerRadius
+        self.backgroundContentView.layer.cornerRadius = UX.backgroundViewCornerRadius
         self.isAccessibilityElement = true
         self.isUserInteractionEnabled = !model.isEnabled ? false : true
         self.accessibilityIdentifier = model.a11yId
@@ -50,39 +63,42 @@ final class MenuSquareCell: UICollectionViewCell, ReusableCell, ThemeApplicable 
     }
 
     private func setupView() {
-        self.addSubview(backgroundIconView)
-        self.addSubview(titleLabel)
-        self.backgroundIconView.addSubview(icon)
+        self.addSubview(backgroundContentView)
+        backgroundContentView.addSubview(contentStackView)
+        contentStackView.addArrangedSubview(icon)
+        contentStackView.addArrangedSubview(titleLabel)
         NSLayoutConstraint.activate([
-            backgroundIconView.topAnchor.constraint(equalTo: self.topAnchor),
-            backgroundIconView.leadingAnchor.constraint(
-                equalTo: self.leadingAnchor,
-                constant: UX.horizontalMargin),
-            backgroundIconView.trailingAnchor.constraint(
-                equalTo: self.trailingAnchor,
-                constant: -UX.horizontalMargin),
+            backgroundContentView.topAnchor.constraint(equalTo: self.topAnchor),
+            backgroundContentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            backgroundContentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            backgroundContentView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 
-            icon.centerYAnchor.constraint(equalTo: backgroundIconView.centerYAnchor),
-            icon.centerXAnchor.constraint(equalTo: backgroundIconView.centerXAnchor),
-            icon.widthAnchor.constraint(equalToConstant: UX.iconSize),
-            icon.heightAnchor.constraint(equalToConstant: UX.iconSize),
-
-            titleLabel.topAnchor.constraint(equalTo: backgroundIconView.bottomAnchor, constant: UX.verticalMargin),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: self.leadingAnchor,
-                constant: UX.horizontalMargin),
-            titleLabel.trailingAnchor.constraint(
-                equalTo: self.trailingAnchor,
-                constant: -UX.horizontalMargin),
-            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            contentStackView.topAnchor.constraint(
+                equalTo: backgroundContentView.topAnchor,
+                constant: UX.contentViewTopMargin
+            ),
+            contentStackView.leadingAnchor.constraint(
+                equalTo: backgroundContentView.leadingAnchor,
+                constant: UX.contentViewHorizontalMargin
+            ),
+            contentStackView.trailingAnchor.constraint(
+                equalTo: backgroundContentView.trailingAnchor,
+                constant: -UX.contentViewHorizontalMargin
+            ),
+            contentStackView.bottomAnchor.constraint(
+                equalTo: backgroundContentView.bottomAnchor,
+                constant: -UX.contentViewBottomMargin
+            ),
+            icon.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
     }
 
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         backgroundColor = .clear
-        backgroundIconView.backgroundColor = theme.colors.layer2
+        contentStackView.backgroundColor = .clear
+        backgroundContentView.backgroundColor = theme.colors.layer2
         icon.tintColor = theme.colors.iconPrimary
-        titleLabel.textColor = theme.colors.textPrimary
+        titleLabel.textColor = theme.colors.textSecondary
     }
 }

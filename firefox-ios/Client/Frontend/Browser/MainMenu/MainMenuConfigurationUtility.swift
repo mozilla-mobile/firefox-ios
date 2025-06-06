@@ -17,6 +17,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
         static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
+        static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray
         static let history = StandardImageIdentifiers.Large.history
         static let downloads = StandardImageIdentifiers.Large.download
         static let passwords = StandardImageIdentifiers.Large.login
@@ -111,8 +112,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         } else {
-            menuSections.insert(getTopTabsSection(with: uuid, tabInfo: tabInfo), at: 0)
-            menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
+            if tabInfo.isHomepage {
+                menuSections.append(getNewTabSection(with: uuid, tabInfo: tabInfo))
+                menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
+            } else {
+                menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
+            }
         }
 
         return menuSections
@@ -252,10 +257,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // TODO: FXIOS-12306 Update MainMenuConfigurationUtility based on the final design
-    // MARK: - Top Tabs Section
-    private func getTopTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+    // MARK: - Horizontal Tabs Section
+    private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
-            isTopTabsSection: true,
+            isHorizontalTabsSection: true,
             options: [
             MenuElement(
                 title: .MainMenu.PanelLinkSection.History,
@@ -278,7 +283,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             ),
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
-                iconName: Icons.bookmarks,
+                iconName: Icons.bookmarksTray,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
