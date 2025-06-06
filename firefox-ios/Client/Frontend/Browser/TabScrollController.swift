@@ -325,6 +325,7 @@ class TabScrollController: NSObject,
     }
 
     func configureRefreshControl() {
+        guard tab?.isFxHomeTab == false else { return }
         tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
         }
