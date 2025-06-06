@@ -103,6 +103,7 @@
       }
     },
     {
+      "parallelizable" : true,
       "skippedTests" : [
         "ContentBlockerTests",
         "ETPCoverSheetTests",

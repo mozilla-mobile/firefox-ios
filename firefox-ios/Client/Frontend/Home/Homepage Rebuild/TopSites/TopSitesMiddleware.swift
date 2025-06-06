@@ -21,6 +21,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
     // but keeping logic consistent for now
     private var otherSites: [TopSiteConfiguration] = []
     private var sponsoredSites: [Site] = []
+    private var retrieveTopSitesTask: Task<Void, Never>?
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
@@ -100,33 +101,44 @@ final class TopSitesMiddleware: FeatureFlaggable {
         }
         return site
     }
+    private enum TopSitesResult {
+        case otherSites([TopSiteConfiguration])
+        case sponsoredSites([Site])
+    }
 
     private func getTopSitesDataAndUpdateState(for action: Action) {
-        Task {
-            await withTaskGroup(of: Void.self) { group in
+        guard retrieveTopSitesTask == nil else { return }
+
+        retrieveTopSitesTask = Task {
+            defer { retrieveTopSitesTask = nil }
+            await withTaskGroup(of: TopSitesResult.self) { group in
                 group.addTask {
-                    self.otherSites = await self.topSitesManager.getOtherSites()
-                    self.updateTopSites(
-                        for: action.windowUUID,
-                        otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredSites
-                    )
+                    let otherSites = await self.topSitesManager.getOtherSites()
+                    return .otherSites(otherSites)
                 }
                 group.addTask {
-                    self.sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
-                    self.updateTopSites(
-                        for: action.windowUUID,
-                        otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredSites
-                    )
+                    let sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
+                    return .sponsoredSites(sponsoredSites)
                 }
 
-                await group.waitForAll()
-                updateTopSites(
-                    for: action.windowUUID,
-                    otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredSites
-                )
+                for await result in group {
+                    switch result {
+                    case .otherSites(let other):
+                        self.otherSites = other
+                        updateTopSites(
+                            for: action.windowUUID,
+                            otherSites: other,
+                            sponsoredTiles: self.sponsoredSites
+                        )
+                    case .sponsoredSites(let sponsored):
+                        self.sponsoredSites = sponsored
+                        updateTopSites(
+                            for: action.windowUUID,
+                            otherSites: self.otherSites,
+                            sponsoredTiles: sponsored
+                        )
+                    }
+                }
             }
         }
     }
