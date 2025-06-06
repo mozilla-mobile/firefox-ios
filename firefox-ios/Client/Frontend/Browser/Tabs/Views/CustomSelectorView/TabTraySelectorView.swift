@@ -11,11 +11,12 @@ protocol TabTraySelectorDelegate: AnyObject {
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
-    static let horizontalPadding: CGFloat = 16
+    static let horizontalSpacing: CGFloat = 16
     static let cornerRadius: CGFloat = 12
     static let verticalInsets: CGFloat = 8
     static let horizontalInsets: CGFloat = 10
     static let fontScaleDelta: CGFloat = 0.055
+    static let stackViewLeadingTrailingPadding: CGFloat = 12
 }
 
 /// Represents the visual state of the selection indicator during a transition.
@@ -38,7 +39,7 @@ class TabTraySelectorView: UIView,
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.spacing = TabTraySelectorUX.horizontalPadding
+        stackView.spacing = TabTraySelectorUX.horizontalSpacing
         stackView.distribution = .fillProportionally
         stackView.alignment = .center
     }
@@ -90,6 +91,10 @@ class TabTraySelectorView: UIView,
         }
 
         NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
+                                               constant: TabTraySelectorUX.stackViewLeadingTrailingPadding),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor,
+                                                constant: -TabTraySelectorUX.stackViewLeadingTrailingPadding),
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor),

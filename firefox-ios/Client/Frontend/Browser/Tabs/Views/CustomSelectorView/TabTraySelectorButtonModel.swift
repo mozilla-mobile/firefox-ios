@@ -34,6 +34,7 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable {
         }
         var updatedConfiguration = config
 
+        updatedConfiguration.titleLineBreakMode = .byTruncatingTail
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
