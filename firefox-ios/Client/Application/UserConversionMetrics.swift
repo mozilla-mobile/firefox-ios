@@ -27,7 +27,7 @@ struct UserConversionMetrics {
         let logger: Logger = DefaultLogger.shared
         /// Google ads only supports SKAN 3 so it will only interpret fine values.
         /// Setting the coarse value to low for now.
-        let conversionValue = ConversionValueUtil(fineValue: conversionValue.rawValue, coarseValue: .low, logger: logger)
-        conversionValue.adNetworkAttributionUpdateConversionEvent()
+        let conversionValueUtil = ConversionValueUtil(fineValue: conversionValue.rawValue, coarseValue: .low, logger: logger)
+        conversionValueUtil.adNetworkAttributionUpdateConversionEvent()
     }
 }
