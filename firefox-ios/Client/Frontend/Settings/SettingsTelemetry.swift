@@ -54,6 +54,13 @@ struct SettingsTelemetry {
             setting: setting
         )
         gleanWrapper.recordEvent(for: GleanMetrics.Settings.changed, extras: extras)
+
+        // Continue to record the `preferences.changed` until it's expired and we deprecate it in favor of `settings.changed`
+        let deprecatedExtras = GleanMetrics.Preferences.ChangedExtra(
+            changedTo: changedTo,
+            preference: setting
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Preferences.changed, extras: deprecatedExtras)
     }
 
     /// Recorded when a user taps a row on the settings screen (or one of its subscreens) to drill deeper into the settings.
