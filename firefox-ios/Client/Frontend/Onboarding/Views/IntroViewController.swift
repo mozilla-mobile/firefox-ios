@@ -327,6 +327,10 @@ extension IntroViewController: OnboardingCardDelegate {
             registerForNotification()
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
+            /// Setting default browser card action opens an instruction pop up instead of
+            /// setting a default browser action. TBD if the above code even still fires.
+            introViewModel.chosenOptions.insert(.setAsDefaultBrowser)
+            introViewModel.updateOnboardingUserActivationEvent()
             presentDefaultBrowserPopup(
                 windowUUID: windowUUID,
                 from: cardName,
