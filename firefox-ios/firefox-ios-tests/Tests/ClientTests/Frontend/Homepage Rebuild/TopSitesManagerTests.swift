@@ -9,7 +9,7 @@ import XCTest
 @testable import Client
 
 final class TopSitesManagerTests: XCTestCase {
-    private var profile: MockProfile?
+    private var profile: MockProfile!
     private var dispatchQueue: MockDispatchQueue?
     private var mockNotificationCenter: MockNotificationCenter?
     override func setUp() {
@@ -17,7 +17,7 @@ final class TopSitesManagerTests: XCTestCase {
         profile = MockProfile()
         dispatchQueue = MockDispatchQueue()
         mockNotificationCenter = MockNotificationCenter()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -393,6 +393,60 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(mockPinnedSites.addPinnedTopSiteCalledCount, 1)
     }
 
+    func test_sponsoredShorcutsFlagEnabled_withoutUserPref_returnsSponsoredSites() throws {
+        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
+
+        let subject = try createSubject()
+
+        let topSites = subject.recalculateTopSites(
+            otherSites: [],
+            sponsoredSites: createSponsoredSites()
+        )
+
+        XCTAssertEqual(topSites.count, 2)
+    }
+
+    func test_sponsoredShorcutsFlagDisabled_withoutUserPref_returnsNoSponsoredSites() throws {
+        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
+
+        let subject = try createSubject()
+
+        let topSites = subject.recalculateTopSites(
+            otherSites: [],
+            sponsoredSites: createSponsoredSites()
+        )
+
+        XCTAssertEqual(topSites.count, 0)
+    }
+
+    func test_sponsoredShorcutsFlagEnabled_withUserPref_returnsNoSponsoredSites() throws {
+        profile?.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
+        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: true)
+
+        let subject = try createSubject()
+
+        let topSites = subject.recalculateTopSites(
+            otherSites: [],
+            sponsoredSites: createSponsoredSites()
+        )
+
+        XCTAssertEqual(topSites.count, 0)
+    }
+
+    func test_sponsoredShorcutsFlagDisabled_withUserPref_returnsSponsoredSites() throws {
+        profile?.prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
+        setupNimbusHNTSponsoredShortcutsTesting(isEnabled: false)
+
+        let subject = try createSubject()
+
+        let topSites = subject.recalculateTopSites(
+            otherSites: [],
+            sponsoredSites: createSponsoredSites()
+        )
+
+        XCTAssertEqual(topSites.count, 2)
+    }
+
     private func createSubject(
         injectedProfile: Profile? = nil,
         googleTopSiteManager: GoogleTopSiteManagerProvider = MockGoogleTopSiteManager(mockSiteData: nil),
@@ -454,6 +508,14 @@ final class TopSitesManagerTests: XCTestCase {
     private func setupNimbusUnifiedAdsTesting(isEnabled: Bool) {
         FxNimbus.shared.features.unifiedAds.with { _, _ in
             return UnifiedAds(enabled: isEnabled)
+        }
+    }
+
+    private func setupNimbusHNTSponsoredShortcutsTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.hntSponsoredShortcutsFeature.with { _, _ in
+            return HntSponsoredShortcutsFeature(
+                enabled: isEnabled
+            )
         }
     }
 }
