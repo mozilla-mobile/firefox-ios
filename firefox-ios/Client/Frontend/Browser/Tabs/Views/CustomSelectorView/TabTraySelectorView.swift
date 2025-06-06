@@ -11,12 +11,12 @@ protocol TabTraySelectorDelegate: AnyObject {
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
-    static let horizontalSpacing: CGFloat = 16
+    static let horizontalSpacing: CGFloat = 12
     static let cornerRadius: CGFloat = 12
     static let verticalInsets: CGFloat = 8
     static let horizontalInsets: CGFloat = 10
     static let fontScaleDelta: CGFloat = 0.055
-    static let stackViewLeadingTrailingPadding: CGFloat = 12
+    static let stackViewLeadingTrailingPadding: CGFloat = 8
 }
 
 /// Represents the visual state of the selection indicator during a transition.
