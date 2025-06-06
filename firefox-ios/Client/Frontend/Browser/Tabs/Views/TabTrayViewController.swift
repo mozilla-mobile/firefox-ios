@@ -269,13 +269,13 @@ class TabTrayViewController: UIViewController,
 
         return [syncTabButton, flexibleSpace, doneButton]
     }()
-    
+
     private lazy var bottomToolbarItemsForPrivate: [UIBarButtonItem] = {
         guard isTabTrayUIExperimentsEnabled else { return [dataClearanceButton, flexibleSpace, newTabButton] }
 
         return [dataClearanceButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
     }()
-    
+
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
         if hasSyncableAccount {
             return [doneButton, fixedSpace, syncTabButton]
@@ -597,13 +597,11 @@ class TabTrayViewController: UIViewController,
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItems = rightBarButtonItemsForSync
         } else {
-            navigationItem.leftBarButtonItem = deleteButton
+            navigationItem.leftBarButtonItem = isFeltDeletionEnabled ? dataClearanceButton : deleteButton
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
 
         navigationController?.isToolbarHidden = true
-        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
-        setToolbarItems(toolbarItems, animated: true)
     }
 
     private func createSegmentedControl(
