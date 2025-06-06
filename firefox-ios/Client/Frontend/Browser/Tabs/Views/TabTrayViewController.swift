@@ -128,11 +128,14 @@ class TabTrayViewController: UIViewController,
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
-        let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
+        let titles = [TabTrayPanelType.privateTabs.label,
+                     TabTrayPanelType.tabs.label,
+                     TabTrayPanelType.syncedTabs.label]
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex,
+                                           theme: retrieveTheme(),
+                                           buttonTitles: titles)
         selector.delegate = self
-        selector.items = [TabTrayPanelType.privateTabs.label,
-                          "0 \(TabTrayPanelType.tabs.label)",
-                          TabTrayPanelType.syncedTabs.label]
+        selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
@@ -394,9 +397,6 @@ class TabTrayViewController: UIViewController,
         countLabel.text = count
         segmentedControl.setImage(TabTrayPanelType.tabs.image!.overlayWith(image: countLabel),
                                   forSegmentAt: 0)
-        if isTabTrayUIExperimentsEnabled {
-            experimentSegmentControl.items[1] = "\(count) \(TabTrayPanelType.tabs.label)"
-        }
     }
 
     // MARK: Themeable
