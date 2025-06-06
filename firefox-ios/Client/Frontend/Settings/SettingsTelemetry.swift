@@ -20,11 +20,22 @@ struct SettingsTelemetry {
     enum OptionIdentifiers: String {
         case AppIconSelection = "app_icon_selection" // Tapping "App Icon >" to show the App Icon Selection screen
     }
+    
+    /// Standard fallback values to use in telemetry when needed (e.g. missing data).
+    struct Placeholders {
+        /// Used when a value is not available to send (e.g. settings.changed changedFrom value missing)
+        static let missingValue = "unavailable"
+    }
+
+    enum MainMenuOption: String {
+        case AppIcon = "app_icon"
+    }
 
     /// Uniquely identifies a setting in the Settings screen hierarchy irrespective of its placement.
     enum SettingKey: String {
         // TODO
         case etpStrength = "ETP-strength"
+        case startAtHome = "StartAtHomeUserPrefsKey" // Formerly `PrefsKeys.FeatureFlags.StartAtHome`
     }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
@@ -50,7 +61,7 @@ struct SettingsTelemetry {
         let extra = GleanMetrics.Settings.OptionSelectedExtra(option: option.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Settings.optionSelected, extras: extra)
     }
-    
+
     func tappedAppIconSetting() {
         let extra = GleanMetrics.SettingsMainMenu.OptionSelectedExtra(option: MainMenuOption.AppIcon.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.SettingsMainMenu.optionSelected, extras: extra)
