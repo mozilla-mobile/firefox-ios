@@ -34,8 +34,10 @@ class TabTraySelectorView: UIView,
     private var theme: Theme
     private var selectedIndex: Int
     private var buttons: [TabTraySelectorButton] = []
-    private lazy var selectionBackgroundView: UIView = .build { _ in }
+    private var buttonTitles: [String]
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
+
+    private lazy var selectionBackgroundView: UIView = .build { _ in }
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -44,21 +46,14 @@ class TabTraySelectorView: UIView,
         stackView.alignment = .center
     }
 
-    var items: [String] = ["", "", ""] {
-        didSet {
-            updateLabels()
-            adjustSelectedButtonFont(toIndex: selectedIndex)
-            // We need the labels on the buttons to adjust proper frame size
-            applyInitalSelectionBackgroundFrame()
-        }
-    }
-
     init(selectedIndex: Int,
          theme: Theme,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         buttonTitles: [String]) {
         self.selectedIndex = selectedIndex
         self.theme = theme
         self.notificationCenter = notificationCenter
+        self.buttonTitles = buttonTitles
         super.init(frame: .zero)
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setup()
@@ -84,11 +79,14 @@ class TabTraySelectorView: UIView,
         addSubview(selectionBackgroundView)
         addSubview(stackView)
 
-        for (index, title) in items.enumerated() {
+        for (index, title) in buttonTitles.enumerated() {
             let button = createButton(with: index, title: title)
             buttons.append(button)
             stackView.addArrangedSubview(button)
+            applyButtonWidthAnchor(on: button, with: title as NSString)
         }
+
+        applyInitalSelectionBackgroundFrame()
 
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
@@ -109,7 +107,7 @@ class TabTraySelectorView: UIView,
         let button = TabTraySelectorButton()
         let hint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
                           NSNumber(value: index + 1),
-                          NSNumber(value: items.count))
+                          NSNumber(value: buttonTitles.count))
         let font = index == selectedIndex
             ? FXFontStyles.Bold.body.systemFont()
             : FXFontStyles.Regular.body.systemFont()
@@ -145,14 +143,6 @@ class TabTraySelectorView: UIView,
         selectionBackgroundWidthConstraint?.isActive = false
         selectionBackgroundWidthConstraint = selectionBackgroundView.widthAnchor.constraint(equalToConstant: width)
         selectionBackgroundWidthConstraint?.isActive = true
-    }
-
-    private func updateLabels() {
-        for (index, title) in items.enumerated() {
-            guard let button = buttons[safe: index] else { continue }
-            button.setTitle(title, for: .normal)
-            applyButtonWidthAnchor(on: button, with: title as NSString)
-        }
     }
 
     /// Calculates and applies a fixed width constraint to a button based on the maximum
@@ -318,7 +308,7 @@ class TabTraySelectorView: UIView,
     private func dynamicTypeChanged() {
         adjustSelectedButtonFont(toIndex: selectedIndex)
 
-        for (index, title) in items.enumerated() {
+        for (index, title) in buttonTitles.enumerated() {
             guard let button = buttons[safe: index] else { continue }
             applyButtonWidthAnchor(on: button, with: title as NSString)
         }
