@@ -20,7 +20,7 @@ extension TopBottomInterchangeable {
     func addToParent(parent: UIStackView, addToTop: Bool = true) {
         self.parent = parent
         if addToTop {
-            parent.addArrangedSubview(self)
+            parent.addArrangedViewToTop(self)
         } else {
             parent.addArrangedViewToBottom(self)
         }
