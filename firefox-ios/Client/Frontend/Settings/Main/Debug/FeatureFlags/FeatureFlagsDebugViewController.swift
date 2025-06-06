@@ -180,13 +180,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .tabAnimation,
-                    titleText: format(string: "Tab Tray Animation"),
-                    statusText: format(string: "Toggle to use the new tab tray animation when new tab experiment is enabled")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .toolbarRefactor,
                     titleText: format(string: "Toolbar Redesign"),
                     statusText: format(string: "Toggle to enable the toolbar redesign")
