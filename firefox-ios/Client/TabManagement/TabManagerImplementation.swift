@@ -495,7 +495,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             return
         }
 
-        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty)",
+        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty), crashed at last launch is \(logger.crashedLastLaunch)",
                    level: .debug,
                    category: .tabs)
 
