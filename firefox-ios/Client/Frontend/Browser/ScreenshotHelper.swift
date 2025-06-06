@@ -55,7 +55,7 @@ class ScreenshotHelper {
         let isNativeErrorPage = controller?.contentContainer.hasNativeErrorPage ?? false
 
         // If the tab is the homepage, take a screenshot of the homepage view.
-        // This is done by accessing the content view from the content container.
+        // This is done by accessing the content controller from the content container.
         // The screenshot is then set for the tab, and a TabEvent is posted to indicate
         // that a screenshot has been set for the homepage.
         if tab.isFxHomeTab {
@@ -64,7 +64,7 @@ class ScreenshotHelper {
             let screenshotTool = controller?.contentContainer.contentController as? Screenshotable
                                  ?? controller?.contentContainer.contentView as? Screenshotable
             if let screenshotTool {
-                // apply bounds only for iphone in portrait, as otherwise it results in
+                // apply bounds only for iPhone in portrait, as otherwise it results in
                 // bad screenshot view port.
                 let screenshot: UIImage? = if UIWindow.isPortrait && !isIpad {
                     screenshotTool.screenshot(bounds: screenshotBounds)
@@ -104,7 +104,7 @@ class ScreenshotHelper {
             let configuration = WKSnapshotConfiguration()
             configuration.afterScreenUpdates = true
 
-            // apply bounds only for iphone in portrait, as otherwise it results in
+            // apply bounds only for iPhone in portrait, as otherwise it results in
             // bad screenshot view port.
             if UIWindow.isPortrait && !isIpad {
                 configuration.rect = screenshotBounds
