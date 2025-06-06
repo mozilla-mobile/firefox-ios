@@ -15,6 +15,7 @@ struct GenericSectionView<Content: View>: View {
     let title: String
     let description: String?
     let content: () -> Content
+    let identifier: String
 
     let theme: Theme?
 
@@ -32,11 +33,16 @@ struct GenericSectionView<Content: View>: View {
         static var textPadding: CGFloat { 8 }
     }
 
-    init(theme: Theme?, title: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    init(theme: Theme?,
+         title: String,
+         description: String? = nil,
+         identifier: String,
+         @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.description = description
         self.content = content
         self.theme = theme
+        self.identifier = identifier
     }
 
     var body: some View {
@@ -59,6 +65,8 @@ struct GenericSectionView<Content: View>: View {
             }
         }
         .padding(.bottom, UX.sectionPadding)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(identifier)
     }
 
     /// Creates the header view with the provided title.
