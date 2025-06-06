@@ -103,9 +103,6 @@ final class NimbusFeatureFlagLayer {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
-        case .tabAnimation:
-            return checkTabAnimationFeature(from: nimbus)
-
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
 
@@ -199,11 +196,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.tabTrayUiExperiments.value()
-        return config.animationFeature
     }
 
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
