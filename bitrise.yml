@@ -4,34 +4,34 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     workflows:
-        determine_apps_affected: {}
-        firefox_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
-        focus_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
-        klar_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
-        run_firefox_ui_tests:
-            run_if:
-              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
-            depends_on:
-            - firefox_configure_build
-            parallel: 5
-        focus_ui_test:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - focus_configure_build
-            parallel: 1
+      determine_apps_affected: {}
+      firefox_configure_build:
+        run_if:
+          expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
+        depends_on:
+        - determine_apps_affected
+      focus_configure_build:
+        run_if:
+          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        depends_on:
+        - determine_apps_affected
+      klar_configure_build:
+        run_if:
+          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        depends_on:
+        - determine_apps_affected
+      run_firefox_ui_tests:
+        run_if:
+          expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
+        depends_on:
+        - firefox_configure_build
+        parallel: 5
+      focus_ui_test:
+        run_if:
+          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        depends_on:
+        - focus_configure_build
+        parallel: 1
 
 workflows:
   firefox_accessibility_test:
@@ -795,7 +795,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-16.4.x
         machine_type_id: g2.mac.large
   L10nBuild:
     steps:
@@ -2271,9 +2271,9 @@ workflows:
     - SPM_Common_Steps
     - _testflight_add_nightly_group
     envs:
-      - opts:
-          is_expand: false
-        WAIT_TIME_BEFORE_NIGHTLY_GROUP: 0
+    - opts:
+        is_expand: false
+      WAIT_TIME_BEFORE_NIGHTLY_GROUP: 0
 
   release_promotion_push:
     before_run:
