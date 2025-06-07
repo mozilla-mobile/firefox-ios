@@ -84,7 +84,6 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
     var state: URLSessionTask.State {
         return task?.state ?? .suspended
     }
-
     fileprivate(set) var session: URLSession?
     fileprivate(set) var task: URLSessionDownloadTask?
     fileprivate(set) var cookieStore: WKHTTPCookieStore
@@ -100,7 +99,8 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
     init?(originWindow: WindowUUID,
           cookieStore: WKHTTPCookieStore,
           preflightResponse: URLResponse,
-          request: URLRequest) {
+          request: URLRequest,
+          isPrivate: Bool?) {
         self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
 
@@ -125,7 +125,23 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
         if let mimeType = preflightResponse.mimeType {
             self.mimeType = mimeType
         }
+        // If the current window is Private or nil (for safety), create an ephemeral URLSession
+        if isPrivate == true || isPrivate == nil {
+            self.session = URLSession(configuration: .ephemeralMPTCP,
+                                      delegate: self,
+                                      delegateQueue: .main)
+        } else {
+            self.session = {
+                let config = URLSessionConfiguration.background(withIdentifier: "Firefox")
+                config.isDiscretionary = false
+                config.sessionSendsLaunchEvents = true
 
+                return URLSession(
+                    configuration: config,
+                    delegate: self,
+                    delegateQueue: .main)
+                }()
+        }
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
         if let contentEncodingHeader = (preflightResponse as? HTTPURLResponse)?
                                        .allHeaderFields["Content-Encoding"] as? String,
@@ -138,8 +154,6 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
         } else {
             self.hasContentEncoding = false
         }
-
-        self.session = URLSession(configuration: .ephemeralMPTCP, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: self.request)
     }
 
