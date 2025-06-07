@@ -154,9 +154,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
         } else {
             self.hasContentEncoding = false
         }
-        guard case self.task = session!.downloadTask(with: self.request) else {
-            return
-        }
+        self.task = session?.downloadTask(with: self.request)
     }
 
     override func cancel() {
@@ -172,7 +170,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
     override func resume() {
         cookieStore.getAllCookies { [self] cookies in
             cookies.forEach { cookie in
-                session!.configuration.httpCookieStorage?.setCookie(cookie)
+                session?.configuration.httpCookieStorage?.setCookie(cookie)
             }
 
             guard let resumeData = self.resumeData else {
@@ -180,7 +178,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
                 return
             }
 
-            self.task = session!.downloadTask(withResumeData: resumeData)
+            self.task = session?.downloadTask(withResumeData: resumeData)
             self.task?.resume()
         }
     }
