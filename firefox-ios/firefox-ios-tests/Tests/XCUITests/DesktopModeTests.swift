@@ -41,9 +41,17 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
     }
 }
 
-class DesktopModeTestsIphone: IphoneOnlyTestCase {
+class DesktopModeTestsIphone: FeatureFlaggedTestBase {
+    override func setUp() {
+        specificForPlatform = .phone
+        if !iPad() {
+            super.setUp()
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306853
     func testClearPrivateData() {
+        app.launch()
         if skipPlatform { return }
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
@@ -69,6 +77,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306855
     func testSameHostInMultipleTabs() {
+        app.launch()
         if skipPlatform { return }
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
@@ -101,6 +110,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306854
     // Smoketest
     func testChangeModeInSameTab() {
+        app.launch()
         if skipPlatform { return }
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
@@ -124,6 +134,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306856
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
+        app.launch()
         if skipPlatform { return }
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
@@ -156,6 +167,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306857
     func testPrivateModeOnHasNoAffectOnNormalMode() {
+        app.launch()
         if skipPlatform { return }
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
@@ -181,7 +193,9 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // smoketest
-    func testLongPressReload() {
+    func testLongPressReload_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
@@ -206,6 +220,45 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitUntilPageLoad()
+        navigator.nowAt(NewTabScreen)
+        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
+        navigator.createNewTab()
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+    }
+
+    func testLongPressReload_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        if skipPlatform { return }
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+
+        navigator.nowAt(BrowserTab)
+        if #unavailable(iOS 16) {
+            // iOS 15 displays a toast that covers the reload button
+            sleep(2)
+        }
+        navigator.goto(ReloadLongPressMenu)
+        navigator.performAction(Action.ToggleRequestDesktopSite)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        // Covering scenario that when reloading the page should preserve Desktop site
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.ReloadURL)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        // The experiment is not opening the keyboard on a new tab
         navigator.nowAt(NewTabScreen)
 
         navigator.performAction(Action.AcceptRemovingAllTabs)

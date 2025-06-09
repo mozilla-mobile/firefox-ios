@@ -204,7 +204,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab() throws {
+    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
@@ -216,6 +217,29 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
         mozWaitForElementToExist(TopSiteCellgroup)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(TabTray)
+        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
+        navigator.nowAt(TabTray)
+        app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
+        // The website is open
+        mozWaitForElementToNotExist(TopSiteCellgroup)
+        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                             value: "wikipedia.org")
+    }
+
+    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOn() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
+        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        // Long tap on Wikipedia top site
+        waitForExistence(app.collectionViews.links.staticTexts["Wikipedia"])
+        app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
+        app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
+        mozWaitForElementToExist(TopSiteCellgroup)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts.element(boundBy: 0))
         navigator.nowAt(TabTray)
