@@ -666,40 +666,22 @@
 		5F2B55FF2D4CD7FE00A4E2CF /* A11yUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */; };
 		5F7C8A042D09A62A00C9F89D /* A11yOnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7C8A032D09A62A00C9F89D /* A11yOnboardingTests.swift */; };
 		5F8779132DE5E40D002DF55C /* FxUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779122DE5E40D002DF55C /* FxUserState.swift */; };
-		5F8779142DE5E40D002DF55C /* FxUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779122DE5E40D002DF55C /* FxUserState.swift */; };
 		5F8779162DE6F60D002DF55C /* NavigationRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779152DE6F60D002DF55C /* NavigationRegistry.swift */; };
-		5F8779172DE6F60D002DF55C /* NavigationRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779152DE6F60D002DF55C /* NavigationRegistry.swift */; };
 		5F8779192DE6FBD3002DF55C /* registerZoomNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779182DE6FBD3002DF55C /* registerZoomNavigation.swift */; };
-		5F87791A2DE6FBD3002DF55C /* registerZoomNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779182DE6FBD3002DF55C /* registerZoomNavigation.swift */; };
 		5F87791C2DE6FE51002DF55C /* registerToolbarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87791B2DE6FE51002DF55C /* registerToolbarNavigation.swift */; };
-		5F87791D2DE6FE51002DF55C /* registerToolbarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87791B2DE6FE51002DF55C /* registerToolbarNavigation.swift */; };
 		5F87791F2DE70643002DF55C /* registerSettingsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87791E2DE70643002DF55C /* registerSettingsNavigation.swift */; };
-		5F8779202DE70643002DF55C /* registerSettingsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87791E2DE70643002DF55C /* registerSettingsNavigation.swift */; };
 		5F8779222DE984BA002DF55C /* registerUrlBarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779212DE984BA002DF55C /* registerUrlBarNavigation.swift */; };
-		5F8779232DE984BA002DF55C /* registerUrlBarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779212DE984BA002DF55C /* registerUrlBarNavigation.swift */; };
 		5F8779252DE98B33002DF55C /* registerLibraryPanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779242DE98B33002DF55C /* registerLibraryPanelNavigation.swift */; };
-		5F8779262DE98B33002DF55C /* registerLibraryPanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779242DE98B33002DF55C /* registerLibraryPanelNavigation.swift */; };
 		5F8779282DE98C84002DF55C /* registerHomePanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779272DE98C84002DF55C /* registerHomePanelNavigation.swift */; };
-		5F8779292DE98C84002DF55C /* registerHomePanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779272DE98C84002DF55C /* registerHomePanelNavigation.swift */; };
 		5F87792B2DE9ABB9002DF55C /* registerTabMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87792A2DE9ABB9002DF55C /* registerTabMenuNavigation.swift */; };
-		5F87792C2DE9ABB9002DF55C /* registerTabMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87792A2DE9ABB9002DF55C /* registerTabMenuNavigation.swift */; };
 		5F87792E2DE9ACDE002DF55C /* registerTabTrayNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87792D2DE9ACDE002DF55C /* registerTabTrayNavigation.swift */; };
-		5F87792F2DE9ACDE002DF55C /* registerTabTrayNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87792D2DE9ACDE002DF55C /* registerTabTrayNavigation.swift */; };
 		5F8779312DE9AE7B002DF55C /* registerCommonNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779302DE9AE7B002DF55C /* registerCommonNavigation.swift */; };
-		5F8779322DE9AE7B002DF55C /* registerCommonNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779302DE9AE7B002DF55C /* registerCommonNavigation.swift */; };
 		5F8779342DE9B0B8002DF55C /* registerOnboardingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779332DE9B0B8002DF55C /* registerOnboardingNavigation.swift */; };
-		5F8779352DE9B0B8002DF55C /* registerOnboardingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779332DE9B0B8002DF55C /* registerOnboardingNavigation.swift */; };
 		5F8779372DE9FCE7002DF55C /* registerMobileNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779362DE9FCE7002DF55C /* registerMobileNavigation.swift */; };
-		5F8779382DE9FCE7002DF55C /* registerMobileNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779362DE9FCE7002DF55C /* registerMobileNavigation.swift */; };
 		5F87793A2DE9FF69002DF55C /* registerTrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779392DE9FF69002DF55C /* registerTrackingProtection.swift */; };
-		5F87793B2DE9FF69002DF55C /* registerTrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779392DE9FF69002DF55C /* registerTrackingProtection.swift */; };
 		5F87793D2DEDC251002DF55C /* registerContextMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87793C2DEDC251002DF55C /* registerContextMenuNavigation.swift */; };
-		5F87793E2DEDC251002DF55C /* registerContextMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87793C2DEDC251002DF55C /* registerContextMenuNavigation.swift */; };
 		5F8779402DEDC3F8002DF55C /* registerFxAccountNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87793F2DEDC3F8002DF55C /* registerFxAccountNavigation.swift */; };
-		5F8779412DEDC3F8002DF55C /* registerFxAccountNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F87793F2DEDC3F8002DF55C /* registerFxAccountNavigation.swift */; };
 		5F8779432DEDC568002DF55C /* registerMiscellanousNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779422DEDC568002DF55C /* registerMiscellanousNavigation.swift */; };
-		5F8779442DEDC568002DF55C /* registerMiscellanousNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779422DEDC568002DF55C /* registerMiscellanousNavigation.swift */; };
-		5F87794A2DF1CCF3002DF55C /* registerMiscellanousActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779492DF1CCF3002DF55C /* registerMiscellanousActions.swift */; };
 		5F87794B2DF1CCF3002DF55C /* registerMiscellanousActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8779492DF1CCF3002DF55C /* registerMiscellanousActions.swift */; };
 		5FA2233C27F74071005B3D87 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA2233B27F74071005B3D87 /* Glean */; };
 		5FACA10C2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 5FACA10B2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan */; };
@@ -7824,24 +7806,6 @@
 		5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11yUtils.swift; sourceTree = "<group>"; };
 		5F684EB59A149BD03A1E5247 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5F7C8A032D09A62A00C9F89D /* A11yOnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11yOnboardingTests.swift; sourceTree = "<group>"; };
-		5F8779122DE5E40D002DF55C /* FxUserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxUserState.swift; sourceTree = "<group>"; };
-		5F8779152DE6F60D002DF55C /* NavigationRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRegistry.swift; sourceTree = "<group>"; };
-		5F8779182DE6FBD3002DF55C /* registerZoomNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerZoomNavigation.swift; sourceTree = "<group>"; };
-		5F87791B2DE6FE51002DF55C /* registerToolbarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerToolbarNavigation.swift; sourceTree = "<group>"; };
-		5F87791E2DE70643002DF55C /* registerSettingsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerSettingsNavigation.swift; sourceTree = "<group>"; };
-		5F8779212DE984BA002DF55C /* registerUrlBarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerUrlBarNavigation.swift; sourceTree = "<group>"; };
-		5F8779242DE98B33002DF55C /* registerLibraryPanelNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerLibraryPanelNavigation.swift; sourceTree = "<group>"; };
-		5F8779272DE98C84002DF55C /* registerHomePanelNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerHomePanelNavigation.swift; sourceTree = "<group>"; };
-		5F87792A2DE9ABB9002DF55C /* registerTabMenuNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerTabMenuNavigation.swift; sourceTree = "<group>"; };
-		5F87792D2DE9ACDE002DF55C /* registerTabTrayNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerTabTrayNavigation.swift; sourceTree = "<group>"; };
-		5F8779302DE9AE7B002DF55C /* registerCommonNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerCommonNavigation.swift; sourceTree = "<group>"; };
-		5F8779332DE9B0B8002DF55C /* registerOnboardingNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerOnboardingNavigation.swift; sourceTree = "<group>"; };
-		5F8779362DE9FCE7002DF55C /* registerMobileNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerMobileNavigation.swift; sourceTree = "<group>"; };
-		5F8779392DE9FF69002DF55C /* registerTrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerTrackingProtection.swift; sourceTree = "<group>"; };
-		5F87793C2DEDC251002DF55C /* registerContextMenuNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerContextMenuNavigation.swift; sourceTree = "<group>"; };
-		5F87793F2DEDC3F8002DF55C /* registerFxAccountNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerFxAccountNavigation.swift; sourceTree = "<group>"; };
-		5F8779422DEDC568002DF55C /* registerMiscellanousNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerMiscellanousNavigation.swift; sourceTree = "<group>"; };
-		5F8779492DF1CCF3002DF55C /* registerMiscellanousActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerMiscellanousActions.swift; sourceTree = "<group>"; };
 		5FACA10B2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AccessibilityTestPlan.xctestplan; sourceTree = "<group>"; };
 		5FACA10F2D099DCD00B289BC /* A11ySearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11ySearchTest.swift; sourceTree = "<group>"; };
 		5FAD4F1A8770848F48AF6023 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Today.strings; sourceTree = "<group>"; };
@@ -11670,24 +11634,6 @@
 				5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */,
 				3BF4B8E81D38497A00493393 /* BaseTestCase.swift */,
 				39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */,
-				5F8779122DE5E40D002DF55C /* FxUserState.swift */,
-				5F8779152DE6F60D002DF55C /* NavigationRegistry.swift */,
-				5F8779182DE6FBD3002DF55C /* registerZoomNavigation.swift */,
-				5F87791B2DE6FE51002DF55C /* registerToolbarNavigation.swift */,
-				5F87791E2DE70643002DF55C /* registerSettingsNavigation.swift */,
-				5F8779212DE984BA002DF55C /* registerUrlBarNavigation.swift */,
-				5F8779242DE98B33002DF55C /* registerLibraryPanelNavigation.swift */,
-				5F8779272DE98C84002DF55C /* registerHomePanelNavigation.swift */,
-				5F87792A2DE9ABB9002DF55C /* registerTabMenuNavigation.swift */,
-				5F87792D2DE9ACDE002DF55C /* registerTabTrayNavigation.swift */,
-				5F8779302DE9AE7B002DF55C /* registerCommonNavigation.swift */,
-				5F8779332DE9B0B8002DF55C /* registerOnboardingNavigation.swift */,
-				5F8779362DE9FCE7002DF55C /* registerMobileNavigation.swift */,
-				5F8779392DE9FF69002DF55C /* registerTrackingProtection.swift */,
-				5F87793C2DEDC251002DF55C /* registerContextMenuNavigation.swift */,
-				5F87793F2DEDC3F8002DF55C /* registerFxAccountNavigation.swift */,
-				5F8779422DEDC568002DF55C /* registerMiscellanousNavigation.swift */,
-				5F8779492DF1CCF3002DF55C /* registerMiscellanousActions.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -17143,48 +17089,31 @@
 				2CCB296720A99C9500121DD8 /* LoginsTests.swift in Sources */,
 				3D9CA9841EF456A8002434DD /* NightModeTests.swift in Sources */,
 				5F2B55FF2D4CD7FE00A4E2CF /* A11yUtils.swift in Sources */,
-				5F8779202DE70643002DF55C /* registerSettingsNavigation.swift in Sources */,
-				5F87794B2DF1CCF3002DF55C /* registerMiscellanousActions.swift in Sources */,
 				39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */,
 				0B305E1B1E3A98A900BE0767 /* BookmarksTests.swift in Sources */,
 				5FF4AF5C2CC69CC900BABC62 /* TodayWidgetTests.swift in Sources */,
 				B126B8AA2D2FFD93002F4EFC /* ShareMenuTests.swift in Sources */,
-				5F87792C2DE9ABB9002DF55C /* registerTabMenuNavigation.swift in Sources */,
 				D81127D81F84023B0050841D /* PhotonActionSheetTests.swift in Sources */,
 				3BFE4B501D34673D00DDF53F /* ThirdPartySearchTest.swift in Sources */,
-<<<<<<< Updated upstream
-=======
-				8A5BD6032DC27B5000113E94 /* HistoryTabTrayUIExperimentTests.swift in Sources */,
-				5F87791A2DE6FBD3002DF55C /* registerZoomNavigation.swift in Sources */,
->>>>>>> Stashed changes
 				5F7C8A042D09A62A00C9F89D /* A11yOnboardingTests.swift in Sources */,
 				EB3A38A02032673E004C6E67 /* DatabaseFixtureTest.swift in Sources */,
 				EB63CA51228F0539005FD0EF /* DesktopModeTests.swift in Sources */,
 				2CF9D9AA20067FA10083DF2A /* BrowsingPDFTests.swift in Sources */,
 				B1158F2A2B5029F200AC9D70 /* URLValidationTests.swift in Sources */,
 				4FB4AF7526E7E789005FDF91 /* HomeButtonTests.swift in Sources */,
-				5F8779342DE9B0B8002DF55C /* registerOnboardingNavigation.swift in Sources */,
 				B1E156A62CD5080E009DF9E5 /* C_AddressesTests.swift in Sources */,
-				5F87793B2DE9FF69002DF55C /* registerTrackingProtection.swift in Sources */,
 				0BC9C9C41F26F54D000E8AB5 /* SiteLoadTest.swift in Sources */,
 				B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */,
 				2C4B6BF320349EB800A009C2 /* OnboardingTests.swift in Sources */,
-				5F8779412DEDC3F8002DF55C /* registerFxAccountNavigation.swift in Sources */,
 				2C4A07DC20246EAD0083E320 /* DragAndDropTests.swift in Sources */,
 				2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */,
 				D4C35391283500A600F7DC7D /* PerformanceTests.swift in Sources */,
 				B10D0B692D38F00E00925997 /* ShareLongPressTests.swift in Sources */,
-				5F87792E2DE9ACDE002DF55C /* registerTabTrayNavigation.swift in Sources */,
 				2CF449A51E7BFE2C00FD7595 /* NavigationTest.swift in Sources */,
 				2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */,
-				5F87793E2DEDC251002DF55C /* registerContextMenuNavigation.swift in Sources */,
 				580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */,
 				5FACA1102D099DCD00B289BC /* A11ySearchTest.swift in Sources */,
 				3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */,
-				5F87791C2DE6FE51002DF55C /* registerToolbarNavigation.swift in Sources */,
-				5F8779222DE984BA002DF55C /* registerUrlBarNavigation.swift in Sources */,
-				5F8779282DE98C84002DF55C /* registerHomePanelNavigation.swift in Sources */,
-				5F8779442DEDC568002DF55C /* registerMiscellanousNavigation.swift in Sources */,
 				3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */,
 				2CB1A65A1FDEA8B60084E96D /* NewTabSettings.swift in Sources */,
 				0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */,
@@ -17199,7 +17128,6 @@
 				4F2A06BE26F8E46E0017DA05 /* TabCounterTests.swift in Sources */,
 				E1AF27362A13BDFE00CE5991 /* EngagementNotificationTests.swift in Sources */,
 				78F28FC02CB81FDF00DA862E /* InactiveTabsTest.swift in Sources */,
-				5F8779312DE9AE7B002DF55C /* registerCommonNavigation.swift in Sources */,
 				2C473BD0209778900008C853 /* DownloadsTests.swift in Sources */,
 				8AC976C22DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift in Sources */,
 				39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */,
@@ -17209,16 +17137,12 @@
 				5FDE66032D94528A003961DC /* A11ySettingsTests.swift in Sources */,
 				B1F90EC12BB3F6B600A4D431 /* ZoomingTests.swift in Sources */,
 				8AEAD9F92C3DB0CD001A2C5A /* MicrosurveyTests.swift in Sources */,
-				5F8779172DE6F60D002DF55C /* NavigationRegistry.swift in Sources */,
 				E143BF652CE36FFD00A1D2D9 /* A11yTabTrayTests.swift in Sources */,
 				D4AFA84E2AFA5482000BFEAA /* ExperimentIntegrationTests.swift in Sources */,
 				3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */,
-				5F8779132DE5E40D002DF55C /* FxUserState.swift in Sources */,
 				2CEDADA220207EC400223A89 /* SyncFAUITests.swift in Sources */,
-				5F8779372DE9FCE7002DF55C /* registerMobileNavigation.swift in Sources */,
 				C84266772728462900382274 /* AccessibilityIdentifiers.swift in Sources */,
 				0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */,
-				5F8779262DE98B33002DF55C /* registerLibraryPanelNavigation.swift in Sources */,
 				2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */,
 				B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */,
 				2CEA6F791E93E3A600D4100E /* SearchSettingsUITest.swift in Sources */,
@@ -17245,34 +17169,16 @@
 			files = (
 				D4859A7727328569009A2390 /* AccessibilityIdentifiers.swift in Sources */,
 				7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */,
-				5F8779252DE98B33002DF55C /* registerLibraryPanelNavigation.swift in Sources */,
-				5F87791D2DE6FE51002DF55C /* registerToolbarNavigation.swift in Sources */,
-				5F87791F2DE70643002DF55C /* registerSettingsNavigation.swift in Sources */,
-				5F8779382DE9FCE7002DF55C /* registerMobileNavigation.swift in Sources */,
-				5F8779142DE5E40D002DF55C /* FxUserState.swift in Sources */,
 				7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */,
 				5F2B55FE2D4CD7FE00A4E2CF /* A11yUtils.swift in Sources */,
-				5F87794A2DF1CCF3002DF55C /* registerMiscellanousActions.swift in Sources */,
 				D88C01B722B29EC200936951 /* ScreenGraphTest.swift in Sources */,
-				5F87793D2DEDC251002DF55C /* registerContextMenuNavigation.swift in Sources */,
-				5F8779192DE6FBD3002DF55C /* registerZoomNavigation.swift in Sources */,
-				5F8779402DEDC3F8002DF55C /* registerFxAccountNavigation.swift in Sources */,
 				E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */,
 				E40AFC6C1DD128DA00DA5651 /* L10nSuite1SnapshotTests.swift in Sources */,
 				D437C4FD25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift in Sources */,
 				8AC976C32DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift in Sources */,
-				5F8779432DEDC568002DF55C /* registerMiscellanousNavigation.swift in Sources */,
-				5F87792F2DE9ACDE002DF55C /* registerTabTrayNavigation.swift in Sources */,
 				E40AFC651DD0F25500DA5651 /* L10nBaseSnapshotTests.swift in Sources */,
-				5F8779232DE984BA002DF55C /* registerUrlBarNavigation.swift in Sources */,
-				5F8779352DE9B0B8002DF55C /* registerOnboardingNavigation.swift in Sources */,
 				391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */,
-				5F8779322DE9AE7B002DF55C /* registerCommonNavigation.swift in Sources */,
-				5F8779162DE6F60D002DF55C /* NavigationRegistry.swift in Sources */,
-				5F87793A2DE9FF69002DF55C /* registerTrackingProtection.swift in Sources */,
-				5F8779292DE98C84002DF55C /* registerHomePanelNavigation.swift in Sources */,
 				8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */,
-				5F87792B2DE9ABB9002DF55C /* registerTabMenuNavigation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
