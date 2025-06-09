@@ -248,6 +248,10 @@ class Action {
     static let SentToDevice = "SentToDevice"
     static let AddToReadingListBrowserTabMenu = "AddToReadingListBrowserTabMenu"
 
+    static let SelectAutomatically = "SelectAutomatically"
+    static let SelectManually = "SelectManually"
+    static let SystemThemeSwitch = "SystemThemeSwitch"
+    
     static let SelectAutomaticTheme = "SelectAutomaticTheme"
     static let SelectLightTheme = "SelectLightTheme"
     static let SelectDarkTheme = "SelectDarkTheme"
