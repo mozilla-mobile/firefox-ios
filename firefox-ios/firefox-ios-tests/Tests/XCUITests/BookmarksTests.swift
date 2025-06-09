@@ -362,6 +362,45 @@ class BookmarksTests: FeatureFlaggedTestBase {
         XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
+    func testBookmarkLibraryAddDeleteBookmark_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                     timeout: TIMEOUT_LONG)
+        }
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(LibraryPanel_Bookmarks)
+        // There is only one row in the bookmarks panel, which is the desktop folder
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
+
+        // Add a bookmark
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.goto(NewTabScreen)
+
+        navigator.openURL(url_3)
+        waitForTabsButton()
+        bookmark()
+
+        // Check that it appears in Bookmarks panel
+        navigator.goto(LibraryPanel_Bookmarks)
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
+
+        // Delete the Bookmark added, check it is removed
+        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+        app.buttons["Delete"].waitAndTap()
+
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
+        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
     // Smoketest
     func testDesktopFoldersArePresent() throws {
