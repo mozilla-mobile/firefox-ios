@@ -23,7 +23,7 @@
 "DeleteLoginAlert.DeleteButton.Title.v122" = "Leva";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
-"DeleteLoginAlert.Message.Local.v122" = "Nun poi sfari st'azzioni.";
+"DeleteLoginAlert.Message.Local.v122" = "Nun poi sfari st’azzioni.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "DeleteLoginAlert.Message.Synced.v122" = "Chistu scancella a chiavi di tutti i to dispusitivi sincrunizzati.";

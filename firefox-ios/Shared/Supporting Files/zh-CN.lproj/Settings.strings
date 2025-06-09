@@ -67,8 +67,14 @@
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "默认";
 
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "重置网站设置";
+
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "缩放设置";
+
+/* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "若要向此列表添加网站，请访问相应网站，然后在菜单中调整页面缩放";
 
 /* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
 "Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "特定网站设置";

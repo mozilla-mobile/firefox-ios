@@ -11,7 +11,7 @@
 "Addresses.Settings.SaveToFirefox.Title.v130" = "Sarba nnirizzi nne %@";
 
 /* Description text for the content unavailable view informing users they can create or add new addresses. */
-"Addresses.Settings.SecureSaveInfo.Description.v130" = "Sarba i to nfurmazzioni ô sicuru p'avilli cchiù lesti doppu.";
+"Addresses.Settings.SecureSaveInfo.Description.v130" = "Sarba i to nfurmazzioni ô sicuru p’avilli cchiù lesti doppu.";
 
 /* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
 "Addresses.Settings.Switch.Description.v124" = "Macari nùmmari di tilèfunu e nnirizzi di posta elittrònica";
@@ -26,7 +26,7 @@
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Junci na carta";
 
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
-"CreditCard.Settings.EmptyListDescription.v112" = "Sarba i nfurmazzioni dâ to carta ô sicuru p'accattari cchiù lestu a pròssima vota.";
+"CreditCard.Settings.EmptyListDescription.v112" = "Sarba i nfurmazzioni dâ to carta ô sicuru p’accattari cchiù lestu a pròssima vota.";
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "Sarba carti nne %@";
@@ -38,7 +38,7 @@
 "CreditCard.Settings.NotNow.v122" = "Ora no";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.RememberThisCard.v122" = "Vo' sarbari sta carta di manera sicura?";
+"CreditCard.Settings.RememberThisCard.v122" = "Vo’ sarbari sta carta di manera sicura?";
 
 /* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
 "CreditCard.Settings.UpdateThisCard.v122" = "Attualizzari a carta?";
@@ -66,6 +66,9 @@
 
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "Pridifinutu";
+
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Risetta mpustazzioni dû situ";
 
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "Mpustazzioni grannizza";
@@ -98,7 +101,7 @@
 "Settings.Autoplay.BlockAudioAndVideo.v137" = "Blocca audiu e vidiu";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
-"Settings.Autoplay.Footer.v137" = "I mpustazzioni di ripruduzzioni autumàtica vennu mpustati sulu pî schedi novi chi grapi. Nun è pussìbbili riggistrari sti canci pî schedi chi già grapisti, abbestra di abbiari arrè l'applicazzioni.";
+"Settings.Autoplay.Footer.v137" = "I mpustazzioni di ripruduzzioni autumàtica vennu mpustati sulu pî schedi novi chi grapi. Nun è pussìbbili riggistrari sti canci pî schedi chi già grapisti, abbestra di abbiari arrè l’applicazzioni.";
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Ripruduzzioni autumàtica";
@@ -128,7 +131,7 @@
 "Settings.CrashReports.Message.v136" = "Chistu ni pirmetti di diagnusticari e abbirsari i prubblemi dû navicaturi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Title.v135" = "Manna 'n autumàticu i signalijazzioni di scasciu";
+"Settings.CrashReports.Title.v135" = "Manna ’n autumàticu i signalijazzioni di scasciu";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "Cchiù nfurmazzioni.";
@@ -137,22 +140,22 @@
 "Settings.DailyUsagePing.Link.v136" = "Cchiù nfurmazzioni";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
-"Settings.DailyUsagePing.Message.v135" = "Chistu ajuta %@ a fari na stima di l'utenti attivi.";
+"Settings.DailyUsagePing.Message.v135" = "Chistu ajuta %@ a fari na stima di l’utenti attivi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
-"Settings.DailyUsagePing.Title.v135" = "Ping d'usu nnô jornu";
+"Settings.DailyUsagePing.Title.v135" = "Ping d’usu nnô jornu";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Cuntu";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
-"Settings.Notifications.SyncNotificationsStatus.v112" = "Chistu s'hâ attivari pi ricìviri i schedi e i nutìfichi quannu trasi nta n'autru dispusitivu.";
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Chistu s’hâ attivari pi ricìviri i schedi e i nutìfichi quannu trasi nta n’autru dispusitivu.";
 
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sincrunizzazzioni";
 
 /* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
-"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Sdisattivasti tutti i nutìfichi di %1$@. P'attivàrili vai nnô minù dû dispusitivu Mpustazzioni > Nutìfichi > %2$@";
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Sdisattivasti tutti i nutìfichi di %1$@. P’attivàrili vai nnô minù dû dispusitivu Mpustazzioni > Nutìfichi > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Cchiù nfurmazzioni supra ê funzioni ùtili e comu usari megghiu %@.";
@@ -164,7 +167,7 @@
 "Settings.Notifications.Title.v112" = "Nutìfichi";
 
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. %@ is the app name (e.g. Firefox). */
-"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Vai nnê Mpustazzioni dû to dispusitivu p'attivari i nutìfichi di %@";
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Vai nnê Mpustazzioni dû to dispusitivu p’attivari i nutìfichi di %@";
 
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Aḍḍuma nutìfichi";
@@ -173,7 +176,7 @@
 "Settings.PrivacyNotice.Title.v137" = "Abbisu di privatizza";
 
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
-"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Scorri p'ammucciari i schedi e a barra dû nnirizzu";
+"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Scorri p’ammucciari i schedi e a barra dû nnirizzu";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Muturi di risciduta pridifinutu";
@@ -248,10 +251,10 @@
 "Settings.TechnicalData.Link.v136" = "Cchiù nfurmazzioni";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ cerca di ricògghiri sulu chiḍḍu chi ci serbi p'ammigghiurari %2$@ pi tutti.";
+"Settings.TechnicalData.Message.v135" = "%1$@ cerca di ricògghiri sulu chiḍḍu chi ci serbi pi fari megghiu %2$@ pi tutti.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v136" = "Dati supra ô to dispusitivu, a cunfijurazzioni hardware e ncapu a comu usi %@ n'ajuta a 'mmigghiuràrinni i funzioni, i pristazzioni e a stabbilità.";
+"Settings.TechnicalData.Message.v136" = "Dati supra ô to dispusitivu, a cunfijurazzioni hardware e ncapu a comu usi %@ n’ajuta a ’mmigghiuràrinni i funzioni, i pristazzioni e a stabbilità.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Dati tècnici e di ntirazzioni";
