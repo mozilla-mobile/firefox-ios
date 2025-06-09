@@ -196,10 +196,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .home, expectedActionType: GeneralBrowserActionType.goToHomepage)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.HomeButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.HomeButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.HomeButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.HomeButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.homeButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -214,10 +214,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .newTab, expectedActionType: GeneralBrowserActionType.addNewTab)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.oneTapNewTabButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -232,10 +232,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .qrCode, expectedActionType: GeneralBrowserActionType.showQRcodeReader)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.qrScanButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -269,10 +269,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(secondActionType, GeneralBrowserActionType.showQRcodeReader)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.QrScanButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.QrScanButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.qrScanButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -287,10 +287,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.navigateBack)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.BackButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.BackButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.BackButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.BackButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.backButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -305,10 +305,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .forward, expectedActionType: GeneralBrowserActionType.navigateForward)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.ForwardButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ForwardButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.ForwardButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ForwardButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.forwardButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -337,10 +337,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.showTabTray)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.TabTrayButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.TabTrayButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -357,10 +357,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             expectedActionType: GeneralBrowserActionType.showTrackingProtectionDetails)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.SiteInfoButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.SiteInfoButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.SiteInfoButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.SiteInfoButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.siteInfoButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -390,10 +390,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.showMenu)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.AppMenuButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.AppMenuButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.AppMenuButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.AppMenuButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.appMenuButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -421,10 +421,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .readerMode, expectedActionType: GeneralBrowserActionType.showReaderMode)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -440,10 +440,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .reload, expectedActionType: GeneralBrowserActionType.reloadWebsite)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.RefreshButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.RefreshButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.RefreshButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.RefreshButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.refreshButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -462,10 +462,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .share, expectedActionType: GeneralBrowserActionType.showShare)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.ShareButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ShareButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.ShareButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ShareButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.shareButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -493,10 +493,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, ToolbarActionType.didStartEditingUrl)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.SearchButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.SearchButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.SearchButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.SearchButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.searchButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -511,10 +511,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didTapButton(buttonType: .dataClearance, expectedActionType: GeneralBrowserActionType.clearData)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.DataClearanceButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.DataClearanceButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.DataClearanceButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.DataClearanceButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.dataClearanceButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -529,10 +529,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didLongPressButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.showBackForwardList)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.BackLongPressExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.BackLongPressExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.BackLongPressExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.BackLongPressExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.backLongPress)
         let resultMetricType = type(of: savedMetric)
@@ -547,10 +547,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didLongPressButton(buttonType: .forward, expectedActionType: GeneralBrowserActionType.showBackForwardList)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.ForwardLongPressExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ForwardLongPressExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.ForwardLongPressExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ForwardLongPressExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.forwardLongPress)
         let resultMetricType = type(of: savedMetric)
@@ -565,10 +565,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didLongPressButton(buttonType: .tabs, expectedActionType: GeneralBrowserActionType.showTabsLongPressActions)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.TabTrayLongPressExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.TabTrayLongPressExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayLongPress)
         let resultMetricType = type(of: savedMetric)
@@ -607,10 +607,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                                expectedActionType: GeneralBrowserActionType.showNewTabLongPressActions)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.OneTapNewTabLongPressExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.OneTapNewTabLongPressExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.OneTapNewTabLongPressExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.OneTapNewTabLongPressExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.oneTapNewTabLongPress)
         let resultMetricType = type(of: savedMetric)
@@ -661,10 +661,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, ToolbarActionType.clearSearch)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Toolbar.ClearSearchButtonTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ClearSearchButtonTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Toolbar.ClearSearchButtonTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ClearSearchButtonTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Toolbar.clearSearchButtonTapped)
         let resultMetricType = type(of: savedMetric)
@@ -685,7 +685,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
         let expectedMetricType = type(of: GleanMetrics.Awesomebar.dragLocationBar)
         let resultMetricType = type(of: savedMetric)
