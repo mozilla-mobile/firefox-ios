@@ -1084,6 +1084,8 @@
 		8A94DB972E0F16E80005FE69 /* homepageSearchBarOn.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A94DB952E0F16E70005FE69 /* homepageSearchBarOn.json */; };
 		8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */; };
 		8A95FF672B1E97A800AC303D /* TelemetryContextualIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */; };
+		8A95FF642B1E969E00AC303D /* ContextIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF632B1E969E00AC303D /* ContextIDManager.swift */; };
+		8A95FF672B1E97A800AC303D /* ContextIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF652B1E977E00AC303D /* ContextIDManagerTests.swift */; };
 		8A967E422D30419100B1017D /* TelemetryDebugMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */; };
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		8A97E6EA2C58487900F94793 /* AddressLocaleFeatureValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97E6E92C58487900F94793 /* AddressLocaleFeatureValidator.swift */; };
@@ -8597,6 +8599,8 @@
 		8A94DB952E0F16E70005FE69 /* homepageSearchBarOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageSearchBarOn.json; sourceTree = "<group>"; };
 		8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifier.swift; sourceTree = "<group>"; };
 		8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifierTests.swift; sourceTree = "<group>"; };
+		8A95FF632B1E969E00AC303D /* ContextIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextIDManager.swift; sourceTree = "<group>"; };
+		8A95FF652B1E977E00AC303D /* ContextIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextIDManagerTests.swift; sourceTree = "<group>"; };
 		8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryDebugMessage.swift; sourceTree = "<group>"; };
 		8A96C4B828F9DD8700B75884 /* ThemeableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeableTests.swift; sourceTree = "<group>"; };
 		8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseRootViewController.swift; sourceTree = "<group>"; };
@@ -15279,7 +15283,7 @@
 				8A04136828258DF600D20B10 /* SponsoredTileTelemetry.swift */,
 				8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */,
 				8A44F20D2B585E1F0016BC81 /* HomepageTelemetry.swift */,
-				8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */,
+				8A95FF632B1E969E00AC303D /* ContextIDManager.swift */,
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
 				8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */,
 				1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */,
@@ -15639,7 +15643,7 @@
 				21D8EA942ABE0511003FF16E /* TabTray */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
 				8AC225632B6D3F9600CDA7FD /* Telemetry */,
-				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
+				8A95FF652B1E977E00AC303D /* ContextIDManagerTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */,
 				033C94F32E2F839900C2382F /* TermsOfUse */,
@@ -18353,7 +18357,7 @@
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				21EEAA1D2D4005DE00595119 /* NativeErrorPageFeatureFlag.swift in Sources */,
 				5A32C2B62AD8517200A9B5A4 /* MetricKitWrapper.swift in Sources */,
-				8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */,
+				8A95FF642B1E969E00AC303D /* ContextIDManager.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				F89453A92DA71D530022BA3F /* DeleteLoginsKeysSetting.swift in Sources */,
 				8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */,
@@ -18962,7 +18966,7 @@
 				8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */,
 				965C3C96293431FC006499ED /* MockLaunchSessionProvider.swift in Sources */,
 				C869915628917803007ACC5C /* WallpaperJSONTestProvider.swift in Sources */,
-				8A95FF672B1E97A800AC303D /* TelemetryContextualIdentifierTests.swift in Sources */,
+				8A95FF672B1E97A800AC303D /* ContextIDManagerTests.swift in Sources */,
 				8A4B66422D1DC96A008C5B64 /* ContextMenuConfigurationTests.swift in Sources */,
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */,

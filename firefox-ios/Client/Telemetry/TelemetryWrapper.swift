@@ -162,7 +162,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         self.searchEnginesManager = searchEnginesManager
 
-        TelemetryContextualIdentifier.setupContextId()
+        ContextIDManager.setup(isGleanMetricsAllowed: true, isTesting: AppConstants.isRunningTes)
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
@@ -1753,7 +1753,7 @@ extension TelemetryWrapper {
 
         // MARK: - FX Suggest
         case(.action, .tap, .fxSuggest, _, let extras):
-            guard let contextIdString = TelemetryContextualIdentifier.contextId,
+            guard let contextIdString = ContextIDManager.shared.getContextID(),
                   let contextId = UUID(uuidString: contextIdString),
                   let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
                   let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int else {
@@ -1788,7 +1788,7 @@ extension TelemetryWrapper {
             GleanMetrics.Pings.shared.fxSuggest.submit()
 
         case(.action, .view, .fxSuggest, _, let extras):
-            guard let contextIdString = TelemetryContextualIdentifier.contextId,
+            guard let contextIdString = ContextIDManager.shared.getContextID(),
                   let contextId = UUID(uuidString: contextIdString),
                   let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
                   let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int,
