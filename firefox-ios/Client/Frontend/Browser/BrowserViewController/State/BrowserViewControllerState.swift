@@ -406,7 +406,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance(.privateHome),
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-            
+
         case GeneralBrowserActionType.didTapOnDataClearanceInTabTray:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -414,7 +414,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance(.privateTab),
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-            
+
         case GeneralBrowserActionType.showPasswordGenerator:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
