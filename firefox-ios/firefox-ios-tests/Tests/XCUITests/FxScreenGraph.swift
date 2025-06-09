@@ -9,6 +9,28 @@ import Foundation
 import MappaMundi
 import XCTest
 
+
+func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
+    let map = MMScreenGraph(for: test, with: FxUserState.self)
+
+    NavigationRegistry.registerAll(in: map, app: app)
+
+    [WebImageContextMenu, WebLinkContextMenu].forEach { item in
+        map.addScreenState(item) { screenState in
+            screenState.dismissOnUse = true
+            screenState.backAction = {
+                let window = XCUIApplication().windows.element(boundBy: 0)
+                window.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+            }
+        }
+    }
+    
+    return map
+}
+
+
+// MARK: - State Constants
+
 let FirstRun = "OptionalFirstRun"
 let TabTray = "TabTray"
 let PrivateTabTray = "PrivateTabTray"
@@ -64,14 +86,29 @@ let AddressesSettings = "AutofillAddress"
 let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 let BrowsingSettings = "BrowsingSettings"
-let AutofillPasswordSettings = "AutofillsPasswordsSettings"
+let AutofillPasswordSettings = "AutofillPasswordSettings"
 let Shortcuts = "Shortcuts"
 let AutoplaySettings = "AutoplaySettings"
 
-// These are in the exact order they appear in the settings
-// screen. XCUIApplication loses them on small screens.
-// This list should only be for settings screens that can be navigated to
-// without changing userState. i.e. don't need conditional edges to be available
+let HistoryPanelContextMenu = "HistoryPanelContextMenu"
+let TopSitesPanelContextMenu = "TopSitesPanelContextMenu"
+
+let BasicAuthDialog = "BasicAuthDialog"
+let BookmarksPanelContextMenu = "BookmarksPanelContextMenu"
+
+let Intro_Welcome = "Intro.Welcome"
+let Intro_Sync = "Intro.Sync"
+
+let allIntroPages = [Intro_Welcome, Intro_Sync]
+
+let HomePanelsScreen = "HomePanels"
+let PrivateHomePanelsScreen = "PrivateHomePanels"
+let HomePanel_TopSites = "HomePanel.TopSites.0"
+let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
+let LibraryPanel_History = "LibraryPanel.History.2"
+let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
+let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
+
 let allSettingsScreens = [
     SearchSettings,
     AddCustomSearchSettings,
@@ -83,28 +120,6 @@ let allSettingsScreens = [
     NotificationsSettings
 ]
 
-let HistoryPanelContextMenu = "HistoryPanelContextMenu"
-let TopSitesPanelContextMenu = "TopSitesPanelContextMenu"
-
-let BasicAuthDialog = "BasicAuthDialog"
-let BookmarksPanelContextMenu = "BookmarksPanelContextMenu"
-
-let Intro_Welcome = "Intro.Welcome"
-let Intro_Sync = "Intro.Sync"
-
-let allIntroPages = [
-    Intro_Welcome,
-    Intro_Sync
-]
-
-let HomePanelsScreen = "HomePanels"
-let PrivateHomePanelsScreen = "PrivateHomePanels"
-let HomePanel_TopSites = "HomePanel.TopSites.0"
-let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
-let LibraryPanel_History = "LibraryPanel.History.2"
-let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
-let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
-
 let allHomePanels = [
     LibraryPanel_Bookmarks,
     LibraryPanel_History,
@@ -114,6 +129,28 @@ let allHomePanels = [
 
 let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+
+func navigationControllerBackAction(for app: XCUIApplication) ->  () -> Void {
+    return {
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
+    }
+}
+
+func cancelBackAction(for app: XCUIApplication) ->  () -> Void {
+    return {
+        app.otherElements["PopoverDismissRegion"].waitAndTap()
+    }
+}
+
+func dismissContextMenuAction(app: XCUIApplication) ->  () -> Void {
+    return {
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
+    }
+}
+
+func select(rows: Int, in app: XCUIApplication) {
+    app.staticTexts[String(rows)].firstMatch.waitAndTap()
+}
 
 class Action {
     static let LoadURL = "LoadURL"
@@ -236,46 +273,10 @@ class Action {
     static let SelectShortcuts = "TopSitesSettings"
 }
 
-@objcMembers
-class FxUserState: MMUserState {
-    required init() {
-        super.init()
-        initialScreenState = FirstRun
-    }
-
-    var isPrivate = false
-    var showIntro = false
-    var showWhatsNew = false
-    var waitForLoading = true
-    var url: String?
-    var requestDesktopSite = false
-
-    var noImageMode = false
-    var nightMode = false
-
-    var pocketInNewTab = false
-    var bookmarksInNewTab = true
-    var historyInNewTab = true
-
-    var fxaUsername: String?
-    var fxaPassword: String?
-
-    var numTabs: Int = 0
-
-    var numTopSitesRows: Int = 2
-
-    var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
-    var trackingProtectionSettingOnNormalMode = true
-    var trackingProtectionSettingOnPrivateMode = true
-
-    var localeIsExpectedDifferent = false
-}
-
 private let defaultURL = "https://www.mozilla.org/en-US/book/"
 
-func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
-    let map = MMScreenGraph(for: test, with: FxUserState.self)
 
+<<<<<<< Updated upstream
     let navigationControllerBackAction = {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
@@ -1252,6 +1253,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     return map
 }
+=======
+>>>>>>> Stashed changes
 
 extension MMNavigator where T == FxUserState {
     func openURL(_ urlString: String, waitForLoading: Bool = true) {
