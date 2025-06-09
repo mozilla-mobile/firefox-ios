@@ -96,6 +96,7 @@ class BrowserViewController: UIViewController,
     var logger: Logger
     var zoomManager: ZoomPageManager
     let documentLogger: DocumentLogger
+    var downloadHelper: DownloadHelper?
 
     private lazy var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
 
