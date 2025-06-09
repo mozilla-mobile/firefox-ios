@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Cookie Test</title>
+  <script>
+    function setLoginCookies() {
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 7); // Valid for 7 days
+      const expires = "expires=" + expiryDate.toUTCString();
+
+      document.cookie = "logged_in=true; path=/; " + expires;
+      document.cookie = "session_id=abc123; path=/; " + expires;
+      document.cookie = "theme=dark; path=/; " + expires;
+      updateStatus();
+    }
+
+    function clearLoginCookies() {
+      document.cookie = "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "theme=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      updateStatus();
+    }
+
+    function isLoggedIn() {
+      return document.cookie.includes("logged_in=true");
+    }
+
+    function updateStatus() {
+      const status = isLoggedIn() ? "LOGGED_IN" : "LOGGED_OUT";
+      const cookies = document.cookie.split("; ").join("<br>");
+      document.getElementById("login-indicator").innerHTML = `<strong>Status:</strong> ${status}<br><br><strong>Cookies:</strong><br>${cookies}`;
+    }
+
+    window.onload = function() {
+      updateStatus();
+    }
+  </script>
+</head>
+<body>
+  <h1>Cookie Test Page</h1>
+  <input id="username" type="text" value="test@example.com">
+  <input id="password" type="password" value="testpassword">
+  <br><br>
+  <button onclick="setLoginCookies()">Login</button>
+  <!-- <button onclick="clearLoginCookies()">Log Out</button> -->
+  <br><br>
+  <div id="login-indicator">Checking...</div>
+</body>
+</html>
+
