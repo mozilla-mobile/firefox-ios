@@ -190,25 +190,11 @@ final class AppLaunchUtil {
             logger.log("Migrating Application services history",
                        level: .info,
                        category: .sync)
-            let id = GleanMetrics.PlacesHistoryMigration.duration.start()
-            // We mark that the migration started
-            // this will help us identify how often the migration starts, but never ends
-            // additionally, we have a separate metric for error rates
-            GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
-            GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(
             callback: { result in
                 self.logger.log("Successful Migration took \(result.totalDuration / 1000) seconds",
                                 level: .info,
                                 category: .sync)
-                // We record various success metrics here
-                GleanMetrics.PlacesHistoryMigration.duration.stopAndAccumulate(id)
-                GleanMetrics.PlacesHistoryMigration.numMigrated.set(Int64(result.numSucceeded))
-                self.logger.log("Migrated \(result.numSucceeded) entries",
-                                level: .info,
-                                category: .sync)
-                GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
-                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
                 NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
             },
@@ -217,10 +203,6 @@ final class AppLaunchUtil {
                 self.logger.log("Migration failed with \(errDescription)",
                                 level: .warning,
                                 category: .sync)
-
-                GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
-                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
-                GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
             })
         } else {
             self.logger.log("History Migration skipped",
