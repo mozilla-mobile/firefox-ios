@@ -5,7 +5,7 @@
 "FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ scancella i to viscotta, a crunuluggìa e i dati dî siti quannu chiuji tutti i schedi privati.";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
-"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Cu' putissi vìdiri a me attività?";
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Cu’ putissi vìdiri a me attività?";
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Nun lassari trazzi nta stu dispusitivu";

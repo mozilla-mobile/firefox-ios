@@ -1,5 +1,5 @@
 /* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
-"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Nn'arrè";
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Nn’arrè";
 
 /* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "Chiuji";
@@ -89,7 +89,7 @@
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Vidi cirtificatu";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
-"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ nun funziona cchiù. Ti cunzigghiamu d'abbilitari arrè i prutizzioni.";
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ nun funziona cchiù. Ti cunzigghiamu d’abbilitari arrè i prutizzioni.";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Astutasti i prutizzioni";
@@ -113,8 +113,8 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Prutizzioni avanzata dû trazzamentu";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "I prutizzioni sunnu sdisabbilitati. Ti suggiremu d'abbilitalli arrè.";
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "I prutizzioni sunnu sdisabbilitati. Ti suggiremu d’abbilitalli arrè.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Si cc'è quarchi cosa ca nun funziona nna stu situ, prova a sdisabbilitari i prutizzioni.";
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Si cc’è quarchi cosa ca nun funziona nna stu situ, prova a sdisabbilitari i prutizzioni.";
 
