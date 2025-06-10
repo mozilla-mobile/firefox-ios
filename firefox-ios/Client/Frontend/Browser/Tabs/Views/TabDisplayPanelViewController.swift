@@ -33,6 +33,10 @@ class TabDisplayPanelViewController: UIViewController,
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
+    private var isToolbarRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+    }
+
     private lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()
@@ -109,6 +113,18 @@ class TabDisplayPanelViewController: UIViewController,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard isToolbarRefactorEnabled, isTabTrayUIExperimentsEnabled else { return }
+        store.dispatch(
+            ToolbarAction(
+                shouldAnimate: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.animationStateChanged
+            )
+        )
     }
 
     override func viewDidLayoutSubviews() {
