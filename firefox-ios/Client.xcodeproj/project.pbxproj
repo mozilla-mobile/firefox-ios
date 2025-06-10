@@ -1244,6 +1244,7 @@
 		8C51ED722DE0A5B500B3E58A /* OnboardingKitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */; };
 		8C51ED742DE0A64D00B3E58A /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C51ED732DE0A64D00B3E58A /* OnboardingKit */; };
 		8C6AF26A2D38FB1500254698 /* GleanLifecycleObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6AF2692D38FB1500254698 /* GleanLifecycleObserverTests.swift */; };
+		8C77849F2DF33707001FB8B0 /* OnboardingServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C77849E2DF33707001FB8B0 /* OnboardingServiceDelegate.swift */; };
 		8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */; };
 		8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
@@ -8640,6 +8641,7 @@
 		8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitCardInfoModel.swift; sourceTree = "<group>"; };
 		8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitViewModel.swift; sourceTree = "<group>"; };
 		8C6AF2692D38FB1500254698 /* GleanLifecycleObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanLifecycleObserverTests.swift; sourceTree = "<group>"; };
+		8C77849E2DF33707001FB8B0 /* OnboardingServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingServiceDelegate.swift; sourceTree = "<group>"; };
 		8C7A4A32A98AD1B79E3D69BE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReporting.swift; sourceTree = "<group>"; };
 		8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReportingLifecycleObserverTest.swift; sourceTree = "<group>"; };
@@ -12674,6 +12676,7 @@
 			isa = PBXGroup;
 			children = (
 				8A93F87329D3A5C1004159D9 /* LaunchCoordinator.swift */,
+				8C77849E2DF33707001FB8B0 /* OnboardingServiceDelegate.swift */,
 				8A7A26E929D4C3C800EA76F1 /* LaunchType.swift */,
 			);
 			path = Launch;
@@ -17664,6 +17667,7 @@
 				43D16B8529831EA5009F8279 /* Style.swift in Sources */,
 				8A5564022D23317100028CA7 /* ContextMenuAction.swift in Sources */,
 				219588942D6E519F00B8715E /* AutofillPasswordSetting.swift in Sources */,
+				8C77849F2DF33707001FB8B0 /* OnboardingServiceDelegate.swift in Sources */,
 				1D1418782DC92E0C004BBFAD /* ChangeRSServerSetting.swift in Sources */,
 				8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */,
 				8AE80BB82891BE0700BC12EA /* JumpBackInDataAdaptor.swift in Sources */,

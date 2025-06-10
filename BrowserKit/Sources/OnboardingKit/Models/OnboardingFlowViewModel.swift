@@ -7,11 +7,23 @@ import SwiftUI
 public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
     public let onboardingCards: [VM]
-    public let onComplete: () -> Void
+    public let onActionTap: (VM.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void
+
+    public enum TabAction {
+        case advance(numberOfPages: Int)
+        case none
+    }
+
+    public let onComplete: (String) -> Void
     public private(set) var multipleChoiceSelections: [String: VM.OnboardingMultipleChoiceActionType] = [:]
 
-    public init(onboardingCards: [VM], onComplete: @escaping () -> Void) {
+    public init(
+        onboardingCards: [VM],
+        onActionTap: @escaping (VM.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void,
+        onComplete: @escaping (String) -> Void
+    ) {
         self.onboardingCards = onboardingCards
+        self.onActionTap = onActionTap
         self.onComplete = onComplete
     }
 
@@ -19,15 +31,30 @@ public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: Obser
         action: VM.OnboardingActionType,
         cardName: String
     ) {
-        guard let index = onboardingCards.firstIndex(where: { $0.name == cardName }) else { return }
+        onActionTap(action, cardName) { [weak self] result in
+            switch result {
+            case .success(let tabAction):
+                switch tabAction {
+                case .advance(let numberOfPages):
+                    self?.advanceFromCard(cardName, by: numberOfPages)
+                case .none:
+                    return
+                }
+            case .failure:
+                return
+            }
+        }
+    }
 
-        let nextIndex = index + 1
+    private func advanceFromCard(_ cardName: String, by numberOfPages: Int) {
+        guard let index = onboardingCards.firstIndex(where: { $0.name == cardName }) else { return }
+        let nextIndex = index + numberOfPages
         if nextIndex < onboardingCards.count {
             withAnimation {
                 pageCount = nextIndex
             }
         } else {
-            onComplete()
+            onComplete(cardName)
         }
     }
 
