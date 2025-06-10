@@ -73,7 +73,11 @@ final class RouteBuilder: FeatureFlaggable {
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .openText:
-                return .searchQuery(query: urlScanner.value(query: "text") ?? "", isPrivate: isPrivate)
+                let queryValue = urlScanner.value(query: "text") ?? ""
+                // Bugzilla #1946062
+                let queryURL = URIFixup.getURL(queryValue)
+                let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
+                return .searchQuery(query: safeQuery, isPrivate: isPrivate)
 
             case .glean:
                 return .glean(url: url)
