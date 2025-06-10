@@ -1219,7 +1219,9 @@ class BrowserViewController: UIViewController,
         if isSwipingTabsEnabled {
             showEmbeddedHomepage(inline: false, isPrivate: false)
             (browserDelegate as? BrowserCoordinator)?.homepageViewController?.view.alpha = 0.0
-            addressBarPanGestureHandler?.homepageScreenshotHandler = (browserDelegate as? BrowserCoordinator)?.homepageScreenshot()
+            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
+                return self?.browserDelegate?.homepageScreenshotTool()
+            }
         }
     }
 

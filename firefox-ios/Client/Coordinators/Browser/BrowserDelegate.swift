@@ -31,6 +31,9 @@ protocol BrowserDelegate: AnyObject {
         toastContainer: UIView
     )
 
+    /// Returns a tool which can be used to get a snapshot of the homepage
+    func homepageScreenshotTool() -> Screenshotable?
+
     /// Show the private homepage to the user as part of felt privacy
     func showPrivateHomepage(overlayManager: OverlayModeManager)
 

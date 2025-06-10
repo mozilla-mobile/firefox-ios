@@ -26,7 +26,8 @@ final class AddressBarPanGestureHandler: NSObject {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
-    var homepageScreenshotHandler: Screenshotable?
+    var homepageScreenshotToolProvider: (() -> Screenshotable?)?
+    private var homepageScreenshot: UIImage?
 
     // MARK: - Init
     init(
@@ -79,8 +80,6 @@ final class AddressBarPanGestureHandler: NSObject {
         enablePanGestureRecognizer()
     }
 
-    var homepage: UIImage?
-
     // MARK: - Pan Gesture Handling
     @objc
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -108,7 +107,8 @@ final class AddressBarPanGestureHandler: NSObject {
             )
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
             if nextTab == nil {
-                homepage = homepageScreenshotHandler?.screenshot(bounds: CGRect(
+                let homepageScreenshotTool = homepageScreenshotToolProvider?()
+                homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(
                     x: 0.0,
                     y: -contentContainer.frame.origin.y,
                     width: webPagePreview.frame.width,
@@ -134,7 +134,7 @@ final class AddressBarPanGestureHandler: NSObject {
         if shouldAddNewTab {
             let progress = abs(translation.x) / contentContainer.frame.width
             webPagePreview.alpha = progress
-            webPagePreview.setScreenshot(homepage)
+            webPagePreview.setScreenshot(homepageScreenshot)
         } else {
             webPagePreview.alpha = 1.0
             webPagePreview.setScreenshot(nextTab)

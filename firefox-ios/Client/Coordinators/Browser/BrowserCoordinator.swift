@@ -39,6 +39,7 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
+    var privateHomepageViewController: PrivateHomepageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -160,8 +161,11 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
     }
 
-    func homepageScreenshot() -> Screenshotable? {
-        return homepageViewController
+    func homepageScreenshotTool() -> (any Screenshotable)? {
+        if tabManager.selectedTab?.isPrivate == true {
+            return privateHomepageViewController
+        }
+        return homepageViewController ?? legacyHomepageViewController
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
@@ -180,6 +184,7 @@ class BrowserCoordinator: BaseCoordinator,
             overlayManager: overlayManager
         )
         privateHomepageController.parentCoordinator = self
+        self.privateHomepageViewController = privateHomepageController
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
