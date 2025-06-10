@@ -1183,7 +1183,6 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-
     }
 
     func addSubviews() {

@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Common
 
-final public class AddressToolbarAddTabView: UIView,
+public final class AddressToolbarAddTabView: UIView,
                                          ThemeApplicable {
     private lazy var plusIconView: UIImageView  = .build {
         $0.alpha = 0.0
