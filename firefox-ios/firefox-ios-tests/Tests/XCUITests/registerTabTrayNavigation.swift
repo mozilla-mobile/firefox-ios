@@ -39,18 +39,15 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
 
     // swiftlint:disable closure_body_length
     map.addScreenState(TabTray) { screenState in
-        let newTabButton = app.buttons[AccessibilityIdentifiers.TabTray.newTabButton]
-        let closeAllTabsButton = app.navigationBars.buttons["closeAllTabsButtonTabTray"]
-
         // Both iPad and iPhone use the same accessibility identifiers for buttons,
         // even thought they may be in separate locations design wise.
-        screenState.tap(newTabButton,
+        screenState.tap(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
         if isTablet {
-            screenState.tap(closeAllTabsButton, to: CloseTabMenu)
+            screenState.tap(app.navigationBars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
         } else {
-            screenState.tap(closeAllTabsButton, to: CloseTabMenu)
+            screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
         }
 
         var regularModeSelector: XCUIElement
@@ -100,10 +97,11 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         }
 
         screenState.onEnter { userState in
+            let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
             let exists = NSPredicate(format: "exists == true")
-            let expectation = XCTNSPredicateExpectation(predicate: exists, object: app.otherElements["Tabs Tray"])
-            let _ = XCTWaiter().wait(for: [expectation], timeout: 5) // swiftlint:disable:this redundant_discardable_let
-            userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
+            let expectation = XCTNSPredicateExpectation(predicate: exists, object: app.otherElements[tabsTray])
+            let _ = XCTWaiter().wait(for: [expectation], timeout: 5)
+            userState.numTabs = Int(app.otherElements[tabsTray].cells.count)
         }
     }
     // swiftlint:enable closure_body_length

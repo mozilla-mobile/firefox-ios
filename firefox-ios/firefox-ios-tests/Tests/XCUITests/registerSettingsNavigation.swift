@@ -112,6 +112,18 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
             app.switches["SystemThemeSwitchValue"].waitAndTap()
         }
+        screenState.gesture(forAction: Action.SelectAutomaticTheme) { userState in
+            app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].waitAndTap()
+        }
+        screenState.gesture(forAction: Action.SelectLightTheme) { userState in
+            app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].waitAndTap()
+        }
+        screenState.gesture(forAction: Action.SelectDarkTheme) { userState in
+            app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].waitAndTap()
+        }
+        screenState.gesture(forAction: Action.SelectBrowserDarkTheme) { userState in
+            app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle].waitAndTap()
+        }
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
@@ -210,11 +222,11 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
 
     map.addScreenState(ToolbarSettings) { screenState in
         screenState.gesture(forAction: Action.SelectToolbarBottom) { UserState in
-            app.cells[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectToolbarTop) { UserState in
-            app.cells[AccessibilityIdentifiers.Settings.SearchBar.topSetting].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.Settings.SearchBar.topSetting].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction(for: app)
