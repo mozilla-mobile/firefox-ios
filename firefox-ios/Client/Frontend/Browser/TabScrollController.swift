@@ -132,11 +132,13 @@ class TabScrollController: NSObject,
         return windowUUID
     }
 
-    // If scrollview contentSize height is bigger that device height plus delta
-    // New settings to disable bar autohide only for iPad
-    var isAbleToScroll: Bool {
-        return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
+    /// Returns true when the scrollview contentSize height is bigger than device height plus delta
+    /// and voice over is turned off
+    var shouldUpdateUIWhenScrolling: Bool {
+        let heightNeedsScrolling = (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
             contentSize.height
+        let voiceOverOff = !UIAccessibility.isVoiceOverRunning
+        return heightNeedsScrolling && voiceOverOff
     }
 
     deinit {
@@ -208,7 +210,7 @@ class TabScrollController: NSObject,
             setScrollDirection(delta)
 
             lastPanTranslation = translation.y
-            if checkRubberbanding() && isAbleToScroll {
+            if checkRubberbanding() && shouldUpdateUIWhenScrolling {
                 scrollWithDelta(delta)
                 updateToolbarState()
             }
@@ -290,7 +292,7 @@ class TabScrollController: NSObject,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard isAbleToScroll, toolbarsShowing else { return }
+            guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
 
             showToolbars(animated: true)
         }
@@ -611,7 +613,7 @@ extension TabScrollController: UIScrollViewDelegate {
               !tabIsLoading(),
               !scrollReachBottom(),
               !tab.isFindInPageMode,
-              isAbleToScroll  else { return }
+              shouldUpdateUIWhenScrolling else { return }
 
         tab.shouldScrollToTop = false
 
