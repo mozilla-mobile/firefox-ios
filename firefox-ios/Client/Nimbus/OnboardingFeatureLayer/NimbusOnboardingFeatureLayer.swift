@@ -44,7 +44,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
         return getOnboardingCards(
-            from: cardData.filter { $0.value.onboardingType == onboardingType },
+            from: cardData.filter { $0.value.onboardingType == onboardingType && $0.value.uiVariant == nil },
             withConditions: conditionTable
         )
         .sorted(by: { $0.order < $1.order })
