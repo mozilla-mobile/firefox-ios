@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
-	<string>https://5641-146-71-84-19.ngrok-free.app/skadnetwork-postback</string>
+	<string>https://5641-146-71-84-19.ngrok-free.app</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
