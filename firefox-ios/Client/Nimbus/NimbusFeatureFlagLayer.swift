@@ -190,7 +190,7 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
-    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+    public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 
