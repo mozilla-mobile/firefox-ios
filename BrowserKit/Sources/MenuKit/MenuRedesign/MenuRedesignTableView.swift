@@ -64,7 +64,8 @@ final class MenuRedesignTableView: UIView,
         tableView.register(MenuRedesignCell.self, forCellReuseIdentifier: MenuRedesignCell.cellIdentifier)
         tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
         tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
-        tableView.register(MenuCollectionViewContainerCell.self, forCellReuseIdentifier: MenuCollectionViewContainerCell.cellIdentifier)
+        tableView.register(MenuCollectionViewContainerCell.self,
+                           forCellReuseIdentifier: MenuCollectionViewContainerCell.cellIdentifier)
     }
 
     func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
