@@ -64,7 +64,7 @@ final class MenuRedesignTableView: UIView,
         tableView.register(MenuRedesignCell.self, forCellReuseIdentifier: MenuRedesignCell.cellIdentifier)
         tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
         tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
-        tableView.register(MenuCollectionView.self, forCellReuseIdentifier: MenuCollectionView.cellIdentifier)
+        tableView.register(MenuCollectionViewContainerCell.self, forCellReuseIdentifier: MenuCollectionViewContainerCell.cellIdentifier)
     }
 
     func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
@@ -119,8 +119,8 @@ final class MenuRedesignTableView: UIView,
     ) -> UITableViewCell {
         if menuData[indexPath.section].isHorizontalTabsSection {
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: MenuCollectionView.cellIdentifier,
-                for: indexPath) as? MenuCollectionView else {
+                withIdentifier: MenuCollectionViewContainerCell.cellIdentifier,
+                for: indexPath) as? MenuCollectionViewContainerCell else {
                 return UITableViewCell()
             }
             cell.reloadCollectionView(with: menuData)
@@ -195,7 +195,7 @@ final class MenuRedesignTableView: UIView,
     }
 
     func reloadTableView(with data: [MenuSection]) {
-        // We ignore first section because it is handled in MenuCollectionView
+        // We ignore first section because it is handled in MenuCollectionViewContainerCell
         if let firstSection = data.first, firstSection.isHorizontalTabsSection {
             tableView.showsVerticalScrollIndicator = false
             menuData = data

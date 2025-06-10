@@ -111,13 +111,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     at: 1
                 )
             }
+        } else if tabInfo.isHomepage {
+            menuSections.append(getNewTabSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
         } else {
-            if tabInfo.isHomepage {
-                menuSections.append(getNewTabSection(with: uuid, tabInfo: tabInfo))
-                menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
-            } else {
-                menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
-            }
+            menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         }
 
         return menuSections

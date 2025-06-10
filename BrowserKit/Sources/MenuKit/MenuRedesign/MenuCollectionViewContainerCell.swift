@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-final class MenuCollectionView: UITableViewCell,
+final class MenuCollectionViewContainerCell: UITableViewCell,
                                 UICollectionViewDelegate,
                                 UICollectionViewDataSource,
                                 UICollectionViewDelegateFlowLayout,
@@ -18,6 +18,10 @@ final class MenuCollectionView: UITableViewCell,
     private var collectionView: UICollectionView
     private var menuData: [MenuSection]
     private var theme: Theme?
+
+    private var horizontalTabsSection: MenuSection? {
+        return menuData.first(where: { $0.isHorizontalTabsSection })
+    }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         let layout = UICollectionViewFlowLayout()
@@ -73,8 +77,8 @@ final class MenuCollectionView: UITableViewCell,
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        guard let section = menuData.first(where: { $0.isHorizontalTabsSection }) else { return 0 }
-        return section.options.count
+        guard let horizontalTabsSection else { return 0 }
+        return horizontalTabsSection.options.count
     }
 
     func collectionView(
@@ -88,24 +92,24 @@ final class MenuCollectionView: UITableViewCell,
             return UICollectionViewCell()
         }
 
-        guard let section = menuData.first(where: { $0.isHorizontalTabsSection }) else { return UICollectionViewCell() }
-        cell.configureCellWith(model: section.options[indexPath.row])
+        guard let horizontalTabsSection else { return UICollectionViewCell() }
+        cell.configureCellWith(model: horizontalTabsSection.options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: false)
-        guard let section = menuData.first(where: { $0.isHorizontalTabsSection }),
-              let action = section.options[indexPath.row].action else { return }
+        guard let horizontalTabsSection,
+              let action = horizontalTabsSection.options[indexPath.row].action else { return }
         action()
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let section = menuData.first(where: { $0.isHorizontalTabsSection }) else { return .zero }
-        let itemCount = section.options.count
+        guard let horizontalTabsSection else { return .zero }
+        let itemCount = horizontalTabsSection.options.count
         let width = (collectionView.bounds.width - CGFloat(itemCount - 1) * UX.minimumLineSpacing) / CGFloat(itemCount)
         let height = collectionView.bounds.height
         return CGSize(width: width, height: height)
