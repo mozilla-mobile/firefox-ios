@@ -78,9 +78,11 @@ final class AddressToolbarContainer: UIView,
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
     }
-    private lazy var addNewTabView: AddressBarAddTabView = .build()
+    private lazy var addNewTabView: AddressToolbarAddTabView = .build()
     private var addNewTabTrailingConstraint: NSLayoutConstraint?
     private var addNewTabLeadingConstraint: NSLayoutConstraint?
+    private var addNewTabTopConstraint: NSLayoutConstraint?
+    private var addNewTabBottomConstraint: NSLayoutConstraint?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
@@ -249,6 +251,12 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: newModel.shouldAnimate)
 
+        let addressBarVerticalPaddings = newModel.addressToolbarConfig.uxConfiguration
+            .locationViewVerticalPaddings(addressBarPosition: toolbarState.toolbarPosition)
+        addNewTabTopConstraint?.constant = addressBarVerticalPaddings.top
+        addNewTabBottomConstraint?.constant = -addressBarVerticalPaddings.bottom
+        addNewTabView.config(newModel.addressToolbarConfig.uxConfiguration)
+
         // Replace the old model after we are done using it for comparison
         // All functionality that depends on the new model should come after this
         self.model = newModel
@@ -298,13 +306,14 @@ final class AddressToolbarContainer: UIView,
 
         addSubview(addNewTabView)
         addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
-        addNewTabLeadingConstraint?.isActive = true
         addNewTabTrailingConstraint = addNewTabView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        addNewTabTopConstraint = addNewTabView.topAnchor.constraint(equalTo: topAnchor)
+        addNewTabBottomConstraint = addNewTabView.bottomAnchor.constraint(equalTo: bottomAnchor)
+
         addNewTabTrailingConstraint?.isActive = true
-        NSLayoutConstraint.activate([
-            addNewTabView.topAnchor.constraint(equalTo: topAnchor, constant: 8.0),
-            addNewTabView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4.0),
-        ])
+        addNewTabTopConstraint?.isActive = true
+        addNewTabBottomConstraint?.isActive = true
+        addNewTabLeadingConstraint?.isActive = true
     }
 
     private func setupToolbarConstraints() {
@@ -364,8 +373,9 @@ final class AddressToolbarContainer: UIView,
         if shouldAddNewTab {
             let percentageTransform = abs(transform.tx) / bounds.width
             UIView.animate(withDuration: 0.2) {
-                self.addNewTabView.plusIconView.alpha = percentageTransform > 0.3 ? 1.0 : 0.0
-                self.addNewTabTrailingConstraint?.constant = percentageTransform > 0.3 ? -16.0 : 0.0
+                self.addNewTabView.showHideAddTabIcon(shouldShow: percentageTransform > 0.3)
+                self.addNewTabTrailingConstraint?.constant = percentageTransform > 0.3 ?
+                    -UX.toolbarHorizontalPadding : 0.0
                 self.layoutIfNeeded()
             }
             addNewTabLeadingConstraint?.constant = transform.tx

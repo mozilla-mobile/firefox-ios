@@ -1215,6 +1215,12 @@ class BrowserViewController: UIViewController,
         // add overKeyboardContainer after bottomContainer so the address toolbar shadow
         // for bottom toolbar doesn't get clipped
         view.addSubview(overKeyboardContainer)
+
+        if isSwipingTabsEnabled {
+            showEmbeddedHomepage(inline: false, isPrivate: false)
+            (browserDelegate as? BrowserCoordinator)?.homepageViewController?.view.alpha = 0.0
+            addressBarPanGestureHandler?.homepageScreenshotHandler = (browserDelegate as? BrowserCoordinator)?.homepageScreenshot()
+        }
     }
 
     private func enqueueTabRestoration() {
@@ -1252,8 +1258,6 @@ class BrowserViewController: UIViewController,
         }
 
         updateToolbarStateForTraitCollection(traitCollection)
-        showEmbeddedHomepage(inline: false, isPrivate: false)
-        addressBarPanGestureHandler?.homepageScreenshotHandler = (browserDelegate as? BrowserCoordinator)?.homepageScreenshot()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1697,6 +1701,7 @@ class BrowserViewController: UIViewController,
             legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
         }
 
+        let browserCoordinator = browserDelegate as? BrowserCoordinator
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
             browserDelegate?.showHomepage(
                 overlayManager: overlayManager,
@@ -1704,6 +1709,7 @@ class BrowserViewController: UIViewController,
                 statusBarScrollDelegate: statusBarOverlay,
                 toastContainer: contentContainer
             )
+            browserCoordinator?.homepageViewController?.view.alpha = 1.0
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,

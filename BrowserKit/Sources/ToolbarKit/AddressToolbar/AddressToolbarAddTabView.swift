@@ -6,17 +6,14 @@ import Foundation
 import UIKit
 import Common
 
-final class AddressBarAddTabView: UIView, ThemeApplicable {
-    private struct UX {
-        static let cornerRadius: CGFloat = 12.0
-    }
-
-    private(set) lazy var plusIconView: UIImageView  = .build {
+final public class AddressToolbarAddTabView: UIView,
+                                         ThemeApplicable {
+    private lazy var plusIconView: UIImageView  = .build {
         $0.alpha = 0.0
         $0.image = UIImage(named: StandardImageIdentifiers.Large.plus)
     }
 
-    init() {
+    public init() {
         super.init(frame: .zero)
         setupLayout()
     }
@@ -26,7 +23,6 @@ final class AddressBarAddTabView: UIView, ThemeApplicable {
     }
 
     private func setupLayout() {
-        layer.cornerRadius = UX.cornerRadius
         addSubview(plusIconView)
         NSLayoutConstraint.activate([
             plusIconView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -34,11 +30,18 @@ final class AddressBarAddTabView: UIView, ThemeApplicable {
         ])
     }
 
+    public func config(_ configuration: AddressToolbarUXConfiguration) {
+        layer.cornerRadius = configuration.toolbarCornerRadius
+    }
+
+    public func showHideAddTabIcon(shouldShow: Bool) {
+        plusIconView.alpha = shouldShow ? 1.0 : 0.0
+    }
+
     // MARK: - ThemeApplicable
 
-    func applyTheme(theme: any Theme) {
+    public func applyTheme(theme: any Theme) {
         plusIconView.tintColor = theme.colors.textPrimary
-        let configuration: TabWebViewPreviewAppearanceConfiguration = .getAppearance(basedOn: theme)
-        backgroundColor = configuration.addressBarBackgroundColor
+        backgroundColor = theme.colors.layer2
     }
 }

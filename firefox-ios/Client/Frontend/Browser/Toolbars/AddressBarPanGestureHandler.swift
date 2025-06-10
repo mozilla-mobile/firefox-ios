@@ -132,8 +132,11 @@ final class AddressBarPanGestureHandler: NSObject {
         applyPreviewTransform(translation: translation)
 
         if shouldAddNewTab {
+            let progress = abs(translation.x) / contentContainer.frame.width
+            webPagePreview.alpha = progress
             webPagePreview.setScreenshot(homepage)
         } else {
+            webPagePreview.alpha = 1.0
             webPagePreview.setScreenshot(nextTab)
         }
     }
@@ -162,7 +165,7 @@ final class AddressBarPanGestureHandler: NSObject {
                                                    shouldAddNewTab: shouldShowNewTab)
             contentContainer.transform = shouldCompleteTransition ?
             CGAffineTransform(translationX: targetPreview, y: 0) : .identity
-
+            webPagePreview.alpha = shouldCompleteTransition ? 1.0 : 0.0
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
         } completion: { [self] _ in
             webPagePreview.isHidden = true
