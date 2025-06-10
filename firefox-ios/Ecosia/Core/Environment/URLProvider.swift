@@ -39,7 +39,7 @@ public enum URLProvider {
 
     public var snowplowMicro: String? {
         if case .staging = self {
-            return "https://ecosia-staging.xyz/analytics-test-micro"
+            return "https://www.ecosia-staging.xyz/analytics-test-micro"
         }
         return nil
     }

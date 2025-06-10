@@ -13,8 +13,13 @@ open class Analytics {
     static let inappSearchSchema = "iglu:org.ecosia/inapp_search_event/jsonschema/1-0-1"
     private static let abTestRoot = "ab_tests"
     private static let namespace = "ios_sp"
-    public static var shouldUseMicroInstance: Bool = false {
-        didSet {
+    private static let shouldUseMicroInstanceKey = "shouldUseMicroInstance"
+    public static var shouldUseMicroInstance: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: shouldUseMicroInstanceKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: shouldUseMicroInstanceKey)
             Analytics.updateTrackerController()
         }
     }
