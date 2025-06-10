@@ -52,10 +52,10 @@ public struct AddressToolbarUXConfiguration {
 
     public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {
         return switch addressBarPosition {
-            case .top:
-                (top: 8, bottom: 8)
-            case .bottom:
-                (top: 8, bottom: 4)
+        case .top:
+            (top: 8, bottom: 8)
+        case .bottom:
+            (top: 8, bottom: 4)
         }
     }
 }
