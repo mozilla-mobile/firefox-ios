@@ -144,11 +144,11 @@ private extension OnboardingService {
         askForNotificationPermission(from: cardName)
     }
 
-//    func handleForwardCards(numberOfPages: Int, from cardName: String) {
-//        navigationDelegate?.advance(numberOfPages: numberOfPages, from: cardName) {}
-//    }
-
-    func handleSyncSignIn(from cardName: String, with activityEventHelper: ActivityEventHelper, completion: @escaping () -> Void) {
+    func handleSyncSignIn(
+        from cardName: String,
+        with activityEventHelper: ActivityEventHelper,
+        completion: @escaping () -> Void
+    ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
