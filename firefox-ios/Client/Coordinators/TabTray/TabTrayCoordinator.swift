@@ -48,7 +48,7 @@ class TabTrayCoordinator: BaseCoordinator,
         let tabTrayViewController = TabTrayViewController(panelType: panelType, windowUUID: tabManager.windowUUID)
         router.setRootViewController(tabTrayViewController)
         self.tabTrayViewController = tabTrayViewController
-        tabTrayViewController.childPanelControllers = makeChildPanels()
+        tabTrayViewController.childPanelControllers = makeChildPanels(dragAndDropDelegate: tabTrayViewController)
         tabTrayViewController.childPanelThemes = makeChildPanelThemes()
         tabTrayViewController.delegate = self
         tabTrayViewController.navigationHandler = self
@@ -58,10 +58,14 @@ class TabTrayCoordinator: BaseCoordinator,
         tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
     }
 
-    private func makeChildPanels() -> [UINavigationController] {
+    private func makeChildPanels(dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) -> [UINavigationController] {
         let windowUUID = tabManager.windowUUID
-        let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false, windowUUID: windowUUID)
-        let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true, windowUUID: windowUUID)
+        let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false,
+                                                             windowUUID: windowUUID,
+                                                             dragAndDropDelegate: dragAndDropDelegate)
+        let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true,
+                                                             windowUUID: windowUUID,
+                                                             dragAndDropDelegate: dragAndDropDelegate)
         let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
 
         let panels: [UIViewController]
