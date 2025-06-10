@@ -44,6 +44,9 @@ final class NimbusFeatureFlagLayer {
         case .hntContentFeedRefresh:
             return checkHNTContentFeedRefreshFeature(from: nimbus)
 
+        case .hntSponsoredShortcuts:
+            return checkHNTSponsoredShortcutsFeature(from: nimbus)
+
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
@@ -181,6 +184,10 @@ final class NimbusFeatureFlagLayer {
 
     public func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
+    }
+
+    private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
     public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {

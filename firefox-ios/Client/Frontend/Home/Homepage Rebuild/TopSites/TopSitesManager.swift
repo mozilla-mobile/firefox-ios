@@ -142,7 +142,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     private var shouldLoadSponsoredTiles: Bool {
-        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
+        return featureFlags.isFeatureEnabled(.hntSponsoredShortcuts, checking: .userOnly)
     }
 
     private func filterSponsoredSites(
