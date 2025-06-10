@@ -25,7 +25,7 @@ final class WKUserScriptManagerTests: XCTestCase {
             XCTFail("Failed to cast webview engine configuration to MockWKEngineConfiguration")
             return
         }
-        XCTAssertEqual(config.addUserScriptCalled, 8)
+        XCTAssertEqual(config.addUserScriptCalled, 9)
     }
 
     func createSubject() async -> DefaultUserScriptManager {

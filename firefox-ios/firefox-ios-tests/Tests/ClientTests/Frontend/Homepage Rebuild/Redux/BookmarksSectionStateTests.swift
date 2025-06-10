@@ -12,6 +12,7 @@ final class BookmarksSectionStateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
@@ -101,6 +102,56 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
+    func test_sectionFlagEnabled_withoutUserPref_returnsExpectedState() {
+        setupNimbusHNTBookmarksSectionTesting(isEnabled: true)
+
+        let initialState = createSubject()
+        XCTAssertTrue(initialState.shouldShowSection)
+    }
+
+    func test_sectionFlagDisabled_withoutUserPref_returnsExpectedState() {
+        setupNimbusHNTBookmarksSectionTesting(isEnabled: false)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_sectionFlagEnabled_withUserPref_returnsExpectedState() {
+        setupNimbusHNTBookmarksSectionTesting(isEnabled: true)
+
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        // Updates the bookmarks section user pref
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksActionType.toggleShowSectionSetting
+            )
+        )
+        XCTAssertFalse(newState.shouldShowSection)
+    }
+
+    func test_sectionFlagDisabled_withUserPref_returnsExpectedState() {
+        setupNimbusHNTBookmarksSectionTesting(isEnabled: false)
+
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        // Updates the bookmarks section user pref
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksActionType.toggleShowSectionSetting
+            )
+        )
+        XCTAssertTrue(newState.shouldShowSection)
+    }
+
     // MARK: - Private
     private func createSubject() -> BookmarksSectionState {
         return BookmarksSectionState(windowUUID: .XCTestDefaultUUID)
@@ -108,5 +159,13 @@ final class BookmarksSectionStateTests: XCTestCase {
 
     private func bookmarksSectionReducer() -> Reducer<BookmarksSectionState> {
         return BookmarksSectionState.reducer
+    }
+
+    private func setupNimbusHNTBookmarksSectionTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.hntBookmarksSectionFeature.with { _, _ in
+            return HntBookmarksSectionFeature(
+                enabled: isEnabled
+            )
+        }
     }
 }

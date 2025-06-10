@@ -40,6 +40,9 @@
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Standardapp til browsing";
 
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "Jeg gør det senere";
+
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Angiv som standardbrowser";
 

@@ -130,14 +130,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tab, addedTab)
     }
 
-    func testGetMostRecentHomepageTab() {
-        let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        tab.url = URL(string: "\(InternalURL.baseUrl)/about/home#panel=0")!
-        let subject = createSubject(tabs: [tab])
-        let homeTab = subject.getMostRecentHomepageTab()
-        XCTAssertEqual(tab, homeTab)
-    }
-
     func testUndoCloseTab() {
         let subject = createSubject()
         let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)

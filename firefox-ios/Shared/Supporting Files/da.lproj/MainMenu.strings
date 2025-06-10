@@ -205,6 +205,9 @@
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Nat-tilstand";
 
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. */
+"MainMenu.Submenus.Tools.PageZoom.Title.v140" = "Side-zoom (%@)";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Udskriv";
 
@@ -268,6 +271,12 @@
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Find på side";
 
+/* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "Mindre";
+
+/* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "Mere";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Gem";
 
@@ -288,6 +297,12 @@
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Find på side…";
+
+/* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.LessOptions.Title.v141" = "Mindre";
+
+/* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.MoreOptions.Title.v141" = "Mere";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Gem";

@@ -110,6 +110,7 @@ struct AccessibilityIdentifiers {
         static let nightMode = "MainMenu.NightModeOn"
         static let zoom = "MainMenu.Zoom"
         static let moreLess = "MainMenu.MoreLess"
+        static let signIn = "MainMenu.SignIn"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -402,6 +403,15 @@ struct AccessibilityIdentifiers {
         static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
+
+        struct Appearance {
+            static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
+            static let websiteAppearanceSectionTitle = "WebsiteAppearanceSectionTitle"
+            static let automaticThemeView = "AutomaticThemeView"
+            static let lightThemeView = "LightThemeView"
+            static let darkThemeView = "DarkThemeView"
+            static let darkModeToggle = "DarkModeToggle"
+        }
 
         struct AppIconSelection {
             static let settingsRowTitle = "AppIconSelectionTitle"

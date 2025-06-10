@@ -18,6 +18,7 @@ enum TabsDeletionPeriod: String {
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
     var isRestoringTabs: Bool { get }
+    var tabRestoreHasFinished: Bool { get }
     var delaySelectingNewPopupTab: TimeInterval { get }
     var recentlyAccessedNormalTabs: [Tab] { get }
     var count: Int { get }
@@ -95,7 +96,6 @@ protocol TabManager: AnyObject {
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
-    func getMostRecentHomepageTab() -> Tab?
 
     // MARK: Other Tab Actions
     func clearAllTabsHistory()
@@ -107,7 +107,6 @@ protocol TabManager: AnyObject {
 
     func notifyCurrentTabDidFinishLoading()
     func restoreTabs(_ forced: Bool)
-    func startAtHomeCheck() -> Bool
     func expireLoginAlerts()
     @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult

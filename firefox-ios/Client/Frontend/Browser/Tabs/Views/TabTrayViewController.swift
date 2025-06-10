@@ -124,11 +124,13 @@ class TabTrayViewController: UIViewController,
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
-        let selector = TabTraySelectorView(selectedIndex: selectedIndex, theme: retrieveTheme())
+        let titles = [TabTrayPanelType.privateTabs.label,
+                     TabTrayPanelType.tabs.label,
+                     TabTrayPanelType.syncedTabs.label]
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex,
+                                           theme: retrieveTheme(),
+                                           buttonTitles: titles)
         selector.delegate = self
-        selector.items = [TabTrayPanelType.privateTabs.label,
-                          TabTrayPanelType.tabs.label,
-                          TabTrayPanelType.syncedTabs.label]
         selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
 
         didSelectSection(panelType: tabTrayState.selectedPanel)
@@ -788,6 +790,9 @@ class TabTrayViewController: UIViewController,
     }
 
     private func showTabsDeletionPicker() {
+        let telemetry = TabsPanelTelemetry()
+        telemetry.closeAllTabsSheetOptionSelected(option: .old, mode: .normal)
+
         let alert = AlertController(title: .TabsTray.TabTrayCloseTabsOlderThanTitle,
                                     message: nil,
                                     preferredStyle: .actionSheet)

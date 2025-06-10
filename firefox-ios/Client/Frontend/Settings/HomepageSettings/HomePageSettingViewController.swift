@@ -131,8 +131,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             let jumpBackInSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.UserFeatureFlagPrefs.JumpBackInSection,
-                defaultValue: true,
+                prefKey: PrefsKeys.FeatureFlags.JumpBackInSection,
+                defaultValue: featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
@@ -148,8 +148,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.UserFeatureFlagPrefs.BookmarksSection,
-                defaultValue: true,
+                prefKey: PrefsKeys.FeatureFlags.BookmarksSection,
+                defaultValue: featureFlags.isFeatureEnabled(.hntBookmarksSection, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(

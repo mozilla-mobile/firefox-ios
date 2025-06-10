@@ -17,7 +17,7 @@
 "About" = "Nfurmazzioni";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Junci a l'accurzi";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Junci a l’accurzi";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Appuntiḍḍa";
@@ -77,7 +77,7 @@
 "Authentication required" = "Autinticazzioni nicissaria";
 
 /* Accessibility label for the Back button in the tab toolbar. */
-"Back" = "Nn'arrè";
+"Back" = "Nn’arrè";
 
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Blocca i finestri assummanti";
@@ -122,7 +122,7 @@
 "BreachAlerts.BreachDate" = "Sta viulazzioni mmattìu u";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "Cci fu na viulazzioni e foru arrubbati chiavi di l'ùrtima vota chi canciasti a to chiavi. Pi prutèggiri stu cuntu, trasi nnô situ e cancia a to chiavi.";
+"BreachAlerts.Description" = "Cci fu na viulazzioni e foru arrubbati chiavi di l’ùrtima vota chi canciasti a to chiavi. Pi prutèggiri stu cuntu, trasi nnô situ e cancia a to chiavi.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Cchiù nfurmazzioni";
@@ -200,7 +200,7 @@
 "ContextualHints.SearchBarPlacement.CallToAction" = "Mpustazzioni dâ barra dî stigghi";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
-"ContextualHints.TabTray.InactiveTabs" = "I schedi chi nun taliasti pi du' simani vennu muvuti cca.";
+"ContextualHints.TabTray.InactiveTabs" = "I schedi chi nun taliasti pi du’ simani vennu muvuti cca.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Astuta nnê mpustazzioni";
@@ -212,13 +212,13 @@
 "Could not add page to Reading list" = "Nun potti jùnciri a pàggina â lista di lèggiri";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Nun potti jùnciri â pàggina â lista di lèggiri. Forsi cc'è già?";
+"Could not add page to Reading List. Maybe it’s already there?" = "Nun potti jùnciri â pàggina â lista di lèggiri. Forsi cc’è già?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Nun potti carricari a pàggina.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "A prutizzioni avanzata dû trazzamentu ntigrata t'ajuta a bluccari i pubblicità chi ti sicùtanu mentri chi nàvichi. Attivà a mudalità Stritta pi bluccari ancora cchiù assai trazzatura, pubblicità e finestri assummanti. ";
+"CoverSheet.v24.ETP.Description" = "A prutizzioni avanzata dû trazzamentu ntigrata t’ajuta a bluccari i pubblicità chi ti sicùtanu mentri chi nàvichi. Attivà a mudalità Stritta pi bluccari ancora cchiù assai trazzatura, pubblicità e finestri assummanti. ";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Vai nnê mpustazzioni";
@@ -305,7 +305,7 @@
 "ErrorPages.AdvancedWarning1.Text" = "Accura: nun ti putemu cunfirmari chi a to cunnissioni a stu situ è sicura.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning2.Text" = "Putissi èssiri na cunfijurazzioni sbagghiata o na ntircittazzioni di n'attaccanti. Cuntinua sulu si capisci u rìsicu chi curri.";
+"ErrorPages.AdvancedWarning2.Text" = "Putissi èssiri na cunfijurazzioni sbagghiata o na ntircittazzioni di n’attaccanti. Cuntinua sulu si capisci u rìsicu chi curri.";
 
 /* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "U prupitariu di %@ sbagghiau a cunfijurari u so situ. Pi prutèggiri i to nfurmazzioni, Firefox nun si ci cullijau.";
@@ -314,16 +314,16 @@
 "ErrorPages.CertWarning.Title" = "Sta cunnissioni nun è affidàbbili";
 
 /* Label for button to go back from the error page */
-"ErrorPages.GoBack.Button" = "Vai nn'arrè";
+"ErrorPages.GoBack.Button" = "Vai nn’arrè";
 
 /* Button label to temporarily continue to the site from the certificate error page */
 "ErrorPages.VisitOnce.Button" = "Visita stu situ u stissu";
 
 /* Question shown to user when tapping a link that opens the App Store app */
-"ExternalLink.AppStore.ConfirmationTitle" = "Gràpiri sta lijami nni l'App Store?";
+"ExternalLink.AppStore.ConfirmationTitle" = "Gràpiri sta lijami nni l’App Store?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "Grapi sta lijami nta l'applicazzioni di fora?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Grapi sta lijami nta l’applicazzioni di fora?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
@@ -434,7 +434,7 @@
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Tuttu";
 
 /* Button to perform action to clear history for the last hour */
-"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "L'ùrtima ura";
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "L’ùrtima ura";
 
 /* Button to perform action to clear history for today only */
 "HistoryPanel.ClearHistoryMenuOptionToday" = "Oji";
@@ -446,10 +446,10 @@
 "HistoryPanel.EmptyState.Title" = "Cca cci sunnu i siti chi visitasti di picca.";
 
 /* Description for the empty synced tabs null state in the History Panel */
-"HistoryPanel.EmptySyncedTabsNullState.Description" = "Cca cci sunnu i schedi di l'autri dispusitivi.";
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Cca cci sunnu i schedi di l’autri dispusitivi.";
 
 /* Description for the empty synced tabs 'not signed in' state in the History Panel */
-"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Trasi pi vìdiri na lista dî schedi di l'autri dispusitivi.";
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Trasi pi vìdiri na lista dî schedi di l’autri dispusitivi.";
 
 /* Title for the empty synced tabs state in the History Panel */
 "HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
@@ -485,7 +485,7 @@
 "HomePanel.ContextMenu.Share" = "Sparti";
 
 /* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.Back.DiscoveryTitle" = "Nn'arrè";
+"Hotkeys.Back.DiscoveryTitle" = "Nn’arrè";
 
 /* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.CloseTab.DiscoveryTitle" = "Chiuji scheda";
@@ -572,7 +572,7 @@
 "Keyboard.Shortcuts.ShowHistory" = "Mustra a crunuluggìa";
 
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowLastTab" = "Mustra l'ùrtima scheda";
+"Keyboard.Shortcuts.ShowLastTab" = "Mustra l’ùrtima scheda";
 
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "Cchiù granni";
@@ -581,10 +581,10 @@
 "Keyboard.Shortcuts.ZoomOut" = "Cchiù nicu";
 
 /* This label is meant to signify the section containing a group of items from the past thirty days. */
-"Last month" = "L'ùrtimu misi";
+"Last month" = "L’ùrtimu misi";
 
 /* This label is meant to signify the section containing a group of items from the past seven days. */
-"Last week" = "L'ùrtima simana";
+"Last week" = "L’ùrtima simana";
 
 /* Panel accessibility label */
 "LibraryPanel.Accessibility.Bookmarks.v106" = "Nzingalibbra";
@@ -608,7 +608,7 @@
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Scancella";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
-"LibraryPanel.History.NoHistoryFound.v99" = "Nun cc'è nuḍḍa crunuluggìa dispunìbbili";
+"LibraryPanel.History.NoHistoryFound.v99" = "Nun cc’è nuḍḍa crunuluggìa dispunìbbili";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
 "LibraryPanel.History.RecentlyClosedTabs.v99" = "Schedi chiujuti di picca";
@@ -650,13 +650,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Cchiù nfurmazzioni";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "P'usari a funzioni d'jinchimentu autumàticu di Firefox, hâ abbilitari un còdici dû dispusitivu.";
+"Logins.PasscodeRequirement.Warning" = "P’usari a funzioni d’jinchimentu autumàticu di Firefox, hâ abbilitari un còdici dû dispusitivu.";
 
 /* Label displaying welcome view tagline under the title */
-"Logins.WelcomeView.Tagline" = "Pòrtati i chiavi unn'è-è";
+"Logins.WelcomeView.Tagline" = "Pòrtati i chiavi unn’è-è";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Jinchi 'n autumàticu i chiavi di Firefox";
+"Logins.WelcomeView.Title2" = "Jinchi ’n autumàticu i chiavi di Firefox";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Attiva jinchimentu autumàticu";
@@ -689,7 +689,7 @@
 "LoginsList.Title" = "CRIDINZIALI SARBATI";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Parissi chi Firefox sfallìu. Vo' ricupirari i schedi?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Parissi chi Firefox sfallìu. Vo’ ricupirari i schedi?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marca liggiutu";
@@ -704,7 +704,7 @@
 "Menu.AddBookmark.Label.v99" = "Junci";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "Junciutu a l'accurzi";
+"Menu.AddPin.Confirm2" = "Junciutu a l’accurzi";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "Junci";
@@ -713,7 +713,7 @@
 "Menu.AddToReadingList.Confirm" = "Junciutu â lista di lèggiri";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Junci a l'accurzi";
+"Menu.AddToShortcuts.v99" = "Junci a l’accurzi";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Nzingalibbra";
@@ -779,10 +779,10 @@
 "Menu.RemoveBookmark.Label.v99" = "Leva";
 
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
-"Menu.RemovedFromShortcuts.v99" = "Leva di l'accurzi";
+"Menu.RemovedFromShortcuts.v99" = "Leva di l’accurzi";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2.v99" = "Livatu di l'accurzi";
+"Menu.RemovePin.Confirm2.v99" = "Livatu di l’accurzi";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "Livatu dâ lista di lèggiri";
@@ -827,16 +827,16 @@
 "Menu.TrackingProtectionDescription.ContentTrackers" = "I siti ponnu carricari di fora pubblicità, vidiu e autri cuntinuti chi ànnu trazzatura ammucciati. Si u blocchi i siti si càrricanu cchiù lesti, ma certi buttuna, mòduli e campi pi tràsiri putìssiru sfarsijari.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Sti viscotta ti sicùtanu d'un situ a n'autru pi ricògghiri dati ncapu a chiḍḍu chi fai 'n linia. Sunnu mpustati di terzi parti a tipu agginzìi di pubblicità e cumpagnìi d'anàlisi.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Sti viscotta ti sicùtanu d’un situ a n’autru pi ricògghiri dati ncapu a chiḍḍu chi fai ’n linia. Sunnu mpustati di terzi parti a tipu agginzìi di pubblicità e cumpagnìi d’anàlisi.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "I pirrijatura di crittumunita ùsanu a putenza dû to sistema 'n sicritu pi criari munita diggitali. Sti prugrammi cunzùmanu a battirìa, fannu addivintari cchiù lentu u to computer e ti ponnu custari assai nnâ bulletta elèttrica.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "I pirrijatura di crittumunita ùsanu a putenza dû to sistema ’n sicritu pi criari munita diggitali. Sti prugrammi cunzùmanu a battirìa, fannu addivintari cchiù lentu u to computer e ti ponnu custari assai nnâ bulletta elèttrica.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "I mpustazzioni dû to navicaturi nnô to computer sunnu ùnichi. I giniratura di griffi nfurmàtichi ricògghinu na varità di sti mpustazzioni ùnichi pi criari un prufilu di tia, chi ponnu usari pi trazzàriti mentri chi nàvichi.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "I riti suciali mèttinu trazzatura macari nni autri siti pi custrujiri un prufilu di tia megghiu e cu cchiù assai minutagghi. Si i blocchi, arriduci a quantità di nfurmazzioni chi i cumpagnìi dî riti suciali vìdini di chiḍḍu chi fai 'n riti.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "I riti suciali mèttinu trazzatura macari nni autri siti pi custrujiri un prufilu di tia megghiu e cu cchiù assai minutagghi. Si i blocchi, arriduci a quantità di nfurmazzioni chi i cumpagnìi dî riti suciali vìdini di chiḍḍu chi fai ’n riti.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Giniratura di griffi nfurmàtichi";
@@ -851,10 +851,10 @@
 "mobile device" = "dispusitivu mòbbili";
 
 /* Relative date for dates older than a month and less than two months. */
-"more than a month ago" = "cchiù assai d'un misi nn'arrè";
+"more than a month ago" = "cchiù assai d’un misi nn’arrè";
 
 /* Description for a date more than a week ago, but less than a month ago. */
-"more than a week ago" = "cchiù assai di na simana nn'arrè";
+"more than a week ago" = "cchiù assai di na simana nn’arrè";
 
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
 "Navigation Toolbar" = "Sbarra di navicazzioni";
@@ -881,7 +881,7 @@
 "Oops! Firefox crashed" = "Ops. Firefox scasciau";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Grapi l'artìculi 'n mudalità di littura ammaccannu a cona a libbru quannu affaccia nnâ barra dû tìtulu.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Grapi l’artìculi ’n mudalità di littura ammaccannu a cona a libbru quannu affaccia nnâ barra dû tìtulu.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Grapi i mpustazzioni";
@@ -890,7 +890,7 @@
 "Open Tabs" = "Schedi graputi";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox nun po' gràpiri a pàggina picchì àvi nu nnirizzu nun vàlitu.";
+"OpenURL.Error.Message" = "Firefox nun po’ gràpiri a pàggina picchì àvi nu nnirizzu nun vàlitu.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nun potti gràpiri a pàggina";
@@ -968,7 +968,7 @@
 "ReopenAlert.Actions.Reopen" = "Grapi arrè";
 
 /* Reopen alert title shown at home page. */
-"ReopenAlert.Title" = "Grapi arrè l'ùrtima scheda chiujuta";
+"ReopenAlert.Title" = "Grapi arrè l’ùrtima scheda chiujuta";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Risetta a grannizza dû testu";
@@ -1013,13 +1013,13 @@
 "Search.ThirdPartyEngines.AddSuccess" = "Juncivi un muturi di risciduta!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Vo' jùnciri un muturi di risciduta?";
+"Search.ThirdPartyEngines.AddTitle" = "Vo’ jùnciri un muturi di risciduta?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Sfai";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Cc'è già un muturi di risciduta cu stu tìtulu o stu nnirizzu.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Cc’è già un muturi di risciduta cu stu tìtulu o stu nnirizzu.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Sfallutu";
@@ -1040,7 +1040,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Vo' mannari na signalijazzioni di scasciu, accussì Mozilla po travagghiari p'arrisòrbiri u prubblema?";
+"Send a crash report so Mozilla can fix the problem?" = "Vo’ mannari na signalijazzioni di scasciu, accussì Mozilla po travagghiari p’arrisòrbiri u prubblema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Manna un cummentu";
@@ -1082,7 +1082,7 @@
 "SendTo.SendAction.Text" = "Manna";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_body" = "Agghicau na nova scheda di n'autru dispusitivu.";
+"SentTab_TabArrivingNotification_NoDevice_body" = "Agghicau na nova scheda di n’autru dispusitivu.";
 
 /* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_title" = "Scheda ricivuta";
@@ -1094,7 +1094,7 @@
 "SentTab_TabArrivingNotification_WithDevice_title" = "Scheda ricivuta di %@";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "Tocca p'accuminciari";
+"SentTab.NoTabArrivingNotification.body" = "Tocca p’accuminciari";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
@@ -1130,7 +1130,7 @@
 "Settings.AddCustomEngine.URLLabel" = "Nnirizzu";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (metti %s unni cc'è a risciduta)";
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (metti %s unni cc’è a risciduta)";
 
 /* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
 "Settings.AddressBar.Bottom.v138" = "Jusu";
@@ -1154,7 +1154,7 @@
 "Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Aspettu dî siti";
 
 /* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
-"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Ci duna n'aspettu scuru ê siti. Po èssiri chi certi siti nun si vìdinu boni.";
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Ci duna n’aspettu scuru ê siti. Po èssiri chi certi siti nun si vìdinu boni.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
 "Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Mudalità scura pî siti";
@@ -1220,7 +1220,7 @@
 "Settings.DisplayTheme.OptionLight" = "Chiaru";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
-"Settings.DisplayTheme.SectionFooter" = "U tema cancia 'n autumàticu sicutannu a lustrizza dû to schirmu. Poi mpustari u liveḍḍu di quannu canciari u tema. U cìrculu signalija a lustrizza attuali dû to schirmu.";
+"Settings.DisplayTheme.SectionFooter" = "U tema cancia ’n autumàticu sicutannu a lustrizza dû to schirmu. Poi mpustari u liveḍḍu di quannu canciari u tema. U cìrculu signalija a lustrizza attuali dû to schirmu.";
 
 /* Display (theme) settings label to show if automatically switch theme is enabled. */
 "Settings.DisplayTheme.StatusTitle" = "Autumàticu";
@@ -1229,7 +1229,7 @@
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Cancia mudalità";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
-"Settings.DisplayTheme.SwitchSubtitle" = "Cancia 'n autumàticu sicunnu a lustrizza dû schirmu";
+"Settings.DisplayTheme.SwitchSubtitle" = "Cancia ’n autumàticu sicunnu a lustrizza dû schirmu";
 
 /* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Autumàticu";
@@ -1259,10 +1259,10 @@
 "Settings.General.SectionName" = "Ginirali";
 
 /* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
-"Settings.Home.Current.Description.v101" = "Scarta soccu vo' vìdiri comu pàggina mastra.";
+"Settings.Home.Current.Description.v101" = "Scarta soccu vo’ vìdiri comu pàggina mastra.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Scarta soccu cc'è dintra â pàggina mastra.";
+"Settings.Home.Option.Description.v101" = "Scarta soccu cc’è dintra â pàggina mastra.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Torna â scheda";
@@ -1319,7 +1319,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Buttuni pi canciari i funni dâ pàggina mastra";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Funnu di Firefox, mutivu muntagnoli a l'arbiceḍḍa.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Funnu di Firefox, mutivu muntagnoli a l’arbiceḍḍa.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ clàssicu";
@@ -1409,7 +1409,7 @@
 "Settings.NewTab.TopSectionName" = "Mustra";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Scarta soccu vo' carricari quannu grapi na scheda nova";
+"Settings.NewTab.TopSectionNameFooter" = "Scarta soccu vo’ carricari quannu grapi na scheda nova";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "Blocca i mmàggini";
@@ -1454,10 +1454,10 @@
 "Settings.SendUsage.Link" = "Cchiù nfurmazzioni.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla cerca di ricògghiri sulu chiḍḍu chi ci serbi p'ammigghiurari Firefox pi tutti.";
+"Settings.SendUsage.Message" = "Mozilla cerca di ricògghiri sulu chiḍḍu chi ci serbi pi fari megghiu Firefox pi tutti.";
 
 /* The title for the setting to send usage data. */
-"Settings.SendUsage.Title" = "Manna i dati d'usu";
+"Settings.SendUsage.Title" = "Manna i dati d’usu";
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Quannu teni primutu ncapu ê lijami";
@@ -1469,13 +1469,13 @@
 "Settings.ShowLinkPreviews.Title" = "Mustra antiprima dî lijami";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
-"Settings.ShowLoginsInAppMenu.Title" = "Mustra nnô minù di l'applicazzioni";
+"Settings.ShowLoginsInAppMenu.Title" = "Mustra nnô minù di l’applicazzioni";
 
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "Grapi na nova scheda";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Usa l'accurzi di Siri pi gràpiri lestu Firefox cu Siri";
+"Settings.Siri.SectionDescription" = "Usa l’accurzi di Siri pi gràpiri lestu Firefox cu Siri";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Accurzi di Siri";
@@ -1484,7 +1484,7 @@
 "Settings.Studies.Toggle.Link" = "Cchiù nfurmazzioni.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox po nzitari e abbiari studi di tempu 'n tempu.";
+"Settings.Studies.Toggle.Message" = "Firefox po nzitari e abbiari studi di tempu ’n tempu.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studi";
@@ -1502,7 +1502,7 @@
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Schedi fermi";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "I schedi chi nun taliasti pi du' simani vennu muvuti nnâ sizzioni Fermi.";
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "I schedi chi nun taliasti pi du’ simani vennu muvuti nnâ sizzioni Fermi.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Gruppi di schedi";
@@ -1538,7 +1538,7 @@
 "Settings.TrackingProtection.LearnMore" = "Cchiù nfurmazzioni";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "Arriduci i pubblicità pirsunalizzati e t'ajuta a firmari i cumpagnìi di trazzàriti mentri chi nàvichi.";
+"Settings.TrackingProtection.ProtectionCellFooter" = "Arriduci i pubblicità pirsunalizzati e t’ajuta a firmari i cumpagnìi di trazzàriti mentri chi nàvichi.";
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un situ nun funziona bonu, tocca u catinazzu nnâ barra dû nnirizzu e sdisattiva a prutizzioni avanzata dû trazzamentu pi ḍḍa pàggina.";
@@ -1577,10 +1577,10 @@
 "Settings.WebsiteData.ButtonShowMore" = "Mustra cchiù assai";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "St'azzioni scancella tutti i to dati dî siti. Nun si po sfari.";
+"Settings.WebsiteData.ConfirmPrompt" = "St’azzioni scancella tutti i to dati dî siti. Nun si po sfari.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "St'azzioni scancella tutti l'elimenti scartati. Nun si po sfari.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "St’azzioni scancella tutti l’elimenti scartati. Nun si po sfari.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Dati dî siti";
@@ -1598,10 +1598,10 @@
 "ShareExtension.BookmarkThisPageActionDone.Title" = "Nnê nzingalibbra";
 
 /* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
-"ShareExtension.LoadInBackgroundAction.Title" = "Càrrica 'n suttafunnu";
+"ShareExtension.LoadInBackgroundAction.Title" = "Càrrica ’n suttafunnu";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Staju carricannu 'n Firefox";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Staju carricannu ’n Firefox";
 
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Grapi cu Firefox";
@@ -1697,13 +1697,13 @@
 "TabTrayButtons.Accessibility.ShowTabs.v106" = "Mustra schedi";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "A pàggina nun po èssiri mustrata 'n mudalità di littura.";
+"The page could not be displayed in Reader View." = "A pàggina nun po èssiri mustrata ’n mudalità di littura.";
 
 /* Error message in the remote tabs panel */
-"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Cci fu un prubblema a pigghiari i schedi ti l'autri to dispusitivi. Prova arrè ntra n'anticchieḍḍa.";
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Cci fu un prubblema a pigghiari i schedi ti l’autri to dispusitivi. Prova arrè ntra n’anticchieḍḍa.";
 
 /* Error displayed when reader mode cannot be enabled */
-"There was an error converting the page" = "Cci fu n'erruri nnâ cummirsioni dâ pàggina";
+"There was an error converting the page" = "Cci fu n’erruri nnâ cummirsioni dâ pàggina";
 
 /* Relative date for date in past week. */
 "this week" = "sta simana";
@@ -1715,7 +1715,7 @@
 "Toasts.NotNow" = "Ora no";
 
 /* Open App Store button */
-"Toasts.OpenAppStore" = "Grapi l'App Store";
+"Toasts.OpenAppStore" = "Grapi l’App Store";
 
 /* Label for button to undo the action just performed */
 "Toasts.Undo" = "Sfai";
@@ -1724,7 +1724,7 @@
 "Today" = "Oji";
 
 /* Relative date for date older than a minute. %@ is the time. */
-"today at %@" = "oji a l'uri %@";
+"today at %@" = "oji a l’uri %@";
 
 /* Accessibility label for the Menu button. */
 "Toolbar.Menu.AccessibilityLabel" = "Minù";
@@ -1742,7 +1742,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Se";
 
 /* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Sta pàggina parissi èssiri 'n %1$@. A voi tradùciri 'n %2$@ cu %3$@?";
+"TranslationToastHandler.PromptTranslate.Title" = "Sta pàggina parissi èssiri ’n %1$@. A voi tradùciri ’n %2$@ cu %3$@?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";

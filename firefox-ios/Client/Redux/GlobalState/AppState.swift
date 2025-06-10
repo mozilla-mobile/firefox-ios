@@ -78,7 +78,8 @@ let middlewares = [
     NativeErrorPageMiddleware().nativeErrorPageProvider,
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
-    HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider
+    HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
+    StartAtHomeMiddleware().startAtHomeProvider,
 ]
 
 // In order for us to mock and test the middlewares easier,

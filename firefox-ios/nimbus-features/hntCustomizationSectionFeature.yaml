@@ -1,0 +1,16 @@
+# The configuration for the customize homepage section feature
+features:
+  hnt-customization-section-feature:
+    description: This feature manages the visibility of the homepage customization section of the homepage
+    variables:
+      enabled:
+        description: Setting 'enabled' to false will hide the homepage customization section of the homepage
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true
