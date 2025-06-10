@@ -5,10 +5,11 @@
 import XCTest
 
 let websiteUrl = "www.mozilla.org"
-class NewTabSettingsTest: BaseTestCase {
+class NewTabSettingsTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
+        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -24,7 +25,9 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
-    func testChangeNewTabSettingsShowBlankPage() {
+    func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -41,8 +44,29 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
+    func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        mozWaitForElementToExist(app.navigationBars["New Tab"])
+
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        // Keyboard is not focused with the experiment ON
+        XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        let keyboardCount = app.keyboards.count
+        XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
+        mozWaitForElementToNotExist(app.staticTexts["Highlights"])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
+        app.launch()
         // Set to history page first since FF Home is default
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -66,6 +90,7 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307029
     // Smoketest
     func testChangeNewTabSettingsShowCustomURL() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
@@ -92,6 +117,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)
@@ -116,7 +142,9 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306877
     // Smoketest
-    func testKeyboardRaisedWhenTabOpenedFromTabTray() {
+    func testKeyboardRaisedWhenTabOpenedFromTabTray_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Add New tab and set it as Blank
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -135,9 +163,33 @@ class NewTabSettingsTest: BaseTestCase {
         validateKeyboardIsRaisedAndDismissed()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306877
+    // Smoketest
+    func testKeyboardNotRaisedWhenTabOpenedFromTabTray_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Add New tab and set it as Blank
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        mozWaitForElementToExist(app.navigationBars["New Tab"])
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        validateKeyboardIsNotRaised()
+
+        // Switch to Private Browsing
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        validateKeyboardIsNotRaised()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
+        app.launch()
         // Set a custom URL
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -177,6 +229,13 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         // The keyboard is dismissed and the URL is unfocused
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForElementToExist(url)
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
+        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+    }
+
+    private func validateKeyboardIsNotRaised() {
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         XCTAssertFalse(url.isSelected, "The URL has the focus")
