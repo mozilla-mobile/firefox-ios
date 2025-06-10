@@ -112,12 +112,8 @@ public struct PrefsKeys {
 
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
-<<<<<<< HEAD
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
-        public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
-=======
->>>>>>> d9c0971f5 (Add FXIOS-12438 Add flag for hiding sponsored shortcuts (#27166))
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
     }
