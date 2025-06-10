@@ -1353,9 +1353,6 @@ extension TelemetryWrapper {
         case (.action, .tap, .newPrivateTab, .pocketSite, _):
             GleanMetrics.Pocket.openInPrivateTab.record()
 
-        // MARK: Library Panel
-        case (.action, .tap, .libraryPanel, let type?, _):
-            GleanMetrics.Library.panelPressed[type.rawValue].add()
         // History Panel related
         case (.action, .navigate, .navigateToGroupHistory, _, _):
             GleanMetrics.History.groupList.add()

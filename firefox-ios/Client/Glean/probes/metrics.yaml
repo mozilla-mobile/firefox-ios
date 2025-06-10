@@ -2199,35 +2199,9 @@ homepage:
       tags:
         - Homepage
 
-
-# Metrics related to the history panel of the library
-library:
-  panel_pressed:
-    type: labeled_counter
-    description: |
-      Counts the number of times a specific library panel
-      button is tapped for Bookmarks, History, Reading List,
-      Downloads and Synced tabs
-    labels:
-      - bookmarks-panel
-      - history-panel
-      - reading-panel
-      - downloads-panel
-      - sync-panel
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-
 # Library
 library.history_panel:
-  cleared_history: 
+  cleared_history:
     type: event
     description: |
       A user deleted history entries from a certain timeframe
@@ -5059,21 +5033,6 @@ adjust:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-migration:
-  image_sd_cache_cleanup:
-    type: counter
-    description: |
-        Counts the number of times a user runs the
-        sd web image library cache cleanup
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/10903
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11169
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
 
 places_history_migration:
   duration:
@@ -5941,7 +5900,7 @@ testing:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-17"
-    no_lint: 
+    no_lint:
       - COMMON_PREFIX
   test_event_2:
     type: event
@@ -5955,5 +5914,5 @@ testing:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-18"
-    no_lint: 
+    no_lint:
       - COMMON_PREFIX
