@@ -93,7 +93,7 @@ class ContentContainer: UIView {
         // Only remove previous content when it's the homepage or native error page.
         // We're not removing the webview controller for now since if it's not loaded, the
         // webview doesn't layout it's WKCompositingView which result in black screen
-        guard !hasWebView else { return }
+        guard !hasWebView, !hasHomepage, !hasLegacyHomepage else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()

@@ -78,6 +78,9 @@ final class AddressToolbarContainer: UIView,
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
     }
+    private lazy var addNewTabView: AddressBarAddTabView = .build()
+    private var addNewTabTrailingConstraint: NSLayoutConstraint?
+    private var addNewTabLeadingConstraint: NSLayoutConstraint?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
@@ -292,6 +295,16 @@ final class AddressToolbarContainer: UIView,
 
         setupToolbarConstraints()
         setupSkeletonAddressBarsLayout()
+
+        addSubview(addNewTabView)
+        addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
+        addNewTabLeadingConstraint?.isActive = true
+        addNewTabTrailingConstraint = addNewTabView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        addNewTabTrailingConstraint?.isActive = true
+        NSLayoutConstraint.activate([
+            addNewTabView.topAnchor.constraint(equalTo: topAnchor, constant: 8.0),
+            addNewTabView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4.0),
+        ])
     }
 
     private func setupToolbarConstraints() {
@@ -344,10 +357,20 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    func applyTransform(_ transform: CGAffineTransform) {
+    func applyTransform(_ transform: CGAffineTransform, shouldAddNewTab: Bool) {
         regularToolbar.transform = transform
         leftSkeletonAddressBar.transform = transform
         rightSkeletonAddressBar.transform = transform
+        if shouldAddNewTab {
+            let percentageTransform = abs(transform.tx) / bounds.width
+            UIView.animate(withDuration: 0.2) {
+                self.addNewTabView.plusIconView.alpha = percentageTransform > 0.3 ? 1.0 : 0.0
+                self.addNewTabTrailingConstraint?.constant = percentageTransform > 0.3 ? -16.0 : 0.0
+                self.layoutIfNeeded()
+            }
+            addNewTabLeadingConstraint?.constant = transform.tx
+            layoutIfNeeded()
+        }
     }
 
     // MARK: - ThemeApplicable
@@ -356,6 +379,7 @@ final class AddressToolbarContainer: UIView,
         if isSwipingTabsEnabled {
             leftSkeletonAddressBar.applyTheme(theme: theme)
             rightSkeletonAddressBar.applyTheme(theme: theme)
+            addNewTabView.applyTheme(theme: theme)
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
     }

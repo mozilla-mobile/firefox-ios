@@ -11,7 +11,7 @@ final class AddressBarAddTabView: UIView, ThemeApplicable {
         static let cornerRadius: CGFloat = 12.0
     }
 
-    let plusIconView: UIImageView  = .build {
+    private(set) lazy var plusIconView: UIImageView  = .build {
         $0.alpha = 0.0
         $0.image = UIImage(named: StandardImageIdentifiers.Large.plus)
     }

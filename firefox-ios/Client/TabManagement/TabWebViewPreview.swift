@@ -79,6 +79,12 @@ final class TabWebViewPreview: UIView {
         }
     }
 
+    func setScreenshot(_ image: UIImage?) {
+        faviconImageView.isHidden = true
+        webPageScreenshotImageView.isHidden = false
+        webPageScreenshotImageView.image = image
+    }
+
     func applyTransform(translationX: CGFloat) {
         webPageScreenshotImageView.transform = CGAffineTransform(translationX: translationX, y: 0)
     }

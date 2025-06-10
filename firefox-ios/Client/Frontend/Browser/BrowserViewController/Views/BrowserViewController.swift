@@ -1183,6 +1183,7 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
+
     }
 
     func addSubviews() {
@@ -1251,6 +1252,8 @@ class BrowserViewController: UIViewController,
         }
 
         updateToolbarStateForTraitCollection(traitCollection)
+        showEmbeddedHomepage(inline: false, isPrivate: false)
+        addressBarPanGestureHandler?.homepageScreenshotHandler = (browserDelegate as? BrowserCoordinator)?.homepageScreenshot()
     }
 
     override func viewDidAppear(_ animated: Bool) {

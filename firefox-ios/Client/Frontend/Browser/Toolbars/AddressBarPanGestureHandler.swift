@@ -26,6 +26,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
+    var homepageScreenshotHandler: Screenshotable?
 
     // MARK: - Init
     init(
@@ -78,6 +79,8 @@ final class AddressBarPanGestureHandler: NSObject {
         enablePanGestureRecognizer()
     }
 
+    var homepage: UIImage?
+
     // MARK: - Pan Gesture Handling
     @objc
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -104,6 +107,14 @@ final class AddressBarPanGestureHandler: NSObject {
                 )
             )
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
+            if nextTab == nil {
+                homepage = homepageScreenshotHandler?.screenshot(bounds: CGRect(
+                    x: 0.0,
+                    y: -contentContainer.frame.origin.y,
+                    width: webPagePreview.frame.width,
+                    height: webPagePreview.frame.height
+                ))
+            }
         case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended, .cancelled, .failed:
@@ -116,18 +127,25 @@ final class AddressBarPanGestureHandler: NSObject {
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {
         webPagePreview.isHidden = false
 
-        applyCurrentTabTransform(translation.x)
+        let shouldAddNewTab = nextTab == nil && translation.x < 0
+        applyCurrentTabTransform(translation.x, shouldAddNewTab: shouldAddNewTab)
         applyPreviewTransform(translation: translation)
 
-        webPagePreview.setScreenshot(nextTab)
+        if shouldAddNewTab {
+            webPagePreview.setScreenshot(homepage)
+        } else {
+            webPagePreview.setScreenshot(nextTab)
+        }
     }
 
     private func handleGestureEndedState(translation: CGPoint, velocity: CGPoint, nextTab: Tab?) {
+        let shouldShowNewTab = nextTab == nil && translation.x < 0
+
         // Determine if the transition should be completed based on the translation and velocity.
         // If the user swiped more than half of the screen or had a velocity higher that the constant,
         // then we can complete the transition.
         let shouldCompleteTransition = (abs(translation.x) > contentContainer.frame.width / 2
-                                        || abs(velocity.x) > UX.swipingVelocity) && nextTab != nil
+                                        || abs(velocity.x) > UX.swipingVelocity) && (shouldShowNewTab || nextTab != nil)
 
         let contentWidth = contentContainer.frame.width
         let isPanningLeft = translation.x < 0
@@ -140,7 +158,8 @@ final class AddressBarPanGestureHandler: NSObject {
         UIView.animate(withDuration: UX.swipingDuration,
                        delay: 0.0,
                        options: .curveEaseOut) { [self] in
-            addressToolbarContainer.applyTransform(shouldCompleteTransition ? currentTabTransform : .identity)
+            addressToolbarContainer.applyTransform(shouldCompleteTransition ? currentTabTransform : .identity,
+                                                   shouldAddNewTab: shouldShowNewTab)
             contentContainer.transform = shouldCompleteTransition ?
             CGAffineTransform(translationX: targetPreview, y: 0) : .identity
 
@@ -149,7 +168,7 @@ final class AddressBarPanGestureHandler: NSObject {
             webPagePreview.isHidden = true
             webPagePreview.transitionDidEnd()
 
-            if shouldCompleteTransition, let nextTab {
+            if shouldCompleteTransition {
                 store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
@@ -158,9 +177,14 @@ final class AddressBarPanGestureHandler: NSObject {
                     )
                 )
                 // Reset the positions and select the new tab if the transition was completed.
-                addressToolbarContainer.applyTransform(.identity)
+                addressToolbarContainer.applyTransform(.identity, shouldAddNewTab: shouldShowNewTab)
                 contentContainer.transform = .identity
-                tabManager.selectTab(nextTab)
+                if let nextTab {
+                    tabManager.selectTab(nextTab)
+                } else {
+                    store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserActionType.addNewTab))
+                }
             } else {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
                                                 isHomepage: contentContainer.hasHomepage)
@@ -168,9 +192,10 @@ final class AddressBarPanGestureHandler: NSObject {
         }
     }
 
-    private func applyCurrentTabTransform(_ translation: CGFloat) {
+    private func applyCurrentTabTransform(_ translation: CGFloat, shouldAddNewTab: Bool) {
         contentContainer.transform = CGAffineTransform(translationX: translation, y: 0)
-        addressToolbarContainer.applyTransform(CGAffineTransform(translationX: translation * 0.8, y: 0))
+        addressToolbarContainer.applyTransform(CGAffineTransform(translationX: translation * 0.8, y: 0),
+                                               shouldAddNewTab: shouldAddNewTab)
     }
 
     private func applyPreviewTransform(translation: CGPoint) {
