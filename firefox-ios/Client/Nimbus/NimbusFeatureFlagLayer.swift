@@ -44,6 +44,18 @@ final class NimbusFeatureFlagLayer {
         case .hntContentFeedRefresh:
             return checkHNTContentFeedRefreshFeature(from: nimbus)
 
+<<<<<<< HEAD
+=======
+        case .hntCusomizationSection:
+            return checkHNTCustomizationSectionFeature(from: nimbus)
+
+        case .hntJumpBackInSection:
+             return checkHNTJumpBackInSectionFeature(from: nimbus)
+
+        case .hntSponsoredShortcuts:
+            return checkHNTSponsoredShortcutsFeature(from: nimbus)
+
+>>>>>>> d9c0971f5 (Add FXIOS-12438 Add flag for hiding sponsored shortcuts (#27166))
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
@@ -183,7 +195,23 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
     }
 
+<<<<<<< HEAD
     public func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+=======
+    private func checkHNTCustomizationSectionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntCustomizationSectionFeature.value().enabled
+    }
+
+    private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntJumpBackInSectionFeature.value().enabled
+    }
+
+    private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
+    }
+
+    private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
+>>>>>>> d9c0971f5 (Add FXIOS-12438 Add flag for hiding sponsored shortcuts (#27166))
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
     }
 

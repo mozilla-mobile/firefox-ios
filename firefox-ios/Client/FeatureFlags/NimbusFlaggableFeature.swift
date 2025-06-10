@@ -22,6 +22,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
     case hntContentFeedRefresh
+<<<<<<< HEAD
+=======
+    case hntCusomizationSection
+    case hntJumpBackInSection
+    case hntSponsoredShortcuts
+>>>>>>> d9c0971f5 (Add FXIOS-12438 Add flag for hiding sponsored shortcuts (#27166))
     case hntTopSitesVisualRefresh
     case homepageRebuild
     case inactiveTabs
@@ -111,6 +117,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
+<<<<<<< HEAD
+=======
+        case .hntBookmarksSection:
+            return FlagKeys.BookmarksSection
+        case .hntJumpBackInSection:
+            return FlagKeys.JumpBackInSection
+        case .hntSponsoredShortcuts:
+            return FlagKeys.SponsoredShortcuts
+>>>>>>> d9c0971f5 (Add FXIOS-12438 Add flag for hiding sponsored shortcuts (#27166))
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
         case .sentFromFirefox:
