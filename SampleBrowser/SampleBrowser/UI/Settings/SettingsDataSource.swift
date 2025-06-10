@@ -28,7 +28,9 @@ class SettingsDataSource: NSObject, UITableViewDataSource {
             SettingsCellViewModel(settingType: .zoomSet,
                                   title: "Trigger zoom set"),
             SettingsCellViewModel(settingType: .loadPopWebSource,
-                                  title: "Load pop up web source")
+                                  title: "Load pop up web source"),
+            SettingsCellViewModel(settingType: .loadPrintWebSource,
+                                  title: "Load print web source")
         ]
     }
 

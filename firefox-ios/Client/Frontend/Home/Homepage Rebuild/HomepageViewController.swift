@@ -14,6 +14,7 @@ final class HomepageViewController: UIViewController,
                                     FeatureFlaggable,
                                     ContentContainable,
                                     Notifiable,
+                                    Screenshotable,
                                     Themeable,
                                     StoreSubscriber {
     // MARK: - Typealiases
@@ -644,6 +645,42 @@ final class HomepageViewController: UIViewController,
         default:
             return nil
         }
+    }
+
+    // MARK: - Screenshotable
+
+    func screenshot(bounds: CGRect) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        return renderer.image { context in
+            themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+            // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
+            // wallpaper
+            wallpaperView.drawHierarchy(
+                in: CGRect(
+                    x: 0,
+                    y: 0,
+                    width: bounds.width,
+                    height: bounds.height
+                ),
+                afterScreenUpdates: false
+            )
+
+            view.drawHierarchy(
+                in: CGRect(
+                    x: bounds.origin.x,
+                    y: -bounds.origin.y,
+                    width: bounds.width,
+                    height: collectionView?.frame.height ?? 0.0
+                ),
+                afterScreenUpdates: false
+            )
+        }
+    }
+
+    func screenshot(quality: CGFloat) -> UIImage? {
+        return screenshot(bounds: view.bounds)
     }
 
     private func dynamicTypeChanged() {

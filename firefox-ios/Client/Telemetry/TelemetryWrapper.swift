@@ -181,7 +181,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     }
 
     func recordStartUpTelemetry() {
-        let isEnabled: Bool = (profile?.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true) &&
+        let isEnabled: Bool = (profile?.prefs.boolForKey(PrefsKeys.FeatureFlags.SponsoredShortcuts) ?? true) &&
                                (profile?.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true)
         recordEvent(category: .information,
                     method: .view,
@@ -305,10 +305,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Homepage section preferences
-        let isJumpBackInEnabled = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.JumpBackInSection) ?? true
+        let isJumpBackInEnabled = featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly)
         GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
 
-        let isBookmarksEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
+        let isBookmarksEnabled = featureFlags.isFeatureEnabled(.hntBookmarksSection, checking: .userOnly)
         GleanMetrics.Preferences.recentlySaved.set(isBookmarksEnabled)
 
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true

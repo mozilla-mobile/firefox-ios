@@ -8,15 +8,11 @@ import UIKit
 
 final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let contentMargin: CGFloat = 12
+        static let contentMargin: CGFloat = 16
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
-    }
-
-    private var separatorInsetSize: CGFloat {
-        return UX.contentMargin * 2 + UX.iconSize
     }
 
     // MARK: - UI Elements
@@ -42,13 +38,19 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureCellWith(model: MenuElement) {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        iconImageView.image = nil
+    }
+
+    func configureCellWith(model: MenuElement, theme: Theme) {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
@@ -61,7 +63,6 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.accessibilityHint = model.a11yHint
         self.accessibilityTraits = .button
         self.separatorInset = .zero
-        setupView()
     }
 
     private func setupView() {

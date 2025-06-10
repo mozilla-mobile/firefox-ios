@@ -8,7 +8,7 @@
 "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "Mercu di %@";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. %@ is the app name (e.g. Firefox). */
-"Microsurvey.Prompt.TitleLabel.v127" = "Ajùtani a 'mmigghiurari %@. Cci voli sulu un minutu.";
+"Microsurvey.Prompt.TitleLabel.v127" = "Ajùtani a fari megghiu %@. Cci voli sulu un minutu.";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
 "Microsurvey.Survey.Button.v127" = "Manna";
@@ -35,7 +35,7 @@
 "Microsurvey.Survey.Options.Neutral.v132" = "Niutrali";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
-"Microsurvey.Survey.Options.NotApplicable.v132" = "Nun l'usu";
+"Microsurvey.Survey.Options.NotApplicable.v132" = "Nun l’usu";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.Satisfied.v132" = "Satisfatu/a";

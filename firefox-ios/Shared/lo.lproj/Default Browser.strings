@@ -40,6 +40,9 @@
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "ບຣາວເຊີຫລັກ";
 
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "ຂ້ອຍຈະເຮັດອັນນີ້ໃນພາຍຫຼັງ";
+
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "ຕັ້ງໃຫ້ເປັນບຣາວເຊີຫລັກ";
 

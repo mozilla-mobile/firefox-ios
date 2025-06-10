@@ -161,10 +161,17 @@ class WallpaperSettingsViewModel: FeatureFlaggable {
         tabManager.selectTab(homepageTab, previous: nil)
     }
 
-    /// Get mostRecentHomePage used if none is available we add and select a new homepage Tab
-    /// - Parameter isPrivate: If private mode is selected
+    /// Returns the most recently used homepage tab from either the private or normal tab list,
+    /// depending on the currently selected tab's privacy status.
+    /// If no homepage tab is found, it creates and returns a new tab.
+    ///
+    /// - Parameter isPrivate: A Boolean indicating whether the selected tab is in private mode
+    /// - Returns: A `Tab` instance representing the most recent homepage tab, or a newly created one if none exist.
     private func getHomepageTab(isPrivate: Bool) -> Tab {
-        guard let homepageTab = tabManager.getMostRecentHomepageTab() else {
+        let tabsToFilter = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let homepageTabs = tabsToFilter.filter { $0.isFxHomeTab }
+
+        guard let homepageTab = mostRecentTab(inTabs: homepageTabs) else {
             return tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
         }
 

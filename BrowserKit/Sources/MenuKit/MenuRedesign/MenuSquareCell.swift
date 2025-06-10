@@ -29,6 +29,13 @@ final class MenuSquareCell: UICollectionViewCell, ReusableCell, ThemeApplicable 
     var model: MenuElement?
 
     // MARK: - Initializers
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
+
     func configureCellWith(model: MenuElement) {
         self.model = model
         self.titleLabel.text = model.title
@@ -40,7 +47,6 @@ final class MenuSquareCell: UICollectionViewCell, ReusableCell, ThemeApplicable 
         self.accessibilityLabel = model.a11yLabel
         self.accessibilityHint = model.a11yHint
         self.accessibilityTraits = .button
-        setupView()
     }
 
     private func setupView() {

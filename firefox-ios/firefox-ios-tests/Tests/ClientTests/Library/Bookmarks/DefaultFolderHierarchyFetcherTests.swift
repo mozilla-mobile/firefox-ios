@@ -20,6 +20,7 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     override func tearDown() {
+        mockProfile.shutdown()
         mockProfile = nil
         super.tearDown()
     }

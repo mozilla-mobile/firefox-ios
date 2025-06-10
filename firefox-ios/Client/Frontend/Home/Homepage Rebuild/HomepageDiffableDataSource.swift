@@ -10,7 +10,8 @@ typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
 final class HomepageDiffableDataSource:
-    UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
+    UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,
+    FeatureFlaggable {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
 
@@ -119,8 +120,10 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        snapshot.appendSections([.customizeHomepage])
-        snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
+        if featureFlags.isFeatureEnabled(.hntCusomizationSection, checking: .buildOnly) {
+            snapshot.appendSections([.customizeHomepage])
+            snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
+        }
 
         apply(snapshot, animatingDifferences: false)
     }

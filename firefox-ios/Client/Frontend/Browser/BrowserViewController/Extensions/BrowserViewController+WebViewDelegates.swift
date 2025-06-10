@@ -653,6 +653,14 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.cancel)
     }
 
+    func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
+        guard let downloadHelper else {
+            logger.log("Unable to access downloadHelper, it is nil", level: .warning, category: .webview)
+            return
+        }
+        handleDownloadFiles(downloadHelper: downloadHelper)
+    }
+
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse,
@@ -753,8 +761,10 @@ extension BrowserViewController: WKNavigationDelegate {
             downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
                                               forceDownload: forceDownload,
                                               isForMainFrame: navigationResponse.isForMainFrame) {
-            handleDownloadFiles(downloadHelper: downloadHelper)
-            decisionHandler(.cancel)
+            /// FXIOS-12201: Need to hold reference to downloadHelper,
+            /// so we can use this later in `webView(_:navigationResponse:didBecome:)`
+            self.downloadHelper = downloadHelper
+            decisionHandler(.download)
             return
         }
 

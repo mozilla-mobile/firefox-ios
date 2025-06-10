@@ -1,0 +1,126 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Microsurvey
+
+###############################################################################
+# Microsurvey
+###############################################################################
+
+microsurvey:
+  shown:
+    type: event
+    description: |
+        The survey surface (bottom sheet) was shown and visible.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+
+  privacy_notice_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the privacy notice.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2026-01-01"
+
+  dismiss_button_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the close button to dismiss the survey.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2026-01-01"
+
+  submit_button_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the submit button to respond to the survey.
+    extra_keys:
+      user_selection:
+        type: string
+        description: |
+          The user's selected option e.g. "satisfied".
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2026-01-01"
+
+  confirmation_shown:
+    type: event
+    description: |
+        Records that the confirmation message in the survey has been viewed by the user.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20800
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20840
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+        - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

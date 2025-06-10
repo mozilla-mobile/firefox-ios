@@ -23,6 +23,13 @@ struct NewTabAccessors {
         return option
     }
 
+    /// Retrieves the user's preference for the new tab page.
+    /// If the preference value is invalid or missing, the default firefox homepage is returned.
+    /// Additionally, if the user has selected the custom URL option, `.homePage`,
+    /// but no homepage URL is configured, the method falls back to the default to ensure a valid tab experience.
+    ///
+    /// - Parameter prefs: The preferences object containing the user's settings.
+    /// - Returns: The resolved `NewTabPage` value based on the user's preferences or default fallback.
     static func getHomePage(_ prefs: Prefs) -> NewTabPage {
         guard let raw = prefs.stringForKey(HomePrefKey) else { return Default }
 
@@ -39,7 +46,9 @@ struct NewTabAccessors {
 /// Enum to encode what should happen when the user opens a new tab without a URL.
 enum NewTabPage: String {
     case blankPage = "Blank"
+    /// Custom Firefox homepage (URL set by user)
     case homePage = "HomePage"
+    /// Firefox homepage
     case topSites = "TopSites"
 
     var settingTitle: String {

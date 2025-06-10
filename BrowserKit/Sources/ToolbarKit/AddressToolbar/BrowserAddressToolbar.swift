@@ -31,10 +31,6 @@ public class BrowserAddressToolbar: UIView,
         static let toolbarAnimationTime: CGFloat = 0.15
         static let iconsAnimationTime: CGFloat = 0.1
         static let iconsAnimationDelay: CGFloat = 0.075
-
-        static let shadowRadius: CGFloat = 14
-        static let shadowOpacity: Float = 1
-        static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
     public var notificationCenter: any NotificationProtocol = NotificationCenter.default
@@ -49,7 +45,7 @@ public class BrowserAddressToolbar: UIView,
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
 
-    private lazy var locationContainer: UIView = .build()
+    private lazy var locationContainer: LocationContainer = .build()
     private lazy var locationView: LocationView = .build()
     private lazy var locationDividerView: UIView = .build()
 
@@ -95,6 +91,15 @@ public class BrowserAddressToolbar: UIView,
                 isLocationTextCentered: previousConfiguration.uxConfiguration.isLocationTextCentered,
                 locationTextFieldTrailingPadding: previousConfiguration.uxConfiguration.locationTextFieldTrailingPadding
             )
+        }
+    }
+
+    override public var transform: CGAffineTransform {
+        get {
+            return locationContainer.transform
+        }
+        set {
+            locationContainer.transform = newValue
         }
     }
 
@@ -162,13 +167,6 @@ public class BrowserAddressToolbar: UIView,
     override public func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return locationView.resignFirstResponder()
-    }
-
-    override public var transform: CGAffineTransform {
-        get {
-            return locationContainer.transform
-        }
-        set { locationContainer.transform = newValue }
     }
 
     // MARK: - Private
@@ -271,16 +269,6 @@ public class BrowserAddressToolbar: UIView,
         updateActionSpacing(uxConfig: .default())
 
         setupAccessibility()
-    }
-
-    private func setupShadow(theme: Theme) {
-        locationContainer.layer.shadowPath = UIBezierPath(roundedRect: locationContainer.bounds,
-                                                          cornerRadius: locationContainer.layer.cornerRadius).cgPath
-        locationContainer.layer.shadowRadius = UX.shadowRadius
-        locationContainer.layer.shadowOffset = UX.shadowOffset
-        locationContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
-        locationContainer.layer.shadowOpacity = UX.shadowOpacity
-        locationContainer.layer.masksToBounds = false
     }
 
     private func setupDragInteraction() {
@@ -500,8 +488,8 @@ public class BrowserAddressToolbar: UIView,
         locationDividerView.backgroundColor = colors.layer1
         toolbarTopBorderView.backgroundColor = colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = colors.borderPrimary
+        locationContainer.applyTheme(theme: theme)
         locationView.applyTheme(theme: theme)
-        setupShadow(theme: theme)
         self.theme = theme
     }
 

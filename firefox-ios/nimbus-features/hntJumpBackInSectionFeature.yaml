@@ -1,0 +1,16 @@
+# The configuration for the jump back in and synced tabs section feature
+features:
+  hnt-jump-back-in-section-feature:
+    description: This feature manages the visibility of the jump back in and synced tabs section of the homepage and the respective toggle in the homepage settings
+    variables:
+      enabled:
+        description: Setting 'enabled' to false will hide the jump back in and synced tabs section of the homepage and disable the respective toggle in the homepage settings
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true
