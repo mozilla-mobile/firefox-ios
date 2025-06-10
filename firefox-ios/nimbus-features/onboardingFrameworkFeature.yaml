@@ -224,15 +224,15 @@ features:
             welcome-modern:
               card-type: basic
               order: 10
-              title: Onboarding/Onboarding.Modern.Welcome.Title.v140
-              body: Onboarding/Onboarding.Modern.Welcome.Description.v140
-              image: trackers
+              title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
+              body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
+              image: welcome-globe
               buttons:
                 primary:
-                  title: Onboarding/Onboarding.Modern.Welcome.ActionTreatementA.v140
+                  title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
                   action: open-instructions-popup
                 secondary:
-                  title: Onboarding/Onboarding.Modern.Welcome.Skip.v140
+                  title: Onboarding/Onboarding.Welcome.Skip.v114
                   action: forward-one-card
               instructions-popup:
                 title: Onboarding/DefaultBrowserPopup.Title.v114
