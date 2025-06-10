@@ -34,6 +34,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case menuRefactorHint
     case menuRedesign
     case microsurvey
+    case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case pdfRefactor
@@ -146,6 +147,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .menuRefactorHint,
                 .menuRedesign,
                 .microsurvey,
+                .modernOnboardingUI,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .pdfRefactor,
