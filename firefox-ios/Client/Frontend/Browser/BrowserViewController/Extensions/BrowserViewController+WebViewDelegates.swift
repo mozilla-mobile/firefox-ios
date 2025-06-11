@@ -816,10 +816,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 cookies: cookies
             )
             tempPDF.onDownloadProgressUpdate = { progress in
-                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
-                                   of: tab?.webView,
-                                   change: [.newKey: progress],
-                                   context: nil)
+                self?.handleDownloadProgressUpdate(progress: progress, tab: tab)
             }
             tempPDF.onDownloadStarted = {
                 self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
