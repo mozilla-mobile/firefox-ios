@@ -75,12 +75,18 @@ func failOnNewFilesWithoutCoverage() {
             coveragePath.hasSuffix(cleanedFile)
         }
 
+        var hasNewFileWithoutCoverage = false
         if let (_, coveragePercent) = matching {
             if coveragePercent == 0 {
-                let contact = "(cc: @cyndichin @yoanarios )."
-                warn("New file `\(file)` has 0% test coverage. Please add unit tests. \(contact)")
+                hasNewFileWithoutCoverage = true
             }
         }
+        
+        if hasNewFileWithoutCoverage {
+            let contact = "(cc: @cyndichin @yoanarios )."
+            warn("New file detected with 0% test coverage. Please add unit tests. \(contact)")
+        }
+        
     }
 }
 
