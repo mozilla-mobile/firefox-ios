@@ -50,17 +50,17 @@ features:
         value:
           enabled: true
           unified_search: false
-          one_tap_new_tab: false
+          one_tap_new_tab: true
           navigation_hint: true
           toolbar_update_hint: false
-          swiping_tabs: false
+          swiping_tabs: true
           translucency: true
           layout: version1
       - channel: developer
         value:
           enabled: true
           unified_search: false
-          one_tap_new_tab: false
+          one_tap_new_tab: true
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
