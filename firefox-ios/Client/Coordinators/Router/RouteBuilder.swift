@@ -74,7 +74,6 @@ final class RouteBuilder: FeatureFlaggable {
 
             case .openText:
                 let queryValue = urlScanner.value(query: "text") ?? ""
-                // Bugzilla #1946062
                 let queryURL = URIFixup.getURL(queryValue)
                 let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
                 return .searchQuery(query: safeQuery, isPrivate: isPrivate)
