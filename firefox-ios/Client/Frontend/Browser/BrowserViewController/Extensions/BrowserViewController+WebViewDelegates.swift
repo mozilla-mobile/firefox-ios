@@ -853,6 +853,13 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleDownloadProgressUpdate(progress: Double, tab: Tab?) {
+        observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                     of: tab?.webView,
+                     change: [.newKey: progress],
+                     context: nil)
+    }
+
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         if isNativeErrorPageEnabled {
