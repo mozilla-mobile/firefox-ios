@@ -6,7 +6,9 @@ import XCTest
 
 final class CookiePersistenceTests: BaseTestCase {
     let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/test-cookie-store.html"
-    let websites = ["mozilla.org", "wikipedia", "reddit"]
+    let websites = ["http://mozilla.org",
+                    "http://wikipedia",
+                    "http://reddit.com"]
 
     override func setUp() {
         // Fresh install the app
@@ -52,11 +54,12 @@ final class CookiePersistenceTests: BaseTestCase {
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
 
         // Open a few tabs
-        websites.forEach { searchText in
+        websites.forEach { website in
             navigator.performAction(Action.OpenNewTabFromTabTray)
             navigator.nowAt(NewTabScreen)
-
-            typeOnSearchBar(text: searchText)
+            navigator.openURL(website)
+            waitUntilPageLoad()
+            navigator.nowAt(BrowserTab)
         }
 
         // Relaunch app
