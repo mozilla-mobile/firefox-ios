@@ -397,7 +397,7 @@ class MainMenuViewController: UIViewController,
                     menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
                     menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
-                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,)
+                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton)
             } else {
                 menuContent.setupAccessibilityIdentifiers(
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
