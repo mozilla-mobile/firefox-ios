@@ -80,7 +80,7 @@ final class CookiePersistenceTests: BaseTestCase {
     }
 
     private func openCookieSite() {
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-cookie-store.html")
+        navigator.openURL(path(forTestPage: "test-cookie-store.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
     }
