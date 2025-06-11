@@ -57,8 +57,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.actions[1].actionType, .forward)
         XCTAssertEqual(newState.actions[1].isEnabled, false)
         XCTAssertEqual(newState.actions[2].actionType, .search)
-        XCTAssertEqual(newState.actions[3].actionType, .tabs)
-        XCTAssertEqual(newState.actions[4].actionType, .menu)
+        XCTAssertEqual(newState.actions[3].actionType, .menu)
+        XCTAssertEqual(newState.actions[4].actionType, .tabs)
     }
 
     func test_urlDidChangeAction_returnsExpectedState() {
