@@ -295,7 +295,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.goto(LibraryPanel_Bookmarks)
         // There is only one row in the bookmarks panel, which is the desktop folder
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
+        let count = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(count, 0, "Expected 0 bookmarks in the list, but found \(count)")
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
