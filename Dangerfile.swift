@@ -66,9 +66,7 @@ func failOnNewFilesWithoutCoverage() {
         !$0.contains("Tests") &&
         !$0.contains("/Generated/") // adjust if you use codegen folders
     }
-    warn("New files \(newSwiftFiles.count)")
 
-    var hasNewFileWithoutCoverage = false
     for file in newSwiftFiles {
         // Adjust path if needed to match coverage.json format
         // Strip "./" and match suffixes
@@ -78,9 +76,9 @@ func failOnNewFilesWithoutCoverage() {
         let matching = coverageByFile.first { (coveragePath, _) in
             coveragePath.hasSuffix(cleanedFile)
         }
+        warn("Could find match for \(matching?.key ?? "")")
 
         if let (path, _) = matching {
-            warn("Check matches file: \(path)")
             let contact = "(cc: @cyndichin @yoanarios )."
             warn("New file \(path) detected with 0% test coverage. Please add unit tests. \(contact)")
         }
