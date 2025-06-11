@@ -54,6 +54,7 @@ func failOnNewFilesWithoutCoverage() {
                 guard let path = file["name"] as? String,
                       let coverage = file["lineCoverage"] as? Double else { continue }
                 coverageByFile[path] = coverage * 100.0 // Convert from 0.0–1.0 to percent
+                warn("Code coverage found for: \(path) coverage: \(coverage)"
             }
         }
     }
@@ -70,13 +71,15 @@ func failOnNewFilesWithoutCoverage() {
         // Adjust path if needed to match coverage.json format
         // Strip "./" and match suffixes
         let cleanedFile = file.replacingOccurrences(of: "./", with: "")
+        warn("Checking new file: \(file)")
 
         // Try to find a file in coverage report that ends with this file
         let matching = coverageByFile.first { (coveragePath, _) in
             coveragePath.hasSuffix(cleanedFile)
         }
 
-        if let (_, coveragePercent) = matching {
+        if let (path, coveragePercent) = matching {
+            warn("Check matches file: \(path)")
             if coveragePercent == 0 {
                 hasNewFileWithoutCoverage = true
             }
