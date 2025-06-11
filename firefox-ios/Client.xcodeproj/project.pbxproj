@@ -324,7 +324,7 @@
 		21EEAA1D2D4005DE00595119 /* NativeErrorPageFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEAA1C2D4005DE00595119 /* NativeErrorPageFeatureFlag.swift */; };
 		21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */; };
 		21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */; };
-		21F76C622DF9E43B00685BE0 /* TestDangerRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F76C612DF9E43100685BE0 /* TestDangerRule.swift */; };
+		21F76C622DF9E43B00685BE0 /* DangerRuleCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F76C612DF9E43100685BE0 /* DangerRuleCheck.swift */; };
 		21F96EE42D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F96EE22D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
 		21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */; };
@@ -2870,7 +2870,7 @@
 		21EEAA1C2D4005DE00595119 /* NativeErrorPageFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageFeatureFlag.swift; sourceTree = "<group>"; };
 		21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsModel.swift; sourceTree = "<group>"; };
 		21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelStateTests.swift; sourceTree = "<group>"; };
-		21F76C612DF9E43100685BE0 /* TestDangerRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDangerRule.swift; sourceTree = "<group>"; };
+		21F76C612DF9E43100685BE0 /* DangerRuleCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DangerRuleCheck.swift; sourceTree = "<group>"; };
 		21F96EE22D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageFeatureFlagTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
 		21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -15208,7 +15208,7 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				21F76C612DF9E43100685BE0 /* TestDangerRule.swift */,
+				21F76C612DF9E43100685BE0 /* DangerRuleCheck.swift */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				E60961841B62B7E100DD640F /* Configuration */,
@@ -18193,7 +18193,7 @@
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
 				8AB5958828413F6C0090F4AE /* LegacyBookmarksCell.swift in Sources */,
-				21F76C622DF9E43B00685BE0 /* TestDangerRule.swift in Sources */,
+				21F76C622DF9E43B00685BE0 /* DangerRuleCheck.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
