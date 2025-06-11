@@ -1985,6 +1985,7 @@
 		EDADF77C2D70C58200C39295 /* SettingsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF77B2D70C58200C39295 /* SettingsTelemetry.swift */; };
 		EDADF77F2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF77E2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift */; };
 		EDADF7842D70DAF800C39295 /* SettingsTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDADF7832D70DAF800C39295 /* SettingsTelemetryTests.swift */; };
+		EDBD5C1C2DFA248E0050A59A /* HistoryTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBD5C1B2DFA248B0050A59A /* HistoryTelemetry.swift */; };
 		EDC3C2562CCAC9CB005A047F /* SearchEnginesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3C2552CCAC9CB005A047F /* SearchEnginesManager.swift */; };
 		EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */; };
 		EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */; };
@@ -10332,6 +10333,7 @@
 		EDADF77E2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSelectionTelemetryTests.swift; sourceTree = "<group>"; };
 		EDADF7832D70DAF800C39295 /* SettingsTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTelemetryTests.swift; sourceTree = "<group>"; };
 		EDB94DDC89DE1F2C624C9841 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EDBD5C1B2DFA248B0050A59A /* HistoryTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTelemetry.swift; sourceTree = "<group>"; };
 		EDBE49119AB71D7076BC2CA3 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Menu.strings"; sourceTree = "<group>"; };
 		EDC3C2552CCAC9CB005A047F /* SearchEnginesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginesManager.swift; sourceTree = "<group>"; };
 		EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SearchEngineTestAssets.xcassets; sourceTree = "<group>"; };
@@ -14151,6 +14153,7 @@
 		D05434F3225FDA3400FDE4EF /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				EDBD5C1B2DFA248B0050A59A /* HistoryTelemetry.swift */,
 				7AC7E04E2C160EB600051D4D /* Reader */,
 				2137785B297F1EFF00D01309 /* Downloads */,
 				8A3233FF28627451003E1C33 /* Bookmarks */,
@@ -18185,6 +18188,7 @@
 				8A3EF7FF2A2FCFBB00796E3A /* ChangeToChinaSetting.swift in Sources */,
 				1D558A5A2BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift in Sources */,
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
+				EDBD5C1C2DFA248E0050A59A /* HistoryTelemetry.swift in Sources */,
 				F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */,
 				612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
