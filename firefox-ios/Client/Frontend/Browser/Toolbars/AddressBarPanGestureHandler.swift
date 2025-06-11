@@ -133,6 +133,8 @@ final class AddressBarPanGestureHandler: NSObject {
 
         if shouldAddNewTab {
             let progress = abs(translation.x) / contentContainer.frame.width
+            let scale = progress > 0.3 ? progress : 0.3
+            webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale)
             webPagePreview.alpha = progress
             webPagePreview.setScreenshot(homepageScreenshot)
         } else {

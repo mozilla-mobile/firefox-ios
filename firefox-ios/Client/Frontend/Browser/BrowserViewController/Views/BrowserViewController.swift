@@ -1217,7 +1217,6 @@ class BrowserViewController: UIViewController,
 
         if isSwipingTabsEnabled {
             showEmbeddedHomepage(inline: false, isPrivate: false)
-            (browserDelegate as? BrowserCoordinator)?.homepageViewController?.view.alpha = 0.0
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
             }
@@ -1702,7 +1701,6 @@ class BrowserViewController: UIViewController,
             legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
         }
 
-        let browserCoordinator = browserDelegate as? BrowserCoordinator
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
             browserDelegate?.showHomepage(
                 overlayManager: overlayManager,
@@ -1710,7 +1708,6 @@ class BrowserViewController: UIViewController,
                 statusBarScrollDelegate: statusBarOverlay,
                 toastContainer: contentContainer
             )
-            browserCoordinator?.homepageViewController?.view.alpha = 1.0
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,
