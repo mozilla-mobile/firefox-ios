@@ -2,10 +2,10 @@
 "About.learnMoreButton" = "Cchiù nfurmazzioni";
 
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"About.missionLabel" = "%@ è criatu di Mozilla. A nostra missiuni è di ammuttari pi na riti cchiù lìbbira e 'n saluti.";
+"About.missionLabel" = "%@ è criatu di Mozilla. A nostra missiuni è di ammuttari pi na riti cchiù lìbbira e ’n saluti.";
 
 /* Label on About screen */
-"About.privateBullet1" = "Fai risciduti e nàviga direttu di l'applicazzioni";
+"About.privateBullet1" = "Fai risciduti e nàviga direttu di l’applicazzioni";
 
 /* Label on About screen */
 "About.privateBullet2" = "Ferma i trazzatura (o attualizza i mpustazzioni pi pirmittìrili)";
@@ -32,7 +32,7 @@
 "About.safariBullet1" = "Blocca i trazzatura pi na megghiu privatizza";
 
 /* Label on About screen */
-"About.safariBullet2" = "Blocca i caràttiri 'n linia pi fari i pàggini cchiù nichi";
+"About.safariBullet2" = "Blocca i caràttiri ’n linia pi fari i pàggini cchiù nichi";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Ùsalu comu nu stinneriu di Safari:";
@@ -80,13 +80,13 @@
 "Autocomplete.customUrlAdded" = "Juncisti nu nnirizzu pirsunalizzatu novu.";
 
 /* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Autocomplete.defaultDescriptoin" = "Attìvalu pi fàrici cumplitari 'n autumàticu a %@ cchiù assai di 450 siti pupulari nnâ barra dû nnirizzu.";
+"Autocomplete.defaultDescriptoin" = "Attìvalu pi fàrici cumplitari ’n autumàticu a %@ cchiù assai di 450 siti pupulari nnâ barra dû nnirizzu.";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Sdisabbilitatu";
 
 /* Label for toast alerting that the custom URL being added is a duplicate */
-"Autocomplete.duplicateUrl" = "U nnirizzu cc'è già";
+"Autocomplete.duplicateUrl" = "U nnirizzu cc’è già";
 
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Nuḍḍu nnirizzu pirsunalizzatu di mustrari";
@@ -101,7 +101,7 @@
 "Autocomplete.mySites" = "I me siti";
 
 /* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Autocomplete.mySitesDesc" = "Attìvalu pi fàrici jìnchiri 'n autumàticu a %@ i to siti prifiruti.";
+"Autocomplete.mySitesDesc" = "Attìvalu pi fàrici jìnchiri ’n autumàticu a %@ i to siti prifiruti.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Siti cchiù visitati";
@@ -113,7 +113,7 @@
 "BiometricPrompt.newSession" = "Nova sissioni";
 
 /* Accessibility label for the back button */
-"Browser.backLabel" = "Nn'arrè";
+"Browser.backLabel" = "Nn’arrè";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "URL cupiatu nnô pitazzu";
@@ -149,7 +149,7 @@
 "ExternalAppLink.cancelTitle" = "Sfai";
 
 /* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"ExternalAppLink.messageTitle" = "%@ voli gràpiri n'autra applicazzioni";
+"ExternalAppLink.messageTitle" = "%@ voli gràpiri n’autra applicazzioni";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Grapi";
@@ -200,19 +200,19 @@
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Sauta";
 
 /* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
-"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Scancillamu a to crunuluggìa quannu chiuji l'applicazzioni p'aviri privatizza superchiu.";
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Scancillamu a to crunuluggìa quannu chiuji l’applicazzioni p’aviri privatizza superchiu.";
 
 /* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Cunfijura %@ comu u to navigaturi pridifinutu pi prutèggiri i to dati ogni vota chi grapi na lijami.";
 
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Onboarding.DefaultBrowser.Title.V2" = "%@ nun è comu l'autri navigatura";
+"Onboarding.DefaultBrowser.Title.V2" = "%@ nun è comu l’autri navigatura";
 
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Cunfijura comu navigaturi pridifinutu";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
-"Onboarding.History.Description" = "Scancella a to crunuluggìa di navigazzioni, i chiavi, i viscotta e blocca i pubblicità di trazzàriti c'un toccu sulu!";
+"Onboarding.History.Description" = "Scancella a to crunuluggìa di navigazzioni, i chiavi, i viscotta e blocca i pubblicità di trazzàriti c’un toccu sulu!";
 
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "A to crunuluggìa nun ti sicuta";
@@ -230,7 +230,7 @@
 "Onboarding.PrivacyNotice.Text" = "A Firefox ci ntiressa dâ to privatizza. Leggi cchiù assai nnô nostru %@.";
 
 /* Text for a label that indicates the description of protection section from onboarding screen. */
-"Onboarding.Protection.Description" = "Cunfijura i mpustazzioni pi dicìdiri quantu assai o quantu picca vo' spàrtiri.";
+"Onboarding.Protection.Description" = "Cunfijura i mpustazzioni pi dicìdiri quantu assai o quantu picca vo’ spàrtiri.";
 
 /* Text for a label that indicates the title of protection section from onboarding screen. */
 "Onboarding.Protection.Title" = "Prutizzioni comu dicidi tu";
@@ -293,7 +293,7 @@
 "SearchSuggestions.promptEnable" = "Se";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "P'aviri suggirimenti, %@ manna chiḍḍu chi scrivi nnâ barra dû nnirizzu ô muturi di risciduta.";
+"SearchSuggestions.promptMessage" = "P’aviri suggirimenti, %@ manna chiḍḍu chi scrivi nnâ barra dû nnirizzu ô muturi di risciduta.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Mustrari i suggirimenti di risciduta?";
@@ -311,10 +311,10 @@
 "Settings.blockOtherYes2" = "Ferma i trazzatura dî cuntinuti";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
-"Settings.DailyUsagePing.Message" = "Chistu ajuta Mozilla a fari na stima di l'utenti attivi.";
+"Settings.DailyUsagePing.Message" = "Chistu ajuta Mozilla a fari na stima di l’utenti attivi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
-"Settings.DailyUsagePing.Title" = "Ping d'usu nnô jornu";
+"Settings.DailyUsagePing.Title" = "Ping d’usu nnô jornu";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Scuru";
@@ -326,10 +326,10 @@
 "Settings.detailTextSearchSuggestion" = "%@ manna chiḍḍu chi scrivi nnâ barra dû nnirizzu ô to muturi di risciduta.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Settings.detailTextSendUsageData" = "Mozilla cerca di ricògghiri sulu chiḍḍu chi ci serbi p'ammigghiurari %@ pi tutti.";
+"Settings.detailTextSendUsageData" = "Mozilla cerca di ricògghiri sulu chiḍḍu chi ci serbi pi fari megghiu %@ pi tutti.";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Settings.detailTextStudies" = "%@ po nzitari e abbiari studi di tempu 'n tempu.";
+"Settings.detailTextStudies" = "%@ po nzitari e abbiari studi di tempu ’n tempu.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Ginirali";
@@ -353,7 +353,7 @@
 "Settings.screenTitle" = "Mpustazzioni";
 
 /* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Junci n'autru muturi di risciduta";
+"Settings.Search.AddSearchEngineButton" = "Junci n’autru muturi di risciduta";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Junci muturi di risciduta";
@@ -374,7 +374,7 @@
 "Settings.Search.SearchEngineName" = "Nomu dû muturi di risciduta";
 
 /* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Stringa di risciduta d'usari";
+"Settings.Search.SearchTemplate" = "Stringa di risciduta d’usari";
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Scempru: searchengine.example.com/search/?q=%s";
@@ -401,7 +401,7 @@
 "Settings.setAsDefaultBrowser" = "Cunfijura comu navigaturi pridifinutu";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for set as default browser option. */
-"Settings.setAsDefaultBrowserDescription" = "Cunfijura pi fari gràpiri 'n autumàticu cu %@ i lijami dî siti, l'e-mail e i missaggi.";
+"Settings.setAsDefaultBrowserDescription" = "Cunfijura pi fari gràpiri ’n autumàticu cu %@ i lijami dî siti, l’e-mail e i missaggi.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Tema dû sistema";
@@ -419,7 +419,7 @@
 "Settings.toggleBlockAnalytics2" = "Statìstichi";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockFonts" = "Ferma i caràttari 'n linia";
+"Settings.toggleBlockFonts" = "Ferma i caràttari ’n linia";
 
 /* Label for the checkbox to toggle Other trackers */
 "Settings.toggleBlockOther2" = "Cuntinutu";
@@ -428,13 +428,13 @@
 "Settings.toggleBlockSocial2" = "Riti suciali";
 
 /* Label for Crash Reports toggle on settings screen */
-"Settings.toggleCrashReports" = "Manna 'n autumàticu i signalijazzioni di scasciu";
+"Settings.toggleCrashReports" = "Manna ’n autumàticu i signalijazzioni di scasciu";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "Usa Face ID pi sbluccari l'applicazzioni";
+"Settings.toggleFaceID" = "Usa Face ID pi sbluccari l’applicazzioni";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "Face ID po sbluccari %@ si cc'è già nu nnirizzu graputu nni l'applicazzioni";
+"Settings.toggleFaceIDDescription" = "Face ID po sbluccari %@ si cc’è già nu nnirizzu graputu nni l’applicazzioni";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Mustra i cunzigghi nnâ schirmata mastra";
@@ -443,16 +443,16 @@
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Usage Data toggle on main screen */
-"Settings.toggleSendUsageData" = "Manna i dati d'usu";
+"Settings.toggleSendUsageData" = "Manna i dati d’usu";
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Studi";
 
 /* Label for toggle on settings screen */
-"Settings.toggleTouchID" = "Usa Touch ID pi sbluccari l'applicazzioni";
+"Settings.toggleTouchID" = "Usa Touch ID pi sbluccari l’applicazzioni";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "Touch ID po sbluccari %@ si cc'è già nu nnirizzu graputu nni l'applicazzioni";
+"Settings.toggleTouchIDDescription" = "Touch ID po sbluccari %@ si cc’è già nu nnirizzu graputu nni l’applicazzioni";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "Sdisattiva";
@@ -470,10 +470,10 @@
 "share" = "Sparti";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "Junci a l'accurzi";
+"ShareMenu.AddToShortcuts" = "Junci a l’accurzi";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"ShareMenu.AddToShortcuts.Confirm" = "Junciutu a l'accurzi";
+"ShareMenu.AddToShortcuts.Confirm" = "Junciutu a l’accurzi";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copia nnirizzu";
@@ -482,7 +482,7 @@
 "ShareMenu.FindInPage" = "Attrova nnâ pàggina";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
-"ShareMenu.RemoveFromShortcuts" = "Leva di l'accurzi";
+"ShareMenu.RemoveFromShortcuts" = "Leva di l’accurzi";
 
 /* Toast displayed to the user after removing the item from the Shortcuts. */
 "ShareMenu.RemoveShortcut.Confirm" = "Accurzu scancillatu";
@@ -509,13 +509,13 @@
 "ShareMenu.SharePage" = "Sparti pàggina cu…";
 
 /* Text for the long press on a shortcut option in context menu. */
-"ShortcutView.RemoveFromShortcuts" = "Leva di l'accurzi";
+"ShortcutView.RemoveFromShortcuts" = "Leva di l’accurzi";
 
 /* Text for the long press on a shortcut rename option in context menu. */
-"ShortcutView.Rename" = "Cancia u nomu di l'accurzu";
+"ShortcutView.Rename" = "Cancia u nomu di l’accurzu";
 
 /* Text for the placeholder textfield on rename shortcut alert. */
-"ShortcutView.RenameShortcutAlertPlaceholder" = "Nomu di l'accurzu";
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Nomu di l’accurzu";
 
 /* Text for the rename shortcut alert primary action. */
 "ShortcutView.RenameShortcutAlertPrimaryAction" = "Sarba";
@@ -563,7 +563,7 @@
 "Siri.urlToOpen" = "Nnirizzu di gràpiri";
 
 /* Text for a label that indicates the title for biometric tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Tip.Biometric.Title" = "Blocca a %@ quannu cc'è un situ graputu:";
+"Tip.Biometric.Title" = "Blocca a %@ quannu cc’è un situ graputu:";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "Attiva Face ID";
@@ -575,7 +575,7 @@
 "Tip.RequestDesktop.Description" = "Azzioni dâ pàggina > Addumanna situ dû scagnu";
 
 /* Text for a label that indicates the title for request desktop tip. */
-"Tip.RequestDesktop.Title" = "Vo' vìdiri a virsioni cumpleta dû scagnu d'un situ?";
+"Tip.RequestDesktop.Title" = "Vo’ vìdiri a virsioni cumpleta dû scagnu d’un situ?";
 
 /* Text for a label that indicates the description for share trackers tip. %@ is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ trazzatura bluccati nzinu a ora";
@@ -584,7 +584,7 @@
 "Tip.ShareTrackers.Title" = "Tu nàvighi. %@ blocca.";
 
 /* Text for a label that indicates the description for shortcuts tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Tip.Shortcuts.Description" = "Scarta Junci a l'accurzi dû minù di %@";
+"Tip.Shortcuts.Description" = "Scarta Junci a l’accurzi dû minù di %@";
 
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "Cria accurzi ê siti chi vìsiti cchiù assai:";
@@ -611,7 +611,7 @@
 "TodayWidget.SearchInApp.Instruction" = "Riscedi cu %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Vai nnê Mpustazzioni pi manijari l'aḍḍijuti spicìfichi di privatizza e sicurizza.";
+"TooltipBodyText.ContextMenu" = "Vai nnê Mpustazzioni pi manijari l’aḍḍijuti spicìfichi di privatizza e sicurizza.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Sti mpustazzioni pridifinuti òffrinu na prutizzioni forti. Ma è fàcili cancialli pi satisfari i to nicissità spicìfichi.";
@@ -623,10 +623,10 @@
 "TooltipBodyText.ShieldIcon" = "%@ firmau stu situ di spiàriti. Ammacca a cona dû scudu pi vìdiri soccu bluccammu.";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "U ncagghiammu! Firmammu stu situ di spiàriti. Ammacca a cona dû scudu quannu vo' pi vìdiri soccu stamu bluccannu.";
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "U ncagghiammu! Firmammu stu situ di spiàriti. Ammacca a cona dû scudu quannu vo’ pi vìdiri soccu stamu bluccannu.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "Ammacca a cona dâ munnizza quannu vo' pi scancillari tutti i trazzi dâ to sissioni.";
+"TooltipBodyText.TrashIcon" = "Ammacca a cona dâ munnizza quannu vo’ pi scancillari tutti i trazzi dâ to sissioni.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon.V2" = "Ammacca cca pi jittari tutti cosi — crunuluggìa, viscotta, tuttu — e parti di zeru cu na scheda nova.";
@@ -659,7 +659,7 @@
 "trackingProtection.trackersHeader" = "Trazzatura e script di firmari";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Junci lijami di jìnchiri 'n autumàticu";
+"URL.addToAutocompleteLabel" = "Junci lijami di jìnchiri ’n autumàticu";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Ncoḍḍa e vai";
