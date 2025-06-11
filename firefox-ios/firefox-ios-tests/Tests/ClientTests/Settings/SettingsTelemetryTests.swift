@@ -31,10 +31,10 @@ final class SettingsTelemetryTests: XCTestCase {
         subject.optionSelected(option: .AppIconSelection)
 
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? EventExtrasType
+            mockGleanWrapper.savedExtras.first as? EventExtrasType
         )
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
         )
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
