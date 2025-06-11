@@ -819,13 +819,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 self?.handleDownloadProgressUpdate(progress: progress, tab: tab)
             }
             tempPDF.onDownloadStarted = {
-                self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
-                                   of: tab?.webView,
-                                   change: [.newKey: true],
-                                   context: nil)
-                if let url = request.url {
-                    self?.documentLogger.registerDownloadStart(url: url)
-                }
+                self?.handleDownloadStarted(tab: tab, request: request)
             }
             tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
