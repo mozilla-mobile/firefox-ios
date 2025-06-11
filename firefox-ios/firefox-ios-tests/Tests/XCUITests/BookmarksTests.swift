@@ -399,6 +399,7 @@ class BookmarksTests: BaseTestCase {
         navigator.nowAt(HomeSettings)
         navigator.goto(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
         navigator.nowAt(BrowserTab)
         navigator.goto(HomeSettings)
@@ -417,14 +418,8 @@ class BookmarksTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         bookmark()
-        if XCUIDevice.shared.orientation == .landscapeLeft {
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-        }
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-        }
+        navigator.performAction(Action.GoToHomePage)
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         longPressBookmarkCell()
         // The context menu opens, having the correct options
         let contextMenuTable = app.tables["Context Menu"]
@@ -440,11 +435,7 @@ class BookmarksTests: BaseTestCase {
         // Tap to "Open in New Tab"
         contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
         // The webpage opens in a new tab
-        if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
-            switchToTabAndValidate(nrOfTabs: "3")
-        } else {
-            switchToTabAndValidate(nrOfTabs: "2")
-        }
+        switchToTabAndValidate(nrOfTabs: "3")
 
         // Tap to "Open in Private Tab"
         if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
