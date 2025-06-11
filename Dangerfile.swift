@@ -64,23 +64,21 @@ func failOnNewFilesWithoutCoverage() {
     let newSwiftFiles = danger.git.createdFiles.filter {
         $0.hasSuffix(".swift") &&
         !$0.contains("Tests") &&
-        !$0.contains("/Generated/") // adjust if you use codegen folders
+        !$0.contains("/Generated/")
     }
 
     for file in newSwiftFiles {
-        // Adjust path if needed to match coverage.json format
-        // Strip "./" and match suffixes
-        let cleanedFile = file.replacingOccurrences(of: "./", with: "")
+        // Extract just the file name
+        let newFileName = URL(fileURLWithPath: file).lastPathComponent
 
-        // Try to find a file in coverage report that ends with this file
+        // Try to find a file in the coverage report that has the same file name
         let matching = coverageByFile.first { (coveragePath, _) in
-            coveragePath.hasSuffix(cleanedFile)
+            URL(fileURLWithPath: coveragePath).lastPathComponent == newFileName
         }
-        warn("Could find match for \(matching?.key ?? "")")
 
-        if let (path, _) = matching {
+        if let matching {
             let contact = "(cc: @cyndichin @yoanarios )."
-            warn("New file \(path) detected with 0% test coverage. Please add unit tests. \(contact)")
+            warn("New file \(newFileName) detected with 0% test coverage. Please add unit tests. \(contact)")
         }
     }
 }
