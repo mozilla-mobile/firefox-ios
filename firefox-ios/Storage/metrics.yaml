@@ -5,22 +5,6 @@
 
 $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
-# Metrics specific to the history storage
-history:
-  num_visits:
-    type: quantity
-    unit: visit
-    description: >
-      The number of visits in a User's history database
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SYNC-3260
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11634
-    notification_emails:
-      - sync-core@mozilla.com
-      - mhammond@mozilla.com
-    expires: never
-
 logins_store_key_regeneration:
   # These track when we need to regenerate the encryption key which causes all
   # local data to be lost
