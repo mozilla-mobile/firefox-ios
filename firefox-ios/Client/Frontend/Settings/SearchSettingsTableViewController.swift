@@ -228,6 +228,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                         cell: cell,
                         selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
                     )
+                    cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.disableSearchSuggestsInPrivateMode
                 }
             default: break
             }
