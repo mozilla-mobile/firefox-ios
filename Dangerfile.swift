@@ -65,6 +65,7 @@ func failOnNewFilesWithoutCoverage() {
         !$0.contains("/Generated/") // adjust if you use codegen folders
     }
 
+    var hasNewFileWithoutCoverage = false
     for file in newSwiftFiles {
         // Adjust path if needed to match coverage.json format
         // Strip "./" and match suffixes
@@ -75,7 +76,6 @@ func failOnNewFilesWithoutCoverage() {
             coveragePath.hasSuffix(cleanedFile)
         }
 
-        var hasNewFileWithoutCoverage = false
         if let (_, coveragePercent) = matching {
             if coveragePercent == 0 {
                 hasNewFileWithoutCoverage = true
