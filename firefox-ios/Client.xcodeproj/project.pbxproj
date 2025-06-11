@@ -11819,6 +11819,7 @@
 				2CF9D9A920067FA10083DF2A /* BrowsingPDFTests.swift */,
 				B1E156A52CD5080E009DF9E5 /* C_AddressesTests.swift */,
 				3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */,
+				211FD2742DF38106003F60EF /* CookiePersistenceTests.swift */,
 				B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */,
 				EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */,
 				580B0C4121748CFE00448DF8 /* DataManagementTests.swift */,
