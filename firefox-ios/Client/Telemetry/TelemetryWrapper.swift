@@ -1344,8 +1344,6 @@ extension TelemetryWrapper {
             GleanMetrics.Pocket.openInPrivateTab.record()
 
         // History Panel related
-        case (.action, .navigate, .navigateToGroupHistory, _, _):
-            GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
         case (.action, .tap, .openedHistoryItem, _, _):

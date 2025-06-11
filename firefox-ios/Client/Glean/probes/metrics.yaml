@@ -2236,22 +2236,6 @@ history:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  group_list:
-    type: counter
-    description: |
-      Counts the number of times a user has selected a
-      search term group inside the history panel. Selecting
-      this item will navigate them to a view containing a list
-      of all Site items that appear in that group.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
   selected_item:
     type: labeled_counter
     description: |
