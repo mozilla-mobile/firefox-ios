@@ -236,6 +236,37 @@ preferences:
 # New "settings" telemetry properly nested under "settings".
 ###############################################################################
 
+# General settings events
+settings:
+  option_selected:
+    type: event
+    description: |
+      Recorded when the user taps an option to drill deeper into the
+      settings menu screens.
+      
+      For example, tapping the "App Icon >" option to show the app icon
+      selection screen, or tapping "Browsing >" to view the browsing settings.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          A unique key describing the item selected from the settings menu and
+          its submenus. This unique key should describe the screen being shown
+          next to the user. 
+          
+          Keep in mind that experiments and redesigns sometimes move options to
+          different depths of the settings screens. However, this unique key
+          should always remain the same. As a result, it is useful to devise a
+          unique key irrespective of the option's current placement in the
+          settings hierarchy.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12155
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27128
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+
 # App Icon Settings
 settings.app_icon:
   selected:
@@ -263,3 +294,41 @@ settings.app_icon:
     metadata:
       tags:
         - AppIconSelection
+        
+# Default Zoom Settings
+settings.zoom_bar:
+  domain_list_item_swiped_to_delete:
+    type: event
+    description: |
+      Recorded when the user swipes to delete a specific zoom domain level in the app settings.
+    extra_keys:
+      index:
+        type: quantity
+        description: |
+          The index of the site in the list of domains that have a user-configured page zoom level. Index 0 is the top of the list.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - ZoomBar
+  domain_list_reset_button_tapped:
+    type: event
+    description: |
+      Recorded when the user resets the list of zoom domain levels in the app settings.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27006
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - ZoomBar
+    no_lint:
+      - COMMON_PREFIX

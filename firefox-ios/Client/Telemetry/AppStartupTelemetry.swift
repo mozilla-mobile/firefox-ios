@@ -10,7 +10,12 @@ import Common
 import class MozillaAppServices.BookmarkFolderData
 import enum MozillaAppServices.BookmarkRoots
 
-final class AppStartupTelemetry {
+protocol AppStartupTelemetry {
+    /// Send the relevant telemetry after App startup.
+    func sendStartupTelemetry()
+}
+
+final class DefaultAppStartupTelemetry: AppStartupTelemetry {
     let profile: Profile
 
     // MARK: Init

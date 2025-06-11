@@ -2,7 +2,7 @@
 "Upgrade.SyncSign.Action.v114" = "Trasi";
 
 /* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v114" = "Nnâ pàggina mastra attrovi i schedi chi lassasti nnî to autri dispusitivi, pi ripigghiari d'unni lassasti.";
+"Upgrade.SyncSign.Description.v114" = "Nnâ pàggina mastra attrovi i schedi chi lassasti nnî to autri dispusitivi, pi ripigghiari d’unni lassasti.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v114" = "Canciari schirmi è cchiù fàcili di sempri";
@@ -14,5 +14,5 @@
 "Upgrade.Welcome.Description.v114" = "Novi culura. Cchiù cummidità. A stissa didizzioni ê genti cchiù assai chi ê prufitti.";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.Welcome.Title.v114" = "Bummegna nta n'internet cchiù pirsunali";
+"Upgrade.Welcome.Title.v114" = "Bummegna nta n’internet cchiù pirsunali";
 

@@ -25,6 +25,7 @@ struct TabsPanelTelemetry {
     enum CloseAllPanelOption: String {
         case all
         case cancel
+        case old
     }
 
     private enum TabType: String {

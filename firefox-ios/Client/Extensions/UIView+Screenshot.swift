@@ -6,6 +6,8 @@ import UIKit
 
 protocol Screenshotable {
     func screenshot(quality: CGFloat) -> UIImage?
+
+    func screenshot(bounds: CGRect) -> UIImage?
 }
 
 extension UIView: Screenshotable {
@@ -16,6 +18,21 @@ extension UIView: Screenshotable {
     /// - Returns: The image that represents the screenshot
     func screenshot(quality: CGFloat = 1) -> UIImage? {
         return screenshot(frame.size, offset: nil, quality: quality)
+    }
+
+    /// Takes a screenshot of the view by drawing it's content in the provided bounds.
+    /// - Parameters:
+    ///    - bounds: The area of the view to snapshot
+    /// - Returns: The image representing the snapshot of the view in the provided bounds.
+    func screenshot(bounds: CGRect) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        return renderer.image { context in
+            drawHierarchy(
+                in: bounds,
+                afterScreenUpdates: true
+            )
+        }
     }
 
     /// Takes a screenshot of the view with the given size.

@@ -76,6 +76,88 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ئاتلا";
 
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v123" = "داۋاملاشتۇر";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "ئاستى";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Modern.Customization.Toolbar.Title.v140" = "ئادرېس بالداق ئورنى تاللىنىدۇ";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "چوققا";
+
+/* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Sync.Description.v140" = "خالىغان ئۈسكۈنىدە خەتكۈچ، تارىخ ۋە ئىم ئۇچۇرلىرىغا ئېرىشەلەيدۇ.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.SignIn.Action.v140" = "قەدەمداشنى باشلايدۇ";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.Skip.Action.v140" = "ھازىر ئەمەس";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Sync.Title.v140" = "شۇئان ئالدىنقى قېتىم كەلگەن جايدىن داۋاملاشتۇرىدۇ";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "داۋاملاشتۇر";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.Modern.TermsOfService.ManageLink.v140" = "باشقۇرۇش";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "توركۆرگۈنى ياخشىلاشقا ياردەملىشىپ، %1$@ دىياگنوز ۋە تەسىرلىشىش سانلىق مەلۇماتىنى %2$@ غا يوللايدۇ. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ شەخسىيىتىڭىزگە كۆڭۈل بۆلىدۇ. %2$@ دىن تەپسىلاتىنى ئوقۇغىلى بولىدۇ";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "شەخسىيەت ئۇقتۇرۇشى.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "تەپسىلاتى";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "يىمىرىلىش دوكلاتى توركۆرگۈدىكى مەسىلىگە دىياگنوز قويۇپ ۋە ئوڭشىشىمىزغا يول قويىدۇ. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "يىمىرىلىش دوكلاتىنى ئۆزلۈكىدىن يوللايدۇ";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "ئۈسكۈنىڭىز، قاتتىق دېتال سەپلىمىسى ۋە %1$@ نى قانداق ئىشلىتىش ھەققىدىكى سانلىق مەلۇمات بىزنىڭ بارلىق ئىشلەتكۈچىلەر ئۈچۈن ئىقتىدارلارنى ياخشىلاش ۋە مۇقىملىقىنى ئاشۇرۇشىمىزغا ياردەم بېرىدۇ. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "تېخنىكىلىق ۋە تەسىرلىشىش سانلىق مەلۇماتنى %@ غا يوللايدۇ";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "%@ نى تېخىمۇ ياخشى قىلىشىمىزغا ياردەملىشىدۇ";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "بېكەتنى يۈكلىشى چاقماقتەك تېز\nئىزلاشتىن ئۆزلۈكىدىن قوغدايدۇ\nھەممە ئۈسكۈنىلىرىڭىزدە قەدەمداشلايدۇ";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "داۋاملاشتۇرسىڭىز، %@ غا قوشۇلىسىز";
+
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "توركۆرگۈڭىزنى يۈكسەلتىڭ";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ نىڭ ئىشلىتىش شەرتلىرى.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "كۆڭۈلدىكى توركۆرگۈ قىلىپ تەڭشەيدۇ";
+
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "بىرلا تاللانسا سىزنى تورنىڭ ھەممە يېرىدە قوغدايدۇ. ئۇنى كېيىن ھەمىشە ئۆزگەرتەلەيسىز.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Modern.Welcome.Skip.v140" = "ھازىر ئەمەس";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Welcome.Title.v140" = "زېرىكىشلىك ئېلانلار بىلەن خوشلىشىڭ";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "داۋاملاشتۇر";
 

@@ -10,16 +10,25 @@ import Glean
 struct SettingsTelemetry {
     private let gleanWrapper: GleanWrapper
 
-    enum MainMenuOption: String {
-        case AppIcon = "app_icon"
+    /// Uniquely identifies a row on the settings screen (or one of its subscreens), which the user can tap to drill down
+    /// deeper into settings.
+    ///
+    /// If the row moves somewhere else due to a refactor or an experiment, the key should stay the same. The most important
+    /// feature of the key is that it identifies the tapped row irrespective of its location in the settings hierarchy.
+    ///
+    /// Note that the `option` identifies the __row tapped__, not necessarily the screen shown.
+    enum OptionIdentifiers: String {
+        case AppIconSelection = "app_icon_selection" // Tapping "App Icon >" to show the App Icon Selection screen
     }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
 
-    func tappedAppIconSetting() {
-        let extra = GleanMetrics.SettingsMainMenu.OptionSelectedExtra(option: MainMenuOption.AppIcon.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsMainMenu.optionSelected, extras: extra)
+    /// Recorded when a user taps a row on the settings screen (or one of its subscreens) to drill deeper into the settings.
+    /// - Parameter option: A unique identifier for the selected row. Identifies the row tapped, not the screen shown.
+    func optionSelected(option: OptionIdentifiers) {
+        let extra = GleanMetrics.Settings.OptionSelectedExtra(option: option.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.Settings.optionSelected, extras: extra)
     }
 }

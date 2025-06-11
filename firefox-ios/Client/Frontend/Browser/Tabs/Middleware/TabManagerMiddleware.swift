@@ -6,6 +6,7 @@ import Common
 import Redux
 import Shared
 import Storage
+import Account
 
 import enum MozillaAppServices.BookmarkRoots
 
@@ -168,6 +169,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
             tabsPanelTelemetry.newTabButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
+            UserConversionMetrics().didOpenNewTab()
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
             dispatchRecentlyAccessedTabs(action: action)
         case TabPanelViewActionType.moveTab:
@@ -782,7 +784,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case MainMenuActionType.tapToggleUserAgent:
             changeUserAgent(forWindow: action.windowUUID)
         case MainMenuMiddlewareActionType.requestTabInfo:
-            provideTabInfo(forWindow: action.windowUUID)
+            provideTabInfo(forWindow: action.windowUUID, accountData: defaultAccountData())
+            handleDidInstantiateViewAction(action: action)
         case MainMenuDetailsActionType.tapAddToBookmarks:
             guard let tabID = action.tabID else { return }
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
@@ -830,7 +833,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         let isPinned: Bool
     }
 
-    private func provideTabInfo(forWindow windowUUID: WindowUUID) {
+    private func provideTabInfo(forWindow windowUUID: WindowUUID, accountData: AccountData, profileImage: UIImage? = nil) {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
             logger.log(
                 "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
@@ -856,7 +859,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                         readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
                         isBookmarked: profileTabInfo.isBookmarked,
                         isInReadingList: profileTabInfo.isInReadingList,
-                        isPinned: profileTabInfo.isPinned
+                        isPinned: profileTabInfo.isPinned,
+                        accountData: accountData,
+                        accountProfileImage: profileImage
                     )
                 )
             )
@@ -912,6 +917,51 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                 )
             )
         }
+    }
+
+    private func handleDidInstantiateViewAction(action: MainMenuAction) {
+        let accountData = getAccountData()
+        if let iconURL = accountData.iconURL {
+            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                guard let self else { return }
+                self.provideTabInfo(forWindow: action.windowUUID, accountData: accountData, profileImage: image)
+            }
+        } else {
+            provideTabInfo(forWindow: action.windowUUID, accountData: accountData)
+        }
+    }
+
+    private func getAccountData() -> AccountData {
+        let rustAccount = RustFirefoxAccounts.shared
+        let needsReAuth = rustAccount.accountNeedsReauth()
+
+        if let userProfile = rustAccount.userProfile {
+            let title: String = {
+                return userProfile.displayName ?? userProfile.email
+            }()
+
+            let subtitle: String? = needsReAuth ?
+                .MainMenu.Account.SyncErrorDescription : .MainMenu.Account.SignedInDescription
+
+            var iconURL: URL?
+            if let str = rustAccount.userProfile?.avatarUrl,
+               let url = URL(string: str) {
+                iconURL = url
+            }
+
+            return AccountData(title: title,
+                               subtitle: subtitle,
+                               needsReAuth: needsReAuth,
+                               iconURL: iconURL)
+        }
+        return defaultAccountData()
+    }
+
+    private func defaultAccountData() -> AccountData {
+        return AccountData(title: .MainMenu.Account.SignedOutTitle,
+                           subtitle: .MainMenu.Account.SignedOutDescriptionV2,
+                           needsReAuth: nil,
+                           iconURL: nil)
     }
 
     private func absoluteStringFrom(_ url: URL) -> String? {

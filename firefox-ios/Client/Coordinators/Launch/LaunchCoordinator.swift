@@ -258,13 +258,13 @@ final class LaunchCoordinator: BaseCoordinator,
                         completion: completion
                     )
                 },
-                onComplete: { currentCardName [weak self] in
+                onComplete: { [weak self] currentCardName in
                     guard let self = self else { return }
                     introScreenManager.didSeeIntroScreen()
                     SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
                     telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
 
-                    didFinishLaunch(from: self)
+                    parentCoordinator?.didFinishLaunch(from: self)
                 }
             )
         )

@@ -17,6 +17,7 @@ protocol PrivateHomepageDelegate: AnyObject {
 final class PrivateHomepageViewController:
     UIViewController,
     ContentContainable,
+    Screenshotable,
     Themeable,
     FeatureFlaggable {
     enum UX {
@@ -51,14 +52,7 @@ final class PrivateHomepageViewController:
     private var containerWidthConstraint: NSLayoutConstraint?
 
     // MARK: UI Elements
-    private lazy var gradient: CAGradientLayer = {
-        let gradient = CAGradientLayer()
-        gradient.type = .axial
-        gradient.startPoint = CGPoint(x: 1, y: 0)
-        gradient.endPoint = CGPoint(x: 0, y: 1)
-        gradient.locations = [0, 0.5, 1]
-        return gradient
-    }()
+    private lazy var gradient = CAGradientLayer()
 
     private let scrollView: UIScrollView = .build()
 
@@ -140,6 +134,7 @@ final class PrivateHomepageViewController:
         scrollContainer.addArrangedSubview(privateMessageCardCell)
         scrollContainer.accessibilityElements = [homepageHeaderCell.contentView, privateMessageCardCell]
 
+        setupGradient(gradient)
         view.layer.addSublayer(gradient)
         view.addSubview(scrollView)
         scrollView.addSubview(scrollContainer)
@@ -157,6 +152,13 @@ final class PrivateHomepageViewController:
         ])
 
         setupConstraintsForMultitasking()
+    }
+
+    private func setupGradient(_ gradient: CAGradientLayer) {
+        gradient.type = .axial
+        gradient.startPoint = CGPoint(x: 1, y: 0)
+        gradient.endPoint = CGPoint(x: 0, y: 1)
+        gradient.locations = [0, 0.5, 1]
     }
 
     // Constraints for trailing and leading padding on iPad (regular) should be larger than that of compact layout
@@ -229,5 +231,35 @@ final class PrivateHomepageViewController:
     @objc
     private func dismissKeyboard() {
         overlayManager.finishEditing(shouldCancelLoading: false)
+    }
+
+    // MARK: - Screenshotable
+
+    func screenshot(bounds: CGRect) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        return renderer.image { context in
+            // Draw the background gradient separately, so the potential safe area coordinates is filled with the
+            // gradient
+            let renderedGradient = CAGradientLayer()
+            setupGradient(renderedGradient)
+            renderedGradient.colors = themeManager.getCurrentTheme(for: windowUUID).colors.layerHomepage.cgColors
+            renderedGradient.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
+            renderedGradient.render(in: context.cgContext)
+
+            view.drawHierarchy(
+                in: CGRect(
+                    x: bounds.origin.x,
+                    y: -bounds.origin.y,
+                    width: bounds.width,
+                    height: view.bounds.height
+                ),
+                afterScreenUpdates: false
+            )
+        }
+    }
+
+    func screenshot(quality: CGFloat) -> UIImage? {
+        screenshot(bounds: view.bounds)
     }
 }

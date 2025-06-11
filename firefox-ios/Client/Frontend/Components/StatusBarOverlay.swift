@@ -23,11 +23,15 @@ class StatusBarOverlay: UIView,
                         StatusBarScrollDelegate,
                         SearchBarLocationProvider,
                         Notifiable {
+    private struct UX {
+        static let overlayAppearanceAnimationDuration: TimeInterval = 0.2
+    }
+
     private var savedBackgroundColor: UIColor?
     private var savedIsHomepage: Bool?
     private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
     private var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
-    var scrollDelegate: BrowserStatusBarScrollDelegate?
+    weak var scrollDelegate: BrowserStatusBarScrollDelegate?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
 
@@ -87,6 +91,38 @@ class StatusBarOverlay: UIView,
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
         let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
         backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
+    }
+
+    func showOverlay(animated: Bool) {
+        guard animated else {
+            scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: 1.0)
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(toolbarHelper.backgroundAlpha())
+            return
+        }
+        UIView.animate(
+            withDuration: UX.overlayAppearanceAnimationDuration,
+            delay: 0,
+            options: .curveEaseIn
+        ) {
+            self.scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: 1.0)
+            self.backgroundColor = self.savedBackgroundColor?.withAlphaComponent(self.toolbarHelper.backgroundAlpha())
+        }
+    }
+
+    func restoreOverlay(animated: Bool, isHomepage: Bool) {
+        guard animated else {
+            scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: scrollOffset)
+            resetState(isHomepage: isHomepage)
+            return
+        }
+        UIView.animate(
+            withDuration: UX.overlayAppearanceAnimationDuration,
+            delay: 0,
+            options: .curveEaseIn
+        ) {
+            self.scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: self.scrollOffset)
+            self.resetState(isHomepage: isHomepage)
+        }
     }
 
     // MARK: - ThemeApplicable

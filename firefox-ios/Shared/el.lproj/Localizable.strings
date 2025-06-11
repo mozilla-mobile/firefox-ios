@@ -821,7 +821,7 @@
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Ιχνηλάτες μεταξύ ιστοτόπων";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominers";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominer";
 
 /* Description of content trackers. */
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστότοποι μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοτόπων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ενδέχεται να μη λειτουργούν.";
@@ -830,7 +830,7 @@
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookie σάς ακολουθούν από ιστότοπο σε ιστότοπο για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominers χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να εξορύξουν κρυπτονομίσματα. Τα σενάρια εξόρυξης κρυπτονομισμάτων εξαντλούν την μπαταρία σας, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στο λογαριασμό τους ρεύματος.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominer χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να εξορύξουν κρυπτονομίσματα. Τα σενάρια εξόρυξης κρυπτονομισμάτων εξαντλούν την μπαταρία σας, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στο λογαριασμό τους ρεύματος.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Οι ρυθμίσεις στο πρόγραμμα περιήγησης και στον υπολογιστή σας είναι μοναδικές. Τα fingerprinters συλλέγουν πολλές από αυτές τις μοναδικές ρυθμίσεις για να δημιουργήσουν ένα προφίλ για εσάς, το οποίο μπορεί να χρησιμοποιηθεί για να την καταγραφή της περιήγησής σας.";

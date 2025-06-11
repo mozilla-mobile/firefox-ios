@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Common
+import Foundation
 
 public struct ZoomSettings: Codable {
     var defaultZoom: CGFloat
@@ -63,9 +63,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
         }) {
             zoomSetting.zoomLevels.remove(at: index)
         }
-        if domainZoomLevel.zoomLevel != ZoomLevelStore.defaultZoomLimit {
-            zoomSetting.zoomLevels.append(domainZoomLevel)
-        }
+        zoomSetting.zoomLevels.append(domainZoomLevel)
         save(completion)
     }
 

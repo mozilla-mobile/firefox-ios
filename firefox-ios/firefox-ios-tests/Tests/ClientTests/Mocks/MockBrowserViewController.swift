@@ -175,4 +175,8 @@ class MockScreenshotView: Screenshotable {
     func screenshot(quality: CGFloat) -> UIImage? {
         return UIImage.checkmark
     }
+
+    func screenshot(bounds: CGRect) -> UIImage? {
+        return UIImage.checkmark
+    }
 }
