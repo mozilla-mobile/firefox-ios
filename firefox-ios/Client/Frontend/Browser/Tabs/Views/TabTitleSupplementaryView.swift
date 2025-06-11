@@ -10,7 +10,7 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
     struct UX {
         static let tabViewFooterSpacing: CGFloat = 4
         static let faviconSize = CGSize(width: 16, height: 16)
-        static let viewPosition: CGFloat = 23
+        static let bottomAnchorText: CGFloat = 8
     }
 
     private lazy var footerView: UIStackView = .build { stackView in
@@ -42,7 +42,7 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
         faviconContainer.addSubview(favicon)
 
         NSLayoutConstraint.activate([
-            footerView.topAnchor.constraint(equalTo: topAnchor, constant: UX.viewPosition),
+            footerView.topAnchor.constraint(equalTo: bottomAnchor, constant: UX.bottomAnchorText),
             footerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
             footerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
             footerView.centerXAnchor.constraint(equalTo: centerXAnchor),
