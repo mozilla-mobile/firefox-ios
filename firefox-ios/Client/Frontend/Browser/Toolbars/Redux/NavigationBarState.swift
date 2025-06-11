@@ -194,12 +194,12 @@ struct NavigationBarState: StateType, Equatable {
         ]
 
         switch layout {
-        case .version1:
+        case .version1, .none:
             actions.append(middleAction)
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
                                       showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
-        case .version2, .none:
+        case .version2:
             actions.append(middleAction)
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,

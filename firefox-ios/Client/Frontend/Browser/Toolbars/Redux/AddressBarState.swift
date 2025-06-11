@@ -1016,12 +1016,12 @@ struct AddressBarState: StateType, Equatable {
         let menuIcon = StandardImageIdentifiers.Large.moreHorizontalRound
 
         switch layout {
-        case .version1:
+        case .version1, .none:
             actions.append(contentsOf: [
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
             ])
-        case .version2, .none:
+        case .version2:
             actions.append(contentsOf: [
                 tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
                 menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
