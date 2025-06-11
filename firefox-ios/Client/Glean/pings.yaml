@@ -29,6 +29,22 @@ first-session:
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
 
+fx-accounts:
+  description: |
+    A ping for information about Mozilla Account usage. Sent at the same cadence
+    as the baseline ping.
+  include_client_id: true
+  send_if_empty: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-12445
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com
+  metadata:
+    ping_schedule:
+      - baseline
+
 fx-suggest:
   description: |
     A ping representing a single event occurring with or to a Firefox Suggestion.
