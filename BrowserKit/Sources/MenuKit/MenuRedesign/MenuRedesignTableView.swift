@@ -14,12 +14,6 @@ final class MenuRedesignTableView: UIView,
         static let topPadding: CGFloat = 12
         static let tableViewMargin: CGFloat = 16
         static let distanceBetweenSections: CGFloat = 16
-
-        // Menu Redesign horizontal squares cells sizes
-        static let iconSize: CGFloat = 24
-        static let contentViewSpacing: CGFloat = 4
-        static let contentViewTopMargin: CGFloat = 12
-        static let contentViewBottomMargin: CGFloat = 8
     }
 
     private var tableView: UITableView
@@ -64,8 +58,8 @@ final class MenuRedesignTableView: UIView,
         tableView.register(MenuRedesignCell.self, forCellReuseIdentifier: MenuRedesignCell.cellIdentifier)
         tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
         tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
-        tableView.register(MenuCollectionViewContainerCell.self,
-                           forCellReuseIdentifier: MenuCollectionViewContainerCell.cellIdentifier)
+        tableView.register(MenuSquaresViewContentCell.self,
+                           forCellReuseIdentifier: MenuSquaresViewContentCell.cellIdentifier)
     }
 
     func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
@@ -83,22 +77,6 @@ final class MenuRedesignTableView: UIView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
         return section == 0 ? UX.topPadding : UX.distanceBetweenSections
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if menuData[indexPath.section].isHorizontalTabsSection {
-            let label = UILabel()
-            label.font = FXFontStyles.Regular.caption1.scaledFont()
-            label.text = menuData[indexPath.section].options.first?.title
-            label.sizeToFit()
-            let textHeight = label.frame.height
-            let iconHeight: CGFloat = UX.iconSize
-            let spacing: CGFloat = UX.contentViewSpacing
-            let topMargin: CGFloat = UX.contentViewTopMargin
-            let bottomMargin: CGFloat = UX.contentViewBottomMargin
-            return topMargin + iconHeight + spacing + textHeight + bottomMargin
-        }
-        return UITableView.automaticDimension
     }
 
     func tableView(
@@ -120,12 +98,12 @@ final class MenuRedesignTableView: UIView,
     ) -> UITableViewCell {
         if menuData[indexPath.section].isHorizontalTabsSection {
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: MenuCollectionViewContainerCell.cellIdentifier,
-                for: indexPath) as? MenuCollectionViewContainerCell else {
+                withIdentifier: MenuSquaresViewContentCell.cellIdentifier,
+                for: indexPath) as? MenuSquaresViewContentCell else {
                 return UITableViewCell()
             }
-            cell.reloadCollectionView(with: menuData)
             if let theme { cell.applyTheme(theme: theme) }
+            cell.reloadData(with: menuData)
             return cell
         }
 
@@ -196,7 +174,7 @@ final class MenuRedesignTableView: UIView,
     }
 
     func reloadTableView(with data: [MenuSection]) {
-        // We ignore first section because it is handled in MenuCollectionViewContainerCell
+        // We ignore first section because it is handled in MenuSquaresViewContentCell
         if let firstSection = data.first, firstSection.isHorizontalTabsSection {
             tableView.showsVerticalScrollIndicator = false
             menuData = data

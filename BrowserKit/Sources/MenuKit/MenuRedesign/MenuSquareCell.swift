@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 // TODO: FXIOS-12302 Create the UI for different accessibility sizes, for horizontal options section
-final class MenuSquareCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
+final class MenuSquareView: UIView, ThemeApplicable {
     private struct UX {
         static let iconSize: CGFloat = 24
         static let backgroundViewCornerRadius: CGFloat = 12
