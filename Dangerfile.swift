@@ -46,19 +46,19 @@ func failOnNewFilesWithoutCoverage() {
         return
     }
 
-    // Build a dictionary of file coverage: [file path: coverage %]
-    var coverageByFile: [String: Double] = [:]
+    // Build an array with files with 0 coverage
+    var filesWithoutTest = [String]()
     for target in targets {
         if let files = target["files"] as? [[String: Any]] {
             for file in files {
-                // Add files with 0 coverage to check if matches new created files
                 if let path = file["name"] as? String,
                       let coverage = file["lineCoverage"] as? Double, coverage == 0 {
-                    coverageByFile[path] = coverage * 100.0 // Convert from 0.0–1.0 to percent
+                    filesWithoutTest.append(path)
                 }
             }
         }
     }
+    warn("Detected \(filesWithoutTest.count) files with 0 code coverage")
 
     // Get new files filtering Test and Generated
     let newSwiftFiles = danger.git.createdFiles.filter {
@@ -72,11 +72,11 @@ func failOnNewFilesWithoutCoverage() {
         let newFileName = URL(fileURLWithPath: file).lastPathComponent
 
         // Try to find a file in the coverage report that has the same file name
-        let matching = coverageByFile.first { (coveragePath, _) in
-            URL(fileURLWithPath: coveragePath).lastPathComponent == newFileName
+        let matching = filesWithoutTest.first { path in
+            URL(fileURLWithPath: path).lastPathComponent == newFileName
         }
 
-        if let matching {
+        if matching != nil {
             let contact = "(cc: @cyndichin @yoanarios )."
             warn("New file \(newFileName) detected with 0% test coverage. Please add unit tests. \(contact)")
         }
