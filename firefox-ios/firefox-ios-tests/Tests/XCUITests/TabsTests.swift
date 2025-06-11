@@ -687,13 +687,29 @@ fileprivate extension BaseTestCase {
         app.cells.staticTexts[goBackToBrowserTab].firstMatch.waitAndTap()
         navigator.nowAt(BrowserTab)
     }
+
+    func closeExperimentTabTrayView(goBackToBrowserTab: String) {
+        let tabCell = app.cells.containing(NSPredicate(format: "label CONTAINS %@", goBackToBrowserTab)).firstMatch
+        XCTAssertTrue(tabCell.waitForExistence(timeout: 5))
+        tabCell.tap()
+        navigator.nowAt(BrowserTab)
+    }
 }
 
-class TabsTestsIphone: IphoneOnlyTestCase {
+class TabsTestsIphone: FeatureFlaggedTestBase {
+    override func setUp() {
+        specificForPlatform = .phone
+        if !iPad() {
+            super.setUp()
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2355535
     // Smoketest
-    func testCloseTabFromLongPressTabsButton() {
+    func testCloseTabFromLongPressTabsButton_tabTrayExperimentOff() {
         if skipPlatform { return }
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.goto(URLBarOpen)
         navigator.back()
         waitForTabsButton()
@@ -720,11 +736,41 @@ class TabsTestsIphone: IphoneOnlyTestCase {
         closeTabTrayView(goBackToBrowserTab: "Homepage")
     }
 
+    func testCloseTabFromLongPressTabsButton_tabTrayExperimentOn() {
+        if skipPlatform { return }
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.goto(URLBarOpen)
+        navigator.back()
+        waitForTabsButton()
+        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
+    }
+
     // This test only runs for iPhone see bug 1409750
     // https://mozilla.testrail.io/index.php?/cases/view/2355536
     // Smoketest
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
+        app.launch()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
@@ -736,8 +782,10 @@ class TabsTestsIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     // https://mozilla.testrail.io/index.php?/cases/view/2355537
     // Smoketest
-    func testAddPrivateTabByLongPressTabsButton() {
+    func testAddPrivateTabByLongPressTabsButton_tabTrayExperimentOff() {
         if skipPlatform { return }
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
@@ -749,11 +797,28 @@ class TabsTestsIphone: IphoneOnlyTestCase {
         XCTAssertTrue(userState.isPrivate)
     }
 
+    func testAddPrivateTabByLongPressTabsButton_tabTrayExperimentOn() {
+        if skipPlatform { return }
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+        navigator.goto(URLBarOpen)
+        navigator.back()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        let privateIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)0"
+        mozWaitForElementToExist(app.buttons[privateIdentifier])
+        XCTAssertTrue(app.buttons[privateIdentifier].isEnabled)
+        XCTAssertTrue(userState.isPrivate)
+    }
+
     // This test is disabled for iPad because the toast menu is not shown there
     // https://mozilla.testrail.io/index.php?/cases/view/2306861
     // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
+        app.launch()
 
         navigator.openURL(urlExample)
         waitUntilPageLoad()
@@ -776,8 +841,10 @@ class TabsTestsIphone: IphoneOnlyTestCase {
     // This test is disabled for iPad because the toast menu is not shown there
     // https://mozilla.testrail.io/index.php?/cases/view/2306860
     // Smoketest
-    func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
+    func testSwitchBetweenTabsNoPrivatePrivateToastButton_tabTrayExperimentOff() {
         if skipPlatform { return }
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
 
         navigator.openURL(urlExample)
         waitUntilPageLoad()
@@ -794,6 +861,30 @@ class TabsTestsIphone: IphoneOnlyTestCase {
                                 value: "iana")
         navigator.goto(TabTray)
         XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
+    }
+
+    func testSwitchBetweenTabsNoPrivatePrivateToastButton_tabTrayExperimentOn() {
+        if skipPlatform { return }
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        mozWaitForElementToExist(app.buttons["Open in New Tab"])
+        app.buttons["Open in New Private Tab"].press(forDuration: 1)
+        app.buttons["Switch"].waitAndTap()
+
+        // Check that the tab has changed to the new open one and that the user is in private mode
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "iana")
+        navigator.goto(TabTray)
+        let privateIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)0"
+        mozWaitForElementToExist(app.buttons[privateIdentifier])
+        XCTAssertTrue(app.buttons[privateIdentifier].isEnabled)
     }
 }
 
