@@ -857,6 +857,16 @@ extension BrowserViewController: WKNavigationDelegate {
                      context: nil)
     }
 
+    private func handleDownloadStarted(tab: Tab?, request: URLRequest) {
+        observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                     of: tab?.webView,
+                     change: [.newKey: true],
+                     context: nil)
+        if let url = request.url {
+            documentLogger.registerDownloadStart(url: url)
+        }
+    }
+
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         if isNativeErrorPageEnabled {
