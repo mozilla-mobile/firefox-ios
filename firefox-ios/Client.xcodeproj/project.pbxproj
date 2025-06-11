@@ -325,6 +325,7 @@
 		21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */; };
 		21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */; };
 		21F76C622DF9E43B00685BE0 /* DangerRuleCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F76C612DF9E43100685BE0 /* DangerRuleCheck.swift */; };
+		21F76C742DFA060900685BE0 /* SecondDangerCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F76C732DFA060100685BE0 /* SecondDangerCheck.swift */; };
 		21F96EE42D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F96EE22D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
 		21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */; };
@@ -2871,6 +2872,7 @@
 		21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsModel.swift; sourceTree = "<group>"; };
 		21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelStateTests.swift; sourceTree = "<group>"; };
 		21F76C612DF9E43100685BE0 /* DangerRuleCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DangerRuleCheck.swift; sourceTree = "<group>"; };
+		21F76C732DFA060100685BE0 /* SecondDangerCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondDangerCheck.swift; sourceTree = "<group>"; };
 		21F96EE22D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageFeatureFlagTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
 		21FA8FAF2AE856590013B815 /* RemoteTabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -15208,6 +15210,7 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				21F76C732DFA060100685BE0 /* SecondDangerCheck.swift */,
 				21F76C612DF9E43100685BE0 /* DangerRuleCheck.swift */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
@@ -17809,6 +17812,7 @@
 				0A3F57F92CEDD4CA0051B001 /* TermsOfServiceViewController.swift in Sources */,
 				8A3EF7F22A2FCF4000796E3A /* DeleteExportedDataSetting.swift in Sources */,
 				8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */,
+				21F76C742DFA060900685BE0 /* SecondDangerCheck.swift in Sources */,
 				0E6C1E212C909AD7001A43BB /* PasswordGeneratorAction.swift in Sources */,
 				F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */,
 				8A9F4F062DC8F592004644B9 /* TabsProvider.swift in Sources */,
