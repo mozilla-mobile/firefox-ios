@@ -41,8 +41,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
-        static let avatarWarningLargeLight = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorLargeLight
-        static let avatarWarningLargeDark = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorLargeDark
+        static let avatarWarningLargeLight = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorLight
+        static let avatarWarningLargeDark = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorDark
 
         // These will be used in the future, but not now.
         // adding them just for completion's sake

@@ -54,7 +54,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         if shouldConfigureImageView {
             iconImageView.layer.cornerRadius = iconImageView.frame.size.width / 2
         } else {
-            self.iconImageView.layer.cornerRadius = 0
+            iconImageView.layer.cornerRadius = 0
         }
         iconImageView.clipsToBounds = shouldConfigureImageView
     }
@@ -66,31 +66,31 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configureCellWith(model: MenuElement, theme: Theme) {
         self.model = model
-        self.titleLabel.text = model.title
-        self.descriptionLabel.text = model.description
-        self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
+        titleLabel.text = model.title
+        descriptionLabel.text = model.description
+        contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
         if let needsReAuth = model.needsReAuth, needsReAuth {
             typealias Icons = StandardImageIdentifiers.Large
             if theme.type == .light {
-                self.iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLargeLight)
+                iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLight)
             } else {
-                self.iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLargeDark)
+                iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorDark)
             }
         } else if let iconImage = model.iconImage {
-            self.iconImageView.image = iconImage
+            iconImageView.image = iconImage
         }
-        self.isAccessibilityElement = true
-        self.isUserInteractionEnabled = !model.isEnabled ? false : true
-        self.accessibilityIdentifier = model.a11yId
-        self.accessibilityLabel = model.a11yLabel
-        self.accessibilityHint = model.a11yHint
-        self.accessibilityTraits = .button
-        self.separatorInset = .zero
+        isAccessibilityElement = true
+        isUserInteractionEnabled = !model.isEnabled ? false : true
+        accessibilityIdentifier = model.a11yId
+        accessibilityLabel = model.a11yLabel
+        accessibilityHint = model.a11yHint
+        accessibilityTraits = .button
+        separatorInset = .zero
     }
 
     private func setupView() {
-        self.addSubview(contentStackView)
-        self.addSubview(iconImageView)
+        addSubview(contentStackView)
+        addSubview(iconImageView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
         NSLayoutConstraint.activate([
