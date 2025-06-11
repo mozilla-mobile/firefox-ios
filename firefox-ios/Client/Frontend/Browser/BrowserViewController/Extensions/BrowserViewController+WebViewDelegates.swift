@@ -48,7 +48,6 @@ extension BrowserViewController: WKUIDelegate {
             shouldAllowDataScheme = navigationHandler.shouldAllowDataScheme(for: navigationUrl)
         }
 
-        // This is a test to check if we get a Danger warning
         guard shouldAllowDataScheme else { return nil }
 
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
