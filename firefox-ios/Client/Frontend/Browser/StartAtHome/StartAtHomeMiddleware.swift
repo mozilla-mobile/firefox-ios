@@ -23,17 +23,20 @@ final class StartAtHomeMiddleware {
     }
 
     lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
-        switch action.actionType {
-        case StartAtHomeActionType.didBrowserBecomeActive:
-            let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
-            store.dispatchLegacy(
-                StartAtHomeAction(
-                    shouldStartAtHome: shouldStartAtHome,
-                    windowUUID: action.windowUUID,
-                    actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
+        // TODO: We have to spin this up into a task because we don't have a main actor isolated store
+        Task { @MainActor in
+            switch action.actionType {
+            case StartAtHomeActionType.didBrowserBecomeActive:
+                let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
+                store.dispatchLegacy(
+                    StartAtHomeAction(
+                        shouldStartAtHome: shouldStartAtHome,
+                        windowUUID: action.windowUUID,
+                        actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
+                    )
                 )
-            )
-        default: break
+            default: break
+            }
         }
     }
 
@@ -52,6 +55,7 @@ final class StartAtHomeMiddleware {
     /// based on user preferences and session state.
     ///
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
+    @MainActor
     private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
         let tabManager = tabManager(for: windowUUID)
         let startAtHomeManager = StartAtHomeHelper(
@@ -93,6 +97,7 @@ final class StartAtHomeMiddleware {
     ///   - privateMode: A Boolean indicating whether the tab is in private mode.
     ///   - profilePreferences: The user's profile preferences.
     /// - Returns: A tab configured to show the appropriate homepage content.
+    @MainActor
     private func createStartAtHomeTab(tabManager: TabManager,
                                       withExistingTab existingTab: Tab?,
                                       inPrivateMode privateMode: Bool,
