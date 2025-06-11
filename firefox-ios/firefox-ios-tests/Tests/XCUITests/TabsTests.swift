@@ -7,6 +7,7 @@ import XCTest
 
 let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
+let selectedTab = "Currently selected tab."
 let urlValue = "mozilla.org"
 let urlValueLong = "localhost"
 
@@ -17,10 +18,12 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
-class TabsTests: BaseTestCase {
+class TabsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
-    func testAddTabFromTabTray() throws {
+    func testAddTabFromTabTray_tabTrayExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
         }
@@ -44,8 +47,37 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
+    func testAddTabFromTabTray_tabTrayExperimentOn() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        XCTExpectFailure("The app was not launched", strict: false) {
+            mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
+        }
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        waitForTabsButton()
+        // The tabs counter shows the correct number
+        let tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
+        XCTAssertEqual("2", tabsOpen as? String)
+
+        // The tab tray shows the correct tabs
+        if iPad() {
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+        } else {
+            navigator.goto(TabTray)
+        }
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_1"
+        mozWaitForElementToExist(app.cells[identifier])
+        XCTAssertEqual(app.cells[identifier].label, "\(urlLabel). \(selectedTab)")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
     func testAddTabFromContext() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -65,6 +97,7 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354447
     func testSwitchBetweenTabs() {
+        app.launch()
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -96,6 +129,7 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354449
     func testCloseOneTab() {
+        app.launch()
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
@@ -121,6 +155,7 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
     func testCloseAllTabsUndo() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -167,7 +202,9 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
     // Smoketest
-    func testCloseAllTabsPrivateModeUndo() {
+    func testCloseAllTabsPrivateModeUndo_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.goto(URLBarOpen)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
@@ -198,8 +235,42 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
+    func testCloseAllTabsPrivateModeUndo_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.goto(URLBarOpen)
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
+        navigator.back()
+        // A different tab than home is open to do the proper checks
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        waitForTabsButton()
+
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        } else {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        }
+
+        navigator.goto(URLBarOpen)
+        navigator.back()
+        if iPad() {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        } else {
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        }
+        // Close all tabs, undo it and check that the number of tabs is correct
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
     func testCloseAllTabs() {
+        app.launch()
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -225,6 +296,7 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354580
     func testCloseAllTabsPrivateMode() {
+        app.launch()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -246,6 +318,7 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306884
     // Smoketest
     func testOpenNewTabLandscape() {
+        app.launch()
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -260,8 +333,20 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
     // Smoketest
-    func testLongTapTabCounter() {
+    func testLongTapTabCounter_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         guard !iPad() else { return }
+        // Long tap on Tab Counter should show the correct options
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        waitForElementsToExist(
+            [
+                app.cells.buttons[StandardImageIdentifiers.Large.plus],
+                app.cells.buttons[StandardImageIdentifiers.Large.cross]
+            ]
+        )
 
         // Long tap on Tab Counter should show the correct options
         navigator.nowAt(NewTabScreen)
@@ -313,8 +398,63 @@ class TabsTests: BaseTestCase {
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
     }
 
+    func testLongTapTabCounter_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        guard !iPad() else { return }
+        // Long tap on Tab Counter should show the correct options
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        waitForElementsToExist(
+        [
+            app.cells.buttons[StandardImageIdentifiers.Large.plus],
+            app.cells.buttons[StandardImageIdentifiers.Large.cross]
+        ]
+    )
+
+        // Open New Tab
+        app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
+        navigator.performAction(Action.CloseURLBarOpen)
+
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        app.cells[identifier].waitAndTap()
+        mozWaitForElementToExist(
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
+
+        // Close tab
+        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+
+        // Go to Private Mode
+        app.cells[identifier].waitAndTap()
+        mozWaitForElementToExist(
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
+        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        app.tables.cells.buttons["Private Browsing Mode"].waitAndTap()
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(tabsButton)
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307047
     func testOpenTabsViewCurrentTabThumbnail() {
+        app.launch()
         // Open ten or more tabs
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -358,6 +498,7 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306869
     func testTabTrayContextMenuCloseTab() {
+        app.launch()
         // Have multiple tabs opened in the tab tray
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -369,6 +510,7 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306868
     func testTabTrayCloseMultipleTabs() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
@@ -403,6 +545,7 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
     func testCloseOneTabUndo() {
+        app.launch()
         // Open a few tabs
         waitForTabsButton()
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")

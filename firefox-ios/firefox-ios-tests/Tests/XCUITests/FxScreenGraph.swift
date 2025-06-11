@@ -399,11 +399,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
         screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
+            let textField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
             // Workaround BB iOS13 be sure tap happens on url bar
-            app.textFields.firstMatch.waitAndTap()
-            app.textFields.firstMatch.waitAndTap()
-            app.textFields.firstMatch.typeText(url)
-            app.textFields.firstMatch.typeText("\r")
+            textField.waitAndTap()
+            textField.waitAndTap()
+            textField.typeText(url)
+            textField.typeText("\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
