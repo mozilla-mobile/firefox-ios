@@ -2274,7 +2274,9 @@ class BrowserViewController: UIViewController,
                 nil
             }
             guard let url else { break }
-            if !url.isFxHomeUrl { updateToolbarAnimationStateIfNeeded() }
+            if !url.isFxHomeUrl {
+                updateToolbarAnimationStateIfNeeded()
+            }
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
                 tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
