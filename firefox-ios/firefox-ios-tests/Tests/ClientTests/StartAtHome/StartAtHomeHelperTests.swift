@@ -98,6 +98,7 @@ class StartAtHomeHelperTests: XCTestCase {
         XCTAssertNil(homeTab, "Expected to fail for disabled state")
     }
 
+    @MainActor
     func testScanForExistingHomeTab_WithHomePage() {
         setupHelper()
 
@@ -110,6 +111,7 @@ class StartAtHomeHelperTests: XCTestCase {
         XCTAssertNotNil(homeTab, "Expected to have a existing tab")
     }
 
+    @MainActor
     func testScanForExistingHomeTab_WithoutHomePage() {
         setupHelper()
 

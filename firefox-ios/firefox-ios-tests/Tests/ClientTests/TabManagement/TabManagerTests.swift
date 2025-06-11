@@ -130,6 +130,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tab, addedTab)
     }
 
+    @MainActor
     func testUndoCloseTab() {
         let subject = createSubject()
         let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
@@ -140,6 +141,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.selectedIndex, 0)
     }
 
+    @MainActor
     func testUndoCloseTabWithSelectedTab() {
         let closedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
         closedTab.url = URL(string: "https://mozilla.com/")!
@@ -154,7 +156,7 @@ class TabManagerTests: XCTestCase {
     }
 
     // MARK: - Document pause - restore
-
+    @MainActor
     func testSelectTab_pauseCurrentDocumentDownload() throws {
         setIsPDFRefactorEnabled(true)
 
@@ -315,6 +317,7 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    @MainActor
     func testRestoreTabs_whenDeeplinkTabPresent_doesnAddDepplinkTabMultipleTimes() throws {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
@@ -420,6 +423,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.normalTabs.count, totalTabCount, "The total tab count should not have changed")
     }
 
+    @MainActor
     func test_addTabsForURLs() {
         let subject = createSubject()
 
@@ -430,6 +434,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.first?.isPrivate, false)
     }
 
+    @MainActor
     func test_addTabsForURLs_forPrivateMode() {
         let subject = createSubject()
 
