@@ -81,11 +81,11 @@ func failOnNewFilesWithoutCoverage() {
                 hasNewFileWithoutCoverage = true
             }
         }
+    }
 
-        if hasNewFileWithoutCoverage {
-            let contact = "(cc: @cyndichin @yoanarios )."
-            warn("New file detected with 0% test coverage. Please add unit tests. \(contact)")
-        }
+    if hasNewFileWithoutCoverage {
+        let contact = "(cc: @cyndichin @yoanarios )."
+        warn("New file detected with 0% test coverage. Please add unit tests. \(contact)")
     }
 }
 
