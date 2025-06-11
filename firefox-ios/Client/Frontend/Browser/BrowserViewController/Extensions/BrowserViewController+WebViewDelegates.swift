@@ -861,6 +861,18 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleDownloadError(tab: Tab?, request: URLRequest, error: (any Error)?) {
+        navigationHandler?.removeDocumentLoading()
+        logger.log("Failed to download Document",
+                   level: .warning,
+                   category: .webview,
+                   extra: [
+                    "error": error?.localizedDescription ?? "",
+                    "url": request.url?.absoluteString ?? "Unknown URL"])
+        guard let error, let webView = tab?.webView else { return }
+        showErrorPage(webView: webView, error: error)
+    }
+
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         if isNativeErrorPageEnabled {
