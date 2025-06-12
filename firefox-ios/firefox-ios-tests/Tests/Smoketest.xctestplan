@@ -125,7 +125,6 @@
         "BookmarksTests\/testBookmarkingUI()",
         "BookmarksTests\/testDeleteBookmarkContextMenu()",
         "BookmarksTests\/testDeleteBookmarkSwiping()",
-        "BookmarksTests\/testDesktopFoldersArePresent()",
         "BookmarksTests\/testEditBookmark()",
         "BookmarksTests\/testLongTapRecentlySavedLink()",
         "BookmarksTests\/testRecentlyBookmarked()",

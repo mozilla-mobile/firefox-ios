@@ -321,6 +321,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306909
+    // Smoketest
     func testBookmarkLibraryAddDeleteBookmark_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

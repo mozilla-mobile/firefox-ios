@@ -160,6 +160,8 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(jumpBackInItem.staticTexts["YouTube"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306920
+    // Smoketest
     func testPrivateTab_tabTrayExperimentOn() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

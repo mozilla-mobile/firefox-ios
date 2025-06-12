@@ -232,6 +232,8 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306852
+    // smoketest
     func testLongPressReload_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

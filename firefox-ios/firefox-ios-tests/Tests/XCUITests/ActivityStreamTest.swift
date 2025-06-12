@@ -227,6 +227,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
                              value: "wikipedia.org")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
+    // Smoketest
     func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOn() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
@@ -278,6 +280,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
+    // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()

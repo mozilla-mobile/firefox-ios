@@ -415,6 +415,8 @@ class NavigationTest: FeatureFlaggedTestBase {
         XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2441776
+    // Smoketest
     func testPopUpBlocker_tabTrayExperimentOn() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
