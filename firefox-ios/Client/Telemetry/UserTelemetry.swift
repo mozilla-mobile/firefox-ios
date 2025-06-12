@@ -16,5 +16,8 @@ struct UserTelemetry {
     /// - Parameter option: A unique identifier for the selected row. Identifies the row tapped, not the screen shown.
     func setFirefoxAccountID(uid: String) {
         gleanWrapper.recordString(for: GleanMetrics.UserClientAssociation.uid, value: uid)
+
+        // We send the `fx-accounts` ping now that the payload data has been set
+        GleanMetrics.Pings.shared.fxAccounts.submit()
     }
 }
