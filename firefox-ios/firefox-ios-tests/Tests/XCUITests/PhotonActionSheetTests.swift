@@ -92,7 +92,13 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
-        app.staticTexts["Send to Device"].waitAndTap()
+        var attempts = 2
+        let sendToDeviceButton = app.staticTexts["Send to Device"]
+        while sendToDeviceButton.isVisible() && attempts > 0 {
+            sendToDeviceButton.waitAndTap()
+            waitForNoExistence(sendToDeviceButton)
+            attempts -= 1
+        }
         waitForElementsToExist(
             [
                 app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton],
