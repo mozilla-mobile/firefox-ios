@@ -28,7 +28,7 @@ History:
   description: Corresponds to the internal data store of history within the app. Not to be confused with `HistoryPanel`, which refers to the History screen in the library.
 
 HistoryPanel:
-  description: Corresponds to the history panel of the library. Not to be confused with `History`, which deals specifically with telemetry around the interal store of history within the app.
+  description: Corresponds to the history panel of the library. Not to be confused with `History`, which deals specifically with telemetry around the internal store of history within the app.
 
 Homepage:
   description: Corresponds to the homepage feature and all content that resides on the page.
