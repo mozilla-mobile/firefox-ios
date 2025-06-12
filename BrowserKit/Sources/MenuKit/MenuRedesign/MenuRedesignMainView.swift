@@ -12,6 +12,7 @@ public final class MenuRedesignMainView: UIView,
         static let headerTopMargin: CGFloat = 15
         static let horizontalMargin: CGFloat = 16
         static let closeButtonSize: CGFloat = 30
+        static let headerTopMarginWithButton: CGFloat = 8
     }
 
     public var closeButtonCallback: (() -> Void)?
@@ -37,7 +38,7 @@ public final class MenuRedesignMainView: UIView,
                 closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
                 closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
 
-                tableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMargin / 2),
+                tableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMarginWithButton),
                 tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
                 tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
