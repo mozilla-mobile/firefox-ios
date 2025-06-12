@@ -79,6 +79,7 @@ extension Analytics {
 
         public enum Navigation: String {
             case
+            help,
             inapp,
             news,
             privacy,

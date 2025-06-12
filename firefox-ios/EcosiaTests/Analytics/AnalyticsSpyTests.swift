@@ -991,6 +991,7 @@ extension AnalyticsSpyTests {
     func makeInstructionsViewSUT(onButtonTap: @escaping () -> Void = {}) -> InstructionStepsView<some View> {
         let style = InstructionStepsViewStyle(
             backgroundPrimaryColor: .blue,
+
             topContentBackgroundColor: .blue,
             stepsBackgroundColor: .blue,
             textPrimaryColor: .blue,

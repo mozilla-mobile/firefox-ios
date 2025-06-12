@@ -160,40 +160,6 @@ final class EcosiaPrivacyPolicySetting: Setting {
     }
 }
 
-final class EcosiaSendFeedbackSetting: Setting {
-    private var device: String {
-        var systemInfo = utsname()
-        uname(&systemInfo)
-        let machineMirror = Mirror(reflecting: systemInfo.machine)
-        let identifier = machineMirror.children.reduce("") { identifier, element in
-            guard let value = element.value as? Int8, value != 0 else { return identifier }
-            return identifier + String(UnicodeScalar(UInt8(value)))
-        }
-        return identifier
-    }
-
-    private var mailURL: String {
-        """
-        mailto:iosapp@ecosia.org?subject=\
-        iOS%20App%20Feedback%20-\
-        %20Version_\(Bundle.version)\
-        %20iOS_\(UIDevice.current.systemVersion)\
-        %20\(device)
-        """
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: .localized(.sendFeedback), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        _ = URL(string: mailURL).map {
-            UIApplication.shared.open($0, options: [:], completionHandler: nil)
-        }
-        Analytics.shared.navigation(.open, label: .sendFeedback)
-    }
-}
-
 final class EcosiaTermsSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .localized(.terms), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
@@ -256,6 +222,74 @@ final class HomepageSettings: Setting {
         customizationViewController.profile = profile
         customizationViewController.settingsDelegate = delegate
         navigationController?.pushViewController(customizationViewController, animated: true)
+    }
+}
+
+/// Setting option that opens the Ecosia Help Center
+class HelpCenterSetting: Setting {
+    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "HelpCenter" }
+
+    override var url: URL? {
+        return Environment.current.urlProvider.faq
+    }
+
+    let windowUUID = WindowUUID()
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController, url: self.url, windowUUID: windowUUID)
+        Analytics.shared.navigation(.open, label: .help)
+    }
+
+    init() {
+        super.init(title: NSAttributedString(string: String.localized(.helpCenter)))
+    }
+}
+
+/// Setting for displaying the feedback view from the settings menu
+class EcosiaSendFeedbackSetting: Setting {
+    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "SendFeedback" }
+
+    let windowUUID: WindowUUID
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let feedbackVC = FeedbackViewController(windowUUID: windowUUID)
+        feedbackVC.onFeedbackSubmitted = { [weak self, weak navigationController] in
+            self?.showThankYouToast(in: navigationController?.view)
+        }
+        navigationController?.present(feedbackVC, animated: true)
+        Analytics.shared.navigation(.open, label: .sendFeedback)
+    }
+
+    /// Show a toast thanking the user for their feedback
+    private func showThankYouToast(in view: UIView?) {
+        guard let view,
+              let themeManager: ThemeManager = AppContainer.shared.resolve() else {
+            return
+        }
+
+        // Get the default theme
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+
+        // Show the thank you message
+        SimpleToast().ecosiaShowAlertWithText(
+            String.localized(.thankYouForYourFeedback),
+            bottomContainer: view,
+            theme: theme,
+            bottomInset: view.layoutMargins.bottom)
+    }
+
+    init(settings: SettingsTableViewController) {
+        self.windowUUID = settings.windowUUID
+        super.init(title: NSAttributedString(string: String.localized(.sendFeedback)))
+    }
+
+    init() {
+        self.windowUUID = WindowUUID()
+        super.init(title: NSAttributedString(string: String.localized(.sendFeedback)))
     }
 }
 

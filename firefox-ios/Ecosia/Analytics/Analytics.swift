@@ -3,16 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 internal import SnowplowTracker
 
 open class Analytics {
-    static let installSchema = "iglu:org.ecosia/ios_install_event/jsonschema/1-0-0"
     private static let abTestSchema = "iglu:org.ecosia/abtest_context/jsonschema/1-0-1"
     private static let consentSchema = "iglu:org.ecosia/eccc_context/jsonschema/1-0-2"
-    static let userSchema = "iglu:org.ecosia/app_user_state_context/jsonschema/1-0-0"
-    static let inappSearchSchema = "iglu:org.ecosia/inapp_search_event/jsonschema/1-0-1"
+    private static let feedbackSchema = "iglu:org.ecosia/ios_feedback_event/jsonschema/1-0-0"
     private static let abTestRoot = "ab_tests"
     private static let namespace = "ios_sp"
+    static let installSchema = "iglu:org.ecosia/ios_install_event/jsonschema/1-0-0"
+    static let userSchema = "iglu:org.ecosia/app_user_state_context/jsonschema/1-0-0"
+    static let inappSearchSchema = "iglu:org.ecosia/inapp_search_event/jsonschema/1-0-1"
     private static let shouldUseMicroInstanceKey = "shouldUseMicroInstance"
     public static var shouldUseMicroInstance: Bool {
         get {
@@ -316,6 +318,26 @@ open class Analytics {
                          action: Action.click.rawValue)
             .label(Analytics.Label.clear.rawValue)
             .property(section.rawValue))
+    }
+
+    // MARK: Feedback
+
+    public func sendFeedback(_ feedback: String, withType feedbackType: FeedbackType) {
+        let deviceType = UIDevice.current.model
+        let operatingSystem = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+        let idiom = UIDevice.current.userInterfaceIdiom == .pad ? "iPadOS" : "iOS"
+        let browserVersion = "Ecosia \(idiom) \(Bundle.version)"
+
+        let payload: [String: Any] = [
+            "feedback_type": feedbackType.analyticsIdentfier,
+            "device_type": deviceType,
+            "os": operatingSystem,
+            "browser_version": browserVersion,
+            "feedback_text": feedback
+        ]
+
+        track(SelfDescribing(schema: Self.feedbackSchema,
+                             payload: payload))
     }
 }
 

@@ -16,6 +16,8 @@ struct ButtonToastViewModel {
 
 class ButtonToast: Toast {
     struct UX {
+        // Ecosia: Add custom height
+        static let ecosiaButtonToastHeight: CGFloat = Toast.UX.toastHeight + Toast.UX.toastOffset
         static let delay = DispatchTimeInterval.milliseconds(900)
         // Ecosia: Adjust Padding
         // static let padding: CGFloat = 15
@@ -110,11 +112,18 @@ class ButtonToast: Toast {
             toastView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toastView.heightAnchor.constraint(equalTo: heightAnchor),
 
+            /* Ecosia: Add custom height
             heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeight)
+             */
+            heightAnchor.constraint(greaterThanOrEqualToConstant: UX.ecosiaButtonToastHeight),
         ])
 
+        /* Ecosia: Add custom height
         animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
                                                              constant: Toast.UX.toastHeight)
+         */
+        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
+                                                             constant: UX.ecosiaButtonToastHeight)
         animationConstraint?.isActive = true
         if let theme = theme {
             applyTheme(theme: theme)

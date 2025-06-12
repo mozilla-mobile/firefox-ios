@@ -45,7 +45,7 @@ final class BookmarksExchange: BookmarksExchangable {
 
         let toast = SimpleToast()
 
-        toast.showAlertWithText(
+        toast.ecosiaShowAlertWithText(
             .localized(.exportingBookmarks),
             image: .view(activityIndicator),
             bottomContainer: view,
@@ -64,7 +64,7 @@ final class BookmarksExchange: BookmarksExchangable {
         activityViewController.popoverPresentationController?.barButtonItem = barButtonItem
         activityViewController.completionWithItemsHandler = { _, completed, _, error in
             guard completed, error == nil else { return }
-            SimpleToast().showAlertWithText(
+            SimpleToast().ecosiaShowAlertWithText(
                 .localized(.bookmarksExported),
                 image: .named("bookmarkSuccess"),
                 bottomContainer: view,
@@ -85,7 +85,7 @@ final class BookmarksExchange: BookmarksExchangable {
 
         let toast = SimpleToast()
 
-        toast.showAlertWithText(
+        toast.ecosiaShowAlertWithText(
             .localized(.importingBookmarks),
             image: .view(activityIndicator),
             bottomContainer: view,
@@ -131,7 +131,7 @@ final class BookmarksExchange: BookmarksExchangable {
     @MainActor
     private func showImportSuccess(using toast: SimpleToast, in view: UIView) async {
 
-        SimpleToast().showAlertWithText(
+        SimpleToast().ecosiaShowAlertWithText(
             .localized(.bookmarksImported),
             image: .named("bookmarkSuccess"),
             bottomContainer: view,

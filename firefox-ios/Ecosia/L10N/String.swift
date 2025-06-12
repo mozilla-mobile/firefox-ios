@@ -18,6 +18,7 @@ extension String {
     }
 
     public enum Key: String {
+        case addMoreDetailAboutYourFeedback = "Add more detail about your feedback..."
         case allRegions = "All regions"
         case autocomplete = "Autocomplete"
         case climateImpact = "Climate Impact"
@@ -232,5 +233,15 @@ extension String {
         case defaultBrowserCardDetailInstructionStep2 = "Select **Default Browser App**"
         case defaultBrowserCardDetailInstructionStep3 = "Choose **Ecosia**"
         case defaultBrowserCardDetailButton = "Make default in settings"
+
+        // MARK: - Feedback View
+        case reportIssue = "Report an issue"
+        case generalQuestion = "General question"
+        case helpCenter = "Help Center"
+        case suggestionOrFeedback = "Suggestion or feedback"
+        case whatWouldYouLikeToShare = "What would you like to share?"
+        case send = "Send"
+        case close = "Close"
+        case thankYouForYourFeedback = "Thank you for your feedback!"
     }
 }

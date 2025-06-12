@@ -9,9 +9,7 @@ import Shared
 
 class Toast: UIView, ThemeApplicable {
     struct UX {
-        // Ecosia: add `toastOffset`
-        // static let toastHeight: CGFloat = 56
-        static let toastHeight: CGFloat = 56 + toastOffset
+        static let toastHeight: CGFloat = 56
         static let toastOffset: CGFloat = 16
         static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
         static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds

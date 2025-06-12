@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Ecosia
 
 extension SimpleToast {
 
@@ -13,15 +14,15 @@ extension SimpleToast {
 
     @discardableResult
     // Ecosia: Migrated to be able to customize the accessory image shown, as well as bottom inset
-    func showAlertWithText(
+    func ecosiaShowAlertWithText(
         _ text: String,
-        image: AccessoryImage,
+        image: AccessoryImage? = nil,
         bottomContainer: UIView,
         theme: Theme,
         bottomInset: CGFloat? = nil
     ) -> SimpleToast {
         let toast = self.createView(text: text, image: image, theme: theme)
-        toast.layer.cornerRadius = 10
+        toast.layer.cornerRadius = .ecosia.borderRadius._l
         toast.layer.masksToBounds = true
 
         bottomContainer.addSubview(toast)
@@ -36,46 +37,51 @@ extension SimpleToast {
     }
 
     fileprivate func createView(text: String,
-                                image: AccessoryImage,
+                                image: AccessoryImage?,
                                 theme: Theme) -> UIStackView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
         stack.distribution = .fill
-        stack.spacing = 8
-        stack.layer.cornerRadius = 10
+        stack.spacing = .ecosia.space._1s
+        stack.layer.cornerRadius = .ecosia.borderRadius._l
         stack.backgroundColor = theme.colors.ecosia.backgroundQuaternary
 
         let toast = UILabel()
         toast.text = text
         toast.numberOfLines = 1
         toast.textColor = theme.colors.ecosia.textInversePrimary
-        toast.font = UIFont.preferredFont(forTextStyle: .body)
+        // Ecosia: Use consistent font style with main implementation
+        toast.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
         toast.adjustsFontForContentSizeCategory = true
         toast.adjustsFontSizeToFitWidth = true
         toast.textAlignment = .left
         toast.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        let imageView: UIView
-
-        switch image {
-        case let .named(name):
-            imageView = UIImageView(image: .init(named: name)?.withRenderingMode(.alwaysTemplate))
-            imageView.tintColor = theme.colors.ecosia.toastImageTint
-            imageView.contentMode = .scaleAspectFit
-            imageView.setContentHuggingPriority(.required, for: .horizontal)
-        case let .view(view):
-            imageView = view
-        }
-
         let leftSpace = UIView()
-        leftSpace.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        leftSpace.widthAnchor.constraint(equalToConstant: .ecosia.space._1s).isActive = true
         stack.addArrangedSubview(leftSpace)
-        stack.addArrangedSubview(imageView)
         stack.addArrangedSubview(toast)
         let rightSpace = UIView()
-        rightSpace.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        rightSpace.widthAnchor.constraint(equalToConstant: .ecosia.space._1s).isActive = true
         stack.addArrangedSubview(rightSpace)
+
+        if let image {
+            let imageView: UIView
+
+            switch image {
+            case let .named(name):
+                imageView = UIImageView(image: .init(named: name)?.withRenderingMode(.alwaysTemplate))
+                imageView.tintColor = theme.colors.ecosia.toastImageTint
+                imageView.contentMode = .scaleAspectFit
+                imageView.setContentHuggingPriority(.required, for: .horizontal)
+            case let .view(view):
+                imageView = view
+            }
+
+            stack.insertArrangedSubview(imageView, at: 1)
+        }
+
         return stack
     }
 }
