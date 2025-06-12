@@ -23,6 +23,7 @@ import enum MozillaAppServices.SyncReason
 import enum MozillaAppServices.VisitType
 import func MozillaAppServices.setLogger
 import func MozillaAppServices.setMaxLevel
+import func MozillaAppServices.getLocaleTag
 import struct MozillaAppServices.HistoryMigrationResult
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
@@ -761,7 +762,13 @@ open class BrowserProfile: Profile {
             channel: appInfo.buildChannel?.rawValue ?? "release",
             appVersion: AppInfo.appVersion,
             appId: AppInfo.bundleIdentifier,
-            locale: Locale.current.identifier,
+            /// `Locale.current.identifier` uses an underscore (e.g. “en_US”), which is not supported by RS.
+            /// Nimbus’s `getLocaleTag()` returns a Gecko-compatible locale (e.g. “en-US”).
+            /// In Gecko, we use BCP47 format, specifically `appLocaleAsBCP47`
+            /// See : https://searchfox.org/mozilla-central/rev/240ca3f/toolkit/modules/RustSharedRemoteSettingsService.sys.mjs#46
+            /// Once we drop support for iOS <16 we can support the proper  BCP47 by using `Locale.IdentifierType.bcp47`
+            /// See: https://developer.apple.com/documentation/foundation/locale/identifiertype/bcp47
+            locale: getLocaleTag(),
             os: "iOS",
             osVersion: uiDevice.systemVersion,
             formFactor: formFactor,
