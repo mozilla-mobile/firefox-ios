@@ -110,7 +110,7 @@ extension PreviewModel {
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_welcome",
-        imageID: "trackers",
+        imageID: "onboardingTrackers",
         instructionsPopup: OnboardingInstructionsPopupInfoModel(
             title: "Set as Default Browser",
             instructionSteps: [
@@ -138,7 +138,7 @@ extension PreviewModel {
         multipleChoiceButtons: [],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_signToSync",
-        imageID: "syncWithIcons",
+        imageID: "onboardingSyncWithIcons",
         instructionsPopup: nil
     )
 
@@ -217,9 +217,8 @@ extension PreviewModel {
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onPrimaryActionTap: { },
-            onSecondaryActionTap: { },
-            onLinkTap: { }
+            onBottomButtonAction: { _, _ in },
+            onLinkTap: { _ in }
         )
     }
 }
@@ -232,55 +231,22 @@ extension PreviewModel {
             viewModel: PreviewModel.customizationToolbar,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            selectedAction: .constant(.toolbarTop),
-            onPrimaryActionTap: {
-            },
-            onSecondaryActionTap: { },
-            onLinkTap: { }
+            onBottomButtonAction: { _, _ in },
+            onMultipleChoiceAction: { _, _ in },
+            onLinkTap: { _ in }
         )
     }
 }
 
-struct OnboardingMultipleChoiceButtonModelExampleView: View {
-    @State private var selectedAction: OnboardingMultipleChoiceAction = .toolbarBottom
-
-    // configure these however you like—titles, SF Symbol names, etc.
-    private let toolbarOptions = [
-        OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
-            title: "Bottom",
-            action: .toolbarBottom,
-            imageID: "rectangle.bottomthird.inset.filled"
-        ),
-        OnboardingMultipleChoiceButtonModel(
-            title: "Top",
-            action: .toolbarTop,
-            imageID: "rectangle.topthird.inset.filled"
+#Preview("Onboarding Flow") {
+    OnboardingView<PreviewModel>(
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+        viewModel: OnboardingFlowViewModel(
+            onboardingCards: PreviewModel.all,
+            onComplete: { }
         )
-    ]
-
-    var body: some View {
-        VStack(spacing: 20) {
-            OnboardingSegmentedControl(
-                selection: $selectedAction,
-                items: toolbarOptions,
-                windowUUID: .XCTestDefaultUUID,
-                themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-            )
-            .padding()
-
-            Text("You picked: \(selectedAction.rawValue)")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        .onChange(of: selectedAction) { _ in
-            // here’s where you get the callback
-            // e.g. apply your toolbar position or theme
-        }
-    }
-}
-
-#Preview(" Multiple Choice Button") {
-    OnboardingMultipleChoiceButtonModelExampleView()
+    )
 }
 
 #Preview("Terms of service") {
