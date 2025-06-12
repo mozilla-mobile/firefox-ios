@@ -145,13 +145,8 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let delegate = MockTabDisplayViewDragAndDropInteraction()
-        let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false,
-                                                             windowUUID: .XCTestDefaultUUID,
-                                                             dragAndDropDelegate: delegate)
-        let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true,
-                                                             windowUUID: .XCTestDefaultUUID,
-                                                             dragAndDropDelegate: delegate)
+        let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false, windowUUID: .XCTestDefaultUUID)
+        let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true, windowUUID: .XCTestDefaultUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: .XCTestDefaultUUID)
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),

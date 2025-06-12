@@ -6,11 +6,6 @@ import Common
 import Redux
 import UIKit
 
-protocol TabDisplayViewDragAndDropInteraction: AnyObject {
-    func dragAndDropStarted()
-    func dragAndDropEnded()
-}
-
 class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDelegate,
@@ -31,7 +26,6 @@ class TabDisplayView: UIView,
     private let windowUUID: WindowUUID
     private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
-    weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
 
     lazy var dataSource =
     TabDisplayDiffableDataSource(
@@ -462,13 +456,5 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         )
 
         store.dispatch(action)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
-        dragAndDropDelegate?.dragAndDropStarted()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
-        dragAndDropDelegate?.dragAndDropEnded()
     }
 }
