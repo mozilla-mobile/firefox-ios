@@ -39,7 +39,7 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var privateHomepageViewController: PrivateHomepageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
