@@ -209,9 +209,10 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             rootContainer.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
             rootContainer.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
 
+            descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.textSafeSpace),
             descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.textSafeSpace),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             selectedOverlay.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
