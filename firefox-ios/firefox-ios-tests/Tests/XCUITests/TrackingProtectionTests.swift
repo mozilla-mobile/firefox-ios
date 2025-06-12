@@ -128,6 +128,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SwitchETP)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307059
+    // Smoketest
     func testStandardProtectionLevel_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

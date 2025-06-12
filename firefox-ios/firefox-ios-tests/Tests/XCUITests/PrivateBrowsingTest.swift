@@ -221,6 +221,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307012
+    // Smoketest
     func testLongPressLinkOptionsPrivateMode_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
@@ -384,6 +386,9 @@ class PrivateBrowsingTestIphone: FeatureFlaggedTestBase {
         XCTAssertEqual("2", numPrivTab)
     }
 
+    // This test is disabled for iPad because the toast menu is not shown there
+    // https://mozilla.testrail.io/index.php?/cases/view/2307013
+    // Smoketest
     func testSwitchBetweenPrivateTabsToastButton_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

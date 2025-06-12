@@ -152,6 +152,9 @@ class SettingsTests: FeatureFlaggedTestBase {
         checkShowImages(showImages: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307058
+    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
+    // SmokeTest
     func testImageOnOff_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

@@ -44,6 +44,8 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307027
+    // Smoketest
     func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()

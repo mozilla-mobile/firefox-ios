@@ -47,6 +47,8 @@ class TabsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307042
+    // Smoketest
     func testAddTabFromTabTray_tabTrayExperimentOn() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
@@ -235,6 +237,8 @@ class TabsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2354473
+    // Smoketest
     func testCloseAllTabsPrivateModeUndo_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
@@ -398,6 +402,8 @@ class TabsTests: FeatureFlaggedTestBase {
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306838
+    // Smoketest
     func testLongTapTabCounter_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
@@ -736,6 +742,8 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         closeTabTrayView(goBackToBrowserTab: "Homepage")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2355535
+    // Smoketest
     func testCloseTabFromLongPressTabsButton_tabTrayExperimentOn() {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
@@ -797,6 +805,9 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         XCTAssertTrue(userState.isPrivate)
     }
 
+    // This test only runs for iPhone see bug 1409750
+    // https://mozilla.testrail.io/index.php?/cases/view/2355537
+    // Smoketest
     func testAddPrivateTabByLongPressTabsButton_tabTrayExperimentOn() {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
@@ -863,6 +874,9 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
     }
 
+    // This test is disabled for iPad because the toast menu is not shown there
+    // https://mozilla.testrail.io/index.php?/cases/view/2306860
+    // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton_tabTrayExperimentOn() {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
