@@ -255,65 +255,62 @@ class TabsTests: BaseTestCase {
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
-        if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
-        } else {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
     // Smoketest
     func testLongTapTabCounter() {
-        if !iPad() {
-            // Long tap on Tab Counter should show the correct options
-            navigator.nowAt(NewTabScreen)
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-            waitForElementsToExist(
-                [
-                    app.cells.buttons[StandardImageIdentifiers.Large.plus],
-                    app.cells.buttons[StandardImageIdentifiers.Large.cross]
-                ]
-            )
+        guard !iPad() else { return }
 
-            // Open New Tab
-            app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
-            navigator.performAction(Action.CloseURLBarOpen)
+        // Long tap on Tab Counter should show the correct options
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        waitForElementsToExist(
+            [
+                app.cells.buttons[StandardImageIdentifiers.Large.plus],
+                app.cells.buttons[StandardImageIdentifiers.Large.cross]
+            ]
+        )
 
-            waitForTabsButton()
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-            app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
-            mozWaitForElementToExist(
-                app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-            )
+        // Open New Tab
+        app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
+        navigator.performAction(Action.CloseURLBarOpen)
 
-            // Close tab
-            navigator.nowAt(HomePanelsScreen)
-            navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
+        mozWaitForElementToExist(
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
 
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-            mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
-            app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
-            navigator.nowAt(NewTabScreen)
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        // Close tab
+        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
 
-            // Go to Private Mode
-            app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
-            mozWaitForElementToExist(
-                app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-            )
-            navigator.nowAt(HomePanelsScreen)
-            navigator.nowAt(NewTabScreen)
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-            app.tables.cells.buttons["Private Browsing Mode"].waitAndTap()
-            let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-            mozWaitForElementToExist(tabsButton)
-            navigator.nowAt(NewTabScreen)
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+
+        // Go to Private Mode
+        app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
+        mozWaitForElementToExist(
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
+        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
+        app.tables.cells.buttons["New Private Tab"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(tabsButton)
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307047
@@ -539,7 +536,7 @@ fileprivate extension BaseTestCase {
             }
             XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
         } else {
-            // iOS 15 does not update userState.numTabs propertly
+            // iOS 15 does not update userState.numTabs properly
         }
     }
 
