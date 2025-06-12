@@ -22,11 +22,7 @@ class HomeButtonTests: BaseTestCase {
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
         waitUntilPageLoad()
-        if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
-        } else {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
 
         XCUIDevice.shared.orientation = .landscapeRight
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
@@ -42,11 +38,7 @@ class HomeButtonTests: BaseTestCase {
         // Switch to Homepage by taping the home button
         navigator.performAction(Action.GoToHomePage)
 
-        if iPad() {
-            validateHomePageAndKeyboardRaisedUp(showKeyboard: true)
-        } else {
-            validateHomePageAndKeyboardRaisedUp(showKeyboard: false)
-        }
+        validateHomePageAndKeyboardRaisedUp(showKeyboard: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306881
