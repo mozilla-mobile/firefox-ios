@@ -66,24 +66,20 @@ func failOnNewFilesWithoutCoverage() {
         !$0.contains("/Generated/")
     }
 
-    // Get the amount of new files without coverage
-    var countFilesWithoutCoverage = 0
-    for newFilePath in newSwiftFiles {
-        let newFileName = URL(fileURLWithPath: newFilePath).lastPathComponent
+    for file in newSwiftFiles {
+        warn("Check file name \(file)")
+        let cleanedFile = file.replacingOccurrences(of: "./", with: "")
 
-        for uncoveredFile in filesWithoutCoverage {
-            let uncoveredFileName = URL(fileURLWithPath: uncoveredFile).lastPathComponent
-
-            if newFileName == uncoveredFileName {
-                countFilesWithoutCoverage += 1
-                break
-            }
+        // Try to find a file in coverage report that ends with this file
+        let matchingFile = filesWithoutCoverage.first { coveragePath in
+            coveragePath.hasSuffix(cleanedFile)
         }
-    }
 
-    if countFilesWithoutCoverage > 0 {
-        let contact = "(cc: @cyndichin @yoanarios)."
-        warn("Found \(countFilesWithoutCoverage) new Swift file(s) with no test coverage. Please add unit tests. \(contact)")
+        if let file = matchingFile {
+            fail("New file `\(file)` has 0% test coverage. Please add unit tests.")
+        } else {
+            fail("New file `\(cleanedFile)` is missing from coverage report. Please add unit tests.")
+        }
     }
 }
 
