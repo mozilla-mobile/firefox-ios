@@ -1577,7 +1577,7 @@ extension String {
                     value: "Bottom",
                     comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
                 public static let ContinueAction = MZLocalizedString(
-                    key: "Onboarding.Modern.Customization.Theme.Continue.Action.v123",
+                    key: "Onboarding.Modern.Customization.Theme.Continue.Action.v140",
                     tableName: "Onboarding",
                     value: "Continue",
                     comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
@@ -1606,7 +1606,7 @@ extension String {
                     comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
             }
 
-            public struct TermsOfServiceLink {
+            public struct TermsOfService {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.Modern.TermsOfService.Title.v140",
                     tableName: "Onboarding",

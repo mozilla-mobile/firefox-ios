@@ -17,6 +17,7 @@ enum UX {
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
+        static let tosImageHeight: CGFloat = 70
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonTopPadding: CGFloat = 8
         static let secondaryButtonBottomPadding: CGFloat = 24
@@ -40,5 +41,20 @@ enum UX {
 
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
+    }
+
+    struct Onboarding {
+        struct Spacing {
+            static let standard: CGFloat = 20
+            static let small: CGFloat = 10
+            static let contentPadding: CGFloat = 24
+            static let buttonHeight: CGFloat = 44
+            static let vertical: CGFloat = 16
+        }
+
+        struct Layout {
+            static let logoSize = CGSize(width: 150, height: 150)
+            static let buttonCornerRadius: CGFloat = 12
+        }
     }
 }
