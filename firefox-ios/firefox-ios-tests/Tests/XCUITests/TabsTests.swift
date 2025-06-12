@@ -407,11 +407,11 @@ class TabsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
         waitForElementsToExist(
-        [
-            app.cells.buttons[StandardImageIdentifiers.Large.plus],
-            app.cells.buttons[StandardImageIdentifiers.Large.cross]
-        ]
-    )
+            [
+                app.cells.buttons[StandardImageIdentifiers.Large.plus],
+                app.cells.buttons[StandardImageIdentifiers.Large.cross]
+            ]
+        )
 
         // Open New Tab
         app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
