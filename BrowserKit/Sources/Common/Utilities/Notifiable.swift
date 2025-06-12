@@ -11,6 +11,7 @@ public protocol NotificationProtocol {
                      selector aSelector: Selector,
                      name aName: NSNotification.Name?,
                      object anObject: Any?)
+    @discardableResult
     func addObserver(name: NSNotification.Name?,
                      queue: OperationQueue?,
                      using block: @escaping (Notification) -> Void) -> NSObjectProtocol?
@@ -49,11 +50,18 @@ public protocol Notifiable {
 public extension Notifiable {
     func setupNotifications(forObserver observer: Any,
                             observing notifications: [Notification.Name]) {
-        notifications.forEach {
-            notificationCenter.addObserver(observer,
-                                           selector: #selector(handleNotifications),
-                                           name: $0,
-                                           object: nil)
+        notifications.forEach { name in
+            notificationCenter.addObserver(name: name, queue: .main) { [weak self] notification in
+                /// There is really no way for this guard to fail since the notification queue is .main
+                /// but failing nicely is better than crashing?
+                guard Thread.isMainThread else {
+                    return
+                }
+
+                MainActor.assumeIsolated {
+                    self?.handleNotifications(notification)
+                }
+            }
         }
     }
 }

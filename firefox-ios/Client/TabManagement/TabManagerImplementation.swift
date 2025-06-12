@@ -1296,7 +1296,6 @@ class TabManagerImplementation: NSObject,
 
 // MARK: - Notifiable
 extension TabManagerImplementation: Notifiable {
-    @MainActor
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willResignActiveNotification:
