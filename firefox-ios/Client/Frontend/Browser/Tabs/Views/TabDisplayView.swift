@@ -126,8 +126,10 @@ class TabDisplayView: UIView,
         collectionView.keyboardDismissMode = .onDrag
         collectionView.dragInteractionEnabled = true
         collectionView.delegate = self
-        collectionView.dragDelegate = self
-        collectionView.dropDelegate = self
+        if !isTabTrayUIExperimentsEnabled {
+            collectionView.dragDelegate = self
+            collectionView.dropDelegate = self
+        }
         collectionView.collectionViewLayout = createLayout()
         collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
