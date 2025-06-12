@@ -1722,6 +1722,9 @@ class BrowserViewController: UIViewController,
         }
 
         if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
         updateBlurViews()
@@ -4377,6 +4380,9 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
     }
