@@ -7,6 +7,11 @@ import Shared
 import UIKit
 import ComponentLibrary
 
+struct Links {
+    static let termsOfService = "https://www.mozilla.org/about/legal/terms/firefox/"
+    static let privacyNotice = "https://www.mozilla.org/privacy/firefox/"
+}
+
 class TermsOfServiceViewController: UIViewController, Themeable {
 	enum LinkType: Int {
 		case termsOfService
@@ -20,11 +25,6 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         static let margin: CGFloat = 20
         static let agreementContentSpacing: CGFloat = 15
         static let distanceBetweenViews = 2 * margin
-    }
-
-    struct Links {
-        static let termsOfService = "https://www.mozilla.org/about/legal/terms/firefox/"
-        static let privacyNotice = "https://www.mozilla.org/privacy/firefox/"
     }
 
     // MARK: - Properties
