@@ -18,19 +18,21 @@ class MockNotificationCenter: NotificationProtocol {
     weak var notifiableListener: Notifiable?
 
     func post(name: NSNotification.Name) {
+        assert(Thread.isMainThread)
         savePostName = name
         postCallCount += 1
-        Task { @MainActor in
+        MainActor.assumeIsolated {
             notifiableListener?.handleNotifications(Notification(name: name))
         }
     }
 
     func post(name aName: NSNotification.Name, withObject anObject: Any?, withUserInfo info: Any?) {
+        assert(Thread.isMainThread)
         savePostName = aName
         savePostObject = anObject
         saveUserInfo = info
         postCallCount += 1
-        Task { @MainActor in
+        MainActor.assumeIsolated {
             notifiableListener?.handleNotifications(Notification(name: aName))
         }
     }
