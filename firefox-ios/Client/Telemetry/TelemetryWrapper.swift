@@ -835,18 +835,8 @@ extension TelemetryWrapper {
         case (.action, .tap, .newPrivateTab, .topSite, _):
             GleanMetrics.TopSites.openInPrivateTab.record()
         // MARK: Preferences
-        case (.action, .change, .setting, _, let extras):
-            if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
-                let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
-                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to,
-                                                                                              preference: preference))
-            } else if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
-                        let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? Bool {
-                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to.description,
-                                                                                              preference: preference))
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
+        case (.action, .change, .setting, _, _):
+            assertionFailure("Please record telemetry for settings using the SettingsTelemetry().changedSetting() method")
 
         // MARK: - QR Codes
         case (.action, .scan, .qrCodeText, _, _),
@@ -1353,12 +1343,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .newPrivateTab, .pocketSite, _):
             GleanMetrics.Pocket.openInPrivateTab.record()
 
-        // MARK: Library Panel
-        case (.action, .tap, .libraryPanel, let type?, _):
-            GleanMetrics.Library.panelPressed[type.rawValue].add()
         // History Panel related
-        case (.action, .navigate, .navigateToGroupHistory, _, _):
-            GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
         case (.action, .tap, .openedHistoryItem, _, _):

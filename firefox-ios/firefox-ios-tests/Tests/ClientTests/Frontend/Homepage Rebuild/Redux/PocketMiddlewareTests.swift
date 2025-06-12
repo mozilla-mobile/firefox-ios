@@ -86,7 +86,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.pocketSectionProvider(AppState(), action)
 
         let firstSavedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? LabeledMetricType<CounterMetricType>
+            mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>
         )
         let expectedFirstMetricType = type(of: GleanMetrics.Pocket.openStoryOrigin)
         let firstResultMetricType = type(of: firstSavedMetric)
@@ -95,7 +95,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
             resultMetric: firstResultMetricType
         )
 
-        let secondSavedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[1] as? LabeledMetricType<CounterMetricType>)
+        let secondSavedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
         let expectedSecondMetricType = type(of: GleanMetrics.Pocket.openStoryPosition)
         let secondResultMetricType = type(of: secondSavedMetric)
         let secondDebugMessage = TelemetryDebugMessage(
@@ -103,7 +103,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
             resultMetric: secondResultMetricType
         )
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 2)
         XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
         XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
@@ -117,7 +117,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         subject.pocketSectionProvider(AppState(), action)
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
     }
 
@@ -127,7 +127,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.pocketSectionProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.Pocket.sectionImpressions)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -145,7 +145,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         subject.pocketSectionProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let expectedMetricType = type(of: GleanMetrics.Pocket.openInPrivateTab)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -163,7 +163,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         subject.pocketSectionProvider(AppState(), action)
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
     }
 

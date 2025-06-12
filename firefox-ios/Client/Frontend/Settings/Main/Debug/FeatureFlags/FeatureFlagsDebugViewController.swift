@@ -214,6 +214,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
+                FeatureFlagsBoolSetting(
+                    with: .webEngineIntegrationRefactor,
+                    titleText: format(string: "Web Engine Integration Refactor"),
+                    statusText: format(string: "Toggle to enable the use of WebEngine library")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }

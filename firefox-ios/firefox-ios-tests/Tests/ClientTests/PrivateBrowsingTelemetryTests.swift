@@ -21,10 +21,10 @@ final class PrivateBrowsingTelemetryTests: XCTestCase {
         subject.sendDataClearanceTappedTelemetry(didConfirm: true)
 
         let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra>
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            gleanWrapper.savedExtras as? GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra
+            gleanWrapper.savedExtras.first as? GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.PrivateBrowsing.dataClearanceIconTapped)
         let resultMetricType = type(of: savedEvent)
@@ -41,10 +41,10 @@ final class PrivateBrowsingTelemetryTests: XCTestCase {
         subject.sendDataClearanceTappedTelemetry(didConfirm: false)
 
         let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra>
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            gleanWrapper.savedExtras as? GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra
+            gleanWrapper.savedExtras.first as? GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.PrivateBrowsing.dataClearanceIconTapped)
         let resultMetricType = type(of: savedEvent)

@@ -24,8 +24,8 @@ class MockGleanWrapper: GleanWrapper {
     var cancelTimingCalled = 0
     var stopAndAccumulateCalled = 0
     var submitPingCalled = 0
-    var savedEvents: [Any]? = []
-    var savedExtras: Any?
+    var savedEvents: [Any] = []
+    var savedExtras: [Any] = []
     var savedLabel: Any?
     var savedPing: Any?
 
@@ -45,77 +45,77 @@ class MockGleanWrapper: GleanWrapper {
 
     func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
                                   extras: EventExtras) where ExtraObject: EventExtras {
-        savedExtras = extras
-        savedEvents?.append(metric)
+        savedExtras.append(extras)
+        savedEvents.append(metric)
         recordEventCalled += 1
     }
 
     func recordEvent<NoExtras>(for metric: EventMetricType<NoExtras>) where NoExtras: EventExtras {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         recordEventNoExtraCalled += 1
     }
 
     func incrementCounter(for metric: CounterMetricType) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         incrementCounterCalled += 1
     }
 
     func recordString(for metric: StringMetricType, value: String) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         recordStringCalled += 1
     }
 
     func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String) {
         savedLabel = label
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         recordLabelCalled += 1
     }
 
     func setBoolean(for metric: BooleanMetricType, value: Bool) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         setBooleanCalled += 1
     }
 
     func recordQuantity(for metric: QuantityMetricType, value: Int64) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         recordQuantityCalled += 1
     }
 
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         recordLabeledQuantityCalled += 1
     }
 
     func recordUrl(for metric: UrlMetricType, value: String) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         recordUrlCalled += 1
     }
 
     func incrementNumerator(for metric: RateMetricType, amount: Int32) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         incrementNumeratorCalled += 1
     }
 
     func incrementDenominator(for metric: RateMetricType, amount: Int32) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         incrementDenominatorCalled += 1
     }
 
     func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         startTimingCalled += 1
         return savedTimerId
     }
 
     func cancelTiming(for metric: TimingDistributionMetricType,
                       timerId: GleanTimerId) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         cancelTimingCalled += 1
     }
 
     func stopAndAccumulateTiming(for metric: TimingDistributionMetricType,
                                  timerId: GleanTimerId) {
-        savedEvents?.append(metric)
+        savedEvents.append(metric)
         stopAndAccumulateCalled += 1
     }
 

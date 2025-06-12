@@ -24,7 +24,7 @@ final class ToastTelemetryTests: XCTestCase {
         subject.undoClosedSingleTab()
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -41,7 +41,7 @@ final class ToastTelemetryTests: XCTestCase {
         subject.undoClosedAllTabs()
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)

@@ -76,13 +76,15 @@ class TabDisplayPanelViewController: UIViewController,
     init(isPrivateMode: Bool,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) {
         self.panelType = isPrivateMode ? .privateTabs : .tabs
         self.tabsState = TabsPanelState(windowUUID: windowUUID, isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+        tabDisplayView.dragAndDropDelegate = dragAndDropDelegate
     }
 
     required init?(coder: NSCoder) {

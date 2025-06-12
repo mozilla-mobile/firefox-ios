@@ -34,8 +34,8 @@ final class ContextMenuTelemetryTests: XCTestCase {
 
         subject?.optionSelected(option: expectedOption, origin: expectedOrigin)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -54,8 +54,8 @@ final class ContextMenuTelemetryTests: XCTestCase {
 
         subject?.shown(origin: expectedOrigin)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -73,8 +73,8 @@ final class ContextMenuTelemetryTests: XCTestCase {
 
         subject?.dismissed(origin: expectedOrigin)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
