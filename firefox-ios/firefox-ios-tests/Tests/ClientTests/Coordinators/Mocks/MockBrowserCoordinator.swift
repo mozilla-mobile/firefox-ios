@@ -43,6 +43,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showNativeErrorPageCalled = 0
     var showPrivateHomepageCalled = 0
     var showWebViewCalled = 0
+    var setHomepageVisibilityCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -174,6 +175,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     func homepageScreenshotTool() -> (any Client.Screenshotable)? {
         homepageScreenshotToolCalled += 1
         return nil
+    }
+
+    func setHomepageVisibility(isVisible: Bool) {
+        setHomepageVisibilityCalled += 1
     }
 
     func showPrivateHomepage(overlayManager: any Client.OverlayModeManager) {

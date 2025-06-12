@@ -168,6 +168,12 @@ class BrowserCoordinator: BaseCoordinator,
         return homepageViewController ?? legacyHomepageViewController
     }
 
+    func setHomepageVisibility(isVisible: Bool) {
+        let homepage = homepageViewController ?? legacyHomepageViewController
+        guard let homepage else { return }
+        homepage.view.isHidden = !isVisible
+    }
+
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
         store.dispatch(
             HomepageAction(

@@ -34,6 +34,9 @@ protocol BrowserDelegate: AnyObject {
     /// Returns a tool which can be used to get a snapshot of the homepage
     func homepageScreenshotTool() -> Screenshotable?
 
+    /// Hides or show the homepage.
+    func setHomepageVisibility(isVisible: Bool)
+
     /// Show the private homepage to the user as part of felt privacy
     func showPrivateHomepage(overlayManager: OverlayModeManager)
 

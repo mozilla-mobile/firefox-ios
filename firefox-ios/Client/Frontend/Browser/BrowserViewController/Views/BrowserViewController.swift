@@ -1218,7 +1218,7 @@ class BrowserViewController: UIViewController,
         if isSwipingTabsEnabled {
             // Add Homepage to view hierarchy so it is possible to take screenshot from it
             showEmbeddedHomepage(inline: false, isPrivate: false)
-            contentContainer.setContentVisibility(isHidden: true)
+            browserDelegate?.setHomepageVisibility(isVisible: false)
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
             }
@@ -1721,7 +1721,9 @@ class BrowserViewController: UIViewController,
             )
         }
 
-        contentContainer.setContentVisibility(isHidden: false)
+        if isSwipingTabsEnabled {
+            browserDelegate?.setHomepageVisibility(isVisible: true)
+        }
         updateBlurViews()
     }
 
@@ -4372,6 +4374,10 @@ extension BrowserViewController: TabManagerDelegate {
 
         if needsReload {
             selectedTab.reloadPage()
+        }
+
+        if isSwipingTabsEnabled {
+            browserDelegate?.setHomepageVisibility(isVisible: true)
         }
     }
 
