@@ -112,13 +112,176 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         } else if tabInfo.isHomepage {
-            menuSections.append(getNewTabSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getCustomiseHomepageSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
         } else {
             menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         }
 
         return menuSections
+    }
+
+    // MARK: - Menu Redesign Sections
+    // Customise Homepage Section
+    private func getCustomiseHomepageSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+        return MenuSection(
+            isHomepage: tabInfo.isHomepage,
+            options: [
+                MenuElement(
+                    title: .MainMenu.OtherToolsSection.CustomizeHomepage,
+                    iconName: Icons.tools,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.CustomizeHomepage,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.customizeHomepage),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+        ])
+    }
+
+    // Horizontal Tabs Section
+    private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+        return MenuSection(
+            isHorizontalTabsSection: true,
+            isHomepage: tabInfo.isHomepage,
+            options: [
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.History,
+                iconName: Icons.history,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.history,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.history),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Bookmarks,
+                iconName: Icons.bookmarksTray,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.bookmarks),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Downloads,
+                iconName: Icons.downloads,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Downloads,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.downloads,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.downloads),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Passwords,
+                iconName: Icons.passwords,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Passwords,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.passwords,
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.passwords),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+        ])
+    }
+
+    // Account Section
+    private func getAccountSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+        return MenuSection(
+            isHomepage: tabInfo.isHomepage,
+            options: [
+                MenuElement(
+                    title: tabInfo.accountData.title,
+                    description: tabInfo.accountData.subtitle,
+                    iconName: Icons.avatarCircle,
+                    iconImage: tabInfo.accountProfileImage,
+                    needsReAuth: tabInfo.accountData.needsReAuth,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.signIn,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.syncSignIn),
+                                currentTabInfo: tabInfo
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.OtherToolsSection.Settings,
+                    iconName: Icons.settings,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.Settings,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.settings,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.settings),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+        ])
     }
 
     // MARK: - Site Section
@@ -148,28 +311,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     }
                 ),
                 configureUserAgentItem(with: uuid, tabInfo: tabInfo),
-                MenuElement(
-                    title: tabInfo.accountData.title,
-                    description: tabInfo.accountData.subtitle,
-                    iconName: Icons.avatarCircle,
-                    iconImage: tabInfo.accountProfileImage,
-                    needsReAuth: tabInfo.accountData.needsReAuth,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: "",
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.signIn,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapNavigateToDestination,
-                                navigationDestination: MenuNavigationDestination(.syncSignIn),
-                                currentTabInfo: tabInfo
-                            )
-                        )
-                    }
-                ),
                 configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded),
                 MenuElement(
                     title: .MainMenu.PanelLinkSection.History,
@@ -255,90 +396,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // TODO: FXIOS-12306 Update MainMenuConfigurationUtility based on the final design
-    // MARK: - Horizontal Tabs Section
-    private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
-        return MenuSection(
-            isHorizontalTabsSection: true,
-            options: [
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.History,
-                iconName: Icons.history,
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
-                a11yHint: "",
-                a11yId: AccessibilityIdentifiers.MainMenu.history,
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.history),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.Bookmarks,
-                iconName: Icons.bookmarksTray,
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
-                a11yHint: "",
-                a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.bookmarks),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.Downloads,
-                iconName: Icons.downloads,
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Downloads,
-                a11yHint: "",
-                a11yId: AccessibilityIdentifiers.MainMenu.downloads,
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.downloads),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.Passwords,
-                iconName: Icons.passwords,
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Passwords,
-                a11yHint: "",
-                a11yId: AccessibilityIdentifiers.MainMenu.passwords,
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.passwords),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                        )
-                    )
-                }
-            ),
-        ])
-    }
-
     // MARK: - New Tabs Section
     private func getNewTabSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(options: [
