@@ -24,10 +24,12 @@ user.client_association:
     type: string
     description: |
       The Mozilla Account UID associated with the user.
+
+      Owner: @jdavis
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12445
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27296
     data_sensitivity:
       - highly_sensitive
     notification_emails:
