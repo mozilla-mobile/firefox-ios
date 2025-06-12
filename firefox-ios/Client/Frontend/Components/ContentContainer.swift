@@ -104,6 +104,11 @@ class ContentContainer: UIView,
         saveContentType(content: content)
     }
 
+    /// Sets the visibility of the current content managed by the container.
+    func setContentVisibility(isHidden: Bool) {
+        contentController?.view.isHidden = isHidden
+    }
+
     // MARK: - Private
 
     private func removePreviousContent() {

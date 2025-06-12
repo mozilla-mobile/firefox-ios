@@ -126,15 +126,15 @@ final class AddressBarPanGestureHandler: NSObject {
 
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {
         webPagePreview.isHidden = false
-
-        let shouldAddNewTab = nextTab == nil && translation.x < 0
+        let shouldAddNewTab = shouldAddNewTab(translation: translation.x, nextTab: nextTab)
         applyCurrentTabTransform(translation.x, shouldAddNewTab: shouldAddNewTab)
         applyPreviewTransform(translation: translation)
 
         if shouldAddNewTab {
             let progress = abs(translation.x) / contentContainer.frame.width
             let scale = progress > 0.3 ? progress : 0.3
-            webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale)
+            let translation = contentContainer.frame.width * (1 - progress)
+            webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: translation, y: 0.0)
             webPagePreview.alpha = progress
             webPagePreview.setScreenshot(homepageScreenshot)
         } else {
@@ -144,7 +144,7 @@ final class AddressBarPanGestureHandler: NSObject {
     }
 
     private func handleGestureEndedState(translation: CGPoint, velocity: CGPoint, nextTab: Tab?) {
-        let shouldShowNewTab = nextTab == nil && translation.x < 0
+        let shouldShowNewTab = shouldAddNewTab(translation: translation.x, nextTab: nextTab)
 
         // Determine if the transition should be completed based on the translation and velocity.
         // If the user swiped more than half of the screen or had a velocity higher that the constant,
@@ -165,6 +165,7 @@ final class AddressBarPanGestureHandler: NSObject {
                        options: .curveEaseOut) { [self] in
             addressToolbarContainer.applyTransform(shouldCompleteTransition ? currentTabTransform : .identity,
                                                    shouldAddNewTab: shouldShowNewTab)
+            addressToolbarContainer.layoutIfNeeded()
             contentContainer.transform = shouldCompleteTransition ?
             CGAffineTransform(translationX: targetPreview, y: 0) : .identity
             webPagePreview.alpha = shouldCompleteTransition ? 1.0 : 0.0
@@ -208,6 +209,10 @@ final class AddressBarPanGestureHandler: NSObject {
         let width = contentContainer.frame.width
         let xTranslation = isSwipingLeft ? width + translation.x + UX.offset : -width + translation.x - UX.offset
         webPagePreview.transform = CGAffineTransform(translationX: xTranslation, y: 0)
+    }
+
+    private func shouldAddNewTab(translation: CGFloat, nextTab: Tab?) -> Bool {
+        return translation < 0.0 && nextTab == nil && tabManager.selectedTab?.isFxHomeTab == false
     }
 
     /// Calculates the index of the next tab to display based on the current index, swipe direction, and layout direction.

@@ -11,7 +11,9 @@ import WebKit
 import struct MozillaAppServices.CreditCard
 import enum MozillaAppServices.VisitType
 
-class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegate {
+class MockBrowserCoordinator: BrowserNavigationHandler,
+                              BrowserDelegate,
+                              ParentCoordinatorDelegate {
     var showSettingsCalled = 0
     var showCreditCardAutofillCalled = 0
     var showLoginAutofillCalled = 0
@@ -34,6 +36,13 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var openInNewTabCalled = 0
     var showDocumentLoadingCalled = 0
     var removeDocumentLoadingCalled = 0
+    var showHomepageCalled = 0
+    var showLegacyHomepageCalled = 0
+    var browserHasLoadedCalled = 0
+    var homepageScreenshotToolCalled = 0
+    var showNativeErrorPageCalled = 0
+    var showPrivateHomepageCalled = 0
+    var showWebViewCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -134,5 +143,36 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func removeDocumentLoading() {
         removeDocumentLoadingCalled += 1
+    }
+
+    // MARK: - BrowserDelegate
+
+    func show(webView: WKWebView) {
+        showWebViewCalled += 1
+    }
+
+    func showLegacyHomepage(inline: Bool, toastContainer: UIView, homepanelDelegate: any Client.HomePanelDelegate, libraryPanelDelegate: any Client.LibraryPanelDelegate, statusBarScrollDelegate: any Client.StatusBarScrollDelegate, overlayManager: any Client.OverlayModeManager) {
+        showLegacyHomepageCalled += 1
+    }
+
+    func showHomepage(overlayManager: any Client.OverlayModeManager, isZeroSearch: Bool, statusBarScrollDelegate: any Client.StatusBarScrollDelegate, toastContainer: UIView) {
+        showHomepageCalled += 1
+    }
+
+    func homepageScreenshotTool() -> (any Client.Screenshotable)? {
+        homepageScreenshotToolCalled += 1
+        return nil
+    }
+
+    func showPrivateHomepage(overlayManager: any Client.OverlayModeManager) {
+        showPrivateHomepageCalled += 1
+    }
+
+    func browserHasLoaded() {
+        browserHasLoadedCalled += 1
+    }
+
+    func showNativeErrorPage(overlayManager: any Client.OverlayModeManager) {
+        showNativeErrorPageCalled += 1
     }
 }

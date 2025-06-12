@@ -1216,7 +1216,9 @@ class BrowserViewController: UIViewController,
         view.addSubview(overKeyboardContainer)
 
         if isSwipingTabsEnabled {
+            // Add Homepage to view hierarchy so it is possible to take screenshot from it
             showEmbeddedHomepage(inline: false, isPrivate: false)
+            contentContainer.setContentVisibility(isHidden: true)
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
             }
@@ -1719,6 +1721,7 @@ class BrowserViewController: UIViewController,
             )
         }
 
+        contentContainer.setContentVisibility(isHidden: false)
         updateBlurViews()
     }
 

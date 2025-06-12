@@ -22,6 +22,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() {
         super.setUp()
+        setIsSwipingTabsEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -169,6 +170,15 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
+    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled() {
+        let subject = createSubject()
+        setIsSwipingTabsEnabled(true)
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
+    }
+
     // MARK: - Handle PDF
 
     func testHandlePDFDownloadRequest_doesntDocumentLoadingView_whenTabNotSelected() {
@@ -226,6 +236,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
+        subject.browserDelegate = browserCoordinator
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -239,6 +250,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setupNimbusHomepageRebuildForTesting(isEnabled: Bool) {
         FxNimbus.shared.features.homepageRebuildFeature.with { _, _ in
             return HomepageRebuildFeature(enabled: isEnabled)
+        }
+    }
+
+    private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(swipingTabs: isEnabled)
         }
     }
 

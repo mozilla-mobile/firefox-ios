@@ -379,7 +379,6 @@ final class AddressToolbarContainer: UIView,
                 self.layoutIfNeeded()
             }
             addNewTabLeadingConstraint?.constant = transform.tx
-            layoutIfNeeded()
         }
     }
 
