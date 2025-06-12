@@ -1004,9 +1004,9 @@ extension String {
 
         public struct Pocket {
             public static let SectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Pocket.SectionTitle",
-                tableName: nil,
-                value: "Thought-Provoking Stories",
+                key: "FirefoxHome.Pocket.SectionTitle.v140",
+                tableName: "FirefoxHomepage",
+                value: "Stories",
                 comment: "This is the title of the Pocket section on Firefox Homepage.")
             public static let DiscoverMore = MZLocalizedString(
                 key: "FirefoxHome.Pocket.DiscoverMore",
@@ -2084,15 +2084,10 @@ extension String {
                     value: "Recommended by Pocket",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
                 public static let ThoughtProvokingStories = MZLocalizedString(
-                    key: "Settings.Home.Option.ThoughtProvokingStories.v116",
+                    key: "Settings.Home.Option.ThoughtProvokingStories.v140",
                     tableName: "CustomizeFirefoxHome",
-                    value: "Thought-Provoking Stories",
+                    value: "Stories",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
-                public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
-                    key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
-                    tableName: "CustomizeFirefoxHome",
-                    value: "Articles powered by %@",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. %@ is Pocket.")
                 public static let Title = MZLocalizedString(
                     key: "Settings.Home.Option.Title.v101",
                     tableName: nil,
@@ -8076,6 +8071,21 @@ extension String {
                 tableName: nil,
                 value: "Tabs",
                 comment: "The title on the button to look at regular tabs.")
+            public static let ThoughtProvokingStories = MZLocalizedString(
+                key: "Settings.Home.Option.ThoughtProvokingStories.v116",
+                tableName: "CustomizeFirefoxHome",
+                value: "Thought-Provoking Stories",
+                comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
+            public static let SectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Pocket.SectionTitle",
+                tableName: nil,
+                value: "Thought-Provoking Stories",
+                comment: "This is the title of the Pocket section on Firefox Homepage.")
+            public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
+                key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
+                tableName: "CustomizeFirefoxHome",
+                value: "Articles powered by %@",
+                comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. %@ is Pocket.")
         }
     }
 }
