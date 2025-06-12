@@ -165,7 +165,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
                 defaultValue: true,
-                titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.Stories
             ) { value in
                 store.dispatch(
                     PocketAction(
