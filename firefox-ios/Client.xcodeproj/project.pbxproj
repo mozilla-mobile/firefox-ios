@@ -13867,11 +13867,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */,
-=======
-				8A01FE3F2DF0CE49002C483B /* MockDateProvider.swift */,
->>>>>>> 9563b5cec (Refactor FXIOS-12520 [Tab tray UI experiment] Disable drag and drop (#27292))
 				8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */,
 				8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */,
 				2199A1D32DB8389000DC84BD /* MockZoomStore.swift */,
