@@ -9,40 +9,6 @@ import Shared
 import ComponentLibrary
 import OnboardingKit
 
-class ActivityEventHelper {
-    var chosenOptions: IntroViewModel.OnboardingOptions = []
-
-    init(chosenOptions: IntroViewModel.OnboardingOptions = []) {
-        self.chosenOptions = chosenOptions
-    }
-
-    // MARK: SkAdNetwork
-    // this event should be sent in the first 24h time window, if it's not sent the conversion value is locked by Apple
-    func updateOnboardingUserActivationEvent() {
-        let fineValue = IntroViewModel
-            .OnboardingOptions
-            .allCases
-            .map { chosenOptions.contains($0) ? $0.rawValue : 0 }.reduce(0, +)
-        let conversionValue = ConversionValueUtil(fineValue: fineValue, coarseValue: .low, logger: DefaultLogger.shared)
-        // we should send this event only if an action has been selected during the onboarding flow
-        if fineValue > 0 {
-            conversionValue.adNetworkAttributionUpdateConversionEvent()
-        }
-    }
-}
-
-// MARK: - OnboardingServiceDelegate (Minimal interface for view controllers)
-protocol OnboardingServiceDelegate: AnyObject {
-    func dismiss(animated: Bool, completion: (() -> Void)?)
-    func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
-}
-
-// MARK: - OnboardingNavigationDelegate (For navigation-specific actions)
-protocol OnboardingNavigationDelegate: AnyObject {
-    func finishOnboardingFlow()
-}
-
-// MARK: - OnboardingService
 class OnboardingService {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
@@ -54,7 +20,7 @@ class OnboardingService {
     var profile: Profile
     var introScreenManager: IntroScreenManager?
     var themeManager: ThemeManager
-    // MARK: - Initialization
+
     init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
         windowUUID: WindowUUID,
@@ -74,7 +40,6 @@ class OnboardingService {
         self.qrCodeNavigationHandler = qrCodeNavigationHandler
     }
 
-    // MARK: - Public Methods
     func handleAction(
         _ action: OnboardingActions,
         from cardName: String,
@@ -136,7 +101,6 @@ class OnboardingService {
     }
 }
 
-// MARK: - Private Action Handlers
 private extension OnboardingService {
     func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
@@ -170,8 +134,7 @@ private extension OnboardingService {
     }
 
     func handleReadPrivacyPolicy(from url: URL) {
-        presentPrivacyPolicy(from: url) {
-        }
+        presentPrivacyPolicy(from: url) {}
     }
 
     func handleOpenIosFxSettings(from cardName: String) {
@@ -185,7 +148,6 @@ private extension OnboardingService {
     }
 }
 
-// MARK: - Private Helper Methods
 private extension OnboardingService {
     func askForNotificationPermission(from cardName: String) {
         let notificationManager = NotificationManager()

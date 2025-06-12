@@ -434,10 +434,9 @@ extension LaunchCoordinator: OnboardingServiceDelegate {
     }
 }
 
-// MARK: - OnboardingNavigationDelegate (Optional)
+// MARK: - OnboardingNavigationDelegate
 extension LaunchCoordinator: OnboardingNavigationDelegate {
     func finishOnboardingFlow() {
-        // Handle flow completion
-//        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
