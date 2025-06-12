@@ -47,18 +47,17 @@ func failOnNewFilesWithoutCoverage() {
     }
 
     // Build an array with files with 0 coverage
-    var filesWithoutTest = [String]()
+    var filesWithoutCoverage = [String]()
     for target in targets {
         if let files = target["files"] as? [[String: Any]] {
             for file in files {
                 if let path = file["name"] as? String,
                       let coverage = file["lineCoverage"] as? Double, coverage == 0 {
-                    filesWithoutTest.append(path)
+                    filesWithoutCoverage.append(path)
                 }
             }
         }
     }
-    warn("Detected \(filesWithoutTest.count) files with 0 code coverage")
 
     // Get new files filtering Test and Generated
     let newSwiftFiles = danger.git.createdFiles.filter {
@@ -67,19 +66,23 @@ func failOnNewFilesWithoutCoverage() {
         !$0.contains("/Generated/")
     }
 
-    for file in newSwiftFiles {
-        // Extract just the file name
-        let newFileName = URL(fileURLWithPath: file).lastPathComponent
+    var countFilesWithoutCoverage = 0
+    for newFilePath in newSwiftFiles {
+        let newFileName = URL(fileURLWithPath: newFilePath).lastPathComponent
 
-        // Try to find a file in the coverage report that has the same file name
-        let matching = filesWithoutTest.first { path in
-            URL(fileURLWithPath: path).lastPathComponent == newFileName
-        }
+        for uncoveredFile in filesWithoutCoverage {
+            let uncoveredFileName = URL(fileURLWithPath: uncoveredFile).lastPathComponent
 
-        if matching != nil {
-            let contact = "(cc: @cyndichin @yoanarios )."
-            warn("New file \(newFileName) detected with 0% test coverage. Please add unit tests. \(contact)")
+            if newFileName == uncoveredFileName {
+                countFilesWithoutCoverage += 1
+                break
+            }
         }
+    }
+
+    if countFilesWithoutCoverage > 0 {
+        let contact = "(cc: @cyndichin @yoanarios )."
+        warn("Found \(countFilesWithoutCoverage) new Swift file(s) with no test coveraget coverage. Please add unit tests. \(contact)")
     }
 }
 
