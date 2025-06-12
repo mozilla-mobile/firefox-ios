@@ -14,6 +14,12 @@ let testBLOBFileSize = "35 bytes"
 
 class DownloadsTests: BaseTestCase {
     override func tearDown() {
+        defer { super.tearDown() }
+
+            guard let navigator = navigator else {
+                print("⚠️ Navigator is nil in tearDown — skipping cleanup.")
+                return
+            }
         // The downloaded file has to be removed between tests
         app.terminate()
         app.launch()
