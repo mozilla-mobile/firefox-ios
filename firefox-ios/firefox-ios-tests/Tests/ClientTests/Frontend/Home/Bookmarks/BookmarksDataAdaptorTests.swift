@@ -58,6 +58,7 @@ final class BookmarksDataAdaptorTests: XCTestCase {
 
     // MARK: - Bookmark Notifications
 
+    @MainActor
     func testBookmarksUpdateFromNotification() {
         initializeSubject()
 
