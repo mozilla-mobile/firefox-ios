@@ -23,8 +23,6 @@ final class PocketStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.pocketData, [])
-        XCTAssertEqual(initialState.pocketDiscoverItem.title, .FirefoxHomepage.Pocket.DiscoverMore)
-        XCTAssertEqual(initialState.pocketDiscoverItem.url, PocketProvider.MoreStoriesURL)
     }
 
     func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
@@ -53,8 +51,6 @@ final class PocketStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.pocketData.count, 3)
         XCTAssertEqual(newState.pocketData.compactMap { $0.title }, ["feed1", "feed2", "feed3"])
-        XCTAssertEqual(initialState.pocketDiscoverItem.title, .FirefoxHomepage.Pocket.DiscoverMore)
-        XCTAssertEqual(initialState.pocketDiscoverItem.url, PocketProvider.MoreStoriesURL)
     }
 
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {
