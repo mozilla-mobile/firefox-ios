@@ -439,11 +439,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func openNewTabAndValidateURLisPaste(url: String) {
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        } else {
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
-        }
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
