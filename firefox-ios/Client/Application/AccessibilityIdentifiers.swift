@@ -359,6 +359,7 @@ struct AccessibilityIdentifiers {
     }
 
     struct TermsOfService {
+        static let root = "TermsOfService.Onboarding"
         static let logo = "TermsOfService.Logo"
         static let title = "TermsOfService.Title"
         static let subtitle = "TermsOfService.Subtitle"

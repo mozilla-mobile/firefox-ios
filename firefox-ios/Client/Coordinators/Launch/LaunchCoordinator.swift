@@ -35,7 +35,11 @@ final class LaunchCoordinator: BaseCoordinator,
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
         case .termsOfService(let manager):
-            presentTermsOfService(with: manager, isFullScreen: isFullScreen)
+            if manager.isModernOnboardingEnabled {
+                presentModernTermsOfService(with: manager, isFullScreen: isFullScreen)
+            } else {
+                presentTermsOfService(with: manager, isFullScreen: isFullScreen)
+            }
         case .intro(let manager):
             presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
         case .update(let viewModel):
@@ -45,6 +49,142 @@ final class LaunchCoordinator: BaseCoordinator,
         case .survey(let manager):
             presentSurvey(with: manager)
         }
+    }
+
+    // MARK: - Terms of Service
+    private func presentModernTermsOfService(
+        with manager: TermsOfServiceManager,
+        isFullScreen: Bool
+    ) {
+        TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
+
+        let termsOfServiceLink = String(format: .Onboarding.Modern.TermsOfService.TermsOfUseLink, AppName.shortName.rawValue)
+        let termsOfServiceAgreement = String(
+            format: .Onboarding.Modern.TermsOfService.TermsOfServiceAgreement,
+            termsOfServiceLink
+        )
+
+        let privacyNoticeLink = String.Onboarding.TermsOfService.PrivacyNoticeLink
+        let privacyAgreement = String(
+            format: .Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement,
+            AppName.shortName.rawValue,
+            privacyNoticeLink
+        )
+
+        let manageLink = String.Onboarding.TermsOfService.ManageLink
+        let manageAgreement = String(
+            format: String.Onboarding.Modern.TermsOfService.ManagePreferenceAgreement,
+            AppName.shortName.rawValue,
+            MozillaName.shortName.rawValue,
+            manageLink
+        )
+
+        let viewModel = TosFlowViewModel(
+            configuration: OnboardingKitCardInfoModel(
+                cardType: .basic,
+                name: "tos",
+                order: 20,
+                title: .Onboarding.Modern.TermsOfService.Title,
+                body: .Onboarding.Modern.TermsOfService.Subtitle,
+                buttons: OnboardingKit.OnboardingButtons(
+                    primary: OnboardingKit.OnboardingButtonInfoModel(
+                        title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
+                        action: OnboardingActions.syncSignIn
+                    )
+                ),
+                multipleChoiceButtons: [],
+                onboardingType: .freshInstall,
+                a11yIdRoot: AccessibilityIdentifiers.TermsOfService.root,
+                imageID: ImageIdentifiers.homeHeaderLogoBall,
+                embededLinkText: [
+                    EmbeddedLink(
+                        fullText: termsOfServiceAgreement,
+                        linkText: termsOfServiceLink,
+                        action: .openTermsOfService
+                    ),
+                    EmbeddedLink(
+                        fullText: privacyAgreement,
+                        linkText: privacyNoticeLink,
+                        action: .openPrivacyNotice
+                    ),
+                    EmbeddedLink(
+                        fullText: manageAgreement,
+                        linkText: manageLink,
+                        action: .openManageSettings
+                    )
+                ]
+            ),
+            onTermsOfServiceTap: { [weak self] in
+                guard let self = self else { return }
+                TermsOfServiceTelemetry().termsOfServiceLinkTapped()
+                presentLink(with: URL(string: Links.termsOfService))
+            },
+            onPrivacyNoticeTap: { [weak self] in
+                guard let self = self else { return }
+                TermsOfServiceTelemetry().termsOfServicePrivacyNoticeLinkTapped()
+                presentLink(with: URL(string: Links.privacyNotice))
+            },
+            onManageSettingsTap: { [weak self] in
+                guard let self = self else { return }
+                TermsOfServiceTelemetry().termsOfServiceManageLinkTapped()
+                let managePreferencesVC = PrivacyPreferencesViewController(profile: profile, windowUUID: windowUUID)
+                if UIDevice.current.userInterfaceIdiom != .phone {
+                    managePreferencesVC.modalPresentationStyle = .formSheet
+                }
+                router.navigationController.presentedViewController?.present(managePreferencesVC, animated: true)
+            },
+            onComplete: { [weak self] in
+                guard let self = self else { return }
+                manager.setAccepted()
+                TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
+
+                let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+                let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
+                manager.shouldSendTechnicalData(telemetryValue: sendTechnicalData, studiesValue: sendStudies)
+                self.profile.prefs.setBool(sendTechnicalData, forKey: AppConstants.prefSendUsageData)
+
+                let sendCrashReports = profile.prefs.boolForKey(AppConstants.prefSendCrashReports) ?? true
+                self.profile.prefs.setBool(sendCrashReports, forKey: AppConstants.prefSendCrashReports)
+                self.logger.setup(sendCrashReports: sendCrashReports)
+
+                TelemetryWrapper.shared.setup(profile: profile)
+                TelemetryWrapper.shared.recordStartUpTelemetry()
+
+                self.parentCoordinator?.didFinishTermsOfService(from: self)
+            }
+        )
+
+        let view = TermsOfServiceView(
+            viewModel: viewModel,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            onEmbededLinkAction: { _ in }
+        )
+
+        let viewController = UIHostingController(rootView: view)
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        router.present(viewController, animated: false)
+    }
+
+    private func presentLink(with url: URL?) {
+        guard let url else { return }
+        let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
+        let buttonItem = UIBarButtonItem(
+            title: .SettingsSearchDoneButton,
+            style: .plain,
+            target: self,
+            action: #selector(dismissPresentedLinkVC))
+        buttonItem.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.doneButton
+
+        presentLinkVC.navigationItem.rightBarButtonItem = buttonItem
+        let controller = DismissableNavigationViewController(rootViewController: presentLinkVC)
+        router.navigationController.presentedViewController?.present(controller, animated: true)
+    }
+
+    @objc
+    private func dismissPresentedLinkVC() {
+        router.navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Terms of Service

@@ -22,6 +22,10 @@ struct TermsOfServiceManager: FeatureFlaggable {
         self.bundle = bundle
     }
 
+    var isModernOnboardingEnabled: Bool {
+        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+    }
+
     var isFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
     }
