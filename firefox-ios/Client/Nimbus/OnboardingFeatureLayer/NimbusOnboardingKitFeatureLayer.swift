@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-
-import protocol MozillaAppServices.NimbusMessagingHelperProtocol
+import OnboardingKit
 
 /// A translation layer for the `onboardingFrameworkFeature.fml`
 ///
@@ -12,7 +11,7 @@ import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 /// available in the fml, regardless of experiment. All updates to the
 /// structure of the fml will have to be reflected in this class, especially
 /// because defaults are not provided herein, but in the fml.
-class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
+class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
 
     init(with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
@@ -22,7 +21,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     func getOnboardingModel(
         for onboardingType: OnboardingType,
         from nimbus: FxNimbus = FxNimbus.shared
-    ) -> OnboardingViewModel {
+    ) -> OnboardingKitViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
         let cards = getOrderedOnboardingCards(
@@ -30,7 +29,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             from: framework.cards,
             withConditions: framework.conditions)
 
-        return OnboardingViewModel(
+        return OnboardingKitViewModel(
             cards: cards,
             isDismissable: framework.dismissable)
     }
@@ -39,19 +38,22 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
-    ) -> [OnboardingCardInfoModel] {
+    ) -> [OnboardingKitCardInfoModel] {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
         return getOnboardingCards(
-            from: cardData.filter { $0.value.onboardingType == onboardingType && $0.value.uiVariant == nil },
+            from: cardData.filter {
+                $0.value.onboardingType == onboardingType &&
+                $0.value.uiVariant == .modern
+            },
             withConditions: conditionTable
         )
         .sorted(by: { $0.order < $1.order })
         // We have to update the a11yIdRoot using the correct order of the cards
         .enumerated()
         .map { index, card in
-            return OnboardingCardInfoModel(
+            return OnboardingKitCardInfoModel(
                 cardType: card.cardType,
                 name: card.name,
                 order: card.order,
@@ -70,7 +72,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
         withConditions conditionTable: [String: String]
-    ) -> [OnboardingCardInfoModel] {
+    ) -> [OnboardingKitCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
 
@@ -81,8 +83,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
-                return OnboardingCardInfoModel(
-                    cardType: cardData.cardType,
+                return OnboardingKitCardInfoModel(
+                    cardType: OnboardingKit.OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
                     name: cardName,
                     order: cardData.order,
                     title: String(
@@ -94,7 +96,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                         AppName.shortName.rawValue),
                     link: getOnboardingLink(from: cardData.link),
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
-                    multipleChoiceButtons: getOnboardingMultipleChoiceButtons(from: cardData.multipleChoiceButtons),
+                    multipleChoiceButtons: getOnboardingMultipleChoiceButtons_(from: cardData.multipleChoiceButtons),
                     onboardingType: cardData.onboardingType,
                     a11yIdRoot: cardData.onboardingType == .freshInstall ? a11yOnboarding : a11yUpgrade,
                     imageID: getOnboardingHeaderImageID(from: cardData.image),
@@ -112,22 +114,22 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     /// A card is not viable without buttons.
     private func getOnboardingCardButtons(
         from cardButtons: NimbusOnboardingButtons
-    ) -> OnboardingButtons {
-        return OnboardingButtons(
-            primary: OnboardingButtonInfoModel(
+    ) -> OnboardingKit.OnboardingButtons<OnboardingActions> {
+        return OnboardingKit.OnboardingButtons(
+            primary: OnboardingKit.OnboardingButtonInfoModel(
                 title: String(format: cardButtons.primary.title,
                               AppName.shortName.rawValue),
                 action: cardButtons.primary.action),
             secondary: cardButtons.secondary.map {
-                OnboardingButtonInfoModel(title: $0.title, action: $0.action)
+                OnboardingKit.OnboardingButtonInfoModel(title: $0.title, action: $0.action)
             })
     }
 
-    private func getOnboardingMultipleChoiceButtons(
+    private func getOnboardingMultipleChoiceButtons_(
         from cardButtons: [NimbusOnboardingMultipleChoiceButton]
-    ) -> [OnboardingMultipleChoiceButtonModel] {
+    ) -> [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>] {
         return cardButtons.map { button in
-            return OnboardingMultipleChoiceButtonModel(
+            return OnboardingKit.OnboardingMultipleChoiceButtonModel(
                 title: button.title,
                 action: button.action,
                 imageID: getOnboardingMultipleChoiceButtonImageID(from: button.image)
@@ -137,36 +139,25 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingLink(
         from cardLink: NimbusOnboardingLink?
-    ) -> OnboardingLinkInfoModel? {
+    ) -> OnboardingKit.OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url)
         else { return nil }
 
-        return OnboardingLinkInfoModel(title: cardLink.title, url: url)
-    }
-
-    private func getOnboardingMultipleChoiceButtonImageID(
-        from identifier: NimbusOnboardingMultipleChoiceButtonImage
-    ) -> String {
-        switch identifier {
-        case .themeSystem: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeSystem
-        case .themeDark: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeDark
-        case .themeLight: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeLight
-        case .toolbarTop: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarTop
-        case .toolbarBottom: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarBottom
-        }
+        return OnboardingKit.OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
     private func getPopupInfoModel(
         from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
-    ) -> OnboardingInstructionsPopupInfoModel? {
+    ) -> OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>? {
         guard let data else { return nil }
 
-        return OnboardingInstructionsPopupInfoModel(
+        return OnboardingKit.OnboardingInstructionsPopupInfoModel(
             title: data.title,
             instructionSteps: data.instructions
-                .map { String(format: $0, AppName.shortName.rawValue) },
+                .map { String(format: $0, AppName.shortName.rawValue)
+                },
             buttonTitle: data.buttonTitle,
             buttonAction: data.buttonAction,
             a11yIdRoot: a11yID)

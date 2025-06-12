@@ -68,6 +68,9 @@ final class NimbusFeatureFlagLayer {
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
+        case .modernOnboardingUI:
+            return checkMondernOnboardingUIFeature(from: nimbus)
+
         case .loginsVerificationEnabled:
             return checkLoginsVerificationFeature(from: nimbus)
 
@@ -393,5 +396,9 @@ final class NimbusFeatureFlagLayer {
     private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.updatedPasswordManagerFeature.value()
         return config.status
+    }
+
+    private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
     }
 }
