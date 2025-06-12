@@ -106,7 +106,8 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldShowSection)
     }
 
-    func test_numberOfTilesPerRow_returnsExpectedState() {
+    // MARK: numberOfTilesPerRow
+    func test_viewWillTransition_numberOfTilesPerRow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
@@ -116,6 +117,40 @@ final class TopsSitesSectionStateTests: XCTestCase {
                 numberOfTopSitesPerRow: 8,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.viewWillTransition
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.numberOfTilesPerRow, 8)
+    }
+
+    func test_viewWillAppear_numberOfTilesPerRow_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                numberOfTopSitesPerRow: 8,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.viewWillAppear
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.numberOfTilesPerRow, 8)
+    }
+
+    func test_initialize_numberOfTilesPerRow_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                numberOfTopSitesPerRow: 8,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.initialize
             )
         )
 

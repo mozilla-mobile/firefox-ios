@@ -158,6 +158,7 @@ final class HomepageViewController: UIViewController,
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
             )
