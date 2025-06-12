@@ -151,11 +151,23 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showWebViewCalled += 1
     }
 
-    func showLegacyHomepage(inline: Bool, toastContainer: UIView, homepanelDelegate: any Client.HomePanelDelegate, libraryPanelDelegate: any Client.LibraryPanelDelegate, statusBarScrollDelegate: any Client.StatusBarScrollDelegate, overlayManager: any Client.OverlayModeManager) {
+    func showLegacyHomepage(
+        inline: Bool,
+        toastContainer: UIView,
+        homepanelDelegate: any Client.HomePanelDelegate,
+        libraryPanelDelegate: any Client.LibraryPanelDelegate,
+        statusBarScrollDelegate: any Client.StatusBarScrollDelegate,
+        overlayManager: any Client.OverlayModeManager
+    ) {
         showLegacyHomepageCalled += 1
     }
 
-    func showHomepage(overlayManager: any Client.OverlayModeManager, isZeroSearch: Bool, statusBarScrollDelegate: any Client.StatusBarScrollDelegate, toastContainer: UIView) {
+    func showHomepage(
+        overlayManager: any Client.OverlayModeManager,
+        isZeroSearch: Bool,
+        statusBarScrollDelegate: any Client.StatusBarScrollDelegate,
+        toastContainer: UIView
+    ) {
         showHomepageCalled += 1
     }
 
