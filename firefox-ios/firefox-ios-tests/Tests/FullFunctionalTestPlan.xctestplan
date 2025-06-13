@@ -114,7 +114,7 @@
         "DownloadsTests\/testToastButtonToGoToDownloads()",
         "DragAndDropTestIpad\/testTryDragAndDropBookmarkToURLBar()",
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
-        "DragAndDropTests\/testRearrangeTabsTabTray()",
+        "DragAndDropTests\/testRearrangeTabsTabTray_tabTrayExperimentOff()",
         "ExperimentIntegrationTests",
         "FindInPageTests\/testFindFromMenu()",
         "HistoryTabTrayUIExperimentTests\/testClearPrivateData()",
