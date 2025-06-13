@@ -245,7 +245,7 @@ extension PreviewModel {
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.all,
             onActionTap: { _, _, _ in },
-            onComplete: { _ in },
+            onComplete: { _ in }
         )
     )
 }

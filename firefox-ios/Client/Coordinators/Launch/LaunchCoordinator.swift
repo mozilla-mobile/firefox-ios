@@ -18,7 +18,9 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 final class LaunchCoordinator: BaseCoordinator,
                                SurveySurfaceViewControllerDelegate,
                                QRCodeNavigationHandler,
-                               ParentCoordinatorDelegate {
+                               ParentCoordinatorDelegate,
+                               OnboardingNavigationDelegate,
+                               OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
     let windowUUID: WindowUUID
@@ -241,7 +243,6 @@ final class LaunchCoordinator: BaseCoordinator,
         let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
-        let introScreenManager = IntroScreenManager(prefs: profile.prefs)
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
@@ -260,7 +261,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 },
                 onComplete: { [weak self] currentCardName in
                     guard let self = self else { return }
-                    introScreenManager.didSeeIntroScreen()
+                    manager.didSeeIntroScreen()
                     SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
                     telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
 
@@ -414,10 +415,8 @@ final class LaunchCoordinator: BaseCoordinator,
     func didFinish() {
         parentCoordinator?.didFinishLaunch(from: self)
     }
-}
 
-// MARK: - OnboardingServiceDelegate
-extension LaunchCoordinator: OnboardingServiceDelegate {
+    // MARK: - OnboardingServiceDelegate
     func dismiss(animated: Bool, completion: (() -> Void)?) {
         router.navigationController.presentedViewController?.dismiss(
             animated: animated,
@@ -432,10 +431,8 @@ extension LaunchCoordinator: OnboardingServiceDelegate {
             completion: completion
         )
     }
-}
 
-// MARK: - OnboardingNavigationDelegate
-extension LaunchCoordinator: OnboardingNavigationDelegate {
+    // MARK: - OnboardingNavigationDelegate
     func finishOnboardingFlow() {
         dismiss(animated: true, completion: nil)
     }

@@ -4,10 +4,10 @@
 
 import SwiftUI
 
-public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: ObservableObject {
+public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
-    public let onboardingCards: [VM]
-    public let onActionTap: (VM.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void
+    public let onboardingCards: [ViewModel]
+    public let onActionTap: (ViewModel.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void
 
     public enum TabAction {
         case advance(numberOfPages: Int)
@@ -15,11 +15,15 @@ public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: Obser
     }
 
     public let onComplete: (String) -> Void
-    public private(set) var multipleChoiceSelections: [String: VM.OnboardingMultipleChoiceActionType] = [:]
+    public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
 
     public init(
-        onboardingCards: [VM],
-        onActionTap: @escaping (VM.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void,
+        onboardingCards: [ViewModel],
+        onActionTap: @escaping (
+            ViewModel.OnboardingActionType,
+            String,
+            @escaping (Result<TabAction, Error>) -> Void
+        ) -> Void,
         onComplete: @escaping (String) -> Void
     ) {
         self.onboardingCards = onboardingCards
@@ -28,7 +32,7 @@ public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: Obser
     }
 
     public func handleBottomButtonAction(
-        action: VM.OnboardingActionType,
+        action: ViewModel.OnboardingActionType,
         cardName: String
     ) {
         onActionTap(action, cardName) { [weak self] result in
@@ -58,7 +62,7 @@ public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: Obser
         }
     }
 
-    public func handleMultipleChoiceAction(action: VM.OnboardingMultipleChoiceActionType, cardName: String) {
+    public func handleMultipleChoiceAction(action: ViewModel.OnboardingMultipleChoiceActionType, cardName: String) {
         multipleChoiceSelections[cardName] = action
     }
 }
