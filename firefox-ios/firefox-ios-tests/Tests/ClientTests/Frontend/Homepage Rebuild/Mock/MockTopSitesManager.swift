@@ -4,13 +4,12 @@
 
 import Foundation
 import Storage
+import XCTest
 
 @testable import Client
 
 final class MockTopSitesManager: TopSitesManagerInterface {
-    var getOtherSitesCalledCount = 0
-    var fetchSponsoredSitesCalledCount = 0
-    var recalculateTopSitesCalled: () -> Void = {}
+    var recalculateTopSitesCalledCount = 0
 
     var removeTopSiteCalledCount = 0
     var pinTopSiteCalledCount = 0
@@ -19,20 +18,18 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     private let lock = NSLock()
 
     func getOtherSites() async -> [TopSiteConfiguration] {
-        getOtherSitesCalledCount += 1
         return createSites(count: 15, subtitle: ": otherSites")
     }
 
     func fetchSponsoredSites() async -> [Site] {
-        fetchSponsoredSitesCalledCount += 1
-
         let contiles = MockSponsoredProvider.defaultSuccessData
         return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
     }
 
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
         // We add this completion since this method is called in an asynchronous
-        recalculateTopSitesCalled()
+        recalculateTopSitesCalledCount += 1
+        XCTAssertTrue(Thread.isMainThread)
         return createSites(subtitle: ": total top sites")
     }
 

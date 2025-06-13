@@ -7,7 +7,7 @@ import Storage
 
 /// Top site UI class, used in the homepage top site section
 struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, CustomDebugStringConvertible {
-    var site: Site
+    let site: Site
     var title: String
 
     var sponsoredText: String {
@@ -43,6 +43,10 @@ struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, Custo
 
     var type: SiteType {
         return site.type
+    }
+
+    var shortDomain: String? {
+        return site.url.asURL?.shortDomain
     }
 
     var isGooglePinnedTile: Bool {
