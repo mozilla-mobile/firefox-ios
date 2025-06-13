@@ -9,6 +9,7 @@ metrics_files:
   - firefox-ios/Client/Glean/probes/app_icon.yaml
   - firefox-ios/Client/Glean/probes/autofill.addresses.yaml
   - firefox-ios/Client/Glean/probes/autofill.credit_cards.yaml
+  - firefox-ios/Client/Glean/probes/autofill.password_generator.yaml
   - firefox-ios/Client/Glean/probes/autofill.passwords.yaml
   - firefox-ios/Client/Glean/probes/history.yaml
   - firefox-ios/Client/Glean/probes/library.bookmarks_panel.yaml

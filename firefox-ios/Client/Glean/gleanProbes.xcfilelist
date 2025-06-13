@@ -2,6 +2,7 @@
 $(PROJECT_DIR)/Client/Glean/probes/app_icon.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.addresses.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.credit_cards.yaml
+$(PROJECT_DIR)/Client/Glean/probes/autofill.password_generator.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.passwords.yaml
 $(PROJECT_DIR)/Client/Glean/probes/history.yaml
 $(PROJECT_DIR)/Client/Glean/probes/library.bookmarks_panel.yaml
