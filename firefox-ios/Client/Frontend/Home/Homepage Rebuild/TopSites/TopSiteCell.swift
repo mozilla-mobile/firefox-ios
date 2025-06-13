@@ -17,8 +17,12 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
-        static let pinAlignmentSpacing: CGFloat = 2
-        static let pinIconSize = CGSize(width: 16, height: 16)
+        static let pinIconSize = CGSize(width: 12, height: 12)
+        static let pinBackgroundSize = CGSize(width: 16, height: 16)
+        static let pinBackgroundCornerRadius: CGFloat = pinBackgroundSize.width / 2
+        static let pinBackgroundShadowOffset = CGSize(width: 1, height: 1)
+        static let pinBackgroundShadowOpacity: Float = 1.0
+        static let pinBackgroundShadowRadius: CGFloat = 4.0
         static let textSafeSpace: CGFloat = 6
         static let faviconCornerRadius: CGFloat = 16
         static let faviconTransparentBackgroundInset: CGFloat = 8
@@ -45,9 +49,14 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         stackView.distribution = .fillProportionally
     }
 
+    private lazy var pinImageBackgroundView: UIView = .build { view in
+        view.backgroundColor = LightTheme().colors.layer2
+        view.layer.cornerRadius = UX.pinBackgroundCornerRadius
+        view.isHidden = true
+    }
+
     private lazy var pinImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: StandardImageIdentifiers.Small.pinBadgeFill)
-        imageView.isHidden = true
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.pinFill)
     }
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
@@ -84,12 +93,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
     }
 
     private var textColor: UIColor?
-    private var pinHeightConstraint: NSLayoutConstraint?
-    private var pinWidthConstraint: NSLayoutConstraint?
-    private var pinImageTrailingToTextConstraint: NSLayoutConstraint?
-    private var smallContentConstraints: [NSLayoutConstraint] = []
-    private var largeContentConstraints: [NSLayoutConstraint] = []
     private var imageViewConstraints: [NSLayoutConstraint] = []
+    private var theme: Theme?
 
     // MARK: - Inits
 
@@ -110,7 +115,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
         titleLabel.text = nil
         sponsoredLabel.text = nil
-        pinImageView.isHidden = true
+        pinImageBackgroundView.isHidden = true
         imageViewConstraints.forEach { $0.constant = 0 }
     }
 
@@ -124,12 +129,15 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
         rootContainer.setNeedsLayout()
         rootContainer.layoutIfNeeded()
-        updateDynamicConstraints()
-
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.faviconCornerRadius).cgPath
 
-        alignPinWithText()
+        pinImageBackgroundView.layer.shadowPath = UIBezierPath(roundedRect: pinImageBackgroundView.bounds,
+                                                               cornerRadius: UX.pinBackgroundCornerRadius).cgPath
+        pinImageBackgroundView.layer.shadowColor = theme?.colors.shadowStrong.cgColor
+        pinImageBackgroundView.layer.shadowOpacity = UX.pinBackgroundShadowOpacity
+        pinImageBackgroundView.layer.shadowOffset = UX.pinBackgroundShadowOffset
+        pinImageBackgroundView.layer.shadowRadius = UX.pinBackgroundShadowRadius
     }
 
     // MARK: - Public methods
@@ -138,6 +146,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
                    position: Int,
                    theme: Theme,
                    textColor: UIColor?) {
+        self.theme = theme
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
@@ -180,36 +189,19 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         applyTheme(theme: theme)
     }
 
-    func updateDynamicConstraints() {
-        NSLayoutConstraint.deactivate(smallContentConstraints)
-        NSLayoutConstraint.deactivate(largeContentConstraints)
-
-        if UIApplication.shared.preferredContentSizeCategory <= .extraLarge || pinImageView.isHidden {
-            NSLayoutConstraint.activate(smallContentConstraints)
-        } else {
-            NSLayoutConstraint.activate(largeContentConstraints)
-        }
-
-        // Scales the pin icon with dynamic type, using a minimum height of UX.pinIconSize
-        let dynamicWidth = max(UIFontMetrics.default.scaledValue(for: UX.pinIconSize.width), UX.pinIconSize.width)
-        let dynamicHeight = max(UIFontMetrics.default.scaledValue(for: UX.pinIconSize.height), UX.pinIconSize.height)
-        pinWidthConstraint?.constant = dynamicWidth
-        pinHeightConstraint?.constant = dynamicHeight
-
-        layoutIfNeeded()
-    }
-
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
+        pinImageBackgroundView.addSubview(pinImageView)
+
         descriptionWrapper.addArrangedSubview(titleLabel)
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
 
         rootContainer.addSubview(imageView)
         rootContainer.addSubview(selectedOverlay)
+        rootContainer.addSubview(pinImageBackgroundView)
         contentView.addSubview(rootContainer)
         contentView.addSubview(descriptionWrapper)
-        contentView.addSubview(pinImageView)
 
         NSLayoutConstraint.activate([
             rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -217,13 +209,25 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             rootContainer.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
             rootContainer.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
 
+            descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.textSafeSpace),
             descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             selectedOverlay.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
             selectedOverlay.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
+
+            pinImageView.centerXAnchor.constraint(equalTo: pinImageBackgroundView.centerXAnchor),
+            pinImageView.centerYAnchor.constraint(equalTo: pinImageBackgroundView.centerYAnchor),
+            pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
+            pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
+
+            pinImageBackgroundView.topAnchor.constraint(equalTo: rootContainer.topAnchor, constant: -4),
+            pinImageBackgroundView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor, constant: -4),
+            pinImageBackgroundView.widthAnchor.constraint(equalToConstant: UX.pinBackgroundSize.width),
+            pinImageBackgroundView.heightAnchor.constraint(equalToConstant: UX.pinBackgroundSize.height),
         ])
 
         imageViewConstraints = [
@@ -233,61 +237,12 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
         ]
         NSLayoutConstraint.activate(imageViewConstraints)
-
-        // Constraints used for changing the layout based on dynamic type
-        // When preferredContentSizeCategory is > extraLarge, place the pin icon above the title (largeContentConstraints)
-        // When preferredContentSizeCategory is <= extraLarge, place the pin icon in front of (smallContentConstraints)
-        let trailingConstraint = pinImageView.trailingAnchor.constraint(equalTo: contentView.leadingAnchor)
-        pinImageTrailingToTextConstraint = trailingConstraint
-
-        smallContentConstraints = [
-            pinImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
-            pinImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            pinImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            trailingConstraint,
-            descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                                    constant: UX.textSafeSpace),
-        ]
-
-        largeContentConstraints = [
-            pinImageView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
-            pinImageView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
-            pinImageView.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
-            pinImageView.topAnchor.constraint(equalTo: rootContainer.bottomAnchor, constant: UX.textSafeSpace),
-            descriptionWrapper.topAnchor.constraint(equalTo: pinImageView.bottomAnchor)
-        ]
-
-        let bottomConstraint = descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        bottomConstraint.priority = .defaultHigh
-        bottomConstraint.isActive = true
-        pinHeightConstraint = pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height)
-        pinHeightConstraint?.isActive = true
-        pinWidthConstraint = pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width)
-        pinWidthConstraint?.isActive = true
-
-        updateDynamicConstraints()
-    }
-
-    private func alignPinWithText() {
-        guard !pinImageView.isHidden else { return }
-
-        // Aligns pinImageView with the leading edge of the visible text in titleLabel instead of the label
-        // This ensures correct positioning when the text is center-aligned
-        // Uses async update to account for dynamic type and text alignment changes.
-        DispatchQueue.main.async {
-            let labelBounds = self.titleLabel.bounds
-            let textRect = self.titleLabel.textRect(forBounds: labelBounds,
-                                                    limitedToNumberOfLines: self.titleLabel.numberOfLines
-            )
-            let textStartInContentView = self.titleLabel.convert(textRect.origin, to: self.contentView).x
-            self.pinImageTrailingToTextConstraint?.constant = textStartInContentView - UX.pinAlignmentSpacing
-        }
     }
 
     private func configurePinnedSite(_ topSite: TopSiteConfiguration) {
         guard topSite.isPinned else { return }
 
-        pinImageView.isHidden = false
+        pinImageBackgroundView.isHidden = false
     }
 
     private func configureSponsoredSite(_ topSite: TopSiteConfiguration) {

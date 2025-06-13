@@ -13,7 +13,6 @@ final class HomepageViewController: UIViewController,
                                     UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
-                                    Notifiable,
                                     Screenshotable,
                                     Themeable,
                                     StoreSubscriber {
@@ -146,7 +145,6 @@ final class HomepageViewController: UIViewController,
             )
         )
 
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
@@ -321,16 +319,6 @@ final class HomepageViewController: UIViewController,
             screen: .homepage
         )
         store.dispatch(action)
-    }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            dynamicTypeChanged()
-        default:
-            break
-        }
     }
 
     // MARK: - Theming
@@ -692,13 +680,6 @@ final class HomepageViewController: UIViewController,
 
     func screenshot(quality: CGFloat) -> UIImage? {
         return screenshot(bounds: view.bounds)
-    }
-
-    private func dynamicTypeChanged() {
-        collectionView?.visibleCells.forEach { cell in
-            guard let customCell = cell as? TopSiteCell else { return }
-            customCell.updateDynamicConstraints()
-        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
