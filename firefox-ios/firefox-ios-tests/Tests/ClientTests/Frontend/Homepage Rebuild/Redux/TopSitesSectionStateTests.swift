@@ -124,7 +124,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
-    func test_viewWillAppear_numberOfTilesPerRow_returnsExpectedState() {
+    func test_viewDidLayoutSubviews_numberOfTilesPerRow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
@@ -133,7 +133,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
             HomepageAction(
                 numberOfTopSitesPerRow: 8,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.viewWillAppear
+                actionType: HomepageActionType.viewDidLayoutSubviews
             )
         )
 

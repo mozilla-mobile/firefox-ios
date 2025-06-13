@@ -171,10 +171,22 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.viewWillAppear(false)
 
         let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+            mockStore.dispatchedActions.first(where: { $0 is HomepageAction }) as? HomepageAction
         )
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.viewWillAppear)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidLayoutSubviews_triggersHomepageAction() throws {
+        let subject = createSubject()
+
+        subject.viewDidLayoutSubviews()
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
