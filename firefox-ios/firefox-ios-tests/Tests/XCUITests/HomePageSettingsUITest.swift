@@ -63,7 +63,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", jumpBackIn as? String)
         let bookmarks = app.tables.cells.switches["Bookmarks"].value
         XCTAssertEqual("1", bookmarks as? String)
-        let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
+        let sponsoredStories = app.tables.cells.switches["Stories"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
         // Current Homepage
@@ -330,7 +330,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //        )
 
         XCTAssertEqual(
-            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as? String,
+            app.cells.switches["Stories"].value as? String,
             "1"
         )
     }

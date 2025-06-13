@@ -46,7 +46,7 @@ class PocketStoriesTests: XCTestCase {
 
     func testPocketStoriesCaching() async throws {
         let pocketFeed = PocketProvider(endPoint: pocketAPI, prefs: MockProfilePrefs())
-        let feedNumber = 11
+        let feedNumber = 12
 
         // Fetch stories from the API
         do {

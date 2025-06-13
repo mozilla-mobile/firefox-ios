@@ -87,7 +87,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 21)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
     }
 
     func test_updateSnapshot_withValidState_returnTopSites() throws {
@@ -138,7 +138,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
             .pocket(nil),

@@ -10,7 +10,7 @@ class StoryProvider: FeatureFlaggable {
 
     init(
         pocketAPI: PocketStoriesProviding,
-        numberOfPocketStories: Int = 11
+        numberOfPocketStories: Int = 12
     ) {
         self.pocketAPI = pocketAPI
         self.numberOfPocketStories = numberOfPocketStories

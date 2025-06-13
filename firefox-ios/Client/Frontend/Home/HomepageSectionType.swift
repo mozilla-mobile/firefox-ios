@@ -44,7 +44,6 @@ enum HomepageSectionType: Int, CaseIterable {
                 TopSiteItemCell.self,
                 EmptyTopSiteCell.self,
                 LegacyJumpBackInCell.self,
-                PocketDiscoverCell.self,
                 LegacyPocketStandardCell.self,
                 LegacyBookmarksCell.self,
                 CustomizeHomepageSectionCell.self,
