@@ -10,7 +10,9 @@ extension Data {
         let length = Int(CC_SHA256_DIGEST_LENGTH)
         let digest = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
         CC_SHA256((self as NSData).bytes, CC_LONG(self.count), digest)
-        return Data(bytes: UnsafePointer<UInt8>(digest), count: length)
+        let data = Data(bytes: UnsafePointer<UInt8>(digest), count: length)
+        digest.deallocate()
+        return data
     }
 
     public func hmacSha256WithKey(_ key: Data) -> Data {

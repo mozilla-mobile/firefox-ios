@@ -278,8 +278,11 @@ class PrivateBrowsingTest: BaseTestCase {
         // Tap on "New private tab" option
         navigator.nowAt(NewTabScreen)
         if #available(iOS 16, *) {
-            navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
+            navigator.performAction(Action.CloseURLBarOpen)
+            if !app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].isHittable {
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
             navigator.goto(TabTray)
             let numTab = app.otherElements[tabsTray].cells.count
             XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")

@@ -460,7 +460,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getHelpAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.Help,
                                      iconString: StandardImageIdentifiers.Large.helpCircle) { _ in
-            if let url = URL(string: "https://support.mozilla.org/products/ios") {
+            if let url = SupportUtils.URLForGetHelp {
                 self.delegate?.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .help)
