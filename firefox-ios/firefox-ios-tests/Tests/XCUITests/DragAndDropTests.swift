@@ -31,7 +31,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
-    func testRearrangeTabsTabTray() {
+    func testRearrangeTabsTabTray_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         openTwoWebsites()
         navigator.goto(TabTray)
