@@ -3,4 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 class SecondDangerCheck {
+    func someFunction() {
+        // Adding lines to ger file in test results
+    }
 }
