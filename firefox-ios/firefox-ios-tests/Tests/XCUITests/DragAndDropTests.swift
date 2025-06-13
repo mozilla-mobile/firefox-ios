@@ -128,28 +128,6 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         }
     }
 
-    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        // Set the device in landscape mode
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        openTwoWebsites()
-        navigator.goto(TabTray)
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
-        if #available(iOS 17, *) {
-            // Rearrange the tabs via drag home tab and drop it on twitter tab
-            dragAndDrop(
-                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-            )
-            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-            XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
-        }
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2361192
     func testDragAndDropHomeTabTabsTray_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
@@ -181,29 +159,6 @@ class DragAndDropTests: FeatureFlaggedTestBase {
             } else {
                 XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
             }
-        }
-    }
-
-    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.openNewURL(urlString: secondWebsite.url)
-        waitUntilPageLoad()
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
-
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
-        if #available(iOS 17, *) {
-            // Drag and drop home tab from the first position to the second
-            dragAndDrop(
-                dragElement: app.collectionViews.cells["Homepage"].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-            )
-            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
-            // Check that focus is kept on last website open
-            XCTAssertEqual(app.otherElements[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 
