@@ -4,8 +4,10 @@
 
 import UIKit
 import Common
+import Redux
 
-final class AddressBarPanGestureHandler: NSObject {
+final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+    typealias SubscriberStateType = ToolbarState
     // MARK: - UX Constants
     private struct UX {
         // Offset used to ensure the skeleton address bar animates in alignment with the address bar.
@@ -26,13 +28,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
-    private var toolbarState: ToolbarState? {
-        return store.state.screenState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        )
-    }
+    private var toolbarState: ToolbarState?
 
     // MARK: - Init
     init(
@@ -52,13 +48,35 @@ final class AddressBarPanGestureHandler: NSObject {
         self.screenshotHelper = screenshotHelper
         self.statusBarOverlay = statusBarOverlay
         super.init()
+        subscribeToRedux()
         setupGesture()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
     }
 
     private func setupGesture() {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressToolbarContainer.addGestureRecognizer(gesture)
         panGestureRecognizer = gesture
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return ToolbarState(appState: appState, uuid: self.windowUUID)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: ToolbarState) {
+        toolbarState = state
         disablePanGestureIfTopAddressBar()
     }
 
