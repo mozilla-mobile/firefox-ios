@@ -9,17 +9,23 @@ import Shared
 import ComponentLibrary
 import OnboardingKit
 
-class OnboardingService {
+final class OnboardingService {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?
     private let qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var hasRegisteredForDefaultBrowserNotification = false
-    var userDefaults: UserDefaultsInterface
-    var windowUUID: WindowUUID
-    var profile: Profile
-    var introScreenManager: IntroScreenManager?
-    var themeManager: ThemeManager
+    private var userDefaults: UserDefaultsInterface
+    private var windowUUID: WindowUUID
+    private var profile: Profile
+    private var introScreenManager: IntroScreenManagerProtocol?
+    private var themeManager: ThemeManager
+
+    // MARK: - Injected Dependencies
+    private let notificationManager: NotificationManagerProtocol
+    private let defaultApplicationHelper: ApplicationHelper
+    private let notificationCenter: NotificationProtocol
+    private let searchBarLocationSaver: SearchBarLocationSaverProtocol
 
     init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -28,7 +34,11 @@ class OnboardingService {
         themeManager: ThemeManager,
         delegate: OnboardingServiceDelegate,
         navigationDelegate: OnboardingNavigationDelegate?,
-        qrCodeNavigationHandler: QRCodeNavigationHandler?
+        qrCodeNavigationHandler: QRCodeNavigationHandler?,
+        notificationManager: NotificationManagerProtocol = NotificationManager(),
+        defaultApplicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        searchBarLocationSaver: SearchBarLocationSaverProtocol = SearchBarLocationSaver()
     ) {
         self.delegate = delegate
         self.userDefaults = userDefaults
@@ -38,6 +48,10 @@ class OnboardingService {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.navigationDelegate = navigationDelegate
         self.qrCodeNavigationHandler = qrCodeNavigationHandler
+        self.notificationManager = notificationManager
+        self.defaultApplicationHelper = defaultApplicationHelper
+        self.notificationCenter = notificationCenter
+        self.searchBarLocationSaver = searchBarLocationSaver
     }
 
     func handleAction(
@@ -74,7 +88,16 @@ class OnboardingService {
             guard let popupViewModel = cards
                 .first(where: { $0.name == cardName })?
                 .instructionsPopup
-            else { return }
+            else {
+                completion(.failure(
+                    NSError(
+                        domain: "OnboardingServiceError",
+                        code: 404,
+                        userInfo: [NSLocalizedDescriptionKey: "Popup view model not found for card: \(cardName)"]
+                    )
+                ))
+                return
+            }
             handleOpenInstructionsPopup(
                 from: OnboardingInstructionsPopupInfoModel(
                     title: popupViewModel.title,
@@ -84,31 +107,44 @@ class OnboardingService {
                     a11yIdRoot: popupViewModel.a11yIdRoot
                 )
             )
+            completion(.success(.none))
 
         case .readPrivacyPolicy:
             guard let infoModel = cards
                 .first(where: { $0.name == cardName }),
                   let url = infoModel.link?.url
-            else { return }
-            handleReadPrivacyPolicy(from: url)
+            else {
+                completion(.failure(
+                    NSError(
+                        domain: "OnboardingServiceError",
+                        code: 404,
+                        userInfo: [NSLocalizedDescriptionKey: "Privacy Policy URL not found for card: \(cardName)"]
+                    )
+                ))
+                return
+            }
+            handleReadPrivacyPolicy(from: url) {
+                completion(.success(.none))
+            }
 
         case .openIosFxSettings:
             handleOpenIosFxSettings(from: cardName)
+            completion(.success(.none))
 
         case .endOnboarding:
             handleEndOnboarding(with: activityEventHelper)
+            completion(.success(.none))
         }
     }
-}
 
-private extension OnboardingService {
-    func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
+    // MARK: - Private Methods
+    private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
         activityEventHelper.updateOnboardingUserActivationEvent()
         askForNotificationPermission(from: cardName)
     }
 
-    func handleSyncSignIn(
+    private func handleSyncSignIn(
         from cardName: String,
         with activityEventHelper: ActivityEventHelper,
         completion: @escaping () -> Void
@@ -120,38 +156,38 @@ private extension OnboardingService {
         presentSignToSync(with: fxaParams, profile: profile, completion: completion)
     }
 
-    func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
+    private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
         registerForNotification()
-        DefaultApplicationHelper().openSettings()
+        defaultApplicationHelper.openSettings()
     }
 
-    func handleOpenInstructionsPopup(from popupViewModel: OnboardingDefaultBrowserModelProtocol) {
+    private func handleOpenInstructionsPopup(from popupViewModel: OnboardingDefaultBrowserModelProtocol) {
         presentDefaultBrowserPopup(from: popupViewModel) { [weak self] in
             self?.navigationDelegate?.finishOnboardingFlow()
         }
     }
 
-    func handleReadPrivacyPolicy(from url: URL) {
-        presentPrivacyPolicy(from: url) {}
+    private func handleReadPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
+        presentPrivacyPolicy(from: url, completion: completion)
     }
 
-    func handleOpenIosFxSettings(from cardName: String) {
-        DefaultApplicationHelper().openSettings()
+    private func handleOpenIosFxSettings(from cardName: String) {
+        defaultApplicationHelper.openSettings()
     }
 
-    func handleEndOnboarding(with activityEventHelper: ActivityEventHelper) {
+    private func handleEndOnboarding(with activityEventHelper: ActivityEventHelper) {
         introScreenManager?.didSeeIntroScreen()
-        SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+        searchBarLocationSaver.saveUserSearchBarLocation(
+            profile: profile,
+            userInterfaceIdiom: UIDevice.current.userInterfaceIdiom
+        )
         navigationDelegate?.finishOnboardingFlow()
     }
-}
 
-private extension OnboardingService {
-    func askForNotificationPermission(from cardName: String) {
-        let notificationManager = NotificationManager()
-        notificationManager.requestAuthorization { [weak self] granted, error in
+    private func askForNotificationPermission(from cardName: String) {
+        notificationManager.requestAuthorization { [weak self] (granted: Bool, error: Error?) in
             guard error == nil, let self = self else { return }
 
             DispatchQueue.main.async {
@@ -162,25 +198,20 @@ private extension OnboardingService {
                     if self.userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
                         self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
                     }
-                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+                    self.notificationCenter.post(name: .RegisterForPushNotifications)
                 }
             }
         }
     }
 
-    func registerForNotification() {
+    private func registerForNotification() {
         guard !hasRegisteredForDefaultBrowserNotification else { return }
-
-        // Note: This would need to be implemented based on your notification setup
-        // You might need to pass a notification setup closure or use a different approach
         hasRegisteredForDefaultBrowserNotification = true
     }
 
-    func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
+    private func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
         guard let delegate = delegate else { return }
 
-        // Create and present the sign-in view controller
-        // This is a simplified version - you'll need to adapt based on your actual implementation
         let signInVC = createSignInViewController(
             windowUUID: windowUUID,
             params: params,
@@ -191,7 +222,7 @@ private extension OnboardingService {
         delegate.present(signInVC, animated: true, completion: nil)
     }
 
-    func presentDefaultBrowserPopup(
+    private func presentDefaultBrowserPopup(
         from popupViewModel: OnboardingDefaultBrowserModelProtocol,
         completion: @escaping () -> Void
     ) {
@@ -204,7 +235,7 @@ private extension OnboardingService {
         delegate?.present(popupVC, animated: false, completion: nil)
     }
 
-    func presentPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
+    private func presentPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
         guard let delegate = delegate else { return }
         let privacyVC = createPrivacyPolicyViewController(
             windowUUID: windowUUID,
