@@ -352,17 +352,6 @@ class TabsTests: FeatureFlaggedTestBase {
             ]
         )
 
-        // Long tap on Tab Counter should show the correct options
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-        waitForElementsToExist(
-            [
-                app.cells.buttons[StandardImageIdentifiers.Large.plus],
-                app.cells.buttons[StandardImageIdentifiers.Large.cross]
-            ]
-        )
-
         // Open New Tab
         app.cells.buttons[StandardImageIdentifiers.Large.plus].waitAndTap()
         navigator.performAction(Action.CloseURLBarOpen)
@@ -451,7 +440,8 @@ class TabsTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-        app.tables.cells.buttons["Private Browsing Mode"].waitAndTap()
+        app.tables.cells.buttons["New Private Tab"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
         navigator.nowAt(NewTabScreen)
