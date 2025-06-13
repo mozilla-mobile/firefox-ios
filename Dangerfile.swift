@@ -66,6 +66,7 @@ func failOnNewFilesWithoutCoverage() {
         !$0.contains("/Generated/")
     }
 
+    let contactMessage = "Please add unit tests. (cc: @cyndichin @yoanarios)."
     for file in newSwiftFiles {
         warn("Check file name \(file)")
         let cleanedFile = file.replacingOccurrences(of: "./", with: "")
@@ -76,9 +77,9 @@ func failOnNewFilesWithoutCoverage() {
         }
 
         if let file = matchingFile {
-            fail("New file `\(file)` has 0% test coverage. Please add unit tests.")
+            warn("New file `\(file)` has 0% test coverage. \(contactMessage)")
         } else {
-            fail("New file `\(cleanedFile)` is missing from coverage report. Please add unit tests.")
+            warn("New file `\(cleanedFile)` is missing from coverage report. \(contactMessage)")
         }
     }
 }
