@@ -25,6 +25,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hntContentFeedRefresh
     case hntCusomizationSection
     case hntJumpBackInSection
+    case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
     case homepageRebuild
     case inactiveTabs
@@ -33,6 +34,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case menuRefactorHint
     case menuRedesign
     case microsurvey
+    case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case pdfRefactor
@@ -57,6 +59,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case updatedPasswordManager
     case useRustKeychain
+    case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -86,7 +89,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .unifiedAds,
                 .unifiedSearch,
                 .useRustKeychain,
-                .updatedPasswordManager:
+                .updatedPasswordManager,
+                .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -118,6 +122,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.BookmarksSection
         case .hntJumpBackInSection:
             return FlagKeys.JumpBackInSection
+        case .hntSponsoredShortcuts:
+            return FlagKeys.SponsoredShortcuts
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
         case .sentFromFirefox:
@@ -143,6 +149,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .menuRefactorHint,
                 .menuRedesign,
                 .microsurvey,
+                .modernOnboardingUI,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .pdfRefactor,
@@ -164,7 +171,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
-                .useRustKeychain:
+                .useRustKeychain,
+                .webEngineIntegrationRefactor:
             return nil
         }
     }

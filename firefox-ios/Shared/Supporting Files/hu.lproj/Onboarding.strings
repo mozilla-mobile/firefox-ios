@@ -76,6 +76,88 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Kihagyás";
 
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v123" = "Folytatás";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Alul";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Modern.Customization.Toolbar.Title.v140" = "Válassza ki a címsor helyét";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Felül";
+
+/* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Sync.Description.v140" = "Kapja meg a könyvjelzőit, előzményeit és jelszavait az összes eszközén.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.SignIn.Action.v140" = "Szinkronizálás indítása";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.Skip.Action.v140" = "Most nem";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Sync.Title.v140" = "Azonnal folytassa ott, ahol abbahagyta";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Folytatás";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.Modern.TermsOfService.ManageLink.v140" = "Kezelés";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "A böngésző fejlesztése érdekében, a %1$@ diagnosztikai és interakciós adatokat küld a %2$@ számára. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "A %1$@ vigyáz az Ön adatvédelmére. További információk az %2$@";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Adatvédelmi nyilatkozatunkban.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "További tudnivalók";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Az összeomlás-jelentések lehetővé teszik a böngésző hibáinak diagnosztizálását és javítását. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Összeomlás-jelentések automatikus elküldése";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Az eszközre, a hardverbeállításokra és a %1$@ használatára vonatkozó adatok segítenek abban, hogy a funkciók, a teljesítmény és a stabilitás mindenki számára jobb legyen. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Műszaki és interakciós adatok küldése a %@ számára";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Segítsen jobbá tenni a %@ alkalmazást";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Villámgyors oldalbetöltés\nAutomatikus követésvédelem\nSzinkronizálás az összes eszközén";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "A folytatással elfogadja az %@";
+
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "Tegye jobbá a böngészését";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "A %@ felhasználási feltételei.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Beállítás alapértelmezett böngészőként";
+
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "Egy választás védi Önt, bárhol is jár a weben. Később bármikor módosíthatja.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Modern.Welcome.Skip.v140" = "Most nem";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Welcome.Title.v140" = "Mondjon búcsút a hátborzongató reklámoknak";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Folytatás";
 

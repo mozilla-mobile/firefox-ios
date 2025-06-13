@@ -67,6 +67,9 @@
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "Standardno";
 
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Resetiraj postavke web stranice";
+
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "Postavke zumiranja";
 

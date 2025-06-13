@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .hntJumpBackInSection:
              return checkHNTJumpBackInSectionFeature(from: nimbus)
 
+        case .hntSponsoredShortcuts:
+            return checkHNTSponsoredShortcutsFeature(from: nimbus)
+
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
@@ -73,6 +76,9 @@ final class NimbusFeatureFlagLayer {
 
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
+
+        case .modernOnboardingUI:
+            return checkMondernOnboardingUIFeature(from: nimbus)
 
         case .loginsVerificationEnabled:
             return checkLoginsVerificationFeature(from: nimbus)
@@ -148,6 +154,9 @@ final class NimbusFeatureFlagLayer {
 
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
+
+        case .webEngineIntegrationRefactor:
+            return checkWebEngineIntegrationRefactor(from: nimbus)
         }
     }
 
@@ -202,6 +211,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntJumpBackInSectionFeature.value().enabled
+    }
+
+    private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }
 
     private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
@@ -407,5 +420,13 @@ final class NimbusFeatureFlagLayer {
     private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.updatedPasswordManagerFeature.value()
         return config.status
+    }
+
+    private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
+    }
+
+    private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.webEngineIntegrationRefactor.value().enabled
     }
 }

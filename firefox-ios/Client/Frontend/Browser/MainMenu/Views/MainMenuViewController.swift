@@ -124,6 +124,11 @@ class MainMenuViewController: UIViewController,
                 guard let self else { return }
                 self.dispatchSyncSignInAction()
             }
+        } else {
+            menuRedesignContent.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
         }
 
         setupAccessibilityIdentifiers()
@@ -390,7 +395,9 @@ class MainMenuViewController: UIViewController,
             if isMenuRedesign {
                 menuRedesignContent.setupAccessibilityIdentifiers(
                     menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
-                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
+                    closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
+                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton)
             } else {
                 menuContent.setupAccessibilityIdentifiers(
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,

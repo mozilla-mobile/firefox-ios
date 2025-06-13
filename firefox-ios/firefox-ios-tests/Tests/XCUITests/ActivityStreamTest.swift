@@ -204,8 +204,9 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab_swipingTabsExperimentOff() throws {
+    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff_swipingTabsExperimentOff() throws {
         addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
@@ -217,6 +218,31 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
         mozWaitForElementToExist(TopSiteCellgroup)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(TabTray)
+        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
+        navigator.nowAt(TabTray)
+        app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
+        // The website is open
+        mozWaitForElementToNotExist(TopSiteCellgroup)
+        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                             value: "wikipedia.org")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
+    // Smoketest
+    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOn() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
+        }
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        // Long tap on Wikipedia top site
+        waitForExistence(app.collectionViews.links.staticTexts["Wikipedia"])
+        app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
+        app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
+        mozWaitForElementToExist(TopSiteCellgroup)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts.element(boundBy: 0))
         navigator.nowAt(TabTray)
@@ -255,6 +281,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
+    // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
@@ -364,6 +391,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(NewTabScreen)
         addWebsiteToShortcut(website: url_3)
         addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
         // Verify shortcuts are displayed on the homepage
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]

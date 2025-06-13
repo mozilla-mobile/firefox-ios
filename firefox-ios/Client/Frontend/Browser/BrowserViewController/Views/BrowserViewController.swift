@@ -2274,7 +2274,6 @@ class BrowserViewController: UIViewController,
             }
 
         case .URL:
-            updateToolbarAnimationStateIfNeeded()
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
                 break
@@ -2290,7 +2289,9 @@ class BrowserViewController: UIViewController,
                 nil
             }
             guard let url else { break }
-
+            if !url.isFxHomeUrl {
+                updateToolbarAnimationStateIfNeeded()
+            }
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
                 tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
@@ -3089,6 +3090,7 @@ class BrowserViewController: UIViewController,
 
             if self.isToolbarRefactorEnabled {
                 let action = ToolbarAction(searchTerm: searchText,
+                                           shouldAnimate: true,
                                            windowUUID: self.windowUUID,
                                            actionType: ToolbarActionType.didStartEditingUrl)
                 store.dispatch(action)

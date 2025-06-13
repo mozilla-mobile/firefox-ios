@@ -5,11 +5,11 @@
 "NativeErrorPage.GenericError.Description.v134" = "U prupitariu di %@ nun u cunfijurau bonu e nun pozzu stabbiliri un cullijamentu sicuru.";
 
 /* On error page, this is the title for generic error. */
-"NativeErrorPage.GenericError.TitleLabel.v131" = "Stai accura. Parissi chi cc'è quarchi prubblema.";
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Stai accura. Parissi chi cc’è quarchi prubblema.";
 
 /* On error page, this is the description for no internet connection. */
-"NativeErrorPage.NoInternetConnection.Description.v131" = "Prova a cullijàriti di n'autru dispusitivu. Cuntrolla u modem o u router. Scullèjati e cullèjati arrè ô Wi-Fi.";
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Prova a cullijàriti di n’autru dispusitivu. Cuntrolla u modem o u router. Scullèjati e cullèjati arrè ô Wi-Fi.";
 
 /* On error page, this is the title for no internet connection */
-"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Parissi ca cc'è un prubblema câ to cunnissioni â riti.";
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Parissi ca cc’è un prubblema câ to cunnissioni â riti.";
 

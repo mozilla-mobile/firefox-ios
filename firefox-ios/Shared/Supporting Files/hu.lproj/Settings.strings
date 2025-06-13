@@ -67,6 +67,9 @@
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "Alapértelmezett";
 
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Webhely beállításainak visszaállítása";
+
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "Nagyítási beállítások";
 

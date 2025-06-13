@@ -1606,7 +1606,7 @@ extension String {
                     comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
             }
 
-            public struct TermsOfServiceLink {
+            public struct TermsOfService {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.Modern.TermsOfService.Title.v140",
                     tableName: "Onboarding",
