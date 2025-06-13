@@ -26,6 +26,13 @@ final class AddressBarPanGestureHandler: NSObject {
     private let tabManager: TabManager
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
+    private var toolbarState: ToolbarState? {
+        return store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )
+    }
 
     // MARK: - Init
     init(
@@ -52,25 +59,27 @@ final class AddressBarPanGestureHandler: NSObject {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressToolbarContainer.addGestureRecognizer(gesture)
         panGestureRecognizer = gesture
+        disablePanGestureIfTopAddressBar()
     }
 
     // MARK: - Pan Gesture Availability
     func enablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = true
+        disablePanGestureIfTopAddressBar()
     }
 
     func disablePanGestureRecognizer() {
         panGestureRecognizer?.isEnabled = false
     }
 
+    private func disablePanGestureIfTopAddressBar() {
+        guard toolbarState?.toolbarPosition == .top else { return }
+        disablePanGestureRecognizer()
+    }
+
     /// Enables swiping gesture in overlay mode when no URL or text is in the address bar,
     /// such as after dismissing the keyboard on the homepage.
     func enablePanGestureOnHomepageIfNeeded() {
-        let toolbarState = store.state.screenState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        )
         let addressToolbarState = toolbarState?.addressToolbar
         guard addressToolbarState?.didStartTyping == false,
               addressToolbarState?.url == nil,
