@@ -295,9 +295,9 @@ redo==3.0.0 \
     --hash=sha256:52a14200004d6708924a547b31b7d1c717cb36b944f3a5c7b176e0d61ab81eef \
     --hash=sha256:66905396b2882577fa4bf7edb90fee081db2b98992d303f12e3f898ac7f7bd56
     # via taskcluster-taskgraph
-requests==2.32.3 \
-    --hash=sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760 \
-    --hash=sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6
+requests==2.32.4 \
+    --hash=sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c \
+    --hash=sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422
     # via
     #   cookiecutter
     #   taskcluster-taskgraph
