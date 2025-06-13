@@ -587,9 +587,6 @@ extension TelemetryWrapper {
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
-        case shareSendToDevice = "share-send-to-device"
-        case sharePocketIcon = "share-pocket-icon"
-        case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
         case themeModeManually = "theme-manually"
@@ -1729,13 +1726,6 @@ extension TelemetryWrapper {
                     messageSurface: messageSurface
                 )
             )
-        // MARK: - Share sheet actions
-        case (.action, .tap, .shareSheet, .shareSendToDevice, _):
-            GleanMetrics.ShareSheet.sendDeviceTapped.record()
-        case (.action, .tap, .shareSheet, .sharePocketIcon, _):
-            GleanMetrics.ShareSheet.pocketActionTapped.record()
-        case (.action, .tap, .shareSheet, .shareSaveToPocket, _):
-            GleanMetrics.ShareSheet.saveToPocketTapped.record()
 
         // MARK: - App Errors
         case(.information, .error, .app, .largeFileWrite, let extras):
