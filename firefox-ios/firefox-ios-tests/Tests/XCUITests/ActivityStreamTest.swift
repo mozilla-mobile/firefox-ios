@@ -230,7 +230,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOn() throws {
+    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOn_swipingTabsExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {

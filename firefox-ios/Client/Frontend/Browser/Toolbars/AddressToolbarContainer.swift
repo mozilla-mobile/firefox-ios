@@ -255,7 +255,7 @@ final class AddressToolbarContainer: UIView,
             .locationViewVerticalPaddings(addressBarPosition: toolbarState.toolbarPosition)
         addNewTabTopConstraint?.constant = addressBarVerticalPaddings.top
         addNewTabBottomConstraint?.constant = -addressBarVerticalPaddings.bottom
-        addNewTabView.config(newModel.addressToolbarConfig.uxConfiguration)
+        addNewTabView.configure(newModel.addressToolbarConfig.uxConfiguration)
 
         // Replace the old model after we are done using it for comparison
         // All functionality that depends on the new model should come after this

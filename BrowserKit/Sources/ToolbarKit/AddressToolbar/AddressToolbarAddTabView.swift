@@ -7,7 +7,7 @@ import UIKit
 import Common
 
 public final class AddressToolbarAddTabView: UIView,
-                                         ThemeApplicable {
+                                             ThemeApplicable {
     private lazy var plusIconView: UIImageView  = .build {
         $0.alpha = 0.0
         $0.image = UIImage(named: StandardImageIdentifiers.Large.plus)
@@ -30,7 +30,7 @@ public final class AddressToolbarAddTabView: UIView,
         ])
     }
 
-    public func config(_ configuration: AddressToolbarUXConfiguration) {
+    public func configure(_ configuration: AddressToolbarUXConfiguration) {
         layer.cornerRadius = configuration.toolbarCornerRadius
     }
 
