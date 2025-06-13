@@ -223,6 +223,7 @@ class BrowserCoordinator: BaseCoordinator,
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
+    @MainActor
     func switchMode() {
         browserViewController.tabManager.switchPrivacyMode()
     }

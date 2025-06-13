@@ -80,6 +80,7 @@ final class AddressBarPanGestureHandler: NSObject {
 
     // MARK: - Pan Gesture Handling
     @objc
+    @MainActor
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: contentContainer)
 
@@ -122,6 +123,7 @@ final class AddressBarPanGestureHandler: NSObject {
         webPagePreview.setScreenshot(nextTab)
     }
 
+    @MainActor
     private func handleGestureEndedState(translation: CGPoint, velocity: CGPoint, nextTab: Tab?) {
         // Determine if the transition should be completed based on the translation and velocity.
         // If the user swiped more than half of the screen or had a velocity higher that the constant,
