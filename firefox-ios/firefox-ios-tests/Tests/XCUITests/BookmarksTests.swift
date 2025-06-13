@@ -424,6 +424,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
         validateLongTapOptionsFromBookmarkLink()
         forceRestartApp()
+        app.launch()
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
             validateLongTapOptionsFromBookmarkLink()
