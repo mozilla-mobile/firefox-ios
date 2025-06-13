@@ -6,6 +6,8 @@ import Foundation
 import Shared
 
 protocol IntroScreenManagerProtocol {
+    var shouldShowIntroScreen: Bool { get }
+    var isModernOnboardingEnabled: Bool { get }
     func didSeeIntroScreen()
 }
 

@@ -39,8 +39,31 @@ class MockOnboardingNavigationDelegate: OnboardingNavigationDelegate {
     }
 }
 
-class MockIntroScreenManager: IntroScreenManagerProtocol {
+final class MockIntroScreenManager: IntroScreenManagerProtocol {
+    /// Controls what `shouldShowIntroScreen` returns
+    var stubShouldShowIntroScreen: Bool
+
+    /// Controls what `isModernOnboardingEnabled` returns
+    var stubIsModernOnboardingEnabled: Bool
+
+    /// Records whether `didSeeIntroScreen()` was invoked
     var didSeeIntroScreenCalled = false
+
+    init(
+        shouldShowIntro: Bool = false,
+        isModernEnabled: Bool = false
+    ) {
+        self.stubShouldShowIntroScreen = shouldShowIntro
+        self.stubIsModernOnboardingEnabled = isModernEnabled
+    }
+
+    var shouldShowIntroScreen: Bool {
+        return stubShouldShowIntroScreen
+    }
+
+    var isModernOnboardingEnabled: Bool {
+        return stubIsModernOnboardingEnabled
+    }
 
     func didSeeIntroScreen() {
         didSeeIntroScreenCalled = true

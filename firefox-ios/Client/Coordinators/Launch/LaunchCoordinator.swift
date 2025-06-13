@@ -238,7 +238,7 @@ final class LaunchCoordinator: BaseCoordinator,
     }()
 
     // MARK: - Intro
-    private func presentModernIntroOnboarding(with manager: IntroScreenManager,
+    private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
         let activityEventHelper = ActivityEventHelper()
@@ -288,7 +288,7 @@ final class LaunchCoordinator: BaseCoordinator,
     }
 
     // MARK: - Intro
-    private func presentIntroOnboarding(with manager: IntroScreenManager,
+    private func presentIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
 
