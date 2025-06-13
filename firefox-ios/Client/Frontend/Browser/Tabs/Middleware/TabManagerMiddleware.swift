@@ -786,7 +786,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case MainMenuMiddlewareActionType.requestTabInfo:
             provideTabInfo(forWindow: action.windowUUID, accountData: defaultAccountData())
             handleDidInstantiateViewAction(action: action)
-        case MainMenuDetailsActionType.tapAddToBookmarks:
+        case MainMenuDetailsActionType.tapAddToBookmarks, MainMenuActionType.tapAddToBookmarks:
             guard let tabID = action.tabID else { return }
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
             addToBookmarks(shareItem)
@@ -803,9 +803,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
             addToReadingList(with: action.tabID, uuid: action.windowUUID)
         case MainMenuDetailsActionType.tapRemoveFromReadingList:
             removeFromReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapAddToShortcuts:
+        case MainMenuDetailsActionType.tapAddToShortcuts, MainMenuActionType.tapAddToShortcuts:
             addToShortcuts(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapRemoveFromShortcuts:
+        case MainMenuDetailsActionType.tapRemoveFromShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
             removeFromShortcuts(with: action.tabID, uuid: action.windowUUID)
 
         default:

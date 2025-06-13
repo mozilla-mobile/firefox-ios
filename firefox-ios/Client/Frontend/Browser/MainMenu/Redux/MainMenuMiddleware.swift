@@ -107,7 +107,7 @@ final class MainMenuMiddleware {
         case MainMenuDetailsActionType.tapRemoveFromReadingList:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
 
-        case MainMenuDetailsActionType.tapToggleNightMode:
+        case MainMenuDetailsActionType.tapToggleNightMode, MainMenuActionType.tapToggleNightMode:
             handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
 
         case MainMenuDetailsActionType.tapBackToMainMenu:
