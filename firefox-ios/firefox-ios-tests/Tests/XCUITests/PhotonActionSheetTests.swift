@@ -5,10 +5,12 @@
 import XCTest
 import Common
 
-class PhotonActionSheetTests: BaseTestCase {
+class PhotonActionSheetTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
-    func testPinToShortcuts() {
+    func testPinToShortcuts_topSitesVisualRefreshFlagDisabled() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
+        app.launch()
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
@@ -42,7 +44,44 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToNotExist(cell)
     }
 
+    func testPinToShortcuts_testPinToShortcuts_topSitesVisualRefreshFlagEnabled() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
+        app.launch()
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        // Open Page Action Menu Sheet and Pin the site
+        navigator.performAction(Action.PinToTopSitesPAM)
+
+        // Navigate to topsites to verify that the site has been pinned
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        // Verify that the site is pinned to top
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let cell = itemCell.staticTexts["Example Domain"]
+        mozWaitForElementToExist(cell)
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Large.pinFill])
+        } else {
+            // No identifier is available for iOS 17 amd below
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
+        }
+
+        // Remove pin
+        cell.press(forDuration: 2)
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
+        // Check that it has been unpinned
+        if #available(iOS 17, *) {
+            mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+        } else {
+            mozWaitForElementToNotExist(app.links["Example Domain"].images.element(boundBy: 1))
+        }
+
+        mozWaitForElementToNotExist(cell)
+    }
+
     private func openNewShareSheet() {
+        app.launch()
         navigator.openURL("example.com")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
@@ -77,6 +116,7 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
+        app.launch()
         openNewShareSheet()
         waitForElementsToExist(
             [
@@ -91,6 +131,7 @@ class PhotonActionSheetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
+        app.launch()
         openNewShareSheet()
         app.staticTexts["Send to Device"].waitAndTap()
         waitForElementsToExist(
@@ -104,6 +145,7 @@ class PhotonActionSheetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
+        app.launch()
         openNewShareSheet()
         app.buttons["Cancel"].waitAndTap()
         // User is back to the BrowserTab where the sharesheet was launched

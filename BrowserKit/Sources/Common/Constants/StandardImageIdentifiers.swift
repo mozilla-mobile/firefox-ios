@@ -105,6 +105,7 @@ public struct StandardImageIdentifiers {
         public static let pageZoom = "pageZoomLarge"
         public static let pageZoomFill = "pageZoomFillLarge"
         public static let pin = "pinLarge"
+        public static let pinFill = "pinFillLarge"
         public static let pinSlash = "pinSlashLarge"
         public static let pinSlashFill = "pinSlashFillLarge"
         public static let plus = "plusLarge"
