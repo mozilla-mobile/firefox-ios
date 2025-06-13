@@ -266,8 +266,9 @@ function update_tags_yaml() {
     
     # If tag wasn't inserted (should be at the end), append it
     if [[ $inserted == false ]]; then
-        echo "${tag_name}:"
-        echo "  description: ${tag_description}"
+        echo "" >> "$temp_file"
+        echo "${tag_name}:" >> "$temp_file"
+        echo "  description: ${tag_description}" >> "$temp_file"
         echo "" >> "$temp_file"
     fi
     
@@ -312,8 +313,6 @@ if [ "$1" == "--add" ]; then
             if [[ -z "$3" ]]; then
                 echo -e "Please update the description in tags.yaml for the ${capitalized_tag} tag\n"
             fi
-        else
-            echo -e "Tag ${capitalized_tag} already exists in tags.yaml\n"
         fi
 
         exit 0
