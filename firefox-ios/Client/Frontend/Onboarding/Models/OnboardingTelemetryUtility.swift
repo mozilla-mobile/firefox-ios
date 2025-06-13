@@ -15,6 +15,11 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
     }
 
+    init(with model: OnboardingKitViewModel) {
+        self.cardOrder = model.cards.map { $0.name }
+        self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
+    }
+
     // MARK: - Public methods
     func sendCardViewTelemetry(from cardName: String) {
         TelemetryWrapper.recordEvent(

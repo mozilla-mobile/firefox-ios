@@ -2,7 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import SwiftUI
 import Common
+import OnboardingKit
 import XCTest
 @testable import Client
 
@@ -81,6 +83,34 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
         XCTAssertNotNil(pushedVC as? IntroViewController)
+    }
+
+    func testStart_introNotIphone_presentToModernUI() throws {
+        let introScreenManager = MockIntroScreenManager(isModernEnabled: true)
+        let subject = createSubject(isIphone: false)
+        subject.start(with: .intro(manager: introScreenManager))
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertTrue(
+            presentedViewController is
+            UIHostingController<OnboardingKit.OnboardingView<Client.OnboardingKitCardInfoModel>>
+        )
+    }
+
+    func testStart_introIsIphone_setRootViewToModernUI() throws {
+        let introScreenManager = MockIntroScreenManager(isModernEnabled: true)
+        let subject = createSubject(isIphone: true)
+        subject.start(with: .intro(manager: introScreenManager))
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertTrue(
+            pushedVC is
+            UIHostingController<OnboardingKit.OnboardingView<Client.OnboardingKitCardInfoModel>>
+        )
     }
 
     // MARK: - Update

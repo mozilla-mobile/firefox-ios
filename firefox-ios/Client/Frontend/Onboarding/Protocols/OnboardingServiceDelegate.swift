@@ -4,12 +4,7 @@
 
 import Foundation
 
-public struct OnboardingLinkInfoModel {
-    public let title: String
-    public let url: URL
-
-    public init(title: String, url: URL) {
-        self.title = title
-        self.url = url
-    }
+protocol OnboardingServiceDelegate: AnyObject {
+    func dismiss(animated: Bool, completion: (() -> Void)?)
+    func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
 }

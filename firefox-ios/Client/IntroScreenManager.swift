@@ -5,7 +5,13 @@
 import Foundation
 import Shared
 
-struct IntroScreenManager: FeatureFlaggable {
+protocol IntroScreenManagerProtocol {
+    var shouldShowIntroScreen: Bool { get }
+    var isModernOnboardingEnabled: Bool { get }
+    func didSeeIntroScreen()
+}
+
+struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {

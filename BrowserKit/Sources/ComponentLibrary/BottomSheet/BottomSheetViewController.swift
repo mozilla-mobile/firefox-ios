@@ -13,7 +13,7 @@ public protocol BottomSheetChild: UIViewController {
 }
 
 /// Protocol followed by the bottom sheet view controller. Gives the possibility to dismiss the bottom sheet.
-public protocol BottomSheetDismissProtocol {
+public protocol BottomSheetDismissProtocol: AnyObject {
     func dismissSheetViewController(completion: (() -> Void)?)
 }
 
