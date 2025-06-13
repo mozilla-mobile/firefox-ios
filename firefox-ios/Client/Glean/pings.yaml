@@ -174,5 +174,3 @@ nimbus:
   notification_emails:
     - chumphreys@mozilla.com
     - project-nimbus@mozilla.com
-
-# Test

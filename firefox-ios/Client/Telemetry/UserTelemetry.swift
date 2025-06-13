@@ -12,8 +12,9 @@ struct UserTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    /// Recorded when a user taps a row on the settings screen (or one of its subscreens) to drill deeper into the settings.
-    /// - Parameter option: A unique identifier for the selected row. Identifies the row tapped, not the screen shown.
+    /// Records the UID of a user signed into their Firefox Account on a special `fx-accounts` ping. Once the UID is
+    /// recorded, the ping is immediately submitted.
+    /// - Parameter uid: The user's Firefox Account UID.
     func setFirefoxAccountID(uid: String) {
         gleanWrapper.recordString(for: GleanMetrics.UserClientAssociation.uid, value: uid)
 
