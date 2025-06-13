@@ -169,6 +169,15 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
         tabItemTitle.text = nil
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        contentView.layer.shadowPath = UIBezierPath(
+            roundedRect: contentView.bounds,
+            cornerRadius: HomepageViewModel.UX.generalCornerRadius
+        ).cgPath
+    }
+
     private func setupLayout() {
         tabImageContainer.addSubviews(tabHeroImage)
         syncedDeviceContainer.addSubviews(syncedDeviceImage, syncedDeviceLabel)

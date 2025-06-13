@@ -179,6 +179,17 @@ final class HomepageViewController: UIViewController,
         resetTrackedObjects()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        store.dispatch(
+            HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewDidLayoutSubviews
+            )
+        )
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
