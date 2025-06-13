@@ -960,6 +960,9 @@ class BrowserViewController: UIViewController,
         header.addArrangedViewToTop(topTabsViewController.view)
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
+
+        // move top tabs view to the back so the address toolbar shadow doesn't get clipped
+        header.sendSubviewToBack(topTabsViewController.view)
     }
 
     private func setupAccessibleActions() {
