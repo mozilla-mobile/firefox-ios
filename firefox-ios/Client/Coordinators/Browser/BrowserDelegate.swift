@@ -37,7 +37,8 @@ protocol BrowserDelegate: AnyObject {
     /// Hides or shows the homepage.
     ///
     /// Homepage is added to hierarchy when opening the app when swiping tabs is enabled.
-    /// This method hide or show the homepage and it's needed when opening the app to avoid an homepage flash on the background.
+    /// This method hide or show the homepage and it's needed when opening the app
+    /// to avoid an homepage flash on the background.
     func setHomepageVisibility(isVisible: Bool)
 
     /// Show the private homepage to the user as part of felt privacy
