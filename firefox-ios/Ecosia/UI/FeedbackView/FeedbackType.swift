@@ -8,7 +8,6 @@ import Common
 /// FeedbackType represents the type of feedback a user can submit
 public enum FeedbackType: String, CaseIterable, Identifiable {
     case reportIssue = "Report an issue"
-    case generalQuestion = "General question"
     case suggestionOrFeedback = "Suggestion or feedback"
 
     public var id: String { self.rawValue }
@@ -17,8 +16,6 @@ public enum FeedbackType: String, CaseIterable, Identifiable {
         switch self {
         case .reportIssue:
             return "report_issue"
-        case .generalQuestion:
-            return "general_question"
         case .suggestionOrFeedback:
             return "suggestion_or_feedback"
         }
@@ -28,8 +25,6 @@ public enum FeedbackType: String, CaseIterable, Identifiable {
         switch self {
         case .reportIssue:
             return String.localized(.reportIssue)
-        case .generalQuestion:
-            return String.localized(.generalQuestion)
         case .suggestionOrFeedback:
             return String.localized(.suggestionOrFeedback)
         }

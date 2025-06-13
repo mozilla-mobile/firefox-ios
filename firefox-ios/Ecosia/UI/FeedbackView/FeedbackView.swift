@@ -45,7 +45,7 @@ public struct FeedbackView: View {
 
                 viewModel.backgroundColor.ignoresSafeArea()
 
-                FeedbackContentView(
+                let feedbackContent = FeedbackContentView(
                     viewModel: viewModel,
                     selectedFeedbackType: $selectedFeedbackType,
                     feedbackText: $feedbackText,
@@ -62,6 +62,14 @@ public struct FeedbackView: View {
                         }
                         .foregroundColor(viewModel.brandPrimaryColor)
                         .accessibilityIdentifier("close_feedback_button")
+                    }
+                }
+
+                Group {
+                    if #available(iOS 16.0, *) {
+                        feedbackContent.scrollDismissesKeyboard(.interactively)
+                    } else {
+                        feedbackContent
                     }
                 }
             }

@@ -236,7 +236,6 @@ extension String {
 
         // MARK: - Feedback View
         case reportIssue = "Report an issue"
-        case generalQuestion = "General question"
         case helpCenter = "Help Center"
         case suggestionOrFeedback = "Suggestion or feedback"
         case whatWouldYouLikeToShare = "What would you like to share?"

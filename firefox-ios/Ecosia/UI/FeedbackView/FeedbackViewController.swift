@@ -28,6 +28,7 @@ public class FeedbackViewController: UIHostingController<FeedbackView> {
 
         self.rootView = feedbackView
         self.modalPresentationStyle = .formSheet
+        self.isModalInPresentation = true
     }
 
     @MainActor dynamic required init?(coder aDecoder: NSCoder) {
