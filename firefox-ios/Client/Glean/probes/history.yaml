@@ -1,0 +1,43 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - History
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+history.migration_2022:
+  migration_attempted:
+    type: event
+    description: |
+      Recorded when a user undergoes a successful application services history
+      migration. This migration occurs for users updating their app from
+      version 110. The migration ensures the user preserves all their browsing
+      history. This migration was added in the fall of 2022.
+
+      This setting can safely be expired after we have ensured that the history
+      migration code is no longer required (due to low event counts).
+
+      Owner: @Andy
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12509
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27267
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-09-01"
