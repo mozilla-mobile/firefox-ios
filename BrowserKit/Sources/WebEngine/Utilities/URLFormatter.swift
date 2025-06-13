@@ -39,13 +39,18 @@ public class DefaultURLFormatter: URLFormatter {
             return localHostURL
         }
 
-        // If the entry has a scheme, make sure it's safe then navigate to it
-        if let schemeURL = handleWithScheme(with: entry) {
-            return schemeURL
-        }
+        // Trim whitespace and encode any invalid characters
+        let trimmedEntry = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        guard let escapedEntry = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else { return nil }
 
-        // If there's no scheme in the entry, try to format it as a URL
-        return handleNoScheme(with: entry)
+        guard let components = URLComponents(string: escapedEntry) else { return nil }
+
+        // If the entry has a scheme, make sure it's safe then navigate to it
+        if components.scheme != nil {
+            return handleWithScheme(with: escapedEntry)
+        }
+        // If there's no scheme in the entry, try to format it as a URL with stricter checks
+        return handleNoScheme(with: escapedEntry)
     }
 
     // Add exception of `localhost` to copy default desktop FF setting:
@@ -59,67 +64,69 @@ public class DefaultURLFormatter: URLFormatter {
 
     // Handle the entry if it has a scheme, make sure it's safe before browsing to it
     private func handleWithScheme(with entry: String) -> URL? {
-        // Check if the URL includes a scheme
         guard let url = URL(string: entry),
-              url.scheme != nil,
-              entry.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil else {
+              let components = URLComponents(string: entry) else { return nil }
+
+        // Check if the URL includes a valid scheme
+        if !url.schemeIsValid {
             return nil
         }
 
-        // Check presence of top-level domain if scheme is "http://" or "https://"
-        if entry.hasPrefix("http://") || entry.hasPrefix("https://") {
-            if !entry.contains(".") {
+        // Require either a host or path
+        if components.host == nil && components.path.isEmpty() {
+            return nil
+        }
+
+        // If scheme is "http" or "https", check for a valid TLD
+        if components.scheme == "http" || components.scheme == "https" {
+            let lowercased = URL(string: entry.lowercased()) // to match TLDs correctly
+            if !(url.isIPv4 || url.isIPv6) && lowercased?.publicSuffix == nil {
                 return nil
             }
         }
 
+        // Don't allow spaces in the host
+        if components.host?.contains(" ") ?? false {
+            return nil
+        }
+
+        if entry.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) != nil {
+            return nil
+        }
+
+        return checkBrowsingSafety(with: entry)
+    }
+
+    // Handle the entry if it has no scheme
+    // If it passes the checks, prepend "http://" and call handleWithScheme()
+    private func handleNoScheme(with entry: String) -> URL? {
+        // If entry is a valid floating point number, don't fixup
+        if Double(entry) != nil {
+            return nil
+        }
+
+        // We're going to prepend "http://" as a default scheme
+        let entryPlusScheme = "http://\(entry)"
+
+        guard let components = URLComponents(string: entryPlusScheme) else { return nil }
+
+        // Make sure there's at least one "." in the host. This means
+        // we'll allow single-word searches (e.g., "foo") at the expense
+        // of breaking single-word hosts without a scheme
+        if !(components.host?.contains(".") ?? false) { return nil }
+
+        return handleWithScheme(with: entryPlusScheme)
+    }
+
+    private func checkBrowsingSafety(with entry: String) -> URL? {
         guard let url = URL(string: entry) else { return nil }
 
         // Only allow this URL if it's safe
         let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
         if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
-            return URL(string: entry)
+            return url
         } else {
             return nil
         }
-    }
-
-    // Handle the entry if it has no scheme
-    private func handleNoScheme(with entry: String) -> URL? {
-        // First trim white spaces
-        let trimmedEntry = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-
-        // Make sure there's at least one "." in the host. This means
-        // we'll allow single-word searches (e.g., "foo") at the expense
-        // of breaking single-word hosts without a scheme
-        if !trimmedEntry.contains(".") || trimmedEntry.contains(" ") { return nil }
-
-        // If entry is a valid floating point number, don't fixup
-        if Double(trimmedEntry) != nil {
-            return nil
-        }
-
-        // If entry doesn't have a valid ending in Public Suffix List
-        // and it's not all digits and dot, stop fix up.
-        if !trimmedEntry.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.")).isEmpty,
-           let maybeUrl = URL(string: "http://\(trimmedEntry.lowercased())"),
-           maybeUrl.publicSuffix == nil {
-            return nil
-        }
-
-        // Make sure entry only has allowed characters in it
-        guard let escapedURL = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
-            return nil
-        }
-
-        // We're going to prepend "http://" only if it's not already present
-        let finalURL = escapedURL.hasPrefix("http://") || escapedURL.hasPrefix("https://") ? escapedURL : "http://\(escapedURL)"
-
-        // If there is a host, return this formatted as a URL
-        if let url = URL(string: finalURL), url.host != nil {
-            return url
-        }
-
-        return nil
     }
 }
