@@ -18,7 +18,7 @@ protocol WKPolicyDecider {
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy
 }
 
-protocol NavigationAction {
+public protocol NavigationAction {
     var url: URL? { get }
     var request: URLRequest { get }
     var navigationType: WKNavigationType { get }
@@ -34,15 +34,15 @@ protocol NavigationResponse {
 }
 
 extension WKNavigationAction: NavigationAction {
-    var sourceFrameInfo: any FrameInfo {
+    public var sourceFrameInfo: any FrameInfo {
         return sourceFrame
     }
 
-    var targetFrameInfo: (any FrameInfo)? {
+    public var targetFrameInfo: (any FrameInfo)? {
         return targetFrame
     }
 
-    var url: URL? {
+    public var url: URL? {
         return request.url
     }
 }
@@ -53,7 +53,7 @@ extension WKNavigationResponse: NavigationResponse {
     }
 }
 
-protocol FrameInfo {
+public protocol FrameInfo {
     var isMainFrame: Bool { get }
     var request: URLRequest { get }
 }
