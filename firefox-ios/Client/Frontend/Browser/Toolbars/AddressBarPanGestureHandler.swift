@@ -13,6 +13,7 @@ final class AddressBarPanGestureHandler: NSObject {
         static let offset: CGFloat = 48
         static let swipingDuration: TimeInterval = 0.25
         static let swipingVelocity: CGFloat = 250
+        static let webPagePreviewAddNewTabScale: CGFloat = 0.6
     }
 
     // MARK: - UI Properties
@@ -132,7 +133,7 @@ final class AddressBarPanGestureHandler: NSObject {
 
         if shouldAddNewTab {
             let progress = abs(translation.x) / contentContainer.frame.width
-            let scale = progress > 0.3 ? progress : 0.3
+            let scale = progress > UX.webPagePreviewAddNewTabScale ? progress : UX.webPagePreviewAddNewTabScale
             let translation = contentContainer.frame.width * (1 - progress)
             webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: translation, y: 0.0)
             webPagePreview.alpha = progress

@@ -204,7 +204,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab() throws {
+    func testTopSitesOpenInNewPrivateTab_swipingTabsExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)

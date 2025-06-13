@@ -5,10 +5,11 @@
 import XCTest
 
 let websiteUrl = "www.mozilla.org"
-class NewTabSettingsTest: BaseTestCase {
+class NewTabSettingsTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
+        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -24,7 +25,9 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
-    func testChangeNewTabSettingsShowBlankPage() {
+    func testChangeNewTabSettingsShowBlankPage_swipingTabsExperimentOff() {
+        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
+        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -43,6 +46,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
+        app.launch()
         // Set to history page first since FF Home is default
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -66,6 +70,7 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307029
     // Smoketest
     func testChangeNewTabSettingsShowCustomURL() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
@@ -92,6 +97,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)
@@ -117,6 +123,7 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306877
     // Smoketest
     func testKeyboardRaisedWhenTabOpenedFromTabTray() {
+        app.launch()
         // Add New tab and set it as Blank
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -138,6 +145,7 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
+        app.launch()
         // Set a custom URL
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -170,6 +178,7 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     private func validateKeyboardIsRaisedAndDismissed() {
+        app.launch()
         // The keyboard is raised up
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")

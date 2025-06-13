@@ -64,6 +64,7 @@
 		0B7FC3D32CAE811F005C5CCE /* DefaultBookmarksSaverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */; };
 		0B81AFEC2DB1000C000AF70F /* HomePageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */; };
 		0B81AFEE2DB1036B000AF70F /* HomePageActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */; };
+		0B84E7692DFC1471005103CA /* swipingTabsOff.json in Resources */ = {isa = PBXBuildFile; fileRef = 0B84E7682DFC1471005103CA /* swipingTabsOff.json */; };
 		0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */; };
 		0B8A39F12D351C2500853E47 /* EditBookmarkDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */; };
 		0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */; };
@@ -2485,6 +2486,7 @@
 		0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookmarksSaverTests.swift; sourceTree = "<group>"; };
 		0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageActivity.swift; sourceTree = "<group>"; };
 		0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageActivityTests.swift; sourceTree = "<group>"; };
+		0B84E7682DFC1471005103CA /* swipingTabsOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = swipingTabsOff.json; sourceTree = "<group>"; };
 		0B8749EB891EE229EA88FEF3 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDiffableDataSource.swift; sourceTree = "<group>"; };
 		0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDataSourceTests.swift; sourceTree = "<group>"; };
@@ -14652,6 +14654,7 @@
 			children = (
 				8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */,
 				8A3709E02DC128EA004B9350 /* defaultEnabledOff.json */,
+				0B84E7682DFC1471005103CA /* swipingTabsOff.json */,
 				E1AF27432A17BCF700CE5991 /* engagementNotificationWithoutConditions.json */,
 				E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */,
 			);
@@ -16550,6 +16553,7 @@
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				E1AF3565286DE5F800960045 /* UnitTest.xctestplan in Resources */,
 				1D91C1832CF11EA500B24960 /* disconnect-block-analytics.json in Resources */,
+				0B84E7692DFC1471005103CA /* swipingTabsOff.json in Resources */,
 				E1AF3564286DE5F800960045 /* SyncIntegrationTestPlan.xctestplan in Resources */,
 				0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */,
 				1D91C1822CF11EA500B24960 /* disconnect-block-content.json in Resources */,
