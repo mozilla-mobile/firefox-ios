@@ -269,7 +269,6 @@ function update_tags_yaml() {
         echo "" >> "$temp_file"
         echo "${tag_name}:" >> "$temp_file"
         echo "  description: ${tag_description}" >> "$temp_file"
-        echo "" >> "$temp_file"
     fi
     
     # Replace original file with updated content
