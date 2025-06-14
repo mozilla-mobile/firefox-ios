@@ -17,18 +17,24 @@
 #                        `gleanProbes.xcfilelist` files with file paths for any manually added metrics
 #                        files in the `Client/Glean/probes` directory.
 #
-# --add featureName:     Creates a new metrics YAML file `feature_name.yaml`, adds it to the
+# --add featureName [description]: Creates a new metrics YAML file `feature_name.yaml`, adds it to the
 #                        `Client/Glean/probes` folder, and appends the new filepath to the
 #                        `glean_index.yaml` index and the `gleanProbes.xcfilelist` file list.
+#                        It also adds the new tag to the `tags.yaml` file and alphabetizes it.
 #
-#                        The parameter should be the name the new feature or component. Please write
+#                        The first parameter should be the name the new feature or component. Please write
 #                        the name in camelCase.
 #
-#                        A tag of `FeatureName` will automatically be added to the top of the newly
-#                        created metrics file. This tag and an accompanying description should be
-#                        manually added to the tags.yaml file by the developer. (FXIOS-12432 will make
-#                        this process automatic in the future)
+#                        The second parameter is optional and should be the description for the tag in
+#                        `tags.yaml`. If not provided, a TODO description will be added.
 #
+#                        A tag of `FeatureName` will automatically be added to the top of the newly
+#                        created metrics file.
+#
+# Examples:
+#   ./FirefoxTelemetryUtility.sh --add newFeature "This is a new feature description"
+#   ./FirefoxTelemetryUtility.sh --add newFeature
+#   ./FirefoxTelemetryUtility.sh --update
 
 ##############################################################################
 # Global Constants
@@ -38,6 +44,7 @@ readonly PATH_TO_FEATURE_YAMLS='firefox-ios/Client/Glean/probes'
 readonly FEATURE_YAMLS="$PATH_TO_FEATURE_YAMLS/*.yaml"
 readonly XCODE_INFILE_LIST='firefox-ios/Client/Glean/gleanProbes.xcfilelist'
 readonly DOCUMENTATION_WARNING='Please see the documentation in the script.'
+readonly TAGS_YAML_FILE='firefox-ios/Client/Glean/tags.yaml'
 
 # Eventually we'll want to include metrics files from other targets in a better way
 readonly PATH_TO_STORAGE_METRICS_YAML='firefox-ios/Storage/metrics.yaml'
@@ -217,6 +224,58 @@ function write_probe_files_to_file_list() {
 }
 
 ##############################################################################
+# Updates the tags.yaml file with a new tag and description.
+# Globals:
+#   TAGS_YAML_FILE
+# Arguments:
+#   $1 : The capitalized tag name
+#   $2 : The tag description (optional)
+# Returns:
+#   Updates the tags.yaml file with the new tag in alphabetical order
+##############################################################################
+function update_tags_yaml() {
+    local tag_name=$1
+    local tag_description=$2
+    local tags_file=$TAGS_YAML_FILE
+    
+    # Check if tag already exists
+    if grep -q "^${tag_name}:" "$tags_file"; then
+        echo "Tag ${tag_name} already exists in tags.yaml"
+        return 1
+    fi
+    
+    # If no description provided, use TODO
+    if [[ -z "$tag_description" ]]; then
+        tag_description="TODO: Add description for ${tag_name} tag"
+    fi
+    
+    # Create temporary file
+    local temp_file=$(mktemp)
+    
+    # Find the correct position to insert the new tag
+    local inserted=false
+    while IFS= read -r line; do
+        if [[ $inserted == false && "$line" =~ ^[A-Z] && "$line" > "$tag_name:" ]]; then
+            echo "${tag_name}:"
+            echo "  description: ${tag_description}"
+            echo ""
+            inserted=true
+        fi
+        echo "$line"
+    done < "$tags_file" > "$temp_file"
+    
+    # If tag wasn't inserted (should be at the end), append it
+    if [[ $inserted == false ]]; then
+        echo "" >> "$temp_file"
+        echo "${tag_name}:" >> "$temp_file"
+        echo "  description: ${tag_description}" >> "$temp_file"
+    fi
+    
+    # Replace original file with updated content
+    mv "$temp_file" "$tags_file"
+}
+
+##############################################################################
 # Main
 ##############################################################################
 if [ "$1" == "--add" ]; then
@@ -247,8 +306,13 @@ if [ "$1" == "--add" ]; then
         write_probe_files_to_file_list
         echo -e "Successfully updated the xcode build phase infile list.\n"
 
-        # FIXME FXIOS-12432 Could add new tags to the tags.yaml file automatically for users
-        echo -e "  [!] Please add your new $capitalized_tag tag to the tags.yaml file with a description. [!]\n"
+        # Update tags.yaml with the new tag
+        if update_tags_yaml "$capitalized_tag" "$3"; then
+            echo -e "Successfully added ${capitalized_tag} tag to tags.yaml\n"
+            if [[ -z "$3" ]]; then
+                echo -e "Please update the description in tags.yaml for the ${capitalized_tag} tag\n"
+            fi
+        fi
 
         exit 0
     fi
