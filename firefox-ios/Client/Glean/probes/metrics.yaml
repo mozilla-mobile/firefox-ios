@@ -647,6 +647,29 @@ context_menu:
       tags:
         - ContextMenu
 
+contextual_services:
+  context_id:
+    type: uuid
+    description: >
+      An identifier for Contextual Services user interaction pings. This is
+      used internally for counting unique users as well as for anti-fraud. It
+      is shared with other Contextual Services.
+
+      Does not need to be sent in the Glean "deletion-request" ping. It is sent
+      in its own "context-id-deletion-request" ping.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27195
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/27195
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+    send_in_pings:
+      - context-id-deletion-request
+      
 # Default browser card metrics
 default_browser_card:
   dismiss_pressed:

@@ -5,6 +5,24 @@
 ---
 $schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
+context-id-deletion-request:
+  description: |
+    This ping is submitted when a context ID has been rotated. A rotation may
+    occur because a user has disabled a surface that uses the context ID, or
+    because the context ID age has exceeded some threshold.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/27195
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/27195
+  notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+  metadata:
+    follows_collection_enabled: false
+    include_info_sections: false
+
 topsites-impression:
   description: |
     Recorded when a sponsored top site is rendered and

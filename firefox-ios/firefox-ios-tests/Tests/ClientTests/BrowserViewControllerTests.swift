@@ -23,7 +23,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
         // independent of Glean, custom pings may need to be registered manually in
         // tests in order to put them in a state in which they can collect data.
@@ -39,7 +38,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() {
-        TelemetryContextualIdentifier.clearUserDefaults()
         profile.shutdown()
         profile = nil
         tabManager = nil
@@ -56,10 +54,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
             XCTAssertEqual(GleanMetrics.FxSuggest.pingType.testGetValue(), "fxsuggest-impression")
-            XCTAssertEqual(
-                GleanMetrics.FxSuggest.contextId.testGetValue()?.uuidString,
-                TelemetryContextualIdentifier.contextId
-            )
             XCTAssertEqual(GleanMetrics.FxSuggest.isClicked.testGetValue(), false)
             XCTAssertEqual(GleanMetrics.FxSuggest.position.testGetValue(), 3)
             XCTAssertEqual(GleanMetrics.FxSuggest.blockId.testGetValue(), 1)
