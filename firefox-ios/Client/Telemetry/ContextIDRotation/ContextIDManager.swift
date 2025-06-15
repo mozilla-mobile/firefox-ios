@@ -8,14 +8,6 @@ import MozillaAppServices
 
 // Contextual identifier used for the sponsored tiles in top sites and the suggestions in the search view
 class ContextIDManager {
-    private var contextIDComponent: ContextIdComponent?
-
-    static let shared = ContextIDManager()
-
-    static func setup(isGleanMetricsAllowed allowed: Bool, isTesting: Bool) {
-        shared.contextIDComponent = shared.setupContextId(isGleanMetricsAllowed: allowed, isTesting: isTesting)
-    }
-
     private struct ContextIDStorage {
         enum UserDefaultsKey: String {
             case keyContextId = "com.moz.contextId.key"
@@ -38,6 +30,21 @@ class ContextIDManager {
         }
     }
 
+    private var contextIDComponent: ContextIdComponentProtocol?
+
+    static let shared = ContextIDManager()
+
+    static func setup(
+        isGleanMetricsAllowed allowed: Bool,
+        isTesting: Bool,
+        contextIdComponent: ContextIdComponentProtocol? = nil
+    ) {
+        shared.contextIDComponent = contextIdComponent ?? shared.setupContextId(
+            isGleanMetricsAllowed: allowed,
+            isTesting: isTesting
+        )
+    }
+
     func getContextID() -> String? {
         do {
             // TODO: Set up rotation as a feature flag
@@ -48,11 +55,20 @@ class ContextIDManager {
         }
     }
 
-    fileprivate func setContextID(_ contextID: String?, creationTimestamp: Int64?) {
+    func clearContextIDState() {
+        do {
+            // TODO: if we don't have multiprofiles do we still need to unset the call back on App death
+            try contextIDComponent?.unsetCallback()
+        } catch {
+            // catch error
+        }
+    }
+
+    func setContextID(_ contextID: String?, creationTimestamp: Int64?) {
         ContextIDStorage.setContextID(contextID, creationTimestamp: creationTimestamp)
     }
 
-    private func setupContextId(isGleanMetricsAllowed allowed: Bool, isTesting: Bool) -> ContextIdComponent? {
+    private func setupContextId(isGleanMetricsAllowed allowed: Bool, isTesting: Bool) -> ContextIdComponentProtocol? {
         do {
             return try ContextIdComponent(
                 initContextId: ContextIDStorage.contextID ?? "",
@@ -61,35 +77,8 @@ class ContextIDManager {
                 callback: ContextIDRotationHandler(isGleanMetricsAllowed: allowed)
             )
         } catch {
-            // catch error
+             // catch error
             return nil
         }
-    }
-}
-
-class ContextIDRotationHandler: ContextIdCallback {
-    private let isGleanMetricsAllowed: Bool
-
-    init(isGleanMetricsAllowed: Bool) {
-        self.isGleanMetricsAllowed = isGleanMetricsAllowed
-    }
-
-    func persist(contextId: String, creationDate: Int64) {
-        ContextIDManager.shared.setContextID(contextId, creationTimestamp: creationDate)
-        guard isGleanMetricsAllowed else { return }
-        guard let uuid = UUID(uuidString: contextId) else {
-            // log error
-            return
-        }
-        GleanMetrics.TopSites.contextId.set(uuid)
-    }
-
-    func rotated(oldContextId: String) {
-        // NO-OP
-        /*
-         GleanPings.contextIdDeletionRequest.setEnabled(true);
-         Glean.contextualServices.contextId.set(oldContextId);
-         GleanPings.contextIdDeletionRequest.submit();
-         */
     }
 }

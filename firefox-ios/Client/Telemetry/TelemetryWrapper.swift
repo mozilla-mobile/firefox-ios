@@ -162,7 +162,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         self.searchEnginesManager = searchEnginesManager
 
-        ContextIDManager.setup(isGleanMetricsAllowed: true, isTesting: AppConstants.isRunningTes)
+        ContextIDManager.setup(isGleanMetricsAllowed: true, isTesting: AppConstants.isRunningTest)
 
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
