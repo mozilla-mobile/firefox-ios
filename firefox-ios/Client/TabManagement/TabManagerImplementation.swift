@@ -8,6 +8,7 @@ import Storage
 import Common
 import Shared
 import WebKit
+import WebEngine
 
 enum SwitchPrivacyModeResult {
     case createdNewTab
@@ -20,7 +21,10 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
+class TabManagerImplementation: NSObject,
+                                TabManager,
+                                FeatureFlaggable,
+                                SessionCreator {
     let windowUUID: WindowUUID
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -1283,6 +1287,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             menuItems.append(contentsOf: [searchItem, findInPageItem])
         }
         UIMenuController.shared.menuItems = menuItems
+    }
+
+    // MARK: - SessionCreator
+
+    func createSession(configuration: WKWebViewConfiguration, initialURL: URL?) -> WKWebView? {
+        guard let selectedTab else { return nil }
+        return addPopupForParentTab(profile: profile, parentTab: selectedTab, configuration: configuration).webView
     }
 }
 

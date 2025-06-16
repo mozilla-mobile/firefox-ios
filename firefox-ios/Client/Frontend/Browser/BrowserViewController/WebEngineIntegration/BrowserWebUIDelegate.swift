@@ -8,6 +8,10 @@ import WebEngine
 class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     private(set) weak var bvc: BrowserViewController?
     private let policyDecider = WKPolicyDeciderFactory()
+    private var engineUIDelegate: WKUIDelegate {
+        return DefaultUIHandler(sessionDependencies: .empty(),
+                                sessionCreator: bvc?.tabManager as? SessionCreator)
+    }
 
     func setLegacyDelegate(_ bvc: BrowserViewController) {
         self.bvc = bvc
@@ -21,26 +25,12 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
-        guard let bvc, let parentTab = bvc.tabManager[webView] else { return nil }
-        let policy = policyDecider.policyForPopupNavigation(action: navigationAction)
-        switch policy {
-        case .allow:
-            let popupTab = bvc.tabManager.addPopupForParentTab(profile: bvc.profile,
-                                                               parentTab: parentTab,
-                                                               configuration: configuration)
-            let url = navigationAction.request.url
-            let urlString = url?.absoluteString ?? ""
-            if url == nil || urlString.isEmpty {
-                popupTab.url = URL(string: EngineConstants.aboutBlank)
-            }
-            return popupTab.webView
-        case .launchExternalApp:
-            guard let url = navigationAction.request.url, UIApplication.shared.canOpen(url: url) else { return nil }
-            UIApplication.shared.open(url: url)
-            return nil
-        case .cancel:
-            return nil
-        }
+        return engineUIDelegate.webView?(
+            webView,
+            createWebViewWith: configuration,
+            for: navigationAction,
+            windowFeatures: windowFeatures
+        )
     }
 
     func webView(
