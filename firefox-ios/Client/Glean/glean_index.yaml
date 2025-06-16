@@ -10,4 +10,5 @@ metrics_files:
   - firefox-ios/Client/Glean/probes/metrics.yaml
   - firefox-ios/Client/Glean/probes/microsurvey.yaml
   - firefox-ios/Client/Glean/probes/settings.yaml
+  - firefox-ios/Client/Glean/probes/toast.yaml
   - firefox-ios/Storage/metrics.yaml
