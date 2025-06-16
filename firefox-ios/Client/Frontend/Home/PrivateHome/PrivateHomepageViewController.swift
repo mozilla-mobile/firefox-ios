@@ -14,12 +14,11 @@ protocol PrivateHomepageDelegate: AnyObject {
 }
 
 // Displays the view for the private homepage when users create a new tab in private browsing
-final class PrivateHomepageViewController:
-    UIViewController,
-    ContentContainable,
-    Screenshotable,
-    Themeable,
-    FeatureFlaggable {
+final class PrivateHomepageViewController: UIViewController,
+                                           ContentContainable,
+                                           Screenshotable,
+                                           Themeable,
+                                           FeatureFlaggable {
     enum UX {
         static let scrollContainerStackSpacing: CGFloat = 24
         static let defaultScrollContainerPadding: CGFloat = 16
@@ -124,6 +123,12 @@ final class PrivateHomepageViewController:
         applyTheme()
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        coordinator.animate { _ in
+            self.gradient.frame = self.view.bounds
+        }
+    }
+
     deinit {
         // TODO: FXIOS-11187 - Investigate further on privateMessageCardCell memory leaking during viewing private tab.
         scrollView.removeFromSuperview()
@@ -135,6 +140,7 @@ final class PrivateHomepageViewController:
         scrollContainer.accessibilityElements = [homepageHeaderCell.contentView, privateMessageCardCell]
 
         setupGradient(gradient)
+        gradient.frame = view.bounds
         view.layer.addSublayer(gradient)
         view.addSubview(scrollView)
         scrollView.addSubview(scrollContainer)
@@ -194,11 +200,6 @@ final class PrivateHomepageViewController:
         constraint?.isActive = false
         constraint?.constant = updatedConstant
         constraint?.isActive = true
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        gradient.frame = view.bounds
     }
 
     func applyTheme() {
