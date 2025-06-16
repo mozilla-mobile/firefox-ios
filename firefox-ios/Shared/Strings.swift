@@ -8036,8 +8036,6 @@ extension String {
                 value: "Address Saved",
                 comment: "Toast message confirming that an address has been successfully saved."
             )
-<<<<<<< HEAD
-=======
             public static let TabTraySegmentedControlTitlesTabs = MZLocalizedString(
                 key: "TabTray.SegmentedControlTitles.Tabs",
                 tableName: nil,
@@ -8078,7 +8076,6 @@ extension String {
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
->>>>>>> 1792afd65 (Refactor FXIOS-12215 [Content Feed] Update content feed design elements (#27297))
         }
     }
 }
