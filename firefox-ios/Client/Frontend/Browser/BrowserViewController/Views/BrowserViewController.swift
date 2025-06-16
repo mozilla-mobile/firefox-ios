@@ -251,9 +251,10 @@ class BrowserViewController: UIViewController,
     var copyAddressAction: AccessibleAction?
 
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate()
-    private var wkUIDelegate: WKUIDelegate {
+    // TODO: - Add tests
+    var wkUIDelegate: WKUIDelegate {
         if featureFlags.isFeatureEnabled(.webEngineIntegrationRefactor, checking: .buildOnly) {
-            browserWebUIDelegate.bvc = self
+            browserWebUIDelegate.setLegacyDelegate(self)
             return browserWebUIDelegate
         }
         return self

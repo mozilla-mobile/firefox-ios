@@ -6,8 +6,14 @@ import WebKit
 import WebEngine
 
 class BrowserWebUIDelegate: NSObject, WKUIDelegate {
-    weak var bvc: BrowserViewController?
+    private(set) weak var bvc: BrowserViewController?
     private let policyDecider = WKPolicyDeciderFactory()
+
+    func setLegacyDelegate(_ bvc: BrowserViewController) {
+        self.bvc = bvc
+    }
+
+    // MARK: - WKUIDelegate
 
     func webView(
         _ webView: WKWebView,
@@ -25,7 +31,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
             let url = navigationAction.request.url
             let urlString = url?.absoluteString ?? ""
             if url == nil || urlString.isEmpty {
-                popupTab.url = URL(string: "about:blank")
+                popupTab.url = URL(string: EngineConstants.aboutBlank)
             }
             return popupTab.webView
         case .launchExternalApp:
@@ -65,7 +71,53 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         )
     }
 
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptTextInputPanelWithPrompt prompt: String,
+        defaultText: String?,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping (String?) -> Void
+    ) {
+        bvc?.webView(
+            webView,
+            runJavaScriptTextInputPanelWithPrompt: prompt,
+            defaultText: defaultText,
+            initiatedByFrame: frame,
+            completionHandler: completionHandler
+        )
+    }
+
     func webViewDidClose(_ webView: WKWebView) {
         bvc?.webViewDidClose(webView)
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
+        completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
+    ) {
+        bvc?.webView(
+            webView,
+            contextMenuConfigurationForElement: elementInfo,
+            completionHandler: completionHandler
+        )
+    }
+
+    func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
+        bvc?.webView(webView, contextMenuDidEndForElement: elementInfo)
+    }
+
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        bvc?.webView(
+            webView,
+            requestMediaCapturePermissionFor: origin,
+            initiatedByFrame: frame,
+            type: type,
+            decisionHandler: decisionHandler
+        )
     }
 }
