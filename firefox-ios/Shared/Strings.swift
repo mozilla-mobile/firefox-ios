@@ -4315,6 +4315,24 @@ extension String {
                 comment: "On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed'")
         }
 
+        public struct SiteProtection {
+            public static let ProtectionsOn = MZLocalizedString(
+                key: "MainMenu.SiteProtection.ProtectionsOn.Title.v141",
+                tableName: "MainMenu",
+                value: "Protections are ON",
+                comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON.")
+            public static let ProtectionsOff = MZLocalizedString(
+                key: "MainMenu.SiteProtection.ProtectionsOff.Title.v141",
+                tableName: "MainMenu",
+                value: "Protections are OFF",
+                comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF.")
+            public static let ConnectionNotSecure = MZLocalizedString(
+                key: "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141",
+                tableName: "MainMenu",
+                value: "Connection is not secure",
+                comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure.")
+        }
+
         public struct Account {
             public static let SignedOutTitle = MZLocalizedString(
                 key: "MainMenu.Account.SignedOut.Title.v131",

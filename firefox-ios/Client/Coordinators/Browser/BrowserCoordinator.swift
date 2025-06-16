@@ -621,6 +621,10 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    func presentSiteProtections() {
+        showETPMenu(sourceView: browserViewController.addressToolbarContainer)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
         if selectedTab.mimeType == MIMEType.PDF {

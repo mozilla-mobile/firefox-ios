@@ -7,6 +7,7 @@ import Redux
 import Shared
 import Storage
 import Account
+import SiteImageView
 
 import enum MozillaAppServices.BookmarkRoots
 
@@ -786,6 +787,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case MainMenuMiddlewareActionType.requestTabInfo:
             provideTabInfo(forWindow: action.windowUUID, accountData: defaultAccountData())
             handleDidInstantiateViewAction(action: action)
+        case MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader:
+            provideTabInfoForSiteProtectionsHeader(forWindow: action.windowUUID)
         case MainMenuDetailsActionType.tapAddToBookmarks, MainMenuActionType.tapAddToBookmarks:
             guard let tabID = action.tabID else { return }
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
@@ -1000,6 +1003,40 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
             completion(result.successValue != nil)
         }
+    }
+
+    private func provideTabInfoForSiteProtectionsHeader(forWindow windowUUID: WindowUUID) {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+            logger.log(
+                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
+
+        let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        let hasSecureContent = selectedTab.currentWebView()?.hasOnlySecureContent ?? false
+        let siteProtectionState: SiteProtectionsState = if !hasSecureContent {
+            .notSecure
+        } else if isContentBlockingConfigEnabled {
+            .on
+        } else {
+            .off
+        }
+
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.updateSiteProtectionsHeader,
+                siteProtectionsData: SiteProtectionsData(
+                    title: selectedTab.displayTitle,
+                    subtitle: selectedTab.url?.baseDomain,
+                    image: selectedTab.url?.absoluteString,
+                    state: siteProtectionState
+                )
+            )
+        )
     }
 
     // MARK: - Homepage Related Actions
