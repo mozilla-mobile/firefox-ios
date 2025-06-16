@@ -54,17 +54,6 @@ final class LocationView: UIView,
         return urlTextFieldWidth >= locationViewVisibleWidth
     }
 
-    private var isPartOfBrowserAddressToolbar: Bool {
-        var ancestor = superview
-        while let current = ancestor {
-            if current is BrowserAddressToolbar {
-                return true
-            }
-            ancestor = current.superview
-        }
-        return false
-    }
-
     private var dotWidth: CGFloat {
         guard let font = urlTextField.font else { return 0 }
         let fontAttributes = [NSAttributedString.Key.font: font]
@@ -196,9 +185,7 @@ final class LocationView: UIView,
                 containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
                 containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
-        } else if let superview,
-                  isPartOfBrowserAddressToolbar,
-                  !isURLTextFieldWiderThanVisibleArea(safeOffset: UX.safeOffset) {
+        } else if let superview, !isURLTextFieldWiderThanVisibleArea(safeOffset: UX.safeOffset) {
             newConstraints = [
                 containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
                 containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
