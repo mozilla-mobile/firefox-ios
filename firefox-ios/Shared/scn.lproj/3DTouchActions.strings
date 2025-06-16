@@ -11,7 +11,7 @@
 "Menu.SendLinkToDevice" = "Manna a lijami ô dispusitivu";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
-"Open Last Bookmark" = "Grapi l'ùrtimu nzingalibbru";
+"Open Last Bookmark" = "Grapi l’ùrtimu nzingalibbru";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "Manna ô dispusitivu";

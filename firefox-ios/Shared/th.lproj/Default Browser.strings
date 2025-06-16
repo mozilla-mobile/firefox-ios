@@ -40,6 +40,9 @@
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "แอปเบราว์เซอร์เริ่มต้น";
 
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "ค่อยทำทีหลัง";
+
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
 

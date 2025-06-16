@@ -133,8 +133,15 @@
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Hjálpaðu okkur að gera %@ betri";
 
+/* Subtitle for the Terms of Service screen in the onboarding process. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Hleður síðum eldsnöggt\nSjálfvirk rakningarvörn\nSamstillt á öllum tækjunum þínum";
+
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Með því að halda áfram, samþykkir þú %@";
+
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "Bættu vafrið þitt";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "Notkunarskilmálar %@.";
@@ -142,8 +149,14 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Setja sem sjálfgefinn vafra";
 
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "Einn valkostur verndar þig hvert sem þú ferð á netinu. Þú getur alltaf breytt honum síðar.";
+
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "Ekki núna";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Welcome.Title.v140" = "Kveddu ískyggilegar auglýsingar";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Halda áfram";

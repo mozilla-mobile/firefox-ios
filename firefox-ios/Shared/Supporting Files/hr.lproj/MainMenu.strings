@@ -14,10 +14,10 @@
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Zatvori";
 
 /* The accessibility label for the sign in button in the Main menu header view. */
-"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Prijavi se za sinkroniziranje lozinki, kartica i više";
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Prijavi se za sinkroniziranje lozinki, kartica i još više";
 
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
-"MainMenu.Account.SignedOut.Description.v131" = "Sinkroniziraj lozinke, kartice i više";
+"MainMenu.Account.SignedOut.Description.v131" = "Sinkroniziraj lozinke, kartice i još više";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Prijava";

@@ -1,5 +1,5 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
-"ContextualHints.MainMenu.NewMenu.Body.v132" = "Attrova chiḍḍu chi ti serbi cchiù lestu, dâ navicazzioni privata nzinu a l'azzioni di sarbataggiu.";
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Attrova chiḍḍu chi ti serbi cchiù lestu, dâ navicazzioni privata nzinu a l’azzioni di sarbataggiu.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Novu: minù cchiù fàcili";
@@ -8,7 +8,7 @@
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Sdisattivu";
 
 /* The accessibility label for the back button in the Main menu header navigation view. */
-"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Nn'arrè";
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Nn’arrè";
 
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Chiuji";
@@ -23,7 +23,7 @@
 "MainMenu.Account.SignedOut.Title.v131" = "Trasi";
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
-"MainMenu.Account.SyncError.Description.v131" = "Sincrunizzazzioni 'n pausa";
+"MainMenu.Account.SyncError.Description.v131" = "Sincrunizzazzioni ’n pausa";
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Trasi pi sincrunizzari";
@@ -86,7 +86,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Accurzu";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Junci a l'accurzi";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Junci a l’accurzi";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Junci nzingalibbru";
@@ -101,7 +101,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Leva dâ lista di lèggiri";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Leva di l'accurzi";
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Leva di l’accurzi";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
@@ -125,7 +125,7 @@
 "MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Accurzu";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Junci a l'accurzi";
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Junci a l’accurzi";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Junci nzingalibbru";
@@ -140,7 +140,7 @@
 "MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Leva dâ lista di lèggiri";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Leva di l'accurzi";
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Leva di l’accurzi";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";

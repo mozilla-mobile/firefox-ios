@@ -5,5 +5,5 @@
 "ScanQRCode.ConfirmOpenURL.DenyButton.v129" = "Nun pirmèttiri";
 
 /* Text of the prompt to ask user permission to open a URL from a scanned QR code. %@ is the app name (e.g. Firefox). */
-"ScanQRCode.ConfirmOpenURL.Message.v129" = "Vo' pirmèttiri di gràpiri %@?";
+"ScanQRCode.ConfirmOpenURL.Message.v129" = "Vo’ pirmèttiri di gràpiri %@?";
 
