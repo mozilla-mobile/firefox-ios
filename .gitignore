@@ -137,6 +137,3 @@ ContentBlockingLists/disconnect-*
 focus-ios/shavar-*
 firefox-ios/shavar-*
 shavar-*
-
-# Application-services specific
-MozillaRustComponents/Sources/*/Generated/
