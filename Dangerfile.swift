@@ -68,7 +68,7 @@ func failOnNewFilesWithoutCoverage() {
 
     let contactMessage = "Please add unit tests. (cc: @cyndichin @yoanarios)."
     for file in newSwiftFiles {
-        let cleanedFile = file.replacingOccurrences(of: "./", with: "")
+        let cleanedFile = URL(fileURLWithPath: file).lastPathComponent
 
         // Try to find a file in coverage report that ends with this file
         let matchingFile = filesWithoutCoverage.first { coveragePath in
