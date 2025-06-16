@@ -57,6 +57,8 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
+    private var hasBeenExpanded = false
+
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
 
@@ -320,6 +322,7 @@ class MainMenuViewController: UIViewController,
             return
         }
 
+        changeDetentIfNecessary()
         reloadTableView(with: menuState.menuElements)
     }
 
@@ -448,6 +451,17 @@ class MainMenuViewController: UIViewController,
             return false
         }
         return viewProvider.shouldPresentContextualHint()
+    }
+
+    private func changeDetentIfNecessary() {
+        if let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
+           let isExpanded = element.isExpanded,
+           isExpanded {
+            if let sheet = self.sheetPresentationController, !hasBeenExpanded {
+                sheet.selectedDetentIdentifier = .large
+                hasBeenExpanded = true
+            }
+        }
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

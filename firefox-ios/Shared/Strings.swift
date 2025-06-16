@@ -4296,6 +4296,17 @@ extension String {
 // MARK: - Main Menu
 extension String {
     public struct MainMenu {
+        public static let On = MZLocalizedString(
+            key: "MainMenu.On.Title.v141",
+            tableName: "MainMenu",
+            value: "On",
+            comment: "On the main menu, a title for a label that indicate the current option/action state is on.")
+        public static let Off = MZLocalizedString(
+            key: "MainMenu.Off.Title.v141",
+            tableName: "MainMenu",
+            value: "Off",
+            comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
+
         public struct AccessibilityLabels {
             public static let OptionDisabledHint = MZLocalizedString(
                 key: "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133",
@@ -4397,10 +4408,20 @@ extension String {
                 tableName: "MainMenu",
                 value: "Switch to Mobile Site",
                 comment: "On the main menu, the title for the action that will switch a site from the desktop version to the mobile version.")
+            public static let DesktopSite = MZLocalizedString(
+                key: "MainMenu.ToolsSection.DesktopSite.Title.v141",
+                tableName: "MainMenu",
+                value: "Desktop Site",
+                comment: "On the main menu, the title for the action that will switch a site from the desktop version to the mobile version.")
             public static let FindInPage = MZLocalizedString(
                 key: "MainMenu.ToolsSection.FindInPage.Title.v131",
                 tableName: "MainMenu",
                 value: "Find in Page…",
+                comment: "On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
+            public static let FindInPageV2 = MZLocalizedString(
+                key: "MainMenu.ToolsSection.FindInPageV2.Title.v141",
+                tableName: "MainMenu",
+                value: "Find in Page",
                 comment: "On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
             public static let Tools = MZLocalizedString(
                 key: "MainMenu.ToolsSection.ToolsSubmenu.Title.v131",
@@ -4434,6 +4455,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Switch to mobile site",
                     comment: "On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version.")
+                public static let DesktopSite = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Desktop Site",
+                    comment: "On the main menu, the accessibility label for the action that will switch a site user agent value, if available.")
                 public static let FindInPage = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132",
                     tableName: "MainMenu",
@@ -4566,6 +4592,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Page Zoom (%@)",
                     comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. ")
+                public static let PageZoomV2 = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.PageZoomV2.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Page Zoom",
+                    comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level.")
                 public static let ZoomSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.Zoom.Subtitle.v131",
                     tableName: "MainMenu",
@@ -4607,6 +4638,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Turn off Website Dark Mode",
                     comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application.")
+                public static let WebsiteDarkMode = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Website Dark Mode",
+                    comment: "On the main menu, the title for the action that indicate, website dark mode can be turned on or off.")
 
                 public static let NightModeOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.NightMode.On.Title.v131",
@@ -4739,6 +4775,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Add Bookmark",
                     comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool.")
+                public static let BookmarkPage = MZLocalizedString(
+                    key: "MainMenu.BookmarkPage.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Bookmark Page",
+                    comment: "On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page..")
                 public static let EditBookmark = MZLocalizedString(
                     key: "MainMenu.Submenus.Save.EditBookmark.Title.v131",
                     tableName: "MainMenu",
@@ -4796,6 +4837,11 @@ extension String {
                         tableName: "MainMenu",
                         value: "Add Bookmark",
                         comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool.")
+                    public static let BookmarkPage = MZLocalizedString(
+                        key: "MainMenu.AccessibilityLabels.BookmarkPage.Title.v41",
+                        tableName: "MainMenu",
+                        value: "Bookmark Page",
+                        comment: "On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page..")
                     public static let EditBookmark = MZLocalizedString(
                         key: "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132",
                         tableName: "MainMenu",
