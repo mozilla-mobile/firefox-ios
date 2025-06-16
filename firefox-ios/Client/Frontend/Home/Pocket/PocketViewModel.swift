@@ -59,18 +59,9 @@ class PocketViewModel {
         }
     }
 
-    private func isStoryCell(index: Int) -> Bool {
-        return index < pocketStoriesViewModels.count
-    }
-
     private func getSitesDetail(for index: Int) -> Site {
-        if isStoryCell(index: index) {
-            return Site.createBasicSite(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
-                                        title: pocketStoriesViewModels[index].title)
-        } else {
-            return Site.createBasicSite(url: PocketProvider.MoreStoriesURL.absoluteString,
-                                        title: .FirefoxHomepage.Pocket.DiscoverMore)
-        }
+        return Site.createBasicSite(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
+                                    title: pocketStoriesViewModels[index].title)
     }
 
     // MARK: - Telemetry
@@ -210,29 +201,17 @@ extension PocketViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         recordSectionHasShown()
 
-        if isStoryCell(index: indexPath.row) {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
-                                                                for: indexPath) as? LegacyPocketStandardCell else {
-                logger.log("Failed to dequeue LegacyPocketStandardCell at indexPath: \(indexPath)",
-                           level: .fatal,
-                           category: .legacyHomepage)
-                return UICollectionViewCell()
-            }
-            let viewModel = pocketStoriesViewModels[indexPath.row]
-            viewModel.tag = indexPath.row
-            cell.configure(viewModel: viewModel, theme: theme)
-            return cell
-        } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
-                                                                for: indexPath) as? PocketDiscoverCell else {
-                logger.log("Failed to dequeue PocketDiscoverCell at indexPath: \(indexPath)",
-                           level: .fatal,
-                           category: .legacyHomepage)
-                return UICollectionViewCell()
-            }
-            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
-            return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
+                                                            for: indexPath) as? LegacyPocketStandardCell else {
+            logger.log("Failed to dequeue LegacyPocketStandardCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .legacyHomepage)
+            return UICollectionViewCell()
         }
+        let viewModel = pocketStoriesViewModels[indexPath.row]
+        viewModel.tag = indexPath.row
+        cell.configure(viewModel: viewModel, theme: theme)
+        return cell
     }
 
     func configure(_ cell: UICollectionViewCell,
@@ -244,11 +223,7 @@ extension PocketViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-        if isStoryCell(index: indexPath.row) {
-            pocketStoriesViewModels[indexPath.row].onTap(indexPath)
-        } else {
-            showDiscoverMore()
-        }
+        pocketStoriesViewModels[indexPath.row].onTap(indexPath)
     }
 
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
