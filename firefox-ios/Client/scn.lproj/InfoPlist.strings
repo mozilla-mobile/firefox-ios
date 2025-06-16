@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox usa a fotucàmmira pi scanziunari i còdici QR e fari fotu e vidiu.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox abbisogna dû Face ID p'accèdiri ê to chiavi e i furmi di pagamentu sarbati.";
+"NSFaceIDUsageDescription" = "Firefox abbisogna dû Face ID p’accèdiri ê to chiavi e i furmi di pagamentu sarbati.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "I siti chi vìsiti ponnu addumannari a to pusizzioni.";

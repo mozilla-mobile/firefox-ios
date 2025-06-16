@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Chiuji i schedi privati";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Junci l'accurzi a Firefox nnâ to schirmata mastra.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Junci l’accurzi a Firefox nnâ to schirmata mastra.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Vai â lijami cupiata";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Risciduta privata";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Junci n'accurzu a Firefox nnâ to schirmata mastra. Doppu chi junci u stigghiu, tocca e teni ammaccatu pi canciallu e scartari n'accurzu sparti.";
+"TodayWidget.QuickActionGalleryDescription" = "Junci n’accurzu a Firefox nnâ to schirmata mastra. Doppu chi junci u stigghiu, tocca e teni ammaccatu pi canciallu e scartari n’accurzu sparti.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Azzioni lesti";

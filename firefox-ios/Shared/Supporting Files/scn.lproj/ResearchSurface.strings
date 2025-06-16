@@ -1,5 +1,5 @@
 /* On the Research Survey popup, the text that explains what the screen is about. %@ is the app name (e.g. Firefox). */
-"Body.Text.v112" = "Pi favuri ajùtani a 'mmigghiurari %@ arrispunnennu a na ntirbista nicareḍḍa.";
+"Body.Text.v112" = "Pi favuri ajùtani a fari megghiu %@ arrispunnennu a na ntirbista nicareḍḍa.";
 
 /* On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey. */
 "PrimaryButton.Label.v112" = "Fai a ntirbista";
