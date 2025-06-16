@@ -39,32 +39,22 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
-        let recalculateExpectation = XCTestExpectation(
-            description: "Recalculate top sites method is called from top site manager"
-        )
-        dispatchExpectation.expectedFulfillmentCount = 3
-        recalculateExpectation.expectedFulfillmentCount = 3
 
         mockStore.dispatchCalled = {
             dispatchExpectation.fulfill()
         }
 
-        mockTopSitesManager.recalculateTopSitesCalled = {
-            recalculateExpectation.fulfill()
-        }
-
         subject.topSitesProvider(appState, action)
 
-        wait(for: [dispatchExpectation, recalculateExpectation])
+        wait(for: [dispatchExpectation], timeout: 1)
 
-        XCTAssertEqual(mockTopSitesManager.getOtherSitesCalledCount, 1)
-        XCTAssertEqual(mockTopSitesManager.fetchSponsoredSitesCalledCount, 1)
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 1)
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 3)
-        XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
@@ -130,26 +120,47 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
-        let recalculateExpectation = XCTestExpectation(
-            description: "Recalculate top sites method is called from top site manager"
-        )
-        dispatchExpectation.expectedFulfillmentCount = 3
-        recalculateExpectation.expectedFulfillmentCount = 3
 
         mockStore.dispatchCalled = {
             dispatchExpectation.fulfill()
         }
 
-        mockTopSitesManager.recalculateTopSitesCalled = {
-            recalculateExpectation.fulfill()
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
+        XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
+    func test_fetchTopSitesAction_withMultipleCalles_returnsTopSitesSection() throws {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.topSitesUpdated
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
+
+        dispatchExpectation.expectedFulfillmentCount = 3
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
         }
 
         subject.topSitesProvider(appState, action)
+        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider(appState, action)
 
-        wait(for: [dispatchExpectation, recalculateExpectation])
+        wait(for: [dispatchExpectation], timeout: 1)
 
-        XCTAssertEqual(mockTopSitesManager.getOtherSitesCalledCount, 1)
-        XCTAssertEqual(mockTopSitesManager.fetchSponsoredSitesCalledCount, 1)
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 3)
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
