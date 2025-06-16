@@ -139,56 +139,6 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         subject.handleLongPress(with: collectionView,
                                 indexPath: IndexPath(item: 0, section: 0))
     }
-
-    // MARK: - Discover cell
-
-    func testConfigureDiscoverCell() throws {
-        adaptor.pocketStories = createStories(numberOfStories: 2)
-        let subject = createSubject()
-        subject.didLoadNewData()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        collectionView.register(cellType: PocketDiscoverCell.self)
-
-        let cell = try XCTUnwrap(subject.configure(collectionView,
-                                                   at: IndexPath(item: 2, section: 0)) as? PocketDiscoverCell)
-        XCTAssertNotNil(cell)
-    }
-
-    func testClickingDiscoverCell_recordsTapOnStory() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
-        let subject = createSubject()
-        subject.didLoadNewData()
-        subject.didSelectItem(at: IndexPath(item: 1, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
-
-        testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryOrigin)
-        testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryPosition)
-    }
-
-    func testClickingDiscoverCell_callsTapTileAction() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
-        let subject = createSubject()
-        subject.didLoadNewData()
-        subject.onTapTileAction = { url in
-            XCTAssertEqual(url, PocketProvider.MoreStoriesURL)
-        }
-        subject.didSelectItem(at: IndexPath(item: 1, section: 0),
-                              homePanelDelegate: nil,
-                              libraryPanelDelegate: nil)
-    }
-
-    func testLongPressDiscoverCell_callsHandleLongPress() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
-        let subject = createSubject()
-        subject.didLoadNewData()
-        subject.onLongPressTileAction = { (site, _) in
-            XCTAssertEqual(site.url, PocketProvider.MoreStoriesURL.absoluteString)
-            XCTAssertEqual(site.title, "Discover more")
-        }
-
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        subject.handleLongPress(with: collectionView,
-                                indexPath: IndexPath(item: 1, section: 0))
-    }
 }
 
 // MARK: Helpers

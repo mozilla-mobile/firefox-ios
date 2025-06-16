@@ -50,7 +50,7 @@ class PocketTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         XCTAssertEqual(
             app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label,
-            "Thought-Provoking Stories"
+            "Stories"
         )
 
         // There should be at least 8 stories on iPhone and 7 on iPad.
@@ -74,6 +74,7 @@ class PocketTests: BaseTestCase {
         // The url textField is not empty
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         XCTAssertNotEqual(url.value as? String, "", "The url textField is empty")
+<<<<<<< HEAD
         let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         backButton.waitAndTap()
         if #unavailable(iOS 17) {
@@ -89,6 +90,8 @@ class PocketTests: BaseTestCase {
         waitUntilPageLoad()
         mozWaitForElementToExist(url)
         XCTAssertEqual(url.value as? String, "getpocket.com", "The url textField is empty")
+=======
+>>>>>>> 1792afd65 (Refactor FXIOS-12215 [Content Feed] Update content feed design elements (#27297))
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
