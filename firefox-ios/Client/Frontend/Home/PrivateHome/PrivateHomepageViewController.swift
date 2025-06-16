@@ -125,7 +125,7 @@ final class PrivateHomepageViewController: UIViewController,
 
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         coordinator.animate { _ in
-            self.gradient.frame = self.view.bounds
+            self.gradient.frame = CGRect(origin: .zero, size: size)
         }
     }
 
