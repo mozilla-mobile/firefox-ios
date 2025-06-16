@@ -14,11 +14,11 @@ protocol OnboardingDefaultBrowserModelProtocol {
 }
 
 public struct OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>: OnboardingDefaultBrowserModelProtocol {
-    var title: String
-    var instructionSteps: [String]
-    var buttonTitle: String
-    var buttonAction: OnboardingPopupActionType
-    var a11yIdRoot: String
+    public var title: String
+    public var instructionSteps: [String]
+    public var buttonTitle: String
+    public var buttonAction: OnboardingPopupActionType
+    public var a11yIdRoot: String
 
     public init(
         title: String,
