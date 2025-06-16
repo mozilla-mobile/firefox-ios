@@ -13,7 +13,7 @@ enum LaunchType {
     case termsOfService(manager: TermsOfServiceManager)
 
     /// Showing the intro onboarding
-    case intro(manager: IntroScreenManager)
+    case intro(manager: IntroScreenManagerProtocol)
 
     /// Show the update onboarding
     case update(viewModel: UpdateViewModel)

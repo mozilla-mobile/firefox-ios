@@ -20,7 +20,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     // MARK: - Properties
     // FXIOS-6036 - Make this non optional when coordinators are used
-    var introScreenManager: IntroScreenManager?
+    var introScreenManager: IntroScreenManagerProtocol?
     var chosenOptions: OnboardingOptions = []
 
     var availableCards: [OnboardingCardViewController]
@@ -31,7 +31,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
     // MARK: - Initializer
     init(
-        introScreenManager: IntroScreenManager? = nil,
+        introScreenManager: IntroScreenManagerProtocol? = nil,
         profile: Profile,
         model: OnboardingViewModel,
         telemetryUtility: OnboardingTelemetryProtocol
