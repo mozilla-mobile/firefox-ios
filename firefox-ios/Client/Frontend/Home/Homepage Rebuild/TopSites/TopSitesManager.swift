@@ -167,7 +167,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteConfiguration]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
         let sponsoredSiteIsAlreadyPresent = otherSites.contains { (topSite: TopSiteConfiguration) in
-            (topSite.site.url.asURL?.shortDomain == siteDomain) && (topSite.isPinned)
+            (topSite.shortDomain == siteDomain) && (topSite.isPinned)
         }
 
         let shouldAddDefaultEngine = SponsoredTileDataUtility().shouldAdd(
@@ -217,8 +217,8 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
                 return state
             }
 
-            let siteDomain = state.site.url.asURL?.shortDomain
-            let shouldAddSite = !previousStates.contains(where: { $0.site.url.asURL?.shortDomain == siteDomain })
+            let siteDomain = state.shortDomain
+            let shouldAddSite = !previousStates.contains(where: { $0.shortDomain == siteDomain })
 
             // If shouldAddSite or site domain was not found, then insert the site
             guard shouldAddSite || siteDomain == nil else { return nil }
