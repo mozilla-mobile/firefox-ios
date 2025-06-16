@@ -365,10 +365,6 @@ final class HomepageViewController: UIViewController,
             of: UICollectionView.elementKindSectionHeader,
             cellType: LabelButtonHeaderView.self
         )
-        collectionView.registerSupplementary(
-            of: UICollectionView.elementKindSectionFooter,
-            cellType: PocketFooterView.self
-        )
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
@@ -581,17 +577,6 @@ final class HomepageViewController: UIViewController,
                 return UICollectionReusableView()
             }
             return self.configureSectionHeader(for: section, with: sectionHeaderView)
-        case UICollectionView.elementKindSectionFooter:
-            guard let footerView = collectionView.dequeueSupplementary(
-                of: kind,
-                cellType: PocketFooterView.self,
-                for: indexPath)
-            else { return UICollectionReusableView() }
-            footerView.onTapLearnMore = {
-                self.navigateToPocketLearnMore()
-            }
-            footerView.applyTheme(theme: currentTheme)
-            return footerView
         default:
             return nil
         }
