@@ -40,7 +40,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
     }
 
-    // TODO: It would be better here to just make the tabs panel provider @MainActor as well
+    // TODO: FXIOS-12557 It would be better here to just make the tabs panel provider @MainActor as well
     // but that requires making the store @MainActor and would be a wider sweeping change
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
         Task { @MainActor in

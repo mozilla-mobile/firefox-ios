@@ -23,7 +23,7 @@ final class StartAtHomeMiddleware {
     }
 
     lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
-        // TODO: We have to spin this up into a task because we don't have a main actor isolated store
+        // TODO: FXIOS-12557 We have to spin this up into a task because we don't have a main actor isolated store
         Task { @MainActor in
             switch action.actionType {
             case StartAtHomeActionType.didBrowserBecomeActive:

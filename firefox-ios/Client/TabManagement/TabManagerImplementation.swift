@@ -8,7 +8,6 @@ import Storage
 import Common
 import Shared
 import WebKit
-import WebEngine
 
 enum SwitchPrivacyModeResult {
     case createdNewTab
@@ -942,7 +941,7 @@ class TabManagerImplementation: NSObject,
             tab.close()
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
-        // TODO: Do we still need to recreate the private configuration?
+
         tabs = normalTabs
     }
 
