@@ -71,7 +71,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         })
     }
 
-    func unsubscribeFromRedux() {
+    private func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
 
@@ -82,8 +82,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
     // MARK: - Pan Gesture Availability
     func enablePanGestureRecognizer() {
+        guard toolbarState?.toolbarPosition == .bottom else { return }
         panGestureRecognizer?.isEnabled = true
-        disablePanGestureIfTopAddressBar()
     }
 
     func disablePanGestureRecognizer() {
