@@ -73,6 +73,9 @@
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "ຕັ້ງຄ່າການຊູມ";
 
+/* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "ການຕັ້ງຄ່າສະເພາະໄຊທ";
+
 /* Page zoom settings title in Appearance settings */
 "Settings.Appearance.Zoom.Title.v140" = "ຊູມໜ້າເວັບ";
 
