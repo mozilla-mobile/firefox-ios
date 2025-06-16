@@ -21,8 +21,6 @@ struct ContextMenuConfiguration: Equatable {
             return Site.createBasicSite(url: state.site.url, title: state.site.title)
         case .pocket(let state):
             return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
-        case .pocketDiscover(let state):
-            return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil
         }
