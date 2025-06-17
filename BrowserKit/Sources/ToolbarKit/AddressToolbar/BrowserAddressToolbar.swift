@@ -478,6 +478,10 @@ public class BrowserAddressToolbar: UIView,
         toolbarDelegate?.addressToolbarNeedsSearchReset()
     }
 
+    public var getLocationContainer: UIView {
+        return locationContainer
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         let colors = theme.colors

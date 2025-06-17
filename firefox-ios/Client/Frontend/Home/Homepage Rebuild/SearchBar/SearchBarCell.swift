@@ -22,7 +22,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     private lazy var placeholderLabel: UILabel = .build { view in
-        view.text = String.TabLocationURLPlaceholder
+//        view.text = String.TabLocationURLPlaceholder
         view.font = FXFontStyles.Regular.body.scaledFont()
     }
 

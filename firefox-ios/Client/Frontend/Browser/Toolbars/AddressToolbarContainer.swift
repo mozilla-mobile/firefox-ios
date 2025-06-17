@@ -55,6 +55,9 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
+    var locationContainer: UIView {
+        return toolbar.getLocationContainer
+    }
     private var toolbar: BrowserAddressToolbar {
         return regularToolbar
     }

@@ -5,6 +5,7 @@
 import UIKit
 import Common
 
+// Any issues with making this public??
 class LocationContainer: UIView, ThemeApplicable {
     private enum UX {
         static let shadowRadius: CGFloat = 14

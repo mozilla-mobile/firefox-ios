@@ -248,24 +248,31 @@ final class HomepageViewController: UIViewController,
         handleSearchBarVisibilityOnScroll(with: scrollView)
     }
 
+    // MARK: - Search Visibility
     enum SearchBarVisibilityState {
-        case visible
-        case entering
+        case show
+        case hide
     }
-    private var lastSearchBarState: SearchBarVisibilityState = .visible
 
+    private var lastSearchBarState: SearchBarVisibilityState = .show
+
+    // TODO: Add documentation
     private func handleSearchBarVisibilityOnScroll(with scrollView: UIScrollView) {
         guard let indexPath = dataSource?.indexPath(for: .searchBar),
               let cell = collectionView?.cellForItem(at: indexPath) as? SearchBarCell else { return }
 
+        // frame    The view’s rectangle relative to its superview    Superview's coordinate space
+        // bounds    The view’s rectangle relative to itself    Local coordinate space (origin usually at 0,0)
         let cellFrame = cell.frame
         let scrollOffsetY = scrollView.contentOffset.y
-        let newState: SearchBarVisibilityState
+        var newState: SearchBarVisibilityState = lastSearchBarState
+        print("cyn \(cellFrame) \(scrollOffsetY)")
 
+        // TODO: Change to ternary operator
         if cellFrame.minY - scrollOffsetY <= 0 {
-            newState = .entering
-        } else {
-            newState = .visible
+            newState = .hide
+        } else if cellFrame.maxY - scrollOffsetY >= 0 {
+            newState = .show
         }
 
         // Only trigger when state changes
@@ -273,18 +280,18 @@ final class HomepageViewController: UIViewController,
             lastSearchBarState = newState
 
             switch newState {
-            case .visible:
-                print("→ Search bar is visible")
-                dispatchSearchBarAction(with: cell, fadeOut: false)
-            case .entering:
-                print("→ Search bar entering from the bottom")
-                dispatchSearchBarAction(with: cell, fadeOut: true)
+            case .show:
+                print("→ Search bar is visible, should show")
+                dispatchSearchBarAction(with: cell, shouldHideBar: false)
+            case .hide:
+                print("→ Search bar entering from the bottom, should hide")
+                dispatchSearchBarAction(with: cell, shouldHideBar: true)
             }
         }
     }
 
-    private func dispatchSearchBarAction(with cell: SearchBarCell, fadeOut: Bool) {
-        let actionType = fadeOut ? HomepageActionType.searchBarDisappeared : HomepageActionType.searchBarAppeared
+    private func dispatchSearchBarAction(with cell: SearchBarCell, shouldHideBar: Bool) {
+        let actionType = shouldHideBar ? HomepageActionType.searchBarDisappeared : HomepageActionType.searchBarAppeared
         store.dispatch(
             HomepageAction(searchBar: cell, windowUUID: windowUUID, actionType: actionType)
         )
@@ -427,6 +434,8 @@ final class HomepageViewController: UIViewController,
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.delegate = self
+        /// To exten
+        collectionView.clipsToBounds = false
 
         self.collectionView = collectionView
 
@@ -537,6 +546,7 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
+            searchBar.isHidden = false
             searchBar.applyTheme(theme: currentTheme)
             return searchBar
 

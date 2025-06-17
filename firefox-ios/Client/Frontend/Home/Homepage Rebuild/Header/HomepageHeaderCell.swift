@@ -40,7 +40,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private func setupView(with showiPadSetup: Bool) {
         stackContainer.addArrangedSubview(logoHeaderCell.contentView)
         contentView.addSubview(stackContainer)
-
+        contentView.clipsToBounds = false
         setupConstraints(for: showiPadSetup)
     }
 

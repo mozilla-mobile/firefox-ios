@@ -274,7 +274,8 @@ class BrowserViewController: UIViewController,
     }
 
     var isSwipingTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
+        // TODO - only when search bar is on
+        return false
     }
 
     var isToolbarNavigationHintEnabled: Bool {
@@ -2564,7 +2565,6 @@ class BrowserViewController: UIViewController,
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {
         guard let displayState = state.displayView else { return }
-
         switch displayState {
         case .qrCodeReader:
             navigationHandler?.showQRCode(delegate: self)
@@ -2608,75 +2608,150 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
+            /// Handles showing and hiding homepage search bar w/ real toolbar
         case .homepageSearchBar(let searchBar, let fadeOut):
             if fadeOut {
                 print("cyn fade out")
-                fadeFromMiddleSearchToToolbar(from: searchBar, to: addressToolbarContainer) {
-                    self.addressToolbarContainer.isHidden = false
-                    self.header.isHidden = false
-                    self.topBlurView.isHidden = false
-                }
+                morphSearchBar(from: searchBar, to: addressToolbarContainer.locationContainer, in: view)
+                //                animateFadeOut(from: searchBar, to: addressToolbarContainer) {
+                //                    self.addressToolbarContainer.isHidden = false
+                //                    self.header.isHidden = false
+                //                    self.topBlurView.isHidden = false
+                //                }
             } else {
                 print("cyn unfade")
-                fadeFromMiddleSearchToToolbar2(from: addressToolbarContainer, to: searchBar) {
-                }
+                // Need to make sure toolbar is no longer interacted
+                unmorphSearchBar(from: addressToolbarContainer.locationContainer, to: searchBar, in: view)
+                //                animateFadeIn(from: addressToolbarContainer, to: searchBar) {
             }
         }
     }
-        func fadeFromMiddleSearchToToolbar(
-            from pseudoSearchView: UIView,
-            to toolbarSearchView: UIView,
-            duration: TimeInterval = 0.4,
-            completion: (() -> Void)? = nil
-        ) {
-            toolbarSearchView.alpha = 0
+
+    func morphSearchBar(
+        from pseudoSearchView: UIView,
+        to toolbarSearchView: UIView,
+        in parentView: UIView,
+        duration: TimeInterval = 0.4
+    ) {
+        // Get frames in shared coordinate space
+        let startFrame = pseudoSearchView.convert(pseudoSearchView.bounds, to: parentView)
+        let endFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
+
+        // Create a snapshot of the fake bar
+        guard let snapshot = pseudoSearchView.snapshotView(afterScreenUpdates: true) else {
+            return
+        }
+
+        snapshot.frame = startFrame
+        parentView.addSubview(snapshot)
+
+        // Hide the real views during the animation
+        pseudoSearchView.isHidden = true
+        toolbarSearchView.isHidden = true
+
+        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
+            snapshot.frame = endFrame
+        }, completion: { _ in
+            snapshot.removeFromSuperview()
             toolbarSearchView.isHidden = false
+        })
+    }
 
-            self.header.alpha = 0
-            self.header.isHidden = false
+    func unmorphSearchBar(
+        from toolbarSearchView: UIView,
+        to pseudoSearchView: UIView,
+        in parentView: UIView,
+        duration: TimeInterval = 0.4
+    ) {
+        // Get start and end frames in the same coordinate space
+        let startFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
+        let endFrame = pseudoSearchView.convert(pseudoSearchView.bounds, to: parentView)
 
-            self.topBlurView.alpha = 0
-            self.topBlurView.isHidden = false
+        // Create snapshot of toolbar search bar
+        guard let snapshot = toolbarSearchView.snapshotView(afterScreenUpdates: true) else {
+            return
+        }
 
-            topBlurView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-            toolbarSearchView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-            self.header.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+        snapshot.frame = startFrame
+        parentView.addSubview(snapshot)
 
-            UIView.animate(
+        // Hide real views during animation
+        toolbarSearchView.isHidden = true
+        pseudoSearchView.isHidden = true
+
+        // Animate snapshot back to pseudo bar position
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                snapshot.frame = endFrame
+            },
+            completion: { _ in
+                snapshot.removeFromSuperview()
+                pseudoSearchView.isHidden = false
+            })
+    }
+
+    func animateFadeOut(
+        from pseudoSearchView: UIView,
+        to toolbarSearchView: UIView,
+        duration: TimeInterval = 0.4,
+        completion: (() -> Void)? = nil
+    ) {
+        toolbarSearchView.alpha = 0
+        toolbarSearchView.isHidden = false
+
+        self.header.alpha = 0
+        self.header.isHidden = false
+
+        self.topBlurView.alpha = 0
+        self.topBlurView.isHidden = false
+
+        topBlurView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+        toolbarSearchView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+        self.header.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                pseudoSearchView.alpha = 0
+                toolbarSearchView.alpha = 1
+                self.header.alpha = 1
+                self.topBlurView.alpha = 1
+                toolbarSearchView.transform = .identity
+                self.header.transform = .identity
+                self.topBlurView.transform = .identity
+            },
+            completion: { _ in
+                //                pseudoSearchView.isHidden = true
+                completion?()
+            })
+    }
+
+    func animateFadeIn(
+        from pseudoSearchView: UIView,
+        to toolbarSearchView: UIView,
+        duration: TimeInterval = 0.8,
+        completion: (() -> Void)? = nil
+    ) {
+        UIView.animate(
                 withDuration: duration,
                 delay: 0,
                 options: [.curveEaseInOut],
                 animations: {
                     pseudoSearchView.alpha = 0
-                    toolbarSearchView.alpha = 1
-                    self.header.alpha = 1
-                    self.topBlurView.alpha = 1
-                    toolbarSearchView.transform = .identity
-                    self.header.transform = .identity
-                    self.topBlurView.transform = .identity
+                    self.header.alpha = 0
+                    self.topBlurView.alpha = 0
+                    self.topBlurView.isHidden = true
                 },
                 completion: { _ in
-    //                pseudoSearchView.isHidden = true
-                    completion?()
-                })
-        }
-
-        func fadeFromMiddleSearchToToolbar2(
-            from pseudoSearchView: UIView,
-            to toolbarSearchView: UIView,
-            duration: TimeInterval = 0.8,
-            completion: (() -> Void)? = nil
-        ) {
-            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
-                pseudoSearchView.alpha = 0
-                self.header.alpha = 0
-                self.topBlurView.alpha = 0
-                self.topBlurView.isHidden = true
-            }, completion: { _ in
-                self.topBlurView.isHidden = true
-                completion?()
-            })
-        }
+            self.topBlurView.isHidden = true
+            completion?()
+        })
+    }
 
     private func handleNavigationActions(for state: BrowserViewControllerState) {
         guard let navigationState = state.navigateTo else { return }
