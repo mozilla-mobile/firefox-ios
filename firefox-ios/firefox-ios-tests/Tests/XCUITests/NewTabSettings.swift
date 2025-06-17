@@ -179,7 +179,6 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
     }
 
     private func validateKeyboardIsRaisedAndDismissed() {
-        app.launch()
         // The keyboard is raised up
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
