@@ -79,6 +79,7 @@ class PullRefreshView: UIView,
     }
 
     private func setupSubviews() {
+        applyEffect(cornerRadius: 0.0, isInteractive: false)
         addSubviews(progressContainerView, progressView)
         let shrinkFactor = computeShrinkingFactor()
         let progressContainerViewPadding = UX.progressViewPadding * shrinkFactor
@@ -235,7 +236,7 @@ class PullRefreshView: UIView,
 
     func applyTheme(theme: any Theme) {
         currentTheme = theme
-        backgroundColor = theme.colors.layer1
+        backgroundColor = .clear //theme.colors.layer1
         progressView.tintColor = theme.colors.iconPrimary
     }
 

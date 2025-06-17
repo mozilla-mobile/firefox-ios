@@ -5,6 +5,10 @@
 import UIKit
 import Common
 
+extension UIView: BackgroundEffectLayerView {
+
+}
+
 /// Simple address toolbar implementation.
 /// +-------------+--------------------------------------------------------+----------+
 /// | navigation  | [ leading ]     indicators      url       [ trailing ] | browser  |
@@ -180,6 +184,8 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(pageActionStack)
 
+        locationContainer.applyEffect(cornerRadius: 12.0, isInteractive: false)
+
         toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
         toolbarContainerView.addSubview(browserActionStack)
@@ -299,14 +305,14 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - Toolbar Actions and Layout Updates
     internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
-        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
+        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions, ux: config.uxConfiguration)
 
         // Navigation actions
-        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
+        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions, ux: config.uxConfiguration)
 
         // Page actions
-        updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions)
-        updateActionStack(stackView: pageActionStack, toolbarElements: config.trailingPageActions)
+        updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions, ux: config.uxConfiguration)
+        updateActionStack(stackView: pageActionStack, toolbarElements: config.trailingPageActions, ux: config.uxConfiguration)
 
         updateActionSpacing(uxConfig: config.uxConfiguration)
         updateToolbarLayout(animated: animated)
@@ -366,7 +372,9 @@ public class BrowserAddressToolbar: UIView,
         return button
     }
 
-    private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
+    private func updateActionStack(stackView: UIStackView,
+                                   toolbarElements: [ToolbarElement],
+                                   ux: AddressToolbarUXConfiguration) {
         let buttons = toolbarElements.map { toolbarElement in
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
@@ -392,8 +400,8 @@ public class BrowserAddressToolbar: UIView,
 
             if button.configuration?.title == nil {
                 NSLayoutConstraint.activate([
-                    button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                    button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                    button.widthAnchor.constraint(equalToConstant: ux.buttonsSize),
+                    button.heightAnchor.constraint(equalToConstant: ux.buttonsSize),
                 ])
             } else {
                 NSLayoutConstraint.activate([

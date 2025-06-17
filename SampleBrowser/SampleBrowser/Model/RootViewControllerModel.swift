@@ -88,7 +88,7 @@ class RootViewControllerModel {
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTestField",
             searchEngineImage: UIImage(named: "duckduckgoSearchEngine"),
-            lockIconImageName: StandardImageIdentifiers.Large.lock,
+            lockIconImageName: "syncLarge",
             lockIconNeedsTheming: false,
             safeListedURLImageName: StandardImageIdentifiers.Small.notificationDotFill,
             url: url,
@@ -106,10 +106,54 @@ class RootViewControllerModel {
             scrollY: 0,
             isPrivate: false,
             locationViewConfiguration: locationViewConfig,
-            navigationActions: [],
-            leadingPageActions: [],
-            trailingPageActions: [],
-            browserActions: []
+            navigationActions: [
+                ToolbarElement(
+                    iconName: "square.and.arrow.up",
+                    isEnabled: true,
+                    a11yLabel: "",
+                    a11yHint: nil,
+                    a11yId: "",
+                    hasLongPressAction: false,
+                    onSelected: { _ in
+
+                })
+            ],
+            leadingPageActions: [
+                ToolbarElement(
+                    iconName: "square.and.arrow.up",
+                    isEnabled: true,
+                    a11yLabel: "",
+                    a11yHint: nil,
+                    a11yId: "",
+                    hasLongPressAction: false,
+                    onSelected: { _ in
+
+                })
+            ],
+            trailingPageActions: [
+                ToolbarElement(
+                    iconName: "square.and.arrow.up",
+                    isEnabled: true,
+                    a11yLabel: "",
+                    a11yHint: nil,
+                    a11yId: "",
+                    hasLongPressAction: false,
+                    onSelected: { _ in
+
+                })
+            ],
+            browserActions: [
+                ToolbarElement(
+                    iconName: "square.and.arrow.up",
+                    isEnabled: true,
+                    a11yLabel: "",
+                    a11yHint: nil,
+                    a11yId: "",
+                    hasLongPressAction: false,
+                    onSelected: { _ in
+
+                })
+            ]
         )
     }
 }

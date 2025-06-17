@@ -10,9 +10,9 @@ public enum ToolbarButtonGesture {
     case longPress
 }
 
-protocol BackgroundEffectLayerView: UIView {}
+public protocol BackgroundEffectLayerView: UIView {}
 
-extension BackgroundEffectLayerView {
+public extension BackgroundEffectLayerView {
     func applyEffect(cornerRadius: CGFloat, isInteractive: Bool) {
         if #available(iOS 26.0, *) {
             let glass = UIGlassEffect()
@@ -230,7 +230,7 @@ class ToolbarButton: UIButton,
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
         guard let iconName = element.iconName else { return nil }
-        let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate) ?? UIImage(systemName: iconName)
         return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
     }
 

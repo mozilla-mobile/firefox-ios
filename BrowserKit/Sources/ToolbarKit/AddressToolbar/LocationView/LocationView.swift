@@ -8,7 +8,6 @@ import Common
 final class LocationView: UIView,
                           LocationTextFieldDelegate,
                           ThemeApplicable,
-                          BackgroundEffectLayerView,
                           AccessibilityActionsSource,
                           MenuHelperURLBarInterface {
     // MARK: - Properties
@@ -116,7 +115,6 @@ final class LocationView: UIView,
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
-        applyEffect(cornerRadius: 24.0, isInteractive: false)
     }
 
     required init?(coder: NSCoder) {

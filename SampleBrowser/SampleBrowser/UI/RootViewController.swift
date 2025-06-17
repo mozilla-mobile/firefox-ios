@@ -60,6 +60,17 @@ class RootViewController: UIViewController,
         configureBrowserView()
         configureSearchView()
         configureNavigationToolbar()
+
+        let effect = UIVisualEffectView(effect: UIGlassEffect())
+        effect.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(effect)
+        NSLayoutConstraint.activate([
+            effect.topAnchor.constraint(equalTo: view.topAnchor),
+            effect.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            effect.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            effect.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
         configureAddressToolbar()
 
         listenForThemeChange(view)

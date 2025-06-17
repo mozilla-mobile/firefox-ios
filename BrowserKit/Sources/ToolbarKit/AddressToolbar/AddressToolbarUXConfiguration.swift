@@ -12,6 +12,7 @@ public struct AddressToolbarUXConfiguration {
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
+    let buttonsSize: CGFloat
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
@@ -21,7 +22,8 @@ public struct AddressToolbarUXConfiguration {
             isLocationTextCentered: true,
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha
+            backgroundAlpha: backgroundAlpha,
+            buttonsSize: 44.0
         )
     }
 
@@ -33,7 +35,20 @@ public struct AddressToolbarUXConfiguration {
             isLocationTextCentered: false,
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha
+            backgroundAlpha: backgroundAlpha,
+            buttonsSize: 44.0
+        )
+    }
+
+    public static func glass() -> Self {
+        return Self(
+            toolbarCornerRadius: 12.0,
+            browserActionsAddressBarDividerWidth: 0.0,
+            isLocationTextCentered: true,
+            locationTextFieldTrailingPadding: 0.0,
+            shouldBlur: true,
+            backgroundAlpha: 0.0,
+            buttonsSize: 44.0
         )
     }
 
