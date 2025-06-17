@@ -36,14 +36,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                     VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
                         let isSelected = item.action == selection
 
-                        if let img = item.image {
-                            Image(uiImage: img)
-                                .resizable()
-                                .colorMultiply(isSelected ? actionPrimary : noSelection)
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: UX.SegmentedControl.imageHeight)
-                                .accessibilityHidden(true)
-                        }
+                        itemImage(item: item, isSelected: isSelected)
 
                         VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
                             Text(item.title)
