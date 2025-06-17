@@ -1291,9 +1291,9 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - SessionCreator
 
-    func createSession(configuration: WKWebViewConfiguration, initialURL: URL?) -> WKWebView? {
-        guard let selectedTab else { return nil }
-        return addPopupForParentTab(profile: profile, parentTab: selectedTab, configuration: configuration).webView
+    func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
+        guard let parentTab = self[parent] else { return nil }
+        return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView
     }
 }
 

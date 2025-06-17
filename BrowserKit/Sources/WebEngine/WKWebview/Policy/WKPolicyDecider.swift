@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 /// An object that decides the policy for a navigation request by `WebKit`'s delegate methods.
-protocol WKPolicyDecider {
+public protocol WKPolicyDecider {
     /// The next decider in the chain, that can eventually respond with a `WKPolicy`
     /// when this decider is not able to handle it.
     var nextDecider: WKPolicyDecider? { get set }
@@ -27,7 +27,7 @@ public protocol NavigationAction {
     var targetFrameInfo: FrameInfo? { get }
 }
 
-protocol NavigationResponse {
+public protocol NavigationResponse {
     var url: URL? { get }
     var response: URLResponse { get }
     var isForMainFrame: Bool { get }
@@ -48,7 +48,7 @@ extension WKNavigationAction: NavigationAction {
 }
 
 extension WKNavigationResponse: NavigationResponse {
-    var url: URL? {
+    public var url: URL? {
         return response.url
     }
 }

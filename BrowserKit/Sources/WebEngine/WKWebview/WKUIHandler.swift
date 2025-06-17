@@ -53,47 +53,34 @@ protocol WKUIHandler: WKUIDelegate {
     )
 }
 
-public protocol SessionCreator {
-    @MainActor
-    func createSession(configuration: WKWebViewConfiguration, initialURL: URL?) -> WKWebView?
-}
-
-struct WKSessionCreator: SessionCreator {
-    let dependencies: EngineSessionDependencies
-
-    func createSession(configuration: WKWebViewConfiguration, initialURL: URL?) -> WKWebView? {
-        let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
-        let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
-                                                     dependencies: dependencies,
-                                                     configurationProvider: configurationProvider)
-
-        guard let session, let webView = session.webView as? WKWebView else { return nil }
-        return webView
-    }
-}
-
 public class DefaultUIHandler: NSObject, WKUIHandler {
     weak var delegate: EngineSessionDelegate?
+    private weak var sessionCreator: SessionCreator?
+
     public var isActive = false
-    private let sessionCreator: SessionCreator
     private let sessionDependencies: EngineSessionDependencies
     private let application: Application
     private let policyDecider: WKPolicyDecider
 
     public init(sessionDependencies: EngineSessionDependencies,
-                sessionCreator: SessionCreator?,
+                sessionCreator: SessionCreator? = nil,
                 application: Application = UIApplication.shared,
                 policyDecider: WKPolicyDecider = WKPolicyDeciderFactory()) {
         self.sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
+        super.init()
+
+        (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
+            self?.delegate?.onRequestOpenNewSession($0)
+        }
     }
 
     public func webView(_ webView: WKWebView,
-                 createWebViewWith configuration: WKWebViewConfiguration,
-                 for navigationAction: WKNavigationAction,
-                 windowFeatures: WKWindowFeatures) -> WKWebView? {
+                        createWebViewWith configuration: WKWebViewConfiguration,
+                        for navigationAction: WKNavigationAction,
+                        windowFeatures: WKWindowFeatures) -> WKWebView? {
         let policy = policyDecider.policyForPopupNavigation(action: navigationAction)
         switch policy {
         case .cancel:
@@ -101,7 +88,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         case .allow:
             let url = navigationAction.request.url
             let urlString = url?.absoluteString ?? ""
-            let webView = sessionCreator.createSession(configuration: configuration, initialURL: url)
+            let webView = sessionCreator?.createPopupSession(configuration: configuration, parent: webView)
             guard let webView else { return nil }
 
             if url == nil || urlString.isEmpty,

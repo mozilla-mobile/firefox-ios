@@ -11,14 +11,14 @@ import WebKit
 public class WKPolicyDeciderFactory: WKPolicyDecider {
     public init() {}
 
-    var nextDecider: WKPolicyDecider?
+    public var nextDecider: WKPolicyDecider?
 
-    func policyForNavigation(action: NavigationAction) -> WKPolicy {
+    public func policyForNavigation(action: NavigationAction) -> WKPolicy {
         guard let nextDecider else { return .cancel }
         return nextDecider.policyForNavigation(action: action)
     }
 
-    func policyForNavigation(response: NavigationResponse) -> WKPolicy {
+    public func policyForNavigation(response: NavigationResponse) -> WKPolicy {
         guard let nextDecider else { return .cancel }
         return nextDecider.policyForNavigation(response: response)
     }
