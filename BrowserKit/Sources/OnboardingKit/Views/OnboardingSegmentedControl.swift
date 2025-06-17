@@ -38,19 +38,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
 
                         itemImage(item: item, isSelected: isSelected)
 
-                        VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
-                            Text(item.title)
-                                .font(.footnote)
-                                .foregroundColor(.primary)
-                            Image(
-                                isSelected
-                                ? UX.SegmentedControl.radioButtonSelectedImage
-                                : UX.SegmentedControl.radioButtonNotSelectedImage,
-                                bundle: .module
-                            )
-                            .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
-                            .accessibilityHidden(true)
-                        }
+                        itemContent(item: item, isSelected: isSelected)
                     }
                     .padding(.vertical, UX.SegmentedControl.verticalPadding)
                     .frame(maxWidth: .infinity)
