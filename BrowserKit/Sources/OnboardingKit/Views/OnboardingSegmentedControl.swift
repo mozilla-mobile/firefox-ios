@@ -85,6 +85,22 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
         }
     }
 
+    private func itemContent(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
+        VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
+            Text(item.title)
+                .font(.footnote)
+                .foregroundColor(.primary)
+            Image(
+                isSelected
+                ? UX.SegmentedControl.radioButtonSelectedImage
+                : UX.SegmentedControl.radioButtonNotSelectedImage,
+                bundle: .module
+            )
+            .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
+            .accessibilityHidden(true)
+        }
+    }
+
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
         noSelection = Color(theme.colors.textOnDark)
