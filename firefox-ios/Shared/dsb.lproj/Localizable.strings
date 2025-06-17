@@ -389,7 +389,7 @@
 "fxa.signin.qr-link-instruction" = "Wócyńśo Firefox na swójom licadle a źiśo k firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Gótowy za skannowanje";
+"fxa.signin.ready-to-scan" = "Gótowy za scannowanje";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "E-mail město togo wužywaś";
@@ -983,7 +983,7 @@
 "ScanQRCode.Error.OK.Button" = "W pórěźe";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "QR-kod we wobłuku za skannowanje wusměriś";
+"ScanQRCode.Instructions.Label" = "QR-kod we wobłuku za scannowanje wusměriś";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Daty su njepłaśiwe";
@@ -992,7 +992,7 @@
 "ScanQRCode.PermissionError.Message.v100" = "Źiśo k rědoju „Nastajenja“ > „Firefox“. Dowólśo Firefox pśistup ku kamerje.";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "QR-kod skannowaś";
+"ScanQRCode.View.Title" = "QR-kod scannowaś";
 
 /* Open search section of settings */
 "Search" = "Pytaś";

@@ -1157,7 +1157,7 @@
 "Settings.Appearance.WebsiteDarkMode.Description.v137" = "Забезпечення темного вигляду вебсайтів. Деякі сайти можуть мати некоректний вигляд.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
-"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Темний режим вебсайту";
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Темний режим вебсайтів";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Блокувати відкриття зовнішніх програм";

@@ -118,6 +118,9 @@
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "ຊ່ວຍພວກເຮົາເຮັດໃຫ້ %@ ດີຂຶ້ນ";
 
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "ເມື່ອດຳເນີນການຕໍ ຖືວ່າທ່ານໄດ້ຍອມຮັບ %@";
+
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "ຍົກລະດັບການທ່ອງເວັບຂອງທ່ານ";
 
