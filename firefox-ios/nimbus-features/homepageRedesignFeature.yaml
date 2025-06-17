@@ -1,12 +1,12 @@
-# The configuration for the homepageNewTabFeature feature
+# The configuration for the homepageRedesignFeature feature
 features:
-  homepage-new-tab-feature:
+  homepage-redesign-feature:
     description: >
-      This feature is for managing the roll out of the Homepage New Tab feature
+      This feature is for managing the roll out of the Homepage New Tab Redesign feature.
     variables:
       enabled:
         description: >
-          Enables the feature
+          Enables the feature.
         type: Boolean
         default: false
       search_bar:
