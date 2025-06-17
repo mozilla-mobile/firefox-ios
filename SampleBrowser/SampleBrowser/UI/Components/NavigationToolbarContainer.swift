@@ -85,6 +85,6 @@ class NavigationToolbarContainer: UIView,
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         toolbar.applyTheme(theme: theme)
-        backgroundColor = theme.colors.layer1
+        backgroundColor = .clear
     }
 }

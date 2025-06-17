@@ -20,7 +20,7 @@ class FadeScrollViewViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private lazy var scrollView: FadeScrollView = .build { view in
+    private lazy var scrollView: UIScrollView = .build { view in
         view.showsHorizontalScrollIndicator = false
     }
 

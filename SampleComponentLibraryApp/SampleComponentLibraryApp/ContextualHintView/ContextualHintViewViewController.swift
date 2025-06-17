@@ -32,23 +32,23 @@ class ContextualHintViewViewController: UIViewController, Themeable {
         listenForThemeChange(view)
         applyTheme()
 
-        var viewModel = ContextualHintViewModel(
-            isActionType: true,
-            actionButtonTitle: "This button has an action",
-            title: "CFR title",
-            description: "This contextual hint gives you some context about a random feature",
-            arrowDirection: .up,
-            closeButtonA11yLabel: "a11yButton",
-            actionButtonA11yId: "a11yButtonId"
-        )
-        viewModel.closeButtonAction = { [weak self] _ in
-            self?.dismiss(animated: true, completion: nil)
-        }
-        viewModel.actionButtonAction = { [weak self] _ in
-            // The action would be done here, now just dismiss the CFR
-            self?.dismiss(animated: true, completion: nil)
-        }
-        hintView.configure(viewModel: viewModel)
+//        var viewModel = ContextualHintViewModel(
+//            isActionType: true,
+//            actionButtonTitle: "This button has an action",
+//            title: "CFR title",
+//            description: "This contextual hint gives you some context about a random feature",
+//            arrowDirection: .up,
+//            closeButtonA11yLabel: "a11yButton",
+//            actionButtonA11yId: "a11yButtonId"
+//        )
+//        viewModel.closeButtonAction = { [weak self] _ in
+//            self?.dismiss(animated: true, completion: nil)
+//        }
+//        viewModel.actionButtonAction = { [weak self] _ in
+//            // The action would be done here, now just dismiss the CFR
+//            self?.dismiss(animated: true, completion: nil)
+//        }
+//        hintView.configure(viewModel: viewModel)
         hintView.applyTheme(theme: themeManager.currentTheme)
 
         setupView()

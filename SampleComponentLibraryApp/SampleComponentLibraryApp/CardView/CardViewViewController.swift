@@ -20,7 +20,7 @@ class CardViewViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private lazy var cardView: CardView = .build { _ in }
+    private lazy var cardView: UIView = .build { _ in }
 
     private lazy var contentLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -44,12 +44,12 @@ class CardViewViewController: UIViewController, Themeable {
         applyTheme()
 
         contentLabel.text = loremIpsum
-        let viewModel = CardViewModel(view: contentLabel, a11yId: "CardView", backgroundColor: { theme in
-            return theme.colors.layer3
-        })
-        cardView.configure(viewModel)
+//        let viewModel = CardViewModel(view: contentLabel, a11yId: "CardView", backgroundColor: { theme in
+//            return theme.colors.layer3
+//        })
+//        cardView.configure(viewModel)
 
-        cardView.applyTheme(theme: themeManager.currentTheme)
+//        cardView.applyTheme(theme: themeManager.currentTheme)
     }
 
     private func setupView() {

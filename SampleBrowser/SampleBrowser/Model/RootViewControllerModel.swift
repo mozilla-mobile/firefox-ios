@@ -106,9 +106,20 @@ class RootViewControllerModel {
             scrollY: 0,
             isPrivate: false,
             locationViewConfiguration: locationViewConfig,
-            navigationActions: [],
+            navigationActions: [
+                ToolbarElement(
+                    iconName: "syncLarge",
+                    isEnabled: true,
+                    a11yLabel: "",
+                    a11yHint: nil,
+                    a11yId: "",
+                    hasLongPressAction: false,
+                    onSelected: nil
+                )
+            ],
             leadingPageActions: [],
             trailingPageActions: [],
-            browserActions: [])
+            browserActions: []
+        )
     }
 }

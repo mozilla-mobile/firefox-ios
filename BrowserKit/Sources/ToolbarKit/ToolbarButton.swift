@@ -10,7 +10,26 @@ public enum ToolbarButtonGesture {
     case longPress
 }
 
-class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
+protocol BackgroundEffectLayerView: UIView {}
+
+extension BackgroundEffectLayerView {
+    func applyEffect() {
+        if #available(iOS 26.0, *) {
+            let glass = UIGlassEffect()
+            glass.isInteractive = true
+            let effect = UIVisualEffectView(effect: glass)
+            insertSubview(effect, at: 0)
+            effect.translatesAutoresizingMaskIntoConstraints = false
+            effect.pinToSuperview()
+            effect.layer.cornerRadius = 20.0
+        }
+    }
+}
+
+class ToolbarButton: UIButton,
+                     BackgroundEffectLayerView,
+                     ThemeApplicable,
+                     UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
@@ -47,6 +66,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
                                                                bottom: UX.verticalInset,
                                                                trailing: UX.horizontalInset)
         titleLabel?.adjustsFontForContentSizeCategory = true
+        applyEffect()
     }
 
     open func configure(

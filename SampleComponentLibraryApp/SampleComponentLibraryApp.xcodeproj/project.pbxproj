@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0ACC66782D3FA22200DA742D /* HeadersViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACC66762D3FA21800DA742D /* HeadersViewViewController.swift */; };
 		0ACC667B2D3FA29C00DA742D /* HeadersComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACC66792D3FA28A00DA742D /* HeadersComponentViewModel.swift */; };
+		0BF68DDD2E0021EC001775D0 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0BF68DDC2E0021EC001775D0 /* ToolbarKit */; };
 		8A2FE6522A55EE3D0036B6AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */; };
 		8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6532A55EE3D0036B6AF /* SceneDelegate.swift */; };
 		8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6552A55EE3D0036B6AF /* RootViewController.swift */; };
@@ -82,6 +83,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A6EE0A22A574ED500B4D401 /* ComponentLibrary in Frameworks */,
+				0BF68DDD2E0021EC001775D0 /* ToolbarKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +270,7 @@
 			name = SampleComponentLibraryApp;
 			packageProductDependencies = (
 				8A6EE0A12A574ED500B4D401 /* ComponentLibrary */,
+				0BF68DDC2E0021EC001775D0 /* ToolbarKit */,
 			);
 			productName = SampleComponentLibraryApp;
 			productReference = 8A2FE64E2A55EE3D0036B6AF /* SampleComponentLibraryApp.app */;
@@ -584,6 +587,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0BF68DDC2E0021EC001775D0 /* ToolbarKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ToolbarKit;
+		};
 		8A6EE0A12A574ED500B4D401 /* ComponentLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ComponentLibrary;

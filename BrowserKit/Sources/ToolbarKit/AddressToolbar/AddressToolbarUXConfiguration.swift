@@ -43,10 +43,11 @@ public struct AddressToolbarUXConfiguration {
             backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
         }
 
-        return backgroundColor
+        return .clear //backgroundColor
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
-        return isLocationTextCentered ? theme.colors.layer2 : theme.colors.layerSearch
+        return .clear
+//        return isLocationTextCentered ? theme.colors.layer2 : theme.colors.layerSearch
     }
 }

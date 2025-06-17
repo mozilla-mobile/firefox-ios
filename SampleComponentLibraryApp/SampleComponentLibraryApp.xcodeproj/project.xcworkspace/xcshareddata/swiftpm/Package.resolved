@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
-        "version" : "7.12.0"
+        "revision" : "3db26ab625d194c38e68c1a40e43d1bc12743fe0",
+        "version" : "8.2.0"
       }
     },
     {
@@ -43,6 +43,15 @@
       "state" : {
         "revision" : "5575af93efb776414f243e93d6af9f6258dc539a",
         "version" : "8.36.0"
+      }
+    },
+    {
+      "identity" : "swiftdraw",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/SwiftDraw",
+      "state" : {
+        "revision" : "2cfd97c753feafe23c767ad3cb4daaf5c5415272",
+        "version" : "0.18.3"
       }
     },
     {

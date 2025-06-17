@@ -8,6 +8,7 @@ import Common
 final class LocationView: UIView,
                           LocationTextFieldDelegate,
                           ThemeApplicable,
+                          BackgroundEffectLayerView,
                           AccessibilityActionsSource,
                           MenuHelperURLBarInterface {
     // MARK: - Properties
@@ -115,6 +116,7 @@ final class LocationView: UIView,
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
+        applyEffect()
     }
 
     required init?(coder: NSCoder) {
@@ -632,8 +634,8 @@ final class LocationView: UIView,
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = appearance.backgroundColor
-        lockIconButton.backgroundColor = appearance.backgroundColor
+        iconContainerBackgroundView.backgroundColor = .clear
+        lockIconButton.backgroundColor = .clear
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
