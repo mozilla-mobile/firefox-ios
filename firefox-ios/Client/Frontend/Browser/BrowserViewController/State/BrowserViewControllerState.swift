@@ -34,6 +34,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case readerModeLongPressAction
         case dataClearance
         case passwordGenerator
+        case homepageSearchBar(SearchBarCell, shouldHide: Bool)
     }
 
     let windowUUID: WindowUUID
@@ -131,6 +132,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return reduceStateForNavigationBrowserAction(action: action, state: state)
         } else if let action = action as? StartAtHomeAction {
             return reduceStateForStartAtHomeAction(action: action, state: state)
+        } else if let action = action as? HomepageAction {
+            return reduceStateForHomepageAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -179,6 +182,37 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action.actionType {
         case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    // MARK: - Homepage Actions (Search Bar)
+    static func reduceStateForHomepageAction(
+        action: HomepageAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case HomepageActionType.searchBarAppeared:
+            guard let cell = (action as HomepageAction).searchBar else {
+                return defaultState(from: state, action: action)
+            }
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .homepageSearchBar(cell, shouldHide: false),
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case HomepageActionType.searchBarDisappeared:
+            guard let cell = (action as HomepageAction).searchBar else {
+                return defaultState(from: state, action: action)
+            }
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .homepageSearchBar(cell, shouldHide: true),
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return defaultState(from: state, action: action)
         }

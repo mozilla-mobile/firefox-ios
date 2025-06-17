@@ -2608,8 +2608,75 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
+        case .homepageSearchBar(let searchBar, let fadeOut):
+            if fadeOut {
+                print("cyn fade out")
+                fadeFromMiddleSearchToToolbar(from: searchBar, to: addressToolbarContainer) {
+                    self.addressToolbarContainer.isHidden = false
+                    self.header.isHidden = false
+                    self.topBlurView.isHidden = false
+                }
+            } else {
+                print("cyn unfade")
+                fadeFromMiddleSearchToToolbar2(from: addressToolbarContainer, to: searchBar) {
+                }
+            }
         }
     }
+        func fadeFromMiddleSearchToToolbar(
+            from pseudoSearchView: UIView,
+            to toolbarSearchView: UIView,
+            duration: TimeInterval = 0.4,
+            completion: (() -> Void)? = nil
+        ) {
+            toolbarSearchView.alpha = 0
+            toolbarSearchView.isHidden = false
+
+            self.header.alpha = 0
+            self.header.isHidden = false
+
+            self.topBlurView.alpha = 0
+            self.topBlurView.isHidden = false
+
+            topBlurView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+            toolbarSearchView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+            self.header.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+
+            UIView.animate(
+                withDuration: duration,
+                delay: 0,
+                options: [.curveEaseInOut],
+                animations: {
+                    pseudoSearchView.alpha = 0
+                    toolbarSearchView.alpha = 1
+                    self.header.alpha = 1
+                    self.topBlurView.alpha = 1
+                    toolbarSearchView.transform = .identity
+                    self.header.transform = .identity
+                    self.topBlurView.transform = .identity
+                },
+                completion: { _ in
+    //                pseudoSearchView.isHidden = true
+                    completion?()
+                })
+        }
+
+        func fadeFromMiddleSearchToToolbar2(
+            from pseudoSearchView: UIView,
+            to toolbarSearchView: UIView,
+            duration: TimeInterval = 0.8,
+            completion: (() -> Void)? = nil
+        ) {
+            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
+                pseudoSearchView.alpha = 0
+                self.header.alpha = 0
+                self.topBlurView.alpha = 0
+                self.topBlurView.isHidden = true
+            }, completion: { _ in
+                self.topBlurView.isHidden = true
+                completion?()
+            })
+        }
 
     private func handleNavigationActions(for state: BrowserViewControllerState) {
         guard let navigationState = state.navigateTo else { return }

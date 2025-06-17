@@ -245,6 +245,49 @@ final class HomepageViewController: UIViewController,
                     windowUUID: windowUUID,
                     actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
+        handleSearchBarVisibilityOnScroll(with: scrollView)
+    }
+
+    enum SearchBarVisibilityState {
+        case visible
+        case entering
+    }
+    private var lastSearchBarState: SearchBarVisibilityState = .visible
+
+    private func handleSearchBarVisibilityOnScroll(with scrollView: UIScrollView) {
+        guard let indexPath = dataSource?.indexPath(for: .searchBar),
+              let cell = collectionView?.cellForItem(at: indexPath) as? SearchBarCell else { return }
+
+        let cellFrame = cell.frame
+        let scrollOffsetY = scrollView.contentOffset.y
+        let newState: SearchBarVisibilityState
+
+        if cellFrame.minY - scrollOffsetY <= 0 {
+            newState = .entering
+        } else {
+            newState = .visible
+        }
+
+        // Only trigger when state changes
+        if newState != lastSearchBarState {
+            lastSearchBarState = newState
+
+            switch newState {
+            case .visible:
+                print("→ Search bar is visible")
+                dispatchSearchBarAction(with: cell, fadeOut: false)
+            case .entering:
+                print("→ Search bar entering from the bottom")
+                dispatchSearchBarAction(with: cell, fadeOut: true)
+            }
+        }
+    }
+
+    private func dispatchSearchBarAction(with cell: SearchBarCell, fadeOut: Bool) {
+        let actionType = fadeOut ? HomepageActionType.searchBarDisappeared : HomepageActionType.searchBarAppeared
+        store.dispatch(
+            HomepageAction(searchBar: cell, windowUUID: windowUUID, actionType: actionType)
+        )
     }
 
     private func handleToolbarStateOnScroll() {
