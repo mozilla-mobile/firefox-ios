@@ -487,6 +487,16 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
+        case .searchBar:
+            guard let searchBar = collectionView?.dequeueReusableCell(
+                cellType: SearchBarCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            searchBar.applyTheme(theme: currentTheme)
+            return searchBar
+
         case .jumpBackIn(let tab):
             guard let jumpBackInCell = collectionView?.dequeueReusableCell(
                 cellType: JumpBackInCell.self,

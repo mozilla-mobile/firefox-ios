@@ -104,7 +104,7 @@ final class HomepageSectionLayoutProvider {
         with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
-        case .header:
+        case .header, .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
                 topInsets: UX.standardInset,

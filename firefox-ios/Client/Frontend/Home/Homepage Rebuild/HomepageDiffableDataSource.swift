@@ -19,6 +19,7 @@ final class HomepageDiffableDataSource:
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
+        case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
@@ -39,6 +40,7 @@ final class HomepageDiffableDataSource:
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
+        case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
@@ -52,6 +54,7 @@ final class HomepageDiffableDataSource:
                 LegacyTopSiteCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
+                SearchBarCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
@@ -99,6 +102,11 @@ final class HomepageDiffableDataSource:
         if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(numberOfCellsPerRow)])
             snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
+        }
+
+        if featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) {
+            snapshot.appendSections([.searchBar])
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {

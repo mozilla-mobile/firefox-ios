@@ -979,6 +979,7 @@
 		8A7AE4442BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AE4432BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift */; };
 		8A7AE4472BAC78230072DAEC /* MockLibraryNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AE4452BAC76B00072DAEC /* MockLibraryNavigationHandler.swift */; };
 		8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AF0C52C9A1167009691B5 /* TabPeekStateTests.swift */; };
+		8A7C12612E01DB0F00F2D7FA /* SearchBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C12602E01DB0C00F2D7FA /* SearchBarCell.swift */; };
 		8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */; };
 		8A7D1AC52BA3542600162F4B /* splashScreen.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A7D1AC42BA3542600162F4B /* splashScreen.json */; };
 		8A8158CB2C2C77B000281F72 /* MicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8158CA2C2C77B000281F72 /* MicrosurveyTelemetry.swift */; };
@@ -8389,6 +8390,7 @@
 		8A7AE4432BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		8A7AE4452BAC76B00072DAEC /* MockLibraryNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryNavigationHandler.swift; sourceTree = "<group>"; };
 		8A7AF0C52C9A1167009691B5 /* TabPeekStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekStateTests.swift; sourceTree = "<group>"; };
+		8A7C12602E01DB0C00F2D7FA /* SearchBarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCell.swift; sourceTree = "<group>"; };
 		8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageViewController.swift; sourceTree = "<group>"; };
 		8A7D1AC42BA3542600162F4B /* splashScreen.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splashScreen.json; sourceTree = "<group>"; };
 		8A8158CA2C2C77B000281F72 /* MicrosurveyTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyTelemetry.swift; sourceTree = "<group>"; };
@@ -12678,9 +12680,18 @@
 			path = Redux;
 			sourceTree = "<group>";
 		};
+		8A7C125F2E01DB0600F2D7FA /* SearchBar */ = {
+			isa = PBXGroup;
+			children = (
+				8A7C12602E01DB0C00F2D7FA /* SearchBarCell.swift */,
+			);
+			path = SearchBar;
+			sourceTree = "<group>";
+		};
 		8A7D08E12CAAF79F0035999C /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8A7C125F2E01DB0600F2D7FA /* SearchBar */,
 				8A9E04172D4D07E30022ED90 /* Bookmark */,
 				8A6E63CD2D4A7FA60040D355 /* SectionHeader */,
 				8A6E63C32D4946600040D355 /* JumpBackIn */,
@@ -18004,6 +18015,7 @@
 				0B3F8C5E2CA4471C00DB5367 /* EditBookmarkViewModel.swift in Sources */,
 				8AD0110D2CB42FE700368BF3 /* HeaderState.swift in Sources */,
 				968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */,
+				8A7C12612E01DB0F00F2D7FA /* SearchBarCell.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				0A5E6F402CF88A7900C1DFC9 /* SwitchDetailedView.swift in Sources */,
 				ED6F82C32D6E539200FC1098 /* UIColor+Color.swift in Sources */,
@@ -26723,6 +26735,7 @@
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -27488,6 +27501,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -27772,6 +27786,7 @@
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -28059,6 +28074,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -28573,6 +28589,7 @@
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
