@@ -4,34 +4,65 @@
 
 import SwiftUI
 
-public class OnboardingFlowViewModel<VM: OnboardingCardInfoModelProtocol>: ObservableObject {
+public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
-    public let onboardingCards: [VM]
-    public let onComplete: () -> Void
-    public private(set) var multipleChoiceSelections: [String: VM.OnboardingMultipleChoiceActionType] = [:]
+    public let onboardingCards: [ViewModel]
+    public let onActionTap: (ViewModel.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void
 
-    public init(onboardingCards: [VM], onComplete: @escaping () -> Void) {
+    public enum TabAction {
+        case advance(numberOfPages: Int)
+        case none
+    }
+
+    public let onComplete: (String) -> Void
+    public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
+
+    public init(
+        onboardingCards: [ViewModel],
+        onActionTap: @escaping (
+            ViewModel.OnboardingActionType,
+            String,
+            @escaping (Result<TabAction, Error>) -> Void
+        ) -> Void,
+        onComplete: @escaping (String) -> Void
+    ) {
         self.onboardingCards = onboardingCards
+        self.onActionTap = onActionTap
         self.onComplete = onComplete
     }
 
     public func handleBottomButtonAction(
-        action: VM.OnboardingActionType,
+        action: ViewModel.OnboardingActionType,
         cardName: String
     ) {
-        guard let index = onboardingCards.firstIndex(where: { $0.name == cardName }) else { return }
+        onActionTap(action, cardName) { [weak self] result in
+            switch result {
+            case .success(let tabAction):
+                switch tabAction {
+                case .advance(let numberOfPages):
+                    self?.advanceFromCard(cardName, by: numberOfPages)
+                case .none:
+                    return
+                }
+            case .failure:
+                return
+            }
+        }
+    }
 
-        let nextIndex = index + 1
+    private func advanceFromCard(_ cardName: String, by numberOfPages: Int) {
+        guard let index = onboardingCards.firstIndex(where: { $0.name == cardName }) else { return }
+        let nextIndex = index + numberOfPages
         if nextIndex < onboardingCards.count {
             withAnimation {
                 pageCount = nextIndex
             }
         } else {
-            onComplete()
+            onComplete(cardName)
         }
     }
 
-    public func handleMultipleChoiceAction(action: VM.OnboardingMultipleChoiceActionType, cardName: String) {
+    public func handleMultipleChoiceAction(action: ViewModel.OnboardingMultipleChoiceActionType, cardName: String) {
         multipleChoiceSelections[cardName] = action
     }
 }

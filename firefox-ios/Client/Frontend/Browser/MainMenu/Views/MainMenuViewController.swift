@@ -57,6 +57,8 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
+    private var hasBeenExpanded = false
+
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
 
@@ -123,6 +125,11 @@ class MainMenuViewController: UIViewController,
             menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
                 guard let self else { return }
                 self.dispatchSyncSignInAction()
+            }
+        } else {
+            menuRedesignContent.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
             }
         }
 
@@ -315,6 +322,7 @@ class MainMenuViewController: UIViewController,
             return
         }
 
+        changeDetentIfNecessary()
         reloadTableView(with: menuState.menuElements)
     }
 
@@ -390,7 +398,9 @@ class MainMenuViewController: UIViewController,
             if isMenuRedesign {
                 menuRedesignContent.setupAccessibilityIdentifiers(
                     menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
-                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
+                    closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
+                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton)
             } else {
                 menuContent.setupAccessibilityIdentifiers(
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
@@ -441,6 +451,17 @@ class MainMenuViewController: UIViewController,
             return false
         }
         return viewProvider.shouldPresentContextualHint()
+    }
+
+    private func changeDetentIfNecessary() {
+        if let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
+           let isExpanded = element.isExpanded,
+           isExpanded {
+            if let sheet = self.sheetPresentationController, !hasBeenExpanded {
+                sheet.selectedDetentIdentifier = .large
+                hasBeenExpanded = true
+            }
+        }
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

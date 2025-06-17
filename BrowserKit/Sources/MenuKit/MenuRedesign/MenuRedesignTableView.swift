@@ -174,7 +174,7 @@ final class MenuRedesignTableView: UIView,
     }
 
     func reloadTableView(with data: [MenuSection]) {
-        // We ignore first section because it is handled in MenuSquaresViewContentCell
+        // We handle independently Horizontal Tabs Section in MenuSquaresViewContentCell
         if let firstSection = data.first, firstSection.isHorizontalTabsSection {
             tableView.showsVerticalScrollIndicator = false
             menuData = data

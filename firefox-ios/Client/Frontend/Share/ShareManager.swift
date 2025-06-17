@@ -37,27 +37,7 @@ class ShareManager: NSObject, FeatureFlaggable {
 
         activityViewController.excludedActivityTypes = excludingActivities
 
-        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-            guard completed else {
-                completionHandler(completed, activityType)
-                return
-            }
-
-            // Add telemetry for Pocket extension activityTypes
-            if activityType?.rawValue == ActivityIdentifiers.pocketIconExtension {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .shareSheet,
-                                             value: .sharePocketIcon,
-                                             extras: nil)
-            } else if activityType?.rawValue == ActivityIdentifiers.pocketActionExtension {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .shareSheet,
-                                             value: .shareSaveToPocket,
-                                             extras: nil)
-            }
-
+        activityViewController.completionWithItemsHandler = { activityType, completed, _, _ in
             completionHandler(completed, activityType)
         }
 

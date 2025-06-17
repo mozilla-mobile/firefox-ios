@@ -4,7 +4,11 @@
 
 import Shared
 
-struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable {
+protocol SearchBarLocationSaverProtocol {
+    func saveUserSearchBarLocation(profile: Profile, userInterfaceIdiom: UIUserInterfaceIdiom)
+}
+
+struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable, SearchBarLocationSaverProtocol {
     /// Saves the search bar location position to user preferences for existing users
     /// that didn't have the position saved yet. For users on iPhone with version1 or version2 as layout the
     /// search bar location position is set to bottom, otherwise the default is used.

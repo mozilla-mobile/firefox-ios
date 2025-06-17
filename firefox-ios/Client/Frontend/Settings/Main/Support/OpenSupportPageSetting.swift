@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 
 /// Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
@@ -27,7 +28,7 @@ class OpenSupportPageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        guard let url = URL(string: "https://support.mozilla.org/products/ios") else { return }
+        guard let url = SupportUtils.URLForGetHelp else { return }
         settingsDelegate?.pressedOpenSupportPage(url: url)
     }
 }

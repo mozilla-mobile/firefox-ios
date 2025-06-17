@@ -13,7 +13,6 @@ final class HomepageViewController: UIViewController,
                                     UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
-                                    Notifiable,
                                     Screenshotable,
                                     Themeable,
                                     StoreSubscriber {
@@ -146,7 +145,6 @@ final class HomepageViewController: UIViewController,
             )
         )
 
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
@@ -177,6 +175,17 @@ final class HomepageViewController: UIViewController,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         resetTrackedObjects()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        store.dispatch(
+            HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewDidLayoutSubviews
+            )
+        )
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -312,16 +321,6 @@ final class HomepageViewController: UIViewController,
         store.dispatch(action)
     }
 
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            dynamicTypeChanged()
-        default:
-            break
-        }
-    }
-
     // MARK: - Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -376,10 +375,6 @@ final class HomepageViewController: UIViewController,
         collectionView.registerSupplementary(
             of: UICollectionView.elementKindSectionHeader,
             cellType: LabelButtonHeaderView.self
-        )
-        collectionView.registerSupplementary(
-            of: UICollectionView.elementKindSectionFooter,
-            cellType: PocketFooterView.self
         )
 
         collectionView.keyboardDismissMode = .onDrag
@@ -533,6 +528,7 @@ final class HomepageViewController: UIViewController,
             }
             bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
+
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
@@ -544,17 +540,6 @@ final class HomepageViewController: UIViewController,
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
-        case .pocketDiscover(let item):
-            guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
-                cellType: PocketDiscoverCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            pocketDiscoverCell.configure(text: item.title, theme: currentTheme)
-
-            return pocketDiscoverCell
 
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
@@ -593,17 +578,6 @@ final class HomepageViewController: UIViewController,
                 return UICollectionReusableView()
             }
             return self.configureSectionHeader(for: section, with: sectionHeaderView)
-        case UICollectionView.elementKindSectionFooter:
-            guard let footerView = collectionView.dequeueSupplementary(
-                of: kind,
-                cellType: PocketFooterView.self,
-                for: indexPath)
-            else { return UICollectionReusableView() }
-            footerView.onTapLearnMore = {
-                self.navigateToPocketLearnMore()
-            }
-            footerView.applyTheme(theme: currentTheme)
-            return footerView
         default:
             return nil
         }
@@ -681,13 +655,6 @@ final class HomepageViewController: UIViewController,
 
     func screenshot(quality: CGFloat) -> UIImage? {
         return screenshot(bounds: view.bounds)
-    }
-
-    private func dynamicTypeChanged() {
-        collectionView?.visibleCells.forEach { cell in
-            guard let customCell = cell as? TopSiteCell else { return }
-            customCell.updateDynamicConstraints()
-        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -893,13 +860,6 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
             dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
-        case .pocketDiscover(let item):
-            let destination = NavigationDestination(
-                .link,
-                url: item.url,
-                visitType: .link
-            )
-            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         default:
             return
         }

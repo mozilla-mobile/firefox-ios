@@ -195,10 +195,7 @@ final class HomepageSectionLayoutProvider {
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
-        let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
-                                                                 elementKind: UICollectionView.elementKindSectionFooter,
-                                                                 alignment: .bottom)
-        section.boundarySupplementaryItems = [header, footer]
+        section.boundarySupplementaryItems = [header]
 
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,

@@ -63,7 +63,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", jumpBackIn as? String)
         let bookmarks = app.tables.cells.switches["Bookmarks"].value
         XCTAssertEqual("1", bookmarks as? String)
-        let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
+        let sponsoredStories = app.tables.cells.switches["Stories"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
         // Current Homepage
@@ -89,13 +89,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         // Now check open home page should load the previously saved home page
-        var homePageMenuItem: XCUIElement
-        if iPad() {
-            homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
-        } else {
-            homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
-        }
-        homePageMenuItem.waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         waitUntilPageLoad()
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
@@ -265,6 +259,7 @@ class HomePageSettingsUITests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         } else {
             navigator.performAction(Action.GoToHomePage)
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
         navigator.performAction(Action.ToggleRecentlySaved)
@@ -335,7 +330,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //        )
 
         XCTAssertEqual(
-            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as? String,
+            app.cells.switches["Stories"].value as? String,
             "1"
         )
     }

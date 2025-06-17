@@ -76,15 +76,13 @@ class TabDisplayPanelViewController: UIViewController,
     init(isPrivateMode: Bool,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) {
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.panelType = isPrivateMode ? .privateTabs : .tabs
         self.tabsState = TabsPanelState(windowUUID: windowUUID, isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-        tabDisplayView.dragAndDropDelegate = dragAndDropDelegate
     }
 
     required init?(coder: NSCoder) {
@@ -115,18 +113,6 @@ class TabDisplayPanelViewController: UIViewController,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard isToolbarRefactorEnabled, isTabTrayUIExperimentsEnabled else { return }
-        store.dispatch(
-            ToolbarAction(
-                shouldAnimate: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.animationStateChanged
-            )
-        )
     }
 
     override func viewDidLayoutSubviews() {

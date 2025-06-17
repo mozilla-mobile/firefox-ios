@@ -757,7 +757,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.TogglePocketInNewTab) { userState in
             userState.pocketInNewTab = !userState.pocketInNewTab
-            app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].waitAndTap()
+            app.tables.cells.switches["Stories"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
@@ -940,7 +940,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.tables.cells.buttons[StandardImageIdentifiers.Large.tab],
+                app.tables.cells.buttons[StandardImageIdentifiers.Large.privateMode],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in
@@ -988,15 +988,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: TrackingProtectionContextMenuDetails
         )
 
-        if isTablet {
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton],
             forAction: Action.GoToHomePage)
-            } else {
-                screenState.tap(
-                    app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
-                forAction: Action.GoToHomePage)
-            }
 
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],

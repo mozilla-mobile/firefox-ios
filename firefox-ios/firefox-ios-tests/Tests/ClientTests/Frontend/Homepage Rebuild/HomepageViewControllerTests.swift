@@ -52,8 +52,8 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 2)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIContentSizeCategory.didChangeNotification, .ThemeDidChange])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.observers, [.ThemeDidChange])
     }
 
     // MARK: - Deinit State
@@ -167,6 +167,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_viewWillAppear_triggersHomepageAction() throws {
         let subject = createSubject()
+
         subject.viewWillAppear(false)
 
         let actionCalled = try XCTUnwrap(
@@ -174,6 +175,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         )
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.viewWillAppear)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidLayoutSubviews_triggersHomepageAction() throws {
+        let subject = createSubject()
+
+        subject.viewDidLayoutSubviews()
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 

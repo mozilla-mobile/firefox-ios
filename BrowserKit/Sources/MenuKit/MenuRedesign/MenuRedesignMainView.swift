@@ -10,40 +10,71 @@ public final class MenuRedesignMainView: UIView,
                                          ThemeApplicable {
     private struct UX {
         static let headerTopMargin: CGFloat = 15
+        static let horizontalMargin: CGFloat = 16
+        static let closeButtonSize: CGFloat = 30
+        static let headerTopMarginWithButton: CGFloat = 8
     }
+
+    public var closeButtonCallback: (() -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
-
-    // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
+    private lazy var closeButton: CloseButton = .build { button in
+        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var viewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - UI Setup
-    private func setupView() {
+    private func setupView(with data: [MenuSection]) {
+        self.removeConstraints(viewConstraints)
+        viewConstraints.removeAll()
         self.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
-            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ])
+        if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
+            self.addSubview(closeButton)
+            viewConstraints.append(contentsOf: [
+                closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
+                closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalMargin),
+                closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+                closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+
+                tableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMarginWithButton),
+                tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            ])
+        } else {
+            self.closeButton.removeFromSuperview()
+            viewConstraints.append(contentsOf: [
+                tableView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
+                tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            ])
+        }
+        NSLayoutConstraint.activate(viewConstraints)
     }
 
     public func setupAccessibilityIdentifiers(menuA11yId: String,
-                                              menuA11yLabel: String) {
+                                              menuA11yLabel: String,
+                                              closeButtonA11yLabel: String,
+                                              closeButtonA11yIdentifier: String) {
+        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
+                                                        a11yIdentifier: closeButtonA11yIdentifier)
+        closeButton.configure(viewModel: closeButtonViewModel)
         tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
     }
 
     // MARK: - Interface
     public func reloadDataView(with data: [MenuSection]) {
+        setupView(with: data)
         tableView.reloadTableView(with: data)
+    }
+
+    // MARK: - Callbacks
+    @objc
+    private func closeTapped() {
+        closeButtonCallback?()
     }
 
     // MARK: - ThemeApplicable
