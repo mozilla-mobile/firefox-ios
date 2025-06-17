@@ -69,45 +69,47 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     func navigateTo(_ destination: MenuNavigationDestination, animated: Bool) {
         router.dismiss(animated: animated, completion: { [weak self] in
             guard let self else { return }
-            handleNavigationDestination(destination)
+
+            self.handleDestination(destination)
+
             removeCoordinatorFromParent()
         })
     }
 
-    private func handleNavigationDestination(_ destination: MenuNavigationDestination) {
+    private func handleDestination(_ destination: MenuNavigationDestination) {
         switch destination.destination {
         case .bookmarks:
-            self.navigationHandler?.showLibraryPanel(.bookmarks)
+            navigationHandler?.showLibraryPanel(.bookmarks)
 
         case .customizeHomepage:
-            self.navigationHandler?.showSettings(at: .homePage)
+            navigationHandler?.showSettings(at: .homePage)
 
         case .downloads:
-            self.navigationHandler?.showLibraryPanel(.downloads)
+            navigationHandler?.showLibraryPanel(.downloads)
 
         case .editBookmark:
-            self.navigationHandler?.editBookmarkForCurrentTab()
+            navigationHandler?.editBookmarkForCurrentTab()
 
         case .findInPage:
-            self.navigationHandler?.showFindInPage()
+            navigationHandler?.showFindInPage()
 
         case .goToURL:
-            self.navigationHandler?.openURLInNewTab(destination.url)
+            navigationHandler?.openURLInNewTab(destination.url)
 
         case .history:
-            self.navigationHandler?.showLibraryPanel(.history)
+            navigationHandler?.showLibraryPanel(.history)
 
         case .newTab:
-            self.navigationHandler?.openNewTab(inPrivateMode: false)
+            navigationHandler?.openNewTab(inPrivateMode: false)
 
         case .newPrivateTab:
-            self.navigationHandler?.openNewTab(inPrivateMode: true)
+            navigationHandler?.openNewTab(inPrivateMode: true)
 
         case .passwords:
-            self.navigationHandler?.showSettings(at: .password)
+            navigationHandler?.showSettings(at: .password)
 
         case .settings:
-            self.navigationHandler?.showSettings(at: .general)
+            navigationHandler?.showSettings(at: .general)
 
         case .syncSignIn:
             let fxaParameters = FxASignInViewParameters(
@@ -115,19 +117,19 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 flowType: .emailLoginFlow,
                 referringPage: .appMenu
             )
-            self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
+            navigationHandler?.showSignInView(fxaParameters: fxaParameters)
 
         case .printSheet:
-            self.navigationHandler?.showPrintSheet()
+            navigationHandler?.showPrintSheet()
 
         case .shareSheet:
-            self.navigationHandler?.showShareSheetForCurrentlySelectedTab()
+            navigationHandler?.showShareSheetForCurrentlySelectedTab()
 
         case .saveAsPDF:
-            self.navigationHandler?.presentSavePDFController()
+            navigationHandler?.presentSavePDFController()
 
         case .zoom:
-            self.navigationHandler?.updateZoomPageBarVisibility()
+            navigationHandler?.updateZoomPageBarVisibility()
 
         case .siteProtections:
             self.navigationHandler?.presentSiteProtections()
