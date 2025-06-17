@@ -35,6 +35,8 @@ final class AddressToolbarContainer: UIView,
         static let skeletonBarOffset: CGFloat = 8
         static let skeletonBarBottomPositionOffset: CGFloat = 4
         static let skeletonBarWidthOffset: CGFloat = 32
+        static let addNewTabFadeAnimationDuration: TimeInterval = 0.2
+        static let addNewTabPercentageAnimationThreshold: CGFloat = 0.3
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -372,9 +374,11 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.transform = transform
         if shouldAddNewTab {
             let percentageTransform = abs(transform.tx) / bounds.width
-            UIView.animate(withDuration: 0.2) {
-                self.addNewTabView.showHideAddTabIcon(shouldShow: percentageTransform > 0.3)
-                self.addNewTabTrailingConstraint?.constant = percentageTransform > 0.3 ?
+            UIView.animate(withDuration: UX.addNewTabFadeAnimationDuration) {
+                self.addNewTabView.showHideAddTabIcon(shouldShow:
+                                                        percentageTransform > UX.addNewTabPercentageAnimationThreshold)
+                self.addNewTabTrailingConstraint?.constant =
+                percentageTransform > UX.addNewTabPercentageAnimationThreshold ?
                     -UX.toolbarHorizontalPadding : 0.0
                 self.layoutIfNeeded()
             }
