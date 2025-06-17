@@ -58,9 +58,9 @@ class RootViewController: UIViewController,
         super.viewDidLoad()
 
         configureBrowserView()
-        configureAddressToolbar()
         configureSearchView()
         configureNavigationToolbar()
+        configureAddressToolbar()
 
         listenForThemeChange(view)
         applyTheme()
@@ -87,6 +87,8 @@ class RootViewController: UIViewController,
         add(browserVC)
 
         NSLayoutConstraint.activate([
+            browserVC.view.topAnchor.constraint(equalTo: view.topAnchor),
+            browserVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             browserVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             browserVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -99,15 +101,14 @@ class RootViewController: UIViewController,
         view.addSubview(addressToolbarContainer)
 
         NSLayoutConstraint.activate([
-            statusBarFiller.topAnchor.constraint(equalTo: view.topAnchor),
-            statusBarFiller.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            statusBarFiller.bottomAnchor.constraint(equalTo: addressToolbarContainer.topAnchor),
-            statusBarFiller.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            statusBarFiller.topAnchor.constraint(equalTo: view.topAnchor),
+//            statusBarFiller.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            statusBarFiller.bottomAnchor.constraint(equalTo: addressToolbarContainer.topAnchor),
+//            statusBarFiller.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            addressToolbarContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             addressToolbarContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor,
                                                              constant: UX.addressToolbarContainerHorizontalPadding),
-            addressToolbarContainer.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
+            addressToolbarContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             addressToolbarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                               constant: -UX.addressToolbarContainerHorizontalPadding)
         ])
@@ -129,13 +130,15 @@ class RootViewController: UIViewController,
 
     private func addSearchView() {
         guard searchVC.parent == nil else { return }
-        add(searchVC)
+        addChild(searchVC)
+        view.insertSubview(searchVC.view, belowSubview: addressToolbarContainer)
+        searchVC.didMove(toParent: self)
 
         NSLayoutConstraint.activate([
-            searchVC.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
+            searchVC.view.topAnchor.constraint(equalTo: view.topAnchor),
             searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchVC.view.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor)
+            searchVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -144,9 +147,8 @@ class RootViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navigationToolbar.topAnchor.constraint(equalTo: browserVC.view.bottomAnchor)
+            navigationToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         model.navigationToolbarDelegate = self

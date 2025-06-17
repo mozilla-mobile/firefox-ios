@@ -35,6 +35,13 @@ extension UIStackView {
         }
     }
 
+    public func removeAllSubViews() {
+        subviews.forEach {
+            $0.removeFromSuperview()
+        }
+    }
+
+
     private func animateAddingView(_ view: UIView,
                                    animateClosure: @escaping () -> Void,
                                    animated: Bool = true,

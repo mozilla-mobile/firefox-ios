@@ -116,7 +116,7 @@ final class LocationView: UIView,
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
-        applyEffect()
+        applyEffect(cornerRadius: 24.0, isInteractive: false)
     }
 
     required init?(coder: NSCoder) {

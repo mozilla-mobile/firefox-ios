@@ -9,6 +9,10 @@ public protocol BrowserNavigationToolbarDelegate: AnyObject {
     func configureContextualHint(for button: UIButton, with contextualHintType: String)
 }
 
+extension UIStackView: BackgroundEffectLayerView {
+    
+}
+
 /// Navigation toolbar implementation.
 public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable {
     private enum UX {
@@ -47,7 +51,7 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
     ) {
         self.toolbarDelegate = toolbarDelegate
         self.isTranslucent = config.isTranslucencyEnabled
-        updateActionStack(toolbarElements: config.actions)
+        updateActionStack(config: config)
 
         // Update border
         toolbarBorderHeightConstraint?.constant = config.shouldDisplayBorder ? UX.borderHeight : 0
@@ -79,16 +83,31 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
         addInteraction(UILargeContentViewerInteraction())
     }
 
-    private func updateActionStack(toolbarElements: [ToolbarElement]) {
+    private func updateActionStack(config: NavigationToolbarConfiguration) {
         actionStack.removeAllArrangedViews()
-        toolbarElements.forEach { toolbarElement in
+        actionStack.removeAllSubViews()
+
+        let ux = config.uxConfiguration
+
+        if !ux.buttonsEqualSpacing {
+            actionStack.applyEffect(cornerRadius: 24.0, isInteractive: false)
+        }
+        actionStack.isLayoutMarginsRelativeArrangement = true
+        actionStack.directionalLayoutMargins = NSDirectionalEdgeInsets(
+            top: 12.0,
+            leading: 12.0,
+            bottom: 12.0,
+            trailing: 12.0
+        )
+
+        config.actions.forEach { toolbarElement in
             let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
             button.configure(element: toolbarElement)
             actionStack.addArrangedSubview(button)
 
             NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                button.widthAnchor.constraint(equalToConstant: ux.buttonsSize),
+                button.heightAnchor.constraint(equalToConstant: ux.buttonsSize),
             ])
 
             if let theme {

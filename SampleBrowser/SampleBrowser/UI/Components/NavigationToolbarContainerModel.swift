@@ -14,7 +14,8 @@ struct NavigationToolbarContainerModel {
         return NavigationToolbarConfiguration(
             actions: actions,
             shouldDisplayBorder: shouldDisplayBorder,
-            isTranslucencyEnabled: true
+            isTranslucencyEnabled: true,
+            uxConfiguration: .glass()
         )
     }
 

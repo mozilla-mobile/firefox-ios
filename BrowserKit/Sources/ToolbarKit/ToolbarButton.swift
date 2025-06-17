@@ -13,21 +13,20 @@ public enum ToolbarButtonGesture {
 protocol BackgroundEffectLayerView: UIView {}
 
 extension BackgroundEffectLayerView {
-    func applyEffect() {
+    func applyEffect(cornerRadius: CGFloat, isInteractive: Bool) {
         if #available(iOS 26.0, *) {
             let glass = UIGlassEffect()
-            glass.isInteractive = true
+            glass.isInteractive = isInteractive
             let effect = UIVisualEffectView(effect: glass)
             insertSubview(effect, at: 0)
             effect.translatesAutoresizingMaskIntoConstraints = false
             effect.pinToSuperview()
-            effect.layer.cornerRadius = 20.0
+            effect.layer.cornerRadius = cornerRadius
         }
     }
 }
 
 class ToolbarButton: UIButton,
-                     BackgroundEffectLayerView,
                      ThemeApplicable,
                      UIGestureRecognizerDelegate {
     private struct UX {
@@ -66,7 +65,6 @@ class ToolbarButton: UIButton,
                                                                bottom: UX.verticalInset,
                                                                trailing: UX.horizontalInset)
         titleLabel?.adjustsFontForContentSizeCategory = true
-        applyEffect()
     }
 
     open func configure(
