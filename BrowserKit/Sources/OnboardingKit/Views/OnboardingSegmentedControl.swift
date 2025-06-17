@@ -80,6 +80,18 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
         }
     }
 
+    @ViewBuilder
+    private func itemImage(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
+        if let img = item.image {
+            Image(uiImage: img)
+                .resizable()
+                .colorMultiply(isSelected ? actionPrimary : noSelection)
+                .aspectRatio(contentMode: .fit)
+                .frame(height: UX.SegmentedControl.imageHeight)
+                .accessibilityHidden(true)
+        }
+    }
+
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
         noSelection = Color(theme.colors.textOnDark)
