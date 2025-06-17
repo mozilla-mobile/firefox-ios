@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import OnboardingKit
 import SwiftUI
+import ComponentLibrary
 
 protocol LaunchCoordinatorDelegate: AnyObject {
     func didFinishTermsOfService(from coordinator: LaunchCoordinator)
@@ -17,7 +18,9 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 final class LaunchCoordinator: BaseCoordinator,
                                SurveySurfaceViewControllerDelegate,
                                QRCodeNavigationHandler,
-                               ParentCoordinatorDelegate {
+                               ParentCoordinatorDelegate,
+                               OnboardingNavigationDelegate,
+                               OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
     let windowUUID: WindowUUID
@@ -223,17 +226,47 @@ final class LaunchCoordinator: BaseCoordinator,
         router.present(viewController, animated: false)
     }
 
+    private lazy var onboardingService: OnboardingService = {
+        OnboardingService(
+            windowUUID: windowUUID,
+            profile: profile,
+            themeManager: themeManager,
+            delegate: self,
+            navigationDelegate: self,
+            qrCodeNavigationHandler: self
+        )
+    }()
+
     // MARK: - Intro
-    private func presentModernIntroOnboarding(with manager: IntroScreenManager,
+    private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let activityEventHelper = ActivityEventHelper()
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: OnboardingFlowViewModel(
                 onboardingCards: onboardingModel.cards,
-                onComplete: {}
+                onActionTap: { [weak self] action, cardName, completion in
+                    guard let self = self else { return }
+                    onboardingService.handleAction(
+                        action,
+                        from: cardName,
+                        cards: onboardingModel.cards,
+                        with: activityEventHelper,
+                        completion: completion
+                    )
+                },
+                onComplete: { [weak self] currentCardName in
+                    guard let self = self else { return }
+                    manager.didSeeIntroScreen()
+                    SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+                    telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
+
+                    parentCoordinator?.didFinishLaunch(from: self)
+                }
             )
         )
         let hostingController = UIHostingController(rootView: view)
@@ -255,7 +288,7 @@ final class LaunchCoordinator: BaseCoordinator,
     }
 
     // MARK: - Intro
-    private func presentIntroOnboarding(with manager: IntroScreenManager,
+    private func presentIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
 
@@ -381,5 +414,26 @@ final class LaunchCoordinator: BaseCoordinator,
     // MARK: - SurveySurfaceViewControllerDelegate
     func didFinish() {
         parentCoordinator?.didFinishLaunch(from: self)
+    }
+
+    // MARK: - OnboardingServiceDelegate
+    func dismiss(animated: Bool, completion: (() -> Void)?) {
+        router.navigationController.presentedViewController?.dismiss(
+            animated: animated,
+            completion: completion
+        )
+    }
+
+    func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
+        router.navigationController.presentedViewController?.present(
+            viewController,
+            animated: true,
+            completion: completion
+        )
+    }
+
+    // MARK: - OnboardingNavigationDelegate
+    func finishOnboardingFlow() {
+        dismiss(animated: true, completion: nil)
     }
 }

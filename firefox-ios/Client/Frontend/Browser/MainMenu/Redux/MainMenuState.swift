@@ -150,6 +150,16 @@ struct MainMenuState: ScreenState, Equatable {
         case MainMenuActionType.tapToggleUserAgent,
             MainMenuActionType.tapCloseMenu:
             return handleTapToggleUserAgentAndTapCloseMenuAction(state: state)
+        case MainMenuActionType.tapAddToBookmarks:
+            return handleDismissMenuAction(state: state)
+        case MainMenuActionType.tapEditBookmark:
+            return handleTapEditBookmarkAction(state: state, action: action)
+        case MainMenuActionType.tapZoom:
+            return handleTapZoomAction(state: state)
+        case MainMenuActionType.tapToggleNightMode:
+            return handleDismissMenuAction(state: state)
+        case MainMenuActionType.tapAddToShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
+            return handleDismissMenuAction(state: state)
         default:
             return defaultState(from: state)
         }
@@ -257,6 +267,39 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             shouldDismiss: true,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleDismissMenuAction(state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            shouldDismiss: true,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleTapEditBookmarkAction(state: MainMenuState, action: Action) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            navigationDestination: MenuNavigationDestination(.editBookmark),
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleTapZoomAction(state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            navigationDestination: MenuNavigationDestination(.zoom),
             accountData: state.accountData,
             accountIcon: state.accountIcon
         )

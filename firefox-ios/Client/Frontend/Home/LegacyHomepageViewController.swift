@@ -259,9 +259,6 @@ class LegacyHomepageViewController:
         collectionView.register(LegacyLabelButtonHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: LegacyLabelButtonHeaderView.cellIdentifier)
-        collectionView.register(PocketFooterView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                withReuseIdentifier: PocketFooterView.cellIdentifier)
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
@@ -610,23 +607,6 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
             return headerView
         }
 
-        if kind == UICollectionView.elementKindSectionFooter {
-            guard let footerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: PocketFooterView.cellIdentifier,
-                for: indexPath) as? PocketFooterView else { return reusableView }
-            footerView.onTapLearnMore = {
-                guard let learnMoreURL = SupportUtils.URLForPocketLearnMore else {
-                    self.logger.log("Failed to retrieve learn more URL from SupportUtils.URLForPocketLearnMore",
-                                    level: .debug,
-                                    category: .legacyHomepage)
-                    return
-                }
-                self.showSiteWithURLHandler(learnMoreURL)
-            }
-            footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            return footerView
-        }
         return reusableView
     }
 

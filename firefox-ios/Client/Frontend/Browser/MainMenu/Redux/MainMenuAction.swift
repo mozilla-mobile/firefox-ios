@@ -50,6 +50,12 @@ enum MainMenuActionType: ActionType {
     case didInstantiateView
     case viewDidLoad
     case menuDismissed
+    case tapAddToBookmarks
+    case tapEditBookmark
+    case tapZoom
+    case tapToggleNightMode
+    case tapAddToShortcuts
+    case tapRemoveFromShortcuts
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
