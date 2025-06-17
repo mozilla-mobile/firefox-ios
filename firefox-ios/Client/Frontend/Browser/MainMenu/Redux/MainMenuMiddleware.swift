@@ -159,22 +159,22 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
-        if !isMenuRedesignOn {
-            if let accountData = getAccountData() {
-                if let iconURL = accountData.iconURL {
-                    GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                        guard let self else { return }
-                        self.dispatchUpdateAccountHeader(
-                            accountData: accountData,
-                            action: action,
-                            icon: image)
-                    }
-                } else {
-                    dispatchUpdateAccountHeader(accountData: accountData, action: action)
-                }
-            } else {
-                dispatchUpdateAccountHeader(action: action)
+        guard !isMenuRedesignOn else { return }
+        guard let accountData = getAccountData() else {
+            dispatchUpdateAccountHeader(action: action)
+            return
+        }
+
+        if let iconURL = accountData.iconURL {
+            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                guard let self else { return }
+                self.dispatchUpdateAccountHeader(
+                    accountData: accountData,
+                    action: action,
+                    icon: image)
             }
+        } else {
+            dispatchUpdateAccountHeader(accountData: accountData, action: action)
         }
     }
 

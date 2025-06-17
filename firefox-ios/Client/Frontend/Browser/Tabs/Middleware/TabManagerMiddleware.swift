@@ -1014,17 +1014,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
             )
             return
         }
-
-        let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
-        let hasSecureContent = selectedTab.currentWebView()?.hasOnlySecureContent ?? false
-        let siteProtectionState: SiteProtectionsState = if !hasSecureContent {
-            .notSecure
-        } else if isContentBlockingConfigEnabled {
-            .on
-        } else {
-            .off
-        }
-
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
@@ -1033,10 +1022,25 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                     title: selectedTab.displayTitle,
                     subtitle: selectedTab.url?.baseDomain,
                     image: selectedTab.url?.absoluteString,
-                    state: siteProtectionState
+                    state: getSiteProtectionState(for: selectedTab)
                 )
             )
         )
+    }
+
+    private func getSiteProtectionState(for selectedTab: Tab) -> SiteProtectionsState {
+        let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        let hasSecureContent = selectedTab.currentWebView()?.hasOnlySecureContent ?? false
+
+        if !hasSecureContent {
+            return .notSecure
+        }
+
+        if isContentBlockingConfigEnabled {
+            return .on
+        }
+
+        return .off
     }
 
     // MARK: - Homepage Related Actions
