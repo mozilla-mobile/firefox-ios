@@ -207,6 +207,10 @@ struct AccessibilityIdentifiers {
             static let itemCell = "TopSitesCell"
         }
 
+        struct SearchBar {
+            static let itemCell = "SearchBarCell"
+        }
+
         struct Pocket {
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
