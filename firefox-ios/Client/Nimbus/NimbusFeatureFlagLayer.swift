@@ -59,6 +59,12 @@ final class NimbusFeatureFlagLayer {
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
+        case .homepageNewTab:
+            return checkHomepageNewTabFeature(from: nimbus)
+
+        case .homepageSearchBar:
+            return checkHomepageNewTabSearchBarFeature(from: nimbus)
+
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
 
@@ -219,6 +225,14 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
+    }
+
+    private func checkHomepageNewTabFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageNewTabFeature.value().enabled
+    }
+
+    private func checkHomepageNewTabSearchBarFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageNewTabFeature.value().searchBar
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
