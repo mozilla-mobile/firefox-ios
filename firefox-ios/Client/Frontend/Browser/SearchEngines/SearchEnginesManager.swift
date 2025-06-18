@@ -19,7 +19,7 @@ protocol SearchEngineDelegate: AnyObject {
 }
 
 struct SearchEngineProviderFactory {
-    static var defaultSearchEngineProvider: SearchEngineProvider = {
+    static let defaultSearchEngineProvider: SearchEngineProvider = {
         let secEnabled = SearchEngineFlagManager.isSECEnabled
         return secEnabled ? ASSearchEngineProvider() : DefaultSearchEngineProvider()
     }()

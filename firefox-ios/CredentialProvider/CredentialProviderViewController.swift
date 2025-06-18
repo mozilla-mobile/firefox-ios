@@ -26,7 +26,7 @@ struct CredentialProvider {
         return UIColor(named: "credentialCellColor")
     }
 
-    static var tableViewBackgroundColor: UIColor = .systemGroupedBackground
+    static let tableViewBackgroundColor: UIColor = .systemGroupedBackground
 
     static var welcomeScreenBackgroundColor: UIColor? {
         return UIColor(named: "launchScreenBackgroundColor")
