@@ -10,7 +10,6 @@ public protocol BrowserNavigationToolbarDelegate: AnyObject {
 }
 
 extension UIStackView: BackgroundEffectLayerView {
-    
 }
 
 /// Navigation toolbar implementation.

@@ -236,7 +236,7 @@ class PullRefreshView: UIView,
 
     func applyTheme(theme: any Theme) {
         currentTheme = theme
-        backgroundColor = .clear //theme.colors.layer1
+        backgroundColor = .clear // theme.colors.layer1
         progressView.tintColor = theme.colors.iconPrimary
     }
 

@@ -41,7 +41,6 @@ extension UIStackView {
         }
     }
 
-
     private func animateAddingView(_ view: UIView,
                                    animateClosure: @escaping () -> Void,
                                    animated: Bool = true,

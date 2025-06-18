@@ -6,7 +6,6 @@ import UIKit
 import Common
 
 extension UIView: BackgroundEffectLayerView {
-
 }
 
 /// Simple address toolbar implementation.

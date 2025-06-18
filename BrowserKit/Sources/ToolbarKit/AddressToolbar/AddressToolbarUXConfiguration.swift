@@ -58,7 +58,7 @@ public struct AddressToolbarUXConfiguration {
             backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
         }
 
-        return .clear //backgroundColor
+        return .clear // backgroundColor
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {

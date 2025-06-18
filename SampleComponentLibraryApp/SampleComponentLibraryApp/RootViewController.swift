@@ -160,19 +160,15 @@ class RootViewController: UIViewController, AddressToolbarDelegate, Presenter, T
     // MARK: - AddressToolbarDelegate
 
     func searchSuggestions(searchTerm: String) {
-
     }
 
     func didClearSearch() {
-
     }
 
     func openBrowser(searchTerm: String) {
-
     }
 
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
-
     }
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
@@ -180,22 +176,17 @@ class RootViewController: UIViewController, AddressToolbarDelegate, Presenter, T
     }
 
     func configureContextualHint(_ addressToolbar: ToolbarKit.BrowserAddressToolbar, for button: UIButton, with contextualHintType: String) {
-
     }
 
     func addressToolbarDidBeginDragInteraction() {
-
     }
 
     func addressToolbarDidProvideItemsForDragInteraction() {
-
     }
 
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
-
     }
 
     func addressToolbarNeedsSearchReset() {
-
     }
 }
