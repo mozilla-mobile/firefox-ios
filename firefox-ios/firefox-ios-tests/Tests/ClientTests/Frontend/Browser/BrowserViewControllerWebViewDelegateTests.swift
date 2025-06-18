@@ -378,7 +378,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     private func setWebEngineIntegrationEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.webEngineIntegrationRefactor.with { _,_ in
+        FxNimbus.shared.features.webEngineIntegrationRefactor.with { _, _ in
             return WebEngineIntegrationRefactor(enabled: enabled)
         }
     }

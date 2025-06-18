@@ -6,7 +6,7 @@ class PopupHTMLSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Show Popup HTML")
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
         let url = Bundle.main.url(forResource: "testPopUp.html", withExtension: nil)
         guard let url else { return }
