@@ -9,8 +9,6 @@ import WebKit
 ///
 /// The class decides a `WKPolicy` for each type of navigation by asking it to it's managed chain.
 class WKPolicyDeciderFactory: WKPolicyDecider {
-    init() {}
-
     var nextDecider: WKPolicyDecider?
 
     func policyForNavigation(action: NavigationAction) -> WKPolicy {
