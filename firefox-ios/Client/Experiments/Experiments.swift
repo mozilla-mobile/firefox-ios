@@ -199,6 +199,7 @@ enum Experiments {
         return prefsReader.hasEnabledTipsNotifications()
     }
 
+    @MainActor
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,

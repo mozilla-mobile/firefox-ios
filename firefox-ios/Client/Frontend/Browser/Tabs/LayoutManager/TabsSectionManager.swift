@@ -4,7 +4,9 @@
 
 import Foundation
 
+@MainActor
 class TabsSectionManager: FeatureFlaggable {
+    @MainActor
     struct UX {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170

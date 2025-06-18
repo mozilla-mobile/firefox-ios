@@ -98,6 +98,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func updateSectionLayout(for traitCollection: UITraitCollection,
                                      isPortrait: Bool,
                                      device: UIUserInterfaceIdiom,
@@ -132,12 +133,14 @@ class JumpBackInViewModel: FeatureFlaggable {
         return !recentTabs.isEmpty
     }
 
+    @MainActor
     private var isMultitasking: Bool {
         guard let window = UIWindow.keyWindow else { return false }
 
         return window.frame.width != window.screen.bounds.width && window.frame.width != window.screen.bounds.height
     }
 
+    @MainActor
     private func isPadInLandscapeSplit(split: CGFloat,
                                        isPortrait: Bool,
                                        device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
@@ -185,7 +188,9 @@ private extension JumpBackInViewModel {
 }
 
 // MARK: - Private: Configure UI
+@MainActor
 private extension JumpBackInViewModel {
+
     func configureJumpBackInCellForTab(item: Tab, cell: LegacyJumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
@@ -315,6 +320,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return jumpBackInList.itemsToDisplay + (hasSyncedTab ? UX.maxDisplayedSyncedTabs : 0)
     }
 
+    @MainActor
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         var section: NSCollectionLayoutSection
         switch sectionLayout {
@@ -346,6 +352,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
+    @MainActor
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,

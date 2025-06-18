@@ -8,6 +8,7 @@ import Glean
 import Shared
 import Common
 
+@MainActor
 final class RouteBuilder: FeatureFlaggable {
     private var isPrivate = false
     private var prefs: Prefs?

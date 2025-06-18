@@ -31,6 +31,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         static let generalIconCornerRadius: CGFloat = 4
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 
+        @MainActor
         static func leadingInset(
             traitCollection: UITraitCollection,
             interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom

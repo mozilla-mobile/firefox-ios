@@ -55,6 +55,7 @@ final class RatingPromptManager {
 
     /// Go to the App Store review page of this application
     /// - Parameter urlOpener: Opens the App Store url
+    @MainActor
     static func goToAppStoreReview(with urlOpener: URLOpenerProtocol = UIApplication.shared) {
         guard let url = URL(
             string: "https://itunes.apple.com/app/id\(AppInfo.appStoreId)?action=write-review"

@@ -8,6 +8,7 @@ enum LaunchCoordinatorType {
     case SceneCoordinator, BrowserCoordinator
 }
 
+@MainActor
 enum LaunchType {
     /// Showing the terms of service
     case termsOfService(manager: TermsOfServiceManager)

@@ -22,11 +22,13 @@ protocol Coordinator: AnyObject {
 
     /// Handle the Route, if able. This is implemented by each coordinator for Route they will handle.
     /// - Parameter route: The Route to navigate to
+    @MainActor
     func handle(route: Route)
 
     /// When the coordinator cannot handle this particular Route, it returns false.
     /// - Parameter route: The Route to navigate to.
     /// - Returns: true if the route can be handled.
+    @MainActor
     func canHandle(route: Route) -> Bool
 
     /// Searches for a coordinator to handle the given route by recursively checking `canHandle()` of all
@@ -34,12 +36,14 @@ protocol Coordinator: AnyObject {
     /// - Parameter route: The route to find a matching coordinator for.
     /// - Returns: A `Coordinator` that can handle the given `route`, or `nil` if none found.
     @discardableResult
+    @MainActor
     func find(route: Route) -> Coordinator?
 
     /// Convenience. Calls into `find()` to identify the `Coordinator` to handle a route, and then
     /// subsequently calls into `handle()` to perform the relevant actions on that route. Note that
     /// prior to handling the route any children coordinators will be dismissed.
     @discardableResult
+    @MainActor
     func findAndHandle(route: Route) -> Coordinator?
 
     func add(child coordinator: Coordinator)

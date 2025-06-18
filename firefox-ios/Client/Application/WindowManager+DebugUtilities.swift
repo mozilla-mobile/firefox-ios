@@ -6,6 +6,7 @@ import Foundation
 import Common
 import TabDataStore
 
+@MainActor
 extension WindowManagerImplementation {
     /// For developer and internal debugging of Multi-window on iPad
     func _debugDiagnostics() -> String {
@@ -52,6 +53,7 @@ extension WindowManagerImplementation {
 }
 
 /// Convenience. For developer and internal debugging
+@MainActor
 func _wndMgrDebug() -> String {
     let windowMgr: WindowManager = AppContainer.shared.resolve()
     return (windowMgr as? WindowManagerImplementation)?._debugDiagnostics() ?? "<err>"

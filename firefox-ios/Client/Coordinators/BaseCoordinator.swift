@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+
 open class BaseCoordinator: NSObject, Coordinator {
     var savedRoute: Route?
     var id = UUID()
@@ -38,13 +39,16 @@ open class BaseCoordinator: NSObject, Coordinator {
         childCoordinators.removeAll()
     }
 
+    @MainActor
     func canHandle(route: Route) -> Bool {
         return false
     }
 
+    @MainActor
     func handle(route: Route) { }
 
     @discardableResult
+    @MainActor
     func findAndHandle(route: Route) -> Coordinator? {
         guard let matchingCoordinator = find(route: route) else { return nil }
 
@@ -62,6 +66,7 @@ open class BaseCoordinator: NSObject, Coordinator {
     }
 
     @discardableResult
+    @MainActor
     func find(route: Route) -> Coordinator? {
         // Check if the current coordinator can handle the route.
         if canHandle(route: route) {

@@ -6,6 +6,7 @@ import Foundation
 
 // Protocol for each section in Firefox Home page view controller
 // to handle click and cell setup
+@MainActor
 protocol HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell

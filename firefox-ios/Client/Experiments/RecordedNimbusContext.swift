@@ -26,6 +26,7 @@ extension Int32? {
     }
 }
 
+@MainActor
 class RecordedNimbusContext: RecordedContext {
     /**
      * The following constants are string constants of the keys that appear in the [EVENT_QUERIES] map.

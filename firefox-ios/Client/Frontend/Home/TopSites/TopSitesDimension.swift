@@ -9,6 +9,7 @@ struct TopSitesSectionDimension {
     var numberOfTilesPerRow: Int
 }
 
+@MainActor
 struct TopSitesUIInterface {
     var isLandscape: Bool = UIWindow.isLandscape
     var interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
@@ -19,6 +20,7 @@ struct TopSitesUIInterface {
 /// Top sites dimension are subject to change depending on the user's number of rows,
 /// on which device it's showing, if it's landscape or portrait. The dimension should also
 /// excludes empty rows from showing. TopSitesDimension support those calculation.
+@MainActor
 protocol TopSitesDimension {
     /// Get the top sites section dimension to show in the homepage
     /// - Parameters:

@@ -54,6 +54,7 @@ final class OnboardingService {
         self.searchBarLocationSaver = searchBarLocationSaver
     }
 
+    @MainActor
     func handleAction(
         _ action: OnboardingActions,
         from cardName: String,
@@ -177,6 +178,7 @@ final class OnboardingService {
         defaultApplicationHelper.openSettings()
     }
 
+    @MainActor
     private func handleEndOnboarding(with activityEventHelper: ActivityEventHelper) {
         introScreenManager?.didSeeIntroScreen()
         searchBarLocationSaver.saveUserSearchBarLocation(

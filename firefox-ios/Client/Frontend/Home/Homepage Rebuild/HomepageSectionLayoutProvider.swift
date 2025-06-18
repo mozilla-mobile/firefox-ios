@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
+@MainActor
 final class HomepageSectionLayoutProvider {
     struct UX {
         static let standardInset: CGFloat = 16
@@ -16,6 +17,7 @@ final class HomepageSectionLayoutProvider {
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 34
 
+        @MainActor
         static func leadingInset(
             traitCollection: UITraitCollection,
             interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
@@ -34,6 +36,7 @@ final class HomepageSectionLayoutProvider {
             static let height: CGFloat = 180
         }
 
+        @MainActor
         struct PocketConstants {
             static let cellHeight: CGFloat = 112
             static let cellWidth: CGFloat = 350
@@ -44,6 +47,7 @@ final class HomepageSectionLayoutProvider {
 
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
+            @MainActor
             static func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                                           isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
                 if device == .pad {
@@ -67,6 +71,7 @@ final class HomepageSectionLayoutProvider {
             static let syncedItemCompactHeight: CGFloat = 182
             static let maxItemsPerGroup = 2
 
+            @MainActor
             static func getWidthDimension(
                 for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                 layoutType: JumpBackInSectionLayoutConfiguration.LayoutType

@@ -15,6 +15,7 @@ protocol LaunchCoordinatorDelegate: AnyObject {
 }
 
 // Manages different types of onboarding that gets shown at the launch of the application
+@MainActor
 final class LaunchCoordinator: BaseCoordinator,
                                SurveySurfaceViewControllerDelegate,
                                QRCodeNavigationHandler,

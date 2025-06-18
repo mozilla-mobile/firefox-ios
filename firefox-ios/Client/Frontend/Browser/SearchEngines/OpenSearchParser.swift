@@ -10,6 +10,7 @@ import Fuzi
 /// the Firefox-specific search plugin format.
 ///
 /// OpenSearch spec: http://www.opensearch.org/Specifications/OpenSearch/1.1
+@MainActor
 class OpenSearchParser {
     private let pluginMode: Bool
     private let userInterfaceIdiom: UIUserInterfaceIdiom
