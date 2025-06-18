@@ -128,7 +128,7 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        savedBackgroundColor = (hasTopTabs || isToolbarRefactorEnabled) ? theme.colors.layer3 : theme.colors.layer1
+        savedBackgroundColor = (hasTopTabs || isToolbarRefactorEnabled) ? theme.colors.layerSurfaceLow : theme.colors.layer1
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         // We only need no status bar for one edge case
