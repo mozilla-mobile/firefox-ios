@@ -53,8 +53,9 @@ private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
 ///
 /// Rust errors are not expected, but will be reported via logger.
 enum Experiments {
-    private static var studiesSetting: Bool?
-    private static var telemetrySetting: Bool?
+    // TODO: FXIOS-12587 This global property is not concurrency safe
+    nonisolated(unsafe) private static var studiesSetting: Bool?
+    nonisolated(unsafe) private static var telemetrySetting: Bool?
 
     static func setStudiesSetting(_ setting: Bool) {
         studiesSetting = setting
@@ -136,7 +137,7 @@ enum Experiments {
     }
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
-    static var shared: NimbusInterface = {
+    nonisolated(unsafe) static var shared: NimbusInterface = {
         let defaults = UserDefaults.standard
         let isFirstRun: Bool = defaults.object(forKey: NIMBUS_IS_FIRST_RUN_KEY) == nil
         if isFirstRun {
@@ -259,11 +260,11 @@ extension Experiments {
         return try? sdk.createMessageHelper(additionalContext: context)
     }
 
-    public static var messaging: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager()
+    public static let messaging: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager()
 
-    public static var events: NimbusEventStore = sdk.events
+    public static let events: NimbusEventStore = sdk.events
 
-    public static var sdk: NimbusInterface = shared
+    public static let sdk: NimbusInterface = shared
 }
 
 private extension AppBuildChannel {

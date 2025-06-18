@@ -9,10 +9,6 @@ import Common
 
 class DownloadContentScript: TabContentScript {
     fileprivate weak var tab: Tab?
-
-    // Non-blob URLs use the webview to download, by navigating in the webview to the requested URL.
-    // Blobs however, use the JS content script to download using XHR
-    fileprivate static var blobUrlForDownload: URL?
     private let downloadQueue: DownloadQueue
     private let notificationCenter: NotificationProtocol
 
@@ -43,7 +39,6 @@ class DownloadContentScript: TabContentScript {
         guard url.scheme == "blob" else {
             return false
         }
-        blobUrlForDownload = URL(string: safeUrl)
         tab.webView?.evaluateJavascriptInDefaultContentWorld(
             "window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')"
         )
@@ -68,7 +63,6 @@ class DownloadContentScript: TabContentScript {
         let windowUUID = tab?.windowUUID ?? windowManager.windows.first?.key ?? .unavailable
         defer {
             notificationCenter.post(name: .PendingBlobDownloadAddedToQueue, withObject: nil)
-            DownloadContentScript.blobUrlForDownload = nil
         }
 
         // Note: url.lastPathComponent fails on blob: URLs (shrug).

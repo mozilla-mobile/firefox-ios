@@ -86,11 +86,12 @@ open class SwiftData {
     let schema: Schema
     let files: FileAccessor
 
-    static var EnableWAL = true
-    static var EnableForeignKeys = true
+    static let EnableWAL = true
+    static let EnableForeignKeys = true
 
     /// Used to keep track of the corrupted databases we've logged.
-    static var corruptionLogsWritten = Set<String>()
+    // TODO: 
+    nonisolated(unsafe) static var corruptionLogsWritten = Set<String>()
 
     /// For thread-safe access to the primary shared connection.
     fileprivate let primaryConnectionQueue: DispatchQueue
