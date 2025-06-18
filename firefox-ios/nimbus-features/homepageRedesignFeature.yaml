@@ -24,4 +24,4 @@ features:
       - channel: developer
         value:
           enabled: false
-          search_bar: true
+          search_bar: false
