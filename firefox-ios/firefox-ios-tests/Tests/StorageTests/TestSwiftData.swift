@@ -25,9 +25,6 @@ class TestSwiftData: XCTestCase {
         swiftData = SwiftData(filename: testDB, schema: BrowserSchema(), files: files)
         let table = BrowserSchema()
 
-        // Ensure static flags match expected values.
-        XCTAssert(SwiftData.EnableWAL, "WAL enabled")
-
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
     }
 

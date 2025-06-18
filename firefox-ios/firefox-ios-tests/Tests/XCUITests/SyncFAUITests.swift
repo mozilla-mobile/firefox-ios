@@ -11,9 +11,6 @@ let deleteEndPoint = "http://restmail.net/mail/test-256a5b5b18@restmail.net"
 let userMail = "test-256a5b5b18@restmail.net"
 let password = "nPuPEcoj"
 
-var uid: String!
-var code: String!
-
 class SyncUITests: BaseTestCase {
     //  https://mozilla.testrail.io/index.php?/cases/view/2448597
     func testSyncUIFromBrowserTabMenu() {
