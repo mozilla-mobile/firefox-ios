@@ -96,9 +96,16 @@ final class MockTabQueue: TabQueue {
 }
 
 class MockFiles: FileAccessor {
-    init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        super.init(rootPath: (docPath as NSString).appendingPathComponent("testing"))
+    var rootPath: String
+
+    init(rootPath: String? = nil) {
+        guard let rootPath else {
+            let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            self.rootPath = (docPath as NSString).appendingPathComponent("testing")
+            return
+        }
+
+        self.rootPath = rootPath
     }
 }
 
