@@ -18,7 +18,7 @@ public struct EngineSessionDependencies {
         self.telemetryProxy = telemetryProxy
     }
 
-    public static func empty() -> EngineSessionDependencies {
+    static func empty() -> EngineSessionDependencies {
         return EngineSessionDependencies(webviewParameters: WKWebViewParameters())
     }
 }

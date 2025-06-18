@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum WKPolicy: Equatable {
+enum WKPolicy: Equatable {
     case allow
     case launchExternalApp
     case cancel
