@@ -77,8 +77,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         contentView.layer.shadowOpacity = UX.shadowOpacity
     }
-    
+
     func hidePlaceholder() {
-        
     }
 }

@@ -2644,12 +2644,17 @@ class BrowserViewController: UIViewController,
         toolbarSearchView.transform = CGAffineTransform(translationX: 0.0, y: -(endFrame.minY - startFrame.minY))
             .scaledBy(x: 1.0, y: pseudoSearchView.frame.height / toolbarSearchView.frame.height)
 
-        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
-            toolbarSearchView.transform = .identity
-        }, completion: { _ in
-            pseudoSearchView.alpha = 0
-            toolbarSearchView.isHidden = false
-        })
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                toolbarSearchView.transform = .identity
+            },
+            completion: { _ in
+                pseudoSearchView.alpha = 0
+                toolbarSearchView.isHidden = false
+            })
     }
 
     func untransformSearchBar(
@@ -2662,15 +2667,20 @@ class BrowserViewController: UIViewController,
         // Scale + transformation
         let startFrame = pseudoSearchView.convert(pseudoSearchView.bounds, to: parentView)
 
-        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
-            let endFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
-            toolbarSearchView.transform = CGAffineTransform(translationX: 0.0, y: -(endFrame.minY - startFrame.minY))
-                .scaledBy(x: 1.0, y: pseudoSearchView.frame.height / toolbarSearchView.frame.height)
-            pseudoSearchView.alpha = 1
-        }, completion: { _ in
-            toolbarSearchView.transform = .identity
-            toolbarSearchView.isHidden = true
-        })
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                let endFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
+                toolbarSearchView.transform = CGAffineTransform(translationX: 0.0, y: -(endFrame.minY - startFrame.minY))
+                    .scaledBy(x: 1.0, y: pseudoSearchView.frame.height / toolbarSearchView.frame.height)
+                pseudoSearchView.alpha = 1
+            },
+            completion: { _ in
+                toolbarSearchView.transform = .identity
+                toolbarSearchView.isHidden = true
+            })
     }
 
     func morphSearchBar(
@@ -2695,13 +2705,18 @@ class BrowserViewController: UIViewController,
 //        pseudoSearchView.isHidden = true
 //        toolbarSearchView.isHidden = true
 
-        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
-            pseudoSearchView.frame = endFrame
-            self.view.layoutIfNeeded()
-        }, completion: { _ in
-            pseudoSearchView.alpha = 0
-            toolbarSearchView.isHidden = false
-        })
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+                pseudoSearchView.frame = endFrame
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                pseudoSearchView.alpha = 0
+                toolbarSearchView.isHidden = false
+            })
     }
 
     func unmorphSearchBar(
@@ -2797,7 +2812,7 @@ class BrowserViewController: UIViewController,
                 completion: { _ in
             self.topBlurView.isHidden = true
             completion?()
-        })
+                })
     }
 
     private func handleNavigationActions(for state: BrowserViewControllerState) {
