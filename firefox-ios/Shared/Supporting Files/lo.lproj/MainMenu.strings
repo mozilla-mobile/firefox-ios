@@ -16,8 +16,14 @@
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "ເຂົ້າສູ່ລະບົບເພື່ອຊິ້ງລະຫັດຜ່ານ, ແຖບ, ແລະ ອື່ນໆອີກ";
 
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "ຈັດການສິ່ງທີ່ທ່ານສຳຮອງ ແລະ sync";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "ຊິ້ງຂໍ້ມູນລະຫັດຜ່ານ, ແຖບ, ແລະ ອື່ນໆອີກ";
+
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "ຊິ້ງຂໍ້ມູນບຸກມາກ, ລະຫັດຜ່ານ, ແຖບ, ແລະ ອື່ນໆອີກ";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "ລົງຊື່ເຂົ້າໃຊ້";

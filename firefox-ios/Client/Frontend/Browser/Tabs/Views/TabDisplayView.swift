@@ -316,6 +316,9 @@ class TabDisplayView: UIView,
         self.theme = theme
         collectionView.backgroundColor = theme.colors.layer3
         collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
+        collectionView.visibleSupplementaryViews(ofKind: TabTitleSupplementaryView.cellIdentifier)
+            .compactMap { $0 as? TabTitleSupplementaryView }
+            .forEach { $0.applyTheme(theme: theme) }
     }
 
     private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {

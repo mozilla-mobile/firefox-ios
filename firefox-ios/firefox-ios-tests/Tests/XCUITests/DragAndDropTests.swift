@@ -31,7 +31,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
-    func testRearrangeTabsTabTray() {
+    func testRearrangeTabsTabTray_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         openTwoWebsites()
         navigator.goto(TabTray)
@@ -128,7 +129,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         }
     }
 
-    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn() {
+    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn() throws {
+        guard iPad() else {
+            throw XCTSkip("Drag and drop is only applicable for iPad with tab tray enabled")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Set the device in landscape mode
@@ -184,7 +188,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         }
     }
 
-    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOn() {
+    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOn() throws {
+        guard iPad() else {
+            throw XCTSkip("Drag and drop is only applicable for iPad with tab tray enabled")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.openNewURL(urlString: secondWebsite.url)

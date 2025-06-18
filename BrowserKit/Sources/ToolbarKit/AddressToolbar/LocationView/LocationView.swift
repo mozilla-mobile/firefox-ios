@@ -14,6 +14,7 @@ final class LocationView: UIView,
     private enum UX {
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
+        static let safeOffset: CGFloat = 40
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let shieldImageViewSize = CGSize(width: 24, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
@@ -40,11 +41,14 @@ final class LocationView: UIView,
     private var tapGestureRecognizer: UITapGestureRecognizer?
     private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
-    private var doesURLTextFieldExceedViewWidth: Bool {
+    /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
+    /// An additional offset (default is 0) used when reader mode is available,
+    /// to ensure the text does not overlap the icon when the view is constrained to its superview.
+    private func isURLTextFieldWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
             return false
         }
-        let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace
+        let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace - offset
         let urlTextFieldWidth = text.size(withAttributes: [.font: font]).width
 
         return urlTextFieldWidth >= locationViewVisibleWidth
@@ -169,23 +173,28 @@ final class LocationView: UIView,
 
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
         var newConstraints: [NSLayoutConstraint] = []
-
-        if isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
+        if isEditing || !isURLTextFieldCentered || isURLTextFieldWiderThanVisibleArea() {
             // leading alignment configuration
             newConstraints = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
-        } else if !doesURLTextFieldExceedViewWidth {
+        } else if isURLTextFieldWiderThanVisibleArea(safeOffset: UX.safeOffset) {
             newConstraints = [
                 containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
                 containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
+        } else if let superview, !isURLTextFieldWiderThanVisibleArea(safeOffset: UX.safeOffset) {
+            newConstraints = [
+                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
+                containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
+                containerView.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
+            ]
         }
 
         // Only update the constraints if necessary
-        guard !newConstraints.isEmpty, containerViewConstrains.count != newConstraints.count else { return }
+        guard !newConstraints.isEmpty else { return }
 
         NSLayoutConstraint.deactivate(containerViewConstrains)
         containerViewConstrains = newConstraints
@@ -269,7 +278,7 @@ final class LocationView: UIView,
     }
 
     private func updateGradient() {
-        let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !isEditing
+        let showGradientForLongURL = isURLTextFieldWiderThanVisibleArea() && !isEditing
         gradientView.isHidden = !showGradientForLongURL
         // Use the containerView height since gradient's view height could be still not updated here
         // This can avoid to call containerView.layoutIfNeeded() which is an expensive call.
@@ -278,7 +287,7 @@ final class LocationView: UIView,
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
-        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
+        let shouldAdjustForOverflow = isURLTextFieldWiderThanVisibleArea() && !isEditing
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         func handleOverflowAdjustment() {

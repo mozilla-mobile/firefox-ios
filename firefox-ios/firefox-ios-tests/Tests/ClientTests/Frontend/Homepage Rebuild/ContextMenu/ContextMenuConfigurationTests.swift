@@ -38,22 +38,6 @@ final class ContextMenuConfigurationTests: XCTestCase {
         XCTAssertEqual(subject.site?.title, "Site 0")
     }
 
-    func tests_initialState_forPocketDiscoverItem_returnsExpectedState() {
-        let pocketItem: HomepageItem = .pocketDiscover(
-            PocketDiscoverConfiguration(
-                title: "Discover Site 0",
-                url: URL("www.example.com/1234")
-            )
-        )
-        let subject = ContextMenuConfiguration(
-            homepageSection: .pocket(nil),
-            item: pocketItem,
-            toastContainer: UIView()
-        )
-        XCTAssertEqual(subject.site?.tileURL.absoluteString, "file:///www.example.com/1234")
-        XCTAssertEqual(subject.site?.title, "Discover Site 0")
-    }
-
     func tests_initialState_forTopSitesItem_returnsExpectedState() {
         let topSiteItem: HomepageItem = .topSite(
             TopSiteConfiguration(

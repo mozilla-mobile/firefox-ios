@@ -59,7 +59,7 @@ struct TopSitesSectionState: StateType, Equatable {
             return handleUpdatedNumberOfRowsAction(action: action, state: state)
         case TopSitesActionType.toggleShowSectionSetting:
             return handleToggleShowSectionSettingAction(action: action, state: state)
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition, HomepageActionType.viewDidLayoutSubviews:
             return handleViewChangeAction(action: action, state: state)
         default:
             return defaultState(from: state)

@@ -43,7 +43,6 @@ final class HomepageDiffableDataSource:
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
         case pocket(PocketStoryConfiguration)
-        case pocketDiscover(PocketDiscoverConfiguration)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
@@ -57,7 +56,6 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
-                PocketDiscoverCell.self,
                 CustomizeHomepageSectionCell.self
             ]
         }
@@ -74,8 +72,6 @@ final class HomepageDiffableDataSource:
                 return .bookmark
             case .pocket:
                 return .story
-            case .pocketDiscover:
-                return .storyDiscoverMore
             case .customizeHomepage:
                 return .customizeHomepage
             default:
@@ -131,9 +127,8 @@ final class HomepageDiffableDataSource:
     private func getPocketStories(
         with pocketState: PocketState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        var stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
+        let stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
         guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
-        stories.append(.pocketDiscover(pocketState.pocketDiscoverItem))
         return stories
     }
 

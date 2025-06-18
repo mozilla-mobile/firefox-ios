@@ -12,11 +12,12 @@ let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 let url1And3Label = "Example Domain"
 let url2Label = "Internet for people, not profit — Mozilla"
 
-class PrivateBrowsingTest: BaseTestCase {
+class PrivateBrowsingTest: FeatureFlaggedTestBase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
     func testPrivateTabDoesNotTrackHistory() {
+        app.launch()
         navigator.openURL(url1)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
@@ -55,6 +56,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307005
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
+        app.launch()
         // Open two tabs in normal browsing and check the number of tabs open
         navigator.nowAt(NewTabScreen)
         navigator.openNewURL(urlString: url2)
@@ -100,6 +102,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307006
     func testClosePrivateTabsOptionClosesPrivateTabs() {
+        app.launch()
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -136,6 +139,7 @@ class PrivateBrowsingTest: BaseTestCase {
      */
     // https://mozilla.testrail.io/index.php?/cases/view/2307011
     func testClearIndexedDB() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
 
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
@@ -165,6 +169,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307007
     func testPrivateBrowserPanelView() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -194,7 +199,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307012
     // Smoketest
-    func testLongPressLinkOptionsPrivateMode() {
+    func testLongPressLinkOptionsPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
@@ -214,8 +221,33 @@ class PrivateBrowsingTest: BaseTestCase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307012
+    // Smoketest
+    func testLongPressLinkOptionsPrivateMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        mozWaitForElementToExist(
+            app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!]
+        )
+        mozWaitForElementToNotExist(app.buttons["Open in New Tab"])
+        waitForElementsToExist(
+            [
+                app.buttons["Open in New Private Tab"],
+                app.buttons["Copy Link"],
+                app.buttons["Download Link"]
+            ]
+        )
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() {
+        app.launch()
         // Several tabs opened in private tabs tray. Tap on the trashcan
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -265,6 +297,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307003
     func testHamburgerMenuNewPrivateTab() {
+        app.launch()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
@@ -312,15 +345,57 @@ fileprivate extension BaseTestCase {
     }
 }
 
-class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
+class PrivateBrowsingTestIphone: FeatureFlaggedTestBase {
+    override func setUp() {
+        specificForPlatform = .phone
+        if !iPad() {
+            super.setUp()
+        }
+    }
+
     // This test is disabled for iPad because the toast menu is not shown there
     // https://mozilla.testrail.io/index.php?/cases/view/2307013
     // Smoketest
-    func testSwitchBetweenPrivateTabsToastButton() {
+    func testSwitchBetweenPrivateTabsToastButton_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         if skipPlatform { return }
 
         // Go to Private mode
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.links.firstMatch)
+        app.webViews.links.firstMatch.press(forDuration: 1)
+        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
+        app.buttons["Open in New Private Tab"].press(forDuration: 1)
+        app.buttons["Switch"].waitAndTap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "iana")
+        waitForElementsToExist(
+            [
+                app.links["RFC 2606"],
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+            ]
+        )
+        let numPrivTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
+        XCTAssertEqual("2", numPrivTab)
+    }
+
+    // This test is disabled for iPad because the toast menu is not shown there
+    // https://mozilla.testrail.io/index.php?/cases/view/2307013
+    // Smoketest
+    func testSwitchBetweenPrivateTabsToastButton_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        if skipPlatform { return }
+
+        // Go to Private mode
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links.firstMatch)
