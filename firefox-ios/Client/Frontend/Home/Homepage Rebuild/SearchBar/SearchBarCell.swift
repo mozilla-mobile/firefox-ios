@@ -17,7 +17,6 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     private let container: UIView = .build { view in
-        view.backgroundColor = .white
         view.layer.cornerRadius = UX.cornerRadius
     }
 
