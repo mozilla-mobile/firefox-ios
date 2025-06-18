@@ -41,7 +41,7 @@
 "DefaultBrowserOnboarding.Screenshot" = "Ap Porwr Rhagosodedig";
 
 /* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
-"DefaultBrowserOnboarding.SkipButton" = "Rhywbryd eto...";
+"DefaultBrowserOnboarding.SkipButton" = "Rhywbryd eto";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Gosod fel y Porwr Ragosodedig";

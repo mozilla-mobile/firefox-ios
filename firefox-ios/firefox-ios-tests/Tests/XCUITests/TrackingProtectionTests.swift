@@ -79,7 +79,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307059
     // Smoketest
-    func testStandardProtectionLevel() {
+    func testStandardProtectionLevel_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.goto(URLBarOpen)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
@@ -107,6 +108,57 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+
+        // Make sure TP is also there in PBM
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            ]
+        )
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SettingsScreen)
+        mozWaitForElementToExist(app.tables.cells["NewTab"])
+        app.tables.cells["NewTab"].swipeUp()
+        // Enable TP again
+        navigator.goto(TrackingProtectionSettings)
+        // Turn on ETP
+        navigator.performAction(Action.SwitchETP)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307059
+    // Smoketest
+    func testStandardProtectionLevel_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.goto(URLBarOpen)
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
+        navigator.back()
+        navigator.goto(TrackingProtectionSettings)
+
+        // Make sure ETP is enabled by default
+        XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+
+        // Turn off ETP
+        navigator.performAction(Action.SwitchETP)
+
+        // Verify it is turned off
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+
+        // The lock icon should still be there
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            ]
+        )
+
+        // Switch to Private Browsing
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 

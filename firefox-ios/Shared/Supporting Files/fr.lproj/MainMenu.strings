@@ -19,6 +19,9 @@
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Synchronisez vos mots de passe, vos onglets et plus encore";
 
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "Synchronisez vos marque-pages, vos mots de passe, vos onglets et plus encore";
+
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Connexion";
 
@@ -271,6 +274,12 @@
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Rechercher dans la page";
 
+/* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "Moins";
+
+/* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "Plus";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Enregistrer";
 
@@ -291,6 +300,12 @@
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Rechercher dans la page…";
+
+/* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.LessOptions.Title.v141" = "Moins";
+
+/* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.MoreOptions.Title.v141" = "Plus";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Enregistrer";

@@ -28,6 +28,7 @@ include:
   - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/hntTopSitesVisualRefresh.yaml
   - nimbus-features/homepageRebuildFeature.yaml
+  - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
