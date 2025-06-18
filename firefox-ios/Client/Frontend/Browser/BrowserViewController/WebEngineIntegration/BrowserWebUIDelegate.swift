@@ -6,15 +6,17 @@ import WebKit
 import WebEngine
 
 class BrowserWebUIDelegate: NSObject, WKUIDelegate {
-    private(set) weak var bvc: BrowserViewController?
-    private let policyDecider = WKPolicyDeciderFactory()
-    private var engineUIDelegate: WKUIDelegate {
-        return DefaultUIHandler(sessionDependencies: .empty(),
-                                sessionCreator: bvc?.tabManager as? SessionCreator)
-    }
+    private weak var bvc: BrowserViewController?
+    private let engineResponder: WKUIHandler
 
-    func setLegacyDelegate(_ bvc: BrowserViewController) {
-        self.bvc = bvc
+    /// Initializes the `BrowserWebUIDelegate` with a legacy and engine responder.
+    /// - Parameters:
+    ///  - engineResponder: The object which actually responds to `WKUIDelegate` methods
+    ///  being forwarded from `BrowserWebUIDelegate`.
+    ///  - legacyResponder: The responder used when `engineResponder` can't respond to a delegate call.
+    init(engineResponder: WKUIHandler, legacyResponder: BrowserViewController) {
+        self.bvc = legacyResponder
+        self.engineResponder = engineResponder
     }
 
     // MARK: - WKUIDelegate
@@ -25,7 +27,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
-        return engineUIDelegate.webView?(
+        return engineResponder.webView(
             webView,
             createWebViewWith: configuration,
             for: navigationAction,

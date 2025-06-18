@@ -5,7 +5,7 @@
 @preconcurrency import WebKit
 import Common
 
-protocol WKUIHandler: WKUIDelegate {
+public protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
     var isActive: Bool {get set}
 
@@ -54,7 +54,7 @@ protocol WKUIHandler: WKUIDelegate {
 }
 
 public class DefaultUIHandler: NSObject, WKUIHandler {
-    weak var delegate: EngineSessionDelegate?
+    public weak var delegate: EngineSessionDelegate?
     private weak var sessionCreator: SessionCreator?
 
     public var isActive = false

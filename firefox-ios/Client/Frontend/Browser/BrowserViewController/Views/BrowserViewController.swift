@@ -250,11 +250,16 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
-    private lazy var browserWebUIDelegate = BrowserWebUIDelegate()
-    // TODO: - Add tests
+    private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
+        engineResponder: DefaultUIHandler(
+            sessionDependencies: .empty(),
+            sessionCreator: tabManager as? SessionCreator
+        ),
+        legacyResponder: self
+    )
+    /// The ui delegate used by a `WKWebView`
     var wkUIDelegate: WKUIDelegate {
         if featureFlags.isFeatureEnabled(.webEngineIntegrationRefactor, checking: .buildOnly) {
-            browserWebUIDelegate.setLegacyDelegate(self)
             return browserWebUIDelegate
         }
         return self
