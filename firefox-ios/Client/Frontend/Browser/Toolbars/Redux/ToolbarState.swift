@@ -170,6 +170,61 @@ struct ToolbarState: ScreenState, Equatable {
         }
     }
 
+    private static func handleReducer(state: ToolbarState, action: Action) -> ToolbarState {
+        // Only process actions for the current window
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
+        }
+
+        switch action.actionType {
+        case ToolbarActionType.didLoadToolbars:
+            return handleDidLoadToolbars(state: state, action: action)
+
+        case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
+            ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
+            ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
+            ToolbarActionType.cancelEditOnHomepage,
+            ToolbarActionType.hideKeyboard, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
+            ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
+            ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
+            ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange:
+            return handleToolbarUpdates(state: state, action: action)
+
+        case ToolbarActionType.showMenuWarningBadge:
+            return handleShowMenuWarningBadge(state: state, action: action)
+
+        case ToolbarActionType.numberOfTabsChanged:
+            return handleNumberOfTabsChanged(state: state, action: action)
+
+        case ToolbarActionType.toolbarPositionChanged:
+            return handleToolbarPositionChanged(state: state, action: action)
+
+        case ToolbarActionType.readerModeStateChanged:
+            return handleReaderModeStateChanged(state: state, action: action)
+
+        case ToolbarActionType.backForwardButtonStateChanged:
+            return handleBackForwardButtonStateChanged(state: state, action: action)
+
+        case ToolbarActionType.traitCollectionDidChange:
+            return handleTraitCollectionDidChange(state: state, action: action)
+
+        case ToolbarActionType.navigationButtonDoubleTapped:
+            return handleNavigationButtonDoubleTapped(state: state, action: action)
+
+        case ToolbarActionType.navigationHintFinishedPresenting:
+            return handleNavigationHintFinishedPresenting(state: state, action: action)
+
+        case SearchEngineSelectionActionType.didTapSearchEngine,
+            SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
+            return handleSearchEngineSelectionAction(state: state, action: action)
+
+        default:
+            return defaultState(from: state)
+        }
+    }
+
     private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction,
               let toolbarPosition = toolbarAction.toolbarPosition,
