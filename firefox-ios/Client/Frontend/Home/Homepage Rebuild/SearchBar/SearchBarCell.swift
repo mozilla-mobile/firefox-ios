@@ -3,81 +3,81 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import UIKit
+import ToolbarKit
 
 class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset = CGSize(width: 0, height: 2)
-        static let shadowOpacity: Float = 1
-        static let cornerRadius: CGFloat = 16
-        static let heightPadding: CGFloat = 20
-        static let widthPadding: CGFloat = 16
-        static let containerPadding: CGFloat = 4
-    }
-
-    private let container: UIView = .build { view in
-        view.backgroundColor = .white
-        view.layer.cornerRadius = UX.cornerRadius
-    }
-
-    private lazy var placeholderLabel: UILabel = .build { view in
-//        view.text = String.TabLocationURLPlaceholder
-        view.font = FXFontStyles.Regular.body.scaledFont()
-    }
+    private lazy var locationContainer: RegularBrowserAddressToolbar = .build()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        container.addSubview(placeholderLabel)
-        contentView.addSubview(container)
-
-        container.translatesAutoresizingMaskIntoConstraints = false
-        placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.containerPadding),
-            container.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.containerPadding),
-            container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.containerPadding),
-            container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.containerPadding),
-
-            placeholderLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: UX.heightPadding),
-            placeholderLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -UX.heightPadding),
-            placeholderLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: UX.widthPadding),
-            placeholderLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -UX.widthPadding)
-        ])
+        configureHostingController()
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        configureHostingController()
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    private func configureHostingController() {
+        locationContainer.configure(
+            config: setupSkelli(),
+            toolbarPosition: .top,
+            toolbarDelegate: nil,
+            leadingSpace: 8,
+            trailingSpace: 8,
+            isUnifiedSearchEnabled: false,
+            animated: false)
 
-        contentView.layer.shadowPath = UIBezierPath(
-            roundedRect: contentView.bounds,
-            cornerRadius: UX.cornerRadius
-        ).cgPath
+        contentView.addSubview(locationContainer)
+        NSLayoutConstraint.activate([
+            locationContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            locationContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            locationContainer.heightAnchor.constraint(equalToConstant: 54),
+        ])
     }
 
-    private lazy var blurView: UIView = .build { view in
-        view.isUserInteractionEnabled = false
-        view.backgroundColor = .clear
+    private func setupSkelli() -> AddressToolbarConfiguration {
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment()
+
+        let leadingPageElements = [ToolbarElement]()
+        let trailingPageElements = [ToolbarElement]()
+
+        let locationViewConfiguration = LocationViewConfiguration(
+            searchEngineImageViewA11yId: "",
+            searchEngineImageViewA11yLabel: "",
+            lockIconButtonA11yId: "",
+            lockIconButtonA11yLabel: "",
+            urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
+            urlTextFieldA11yId: "",
+            searchEngineImage: nil,
+            lockIconImageName: "",
+            lockIconNeedsTheming: false,
+            safeListedURLImageName: nil,
+            url: nil,
+            droppableUrl: nil,
+            searchTerm: nil,
+            isEditing: false,
+            isEnabled: false,
+            didStartTyping: false,
+            shouldShowKeyboard: false,
+            shouldSelectSearchTerm: false,
+            onTapLockIcon: { _ in },
+            onLongPress: {})
+
+        return AddressToolbarConfiguration(
+            locationViewConfiguration: locationViewConfiguration,
+            navigationActions: [],
+            leadingPageActions: leadingPageElements,
+            trailingPageActions: trailingPageElements,
+            browserActions: [],
+            borderPosition: .top,
+            uxConfiguration: uxConfiguration,
+            shouldAnimate: false
+        )
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        placeholderLabel.textColor = theme.colors.textSecondary
-        container.backgroundColor = theme.colors.layer2
-        setupShadow(theme: theme)
-    }
-
-    func setupShadow(theme: Theme) {
-        contentView.layer.shadowRadius = UX.shadowRadius
-        contentView.layer.shadowOffset = UX.shadowOffset
-        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        contentView.layer.shadowOpacity = UX.shadowOpacity
-    }
-
-    func hidePlaceholder() {
+        locationContainer.applyTheme(theme: theme)
     }
 }
