@@ -55,7 +55,7 @@ public protocol WKUIHandler: WKUIDelegate {
 
 public class DefaultUIHandler: NSObject, WKUIHandler {
     public weak var delegate: EngineSessionDelegate?
-    private weak var sessionCreator: SessionCreator?
+    private var sessionCreator: SessionCreator?
 
     public var isActive = false
     private let sessionDependencies: EngineSessionDependencies
@@ -146,10 +146,10 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
     }
 
     public func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void) {
+                        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                        initiatedByFrame frame: WKFrameInfo,
+                        type: WKMediaCaptureType,
+                        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void) {
         guard isActive && (delegate?.requestMediaCapturePermission() ?? false) else {
             decisionHandler(.deny)
             return
