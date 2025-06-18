@@ -15,6 +15,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
     func presentSavePDFController()
+    func presentSiteProtections()
     func showPrintSheet()
 
     /// Open the share sheet to share the currently selected `Tab`.
@@ -129,6 +130,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .zoom:
             navigationHandler?.updateZoomPageBarVisibility()
+
+        case .siteProtections:
+            self.navigationHandler?.presentSiteProtections()
         }
     }
 
