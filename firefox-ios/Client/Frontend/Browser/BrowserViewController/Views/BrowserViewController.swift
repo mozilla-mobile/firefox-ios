@@ -2612,7 +2612,8 @@ class BrowserViewController: UIViewController,
         case .homepageSearchBar(let searchBar, let fadeOut):
             if fadeOut {
                 print("cyn fade out")
-                morphSearchBar(from: searchBar, to: addressToolbarContainer.locationContainer, in: view)
+                transformSearchBar(from: searchBar, to: addressToolbarContainer.locationContainer, in: view)
+//                morphSearchBar(from: searchBar, to: addressToolbarContainer.locationContainer, in: view)
                 //                animateFadeOut(from: searchBar, to: addressToolbarContainer) {
                 //                    self.addressToolbarContainer.isHidden = false
                 //                    self.header.isHidden = false
@@ -2621,10 +2622,55 @@ class BrowserViewController: UIViewController,
             } else {
                 print("cyn unfade")
                 // Need to make sure toolbar is no longer interacted
-                unmorphSearchBar(from: addressToolbarContainer.locationContainer, to: searchBar, in: view)
+//                unmorphSearchBar(from: addressToolbarContainer.locationContainer, to: searchBar, in: view)
                 //                animateFadeIn(from: addressToolbarContainer, to: searchBar) {
+                untransformSearchBar(from: searchBar, to: addressToolbarContainer.locationContainer, in: view)
             }
         }
+    }
+
+    func transformSearchBar(
+        from pseudoSearchView: UIView,
+        to toolbarSearchView: UIView,
+        in parentView: UIView,
+        duration: TimeInterval = 0.4
+    ) {
+        // TODO: Add more documentation on the convert size things
+        // Scale + transformation
+        let startFrame = pseudoSearchView.convert(pseudoSearchView.bounds, to: parentView)
+        let endFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
+
+        toolbarSearchView.isHidden = false
+        toolbarSearchView.transform = CGAffineTransform(translationX: 0.0, y: -(endFrame.minY - startFrame.minY))
+            .scaledBy(x: 1.0, y: pseudoSearchView.frame.height / toolbarSearchView.frame.height)
+
+        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
+            toolbarSearchView.transform = .identity
+        }, completion: { _ in
+            pseudoSearchView.alpha = 0
+            toolbarSearchView.isHidden = false
+        })
+    }
+
+    func untransformSearchBar(
+        from pseudoSearchView: UIView,
+        to toolbarSearchView: UIView,
+        in parentView: UIView,
+        duration: TimeInterval = 0.4
+    ) {
+        // TODO: Add more documentation on the convert size things
+        // Scale + transformation
+        let startFrame = pseudoSearchView.convert(pseudoSearchView.bounds, to: parentView)
+
+        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
+            let endFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
+            toolbarSearchView.transform = CGAffineTransform(translationX: 0.0, y: -(endFrame.minY - startFrame.minY))
+                .scaledBy(x: 1.0, y: pseudoSearchView.frame.height / toolbarSearchView.frame.height)
+            pseudoSearchView.alpha = 1
+        }, completion: { _ in
+            toolbarSearchView.transform = .identity
+            toolbarSearchView.isHidden = true
+        })
     }
 
     func morphSearchBar(
@@ -2633,26 +2679,27 @@ class BrowserViewController: UIViewController,
         in parentView: UIView,
         duration: TimeInterval = 0.4
     ) {
-        // Get frames in shared coordinate space
+        // TODO: Add more documentation on the convert size things
         let startFrame = pseudoSearchView.convert(pseudoSearchView.bounds, to: parentView)
         let endFrame = toolbarSearchView.convert(toolbarSearchView.bounds, to: parentView)
 
         // Create a snapshot of the fake bar
-        guard let snapshot = pseudoSearchView.snapshotView(afterScreenUpdates: true) else {
-            return
-        }
+//        guard let snapshot = pseudoSearchView.snapshotView(afterScreenUpdates: true) else {
+//            return
+//        }
 
-        snapshot.frame = startFrame
-        parentView.addSubview(snapshot)
+        pseudoSearchView.frame = startFrame
+        parentView.addSubview(pseudoSearchView)
 
         // Hide the real views during the animation
-        pseudoSearchView.isHidden = true
-        toolbarSearchView.isHidden = true
+//        pseudoSearchView.isHidden = true
+//        toolbarSearchView.isHidden = true
 
         UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseInOut], animations: {
-            snapshot.frame = endFrame
+            pseudoSearchView.frame = endFrame
+            self.view.layoutIfNeeded()
         }, completion: { _ in
-            snapshot.removeFromSuperview()
+            pseudoSearchView.alpha = 0
             toolbarSearchView.isHidden = false
         })
     }
