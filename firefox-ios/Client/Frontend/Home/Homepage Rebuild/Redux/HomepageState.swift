@@ -100,18 +100,7 @@ struct HomepageState: ScreenState, Equatable {
 
         switch action.actionType {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                messageState: MessageCardState.reducer(state.messageState, action),
-                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-                bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-                pocketState: PocketState.reducer(state.pocketState, action),
-                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-                isZeroSearch: state.isZeroSearch,
-                shouldTriggerImpression: false
-            )
+            return handleInitializeAndViewWillTransitionState(state: state, action: action)
         case HomepageActionType.embeddedHomepage:
             guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
                 return defaultState(from: state)
