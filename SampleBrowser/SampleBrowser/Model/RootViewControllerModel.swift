@@ -106,54 +106,10 @@ class RootViewControllerModel {
             scrollY: 0,
             isPrivate: false,
             locationViewConfiguration: locationViewConfig,
-            navigationActions: [
-                ToolbarElement(
-                    iconName: "square.and.arrow.up",
-                    isEnabled: true,
-                    a11yLabel: "",
-                    a11yHint: nil,
-                    a11yId: "",
-                    hasLongPressAction: false,
-                    onSelected: { _ in
-
-                })
-            ],
-            leadingPageActions: [
-                ToolbarElement(
-                    iconName: "square.and.arrow.up",
-                    isEnabled: true,
-                    a11yLabel: "",
-                    a11yHint: nil,
-                    a11yId: "",
-                    hasLongPressAction: false,
-                    onSelected: { _ in
-
-                })
-            ],
-            trailingPageActions: [
-                ToolbarElement(
-                    iconName: "square.and.arrow.up",
-                    isEnabled: true,
-                    a11yLabel: "",
-                    a11yHint: nil,
-                    a11yId: "",
-                    hasLongPressAction: false,
-                    onSelected: { _ in
-
-                })
-            ],
-            browserActions: [
-                ToolbarElement(
-                    iconName: "square.and.arrow.up",
-                    isEnabled: true,
-                    a11yLabel: "",
-                    a11yHint: nil,
-                    a11yId: "",
-                    hasLongPressAction: false,
-                    onSelected: { _ in
-
-                })
-            ]
+            navigationActions: [],
+            leadingPageActions: [],
+            trailingPageActions: [],
+            browserActions: []
         )
     }
 }
