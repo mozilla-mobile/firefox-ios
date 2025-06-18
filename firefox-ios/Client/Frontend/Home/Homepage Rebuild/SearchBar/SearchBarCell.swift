@@ -57,7 +57,6 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             droppableUrl: nil,
             searchTerm: nil,
             isEditing: false,
-            isEnabled: false,
             didStartTyping: false,
             shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,

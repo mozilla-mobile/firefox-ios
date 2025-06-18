@@ -8,7 +8,7 @@ import Foundation
 public protocol AddressToolbar {
     func configure(config: AddressToolbarConfiguration,
                    toolbarPosition: AddressToolbarPosition,
-                   toolbarDelegate: AddressToolbarDelegate,
+                   toolbarDelegate: AddressToolbarDelegate?,
                    leadingSpace: CGFloat,
                    trailingSpace: CGFloat,
                    isUnifiedSearchEnabled: Bool,

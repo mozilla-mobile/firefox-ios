@@ -117,7 +117,7 @@ public class BrowserAddressToolbar: UIView,
 
     public func configure(config: AddressToolbarConfiguration,
                           toolbarPosition: AddressToolbarPosition,
-                          toolbarDelegate: any AddressToolbarDelegate,
+                          toolbarDelegate: (any AddressToolbarDelegate)?,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
                           isUnifiedSearchEnabled: Bool,
