@@ -11,18 +11,22 @@ final class TemporaryDocumentTests: XCTestCase {
     private let mimeTypePDF = "application/pdf"
     private var mockURLSession: URLSession!
     private var subject: DefaultTemporaryDocument!
+    private var mockURLProtocol: MockURLProtocol!
 
     override func setUp() {
         super.setUp()
+        mockURLProtocol = MockURLProtocol()
+
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]
+
         mockURLSession = URLSession(configuration: configuration, delegate: nil, delegateQueue: .main)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
-        MockURLProtocol.response = nil
-        MockURLProtocol.data = nil
+        mockURLProtocol.response = nil
+        mockURLProtocol.data = nil
         let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
         try? FileManager.default.removeItem(at: tempFileURL)
         mockURLSession = nil
@@ -49,7 +53,7 @@ final class TemporaryDocumentTests: XCTestCase {
             cookies: [cookie]
         )
 
-        MockURLProtocol.response = { _, response in
+        mockURLProtocol.response = { _, response in
             XCTAssertEqual(response.allHTTPHeaderFields?["Cookie"], "key=session=123")
         }
 
@@ -72,7 +76,7 @@ final class TemporaryDocumentTests: XCTestCase {
     func testDownloadAsync() async {
         subject = createSubject(filename: filename, request: request, session: mockURLSession)
 
-        MockURLProtocol.data = Data()
+        mockURLProtocol.data = Data()
         let localURL = await subject.download()
 
         XCTAssertNotNil(localURL)
@@ -82,7 +86,7 @@ final class TemporaryDocumentTests: XCTestCase {
 
     func testDownload() {
         let expectation = XCTestExpectation(description: "download callback should be fired")
-        MockURLProtocol.data = Data()
+        mockURLProtocol.data = Data()
         subject = createSubject(filename: filename, request: request, session: mockURLSession)
 
         subject.download { [weak self] url in
@@ -100,7 +104,7 @@ final class TemporaryDocumentTests: XCTestCase {
 
     func testDownload_onDownloadStarted() {
         let expectation = XCTestExpectation(description: "onStart callback should be fired")
-        MockURLProtocol.data = Data()
+        mockURLProtocol.data = Data()
         subject = createSubject(filename: filename, request: request, session: mockURLSession)
 
         subject.onDownloadStarted = {
@@ -123,7 +127,7 @@ final class TemporaryDocumentTests: XCTestCase {
     func testDownload_onProgressUpdate() {
         let expectation = XCTestExpectation(description: "onDownloadProgressUpdate callback should be fired")
         let mockProgress = 100.0
-        MockURLProtocol.data = Data()
+        mockURLProtocol.data = Data()
         subject = createSubject(filename: filename, request: request, session: mockURLSession)
 
         subject.onDownloadProgressUpdate = { progress in
