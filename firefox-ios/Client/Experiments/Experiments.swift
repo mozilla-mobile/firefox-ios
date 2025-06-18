@@ -137,6 +137,7 @@ enum Experiments {
     }
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
+    /// TODO FXIOS-12602 This global property is not concurrency safe
     nonisolated(unsafe) static var shared: NimbusInterface = {
         let defaults = UserDefaults.standard
         let isFirstRun: Bool = defaults.object(forKey: NIMBUS_IS_FIRST_RUN_KEY) == nil

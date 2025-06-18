@@ -89,7 +89,7 @@ open class SwiftData {
     static let EnableForeignKeys = true
 
     /// Used to keep track of the corrupted databases we've logged.
-    // TODO: 
+    /// TODO FXIOS-12603 This global property is not concurrency safe
     nonisolated(unsafe) static var corruptionLogsWritten = Set<String>()
 
     /// For thread-safe access to the primary shared connection.
