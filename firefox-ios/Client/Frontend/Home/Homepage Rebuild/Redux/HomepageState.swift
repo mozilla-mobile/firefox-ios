@@ -106,18 +106,7 @@ struct HomepageState: ScreenState, Equatable {
                 return defaultState(from: state)
             }
 
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                messageState: MessageCardState.reducer(state.messageState, action),
-                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-                bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-                pocketState: PocketState.reducer(state.pocketState, action),
-                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-                isZeroSearch: isZeroSearch,
-                shouldTriggerImpression: false
-            )
+            return handleEmbeddedHomepageState(state: state, action: action, isZeroSearch: isZeroSearch)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageState(state: state, action: action)
         default:
