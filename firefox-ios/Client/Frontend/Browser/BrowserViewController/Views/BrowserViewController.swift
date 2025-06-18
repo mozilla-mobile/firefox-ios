@@ -540,10 +540,16 @@ class BrowserViewController: UIViewController,
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
+
+            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
+
+            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            header.bringSubviewToFront(addressToolbarContainer)
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -960,9 +966,6 @@ class BrowserViewController: UIViewController,
         header.addArrangedViewToTop(topTabsViewController.view)
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
-
-        // move top tabs view to the back so the address toolbar shadow doesn't get clipped
-        header.sendSubviewToBack(topTabsViewController.view)
     }
 
     private func setupAccessibleActions() {
