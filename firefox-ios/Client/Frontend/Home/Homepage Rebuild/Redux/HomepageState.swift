@@ -140,6 +140,23 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
+    private static func handleEmbeddedHomepageState(state: HomepageState,
+                                                    action: Action,
+                                                    isZeroSearch: Bool) -> HomepageState {
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: PocketState.reducer(state.pocketState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: isZeroSearch,
+            shouldTriggerImpression: false
+        )
+    }
+
     private static func handleDidTabChangeToHomepageState(state: HomepageState, action: Action) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
