@@ -64,9 +64,10 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
     // MARK: - Redux
     func subscribeToRedux() {
+        let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: self.windowUUID)
+                return ToolbarState(appState: appState, uuid: uuid)
             })
         })
     }
