@@ -43,6 +43,8 @@ private struct LightColourPalette: ThemeColourPalette {
         FXColors.LightGrey30.withAlphaComponent(0),
         FXColors.LightGrey30.withAlphaComponent(1)
     ])
+    var layerSurfaceLow = FXColors.LightGrey20
+    var layerSurfaceMedium = FXColors.White
 
     // MARK: - Ratings
     var layerRatingA: UIColor = FXColors.Green20
