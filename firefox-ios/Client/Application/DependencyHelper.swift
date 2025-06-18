@@ -13,7 +13,7 @@ class DependencyHelper {
         }
 
         let profile: Profile = appDelegate.profile
-        AppContainer.shared.register(service: profile)
+        AppContainer.shared.register(service: profile as Profile)
 
         AppContainer.shared.register(service: appDelegate.searchEnginesManager)
 
@@ -21,27 +21,27 @@ class DependencyHelper {
         DefaultDiskImageStore(files: profile.files,
                               namespace: TabManagerConstants.tabScreenshotNamespace,
                               quality: UIConstants.ScreenshotQuality)
-        AppContainer.shared.register(service: diskImageStore)
+        AppContainer.shared.register(service: diskImageStore as DiskImageStore)
 
         let appSessionProvider: AppSessionProvider = appDelegate.appSessionManager
-        AppContainer.shared.register(service: appSessionProvider)
+        AppContainer.shared.register(service: appSessionProvider as AppSessionProvider)
 
         let downloadQueue: DownloadQueue = appDelegate.appSessionManager.downloadQueue
         AppContainer.shared.register(service: downloadQueue)
 
         let windowManager: WindowManager = appDelegate.windowManager
-        AppContainer.shared.register(service: windowManager)
+        AppContainer.shared.register(service: windowManager as WindowManager)
 
         let themeManager: ThemeManager = appDelegate.themeManager
-        AppContainer.shared.register(service: themeManager)
+        AppContainer.shared.register(service: themeManager as ThemeManager)
 
         let microsurveyManager: MicrosurveyManager = MicrosurveySurfaceManager()
-        AppContainer.shared.register(service: microsurveyManager)
+        AppContainer.shared.register(service: microsurveyManager as MicrosurveyManager)
 
         let pocketManager: PocketManagerProvider = PocketManager(
             pocketAPI: PocketProvider(prefs: profile.prefs)
         )
-        AppContainer.shared.register(service: pocketManager)
+        AppContainer.shared.register(service: pocketManager as PocketManagerProvider)
 
         let documentLogger = appDelegate.documentLogger
         AppContainer.shared.register(service: documentLogger)
