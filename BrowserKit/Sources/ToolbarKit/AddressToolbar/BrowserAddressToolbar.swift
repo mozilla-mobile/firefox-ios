@@ -304,14 +304,30 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - Toolbar Actions and Layout Updates
     internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
-        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions, ux: config.uxConfiguration)
+        updateActionStack(
+            stackView: browserActionStack,
+            toolbarElements: config.browserActions,
+            ux: config.uxConfiguration
+        )
 
         // Navigation actions
-        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions, ux: config.uxConfiguration)
+        updateActionStack(
+            stackView: navigationActionStack,
+            toolbarElements: config.navigationActions,
+            ux: config.uxConfiguration
+        )
 
         // Page actions
-        updateActionStack(stackView: leadingPageActionStack, toolbarElements: config.leadingPageActions, ux: config.uxConfiguration)
-        updateActionStack(stackView: pageActionStack, toolbarElements: config.trailingPageActions, ux: config.uxConfiguration)
+        updateActionStack(
+            stackView: leadingPageActionStack,
+            toolbarElements: config.leadingPageActions,
+            ux: config.uxConfiguration
+        )
+        updateActionStack(
+            stackView: pageActionStack,
+            toolbarElements: config.trailingPageActions,
+            ux: config.uxConfiguration
+        )
 
         updateActionSpacing(uxConfig: config.uxConfiguration)
         updateToolbarLayout(animated: animated)

@@ -175,7 +175,11 @@ class RootViewController: UIViewController, AddressToolbarDelegate, Presenter, T
         return nil
     }
 
-    func configureContextualHint(_ addressToolbar: ToolbarKit.BrowserAddressToolbar, for button: UIButton, with contextualHintType: String) {
+    func configureContextualHint(
+        _ addressToolbar: ToolbarKit.BrowserAddressToolbar,
+        for button: UIButton,
+        with contextualHintType: String
+    ) {
     }
 
     func addressToolbarDidBeginDragInteraction() {
