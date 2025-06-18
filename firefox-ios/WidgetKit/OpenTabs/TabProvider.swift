@@ -33,12 +33,13 @@ struct TabProvider: TimelineProvider {
                         continue
                     }
 
+                    let imageKey = tab.imageKey
                     let siteImageModel = SiteImageModel(id: UUID(),
                                                         imageType: .favicon,
                                                         siteURL: siteURL)
                     group.addTask {
                         let image = await siteImageFetcher.getImage(model: siteImageModel)
-                        return (tab.imageKey, image)
+                        return (imageKey, image)
                     }
                 }
 

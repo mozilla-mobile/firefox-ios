@@ -35,8 +35,8 @@ final class RemoteSettingsServiceSyncCoordinator {
     }
 
     // This is primarily for internal testing or QA purposes.
-    func forceImmediateSync() async {
-        await performSync()
+    func forceImmediateSync() {
+        performSync()
     }
 
     // MARK: - Private API
@@ -61,11 +61,11 @@ final class RemoteSettingsServiceSyncCoordinator {
             // Persist our sync time. Note that this will persist the timestamp
             // even if the sync fails, which means we won't retry for another 24hrs
             updateLastSyncTime()
-            Task { await performSync() }
+            performSync()
         }
     }
 
-    private func performSync() async {
+    private func performSync() {
         guard let service else {
             logger.log(
                 "Remote Settings needs sync but service instance is nil.",
