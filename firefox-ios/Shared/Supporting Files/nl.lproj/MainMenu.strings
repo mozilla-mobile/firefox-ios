@@ -16,8 +16,14 @@
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Meld u aan om wachtwoorden, tabbladen en meer te synchroniseren";
 
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "Beheren waarvan u een reservekopie maakt en wat u synchroniseert";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Wachtwoorden, tabbladen en meer synchroniseren";
+
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "Bladwijzers, wachtwoorden, tabbladen en meer synchroniseren";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Aanmelden";

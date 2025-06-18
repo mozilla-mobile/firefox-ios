@@ -15,17 +15,35 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 # Please add your tags alphabetically.
 ###############################################################################
 
+Addresses:
+  description: Corresponds to the collection, storage, and autofilling of addresses.
+
 AppIcon:
   description: Corresponds to interactions with the app icon on the iOS home screen (e.g. long press menu).
 
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
+Autofill:
+  description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
+
+BookmarksPanel:
+  description: Corresponds to the library screen's bookmarks panel where the user can view and manage their bookmarks.
+
 ContextMenu:
   description: Corresponds to any context menu in the app.
 
+CreditCards:
+  description: Corresponds to the collection, storage, and autofilling of credit cards.
+
+DownloadsPanel:
+  description: Corresponds to the library screen's downloads panel where the user can view their downloads.
+
+History:
+  description: Corresponds to the internal data store of history within the app. Not to be confused with `HistoryPanel`, which refers to the History screen in the library.
+
 HistoryPanel:
-  description: Corresponds to the history panel of the library.
+  description: Corresponds to the history panel of the library. Not to be confused with `History`, which deals specifically with telemetry around the internal store of history within the app.
 
 Homepage:
   description: Corresponds to the homepage feature and all content that resides on the page.
@@ -36,6 +54,15 @@ Library:
 Microsurvey:
   description: Corresponds to the microsurveys shown to the user.
 
+Passwords:
+  description: Corresponds to the collection, storage, and autofilling of login passwords.
+
+PasswordGenerator:
+  description: Corresponds to the generation of strong passwords for logins and autofill.
+
+ReadingListPanel:
+  description: Corresponds to the library screen's reading list panel where the user can view their reading list.
+
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
 
@@ -43,8 +70,7 @@ TabsPanel:
   description: Corresponds to all things related to the tab panel.
 
 Toasts:
-  description: Corresponds to any events around toasts in the app. Toasts are the shortlived banners that 
-    appear when an action is taken.
+  description: Corresponds to the toast elements which can be shown over any screen in the app to provide feedback for user interaction and to sometimes revert user changes.
 
 TopSites:
   description: Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)

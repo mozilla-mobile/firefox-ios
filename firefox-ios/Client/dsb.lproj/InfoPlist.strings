@@ -5,7 +5,7 @@
 "New Tab" = "Nowy rejtarik";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox wašu kameru wužywa, aby QR-kody skannował a fota cynił a wideo nagrał.";
+"NSCameraUsageDescription" = "Firefox wašu kameru wužywa, aby QR-kody scannował a fota cynił a wideo nagrał.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox Face ID trjeba, aby pśistup k wašym skłaźonym gronidłam a płaśeńskim metodam měł.";
@@ -20,5 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžośo fota składowaś.";
 
 /* (No Comment) */
-"Scan QR Code" = "QR-kod skannowaś";
+"Scan QR Code" = "QR-kod scannowaś";
 

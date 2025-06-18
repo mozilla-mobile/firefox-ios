@@ -376,10 +376,6 @@ final class HomepageViewController: UIViewController,
             of: UICollectionView.elementKindSectionHeader,
             cellType: LabelButtonHeaderView.self
         )
-        collectionView.registerSupplementary(
-            of: UICollectionView.elementKindSectionFooter,
-            cellType: PocketFooterView.self
-        )
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
@@ -532,6 +528,7 @@ final class HomepageViewController: UIViewController,
             }
             bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
+
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
@@ -543,17 +540,6 @@ final class HomepageViewController: UIViewController,
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
-        case .pocketDiscover(let item):
-            guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
-                cellType: PocketDiscoverCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            pocketDiscoverCell.configure(text: item.title, theme: currentTheme)
-
-            return pocketDiscoverCell
 
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
@@ -592,17 +578,6 @@ final class HomepageViewController: UIViewController,
                 return UICollectionReusableView()
             }
             return self.configureSectionHeader(for: section, with: sectionHeaderView)
-        case UICollectionView.elementKindSectionFooter:
-            guard let footerView = collectionView.dequeueSupplementary(
-                of: kind,
-                cellType: PocketFooterView.self,
-                for: indexPath)
-            else { return UICollectionReusableView() }
-            footerView.onTapLearnMore = {
-                self.navigateToPocketLearnMore()
-            }
-            footerView.applyTheme(theme: currentTheme)
-            return footerView
         default:
             return nil
         }
@@ -885,13 +860,6 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
             dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
-        case .pocketDiscover(let item):
-            let destination = NavigationDestination(
-                .link,
-                url: item.url,
-                visitType: .link
-            )
-            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         default:
             return
         }
