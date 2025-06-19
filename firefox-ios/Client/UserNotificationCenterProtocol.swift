@@ -7,7 +7,6 @@ import UserNotifications
 
 // Protocol with UNUserNotificationCenter methods so we can mock UNUserNotificationCenter for unit testing
 protocol UserNotificationCenterProtocol {
-    func notificationSettings() async -> UNNotificationSettings
     func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void)
     func requestAuthorization(options: UNAuthorizationOptions,
                               completionHandler: @escaping (Bool, Error?) -> Void)
