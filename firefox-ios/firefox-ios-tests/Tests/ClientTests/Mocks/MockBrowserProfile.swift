@@ -6,4 +6,4 @@ import Foundation
 
 @testable import Client
 
-class MockBrowserProfile: BrowserProfile {}
+class MockBrowserProfile: BrowserProfile, @unchecked Sendable {}
