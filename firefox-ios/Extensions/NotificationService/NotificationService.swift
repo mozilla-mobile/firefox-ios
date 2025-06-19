@@ -44,7 +44,10 @@ class NotificationService: UNNotificationServiceExtension {
 
         let display = SyncDataDisplay(content: content, contentHandler: contentHandler)
         self.display = display
-        let handlerCompletion = { (result: Result<PushMessage, PushMessageError>) in
+        self.handleEncryptedPushMessage(
+            userInfo: userInfo,
+            profile: profile
+        ) { (result: Result<PushMessage, PushMessageError>) in
             guard case .success(let event) = result else {
                 if case .failure(let failure) = result {
                     self.didFinish(nil, with: failure)
@@ -53,12 +56,11 @@ class NotificationService: UNNotificationServiceExtension {
             }
             self.didFinish(event)
         }
-        self.handleEncryptedPushMessage(userInfo: userInfo, profile: profile, completion: handlerCompletion)
     }
 
     func handleEncryptedPushMessage(userInfo: [AnyHashable: Any],
                                     profile: BrowserProfile,
-                                    completion: @escaping (Result<PushMessage, PushMessageError>) -> Void
+                                    completion: @escaping @Sendable (Result<PushMessage, PushMessageError>) -> Void
     ) {
         Task {
             do {

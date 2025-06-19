@@ -219,8 +219,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         /// Actual periodic refreshing happens in the background in `BackgroundFirefoxSuggestIngestUtility.swift`.
         /// `.utility` priority is used here because this blocks on network calls and would otherwise trigger a
         /// priority‑inversion warning if run at user‑initiated QoS.
-        Task(priority: .utility) {
-            try await self.profile.firefoxSuggest?.ingest(emptyOnly: true)
+        Task(priority: .utility) { [profile] in
+            try await profile.firefoxSuggest?.ingest(emptyOnly: true)
         }
         logger.log("applicationDidBecomeActive end",
                    level: .info,
