@@ -163,9 +163,6 @@ class MainMenuViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         hintView.removeFromSuperview()
-    }
-
-    deinit {
         unsubscribeFromRedux()
     }
 
