@@ -60,7 +60,7 @@ public protocol FxACommandsDelegate: AnyObject {
     func closeTabs(for urls: [URL])
 }
 
-struct ProfileFileAccessor: FileAccessor {
+struct ProfileFileAccessor: FileAccessor, Sendable {
     public var rootPath: String
 
     init(localName: String, logger: Logger = DefaultLogger.shared) {
