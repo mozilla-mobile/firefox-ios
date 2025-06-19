@@ -39,12 +39,8 @@ struct NavigationToolbarContainerModel: Equatable {
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
                 a11yCustomActionName: action.a11yCustomActionName,
-                a11yCustomAction: action.a11yCustomActionName != nil ? {
-                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                         windowUUID: windowUUID,
-                                                         actionType: ToolbarMiddlewareActionType.customA11yAction)
-                    store.dispatchLegacy(action)
-                } : nil,
+                a11yCustomAction: NavigationToolbarContainerModel.getA11yCustomAction(action: action,
+                                                                                      windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
@@ -64,5 +60,14 @@ struct NavigationToolbarContainerModel: Equatable {
             )
         }
         self.windowUUID = windowUUID
+    }
+
+    private static func getA11yCustomAction(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> (() -> Void)? {
+        return action.a11yCustomActionName != nil ? {
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.customA11yAction)
+            store.dispatchLegacy(action)
+        } : nil
     }
 }
