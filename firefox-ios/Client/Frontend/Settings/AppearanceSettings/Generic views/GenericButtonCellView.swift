@@ -12,7 +12,7 @@ struct GenericButtonCellView: View {
 
     private struct UX {
         static let dividerHeight: CGFloat = 0.5
-        static var buttonPadding: CGFloat = 4
+        static let buttonPadding: CGFloat = 4
     }
 
     init(theme: Theme, title: String, onTap: @escaping () -> Void) {

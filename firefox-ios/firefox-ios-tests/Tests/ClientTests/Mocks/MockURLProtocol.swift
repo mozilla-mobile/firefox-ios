@@ -5,8 +5,8 @@
 import Foundation
 
 class MockURLProtocol: URLProtocol {
-    static var response: ((HTTPURLResponse, URLRequest) -> Void)?
-    static var data: Data?
+    var response: ((HTTPURLResponse, URLRequest) -> Void)?
+    var data: Data?
 
     override class func canInit(with request: URLRequest) -> Bool {
         return true
@@ -17,21 +17,21 @@ class MockURLProtocol: URLProtocol {
     }
 
     override func startLoading() {
-        let response = HTTPURLResponse(
+        let urlResponse = HTTPURLResponse(
             url: request.url!,
             statusCode: 200,
             httpVersion: nil,
             headerFields: nil
         )!
-        Self.response?(
-            response,
+        response?(
+            urlResponse,
             request
         )
-        if let data = Self.data {
+        if let data = data {
             client?.urlProtocol(self, didLoad: data)
         }
 
-        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didReceive: urlResponse, cacheStoragePolicy: .notAllowed)
         client?.urlProtocolDidFinishLoading(self)
     }
 

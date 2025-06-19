@@ -13,12 +13,12 @@ struct ZoomSiteListView: View {
     private let resetDomain: () -> Void
 
     private struct UX {
-        static var sectionPadding: CGFloat = 16
-        static var footerBottomPadding: CGFloat = 32
-        static var footerTopPadding: CGFloat = 8
-        static var cellHeight: CGFloat = 48
-        static var listPadding: CGFloat = 5
-        static var dividerHeight: CGFloat = 0.5
+        static let sectionPadding: CGFloat = 16
+        static let footerBottomPadding: CGFloat = 32
+        static let footerTopPadding: CGFloat = 8
+        static let cellHeight: CGFloat = 48
+        static let listPadding: CGFloat = 5
+        static let dividerHeight: CGFloat = 0.5
     }
 
     var cellBackground: Color {

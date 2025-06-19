@@ -7,8 +7,8 @@ import UIKit
 public struct UIConstants {
     static let TopToolbarHeight: CGFloat = 56
     static let TopToolbarHeightMax: CGFloat = 75
-    static var ToolbarHeight: CGFloat = 46
-    static var ToolbarPadding: CGFloat = 17
+    static let ToolbarHeight: CGFloat = 46
+    static let ToolbarPadding: CGFloat = 17
     static let ZoomPageBarHeight: CGFloat = 54
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.

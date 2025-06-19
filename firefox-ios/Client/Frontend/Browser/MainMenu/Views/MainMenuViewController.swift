@@ -83,13 +83,6 @@ class MainMenuViewController: UIViewController,
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
-        subscribeToRedux()
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.didInstantiateView
-            )
-        )
     }
 
     required init?(coder: NSCoder) {
@@ -101,6 +94,14 @@ class MainMenuViewController: UIViewController,
         super.viewDidLoad()
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
+
+        subscribeToRedux()
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.didInstantiateView
+            )
+        )
 
         if isMenuRedesign {
             setupRedesignView()
@@ -163,6 +164,9 @@ class MainMenuViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         hintView.removeFromSuperview()
+    }
+
+    deinit {
         unsubscribeFromRedux()
     }
 
