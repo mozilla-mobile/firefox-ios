@@ -42,14 +42,8 @@ struct NavigationToolbarContainerModel: Equatable {
                 a11yCustomAction: NavigationToolbarContainerModel.getA11yCustomAction(action: action,
                                                                                       windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
-                onSelected: { button in
-                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                         buttonTapped: button,
-                                                         gestureType: .tap,
-                                                         windowUUID: windowUUID,
-                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
-                    store.dispatchLegacy(action)
-                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
+                onSelected: NavigationToolbarContainerModel.getOnSelected(action: action, windowUUID: windowUUID),
+                onLongPress: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
                                                          gestureType: .longPress,
@@ -69,5 +63,16 @@ struct NavigationToolbarContainerModel: Equatable {
                                                  actionType: ToolbarMiddlewareActionType.customA11yAction)
             store.dispatchLegacy(action)
         } : nil
+    }
+
+    private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
+        return { button in
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .tap,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatchLegacy(action)
+        }
     }
 }
