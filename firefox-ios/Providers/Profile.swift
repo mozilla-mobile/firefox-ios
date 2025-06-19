@@ -214,6 +214,7 @@ extension Profile {
     }
 }
 
+// TODO: Removed unchecked flag with FXIOS-12610
 open class BrowserProfile: Profile,
                            @unchecked Sendable {
     private let logger: Logger
