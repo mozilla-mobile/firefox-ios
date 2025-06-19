@@ -481,7 +481,7 @@ class WebPageSetting: StringPrefSetting {
                    defaultValue: defaultValue,
                    placeholder: placeholder,
                    accessibilityIdentifier: accessibilityIdentifier,
-                   settingIsValid: WebPageSetting.isURLOrEmpty,
+                   settingIsValid: Self.isURLOrEmpty,
                    settingDidChange: settingDidChange)
         configureTextField(
             keyboardType: .URL,
@@ -501,8 +501,8 @@ class WebPageSetting: StringPrefSetting {
         alignTextFieldToNatural()
     }
 
-    static func isURLOrEmpty(_ string: String?) -> Bool {
-        guard let string = string, !string.isEmpty else {
+    nonisolated static func isURLOrEmpty(_ string: String?) -> Bool {
+        guard let string, !string.isEmpty else {
             return true
         }
         return URL(string: string)?.isWebPage() ?? false
