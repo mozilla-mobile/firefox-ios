@@ -1221,9 +1221,17 @@ private extension BrowserViewController {
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+        guard let tab = tabManager.selectedTab else { return false }
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView === webView))
-            && (self.presentedViewController == nil)
+        // Also ensure that we avoid potential spam or DOS scenarios
+        let shouldDisplay = (tab.webView === webView && self.presentedViewController == nil)
+        && tab.jsAlertThrottler.canShowAlert()
+
+        if shouldDisplay {
+            // If we will display the JS alert, ensure we track it on the associated tab
+            tab.jsAlertThrottler.willShowJSAlert()
+        }
+        return shouldDisplay
     }
 
      func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {

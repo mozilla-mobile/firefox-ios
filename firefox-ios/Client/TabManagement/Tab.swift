@@ -115,6 +115,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var readabilityResult: ReadabilityResult?
 
     var consecutiveCrashes: UInt = 0
+    let jsAlertThrottler = JSAlertThrottler()
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
