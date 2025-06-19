@@ -72,12 +72,29 @@ class HistoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307301
-    func testOpenSyncDevices() {
+    func testOpenSyncDevices_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
+        waitForElementsToExist(
+            [
+                app.otherElements.staticTexts["Firefox Sync"],
+                app.otherElements.buttons["Sync and Save Data"]
+            ]
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307301
+    func testOpenSyncDevices_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Firefox sync page should be available
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleExperimentSyncMode)
         waitForElementsToExist(
             [
                 app.otherElements.staticTexts["Firefox Sync"],
@@ -190,7 +207,8 @@ class HistoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307463
-    func testRecentlyClosedWebsiteClosed() {
+    func testRecentlyClosedWebsiteClosed_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -210,6 +228,36 @@ class HistoryTests: FeatureFlaggedTestBase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307463
+    func testRecentlyClosedWebsiteClosed_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla" and close the tab
+        openBookOfMozilla()
+        closeFirstTabByX(isTabTrayOn: true)
+
+        // On regular mode, the closed tab is listed in "Recently Closed" list
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+
+        // On private mode, the closed tab on regular mode is listed in "Recently Closed" list as well
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HistoryRecentlyClosed)
         waitForElementsToExist(
             [
@@ -321,7 +369,8 @@ class HistoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307482
-    func testClearRecentlyClosedHistory() {
+    func testClearRecentlyClosedHistory_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -355,12 +404,74 @@ class HistoryTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
+    func testClearRecentlyClosedHistory_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla" and close the tab
+        openBookOfMozilla()
+        closeFirstTabByX(isTabTrayOn: true)
+
+        // Once the website is visited and closed it will appear in Recently Closed Tabs list
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+
+        // Clear all private data via the settings
+        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ClearPrivateDataSettings)
+        app.tables.cells["ClearPrivateData"].waitAndTap()
+        app.alerts.buttons["OK"].waitAndTap()
+
+        // The closed tab is *not* listed in "Recently Closed Tabs List"
+        navigator.goto(LibraryPanel_History)
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg]
+            ]
+        )
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307483
-    func testLongTapOptionsRecentlyClosedItem() {
+    func testLongTapOptionsRecentlyClosedItem_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
+
+        // Long tap a recently closed item launches a context menu
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+        app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
+        waitForElementsToExist(
+            [
+                app.tables["Context Menu"],
+                app.tables.buttons[StandardImageIdentifiers.Large.plus],
+                app.tables.buttons[StandardImageIdentifiers.Large.privateMode]
+            ]
+        )
+    }
+
+    func testLongTapOptionsRecentlyClosedItem_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla" and close the tab
+        openBookOfMozilla()
+        closeFirstTabByX(isTabTrayOn: true)
 
         // Long tap a recently closed item launches a context menu
         navigator.nowAt(NewTabScreen)
@@ -462,7 +573,8 @@ class HistoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307485
-    func testOpenInNewPrivateTabRecentlyClosedItem() {
+    func testOpenInNewPrivateTabRecentlyClosedItem_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -500,8 +612,49 @@ class HistoryTests: FeatureFlaggedTestBase {
         XCTAssertEqual(userState.numTabs, 1)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307485
+    func testOpenInNewPrivateTabRecentlyClosedItem_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open "Book of Mozilla" and close the tab
+        openBookOfMozilla()
+        closeFirstTabByX(isTabTrayOn: true)
+
+        // Open the page on a new private tab from History Recently Closed screen
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HistoryRecentlyClosed)
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
+        app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
+        mozWaitForElementToExist(app.tables["Context Menu"])
+        app.tables.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
+
+        // The page is opened only on the new private tab
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(TabTray)
+        if isTablet {
+            mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
+        } else {
+            mozWaitForElementToExist(app.otherElements["navBarTabTray"])
+        }
+        XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].isHittable)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        if isTablet {
+            XCTAssertTrue(app.segmentedControls.buttons["Private"].isSelected)
+        } else {
+            mozWaitForElementToExist(app.staticTexts["Private"])
+        }
+        mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
+        XCTAssertEqual(userState.numTabs, 1)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307486
-    func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
+    func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
 
@@ -534,6 +687,47 @@ class HistoryTests: FeatureFlaggedTestBase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.goto(NewTabScreen)
         closeKeyboard()
+        navigator.goto(LibraryPanel_History)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
+        mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
+        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307486
+    func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+
+        // Open the two tabs in private mode. It is necessary to open two sites.
+        // When one tab is closed private mode, the private mode still has something opened.
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: bookOfMozilla["file"]!))
+        waitUntilPageLoad()
+        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+
+        // Close the private tab "Book of Mozilla" by tapping 'x' button
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        mozWaitForElementToExist(app.staticTexts[webpage["label"]!])
+        app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+
+        // On private mode, the "Recently Closed Tabs List" is empty
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(LibraryPanel_History)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
+        mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
+        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+
+        // On regular mode, the "Recently Closed Tabs List" is empty, too
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.goto(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
