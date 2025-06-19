@@ -5,14 +5,16 @@
 extension Tab {
     class ChangeUserAgent {
         // Track these in-memory only
-        static var privateModeHostList = Set<String>()
+        // TODO: FXIOS-12594 This global property is not concurrency safe
+        nonisolated(unsafe) private static var privateModeHostList = Set<String>()
 
         private static let file: URL = {
             let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
         }()
 
-        private static var baseDomainList: Set<String> = {
+        // TODO: FXIOS-12594 This global property is not concurrency safe
+        nonisolated(unsafe) private static var baseDomainList: Set<String> = {
             if let data = try? Data(contentsOf: ChangeUserAgent.file),
                let hosts = try? NSKeyedUnarchiver.unarchivedObject(
                 ofClasses: [NSSet.self, NSArray.self, NSString.self],

@@ -172,7 +172,8 @@ private let center = NotificationCenter()
 
 private struct AssociatedKeys {
     // This property's address will be used as a unique address for the associated object's handle
-    static var observers: UInt8 = 0
+    // TODO: FXIOS-12595 This global property is not concurrency safe
+    nonisolated(unsafe) static var observers: UInt8 = 0
 }
 
 private class ObserverWrapper: NSObject {

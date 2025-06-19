@@ -11,7 +11,9 @@ import WebKit
 import WebEngine
 import TabDataStore
 
+#if DEBUG
 private var debugTabCount = 0
+#endif
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     guard var recent = tabs.first else {
@@ -497,8 +499,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.backgroundDispatchQueue = backgroundDispatchQueue
         super.init()
         self.isPrivate = isPrivate
-
+#if DEBUG
         debugTabCount += 1
+#endif
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -628,8 +631,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
         webView?.navigationDelegate = nil
 
-        debugTabCount -= 1
 #if DEBUG
+        debugTabCount -= 1
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
             // Need delay for pool to drain.

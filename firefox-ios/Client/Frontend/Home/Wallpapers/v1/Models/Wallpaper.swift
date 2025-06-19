@@ -88,7 +88,7 @@ struct Wallpaper: Equatable {
 
     /// ID for the "default" wallpaper object. This is not actually an image file name, this just helps us
     /// identify that no image is selected.
-    private static var noAssetID = "fxDefault"
+    private static let noAssetID = "fxDefault"
     private var deviceVersionID: String {
         return UIDevice.current.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
     }

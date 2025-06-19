@@ -11,10 +11,10 @@ import ComponentLibrary
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     typealias SubscriberStateType = ThemeSettingsState
     struct UX {
-        static var rowHeight: CGFloat = 70
-        static var moonSunIconSize: CGFloat = 18
-        static var sliderLeftRightInset: CGFloat = 16
-        static var spaceBetweenTableSections: CGFloat = 20
+        static let rowHeight: CGFloat = 70
+        static let moonSunIconSize: CGFloat = 18
+        static let sliderLeftRightInset: CGFloat = 16
+        static let spaceBetweenTableSections: CGFloat = 20
     }
 
     enum Section: Int {
