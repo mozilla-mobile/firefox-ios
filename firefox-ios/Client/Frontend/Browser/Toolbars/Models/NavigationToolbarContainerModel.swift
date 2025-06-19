@@ -43,14 +43,9 @@ struct NavigationToolbarContainerModel: Equatable {
                                                                                       windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
                 onSelected: NavigationToolbarContainerModel.getOnSelected(action: action, windowUUID: windowUUID),
-                onLongPress: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
-                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                         buttonTapped: button,
-                                                         gestureType: .longPress,
-                                                         windowUUID: windowUUID,
-                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
-                    store.dispatchLegacy(action)
-                } : nil
+                onLongPress: NavigationToolbarContainerModel.getOnLongPress(action: action,
+                                                                            state: state,
+                                                                            windowUUID: windowUUID)
             )
         }
         self.windowUUID = windowUUID
@@ -74,5 +69,18 @@ struct NavigationToolbarContainerModel: Equatable {
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)
             store.dispatchLegacy(action)
         }
+    }
+
+    private static func getOnLongPress(action: ToolbarActionConfiguration,
+                                       state: ToolbarState,
+                                       windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
+        return action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .longPress,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatchLegacy(action)
+        } : nil
     }
 }
