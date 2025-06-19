@@ -214,7 +214,8 @@ extension Profile {
     }
 }
 
-open class BrowserProfile: Profile {
+open class BrowserProfile: Profile,
+                           @unchecked Sendable {
     private let logger: Logger
     private lazy var directory: String = {
         do {
