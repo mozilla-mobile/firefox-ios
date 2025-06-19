@@ -258,12 +258,7 @@ final class AddressToolbarContainerModel: Equatable {
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
                 a11yCustomActionName: action.a11yCustomActionName,
-                a11yCustomAction: action.a11yCustomActionName != nil ? {
-                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                         windowUUID: windowUUID,
-                                                         actionType: ToolbarMiddlewareActionType.customA11yAction)
-                    store.dispatchLegacy(action)
-                } : nil,
+                a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
@@ -282,6 +277,15 @@ final class AddressToolbarContainerModel: Equatable {
                 } : nil
             )
         }
+    }
+
+    private static func getA11yCustomAction(action: ToolbarActionConfiguration, windowUUID: UUID) -> (() -> Void)? {
+        return action.a11yCustomActionName != nil ? {
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.customA11yAction)
+            store.dispatchLegacy(action)
+        } : nil
     }
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
