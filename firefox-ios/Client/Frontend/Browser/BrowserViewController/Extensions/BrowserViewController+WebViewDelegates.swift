@@ -688,9 +688,10 @@ extension BrowserViewController: WKNavigationDelegate {
             forceDownload: forceDownload) {
             passBookHelper = OpenPassBookHelper(presenter: self)
             // Open our helper and nullifies the helper when done with it
-            passBookHelper?.open(response: response, cookieStore: cookieStore, completion: {
+            Task {
+                await passBookHelper?.open(response: response, cookieStore: cookieStore)
                 self.passBookHelper = nil
-            })
+            }
 
             // Cancel this response from the webview.
             decisionHandler(.cancel)
