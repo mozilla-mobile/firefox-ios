@@ -76,30 +76,29 @@ extension BrowserViewController: DownloadQueueDelegate {
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
-        // Handle Passbook Pass downloads
-        if let download = (download as? BlobDownload),
-           OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
-            passBookHelper = OpenPassBookHelper(presenter: self)
-            passBookHelper?.open(data: download.data) {
+        Task { @MainActor in
+            // Handle Passbook Pass downloads
+            if let download = (download as? BlobDownload),
+               OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
+                passBookHelper = OpenPassBookHelper(presenter: self)
+                passBookHelper?.open(data: download.data)
                 self.passBookHelper = nil
             }
-        }
 
-        // Handle toast notification
-        guard let downloadToast = self.downloadToast,
-              let downloadProgressManager = self.downloadProgressManager,
-              let download = downloadProgressManager.downloads.first,
-              download.originWindow == windowUUID, downloadQueue.isEmpty
-        else { return }
+            // Handle toast notification
+            guard let downloadToast = self.downloadToast,
+                  let downloadProgressManager = self.downloadProgressManager,
+                  let download = downloadProgressManager.downloads.first,
+                  download.originWindow == windowUUID, downloadQueue.isEmpty
+            else { return }
 
-        DispatchQueue.main.async { [weak self] in
             downloadToast.dismiss(false)
-            if #available(iOS 17, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
+            if #available(iOS 17, *), let downloadLiveActivityWrapper = downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-                self?.downloadLiveActivityWrapper = nil
+                self.downloadLiveActivityWrapper = nil
             }
-            self?.downloadProgressManager = nil
-            self?.presentDownloadCompletedToast(filename: download.filename)
+            self.downloadProgressManager = nil
+            presentDownloadCompletedToast(filename: download.filename)
         }
     }
 
