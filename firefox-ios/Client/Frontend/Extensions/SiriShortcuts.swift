@@ -43,6 +43,7 @@ class SiriShortcuts {
         viewController.present(editViewController, animated: true, completion: nil)
     }
 
+    @MainActor
     static func manageSiri(for activityType: SiriShortcuts.activityType, in viewController: UIViewController) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
