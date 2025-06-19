@@ -27,7 +27,7 @@ final class TabsCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> TabsCoordinator {
         let subject = TabsCoordinator(router: mockRouter)
 

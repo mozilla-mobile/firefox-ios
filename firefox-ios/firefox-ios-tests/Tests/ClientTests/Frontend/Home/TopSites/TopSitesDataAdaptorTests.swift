@@ -555,7 +555,7 @@ extension TopSitesDataAdaptorTests {
                        siteCount: Int = 10,
                        duplicatePinnedSiteURL: Bool = false,
                        expectedContileResult: ContileResult = .success([]),
-                       file: StaticString = #file,
+                       file: StaticString = #filePath,
                        line: UInt = #line) -> TopSitesDataAdaptorImplementation {
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
         historyStub.siteCount = siteCount

@@ -69,7 +69,7 @@ class FaviconURLCacheTests: XCTestCase {
         XCTAssertNil(result2)
     }
 
-    private func getTestData(items: [FaviconURL], file: String = #file, line: UInt = #line) -> Data {
+    private func getTestData(items: [FaviconURL], file: String = #filePath, line: UInt = #line) -> Data {
         let archiver = NSKeyedArchiver(requiringSecureCoding: false)
         do {
             try archiver.encodeEncodable(items, forKey: "favicon-url-cache")
