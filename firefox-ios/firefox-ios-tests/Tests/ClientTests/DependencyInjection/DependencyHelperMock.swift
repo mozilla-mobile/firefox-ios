@@ -18,7 +18,7 @@ class DependencyHelperMock {
         let profile: Profile = BrowserProfile(
             localName: "profile"
         )
-        AppContainer.shared.register(service: profile)
+        AppContainer.shared.register(service: profile as Profile)
 
         let searchEnginesManager = SearchEnginesManager(
             prefs: profile.prefs,
@@ -31,7 +31,7 @@ class DependencyHelperMock {
             files: profile.files,
             namespace: TabManagerConstants.tabScreenshotNamespace,
             quality: UIConstants.ScreenshotQuality)
-        AppContainer.shared.register(service: diskImageStore)
+        AppContainer.shared.register(service: diskImageStore as DiskImageStore)
 
         let windowUUID = WindowUUID.XCTestDefaultUUID
         let windowManager: WindowManager = injectedWindowManager ?? MockWindowManager(
@@ -43,22 +43,22 @@ class DependencyHelperMock {
                                                        windowManager: windowManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
-        AppContainer.shared.register(service: appSessionProvider)
+        AppContainer.shared.register(service: appSessionProvider as AppSessionProvider)
 
         let themeManager: ThemeManager = MockThemeManager()
-        AppContainer.shared.register(service: themeManager)
+        AppContainer.shared.register(service: themeManager as ThemeManager)
 
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
-        AppContainer.shared.register(service: windowManager)
+        AppContainer.shared.register(service: windowManager as WindowManager)
         windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: windowUUID)
 
         let microsurveyManager: MicrosurveyManager = injectedMicrosurveyManager ?? MockMicrosurveySurfaceManager()
-        AppContainer.shared.register(service: microsurveyManager)
+        AppContainer.shared.register(service: microsurveyManager as MicrosurveyManager)
 
         let pocketManager: PocketManagerProvider = injectedPocketManager ?? MockPocketManager()
-        AppContainer.shared.register(service: pocketManager)
+        AppContainer.shared.register(service: pocketManager as PocketManagerProvider)
 
         let documentLogger = DocumentLogger(logger: MockLogger())
         AppContainer.shared.register(service: documentLogger)
