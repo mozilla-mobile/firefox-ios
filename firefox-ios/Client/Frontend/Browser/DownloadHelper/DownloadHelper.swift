@@ -62,7 +62,8 @@ class DownloadHelper: NSObject {
     }
 
     func downloadViewModel(windowUUID: WindowUUID,
-                           okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
+                           okAction: @escaping (HTTPDownload) -> Void,
+                           isPrivate: Bool?) -> PhotonActionSheetViewModel? {
         var requestUrl = request.url
         if let url = requestUrl, url.scheme == "blob" {
             requestUrl = url.removeBlobFromUrl()
@@ -73,7 +74,8 @@ class DownloadHelper: NSObject {
         guard let download = HTTPDownload(originWindow: windowUUID,
                                           cookieStore: cookieStore,
                                           preflightResponse: preflightResponse,
-                                          request: request)
+                                          request: request,
+                                          isPrivate: isPrivate)
         else { return nil }
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(
