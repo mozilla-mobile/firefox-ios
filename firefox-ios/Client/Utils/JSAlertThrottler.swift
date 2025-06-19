@@ -20,8 +20,9 @@ final class JSAlertThrottler {
     // MARK: - Public API
 
     func canShowAlert() -> Bool {
-        return alertCount < Thresholds.maxConsecutiveAlerts ||
-        lastAlertDate.timeIntervalSinceNow < (timespan * -1.0)
+        let alertCountOK = alertCount < Thresholds.maxConsecutiveAlerts
+        let timeOK = lastAlertDate.timeIntervalSinceNow < (timespan * -1.0)
+        return alertCountOK || timeOK
     }
 
     func willShowJSAlert() {
@@ -30,9 +31,9 @@ final class JSAlertThrottler {
             // Our reasonable time limit has passed, which means we can reset our
             // alert count and allow any further alerts.
             alertCount = 1
+            lastAlertDate = Date()
         } else {
             alertCount += 1
         }
-        lastAlertDate = Date()
     }
 }

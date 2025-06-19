@@ -75,8 +75,11 @@ extension BrowserViewController: WKUIDelegate {
         let messageAlert = MessageAlert(message: message,
                                         frame: frame,
                                         completionHandler: completionHandler)
-
-        if shouldDisplayJSAlertForWebView(webView) {
+        if !alertIsWithinAcceptableSpamLimits(webView) {
+            // User is being spammed. Squelch alert. Note that we have to do this after
+            // a delay to avoid JS that could spin the CPU endlessly.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { completionHandler() }
+        } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript alert panel will be presented.", level: .info, category: .webview)
 
             let alertController = messageAlert.alertController()
@@ -99,7 +102,11 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(confirm)
         }
 
-        if shouldDisplayJSAlertForWebView(webView) {
+        if !alertIsWithinAcceptableSpamLimits(webView) {
+            // User is being spammed. Squelch alert. Note that we have to do this after
+            // a delay to avoid JS that could spin the CPU endlessly.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { completionHandler(false) }
+        } else if shouldDisplayJSAlertForWebView(webView) {
             self.logger.log("JavaScript confirm panel will be presented.", level: .info, category: .webview)
 
             let alertController = confirmAlert.alertController()
@@ -123,7 +130,11 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(input)
         }
 
-        if shouldDisplayJSAlertForWebView(webView) {
+        if !alertIsWithinAcceptableSpamLimits(webView) {
+            // User is being spammed. Squelch alert. Note that we have to do this after
+            // a delay to avoid JS that could spin the CPU endlessly.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { completionHandler("") }
+        } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript text input panel will be presented.", level: .info, category: .webview)
 
             let alertController = textInputAlert.alertController()
@@ -1223,15 +1234,14 @@ private extension BrowserViewController {
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         guard let tab = tabManager.selectedTab else { return false }
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        // Also ensure that we avoid potential spam or DOS scenarios
-        let shouldDisplay = (tab.webView === webView && self.presentedViewController == nil)
-        && tab.jsAlertThrottler.canShowAlert()
+        return (tab.webView === webView && self.presentedViewController == nil)
+    }
 
-        if shouldDisplay {
-            // If we will display the JS alert, ensure we track it on the associated tab
-            tab.jsAlertThrottler.willShowJSAlert()
-        }
-        return shouldDisplay
+    func alertIsWithinAcceptableSpamLimits(_ webView: WKWebView) -> Bool {
+        guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
+        let canShow = tab.jsAlertThrottler.canShowAlert()
+        if canShow { tab.jsAlertThrottler.willShowJSAlert() }
+        return canShow
     }
 
      func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
