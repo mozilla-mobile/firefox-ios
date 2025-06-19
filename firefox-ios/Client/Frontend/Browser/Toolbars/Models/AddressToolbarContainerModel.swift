@@ -261,14 +261,7 @@ final class AddressToolbarContainerModel: Equatable {
                 a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
                 onSelected: getOnSelected(action: action, windowUUID: windowUUID),
-                onLongPress: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) ? { button in
-                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                         buttonTapped: button,
-                                                         gestureType: .longPress,
-                                                         windowUUID: windowUUID,
-                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
-                    store.dispatchLegacy(action)
-                } : nil
+                onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
             )
         }
     }
@@ -291,6 +284,19 @@ final class AddressToolbarContainerModel: Equatable {
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)
             store.dispatchLegacy(action)
         }
+    }
+
+    private static func getOnLongPress(action: ToolbarActionConfiguration,
+                                       windowUUID: UUID,
+                                       isShowingTopTabs: Bool) -> ((UIButton) -> Void)? {
+        return action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) ? { button in
+            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                 buttonTapped: button,
+                                                 gestureType: .longPress,
+                                                 windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
+            store.dispatchLegacy(action)
+        } : nil
     }
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
