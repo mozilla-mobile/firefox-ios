@@ -109,10 +109,6 @@ class PocketViewModel {
 
         pocketStoriesViewModels.append(pocketStoryViewModel)
     }
-
-    private func showDiscoverMore() {
-        onTapTileAction?(PocketProvider.MoreStoriesURL)
-    }
 }
 
 // MARK: HomeViewModelProtocol
