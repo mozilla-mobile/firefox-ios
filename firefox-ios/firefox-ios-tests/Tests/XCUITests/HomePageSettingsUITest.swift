@@ -220,7 +220,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn() {
+    func testJumpBackIn_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -248,6 +250,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
     func testRecentlySaved_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
         addContentToReaderView()
@@ -331,6 +334,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
     func testShortcutsRows_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         addWebsitesToShortcut(website: path(forTestPage: url_1))
         addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))
         addWebsitesToShortcut(website: path(forTestPage: url_3))

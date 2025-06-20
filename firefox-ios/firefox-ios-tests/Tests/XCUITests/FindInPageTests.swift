@@ -50,6 +50,7 @@ class FindInPageTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306851
     // Smoketest
     func testFindFromMenu() {
+        app.launch()
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
