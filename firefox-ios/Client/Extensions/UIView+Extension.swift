@@ -29,13 +29,14 @@ extension UIView {
     ///
     /// - Parameter style: The strength of the blur desired
     func addBlurEffect(using style: UIBlurEffect.Style) {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return }
+        guard !UIAccessibility.isReduceTransparencyEnabled, shouldAddBlur else { return }
 
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.clipsToBounds = true
         blurEffectView.isUserInteractionEnabled = false
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        blurEffectView.layer.cornerRadius = layer.cornerRadius
         insertSubview(blurEffectView, at: 0)
 
         NSLayoutConstraint.activate([

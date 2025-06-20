@@ -31,7 +31,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.cornerRadius = UX.faviconCornerRadius
     }
 
     private lazy var imageView: FaviconImageView = {
@@ -295,7 +295,7 @@ extension TopSiteCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             rootContainer.layoutIfNeeded()
-            rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            rootContainer.addBlurEffect(using: .systemThickMaterial)
         } else {
             // If blur is disabled set background color
             rootContainer.removeVisualEffectView()
