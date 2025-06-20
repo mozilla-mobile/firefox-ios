@@ -76,9 +76,7 @@ extension BrowserViewController: WKUIDelegate {
                                         frame: frame,
                                         completionHandler: completionHandler)
         if !alertIsWithinAcceptableSpamLimits(webView) {
-            // User is being spammed. Squelch alert. Note that we have to do this after
-            // a delay to avoid JS that could spin the CPU endlessly.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { completionHandler() }
+            handleSpammedJSAlert(completionHandler)
         } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript alert panel will be presented.", level: .info, category: .webview)
 
@@ -103,9 +101,7 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         if !alertIsWithinAcceptableSpamLimits(webView) {
-            // User is being spammed. Squelch alert. Note that we have to do this after
-            // a delay to avoid JS that could spin the CPU endlessly.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { completionHandler(false) }
+            handleSpammedJSAlert { completionHandler(false) }
         } else if shouldDisplayJSAlertForWebView(webView) {
             self.logger.log("JavaScript confirm panel will be presented.", level: .info, category: .webview)
 
@@ -131,9 +127,7 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         if !alertIsWithinAcceptableSpamLimits(webView) {
-            // User is being spammed. Squelch alert. Note that we have to do this after
-            // a delay to avoid JS that could spin the CPU endlessly.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { completionHandler("") }
+            handleSpammedJSAlert { completionHandler("") }
         } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript text input panel will be presented.", level: .info, category: .webview)
 
@@ -201,6 +195,13 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     // MARK: - Helpers
+
+    private func handleSpammedJSAlert(_ callback: @escaping () -> Void) {
+        // User is being spammed. Squelch alert. Note that we have to do this after
+        // a delay to avoid JS that could spin the CPU endlessly.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
+    }
+
     private func contextMenuConfiguration(for url: URL,
                                           webView: WKWebView,
                                           elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
