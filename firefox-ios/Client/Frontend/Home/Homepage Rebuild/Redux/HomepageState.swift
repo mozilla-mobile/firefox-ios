@@ -100,7 +100,7 @@ struct HomepageState: ScreenState, Equatable {
 
         switch action.actionType {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
-            return handleInitializeAndViewWillTransitionState(state: state, action: action)
+            return handleInitializeAndViewWillTransitionAction(state: state, action: action)
         case HomepageActionType.embeddedHomepage:
             guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
                 return defaultState(from: state)
@@ -114,7 +114,7 @@ struct HomepageState: ScreenState, Equatable {
         }
     }
 
-    private static func handleInitializeAndViewWillTransitionState(state: HomepageState, action: Action) -> HomepageState {
+    private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: HeaderState.reducer(state.headerState, action),
