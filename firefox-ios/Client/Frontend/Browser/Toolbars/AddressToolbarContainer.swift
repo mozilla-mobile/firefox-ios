@@ -35,6 +35,8 @@ final class AddressToolbarContainer: UIView,
         static let skeletonBarOffset: CGFloat = 8
         static let skeletonBarBottomPositionOffset: CGFloat = 4
         static let skeletonBarWidthOffset: CGFloat = 32
+        static let addNewTabFadeAnimationDuration: TimeInterval = 0.2
+        static let addNewTabPercentageAnimationThreshold: CGFloat = 0.3
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -78,6 +80,11 @@ final class AddressToolbarContainer: UIView,
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
     }
+    private lazy var addNewTabView: AddressToolbarAddTabView = .build()
+    private var addNewTabTrailingConstraint: NSLayoutConstraint?
+    private var addNewTabLeadingConstraint: NSLayoutConstraint?
+    private var addNewTabTopConstraint: NSLayoutConstraint?
+    private var addNewTabBottomConstraint: NSLayoutConstraint?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
@@ -249,6 +256,12 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: newModel.shouldAnimate)
 
+        let addressBarVerticalPaddings = newModel.addressToolbarConfig.uxConfiguration
+            .locationViewVerticalPaddings(addressBarPosition: toolbarState.toolbarPosition)
+        addNewTabTopConstraint?.constant = addressBarVerticalPaddings.top
+        addNewTabBottomConstraint?.constant = -addressBarVerticalPaddings.bottom
+        addNewTabView.configure(newModel.addressToolbarConfig.uxConfiguration)
+
         // Replace the old model after we are done using it for comparison
         // All functionality that depends on the new model should come after this
         self.model = newModel
@@ -295,6 +308,17 @@ final class AddressToolbarContainer: UIView,
 
         setupToolbarConstraints()
         setupSkeletonAddressBarsLayout()
+
+        addSubview(addNewTabView)
+        addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
+        addNewTabTrailingConstraint = addNewTabView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        addNewTabTopConstraint = addNewTabView.topAnchor.constraint(equalTo: topAnchor)
+        addNewTabBottomConstraint = addNewTabView.bottomAnchor.constraint(equalTo: bottomAnchor)
+
+        addNewTabTrailingConstraint?.isActive = true
+        addNewTabTopConstraint?.isActive = true
+        addNewTabBottomConstraint?.isActive = true
+        addNewTabLeadingConstraint?.isActive = true
     }
 
     private func setupToolbarConstraints() {
@@ -347,10 +371,22 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    func applyTransform(_ transform: CGAffineTransform) {
+    func applyTransform(_ transform: CGAffineTransform, shouldAddNewTab: Bool) {
         regularToolbar.transform = transform
         leftSkeletonAddressBar.transform = transform
         rightSkeletonAddressBar.transform = transform
+        if shouldAddNewTab {
+            let percentageTransform = abs(transform.tx) / bounds.width
+            UIView.animate(withDuration: UX.addNewTabFadeAnimationDuration) {
+                self.addNewTabView.showHideAddTabIcon(shouldShow:
+                                                        percentageTransform > UX.addNewTabPercentageAnimationThreshold)
+                self.addNewTabTrailingConstraint?.constant =
+                percentageTransform > UX.addNewTabPercentageAnimationThreshold ?
+                    -UX.toolbarHorizontalPadding : 0.0
+                self.layoutIfNeeded()
+            }
+            addNewTabLeadingConstraint?.constant = transform.tx
+        }
     }
 
     // MARK: - ThemeApplicable
@@ -359,6 +395,7 @@ final class AddressToolbarContainer: UIView,
         if isSwipingTabsEnabled {
             leftSkeletonAddressBar.applyTheme(theme: theme)
             rightSkeletonAddressBar.applyTheme(theme: theme)
+            addNewTabView.applyTheme(theme: theme)
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
     }

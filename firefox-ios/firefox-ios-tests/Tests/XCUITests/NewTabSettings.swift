@@ -25,8 +25,9 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
-    func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOff() {
+    func testChangeNewTabSettingsShowBlankPage_swipingTabsExperimentOff_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
         app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -67,7 +68,8 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
-    func testChangeNewTabSettingsShowFirefoxHome() {
+    func testChangeNewTabSettingsShowFirefoxHome_swipingTabsExperimentOff() {
+        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
         app.launch()
         // Set to history page first since FF Home is default
         waitForTabsButton()
