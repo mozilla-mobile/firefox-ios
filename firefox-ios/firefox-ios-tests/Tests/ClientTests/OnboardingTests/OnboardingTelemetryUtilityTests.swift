@@ -134,7 +134,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     // MARK: Private
     private func createTelemetryUtility(
         for onboardingType: OnboardingType,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> OnboardingTelemetryUtility {
         let nimbusConfigUtility = NimbusOnboardingTestingConfigUtility()

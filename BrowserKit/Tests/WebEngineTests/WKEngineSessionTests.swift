@@ -614,7 +614,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Helper
 
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line,
                        uiHandler: WKUIHandler? = nil) -> WKEngineSession? {
         let sessionDependencies = DefaultTestDependencies().sessionDependencies

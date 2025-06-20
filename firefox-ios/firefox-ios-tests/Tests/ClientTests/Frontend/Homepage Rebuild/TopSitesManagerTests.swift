@@ -459,7 +459,7 @@ final class TopSitesManagerTests: XCTestCase {
         topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(sites: []),
         searchEngineManager: SearchEnginesManagerProvider = MockSearchEnginesManager(),
         maxCount: Int = 10,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> TopSitesManager {
         let mockProfile = try XCTUnwrap(injectedProfile ?? profile)

@@ -191,7 +191,7 @@ final class WKEngineWebViewTests: XCTestCase {
 
     @MainActor
     func createSubject(pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
-                       file: StaticString = #file,
+                       file: StaticString = #filePath,
                        line: UInt = #line) -> DefaultWKEngineWebView {
         let parameters = WKWebViewParameters(blockPopups: true,
                                              isPrivate: false,

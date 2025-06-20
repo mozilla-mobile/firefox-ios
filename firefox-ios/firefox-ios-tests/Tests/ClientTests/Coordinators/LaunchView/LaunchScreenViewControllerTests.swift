@@ -71,7 +71,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewController {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,
                                                  coordinator: coordinatorDelegate,

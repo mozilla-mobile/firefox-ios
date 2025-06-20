@@ -359,7 +359,7 @@ final class SearchViewModelTests: XCTestCase {
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> SearchViewModel {
         let subject = SearchViewModel(

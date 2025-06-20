@@ -72,7 +72,7 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockTabManager.addTabsURLs, [URL(string: "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=modal&utm_campaign=microsurvey&utm_content=homepage")])
     }
 
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> MicrosurveyCoordinator {
         let subject = MicrosurveyCoordinator(
             model: MicrosurveyMock.model,
