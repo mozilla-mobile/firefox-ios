@@ -173,7 +173,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .hntTopSitesVisualRefresh,
+                    with: .homepageStoriesRedesign,
                     titleText: format(string: "Stories Redesign"),
                     statusText: format(string: "Toggle to enable homepage stories section redesign")
                 ) { [weak self] _ in
