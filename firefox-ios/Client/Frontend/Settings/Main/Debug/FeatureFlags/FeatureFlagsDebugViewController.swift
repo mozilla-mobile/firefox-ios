@@ -28,13 +28,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
-                    with: .addressBarMenu,
-                    titleText: format(string: "Enable New AddressBar Menu"),
-                    statusText: format(string: "Toggle to show the new address bar menu")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .appearanceMenu,
                     titleText: format(string: "Appearance Menu"),
                     statusText: format(string: "Toggle to show the new apperance menu")
@@ -141,6 +134,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .nativeErrorPage,
                     titleText: format(string: "Native Error Page"),
                     statusText: format(string: "Toggle to display natively created error pages")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .addressBarMenu,
+                    titleText: format(string: "New AddressBar Menu"),
+                    statusText: format(string: "Toggle to show the new address bar menu")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
