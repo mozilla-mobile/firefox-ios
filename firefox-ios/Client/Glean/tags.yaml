@@ -24,6 +24,9 @@ AppIcon:
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
+AppMenu:
+  description: Corresponds to the app's main menu.
+
 Autofill:
   description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
 
