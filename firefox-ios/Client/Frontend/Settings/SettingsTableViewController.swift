@@ -501,7 +501,7 @@ class WebPageSetting: StringPrefSetting {
         alignTextFieldToNatural()
     }
 
-   nonisolated static func isURLOrEmpty(_ string: String?) -> Bool {
+    static func isURLOrEmpty(_ string: String?) -> Bool {
         guard let string = string, !string.isEmpty else {
             return true
         }
