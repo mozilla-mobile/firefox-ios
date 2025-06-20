@@ -5,13 +5,16 @@
 import WebKit
 
 struct SafelistedDomains {
-    var domainSet = Set<String>() {
-        didSet {
-            domainRegex = domainSet.compactMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
+    var domainSet = Set<String>()
+    private(set) var domainRegex = [String]()
+
+    mutating func updateDomainRegex() async {
+        for domain in domainSet {
+            if let regex = await wildcardContentBlockerDomainToRegex(domain: "*" + domain) {
+                domainRegex.append(regex)
+            }
         }
     }
-
-    private(set) var domainRegex = [String]()
 }
 
 extension ContentBlocker {
@@ -58,6 +61,7 @@ extension ContentBlocker {
     }
 
     private func updateSafelist(completion: (() -> Void)?) {
+        Task { await safelistedDomains.updateDomainRegex() }
         removeAllRulesInStore {
             self.compileListsNotInStore {
                 completion?()
