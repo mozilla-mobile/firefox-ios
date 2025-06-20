@@ -173,6 +173,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .hntTopSitesVisualRefresh,
+                    titleText: format(string: "Stories Redesign"),
+                    statusText: format(string: "Toggle to enable homepage stories section redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .tabTrayUIExperiments,
                     titleText: format(string: "Tab Tray UI Experiment"),
                     statusText: format(string: "Toggle to use the new tab tray UI")
