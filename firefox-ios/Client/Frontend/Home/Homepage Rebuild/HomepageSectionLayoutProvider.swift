@@ -104,7 +104,7 @@ final class HomepageSectionLayoutProvider {
         with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
-        case .header:
+        case .header, .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
                 topInsets: UX.standardInset,
@@ -400,5 +400,18 @@ final class HomepageSectionLayoutProvider {
         section.orthogonalScrollingBehavior = .continuous
 
         return section
+    }
+
+    /// Returns an empty layout to avoid app crash when unable to section data
+    func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
+        let zeroLayoutSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(0.0),
+            heightDimension: .absolute(0.0)
+        )
+        let emptyGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: zeroLayoutSize,
+            subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
+        )
+        return NSCollectionLayoutSection(group: emptyGroup)
     }
 }

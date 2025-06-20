@@ -4,8 +4,7 @@
 
 import Common
 
-// TODO: FXIOS-12584 This global property is not concurrency safe
-nonisolated(unsafe) private var appDelegate: String?
+private let appDelegate: String
 
 // For performance or UI tests, run the UITestAppDelegate
 // For unit tests, run no app delegate as unit tests are testing enclosed units of code and shouldn't rely
