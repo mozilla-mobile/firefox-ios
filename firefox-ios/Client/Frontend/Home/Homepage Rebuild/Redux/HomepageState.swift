@@ -108,7 +108,7 @@ struct HomepageState: ScreenState, Equatable {
 
             return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
-            return handleDidTabChangeToHomepageState(state: state, action: action)
+            return handleDidTabChangeToHomepageAction(state: state, action: action)
         default:
             return defaultState(from: state, action: action)
         }
@@ -146,7 +146,7 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
-    private static func handleDidTabChangeToHomepageState(state: HomepageState, action: Action) -> HomepageState {
+    private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: HeaderState.reducer(state.headerState, action),
