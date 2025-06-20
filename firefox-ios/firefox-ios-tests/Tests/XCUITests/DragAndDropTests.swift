@@ -50,7 +50,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
-    func testRearrangeMoreThan3TabsTabTray() {
+    func testRearrangeMoreThan3TabsTabTraytabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
@@ -215,7 +216,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361193
-    func testRearrangeTabsPrivateModeTabTray() {
+    func testRearrangeTabsPrivateModeTabTray_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
