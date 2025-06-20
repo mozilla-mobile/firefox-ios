@@ -158,7 +158,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
-                store.dispatch(newAction)
+                store.dispatchLegacy(newAction)
             }
             if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
                 userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
@@ -379,7 +379,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
                                                  origin: origin)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 

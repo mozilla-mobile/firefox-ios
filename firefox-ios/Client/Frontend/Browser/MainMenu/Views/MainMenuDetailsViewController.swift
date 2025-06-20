@@ -113,7 +113,7 @@ final class MainMenuDetailsViewController: UIViewController,
     private func setupCallbacks() {
         submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
             guard let self else { return }
-            store.dispatch(
+            store.dispatchLegacy(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuDetailsActionType.tapBackToMainMenu,
@@ -124,7 +124,7 @@ final class MainMenuDetailsViewController: UIViewController,
         }
         submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
             guard let self else { return }
-            store.dispatch(
+            store.dispatchLegacy(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuDetailsActionType.tapDismissView,
@@ -141,7 +141,7 @@ final class MainMenuDetailsViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -158,7 +158,7 @@ final class MainMenuDetailsViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
