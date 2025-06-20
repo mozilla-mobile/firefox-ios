@@ -919,12 +919,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    private func deleteDownloadedDocuments(
-        docsURL: TemporaryDocumentSession,
-        backgroundDispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)
-    ) {
+    private func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
         guard !docsURL.isEmpty else { return }
-        backgroundDispatchQueue.async { [fileManager] in
+        DispatchQueue.global(qos: .background).async { [fileManager] in
             docsURL.forEach { url in
                 try? fileManager.removeItem(at: url.key)
             }
