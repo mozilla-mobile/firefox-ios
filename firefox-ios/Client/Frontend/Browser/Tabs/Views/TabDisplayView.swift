@@ -178,7 +178,7 @@ class TabDisplayView: UIView,
             let action = TabPanelViewAction(panelType: self.panelType,
                                             windowUUID: self.windowUUID,
                                             actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -258,7 +258,7 @@ class TabDisplayView: UIView,
                 let action = TabPanelViewAction(panelType: self.panelType,
                                                 windowUUID: self.windowUUID,
                                                 actionType: TabPanelViewActionType.closeAllInactiveTabs)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             }
             return footerView
 
@@ -337,7 +337,7 @@ class TabDisplayView: UIView,
                                         tabUUID: inactiveTabs.tabUUID,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.closeInactiveTab)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -352,7 +352,7 @@ class TabDisplayView: UIView,
                                                 isInactiveTab: true,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             case .tab(let tabModel):
                 let tabUUID = tabModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
@@ -360,7 +360,7 @@ class TabDisplayView: UIView,
                                                 selectedTabIndex: indexPath.item,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             }
         }
     }
@@ -382,7 +382,7 @@ class TabDisplayView: UIView,
         let action = TabPanelViewAction(panelType: panelType,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.toggleInactiveTabs)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: - TabCellDelegate
@@ -392,7 +392,7 @@ class TabDisplayView: UIView,
                                             tabUUID: tabUUID,
                                             windowUUID: windowUUID,
                                             actionType: TabPanelViewActionType.closeTab)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -406,7 +406,7 @@ class TabDisplayView: UIView,
                                         tabUUID: tab.tabUUID,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.closeTab)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
                              argument: String.TabsTray.TabTrayClosingTabAccessibilityMessage)
     }
@@ -460,6 +460,6 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
             actionType: TabPanelViewActionType.moveTab
         )
 
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 }

@@ -161,7 +161,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 isZeroSearch: isZeroSearch,
                 windowUUID: windowUUID,
@@ -716,7 +716,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
+                store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
             }
         }
 
@@ -973,7 +973,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.onViewDismissed = { [weak self] in
             guard let self else { return }
             self.didDismissTabTray(from: tabTrayCoordinator)
-            store.dispatch(
+            store.dispatchLegacy(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
                     actionType: TabTrayActionType.modalSwipedToClose
@@ -1085,7 +1085,7 @@ class BrowserCoordinator: BaseCoordinator,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
             currentFrame: frame
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         let bottomSheetVM = BottomSheetViewModel(
             shouldDismissForTapOutside: true,

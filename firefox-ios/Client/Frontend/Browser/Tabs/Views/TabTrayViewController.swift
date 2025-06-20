@@ -342,7 +342,7 @@ class TabTrayViewController: UIViewController,
         let screenAction = ScreenAction(windowUUID: windowUUID,
                                         actionType: ScreenActionType.showScreen,
                                         screen: .tabsTray)
-        store.dispatch(screenAction)
+        store.dispatchLegacy(screenAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -353,14 +353,14 @@ class TabTrayViewController: UIViewController,
             panelType: initialSelectedPanel,
             windowUUID: windowUUID,
             actionType: TabTrayActionType.tabTrayDidLoad)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func unsubscribeFromRedux() {
         let screenAction = ScreenAction(windowUUID: windowUUID,
                                         actionType: ScreenActionType.closeScreen,
                                         screen: .tabsTray)
-        store.dispatch(screenAction)
+        store.dispatchLegacy(screenAction)
     }
 
     func newState(state: TabTrayState) {
@@ -385,7 +385,7 @@ class TabTrayViewController: UIViewController,
 
                 // Undo the action described by the toast
                 if let action = toastType.reduxAction(for: self.windowUUID), undoClose {
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                 }
                 self.shownToast = nil
             }
@@ -743,7 +743,7 @@ class TabTrayViewController: UIViewController,
         let action = TabTrayAction(panelType: panelType,
                                    windowUUID: windowUUID,
                                    actionType: TabTrayActionType.changePanel)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     @objc
@@ -751,7 +751,7 @@ class TabTrayViewController: UIViewController,
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.closeAllTabs)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func showCloseAllConfirmation() {
@@ -839,14 +839,14 @@ class TabTrayViewController: UIViewController,
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.cancelCloseAllTabs)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func confirmCloseAll() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.confirmCloseAllTabs)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func deleteTabsOlderThan(period: TabsDeletionPeriod) {
@@ -854,7 +854,7 @@ class TabTrayViewController: UIViewController,
                                         deleteTabPeriod: period,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.deleteTabsOlderThan)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     @objc
@@ -862,13 +862,13 @@ class TabTrayViewController: UIViewController,
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.addNewTab)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     @objc
     private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
-        store.dispatch(
+        store.dispatchLegacy(
             TabTrayAction(
                 panelType: tabTrayState.selectedPanel,
                 windowUUID: windowUUID,
@@ -882,7 +882,7 @@ class TabTrayViewController: UIViewController,
     private func syncTabsTapped() {
         let action = RemoteTabsPanelAction(windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.refreshTabs)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: - TabTraySelectorDelegate
@@ -913,7 +913,7 @@ class TabTrayViewController: UIViewController,
         let action = TabTrayAction(panelType: panelType,
                                    windowUUID: windowUUID,
                                    actionType: TabTrayActionType.changePanel)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: - UIPageViewControllerDataSource & UIPageViewControllerDelegate
@@ -948,7 +948,7 @@ class TabTrayViewController: UIViewController,
             let action = TabTrayAction(panelType: newPanelType,
                                        windowUUID: windowUUID,
                                        actionType: TabTrayActionType.changePanel)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
             experimentSegmentControl.didFinishSelection(to: experimentConvertSelectedIndex())
 
