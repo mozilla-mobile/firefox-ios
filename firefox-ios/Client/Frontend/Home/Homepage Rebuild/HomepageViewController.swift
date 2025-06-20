@@ -401,7 +401,12 @@ final class HomepageViewController: UIViewController,
                     category: .homepage,
                     extra: ["Section Index": "\(sectionIndex)"]
                 )
-                return nil
+
+                /// FXIOS-10131: Copied over from legacy homepage in that we want to create an empty layout
+                /// to avoid an app crash.
+                /// However, if we see this path getting hit, then something is wrong and
+                /// we should investigate the underlying issues. We should always be able to fetch the section.
+                return sectionProvider.makeEmptyLayoutSection()
             }
 
             return sectionProvider.createLayoutSection(
