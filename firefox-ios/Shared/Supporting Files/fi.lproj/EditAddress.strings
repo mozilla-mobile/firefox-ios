@@ -28,6 +28,18 @@
 /* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
 "Addresses.EditAddress.AutofillAddressCounty.v129" = "Maakunta";
 
+/* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
+"Addresses.EditAddress.AutofillAddressDepartment.v129" = "Departementti";
+
+/* Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill. */
+"Addresses.EditAddress.AutofillAddressDistrict.v129" = "Alue";
+
+/* Label for the Do/Si field, pertinent to addresses in South Korea. Do/Si refers to provincial level divisions, and specifying this enhances address accuracy in autofill settings. */
+"Addresses.EditAddress.AutofillAddressDoSi.v129" = "Do/Si";
+
+/* Label for the Eircode field, specific to Ireland. It's a unique postal code system that helps in precise location identification, enhancing the effectiveness of autofill. */
+"Addresses.EditAddress.AutofillAddressEircode.v129" = "Eircode";
+
 /* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
 "Addresses.EditAddress.AutofillAddressEmail.v129" = "Sähköposti";
 
@@ -49,8 +61,17 @@
 /* Label for the input field designated for the organization's name related to the address. Helps in distinguishing addresses used for business or personal purposes in autofill settings. */
 "Addresses.EditAddress.AutofillAddressOrganization.v129" = "Organisaatio";
 
+/* Label for the parish field, significant in places where parishes are used for local administration and addressing. Ensures users can specify parish details for better autofill accuracy. */
+"Addresses.EditAddress.AutofillAddressParish.v129" = "Kirkonkylä";
+
+/* Label for the PIN (Postal Index Number) field, used in India. It's a code representing a specific area, crucial for accurate mail delivery and autofill functionality. */
+"Addresses.EditAddress.AutofillAddressPin.v129" = "Pin";
+
 /* Label for the postal code field, universally used in address forms to specify the area code for mail sorting. Essential for autofill to ensure mail and services are accurately routed. */
 "Addresses.EditAddress.AutofillAddressPostalCode.v129" = "Postinumero";
+
+/* Label for the post town field, used primarily in the UK and some other regions for mail sorting. Essential for users in applicable areas to specify for correct mail delivery through autofill. */
+"Addresses.EditAddress.AutofillAddressPostTown.v129" = "Postitoimipaikka";
 
 /* Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill. */
 "Addresses.EditAddress.AutofillAddressPrefecture.v129" = "Prefektuuri";

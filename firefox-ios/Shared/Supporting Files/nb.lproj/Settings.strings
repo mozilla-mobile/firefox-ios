@@ -64,11 +64,59 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adresser";
 
+/* Default section header title under page zoom settings. Indicates the default value for all websites */
+"Settings.Appearance.Zoom.Default.Title.v140" = "Standard";
+
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Tilbakestill nettstedinnstillinger";
+
+/* Page zoom section header title in Appearance settings */
+"Settings.Appearance.Zoom.SectionHeader.v140" = "Zoom-innstillinger";
+
+/* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "For å legge til i denne listen, besøk et nettsted og juster sidezoomen fra menyen";
+
+/* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "Spesifikke nettstedinnstillinger";
+
+/* Page zoom settings title in Appearance settings */
+"Settings.Appearance.Zoom.Title.v140" = "Sidezoom";
+
+/* Zoom level title under page zoom settings to select the default zoom level for all websites */
+"Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "Zoom-nivå";
+
+/* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
+"Settings.AutofillAndPassword.Title.v137" = "Autofyllinger og passord";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Betalingsmåter";
 
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "Tillat lyd og video";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
+"Settings.Autoplay.BlockAudio.v137" = "Blokker lyd";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "Blokker lyd og video";
+
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
 "Settings.Autoplay.Footer.v137" = "Innstillinger for automatisk avspilling vil bare gjelde for nylig åpnede faner. Endringer kan ikke brukes på eksisterende faner med mindre appen startes på nytt.";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
+"Settings.Autoplay.SettingsTitle.v137" = "Automatisk avspilling";
+
+/* This is the title for Links customization under the Browsing settings section. */
+"Settings.Browsing.Links.v137" = "Lenker";
+
+/* This is the title for Media customization under the Browsing settings section. */
+"Settings.Browsing.Media.v137" = "Media";
+
+/* This is the title for Tabs customization under the Browsing settings section. */
+"Settings.Browsing.Tabs.v137" = "Faner";
+
+/* In the settings menu, in the General section, this is the title for Browsing customization section. */
+"Settings.Browsing.Title.v137" = "Nettlesing";
 
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "Les mer.";
@@ -76,11 +124,26 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Les mer";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Krasjrapporter lar oss diagnostisere og fikse problemer med nettleseren.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Dette hjelper oss med å diagnostisere og fikse problemer med nettleseren.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Send inn krasjrapporter automatisk";
+
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "Les mer.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Les mer";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
+"Settings.DailyUsagePing.Message.v135" = "Dette hjelper %@ med å beregne aktive brukere.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping for daglig bruk";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Konto";
@@ -108,6 +171,12 @@
 
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Slå på varsler";
+
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "Personvernbestemmelser";
+
+/* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
+"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Rull til Skjul fane og adressefelt";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Standard søkemotor";
@@ -172,6 +241,27 @@
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Prøv nye funksjoner og idéer før de blir tilgjengelige for alle.";
 
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Installer og kjør studier";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Les mer.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Les mer";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
+"Settings.TechnicalData.Message.v135" = "%1$@ strever etter å bare samle inn det vi trenger for å tilby og forbedre %2$@ for alle.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Settings.TechnicalData.Message.v136" = "Data om enheten din, maskinvarekonfigurasjon og bruk hjelper oss med å forbedre %@-funksjoner, ytelse og stabilitet.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Tekniske data og interaksjonsdata";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Send tekniske data og interaksjonsdata";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "Vilkår for bruk";
 

@@ -4,8 +4,10 @@
 
 import UIKit
 import Common
+import Redux
 
-final class AddressBarPanGestureHandler: NSObject {
+final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+    typealias SubscriberStateType = ToolbarState
     // MARK: - UX Constants
     private struct UX {
         // Offset used to ensure the skeleton address bar animates in alignment with the address bar.
@@ -29,6 +31,7 @@ final class AddressBarPanGestureHandler: NSObject {
     private let screenshotHelper: ScreenshotHelper?
     var homepageScreenshotToolProvider: (() -> Screenshotable?)?
     private var homepageScreenshot: UIImage?
+    private var toolbarState: ToolbarState?
 
     // MARK: - Init
     init(
@@ -48,7 +51,12 @@ final class AddressBarPanGestureHandler: NSObject {
         self.screenshotHelper = screenshotHelper
         self.statusBarOverlay = statusBarOverlay
         super.init()
+        subscribeToRedux()
         setupGesture()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
     }
 
     private func setupGesture() {
@@ -57,8 +65,28 @@ final class AddressBarPanGestureHandler: NSObject {
         panGestureRecognizer = gesture
     }
 
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return ToolbarState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    private func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: ToolbarState) {
+        toolbarState = state
+        disablePanGestureIfTopAddressBar()
+    }
+
     // MARK: - Pan Gesture Availability
     func enablePanGestureRecognizer() {
+        guard toolbarState?.toolbarPosition == .bottom else { return }
         panGestureRecognizer?.isEnabled = true
     }
 
@@ -66,14 +94,14 @@ final class AddressBarPanGestureHandler: NSObject {
         panGestureRecognizer?.isEnabled = false
     }
 
+    private func disablePanGestureIfTopAddressBar() {
+        guard toolbarState?.toolbarPosition == .top else { return }
+        disablePanGestureRecognizer()
+    }
+
     /// Enables swiping gesture in overlay mode when no URL or text is in the address bar,
     /// such as after dismissing the keyboard on the homepage.
     func enablePanGestureOnHomepageIfNeeded() {
-        let toolbarState = store.state.screenState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        )
         let addressToolbarState = toolbarState?.addressToolbar
         guard addressToolbarState?.didStartTyping == false,
               addressToolbarState?.url == nil,

@@ -159,7 +159,10 @@ final class AddressToolbarContainer: UIView,
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
-        guard let selectedTab = tabManager.selectedTab else { return }
+        guard let selectedTab = tabManager.selectedTab, state?.toolbarPosition == .bottom else {
+            hideSkeletonBars()
+            return
+        }
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 

@@ -25,39 +25,12 @@ class TestSwiftData: XCTestCase {
         swiftData = SwiftData(filename: testDB, schema: BrowserSchema(), files: files)
         let table = BrowserSchema()
 
-        // Ensure static flags match expected values.
-        XCTAssert(SwiftData.EnableWAL, "WAL enabled")
-
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
     }
 
-    override func tearDown() {
-        super.tearDown()
-        // Restore static flags to their default values.
-        SwiftData.EnableWAL = true
-    }
-
-    func testNoWAL() {
-        SwiftData.EnableWAL = false
-        let error = writeDuringRead()
-        XCTAssertNil(error, "Insertion succeeded")
-    }
-
     func testDefaultSettings() {
-        SwiftData.EnableWAL = true
         let error = writeDuringRead()
         XCTAssertNil(error, "Insertion succeeded")
-    }
-
-    func testBusyTimeout() {
-        SwiftData.EnableWAL = false
-        let error = writeDuringRead(closeTimeout: 1)
-        XCTAssertNil(error, "Insertion succeeded")
-    }
-
-    func testFilledCursor() {
-        SwiftData.EnableWAL = false
-        XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
     fileprivate func writeDuringRead(

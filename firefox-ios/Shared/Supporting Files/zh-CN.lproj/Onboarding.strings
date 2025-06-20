@@ -140,6 +140,9 @@
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "继续即表示您同意 %@";
 
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "升级您的浏览体验";
+
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ 使用条款";
 

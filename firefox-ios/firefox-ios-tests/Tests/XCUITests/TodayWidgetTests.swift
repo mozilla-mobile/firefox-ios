@@ -11,10 +11,11 @@ let editHomeScreenButton = "com.apple.springboardhome.application-shortcut-item.
 let removeWidgetButton = "com.apple.springboardhome.application-shortcut-item.remove-widget"
 
 // Widget Buttons Identifier
-var goToCopiedLink = springboard.buttons["Go to Copied Link"]
-var newPrivateSearch = springboard.buttons["New Private Search"]
-var newSearch = springboard.buttons["New Search"]
-var clearPrivateTabs = springboard.buttons["Clear Private Tabs"]
+// TODO FXIOS-12604 These global properties are not concurrency safe
+nonisolated(unsafe) var goToCopiedLink = springboard.buttons["Go to Copied Link"]
+nonisolated(unsafe) var newPrivateSearch = springboard.buttons["New Private Search"]
+nonisolated(unsafe) var newSearch = springboard.buttons["New Search"]
+nonisolated(unsafe) var clearPrivateTabs = springboard.buttons["Clear Private Tabs"]
 
 // Widget coordinates
 let normalized = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))

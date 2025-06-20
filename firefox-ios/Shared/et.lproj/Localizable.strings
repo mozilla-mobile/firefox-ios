@@ -61,6 +61,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Aadress ja otsing";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Lisa lugemisnimekirja";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Aadressiriba";
 
@@ -160,11 +163,17 @@
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Avati uus privaatne kaart";
 
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Avati uus privaatne kaart";
+
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Lülitu";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Avati uus kaart";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Avati uus kaart";
 
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "Kopeeri pilt";
@@ -195,6 +204,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Lülita see sätetes välja";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Sulge";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Lehte polnud võimalik lugemisnimekirja lisada";

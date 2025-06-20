@@ -94,8 +94,10 @@ class AccountStatusSetting: WithAccountSetting {
             GeneralizedImageFetcher().getImageFor(url: actionIconUrl) { image in
                 guard let avatar = image else { return }
 
-                imageView.image = avatar.createScaled(CGSize(width: 30, height: 30))
-                    .withRenderingMode(.alwaysOriginal)
+                DispatchQueue.main.async {
+                    imageView.image = avatar.createScaled(CGSize(width: 30, height: 30))
+                        .withRenderingMode(.alwaysOriginal)
+                }
             }
         }
     }

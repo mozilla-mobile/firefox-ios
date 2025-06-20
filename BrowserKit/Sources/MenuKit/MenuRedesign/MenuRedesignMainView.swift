@@ -22,6 +22,7 @@ public final class MenuRedesignMainView: UIView,
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
+    public var siteProtectionHeader: MenuSiteProtectionsHeader = .build()
 
     private var viewConstraints: [NSLayoutConstraint] = []
 
@@ -31,6 +32,7 @@ public final class MenuRedesignMainView: UIView,
         viewConstraints.removeAll()
         self.addSubview(tableView)
         if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
+            self.siteProtectionHeader.removeFromSuperview()
             self.addSubview(closeButton)
             viewConstraints.append(contentsOf: [
                 closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
@@ -43,10 +45,16 @@ public final class MenuRedesignMainView: UIView,
                 tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
             ])
-        } else {
+        } else if !data.isEmpty {
             self.closeButton.removeFromSuperview()
+            self.addSubview(siteProtectionHeader)
             viewConstraints.append(contentsOf: [
-                tableView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
+                siteProtectionHeader.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
+                siteProtectionHeader.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                siteProtectionHeader.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+
+                tableView.topAnchor.constraint(equalTo: siteProtectionHeader.bottomAnchor,
+                                               constant: UX.headerTopMarginWithButton),
                 tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
                 tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
@@ -58,10 +66,14 @@ public final class MenuRedesignMainView: UIView,
     public func setupAccessibilityIdentifiers(menuA11yId: String,
                                               menuA11yLabel: String,
                                               closeButtonA11yLabel: String,
-                                              closeButtonA11yIdentifier: String) {
+                                              closeButtonA11yIdentifier: String,
+                                              siteProtectionHeaderIdentifier: String) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yIdentifier)
         closeButton.configure(viewModel: closeButtonViewModel)
+        siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
+                                                closeButtonA11yId: closeButtonA11yIdentifier)
+        siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
         tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
     }
 
@@ -81,5 +93,6 @@ public final class MenuRedesignMainView: UIView,
     public func applyTheme(theme: Theme) {
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
+        siteProtectionHeader.applyTheme(theme: theme)
     }
 }

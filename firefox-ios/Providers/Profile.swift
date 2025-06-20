@@ -60,10 +60,8 @@ public protocol FxACommandsDelegate: AnyObject {
     func closeTabs(for urls: [URL])
 }
 
-class ProfileFileAccessor: FileAccessor {
-    convenience init(profile: Profile) {
-        self.init(localName: profile.localName())
-    }
+struct ProfileFileAccessor: FileAccessor, Sendable {
+    public var rootPath: String
 
     init(localName: String, logger: Logger = DefaultLogger.shared) {
         let profileDirName = "profile.\(localName)"
@@ -76,10 +74,10 @@ class ProfileFileAccessor: FileAccessor {
         ) {
             rootPath = url.path
         } else {
-            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+            rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         }
 
-        super.init(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
+        self.rootPath = URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path
     }
 }
 
@@ -216,7 +214,9 @@ extension Profile {
     }
 }
 
-open class BrowserProfile: Profile {
+// TODO: Removed unchecked flag with FXIOS-12610
+open class BrowserProfile: Profile,
+                           @unchecked Sendable {
     private let logger: Logger
     private lazy var directory: String = {
         do {

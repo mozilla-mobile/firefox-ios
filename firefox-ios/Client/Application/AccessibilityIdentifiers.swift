@@ -73,6 +73,10 @@ struct AccessibilityIdentifiers {
     }
 
     struct MainMenu {
+        struct SiteProtectionsHeaderView {
+            static let header = "MainMenu.SiteProtectionHeader"
+        }
+
         struct HeaderView {
             static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"

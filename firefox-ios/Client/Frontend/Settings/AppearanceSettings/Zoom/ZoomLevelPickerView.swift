@@ -13,10 +13,10 @@ struct ZoomLevelPickerView: View {
 
     private struct UX {
         static let chevronImageIdentifier = "chevron.down"
-        static var sectionPadding: CGFloat = 16
-        static var verticalPadding: CGFloat = 12
-        static var dividerHeight: CGFloat = 0.5
-        static var pickerLabelSpacing: CGFloat = 4
+        static let sectionPadding: CGFloat = 16
+        static let verticalPadding: CGFloat = 12
+        static let dividerHeight: CGFloat = 0.5
+        static let pickerLabelSpacing: CGFloat = 4
     }
 
     private var sectionBackground: Color {

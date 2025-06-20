@@ -15,6 +15,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
     func presentSavePDFController()
+    func presentSiteProtections()
     func showPrintSheet()
 
     /// Open the share sheet to share the currently selected `Tab`.
@@ -69,63 +70,70 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         router.dismiss(animated: animated, completion: { [weak self] in
             guard let self else { return }
 
-            switch destination.destination {
-            case .bookmarks:
-                self.navigationHandler?.showLibraryPanel(.bookmarks)
-
-            case .customizeHomepage:
-                self.navigationHandler?.showSettings(at: .homePage)
-
-            case .downloads:
-                self.navigationHandler?.showLibraryPanel(.downloads)
-
-            case .editBookmark:
-                self.navigationHandler?.editBookmarkForCurrentTab()
-
-            case .findInPage:
-                self.navigationHandler?.showFindInPage()
-
-            case .goToURL:
-                self.navigationHandler?.openURLInNewTab(destination.url)
-
-            case .history:
-                self.navigationHandler?.showLibraryPanel(.history)
-
-            case .newTab:
-                self.navigationHandler?.openNewTab(inPrivateMode: false)
-
-            case .newPrivateTab:
-                self.navigationHandler?.openNewTab(inPrivateMode: true)
-
-            case .passwords:
-                self.navigationHandler?.showSettings(at: .password)
-
-            case .settings:
-                self.navigationHandler?.showSettings(at: .general)
-
-            case .syncSignIn:
-                let fxaParameters = FxASignInViewParameters(
-                    launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
-                    flowType: .emailLoginFlow,
-                    referringPage: .appMenu
-                )
-                self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
-
-            case .printSheet:
-                self.navigationHandler?.showPrintSheet()
-
-            case .shareSheet:
-                self.navigationHandler?.showShareSheetForCurrentlySelectedTab()
-
-            case .saveAsPDF:
-                self.navigationHandler?.presentSavePDFController()
-
-            case .zoom:
-                self.navigationHandler?.updateZoomPageBarVisibility()
-            }
+            self.handleDestination(destination)
 
             removeCoordinatorFromParent()
         })
+    }
+
+    private func handleDestination(_ destination: MenuNavigationDestination) {
+        switch destination.destination {
+        case .bookmarks:
+            navigationHandler?.showLibraryPanel(.bookmarks)
+
+        case .customizeHomepage:
+            navigationHandler?.showSettings(at: .homePage)
+
+        case .downloads:
+            navigationHandler?.showLibraryPanel(.downloads)
+
+        case .editBookmark:
+            navigationHandler?.editBookmarkForCurrentTab()
+
+        case .findInPage:
+            navigationHandler?.showFindInPage()
+
+        case .goToURL:
+            navigationHandler?.openURLInNewTab(destination.url)
+
+        case .history:
+            navigationHandler?.showLibraryPanel(.history)
+
+        case .newTab:
+            navigationHandler?.openNewTab(inPrivateMode: false)
+
+        case .newPrivateTab:
+            navigationHandler?.openNewTab(inPrivateMode: true)
+
+        case .passwords:
+            navigationHandler?.showSettings(at: .password)
+
+        case .settings:
+            navigationHandler?.showSettings(at: .general)
+
+        case .syncSignIn:
+            let fxaParameters = FxASignInViewParameters(
+                launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
+                flowType: .emailLoginFlow,
+                referringPage: .appMenu
+            )
+            navigationHandler?.showSignInView(fxaParameters: fxaParameters)
+
+        case .printSheet:
+            navigationHandler?.showPrintSheet()
+
+        case .shareSheet:
+            navigationHandler?.showShareSheetForCurrentlySelectedTab()
+
+        case .saveAsPDF:
+            navigationHandler?.presentSavePDFController()
+
+        case .zoom:
+            navigationHandler?.updateZoomPageBarVisibility()
+
+        case .siteProtections:
+            self.navigationHandler?.presentSiteProtections()
+        }
     }
 
     // MARK: - Private helpers

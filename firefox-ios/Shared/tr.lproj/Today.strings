@@ -1,8 +1,8 @@
 /* Close Private Tabs button label */
-"TodayWidget.ClosePrivateTabsButton" = "Gizlileri kapat";
+"TodayWidget.ClosePrivateTabsButton" = "Gizli sekmeleri kapat";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "Gizlileri kapat";
+"TodayWidget.ClosePrivateTabsLabelV2" = "Gizli\nsekmeleri kapat";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Ana ekranınıza Firefox kısayollarını ekleyin.";

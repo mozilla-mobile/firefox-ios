@@ -31,13 +31,14 @@ struct TopSitesProvider: TimelineProvider {
             let tabFaviconDictionary = await withTaskGroup(of: (String, UIImage).self,
                                                            returning: [String: Image].self) { group in
                 for site in topSites {
+                    let imageKey = site.faviconImageCacheKey
                     let siteImageModel = SiteImageModel(id: UUID(),
                                                         imageType: .favicon,
                                                         siteURL: site.tileURL,
                                                         siteResource: site.faviconResource)
                     group.addTask {
                         let image = await siteImageFetcher.getImage(model: siteImageModel)
-                        return (site.faviconImageCacheKey, image)
+                        return (imageKey, image)
                     }
                 }
 

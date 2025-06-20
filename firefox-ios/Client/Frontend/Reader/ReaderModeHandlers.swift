@@ -13,7 +13,8 @@ protocol ReaderModeHandlersProtocol {
 }
 
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
-    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
+    // TODO: FXIOS-12591 This global property is not concurrency safe
+    nonisolated(unsafe) static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming

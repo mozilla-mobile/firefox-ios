@@ -83,13 +83,6 @@ class MainMenuViewController: UIViewController,
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
-        subscribeToRedux()
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.didInstantiateView
-            )
-        )
     }
 
     required init?(coder: NSCoder) {
@@ -101,6 +94,14 @@ class MainMenuViewController: UIViewController,
         super.viewDidLoad()
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
+
+        subscribeToRedux()
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.didInstantiateView
+            )
+        )
 
         if isMenuRedesign {
             setupRedesignView()
@@ -116,7 +117,22 @@ class MainMenuViewController: UIViewController,
             )
         )
 
-        if !isMenuRedesign {
+        if isMenuRedesign {
+            menuRedesignContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
+
+            menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchSiteProtectionAction()
+            }
+
+            menuRedesignContent.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
+        } else {
             menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
                 guard let self else { return }
                 self.dispatchCloseMenuAction()
@@ -125,11 +141,6 @@ class MainMenuViewController: UIViewController,
             menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
                 guard let self else { return }
                 self.dispatchSyncSignInAction()
-            }
-        } else {
-            menuRedesignContent.closeButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchCloseMenuAction()
             }
         }
 
@@ -307,6 +318,10 @@ class MainMenuViewController: UIViewController,
             setupAccessibilityIdentifiers(mainButtonA11yLabel: accountData.title)
         }
 
+        if let siteProtectionsData = menuState.siteProtectionsData {
+            updateSiteProtectionsHeaderWith(siteProtectionsData: siteProtectionsData)
+        }
+
         if menuState.currentSubmenuView != nil {
             coordinator?.showDetailViewController()
             return
@@ -347,6 +362,17 @@ class MainMenuViewController: UIViewController,
         )
     }
 
+    private func dispatchSiteProtectionAction() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.siteProtections),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -363,6 +389,28 @@ class MainMenuViewController: UIViewController,
                                                        warningIcon: accountData.warningIcon,
                                                        theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+    }
+
+    private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
+        var state = String.MainMenu.SiteProtection.ProtectionsOn
+        var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
+
+        switch siteProtectionsData.state {
+        case .notSecure:
+            state = String.MainMenu.SiteProtection.ConnectionNotSecure
+            stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        case .on: break
+        case .off:
+            state = String.MainMenu.SiteProtection.ProtectionsOff
+            stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        }
+
+        menuRedesignContent.siteProtectionHeader.setupDetails(
+            title: siteProtectionsData.title,
+            subtitle: siteProtectionsData.subtitle,
+            image: siteProtectionsData.image,
+            state: state,
+            stateImage: stateImage)
     }
 
     // MARK: - A11y
@@ -400,7 +448,8 @@ class MainMenuViewController: UIViewController,
                     menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
                     menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
-                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton)
+                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
+                    siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header)
             } else {
                 menuContent.setupAccessibilityIdentifiers(
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,

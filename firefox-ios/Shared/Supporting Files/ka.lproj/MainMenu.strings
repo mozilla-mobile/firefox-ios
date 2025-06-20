@@ -16,8 +16,14 @@
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "შედით, რომ დაასინქრონოთ პაროლები, ჩანართები და სხვა";
 
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "მართეთ, რას ამარქაფებთ და ასინქრონებთ";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "დაასინქრონეთ პაროლები, ჩანართები და სხვა";
+
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "დაასინქრონეთ სანიშნები, პაროლები, ჩანართები და სხვა";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "შესვლა";
@@ -182,7 +188,7 @@
 "MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "მოხსენება";
 
 /* On the main menu, the accessibility label for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "საიტზე გაუმართაობის მოხსენება…";
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "არეული საიტის მოხსენება";
 
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Share tool and is indicating that under the Tools submenu, a Share (to someone else) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Share.Subtitle.v132" = "გაზიარება";
@@ -227,7 +233,7 @@
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "მოხსენება";
 
 /* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "საიტზე გაუმართაობის მოხსენება…";
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "არეული საიტის მოხსენება…";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "გაზიარება";
