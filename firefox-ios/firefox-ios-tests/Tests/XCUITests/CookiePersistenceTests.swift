@@ -39,7 +39,7 @@ final class CookiePersistenceTests: BaseTestCase {
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
 
-    func testCookiePersistence_OpenNewTab() {
+    func testCookiePersistenceOpenNewTab() {
         // Open URL for Cookie login
         openCookieSite()
         let webview = app.webViews.firstMatch
@@ -85,11 +85,5 @@ final class CookiePersistenceTests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-cookie-store.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-    }
-
-    private func typeOnSearchBar(text: String) {
-        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        urlBar.waitAndTap()
-        urlBar.tapAndTypeText(text)
     }
 }
