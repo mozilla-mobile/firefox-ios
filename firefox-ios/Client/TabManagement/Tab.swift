@@ -508,22 +508,26 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         )
     }
 
-    class func toRemoteTab(_ tab: Tab, inactive: Bool) -> RemoteTab? {
-        if tab.isPrivate {
+    func toRemoteTab() -> RemoteTab? {
+        guard !isPrivate else {
             return nil
         }
 
-        let icon = (tab.faviconURL ?? tab.pageMetadata?.faviconURL).flatMap { URL(string: $0) }
-        if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
-            let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
+        let faviconURL = faviconURL ?? pageMetadata?.faviconURL
+        if let displayURL = url?.displayURL,
+           RemoteTab.shouldIncludeURL(displayURL) {
+            let filteredReversedHistory: [URL] = historyList
+                .filter(RemoteTab.shouldIncludeURL)
+                .reversed()
+
             return RemoteTab(
                 clientGUID: nil,
                 URL: displayURL,
-                title: tab.title ?? tab.displayTitle,
-                history: history,
-                lastUsed: tab.lastExecutedTime,
-                icon: icon,
-                inactive: inactive
+                title: title ?? displayTitle,
+                history: filteredReversedHistory,
+                lastUsed: lastExecutedTime,
+                icon: faviconURL?.asURL,
+                inactive: isInactive
             )
         }
 
@@ -574,24 +578,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             }
 
             configureEdgeSwipeGestureRecognizers()
-            self.webView?.addObserver(
-                self,
-                forKeyPath: KVOConstants.URL.rawValue,
-                options: .new,
-                context: nil
-            )
-            self.webView?.addObserver(
-                self,
-                forKeyPath: KVOConstants.title.rawValue,
-                options: .new,
-                context: nil
-            )
-            self.webView?.addObserver(
-                self,
-                forKeyPath: KVOConstants.hasOnlySecureContent.rawValue,
-                options: .new,
-                context: nil
-            )
+
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
@@ -623,10 +610,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     deinit {
         deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
         webViewLoadingObserver?.invalidate()
-        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
-        webView?.navigationDelegate = nil
 
 #if DEBUG
         debugTabCount -= 1
@@ -659,10 +642,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         contentScriptManager.uninstall(tab: self)
         webView?.configuration.userContentController.removeAllUserScripts()
         webView?.configuration.userContentController.removeAllScriptMessageHandlers()
-
-        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
 
         if let webView = webView {
             tabDelegate?.tab(self, willDeleteWebView: webView)
@@ -859,25 +838,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func hasJavascriptAlertPrompt() -> Bool {
         return !alertQueue.isEmpty
-    }
-
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        guard let webView = object as? WKWebView,
-              webView == self.webView,
-              let path = keyPath else {
-            return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
-        }
-
-        if let title = self.webView?.title, !title.isEmpty,
-           path == KVOConstants.title.rawValue {
-            // `Tab.toRemoteTab` was added for FXIOS-8241
-            _ = Tab.toRemoteTab(self, inactive: false)
-        }
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
