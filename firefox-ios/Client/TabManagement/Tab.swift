@@ -473,7 +473,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     // MARK: - Dependencies
     var profile: Profile
     private let fileManager: FileManagerProtocol
-    private let backgroundDispatchQueue: DispatchQueueInterface
     private var logger: Logger
     private let documentLogger: DocumentLogger
 
@@ -482,7 +481,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
-         backgroundDispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background),
          fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
@@ -496,7 +494,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.fileManager = fileManager
         self.logger = logger
         self.documentLogger = documentLogger
-        self.backgroundDispatchQueue = backgroundDispatchQueue
         super.init()
         self.isPrivate = isPrivate
 #if DEBUG
@@ -624,7 +621,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
-        deleteDownloadedDocuments()
+        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
@@ -962,8 +959,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    private func deleteDownloadedDocuments() {
-        let docsURL = temporaryDocumentsSession
+    private func deleteDownloadedDocuments(
+        docsURL: TemporaryDocumentSession,
+        backgroundDispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)
+    ) {
         guard !docsURL.isEmpty else { return }
         backgroundDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in
