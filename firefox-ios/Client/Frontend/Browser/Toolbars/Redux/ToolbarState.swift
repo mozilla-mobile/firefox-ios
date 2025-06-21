@@ -116,6 +116,10 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
+        return handleReducer(state: state, action: action)
+    }
+
+    private static func handleReducer(state: ToolbarState, action: Action) -> ToolbarState {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
