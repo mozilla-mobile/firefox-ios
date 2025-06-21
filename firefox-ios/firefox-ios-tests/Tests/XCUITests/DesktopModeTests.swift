@@ -133,7 +133,8 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306856
-    func testPrivateModeOffAlsoRemovesFromNormalMode() {
+    func testPrivateModeOffAlsoRemovesFromNormalMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
 
@@ -166,7 +167,8 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306857
-    func testPrivateModeOnHasNoAffectOnNormalMode() {
+    func testPrivateModeOnHasNoAffectOnNormalMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
 

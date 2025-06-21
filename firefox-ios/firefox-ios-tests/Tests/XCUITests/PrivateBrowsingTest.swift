@@ -16,7 +16,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
-    func testPrivateTabDoesNotTrackHistory() {
+    func testPrivateTabDoesNotTrackHistory_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.openURL(url1)
         waitForTabsButton()
@@ -55,7 +56,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307005
-    func testTabCountShowsOnlyNormalOrPrivateTabCount() {
+    func testTabCountShowsOnlyNormalOrPrivateTabCount_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Open two tabs in normal browsing and check the number of tabs open
         navigator.nowAt(NewTabScreen)
@@ -101,7 +103,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307006
-    func testClosePrivateTabsOptionClosesPrivateTabs() {
+    func testClosePrivateTabsOptionClosesPrivateTabs_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.nowAt(NewTabScreen)
@@ -138,7 +141,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
      https://bugzilla.mozilla.org/show_bug.cgi?id=1646756
      */
     // https://mozilla.testrail.io/index.php?/cases/view/2307011
-    func testClearIndexedDB() {
+    func testClearIndexedDB_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
 
@@ -168,7 +172,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307007
-    func testPrivateBrowserPanelView() {
+    func testPrivateBrowserPanelView_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
@@ -246,7 +251,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
-    func testAllPrivateTabsRestore() {
+    func testAllPrivateTabsRestore_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Several tabs opened in private tabs tray. Tap on the trashcan
         navigator.nowAt(NewTabScreen)
@@ -296,7 +302,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307003
-    func testHamburgerMenuNewPrivateTab() {
+    func testHamburgerMenuNewPrivateTab_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(urlExample)

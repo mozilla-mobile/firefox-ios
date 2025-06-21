@@ -136,7 +136,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441494
-    func testTapSignInShowsFxAFromRemoteTabPanel() {
+    func testTapSignInShowsFxAFromRemoteTabPanel_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -205,7 +206,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441497
-    func testCopyLinkPrivateMode() {
+    func testCopyLinkPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -343,7 +345,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441500
-    func testShareLinkPrivateMode() {
+    func testShareLinkPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -545,7 +548,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441772
-    func testOpenInNewTab() {
+    func testOpenInNewTab_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Long-tap on an article link. Choose "Open in New Tab".
         openContextMenuForArticleLink()
@@ -559,7 +563,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441773
-    func testOpenInNewPrivateTab() {
+    func testOpenInNewPrivateTab_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Long-tap on an article link. Choose "Open in New Private Tab".
         openContextMenuForArticleLink()
@@ -627,7 +632,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
-    func testOpenExternalLink() {
+    func testOpenExternalLink_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)

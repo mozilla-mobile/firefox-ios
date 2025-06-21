@@ -67,7 +67,8 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
-    func testChangeNewTabSettingsShowFirefoxHome() {
+    func testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Set to history page first since FF Home is default
         waitForTabsButton()

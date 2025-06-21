@@ -12,7 +12,7 @@ let website1: [String: String] = [
 ]
 let website2 = path(forTestPage: "test-example.html")
 
-class ToolbarTests: BaseTestCase {
+class ToolbarTests: FeatureFlaggedTestBase {
     override func setUp() {
         super.setUp()
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
@@ -27,7 +27,9 @@ class ToolbarTests: BaseTestCase {
     /**
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
-    func testLandscapeNavigationWithTabSwitch() {
+    func testLandscapeNavigationWithTabSwitch_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         let urlPlaceholder = "Search or enter address"
@@ -82,6 +84,7 @@ class ToolbarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2344430
     func testClearURLTextUsingBackspace() {
+        app.launch()
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         waitForTabsButton()
@@ -106,6 +109,7 @@ class ToolbarTests: BaseTestCase {
     // Skipping for iPad for now, not sure how to implement it there
     // https://mozilla.testrail.io/index.php?/cases/view/2344431
     func testRevealToolbarWhenTappingOnStatusbar() {
+        app.launch()
         if !iPad() {
             // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
 
@@ -137,7 +141,9 @@ class ToolbarTests: BaseTestCase {
    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306870
-    func testOpenNewTabButtonOnToolbar() throws {
+    func testOpenNewTabButtonOnToolbar_tabTrayExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         if iPad() {
             throw XCTSkip("iPhone only test")
         } else {
