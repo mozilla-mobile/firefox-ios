@@ -312,7 +312,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isFxHomeTab: Bool {
         // Check if there is a url or last known url
         let url = url ?? lastKnownUrl
-        guard let url = url else { return false }
+        guard let url = url else { return true }
 
         // Make sure the url is of type home page
         if url.absoluteString.hasPrefix("internal://"),
