@@ -132,8 +132,9 @@ class ContentBlocker {
         }
 
         // Startup tracking stats checker
-        TPStatsBlocklistChecker.shared.startup()
-
+        Task {
+            await TPStatsBlocklistChecker.shared.startup()
+        }
         // General list startup: remove old content-block lists (if needed) and compile latest lists
         logger.log("ContentBlocker startup...", level: .info, category: .adblock)
         removeOldListsByHashFromStore { [weak self] in

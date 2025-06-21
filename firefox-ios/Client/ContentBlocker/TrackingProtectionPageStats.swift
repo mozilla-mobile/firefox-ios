@@ -41,7 +41,7 @@ struct TPPageStats {
     }
 }
 
-class TPStatsBlocklistChecker {
+final class TPStatsBlocklistChecker {
     static let shared = TPStatsBlocklistChecker()
 
     // Initialized async, is non-nil when ready to be used.
@@ -84,25 +84,32 @@ class TPStatsBlocklistChecker {
         }
     }
 
-    func startup() {
-        DispatchQueue.global().async {
-            let parser = TPStatsBlocklists()
-            parser.load()
-            DispatchQueue.main.async {
-                self.blockLists = parser
-            }
+    func startup() async {
+        let parser = TPStatsBlocklists()
+        await parser.load()
+        await MainActor.run {
+            blockLists = parser
         }
     }
 }
 
-// The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
-func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
-    struct Memo {
-        // TODO: FXIOS-12586 This global property is not concurrency safe
-        nonisolated(unsafe) static var domains = [String: String]()
+private actor Memo {
+    private var domains = [String: String]()
+
+    func get(domain: String) -> String? {
+        domains[domain]
     }
 
-    if let memoized = Memo.domains[domain] {
+    func set(domain: String, regex: String) {
+        domains[domain] = regex
+    }
+}
+
+private let memo = Memo()
+
+// The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
+func wildcardContentBlockerDomainToRegex(domain: String) async -> String? {
+    if let memoized = await memo.get(domain: domain) {
         return memoized
     }
 
@@ -113,11 +120,11 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
     }
     regex = regex.replacingOccurrences(of: ".", with: "\\.")
 
-    Memo.domains[domain] = regex
+    await memo.set(domain: domain, regex: regex)
     return regex
 }
 
-class TPStatsBlocklists {
+final class TPStatsBlocklists {
     class Rule {
         let regex: String
         let loadType: LoadType
@@ -157,7 +164,7 @@ class TPStatsBlocklists {
         case font
     }
 
-    func load() {
+    func load() async {
         // All rules have this prefix on the domain to match.
         let standardPrefix = "^https?://([^/]+\\.)?"
 
@@ -244,8 +251,13 @@ class TPStatsBlocklists {
                     }
                 }
 
-                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.compactMap { domain in
-                    return wildcardContentBlockerDomainToRegex(domain: domain)
+                var domainExceptionsRegex = [String]()
+                if let domains = trigger["unless-domain"] as? [String] {
+                    for domain in domains {
+                        if let regex = await wildcardContentBlockerDomainToRegex(domain: domain) {
+                            domainExceptionsRegex.append(regex)
+                        }
+                    }
                 }
 
                 // Only "third-party" is supported; other types are not used in our block lists.
