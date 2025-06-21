@@ -262,7 +262,7 @@ final class DefaultThemeManagerTests: XCTestCase {
     // MARK: - Helper methods
 
     private func createSubject(with userDefaults: UserDefaultsInterface,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> DefaultThemeManager {
         let subject = DefaultThemeManager(
             userDefaults: userDefaults,

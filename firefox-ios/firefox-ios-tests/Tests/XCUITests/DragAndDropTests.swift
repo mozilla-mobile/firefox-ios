@@ -280,7 +280,7 @@ private extension BaseTestCase {
     func checkTabsOrder(dragAndDropTab: Bool,
                         firstTab: String,
                         secondTab: String,
-                        file: StaticString = #file,
+                        file: StaticString = #filePath,
                         line: UInt = #line) {
         waitForElementsToExist(
             [

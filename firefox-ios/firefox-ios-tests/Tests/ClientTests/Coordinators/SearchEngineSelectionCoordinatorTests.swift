@@ -64,7 +64,10 @@ final class SearchEngineSelectionCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
-    private func createSubject(file: StaticString = #file, line: UInt = #line) -> DefaultSearchEngineSelectionCoordinator {
+    private func createSubject(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> DefaultSearchEngineSelectionCoordinator {
         let subject = DefaultSearchEngineSelectionCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID)
         subject.parentCoordinator = mockParentCoordinator
 

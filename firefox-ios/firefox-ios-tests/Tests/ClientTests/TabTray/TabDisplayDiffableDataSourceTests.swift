@@ -85,7 +85,7 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
     private func createSubject(isPrivateMode: Bool,
                                numberInactiveTabs: Int,
                                numberActiveTabs: Int,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> TabDisplayView {
         let tabs = createTabs(numberOfTabs: numberActiveTabs)
 

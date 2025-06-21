@@ -76,7 +76,7 @@ final class RemoteTabPanelTests: XCTestCase {
     }
 
     private func createSubject(state: RemoteTabsPanelState,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> RemoteTabsPanel {
         let subject = RemoteTabsPanel(windowUUID: .XCTestDefaultUUID)
         subject.newState(state: state)

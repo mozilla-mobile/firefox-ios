@@ -167,7 +167,7 @@ extension PocketViewModelTests {
     }
 
     func createSubject(isZeroSearch: Bool = true,
-                       file: StaticString = #file,
+                       file: StaticString = #filePath,
                        line: UInt = #line) -> PocketViewModel {
         let subject = PocketViewModel(pocketDataAdaptor: adaptor,
                                       isZeroSearch: isZeroSearch,

@@ -127,7 +127,7 @@ class HomepageMessageCardViewModelTests: XCTestCase {
 
 // MARK: - Helpers
 extension HomepageMessageCardViewModelTests {
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) -> HomepageMessageCardViewModel {
         let subject = HomepageMessageCardViewModel(dataAdaptor: adaptor,
                                                    theme: LightTheme(),

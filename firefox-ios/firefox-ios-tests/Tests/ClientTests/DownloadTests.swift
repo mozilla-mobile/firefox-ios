@@ -21,7 +21,7 @@ class DownloadTests: XCTestCase {
     func testDelegateMemoryLeak() {
         let mockDownloadDelegate = MockDownloadDelegate()
         download.delegate = mockDownloadDelegate
-        trackForMemoryLeaks(download, file: #file, line: #line)
+        trackForMemoryLeaks(download, file: #filePath, line: #line)
         download = nil
     }
 
@@ -33,7 +33,7 @@ class DownloadTests: XCTestCase {
         download.cancel()
 
         // Check for memory leaks
-        trackForMemoryLeaks(download, file: #file, line: #line)
+        trackForMemoryLeaks(download, file: #filePath, line: #line)
 
         download = nil
     }
@@ -46,7 +46,7 @@ class DownloadTests: XCTestCase {
         download.pause()
 
         // Check for memory leaks
-        trackForMemoryLeaks(download, file: #file, line: #line)
+        trackForMemoryLeaks(download, file: #filePath, line: #line)
 
         download = nil
     }
@@ -59,7 +59,7 @@ class DownloadTests: XCTestCase {
         download.resume()
 
         // Check for memory leaks
-        trackForMemoryLeaks(download, file: #file, line: #line)
+        trackForMemoryLeaks(download, file: #filePath, line: #line)
 
         download = nil
     }

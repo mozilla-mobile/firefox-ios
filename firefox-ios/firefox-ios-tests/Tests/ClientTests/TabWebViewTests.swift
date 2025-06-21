@@ -118,7 +118,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
 
     // MARK: - Helper methods
 
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) async throws -> TabWebView {
         let subject = TabWebView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)),
                                  configuration: .init(),

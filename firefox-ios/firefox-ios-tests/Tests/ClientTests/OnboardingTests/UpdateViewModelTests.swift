@@ -173,7 +173,7 @@ class UpdateViewModelTests: XCTestCase {
     // MARK: - Private Helpers
     func createSubject(
         hasOnboardingCards: Bool = true,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> UpdateViewModel {
         let onboardingModel = createOnboardingViewModel(withCards: hasOnboardingCards)

@@ -135,7 +135,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchScreenViewModel {
         let onboardingModel = createOnboardingViewModel()
 

@@ -16,7 +16,7 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
     // We expect this command to be executed as 'cd <dir of swift package>; swift run',
     // if not, use the fallback path generated from the path to the current swift file. Running from
     // an xcodeproj will use fallbackPath.
-    private let fallbackRootDirectoryPath: String = (#file as NSString).deletingLastPathComponent + "/../.."
+    private let fallbackRootDirectoryPath: String = (#filePath as NSString).deletingLastPathComponent + "/../.."
     private let outputDirectory: URL
     private let rootDirectory: String
     private let inputDirectory: String

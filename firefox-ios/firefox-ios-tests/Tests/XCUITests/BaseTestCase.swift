@@ -145,7 +145,7 @@ class BaseTestCase: XCTestCase {
     func waitForExistence(
         _ element: XCUIElement,
         timeout: TimeInterval = TIMEOUT,
-        file: String = #file,
+        file: String = #filePath,
         line: UInt = #line
     ) {
         waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
@@ -169,7 +169,7 @@ class BaseTestCase: XCTestCase {
     func waitForNoExistence(
         _ element: XCUIElement,
         timeoutValue: TimeInterval = TIMEOUT,
-        file: String = #file,
+        file: String = #filePath,
         line: UInt = #line
     ) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
@@ -188,7 +188,7 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
+    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #filePath, line: UInt = #line) {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
     }
 
@@ -323,7 +323,7 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
-    func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #file, line: UInt = #line) {
+    func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #filePath, line: UInt = #line) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2.0)

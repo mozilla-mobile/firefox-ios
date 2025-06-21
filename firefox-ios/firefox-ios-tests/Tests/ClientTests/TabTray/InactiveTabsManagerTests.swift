@@ -60,7 +60,7 @@ final class InactiveTabsManagerTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> InactiveTabsManager {
         let subject = InactiveTabsManager()
         trackForMemoryLeaks(subject, file: file, line: line)
