@@ -3513,7 +3513,7 @@ class BrowserViewController: UIViewController,
             // we have to adjust the background color to match the homepage background color
             let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
             let colors = currentTheme.colors
-            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layer3
+            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
