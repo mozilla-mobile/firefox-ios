@@ -247,7 +247,11 @@ export class FormAutofillSection {
         // email field, an invisible field that appears next to the user-visible field,
         // and simple cases where a page error where a field name is reused twice.
         let dupIndex = candidateSection.fieldDetails.findIndex(
-          f => f.fieldName == cur.fieldName && f.isVisible && cur.isVisible
+          f =>
+            f.fieldName == cur.fieldName &&
+            f.isVisible &&
+            cur.isVisible &&
+            !f.isLookup
         );
         let isDuplicate = dupIndex != -1;
 
@@ -333,27 +337,63 @@ export class FormAutofillSection {
     return data;
   }
 
+  shouldAutofillField(fieldDetail) {
+    // We don't save security code, but if somehow the profile has securty code,
+    // make sure we don't autofill it.
+    if (fieldDetail.fieldName == "cc-csc") {
+      return false;
+    }
+
+    // When both visible and invisible elements exist, we only autofill the
+    // visible element.
+    if (!fieldDetail.isVisible) {
+      return !this.fieldDetails.some(
+        field => field.fieldName == fieldDetail.fieldName && field.isVisible
+      );
+    }
+
+    // Only fill a street address lookup field if it is the only street
+    // address related field in this section. Similarly, for postal code
+    // fields.
+    if (fieldDetail.isLookup) {
+      const STREET_FIELDS = [
+        "street-address",
+        "address-line1",
+        "address-line2",
+        "address-line3",
+      ];
+
+      let INTERESTED_FIELDS = [];
+      if (STREET_FIELDS.includes(fieldDetail.fieldName)) {
+        INTERESTED_FIELDS = STREET_FIELDS;
+      } else if (fieldDetail.fieldName == "postal-code") {
+        INTERESTED_FIELDS = ["postal-code"];
+      }
+
+      if (
+        INTERESTED_FIELDS.length &&
+        this.fieldDetails.some(
+          field =>
+            INTERESTED_FIELDS.includes(field.fieldName) &&
+            field.isVisible &&
+            !field.isLookup
+        )
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   /**
    * Heuristics to determine which fields to autofill when a section contains
    * multiple fields of the same type.
    */
   getAutofillFields() {
-    return this.fieldDetails.filter(fieldDetail => {
-      // We don't save security code, but if somehow the profile has securty code,
-      // make sure we don't autofill it.
-      if (fieldDetail.fieldName == "cc-csc") {
-        return false;
-      }
-
-      // When both visible and invisible elements exist, we only autofill the
-      // visible element.
-      if (!fieldDetail.isVisible) {
-        return !this.fieldDetails.some(
-          field => field.fieldName == fieldDetail.fieldName && field.isVisible
-        );
-      }
-      return true;
-    });
+    return this.fieldDetails.filter(fieldDetail =>
+      this.shouldAutofillField(fieldDetail)
+    );
   }
 
   /*
@@ -645,7 +685,6 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
         result = decrypted ? "success" : "fail_user_canceled";
       } catch (ex) {
         result = "fail_error";
-        throw ex;
       } finally {
         Glean.formautofill.promptShownOsReauth.record({
           trigger: "autofill",
@@ -677,6 +716,7 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
     } catch (e) {
       errorResult = e.result;
       if (e.result != Cr.NS_ERROR_ABORT) {
+        this.log.warn(`Decryption failed with result: ${e.result}`);
         throw e;
       }
       this.log.warn("User canceled encryption login");
