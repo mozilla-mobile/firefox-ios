@@ -36,7 +36,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionActionType.toggleTrackingProtectionStatus
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
     }
 
     private func clearCookiesAndSiteData(windowUUID: WindowUUID) {
@@ -44,7 +44,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.clearCookies
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         telemetryWrapper.clearCookiesAndSiteData()
     }
 
@@ -53,7 +53,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.showAlert
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         telemetryWrapper.showClearCookiesAlert()
     }
 
@@ -62,7 +62,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.dismissTrackingProtection
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         telemetryWrapper.dismissTrackingProtection()
     }
 
@@ -71,7 +71,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         telemetryWrapper.showTrackingProtectionDetails()
     }
 
@@ -80,7 +80,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         telemetryWrapper.showBlockedTrackersDetails()
     }
 
@@ -89,7 +89,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.navigateToSettings
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         telemetryWrapper.tappedShowSettings()
     }
 }

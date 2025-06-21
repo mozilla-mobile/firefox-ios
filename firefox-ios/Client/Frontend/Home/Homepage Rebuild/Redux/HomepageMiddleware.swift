@@ -96,7 +96,7 @@ final class HomepageMiddleware {
                     windowUUID: windowUUID,
                     actionType: HomepageMiddlewareActionType.enteredForeground
                 )
-                store.dispatch(storiesAction)
+                store.dispatchLegacy(storiesAction)
 
             case .PrivateDataClearedHistory,
                     .TopSitesUpdated,
@@ -108,7 +108,7 @@ final class HomepageMiddleware {
                     windowUUID: windowUUID,
                     actionType: HomepageMiddlewareActionType.bookmarksUpdated
                 )
-                store.dispatch(bookmarksAction)
+                store.dispatchLegacy(bookmarksAction)
 
             case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
                 dispatchActionToFetchTopSites(windowUUID: windowUUID)
@@ -120,7 +120,7 @@ final class HomepageMiddleware {
     }
 
     private func dispatchActionToFetchTopSites(windowUUID: WindowUUID) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.topSitesUpdated
@@ -129,13 +129,13 @@ final class HomepageMiddleware {
     }
 
     private func dispatchActionToFetchTabs(windowUUID: WindowUUID) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated
             )
         )
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInRemoteTabsUpdated

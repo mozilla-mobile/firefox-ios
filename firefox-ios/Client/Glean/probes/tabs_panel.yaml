@@ -1,0 +1,307 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - TabsPanel
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Tabs Panel
+tabs_panel:
+  done_button_tapped:
+    type: event
+    description: |
+      Recorded when a user taps the done button to close the tabs panel.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_closed:
+    type: event
+    description: |
+      Recorded when a user closes an open tab via tapping the x or
+      swiping closed.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_selected:
+    type: event
+    description: |
+      Recorded when a user selects a tab in the tabs panel.
+    extra_keys:
+      selected_tab_index:
+        type: quantity
+        description: |
+          The index of the selectd tab (indicies start at 0).
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+  new_tab_button_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the button in the tabs panel to open a new
+      tab.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+  tab_mode_selected:
+    type: event
+    description: |
+      Recorded when the user changes the tabs panel mode with the segmented 
+      control in the tabs panel.
+    extra_keys:
+      mode:
+        type: string
+        description: |
+          The newly selected tabs panel mode (normal or private or sync).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11614
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10734
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+
+tabs_panel.close_old_tabs_sheet:
+  option_selected:
+    type: event
+    description: |
+      Recorded when the user taps an option in the close old tabs sheet.
+    extra_keys:
+      period:
+        type: string
+        description: |
+          The period of time chosen by the user to delete their older tabs.
+          Either `oneDay`, `oneWeek` or `oneMonth`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/26444
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26584
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+
+tabs_panel.close_all_tabs_sheet:
+  option_selected:
+    type: event
+    description: |
+      Recorded when the user taps an option in the close all tabs sheet.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option selected from the close all tabs sheet, either
+          all, old or cancel.
+      mode:
+        type: string
+        description: |
+          The current tabs panel mode (normal or private or sync).
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+      - https://github.com/mozilla-mobile/firefox-ios/issues/25296
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26131
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - TabsPanel
+
+# Tabs Tray metrics
+tabs_tray:
+  private_browsing_icon_tapped:
+    type: event
+    description: |
+      A user has tapped on the private browsing icon in tabs tray.
+    extra_keys:
+      action:
+       type: string
+       description: |
+         Records the action:
+         close_all_tabs / add / done
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  new_private_tab_tapped:
+    type: event
+    description: |
+      A user opened a new private tab from the tab tray
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+
+# Inactive Tabs metrics
+inactive_tabs_tray:
+  toggle_inactive_tab_tray:
+    type: event
+    description: |
+      Counts the number of times user toggle (expand or collapse)
+      inactive tab section.
+    extra_keys:
+      toggle_type:
+        type: string
+        description: |
+          We either send "collapsed" or "expanded"
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8799
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  open_inactive_tab:
+    type: counter
+    description: |
+      Recorded when a user taps on an inactive tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  inactive_tabs_close_all_btn:
+    type: counter
+    description: |
+      Recorded when a user taps on close all inactive tabs button
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  inactive_tab_swipe_close:
+    type: counter
+    description: |
+      Recorded when a user swipes to close an inactive tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  inactive_tab_shown:
+    type: counter
+    description: |
+      Recorded when a user is shown inactive tab view
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9993
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

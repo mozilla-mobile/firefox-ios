@@ -178,7 +178,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             webPagePreview.transitionDidEnd()
 
             if shouldCompleteTransition, let nextTab {
-                store.dispatch(
+                store.dispatchLegacy(
                     ToolbarAction(
                         shouldAnimate: false,
                         windowUUID: windowUUID,

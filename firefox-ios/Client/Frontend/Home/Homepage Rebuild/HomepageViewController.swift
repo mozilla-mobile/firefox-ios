@@ -136,7 +136,7 @@ final class HomepageViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 showiPadSetup: shouldUseiPadSetup(),
@@ -154,7 +154,7 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
@@ -179,7 +179,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 windowUUID: windowUUID,
@@ -191,7 +191,7 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
                 windowUUID: windowUUID,
@@ -239,7 +239,7 @@ final class HomepageViewController: UIViewController,
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            store.dispatch(
+            store.dispatchLegacy(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,
                     windowUUID: windowUUID,
@@ -251,7 +251,7 @@ final class HomepageViewController: UIViewController,
         guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     /// Calculates the number of tiles that can fit in a single row based on the available width.
@@ -283,7 +283,7 @@ final class HomepageViewController: UIViewController,
             actionType: ScreenActionType.showScreen,
             screen: .homepage
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -318,7 +318,7 @@ final class HomepageViewController: UIViewController,
             actionType: ScreenActionType.closeScreen,
             screen: .homepage
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: - Theming
@@ -674,7 +674,7 @@ final class HomepageViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
@@ -694,7 +694,7 @@ final class HomepageViewController: UIViewController,
     @objc
     private func dismissKeyboard() {
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: Long Press (Photon Action Sheet)
@@ -724,7 +724,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToHomepageSettings() {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
@@ -734,7 +734,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToPocketLearnMore() {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .link,
@@ -754,7 +754,7 @@ final class HomepageViewController: UIViewController,
             sourceView: sourceView,
             toastContainer: toastContainer
         )
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
                 windowUUID: windowUUID,
@@ -781,7 +781,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToBookmarksPanel() {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.bookmarksPanel),
                 windowUUID: windowUUID,
@@ -791,7 +791,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: destination,
                 windowUUID: self.windowUUID,
@@ -802,7 +802,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
         let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
-        store.dispatch(
+        store.dispatchLegacy(
             PocketAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
@@ -817,7 +817,7 @@ final class HomepageViewController: UIViewController,
             position: index,
             topSiteConfiguration: config
         )
-        store.dispatch(
+        store.dispatchLegacy(
             TopSitesAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
@@ -852,7 +852,7 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .jumpBackIn(let config):
-            store.dispatch(
+            store.dispatchLegacy(
                 JumpBackInAction(
                     tab: config.tab,
                     windowUUID: self.windowUUID,
@@ -897,7 +897,7 @@ final class HomepageViewController: UIViewController,
             itemType: item.telemetryItemType,
             topSitesTelemetryConfig: topSitesTelemetryConfig
         )
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
                 windowUUID: windowUUID,

@@ -24,6 +24,9 @@ AppIcon:
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
+AppMenu:
+  description: Corresponds to the app's main menu.
+
 Autofill:
   description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
 
@@ -60,6 +63,9 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+ReaderMode:
+  description: Corresponds to the reading mode viewer for webpages.
+
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
@@ -71,6 +77,9 @@ TabsPanel:
 
 Toasts:
   description: Corresponds to the toast elements which can be shown over any screen in the app to provide feedback for user interaction and to sometimes revert user changes.
+
+Toolbar:
+  description: Corresponds to the toolbar which contains both the address bar and the navigation bar.
 
 TopSites:
   description: Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)

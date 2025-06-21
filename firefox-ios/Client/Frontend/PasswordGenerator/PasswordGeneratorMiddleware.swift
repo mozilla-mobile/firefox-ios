@@ -65,7 +65,7 @@ final class PasswordGeneratorMiddleware {
                 actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                 password: password
             )
-            store.dispatch(newAction)
+            store.dispatchLegacy(newAction)
         } else {
             generateNewPassword(frame: frame, completion: { generatedPassword in
                 self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
@@ -74,7 +74,7 @@ final class PasswordGeneratorMiddleware {
                     actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                     password: generatedPassword
                 )
-                store.dispatch(newAction)
+                store.dispatchLegacy(newAction)
             })
         }
     }
@@ -128,7 +128,7 @@ final class PasswordGeneratorMiddleware {
                 actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                 password: generatedPassword
             )
-            store.dispatch(newAction)
+            store.dispatchLegacy(newAction)
         })
     }
 

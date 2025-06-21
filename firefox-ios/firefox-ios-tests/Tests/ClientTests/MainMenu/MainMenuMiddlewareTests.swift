@@ -32,7 +32,7 @@ final class MainMenuMiddlewareTests: XCTestCase {
         )
 
         let action = getAction(for: .tapCloseMenu)
-        mockStore.dispatch(action)
+        mockStore.dispatchLegacy(action)
     }
 
     private func getAction(for actionType: MainMenuActionType) -> MainMenuAction {
