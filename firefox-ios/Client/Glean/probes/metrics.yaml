@@ -720,18 +720,6 @@ downloads:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  downloads_panel_row_tapped:
-    type: event
-    description: |
-      Records when a row is pressed in the downloads panel
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10777
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
   view_download_complete_toast:
     type: event
     description: |
