@@ -60,6 +60,9 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+ReaderMode:
+  description: Corresponds to the reading mode viewer for webpages.
+
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
