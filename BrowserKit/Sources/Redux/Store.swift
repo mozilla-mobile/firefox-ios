@@ -69,14 +69,23 @@ public class Store<State: StateType>: DefaultDispatchStore {
         }
     }
 
-    public func dispatchLegacy(_ action: Action) {
-        logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
+    public nonisolated func dispatchLegacy(_ action: Action) {
+        logger.log("Legacy dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
         guard Thread.isMainThread else {
-            DispatchQueue.main.async { [weak self] in self?.dispatchLegacy(action) }
+            Task { @MainActor in
+                dispatch(action)
+            }
             return
         }
 
+        actionQueue.append(action)
+        processQueuedActions()
+    }
+
+    @MainActor
+    public func dispatch(_ action: Action) {
+        logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
         actionQueue.append(action)
         processQueuedActions()
     }
