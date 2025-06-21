@@ -157,7 +157,7 @@ final class NativeErrorPageViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .nativeErrorPage)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -170,7 +170,7 @@ final class NativeErrorPageViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .nativeErrorPage)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -185,8 +185,8 @@ final class NativeErrorPageViewController: UIViewController,
         super.viewDidLoad()
         listenForThemeChange(view)
         applyTheme()
-        store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
-                                             actionType: NativeErrorPageActionType.errorPageLoaded))
+        store.dispatchLegacy(NativeErrorPageAction(windowUUID: windowUUID,
+                                                   actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
     override func viewWillTransition(
@@ -322,7 +322,7 @@ final class NativeErrorPageViewController: UIViewController,
 
     @objc
     private func didTapReload() {
-        store.dispatch(
+        store.dispatchLegacy(
             GeneralBrowserAction(
                 isNativeErrorPage: true,
                 windowUUID: windowUUID,

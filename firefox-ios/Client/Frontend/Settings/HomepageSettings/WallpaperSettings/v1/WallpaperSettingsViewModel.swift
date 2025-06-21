@@ -239,7 +239,7 @@ private extension WallpaperSettingsViewModel {
                     windowUUID: windowUUID,
                     actionType: WallpaperActionType.wallpaperSelected
                 )
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             }
             completion(result)
         }

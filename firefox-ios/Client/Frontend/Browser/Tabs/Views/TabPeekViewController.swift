@@ -33,7 +33,7 @@ class TabPeekViewController: UIViewController,
         let action = TabPeekAction(tabUUID: tab.tabUUID,
                                    windowUUID: windowUUID,
                                    actionType: TabPeekActionType.didLoadTabPeek)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -60,7 +60,7 @@ class TabPeekViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .tabPeek)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -73,7 +73,7 @@ class TabPeekViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .tabPeek)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func setupWithScreenshot() {
@@ -104,7 +104,7 @@ class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.addToBookmarks)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
                 return
             })
         }
@@ -116,7 +116,7 @@ class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.copyURL)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
                 return
             })
         }
@@ -128,7 +128,7 @@ class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.closeTab)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
                 return
             })
         }

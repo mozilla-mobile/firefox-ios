@@ -46,6 +46,6 @@ final class BookmarksMiddleware {
             windowUUID: windowUUID,
             actionType: BookmarksMiddlewareActionType.initialize
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
     }
 }

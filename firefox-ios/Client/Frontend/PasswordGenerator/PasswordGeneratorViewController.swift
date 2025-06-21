@@ -61,7 +61,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { [weak self] view in
         view.refreshPasswordButtonOnClick = {
             guard let self else {return}
-            store.dispatch(PasswordGeneratorAction(
+            store.dispatchLegacy(PasswordGeneratorAction(
                 windowUUID: self.windowUUID,
                 actionType: PasswordGeneratorActionType.userTappedRefreshPassword,
                 currentFrame: self.currentFrame)
@@ -168,9 +168,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     // MARK: - Interaction Handlers
     @objc
     func useButtonOnClick() {
-        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
-                                               actionType: PasswordGeneratorActionType.userTappedUsePassword,
-                                               currentFrame: currentFrame))
+        store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
+                                                     actionType: PasswordGeneratorActionType.userTappedUsePassword,
+                                                     currentFrame: currentFrame))
         dismiss(animated: true)
     }
 
@@ -194,7 +194,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -211,7 +211,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
@@ -237,11 +237,11 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         case .DynamicFontChanged:
             applyDynamicFontChange()
         case UIApplication.willResignActiveNotification:
-            store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                   actionType: PasswordGeneratorActionType.hidePassword))
+            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
+                                                         actionType: PasswordGeneratorActionType.hidePassword))
         case UIApplication.didBecomeActiveNotification:
-            store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                   actionType: PasswordGeneratorActionType.showPassword))
+            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
+                                                         actionType: PasswordGeneratorActionType.showPassword))
         default: break
         }
     }

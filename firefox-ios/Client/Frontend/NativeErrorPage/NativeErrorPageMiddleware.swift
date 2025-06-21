@@ -24,9 +24,9 @@ final class NativeErrorPageMiddleware {
     private func initializeNativeErrorPage(windowUUID: WindowUUID) {
         if let helper = nativeErrorPageHelper {
             let model = helper.parseErrorDetails()
-            store.dispatch(NativeErrorPageAction(nativePageErrorModel: model,
-                                                 windowUUID: windowUUID,
-                                                 actionType: NativeErrorPageMiddlewareActionType.initialize)
+            store.dispatchLegacy(NativeErrorPageAction(nativePageErrorModel: model,
+                                                       windowUUID: windowUUID,
+                                                       actionType: NativeErrorPageMiddlewareActionType.initialize)
             )
         }
     }
