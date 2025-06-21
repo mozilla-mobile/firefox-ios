@@ -14,14 +14,21 @@ features:
           If true, enables the search bar feature on homepage for users.
         type: Boolean
         default: false
-        
+      stories_redesign:
+        description: >
+          If true, enables the stories section redesign on homepage
+        type: Boolean
+        default: false
+
     defaults:
       - channel: beta
         value:
           enabled: false
           search_bar: false
+          stories_redesign: false
     
       - channel: developer
         value:
           enabled: false
           search_bar: false
+          stories_redesign: false

@@ -65,6 +65,9 @@ final class NimbusFeatureFlagLayer {
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
+        case .homepageStoriesRedesign:
+            return checkHomepageStoriesRedesignFeature(from: nimbus)
+
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
 
@@ -233,6 +236,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
+    }
+
+    private func checkHomepageStoriesRedesignFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().storiesRedesign
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
