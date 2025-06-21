@@ -108,9 +108,9 @@ class TabDisplayPanelViewController: UIViewController,
         super.viewWillAppear(animated)
 
         if !viewHasAppeared {
-            store.dispatch(TabPanelViewAction(panelType: panelType,
-                                              windowUUID: windowUUID,
-                                              actionType: TabPanelViewActionType.tabPanelWillAppear))
+            store.dispatchLegacy(TabPanelViewAction(panelType: panelType,
+                                                    windowUUID: windowUUID,
+                                                    actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
     }
@@ -277,12 +277,12 @@ class TabDisplayPanelViewController: UIViewController,
         let screenAction = ScreenAction(windowUUID: windowUUID,
                                         actionType: ScreenActionType.showScreen,
                                         screen: .tabsPanel)
-        store.dispatch(screenAction)
+        store.dispatchLegacy(screenAction)
 
         let didLoadAction = TabPanelViewAction(panelType: panelType,
                                                windowUUID: windowUUID,
                                                actionType: TabPanelViewActionType.tabPanelDidLoad)
-        store.dispatch(didLoadAction)
+        store.dispatchLegacy(didLoadAction)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -296,7 +296,7 @@ class TabDisplayPanelViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .tabsPanel)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func newState(state: TabsPanelState) {
@@ -322,6 +322,6 @@ class TabDisplayPanelViewController: UIViewController,
                                         urlRequest: urlRequest,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.learnMorePrivateMode)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 }

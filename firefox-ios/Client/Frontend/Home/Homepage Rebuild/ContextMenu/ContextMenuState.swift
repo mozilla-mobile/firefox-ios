@@ -142,7 +142,7 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             dispatchSettingsAction(section: .topSites)
-            store.dispatch(
+            store.dispatchLegacy(
                 ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSettingsAction)
             )
         }).items
@@ -162,7 +162,7 @@ struct ContextMenuState {
                 return
             }
             dispatchOpenNewTabAction(siteURL: url, isPrivate: false, selectNewTab: true)
-            store.dispatch(
+            store.dispatchLegacy(
                 ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSponsoredAction)
             )
         }).items
@@ -285,7 +285,7 @@ struct ContextMenuState {
 
     // MARK: Dispatch Actions
     private func dispatchSettingsAction(section: Route.SettingsSection) {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(section)),
                 windowUUID: windowUUID,
@@ -295,7 +295,7 @@ struct ContextMenuState {
     }
 
     private func dispatchOpenNewTabAction(siteURL: URL, isPrivate: Bool, selectNewTab: Bool = false) {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .newTab,
@@ -310,7 +310,7 @@ struct ContextMenuState {
     }
 
     private func dispatchShareSheetAction(shareSheetConfiguration: ShareSheetConfiguration) {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
                 windowUUID: windowUUID,
@@ -320,7 +320,7 @@ struct ContextMenuState {
     }
 
     private func dispatchContextMenuAction(site: Site, actionType: ActionType) {
-        store.dispatch(
+        store.dispatchLegacy(
             ContextMenuAction(
                 site: site,
                 windowUUID: windowUUID,
@@ -330,7 +330,7 @@ struct ContextMenuState {
     }
 
     private func dispatchContextMenuActionForSection(actionType: ActionType) {
-        store.dispatch(
+        store.dispatchLegacy(
             ContextMenuAction(
                 section: configuration.homepageSection,
                 windowUUID: windowUUID,

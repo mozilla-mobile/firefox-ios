@@ -910,7 +910,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         let action = PrivateModeAction(isPrivate: isPrivate,
                                        windowUUID: windowUUID,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         if isPDFRefactorEnabled {
             tab.resumeDocumentDownload()
@@ -973,7 +973,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
                                           isNativeErrorPage: isNativeErrorPage,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
