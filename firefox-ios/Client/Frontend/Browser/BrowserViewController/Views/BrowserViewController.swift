@@ -920,7 +920,10 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
-        setupTopTabsViewController()
+
+        if toolbarHelper.shouldShowTopTabs(for: traitCollection) {
+            setupTopTabsViewController()
+        }
 
         // Update theme of already existing views
         let theme = currentTheme()
