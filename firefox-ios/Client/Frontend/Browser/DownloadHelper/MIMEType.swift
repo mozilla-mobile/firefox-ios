@@ -14,6 +14,7 @@ struct MIMEType {
     static let HTML = "text/html"
     static let OctetStream = "application/octet-stream"
     static let Passbook = "application/vnd.apple.pkpass"
+    static let MobileConfig = "application/x-apple-aspen-config"
     static let PDF = "application/pdf"
     static let PlainText = "text/plain"
     static let PNG = "image/png"
@@ -67,5 +68,9 @@ struct MIMEType {
             return fileExtension as String
         }
         return nil
+    }
+
+    static func shouldOpenWithMobileConfig(mimeType: String, forceDownload: Bool = false) -> Bool {
+        return mimeType == MIMEType.MobileConfig && !forceDownload
     }
 }

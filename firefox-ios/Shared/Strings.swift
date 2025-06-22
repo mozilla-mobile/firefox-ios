@@ -3909,6 +3909,21 @@ extension String {
         tableName: nil,
         value: "OK",
         comment: "Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
+    public static let UnableToOpenConfigErrorTitle = MZLocalizedString(
+        key: "OpenConfig.Error.Title",
+        tableName: nil,
+        value: "Failed to Open Configuration Profile",
+        comment: "Title of the 'Open Configuration Profile Failed' alert.")
+    public static let UnableToOpenConfigErrorMessage = MZLocalizedString(
+        key: "OpenConfig.Error.Message",
+        tableName: nil,
+        value: "An error occurred while opening the configuration profile. Please try again later.",
+        comment: "Text of the 'Open Configuration Profile Failed' alert.")
+    public static let UnableToOpenConfigErrorDismiss = MZLocalizedString(
+        key: "OpenConfig.Error.Dismiss",
+        tableName: nil,
+        value: "OK",
+        comment: "Button to dismiss the 'Open Configuration Profile Failed' alert.")
     public static let CouldntDownloadWallpaperErrorTitle = MZLocalizedString(
         key: "Wallpaper.Download.Error.Title.v106",
         tableName: nil,

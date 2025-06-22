@@ -14,6 +14,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         // Do not need toast message for Passbook Passes since we don't save the download
         guard download.mimeType != MIMEType.Passbook else { return }
 
+        // Do not need toast message for Mobile Config files since we don't save the download
+        guard download.mimeType != MIMEType.MobileConfig else { return }
+
         if let downloadProgressManager = self.downloadProgressManager {
             if tabManager.selectedTab?.isPrivate == true {
                 dismissDownloadLiveActivity()
@@ -82,6 +85,24 @@ extension BrowserViewController: DownloadQueueDelegate {
             passBookHelper = OpenPassBookHelper(presenter: self)
             passBookHelper?.open(data: download.data) {
                 self.passBookHelper = nil
+            }
+        }
+
+        // Handle Mobile Config downloads
+        if let download = (download as? BlobDownload),
+           OpenMobileConfigHelper.shouldOpenWithMobileConfig(mimeType: download.mimeType) {
+            mobileConfigHelper = OpenMobileConfigHelper(presenter: self)
+            mobileConfigHelper?.open(data: download.data) {
+                self.mobileConfigHelper = nil
+            }
+        }
+
+        // Handle Mobile Config downloads from HTTPDownload
+        if let download = (download as? HTTPDownload),
+           OpenMobileConfigHelper.shouldOpenWithMobileConfig(mimeType: download.mimeType) {
+            mobileConfigHelper = OpenMobileConfigHelper(presenter: self)
+            mobileConfigHelper?.open(response: download.preflightResponse, cookieStore: download.cookieStore) {
+                self.mobileConfigHelper = nil
             }
         }
 
