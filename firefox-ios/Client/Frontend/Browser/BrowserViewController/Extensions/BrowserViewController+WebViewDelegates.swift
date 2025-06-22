@@ -75,7 +75,7 @@ extension BrowserViewController: WKUIDelegate {
         let messageAlert = MessageAlert(message: message,
                                         frame: frame,
                                         completionHandler: completionHandler)
-        if !alertIsWithinAcceptableSpamLimits(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert(completionHandler)
         } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript alert panel will be presented.", level: .info, category: .webview)
@@ -100,7 +100,7 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(confirm)
         }
 
-        if !alertIsWithinAcceptableSpamLimits(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert { completionHandler(false) }
         } else if shouldDisplayJSAlertForWebView(webView) {
             self.logger.log("JavaScript confirm panel will be presented.", level: .info, category: .webview)
@@ -126,7 +126,7 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(input)
         }
 
-        if !alertIsWithinAcceptableSpamLimits(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert { completionHandler("") }
         } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript text input panel will be presented.", level: .info, category: .webview)
@@ -1238,11 +1238,11 @@ private extension BrowserViewController {
         return (tab.webView === webView && self.presentedViewController == nil)
     }
 
-    func alertIsWithinAcceptableSpamLimits(_ webView: WKWebView) -> Bool {
+    func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
         guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
         let canShow = tab.jsAlertThrottler.canShowAlert()
         if canShow { tab.jsAlertThrottler.willShowJSAlert() }
-        return canShow
+        return !canShow
     }
 
      func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
