@@ -112,7 +112,7 @@ final class NimbusFeatureFlagLayer {
 
         case .searchEngineConsolidation:
             return checkSearchEngineConsolidationFeature(from: nimbus)
-            
+
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
