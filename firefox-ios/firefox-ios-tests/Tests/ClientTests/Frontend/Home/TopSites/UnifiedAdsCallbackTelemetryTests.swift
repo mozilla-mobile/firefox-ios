@@ -68,11 +68,11 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
             return
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
-        XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
 
         // Ensuring we call the right metrics type
         let firstSavedMetric = try XCTUnwrap(
-            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContileImpressionExtra>
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContileImpressionExtra>
         )
         let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileImpression)
         let firstResultMetricType = type(of: firstSavedMetric)
@@ -80,7 +80,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
                                                  resultMetric: firstResultMetricType)
         XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
 
-        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[1] as? StringMetricType)
+        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents[safe: 1] as? StringMetricType)
         let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
         let secondResultMetricType = type(of: secondSavedMetric)
         let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
@@ -102,11 +102,11 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
             return
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
-        XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
 
         // Ensuring we call the right metrics type
         let firstSavedMetric = try XCTUnwrap(
-            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContileClickExtra>
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContileClickExtra>
         )
         let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileClick)
         let firstResultMetricType = type(of: firstSavedMetric)
@@ -114,7 +114,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
                                                  resultMetric: firstResultMetricType)
         XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
 
-        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[1] as? StringMetricType)
+        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents[safe: 1] as? StringMetricType)
         let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
         let secondResultMetricType = type(of: secondSavedMetric)
         let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,

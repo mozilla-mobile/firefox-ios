@@ -141,33 +141,6 @@ class TelemetryWrapperTests: XCTestCase {
                               failureMessage: "Sponsored shortcut value not tracked")
     }
 
-    // MARK: - Preferences
-
-    func test_preferencesWithExtras_GleanIsCalled() {
-        let extras: [String: Any] = [
-            ExtraKey.preference.rawValue: "ETP-strength",
-            ExtraKey.preferenceChanged.rawValue: BlockingStrength.strict.rawValue
-        ]
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .change,
-            object: .setting,
-            extras: extras
-        )
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Preferences.changed)
-    }
-
-    func test_preferencesWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .change,
-            object: .setting
-        )
-        XCTAssertNil(GleanMetrics.Preferences.changed.testGetValue())
-    }
-
     // MARK: - Firefox Home Page
 
     func test_recentlySavedBookmarkViewWithExtras_GleanIsCalled() {

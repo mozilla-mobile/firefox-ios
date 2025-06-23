@@ -102,6 +102,7 @@
         "AddressesTests\/testUpdateAllAddressFields()",
         "AuthenticationTest",
         "BaseTestCase",
+        "BookmarksTests",
         "BrowsingPDFTests",
         "CreditCardsTests\/testAccessingTheCreditCardsSection()",
         "DataManagementTests",

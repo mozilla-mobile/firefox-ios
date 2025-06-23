@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Chistu ti pirmetti di scattari e carricari fotu.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Chistu ti pirmetti di sbluccari l'applicazzioni.";
+"NSFaceIDUsageDescription" = "Chistu ti pirmetti di sbluccari l’applicazzioni.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "I siti chi vìsiti ponnu addumannari a to pusizzioni.";

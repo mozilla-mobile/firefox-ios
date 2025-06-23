@@ -154,6 +154,9 @@ final class NimbusFeatureFlagLayer {
 
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
+
+        case .webEngineIntegrationRefactor:
+            return checkWebEngineIntegrationRefactor(from: nimbus)
         }
     }
 
@@ -421,5 +424,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
+    }
+
+    private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.webEngineIntegrationRefactor.value().enabled
     }
 }

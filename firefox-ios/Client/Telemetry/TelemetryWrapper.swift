@@ -587,9 +587,6 @@ extension TelemetryWrapper {
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
-        case shareSendToDevice = "share-send-to-device"
-        case sharePocketIcon = "share-pocket-icon"
-        case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
         case themeModeManually = "theme-manually"
@@ -835,18 +832,8 @@ extension TelemetryWrapper {
         case (.action, .tap, .newPrivateTab, .topSite, _):
             GleanMetrics.TopSites.openInPrivateTab.record()
         // MARK: Preferences
-        case (.action, .change, .setting, _, let extras):
-            if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
-                let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
-                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to,
-                                                                                              preference: preference))
-            } else if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
-                        let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? Bool {
-                GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to.description,
-                                                                                              preference: preference))
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
+        case (.action, .change, .setting, _, _):
+            assertionFailure("Please record telemetry for settings using the SettingsTelemetry().changedSetting() method")
 
         // MARK: - QR Codes
         case (.action, .scan, .qrCodeText, _, _),
@@ -1353,12 +1340,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .newPrivateTab, .pocketSite, _):
             GleanMetrics.Pocket.openInPrivateTab.record()
 
-        // MARK: Library Panel
-        case (.action, .tap, .libraryPanel, let type?, _):
-            GleanMetrics.Library.panelPressed[type.rawValue].add()
         // History Panel related
-        case (.action, .navigate, .navigateToGroupHistory, _, _):
-            GleanMetrics.History.groupList.add()
         case (.action, .tap, .selectedHistoryItem, let type?, _):
             GleanMetrics.History.selectedItem[type.rawValue].add()
         case (.action, .tap, .openedHistoryItem, _, _):
@@ -1744,13 +1726,6 @@ extension TelemetryWrapper {
                     messageSurface: messageSurface
                 )
             )
-        // MARK: - Share sheet actions
-        case (.action, .tap, .shareSheet, .shareSendToDevice, _):
-            GleanMetrics.ShareSheet.sendDeviceTapped.record()
-        case (.action, .tap, .shareSheet, .sharePocketIcon, _):
-            GleanMetrics.ShareSheet.pocketActionTapped.record()
-        case (.action, .tap, .shareSheet, .shareSaveToPocket, _):
-            GleanMetrics.ShareSheet.saveToPocketTapped.record()
 
         // MARK: - App Errors
         case(.information, .error, .app, .largeFileWrite, let extras):

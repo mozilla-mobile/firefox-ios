@@ -274,9 +274,10 @@ class SearchTests: BaseTestCase {
             waitUntilPageLoad()
 
             // Reload icon is displayed.
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].label, "New Tab")
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].waitAndTap()
 

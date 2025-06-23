@@ -195,26 +195,6 @@ class TestHistory: XCTestCase {
         self.clear(places)
     }
 
-    func testInsertPerformance() {
-        let places = profile.places
-        var index = 0
-
-        measure(metrics: [
-            XCTMemoryMetric(),
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
-            ]) { () in
-            for _ in 0...self.numCmds {
-                self.addSite(
-                    places,
-                    url: "https://someurl\(index).com/",
-                    title: "title \(index)"
-                )
-                index += 1
-            }
-        }
-    }
-
     func testGetPerformance() {
         let places = profile.places
         var index = 0

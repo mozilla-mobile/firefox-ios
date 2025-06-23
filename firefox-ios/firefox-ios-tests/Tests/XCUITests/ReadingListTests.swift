@@ -246,12 +246,8 @@ class ReadingListTests: BaseTestCase {
             XCTAssertTrue(app.buttons["Reader View"].isSelected)
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        } else {
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
-        }
-        navigator.nowAt(NewTabScreen)
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_ReadingList)

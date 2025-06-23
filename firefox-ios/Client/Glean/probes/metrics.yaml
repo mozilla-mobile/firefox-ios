@@ -2199,35 +2199,9 @@ homepage:
       tags:
         - Homepage
 
-
-# Metrics related to the history panel of the library
-library:
-  panel_pressed:
-    type: labeled_counter
-    description: |
-      Counts the number of times a specific library panel
-      button is tapped for Bookmarks, History, Reading List,
-      Downloads and Synced tabs
-    labels:
-      - bookmarks-panel
-      - history-panel
-      - reading-panel
-      - downloads-panel
-      - sync-panel
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/8035
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/8152
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-
 # Library
 library.history_panel:
-  cleared_history: 
+  cleared_history:
     type: event
     description: |
       A user deleted history entries from a certain timeframe
@@ -2259,22 +2233,6 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14905
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  group_list:
-    type: counter
-    description: |
-      Counts the number of times a user has selected a
-      search term group inside the history panel. Selecting
-      this item will navigate them to a view containing a list
-      of all Site items that appear in that group.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -4734,45 +4692,6 @@ toolbar:
 # Share sheet specific metrics
 
 share_sheet:
-  send_device_tapped:
-    type: event
-    description: |
-      Counts the number of times a user taps send to device
-      button from Share Sheet actions
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12526
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  pocket_action_tapped:
-    type: event
-    description: |
-      Counts the number of times a user taps Pocket icon
-      from Share Sheet apps available
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12552
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  save_to_pocket_tapped:
-    type: event
-    description: |
-      Counts the number of times a user taps Save to Pocket
-      from Share Sheet actions
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12552
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
   shared_to:
     type: event
     description: |
@@ -5059,101 +4978,7 @@ adjust:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-migration:
-  image_sd_cache_cleanup:
-    type: counter
-    description: |
-        Counts the number of times a user runs the
-        sd web image library cache cleanup
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/10903
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11169
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
 
-places_history_migration:
-  duration:
-    type: timing_distribution
-    time_unit: millisecond
-    description: |
-        A time distribution of how long it took for the migration to occur
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - mhammond@mozilla.com
-      - sync-team@mozilla.com
-    expires: "2026-01-01"
-  num_to_migrate:
-    type: quantity
-    unit: visits
-    description: |
-       The number of visits expected to migrate to the places.db
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - mhammond@mozilla.com
-      - sync-team@mozilla.com
-    expires: "2026-01-01"
-  num_migrated:
-    type: quantity
-    unit: visits
-    description: |
-       The number of visits migrated to the places.db
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - mhammond@mozilla.com
-      - sync-team@mozilla.com
-    expires: "2026-01-01"
-  migration_ended_rate:
-    type: rate
-    description: |
-       A Rate of how often migrations end
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - mhammond@mozilla.com
-      - sync-team@mozilla.com
-    expires: "2026-01-01"
-  migration_error_rate:
-    type: rate
-    description: |
-       A Rate of how often migrations error out
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    data_sensitivity:
-      - technical
-    notification_emails:
-      - mhammond@mozilla.com
-      - sync-team@mozilla.com
-    expires: "2026-01-01"
 # Address autofill
 addresses:
   form_detected:
@@ -5927,33 +5752,3 @@ nimbus_system:
     send_in_pings:
       - nimbus
 
-# FXIOS-12391 - Temporary metric to test notification emails
-testing:
-  test_event_1:
-    type: event
-    description: |
-      A temporary event used to test the sendability of glean notification
-      emails.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12391
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9999999
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-06-17"
-    no_lint: 
-      - COMMON_PREFIX
-  test_event_2:
-    type: event
-    description: |
-      A temporary event used to test the sendability of glean notification
-      emails.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12391
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9999999
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-06-18"
-    no_lint: 
-      - COMMON_PREFIX

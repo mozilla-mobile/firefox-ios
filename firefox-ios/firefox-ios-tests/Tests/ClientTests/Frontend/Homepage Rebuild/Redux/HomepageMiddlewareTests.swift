@@ -53,7 +53,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.homepageProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -71,7 +71,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.homepageProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -91,10 +91,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.homepageProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
         let resultMetricType = type(of: savedMetric)
@@ -117,10 +117,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.homepageProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
         let resultMetricType = type(of: savedMetric)
@@ -143,10 +143,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.homepageProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
         let resultMetricType = type(of: savedMetric)
@@ -169,10 +169,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.homepageProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
         let resultMetricType = type(of: savedMetric)
@@ -195,10 +195,10 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.homepageProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Homepage.ItemTappedExtra
         )
         let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
         let resultMetricType = type(of: savedMetric)
@@ -220,7 +220,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.homepageProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? LabeledMetricType<CounterMetricType>)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>)
         let expectedMetricType = type(of: GleanMetrics.Homepage.sectionViewed)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)

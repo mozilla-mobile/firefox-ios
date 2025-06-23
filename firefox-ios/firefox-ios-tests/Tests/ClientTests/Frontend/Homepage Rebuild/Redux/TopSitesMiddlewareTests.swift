@@ -39,32 +39,22 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
-        let recalculateExpectation = XCTestExpectation(
-            description: "Recalculate top sites method is called from top site manager"
-        )
-        dispatchExpectation.expectedFulfillmentCount = 3
-        recalculateExpectation.expectedFulfillmentCount = 3
 
         mockStore.dispatchCalled = {
             dispatchExpectation.fulfill()
         }
 
-        mockTopSitesManager.recalculateTopSitesCalled = {
-            recalculateExpectation.fulfill()
-        }
-
         subject.topSitesProvider(appState, action)
 
-        wait(for: [dispatchExpectation, recalculateExpectation])
+        wait(for: [dispatchExpectation], timeout: 1)
 
-        XCTAssertEqual(mockTopSitesManager.getOtherSitesCalledCount, 1)
-        XCTAssertEqual(mockTopSitesManager.fetchSponsoredSitesCalledCount, 1)
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 1)
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 3)
-        XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
@@ -130,26 +120,47 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
-        let recalculateExpectation = XCTestExpectation(
-            description: "Recalculate top sites method is called from top site manager"
-        )
-        dispatchExpectation.expectedFulfillmentCount = 3
-        recalculateExpectation.expectedFulfillmentCount = 3
 
         mockStore.dispatchCalled = {
             dispatchExpectation.fulfill()
         }
 
-        mockTopSitesManager.recalculateTopSitesCalled = {
-            recalculateExpectation.fulfill()
+        subject.topSitesProvider(appState, action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
+        let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionsType, [.retrievedUpdatedSites])
+        XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
+    func test_fetchTopSitesAction_withMultipleCalles_returnsTopSitesSection() throws {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageMiddlewareActionType.topSitesUpdated
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
+
+        dispatchExpectation.expectedFulfillmentCount = 3
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
         }
 
         subject.topSitesProvider(appState, action)
+        subject.topSitesProvider(appState, action)
+        subject.topSitesProvider(appState, action)
 
-        wait(for: [dispatchExpectation, recalculateExpectation])
+        wait(for: [dispatchExpectation], timeout: 1)
 
-        XCTAssertEqual(mockTopSitesManager.getOtherSitesCalledCount, 1)
-        XCTAssertEqual(mockTopSitesManager.fetchSponsoredSitesCalledCount, 1)
+        XCTAssertEqual(mockTopSitesManager.recalculateTopSitesCalledCount, 3)
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
@@ -181,7 +192,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 1)
@@ -210,7 +221,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(unifiedAdsTelemetry.sendClickTelemetryCalled, 1)
@@ -242,7 +253,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         try checkTopSitesPressedMetrics(label: "origin-other", position: "1", tileType: "suggested")
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 0)
@@ -264,7 +275,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.topSitesProvider(appState, action)
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)
@@ -298,7 +309,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.topSitesProvider(appState, action)
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
         XCTAssertEqual(mockTopSitesManager.pinTopSiteCalledCount, 0)
     }
@@ -325,7 +336,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.topSitesProvider(appState, action)
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
         XCTAssertEqual(mockTopSitesManager.unpinTopSiteCalledCount, 0)
     }
@@ -352,7 +363,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.topSitesProvider(appState, action)
 
-        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
         XCTAssertEqual(mockTopSitesManager.removeTopSiteCalledCount, 0)
     }
@@ -366,7 +377,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         subject.topSitesProvider(AppState(), action)
 
-        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let expectedMetricType = type(of: GleanMetrics.TopSites.openInPrivateTab)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -414,10 +425,10 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     private func checkContextMenuMetricsCalled(withExtra extra: String) throws {
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContextualMenuExtra>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.TopSites.ContextualMenuExtra>
         )
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.TopSites.ContextualMenuExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.TopSites.ContextualMenuExtra
         )
         let expectedMetricType = type(of: GleanMetrics.TopSites.contextualMenu)
         let resultMetricType = type(of: savedMetric)
@@ -430,7 +441,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     private func checkTopSitesPressedMetrics(label: String, position: String, tileType: String) throws {
         let firstSavedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[0] as? LabeledMetricType<CounterMetricType>
+            mockGleanWrapper.savedEvents.first as? LabeledMetricType<CounterMetricType>
         )
 
         let expectedFirstMetricType = type(of: GleanMetrics.TopSites.pressedTileOrigin)
@@ -441,10 +452,10 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let secondSavedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?[1] as? EventMetricType<GleanMetrics.TopSites.TilePressedExtra>
+            mockGleanWrapper.savedEvents[safe: 1] as? EventMetricType<GleanMetrics.TopSites.TilePressedExtra>
         )
         let secondSavedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.TopSites.TilePressedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.TopSites.TilePressedExtra
         )
         let expectedSecondMetricType = type(of: GleanMetrics.TopSites.tilePressed)
         let secondResultMetricType = type(of: secondSavedMetric)

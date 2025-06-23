@@ -43,7 +43,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             return
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
-        XCTAssertEqual(gleanWrapper.savedEvents?.count, 4)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 4)
     }
 
     // MARK: Click
@@ -66,7 +66,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             return
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
-        XCTAssertEqual(gleanWrapper.savedEvents?.count, 4)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 4)
     }
 
     // MARK: Helper methods

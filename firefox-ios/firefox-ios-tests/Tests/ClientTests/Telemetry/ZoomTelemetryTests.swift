@@ -31,8 +31,8 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.zoomIn(zoomLevel: expectedZoomLevel)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -49,8 +49,8 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.zoomOut(zoomLevel: expectedZoomLevel)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -65,7 +65,7 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.resetZoomLevel()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -79,7 +79,7 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.closeZoomBar()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -95,8 +95,8 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.updateDefaultZoomLevel(zoomLevel: expectedZoomLevel)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -113,8 +113,8 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.deleteZoomDomainLevel(value: expectedIndex)
 
-        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras as? EventExtrasType)
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>)
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -129,7 +129,7 @@ final class ZoomTelemetryTests: XCTestCase {
 
         subject?.resetDomainZoomLevel()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 

@@ -26,7 +26,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenSectionShown_ThenGleanIsCalled() throws {
         subject?.sectionShown()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabShown)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -37,7 +37,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenClosedAllTabs_ThenGleanIsCalled() throws {
         subject?.closedAllTabs()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -48,7 +48,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenTabOpened_ThenGleanIsCalled() throws {
         subject?.tabOpened()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.openInactiveTab)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -59,7 +59,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenTabSwipedClosed_ThenGleanIsCalled() throws {
         subject?.tabSwipedToClose()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
@@ -71,7 +71,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         subject?.sectionToggled(hasExpanded: true)
 
         let savedMetric = try XCTUnwrap(
-            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra>
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra>
         )
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray)
         let resultMetricType = type(of: savedMetric)
