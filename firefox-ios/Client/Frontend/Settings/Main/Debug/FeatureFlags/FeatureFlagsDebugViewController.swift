@@ -28,13 +28,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
-                    with: .addressBarMenu,
-                    titleText: format(string: "Enable New AddressBar Menu"),
-                    statusText: format(string: "Toggle to show the new address bar menu")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .appearanceMenu,
                     titleText: format(string: "Appearance Menu"),
                     statusText: format(string: "Toggle to show the new apperance menu")
@@ -145,6 +138,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .addressBarMenu,
+                    titleText: format(string: "New AddressBar Menu"),
+                    statusText: format(string: "Toggle to show the new address bar menu")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .noInternetConnectionErrorPage,
                     titleText: format(string: "NIC Native Error Page"),
                     statusText: format(string: "Toggle to display natively created no internet connection error page")
@@ -169,6 +169,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .sentFromFirefox,
                     titleText: format(string: "Sent from Firefox"),
                     statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .homepageStoriesRedesign,
+                    titleText: format(string: "Stories Redesign"),
+                    statusText: format(string: "Toggle to enable homepage stories section redesign")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
