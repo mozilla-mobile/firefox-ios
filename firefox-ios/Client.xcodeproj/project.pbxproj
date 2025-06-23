@@ -1263,6 +1263,52 @@
 		8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4362B8C76C80026530B /* LoginListView.swift */; };
 		8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */; };
 		8CF40B482DFC22C200DCB7F0 /* OnboardingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */; };
+		8CFA6B9E2E095C0600A6B1B1 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8FD2CF2DAE5BCA000E2051 /* Shared */; };
+		8CFA6B9F2E095C0600A6B1B1 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8FD2DE2DAE5D91000E2051 /* SiteImageView */; };
+		8CFA6BCA2E0960E300A6B1B1 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC72E0960E300A6B1B1 /* ShareViewController.swift */; };
+		8CFA6BCB2E0960E300A6B1B1 /* SendToDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC62E0960E300A6B1B1 /* SendToDevice.swift */; };
+		8CFA6BCC2E0960E300A6B1B1 /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC82E0960E300A6B1B1 /* UXConstants.swift */; };
+		8CFA6BCD2E0960E300A6B1B1 /* EmbeddedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC52E0960E300A6B1B1 /* EmbeddedNavController.swift */; };
+		8CFA6BCE2E0960F500A6B1B1 /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC82E0960E300A6B1B1 /* UXConstants.swift */; };
+		8CFA6BCF2E0960F500A6B1B1 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC72E0960E300A6B1B1 /* ShareViewController.swift */; };
+		8CFA6BD02E0960F500A6B1B1 /* EmbeddedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC52E0960E300A6B1B1 /* EmbeddedNavController.swift */; };
+		8CFA6BD12E0960F500A6B1B1 /* SendToDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC62E0960E300A6B1B1 /* SendToDevice.swift */; };
+		8CFA6BD22E0960F500A6B1B1 /* EmbeddedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC52E0960E300A6B1B1 /* EmbeddedNavController.swift */; };
+		8CFA6BD32E0960F500A6B1B1 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC72E0960E300A6B1B1 /* ShareViewController.swift */; };
+		8CFA6BD42E0960F500A6B1B1 /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC82E0960E300A6B1B1 /* UXConstants.swift */; };
+		8CFA6BD52E0960F500A6B1B1 /* SendToDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BC62E0960E300A6B1B1 /* SendToDevice.swift */; };
+		8CFA6BD72E09616200A6B1B1 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFA6BD62E09616200A6B1B1 /* Common */; };
+		8CFA6BD92E09616800A6B1B1 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFA6BD82E09616800A6B1B1 /* GCDWebServers */; };
+		8CFA6BDB2E09617700A6B1B1 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFA6BDA2E09617700A6B1B1 /* Shared */; };
+		8CFA6BDC2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		8CFA6BDD2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8CFA6BE12E09618500A6B1B1 /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
+		8CFA6BE22E09618500A6B1B1 /* Localizations.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8CFA6BE52E0961EC00A6B1B1 /* DevicePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */; };
+		8CFA6BE62E09621C00A6B1B1 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
+		8CFA6BE72E09622700A6B1B1 /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
+		8CFA6BE82E09623700A6B1B1 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
+		8CFA6BE92E09625D00A6B1B1 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
+		8CFA6BEA2E09627400A6B1B1 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
+		8CFA6BEB2E09628F00A6B1B1 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D05C9822D9CCF690081540C /* RemoteSettingsServiceSyncCoordinator.swift */; };
+		8CFA6BEC2E0962A800A6B1B1 /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
+		8CFA6BED2E0962C800A6B1B1 /* RustErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B7109D2ABE380B0029726E /* RustErrors.swift */; };
+		8CFA6BEE2E0962D100A6B1B1 /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
+		8CFA6BEF2E0962D900A6B1B1 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
+		8CFA6BF02E0962F800A6B1B1 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
+		8CFA6BF12E09631700A6B1B1 /* LoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABB92C2C64F77000F1FE51 /* LoginProvider.swift */; };
+		8CFA6BF22E09632000A6B1B1 /* AutofillProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */; };
+		8CFA6BF32E09632700A6B1B1 /* PlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE02DC8EF26004644B9 /* PlacesProvider.swift */; };
+		8CFA6BF42E09632E00A6B1B1 /* TabsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F4EE52DC8F05F004644B9 /* TabsProvider.swift */; };
+		8CFA6BF52E09634B00A6B1B1 /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
+		8CFA6BF62E09636900A6B1B1 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
+		8CFA6BF72E09637500A6B1B1 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
+		8CFA6BF82E09638500A6B1B1 /* HostingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */; };
+		8CFA6BF92E0963F900A6B1B1 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
+		8CFA6BFA2E0963F900A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8CFA6C042E0972E900A6B1B1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CFA6C022E0972E900A6B1B1 /* Media.xcassets */; };
+		8CFA6C062E0972E900A6B1B1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CFA6C012E0972E900A6B1B1 /* InfoPlist.strings */; };
+		8CFA6C072E0972E900A6B1B1 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BFE2E0972E900A6B1B1 /* ActionViewController.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		94AEF1552D690043003E2623 /* DownloadLiveActivityTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEF1542D690040003E2623 /* DownloadLiveActivityTest.swift */; };
 		94D3DD162D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */; };
@@ -1756,7 +1802,6 @@
 		E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */; };
 		E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */; };
 		E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */; };
-		E136D41A2B19D35D003D0302 /* EmbeddedNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E136D4192B19D35D003D0302 /* EmbeddedNavController.swift */; };
 		E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */; };
 		E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */; };
 		E13C07292C217D700087E404 /* NavigationBarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C07282C217D700087E404 /* NavigationBarState.swift */; };
@@ -1922,8 +1967,6 @@
 		EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		EB3A38A02032673E004C6E67 /* DatabaseFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */; };
 		EB63CA51228F0539005FD0EF /* DesktopModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB63CA4F228F0538005FD0EF /* DesktopModeTests.swift */; };
-		EB6E0C60207E6C3100FBFF7E /* SendToDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E0C5F207E6C3000FBFF7E /* SendToDevice.swift */; };
-		EB9407492081353100702E05 /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB940747208134AF00702E05 /* UXConstants.swift */; };
 		EB9854FF2422686F0040F24B /* AppDelegate+PushNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9854FD2422686F0040F24B /* AppDelegate+PushNotifications.swift */; };
 		EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB98550024226EF60040F24B /* AppDelegate+SyncSentTabs.swift */; };
 		EB9A179D20E69A7F00B12184 /* PrivateModeUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179A20E69A7E00B12184 /* PrivateModeUI.swift */; };
@@ -2253,6 +2296,27 @@
 			remoteGlobalIDString = 43BE5774278BA4D900491291;
 			remoteInfo = RustMozillaAppServices;
 		};
+		8CFA6BDE2E09617F00A6B1B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BE5774278BA4D900491291;
+			remoteInfo = RustMozillaAppServices;
+		};
+		8CFA6BE32E09618500A6B1B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Localizations;
+		};
+		8CFA6BFB2E0963F900A6B1B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BE5774278BA4D900491291;
+			remoteInfo = RustMozillaAppServices;
+		};
 		C82043702523DBEB00740B71 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -2380,6 +2444,29 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8CFA6BE02E09617F00A6B1B1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8CFA6BDD2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */,
+				8CFA6BE22E09618500A6B1B1 /* Localizations.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8CFA6BFD2E0963FA00A6B1B1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8CFA6BFA2E0963F900A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8715,6 +8802,14 @@
 		8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListViewModelTests.swift; sourceTree = "<group>"; };
 		8CEDF07F2BFE138B00D2617B /* AutofillProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillProvider.swift; sourceTree = "<group>"; };
 		8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingServiceTests.swift; sourceTree = "<group>"; };
+		8CFA6BC52E0960E300A6B1B1 /* EmbeddedNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedNavController.swift; sourceTree = "<group>"; };
+		8CFA6BC62E0960E300A6B1B1 /* SendToDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendToDevice.swift; sourceTree = "<group>"; };
+		8CFA6BC72E0960E300A6B1B1 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		8CFA6BC82E0960E300A6B1B1 /* UXConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UXConstants.swift; sourceTree = "<group>"; };
+		8CFA6BFE2E0972E900A6B1B1 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
+		8CFA6BFF2E0972E900A6B1B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8CFA6C002E0972E900A6B1B1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8CFA6C022E0972E900A6B1B1 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		8D1340A4B7E4ACBF43347178 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8D194DCF9E244D29DA68FDE5 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/Shared.strings; sourceTree = "<group>"; };
 		8D1D42808537A1B29FEE3BF4 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -10071,7 +10166,6 @@
 		E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManagerTests.swift; sourceTree = "<group>"; };
-		E136D4192B19D35D003D0302 /* EmbeddedNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedNavController.swift; sourceTree = "<group>"; };
 		E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewModelTests.swift; sourceTree = "<group>"; };
 		E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManagerMock.swift; sourceTree = "<group>"; };
 		E13C07282C217D700087E404 /* NavigationBarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarState.swift; sourceTree = "<group>"; };
@@ -10765,12 +10859,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C3536A22D9ED59F00D0DB81 /* Common in Frameworks */,
 				8C19C1D02D8C453B00BEAA17 /* UniformTypeIdentifiers.framework in Frameworks */,
-				8C3536A62D9ED59F00D0DB81 /* GCDWebServers in Frameworks */,
-				8C3536982D9ED59100D0DB81 /* RustMozillaAppServices.framework in Frameworks */,
-				8C3536942D9ED59100D0DB81 /* Localizations.framework in Frameworks */,
-				8C3536A42D9ED59F00D0DB81 /* Shared in Frameworks */,
+				8CFA6BE12E09618500A6B1B1 /* Localizations.framework in Frameworks */,
+				8CFA6BDB2E09617700A6B1B1 /* Shared in Frameworks */,
+				8CFA6BD92E09616800A6B1B1 /* GCDWebServers in Frameworks */,
+				8CFA6BDC2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Frameworks */,
+				8CFA6BD72E09616200A6B1B1 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10817,16 +10911,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C8FD2C72DAE5B31000E2051 /* libAccount.a in Frameworks */,
-				8C8FD2D92DAE5CCE000E2051 /* RustMozillaAppServices.framework in Frameworks */,
+				8CFA6B9F2E095C0600A6B1B1 /* SiteImageView in Frameworks */,
+				8CFA6B9E2E095C0600A6B1B1 /* Shared in Frameworks */,
 				5A87148E292EA3270039A5BD /* Fuzi in Frameworks */,
-				8C8FD2D02DAE5BCA000E2051 /* Shared in Frameworks */,
 				5A70EF14295DFD7C00790249 /* Common in Frameworks */,
 				C877039625222FDC006E38EB /* Localizations.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
-				8C8FD2D12DAE5C0C000E2051 /* libStorage.a in Frameworks */,
-				8C8FD2DF2DAE5D91000E2051 /* SiteImageView in Frameworks */,
-				8C8FD2D42DAE5C78000E2051 /* Sync.framework in Frameworks */,
+				8CFA6BF92E0963F900A6B1B1 /* RustMozillaAppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13404,6 +13495,35 @@
 			path = Edit;
 			sourceTree = "<group>";
 		};
+		8CFA6BA02E095C0600A6B1B1 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		8CFA6BC92E0960E300A6B1B1 /* ExtensionsUtils */ = {
+			isa = PBXGroup;
+			children = (
+				8CFA6BC52E0960E300A6B1B1 /* EmbeddedNavController.swift */,
+				8CFA6BC62E0960E300A6B1B1 /* SendToDevice.swift */,
+				8CFA6BC72E0960E300A6B1B1 /* ShareViewController.swift */,
+				8CFA6BC82E0960E300A6B1B1 /* UXConstants.swift */,
+			);
+			path = ExtensionsUtils;
+			sourceTree = "<group>";
+		};
+		8CFA6C032E0972E900A6B1B1 /* ActionExtension */ = {
+			isa = PBXGroup;
+			children = (
+				8CFA6BFE2E0972E900A6B1B1 /* ActionViewController.swift */,
+				8CFA6BFF2E0972E900A6B1B1 /* Info.plist */,
+				8CFA6C012E0972E900A6B1B1 /* InfoPlist.strings */,
+				8CFA6C022E0972E900A6B1B1 /* Media.xcassets */,
+			);
+			path = ActionExtension;
+			sourceTree = "<group>";
+		};
 		94D3DD1D2D56D6E200D368B8 /* DownloadManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -14948,6 +15068,7 @@
 		E65075551E37F714006961AC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8CFA6BC92E0960E300A6B1B1 /* ExtensionsUtils */,
 				0EBD66912DBFE40100A78532 /* ConcurrencyThrottler.swift */,
 				ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */,
 				0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */,
@@ -15220,7 +15341,6 @@
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				D4AFA84B2AFA4FC6000BFEAA /* firefox-ios-tests */,
 				E17EFC2E2CD16F5A00169A1F /* Sticker */,
-				8C19C1D12D8C453B00BEAA17 /* ActionExtension */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				45D5EDC1292D636000311934 /* nimbus.fml.yaml */,
 				962C6C39297054A700354BE8 /* Package.swift */,
@@ -15237,6 +15357,7 @@
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */,
+				8CFA6BA02E095C0600A6B1B1 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -15566,6 +15687,7 @@
 		F8708D1E1A0970990051AB07 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				8CFA6C032E0972E900A6B1B1 /* ActionExtension */,
 				E40A18F61EDC73D5006B7F28 /* Entitlements */,
 				397848DC1ED86605004C0C0B /* NotificationService */,
 				F8708D241A0970990051AB07 /* ShareTo */,
@@ -15894,21 +16016,21 @@
 				8C19C1CA2D8C453B00BEAA17 /* Sources */,
 				8C19C1CB2D8C453B00BEAA17 /* Frameworks */,
 				8C19C1CC2D8C453B00BEAA17 /* Resources */,
+				8CFA6BE02E09617F00A6B1B1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				8C3536972D9ED59100D0DB81 /* PBXTargetDependency */,
 				8C35369B2D9ED59100D0DB81 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				8C19C1D12D8C453B00BEAA17 /* ActionExtension */,
+				8CFA6BDF2E09617F00A6B1B1 /* PBXTargetDependency */,
+				8CFA6BE42E09618500A6B1B1 /* PBXTargetDependency */,
 			);
 			name = ActionExtension;
 			packageProductDependencies = (
-				8C3536A12D9ED59F00D0DB81 /* Common */,
-				8C3536A32D9ED59F00D0DB81 /* Shared */,
-				8C3536A52D9ED59F00D0DB81 /* GCDWebServers */,
+				8CFA6BD62E09616200A6B1B1 /* Common */,
+				8CFA6BD82E09616800A6B1B1 /* GCDWebServers */,
+				8CFA6BDA2E09617700A6B1B1 /* Shared */,
 			);
 			productName = ActionExtension;
 			productReference = 8C19C1CE2D8C453B00BEAA17 /* ActionExtension.appex */;
@@ -16108,6 +16230,7 @@
 				F84B22461A0920C600AAB793 /* Frameworks */,
 				F84B22471A0920C600AAB793 /* Resources */,
 				43338D08278F725C00A23914 /* ShellScript */,
+				8CFA6BFD2E0963FA00A6B1B1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -16117,6 +16240,7 @@
 				8C8FD2D32DAE5C0C000E2051 /* PBXTargetDependency */,
 				8C8FD2D72DAE5C78000E2051 /* PBXTargetDependency */,
 				8C8FD2DC2DAE5CCE000E2051 /* PBXTargetDependency */,
+				8CFA6BFC2E0963F900A6B1B1 /* PBXTargetDependency */,
 			);
 			name = ShareTo;
 			packageProductDependencies = (
@@ -16570,6 +16694,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CFA6C042E0972E900A6B1B1 /* Media.xcassets in Resources */,
+				8CFA6C062E0972E900A6B1B1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17252,22 +17378,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C3536AF2D9ED78700D0DB81 /* HelpView.swift in Sources */,
-				8C3536AA2D9ED64B00D0DB81 /* InstructionsView.swift in Sources */,
-				8CA4C9972DA80A4800F6D931 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
-				8C3536B62D9ED82100D0DB81 /* DevicePickerTableViewCell.swift in Sources */,
-				8C3536AC2D9ED66400D0DB81 /* SendToDeviceHelper.swift in Sources */,
-				8C3536B52D9ED7FE00D0DB81 /* AppEvent.swift in Sources */,
-				8C3536B32D9ED7D000D0DB81 /* RustSyncManager.swift in Sources */,
-				8C3536B22D9ED7C800D0DB81 /* RustErrors.swift in Sources */,
-				8C3536AE2D9ED68800D0DB81 /* SyncDisplayState.swift in Sources */,
-				8C3536A92D9ED63F00D0DB81 /* DevicePickerViewController.swift in Sources */,
-				8C3536B12D9ED7A900D0DB81 /* LoginRecordExtension.swift in Sources */,
-				8C3536AB2D9ED65500D0DB81 /* Profile.swift in Sources */,
-				8C3536B02D9ED79000D0DB81 /* AccessibilityIdentifiers.swift in Sources */,
-				8C3536AD2D9ED67E00D0DB81 /* DevicePickerTableViewHeaderCell.swift in Sources */,
-				8C3536B72D9ED82900D0DB81 /* HostingTableViewCell.swift in Sources */,
-				8C3536B42D9ED7E500D0DB81 /* EventQueue.swift in Sources */,
+				8CFA6BEB2E09628F00A6B1B1 /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
+				8CFA6BEF2E0962D900A6B1B1 /* EventQueue.swift in Sources */,
+				8CFA6BF32E09632700A6B1B1 /* PlacesProvider.swift in Sources */,
+				8CFA6BE52E0961EC00A6B1B1 /* DevicePickerViewController.swift in Sources */,
+				8CFA6BF52E09634B00A6B1B1 /* LoginRecordExtension.swift in Sources */,
+				8CFA6BF12E09631700A6B1B1 /* LoginProvider.swift in Sources */,
+				8CFA6BF22E09632000A6B1B1 /* AutofillProvider.swift in Sources */,
+				8CFA6BE82E09623700A6B1B1 /* Profile.swift in Sources */,
+				8CFA6BE72E09622700A6B1B1 /* SendToDeviceHelper.swift in Sources */,
+				8CFA6BE62E09621C00A6B1B1 /* InstructionsView.swift in Sources */,
+				8CFA6BEC2E0962A800A6B1B1 /* SyncDisplayState.swift in Sources */,
+				8CFA6BEE2E0962D100A6B1B1 /* RustSyncManager.swift in Sources */,
+				8CFA6BF82E09638500A6B1B1 /* HostingTableViewCell.swift in Sources */,
+				8CFA6BE92E09625D00A6B1B1 /* HelpView.swift in Sources */,
+				8CFA6BD22E0960F500A6B1B1 /* EmbeddedNavController.swift in Sources */,
+				8CFA6BD32E0960F500A6B1B1 /* ShareViewController.swift in Sources */,
+				8CFA6BEA2E09627400A6B1B1 /* AccessibilityIdentifiers.swift in Sources */,
+				8CFA6BF02E0962F800A6B1B1 /* AppEvent.swift in Sources */,
+				8CFA6BED2E0962C800A6B1B1 /* RustErrors.swift in Sources */,
+				8CFA6BF72E09637500A6B1B1 /* DevicePickerTableViewCell.swift in Sources */,
+				8CFA6BD42E0960F500A6B1B1 /* UXConstants.swift in Sources */,
+				8CFA6C072E0972E900A6B1B1 /* ActionViewController.swift in Sources */,
+				8CFA6BF42E09632E00A6B1B1 /* TabsProvider.swift in Sources */,
+				8CFA6BF62E09636900A6B1B1 /* DevicePickerTableViewHeaderCell.swift in Sources */,
+				8CFA6BD52E0960F500A6B1B1 /* SendToDevice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17725,6 +17860,10 @@
 				BA1237C32DAE6D5700BB6333 /* AddressBarSettingsView.swift in Sources */,
 				219A0FDB2ACCCFFC009A6D1A /* InactiveTabsSectionManager.swift in Sources */,
 				B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */,
+				8CFA6BCA2E0960E300A6B1B1 /* ShareViewController.swift in Sources */,
+				8CFA6BCB2E0960E300A6B1B1 /* SendToDevice.swift in Sources */,
+				8CFA6BCC2E0960E300A6B1B1 /* UXConstants.swift in Sources */,
+				8CFA6BCD2E0960E300A6B1B1 /* EmbeddedNavController.swift in Sources */,
 				63B213282CCA796D00A466DB /* NativeErrorPageAction.swift in Sources */,
 				211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */,
 				8AF347E02CADD1C300624036 /* HomepageAction.swift in Sources */,
@@ -18808,6 +18947,10 @@
 				8A9F4F102DC8F5D7004644B9 /* TabsProvider.swift in Sources */,
 				D04CD74D216CF86F004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
+				8CFA6BCE2E0960F500A6B1B1 /* UXConstants.swift in Sources */,
+				8CFA6BCF2E0960F500A6B1B1 /* ShareViewController.swift in Sources */,
+				8CFA6BD02E0960F500A6B1B1 /* EmbeddedNavController.swift in Sources */,
+				8CFA6BD12E0960F500A6B1B1 /* SendToDevice.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				ED07C0E72CCACE18006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift in Sources */,
 				E1CD81C3290C670A00124B27 /* HostingTableViewCell.swift in Sources */,
@@ -18816,7 +18959,6 @@
 				E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */,
 				2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */,
 				8A9F4F0D2DC8F5D1004644B9 /* MockPlaces.swift in Sources */,
-				E136D41A2B19D35D003D0302 /* EmbeddedNavController.swift in Sources */,
 				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
 				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
@@ -18975,6 +19117,21 @@
 			isa = PBXTargetDependency;
 			target = 43BE5774278BA4D900491291 /* RustMozillaAppServices */;
 			targetProxy = 8C8FD2DB2DAE5CCE000E2051 /* PBXContainerItemProxy */;
+		};
+		8CFA6BDF2E09617F00A6B1B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BE5774278BA4D900491291 /* RustMozillaAppServices */;
+			targetProxy = 8CFA6BDE2E09617F00A6B1B1 /* PBXContainerItemProxy */;
+		};
+		8CFA6BE42E09618500A6B1B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Localizations */;
+			targetProxy = 8CFA6BE32E09618500A6B1B1 /* PBXContainerItemProxy */;
+		};
+		8CFA6BFC2E0963F900A6B1B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BE5774278BA4D900491291 /* RustMozillaAppServices */;
+			targetProxy = 8CFA6BFB2E0963F900A6B1B1 /* PBXContainerItemProxy */;
 		};
 		C82043712523DBEB00740B71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -24564,6 +24721,14 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		8CFA6C012E0972E900A6B1B1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CFA6C002E0972E900A6B1B1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -26413,12 +26578,12 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
-				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
-				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
-				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "iPhone, iPad";
 				TEST_TARGET_NAME = Client;
@@ -26894,12 +27059,12 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
-				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
-				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
-				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Testing;
@@ -27341,7 +27506,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ActionExtension/Info.plist;
+				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27416,7 +27581,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ActionExtension/Info.plist;
+				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27491,7 +27656,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ActionExtension/Info.plist;
+				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27566,7 +27731,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ActionExtension/Info.plist;
+				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27641,7 +27806,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ActionExtension/Info.plist;
+				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27669,7 +27834,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = ActionExtension/Info.plist;
+				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FirefoxBeta.ActionExtension;
 				PRODUCT_NAME = ActionExtension;
@@ -28062,12 +28227,12 @@
 				);
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
-				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
-				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
-				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
@@ -28353,12 +28518,12 @@
 				);
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
-				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
-				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
-				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
@@ -28648,12 +28813,12 @@
 				);
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
-				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
-				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
-				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
@@ -29163,12 +29328,12 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
-				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
-				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
-				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
 				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
@@ -29909,6 +30074,19 @@
 		8C8FD2DE2DAE5D91000E2051 /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SiteImageView;
+		};
+		8CFA6BD62E09616200A6B1B1 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
+		};
+		8CFA6BD82E09616800A6B1B1 /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		8CFA6BDA2E09617700A6B1B1 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
 		};
 		AB2AC6622BCFD0A200022AAB /* X509 */ = {
 			isa = XCSwiftPackageProductDependency;
