@@ -35,17 +35,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .bookmarksRefactor,
-                    titleText: format(string: "Bookmarks Redesign"),
-                    statusText: format(string: "Toggle to use the bookmarks redesign")
-                ) { [weak self] _ in
-                    guard let self else { return }
-                    self.reloadView()
-                    let isBookmarksRefactorEnabled = self.featureFlags.isFeatureEnabled(.bookmarksRefactor,
-                                                                                        checking: .buildOnly)
-                    self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
-                },
-                FeatureFlagsBoolSetting(
                     with: .searchEngineConsolidation,
                     titleText: format(string: "Consolidated Search"),
                     statusText: format(string: "Toggle to use Consolidated Search")
