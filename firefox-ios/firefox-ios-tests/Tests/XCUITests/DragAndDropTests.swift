@@ -243,8 +243,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 secondTab: firstWebsite.tabName
             )
             // Check that focus is kept on last website open
-            mozWaitForElementToExist(app.collectionViews[tabsTray].cells.element(boundBy: 0))
-            XCTAssertEqual(app.collectionViews[tabsTray].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            mozWaitForElementToExist(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0))
+            XCTAssertEqual(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 }
@@ -283,25 +283,31 @@ private extension BaseTestCase {
     func checkTabsOrder(dragAndDropTab: Bool,
                         firstTab: String,
                         secondTab: String,
-                        collectionViewIdentifier: String = tabTrayCollectionView,
                         file: StaticString = #file,
                         line: UInt = #line) {
+
+        // Determine which collection view to use based on the current screen
+        let collectionView: XCUIElement
+        if app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].exists {
+            collectionView = app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView]
+        } else if app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView].exists {
+            collectionView = app.collectionViews[AccessibilityIdentifiers.TabTray.collectionView]
+        } else {
+            XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
+            return
+        }
+
         waitForElementsToExist(
             [
-                app.collectionViews.cells.element(
+                collectionView.cells.element(
                     boundBy: 0
                 ),
-                app.collectionViews.cells.element(
+                collectionView.cells.element(
                     boundBy: 1
                 )
             ]
         )
 
-        let collectionView = app.collectionViews[collectionViewIdentifier]
-        guard collectionView.exists else {
-            XCTFail("The collection view with identifier: \(collectionViewIdentifier) doesn't exist.", file: file, line: line)
-            return
-        }
         let firstTabCell = collectionView.cells.element(boundBy: 0).label
         let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
