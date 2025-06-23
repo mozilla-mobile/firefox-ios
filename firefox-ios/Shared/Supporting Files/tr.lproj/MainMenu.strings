@@ -34,6 +34,12 @@
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Eşitlemek için yeniden giriş yap";
 
+/* On the main menu, a title for a label that indicate the current option/action state is off. */
+"MainMenu.Off.Title.v141" = "Kapalı";
+
+/* On the main menu, a title for a label that indicate the current option/action state is on. */
+"MainMenu.On.Title.v141" = "Açık";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Yer imleri";
 
@@ -81,6 +87,15 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@’taki yenilikler";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
+"MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Bağlantı güvenli değil";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Korumalar KAPALI";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Korumalar AÇIK";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Ana ekran";

@@ -86,7 +86,7 @@
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "മേൽഭാഗം";
 
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
-"Onboarding.Modern.Sync.Description.v140" = "ഏതെങ്കിലും ഉപകരണത്തിൽ താങ്ങളുടെ അടയാളക്കുറിപ്പുകളും നാൾവഴിയും രഹസ്യവാക്കുകളും നേടുക.";
+"Onboarding.Modern.Sync.Description.v140" = "ഏതെങ്കിലും ഉപകരണത്തിൽ താങ്ങളുടെ അടയാളക്കുറിപ്പുകളും നാൾവഴിയും ഒളിവാക്കുകളും നേടുക.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "സമന്വയിപ്പിക്കാൻ തുടങ്ങുക";
@@ -161,7 +161,7 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "അറിയിപ്പുകൾ തുടങ്ങി വയ്ക്കുക";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Sync.Description.v123" = "താങ്ങൾ സമന്വയിപ്പിച്ചിരിക്കുമ്പോഴു് %@ താങ്ങളുടെ രഹസ്യവാക്കുകളും അടയാളക്കുറിപ്പുകളും മറ്റും രൂപമാറ്റി വയ്ക്കാരുണ്ടു്. ";
+"Onboarding.Sync.Description.v123" = "താങ്ങൾ സമന്വയിപ്പിച്ചിരിക്കുമ്പോഴു് %@ താങ്ങളുടെ ഒളിവാക്കുകളും അടയാളക്കുറിപ്പുകളും മറ്റും രൂപമാറ്റി വയ്ക്കാരുണ്ടു്. ";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "പ്രവേശിക്കുക";
