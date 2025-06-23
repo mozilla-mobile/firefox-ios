@@ -10,7 +10,7 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
     func start(from folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to modify a bookmark folder
-    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)?)
+    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to create a new bookmark or folder in the parent folder
     func showBookmarkDetail(
@@ -79,17 +79,10 @@ class BookmarksCoordinator: BaseCoordinator,
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: folder.guid)
-        if isBookmarkRefactorEnabled {
-            let controller = BookmarksViewController(viewModel: viewModel, windowUUID: windowUUID)
-            controller.bookmarkCoordinatorDelegate = self
-            controller.libraryPanelDelegate = libraryCoordinator
-            router.push(controller)
-        } else {
-            let controller = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
-            controller.bookmarkCoordinatorDelegate = self
-            controller.libraryPanelDelegate = libraryCoordinator
-            router.push(controller)
-        }
+        let controller = BookmarksViewController(viewModel: viewModel, windowUUID: windowUUID)
+        controller.bookmarkCoordinatorDelegate = self
+        controller.libraryPanelDelegate = libraryCoordinator
+        router.push(controller)
     }
 
     func start(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
@@ -102,20 +95,10 @@ class BookmarksCoordinator: BaseCoordinator,
         router.setRootViewController(controller)
     }
 
-    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
+    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode) {
         let bookmarksTelemetry = BookmarksTelemetry()
         bookmarksTelemetry.editBookmark(eventLabel: .bookmarksPanel)
-        if isBookmarkRefactorEnabled {
-            router.push(makeDetailController(for: node, folder: folder))
-        } else {
-            let detailController = LegacyBookmarkDetailPanel(profile: profile,
-                                                             windowUUID: windowUUID,
-                                                             bookmarkNode: node,
-                                                             parentBookmarkFolder: folder) {
-                completion?()
-            }
-            router.push(detailController)
-        }
+        router.push(makeDetailController(for: node, folder: folder))
     }
 
     func showBookmarkDetail(

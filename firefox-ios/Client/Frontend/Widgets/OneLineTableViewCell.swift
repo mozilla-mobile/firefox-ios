@@ -115,16 +115,11 @@ class OneLineTableViewCell: UITableViewCell,
     override var indentationLevel: Int {
         didSet {
             // Update the leading constraint based on this cell's indentationLevel value
-            if isBookmarkRefactorEnabled {
-                setBookmarksRefactorMargin()
-            } else {
-                // adding 1 since the default indentation is 0.
-                leftImageViewLeadingConstraint?.constant = UX.borderViewMargin * CGFloat(1 + indentationLevel)
-            }
+            setMargin()
         }
     }
 
-    private func setBookmarksRefactorMargin() {
+    private func setMargin() {
         // Sets the indentation so that at each level the folder icon is left
         // aligned with the label of the parent folder above it.
         if indentationLevel == 0 {

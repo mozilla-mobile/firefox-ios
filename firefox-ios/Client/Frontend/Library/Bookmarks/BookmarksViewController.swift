@@ -445,7 +445,7 @@ final class BookmarksViewController: SiteTableViewController,
                 !(node is BookmarkSeparatorData),
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
-                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder, completion: nil)
+                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
             }
             return
         }
@@ -676,7 +676,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                                                iconString: StandardImageIdentifiers.Large.edit,
                                                tapHandler: { _ in
             guard let parentFolder = self.viewModel.bookmarkFolder else {return}
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: folder, folder: parentFolder, completion: nil)
+            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: folder, folder: parentFolder)
         }).items
 
         let removeAction = SingleActionViewModel(title: String.Bookmarks.Menu.DeleteFolder,
@@ -699,7 +699,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: bookmarkFolder, completion: nil)
+            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: bookmarkFolder)
         }).items
         var actions: [PhotonRowActions] = [editBookmark] + defaultActions
 
