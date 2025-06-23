@@ -47,7 +47,6 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         // Open a new tab
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
 
         // "Jump Back In" section is displayed
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
