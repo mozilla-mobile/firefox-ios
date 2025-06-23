@@ -23,8 +23,9 @@ class WebServerUtil {
     func setUpWebServer() {
         guard !webServer.server.isRunning else { return }
 
-        readerModeHander.register(webServer, profile: profile)
-
+        Task {
+            await readerModeHander.register(webServer, profile: profile)
+        }
         let responders: [(String, InternalSchemeResponse)] =
              [(AboutHomeHandler.path, AboutHomeHandler()),
               (AboutLicenseHandler.path, AboutLicenseHandler()),
