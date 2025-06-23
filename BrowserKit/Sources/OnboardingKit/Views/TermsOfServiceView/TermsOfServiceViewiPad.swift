@@ -6,7 +6,7 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceViewiPad<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
@@ -32,43 +32,39 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
     // MARK: - Body
 
     public var body: some View {
-        GeometryReader { geometry in
-            // Determine scale factor based on current size vs base metrics
-            let widthScale = geometry.size.width / UX.CardView.baseWidth
-            let heightScale = geometry.size.height / UX.CardView.baseHeight
-            let scale = min(widthScale, heightScale)
-
-            ZStack {
-                MilkyWayMetalView()
-                    .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        VStack(spacing: UX.CardView.spacing * scale) {
-                            Spacer()
-                            imageView(scale: scale)
-                            titleView
-                            bodyView
-                            Spacer()
-                            links
-                            primaryButton
-                        }
-                        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                        .padding(UX.CardView.verticalPadding * scale)
-                        .background(
-                            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                                .fill(cardBackgroundColor)
-                        )
-                        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+        ZStack {
+            MilkyWayMetalView()
+                .ignoresSafeArea()
+            VStack {
+                Spacer()
+                VStack {
+                    VStack(spacing: UX.CardView.spacing) {
+                        Spacer()
+                        imageView
+                        titleView
+                        bodyView
+                        Spacer()
+                        links
+                        primaryButton
                         Spacer()
                     }
+                    .frame(width: 313)
                 }
-                .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
+                .frame(width: UX.CardView.baseiPadWidth, height: UX.CardView.baseiPadHeight)
+                .padding(UX.CardView.verticalPadding)
+                .background(
+                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                        .fill(cardBackgroundColor)
+                )
+                .padding(.horizontal, UX.CardView.horizontalPadding)
+                Spacer()
+            }
+            .onAppear {
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
         }
     }
@@ -89,12 +85,12 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
     }
 
     @ViewBuilder
-    func imageView(scale: CGFloat) -> some View {
+    var imageView: some View {
         if let img = viewModel.configuration.image {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.tosImageHeight * scale)
+                .frame(height: UX.CardView.tosImageHeight)
                 .accessibilityLabel(viewModel.configuration.title)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
