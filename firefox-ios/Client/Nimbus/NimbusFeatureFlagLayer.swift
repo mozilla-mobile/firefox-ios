@@ -20,9 +20,6 @@ final class NimbusFeatureFlagLayer {
         case .addressBarMenu:
             return checkAddressBarMenuFeature(from: nimbus)
 
-        case .bookmarksRefactor:
-            return checkBookmarksRefactor(from: nimbus)
-
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
@@ -161,10 +158,6 @@ final class NimbusFeatureFlagLayer {
     }
 
     // MARK: - Private methods
-    private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.bookmarkRefactorFeature.value().enabled
-    }
-
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
