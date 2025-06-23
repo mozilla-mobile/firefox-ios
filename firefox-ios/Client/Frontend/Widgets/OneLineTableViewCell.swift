@@ -22,8 +22,7 @@ struct OneLineTableViewCellViewModel {
 
 class OneLineTableViewCell: UITableViewCell,
                             ReusableCell,
-                            ThemeApplicable,
-                            BookmarksRefactorFeatureFlagProvider {
+                            ThemeApplicable {
     // Tableview cell items
 
     struct UX {
@@ -252,11 +251,9 @@ class OneLineTableViewCell: UITableViewCell,
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
-        if isBookmarkRefactorEnabled {
-            accessoryView?.tintColor = theme.colors.iconSecondary
-            editingAccessoryView?.tintColor = theme.colors.iconSecondary
-            tintColor = theme.colors.iconSecondary
-        }
+        accessoryView?.tintColor = theme.colors.iconSecondary
+        editingAccessoryView?.tintColor = theme.colors.iconSecondary
+        tintColor = theme.colors.iconSecondary
 
         switch customization {
         case .regular:
