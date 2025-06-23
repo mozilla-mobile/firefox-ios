@@ -54,6 +54,7 @@ public struct TermsOfServiceViewiPhone<VM: OnboardingCardInfoModelProtocol>: Vie
                         }
                         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
                         .padding(UX.CardView.verticalPadding * scale)
+                        .padding(.bottom)
                         .background(
                             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                                 .fill(cardBackgroundColor)
@@ -108,6 +109,7 @@ public struct TermsOfServiceViewiPhone<VM: OnboardingCardInfoModelProtocol>: Vie
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     var bodyView: some View {
