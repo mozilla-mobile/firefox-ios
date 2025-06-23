@@ -70,8 +70,7 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
             .accessibility(addTraits: .isHeader)
     }
 
-    @ViewBuilder
-    var imageView: some View {
+    @ViewBuilder var imageView: some View {
         if let img = viewModel.image {
             Image(uiImage: img)
                 .resizable()
