@@ -42,7 +42,6 @@
 		0B11AF042CB4130F00AD51D5 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B11AF032CB4130F00AD51D5 /* Metrics.swift */; };
 		0B1278E02DDB1D6E00406656 /* BackForwardList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1278DF2DDB1D6E00406656 /* BackForwardList.swift */; };
 		0B1C58D12CE5019A00F498F0 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */; };
-		0B23E93C2DE5981E00401E20 /* AddressBarAddTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B23E93B2DE5981E00401E20 /* AddressBarAddTabView.swift */; };
 		0B305E1B1E3A98A900BE0767 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */; };
 		0B3A153A2CE1FE710049746C /* PullRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3A15392CE1FE710049746C /* PullRefreshView.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
@@ -65,6 +64,7 @@
 		0B7FC3D32CAE811F005C5CCE /* DefaultBookmarksSaverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */; };
 		0B81AFEC2DB1000C000AF70F /* HomePageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */; };
 		0B81AFEE2DB1036B000AF70F /* HomePageActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */; };
+		0B84E7692DFC1471005103CA /* swipingTabsOff.json in Resources */ = {isa = PBXBuildFile; fileRef = 0B84E7682DFC1471005103CA /* swipingTabsOff.json */; };
 		0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */; };
 		0B8A39F12D351C2500853E47 /* EditBookmarkDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */; };
 		0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */; };
@@ -113,6 +113,7 @@
 		0BED8EBA2D12C055004E826B /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BED8EB92D12C055004E826B /* Shared */; };
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
+		0BF7FE422E09620900FD016A /* swipingTabsOn.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BF7FE412E09620900FD016A /* swipingTabsOn.json */; };
 		0BF802E22CFF0937005633E5 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BF802E12CFF0937005633E5 /* Shared */; };
 		0BF802E42CFF094A005633E5 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BF802E32CFF094A005633E5 /* Shared */; };
 		0BF802E62CFF0951005633E5 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BF802E52CFF0951005633E5 /* Shared */; };
@@ -2471,7 +2472,6 @@
 		0B11AF032CB4130F00AD51D5 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		0B1278DF2DDB1D6E00406656 /* BackForwardList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackForwardList.swift; sourceTree = "<group>"; };
 		0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
-		0B23E93B2DE5981E00401E20 /* AddressBarAddTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarAddTabView.swift; sourceTree = "<group>"; };
 		0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
 		0B3A15392CE1FE710049746C /* PullRefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullRefreshView.swift; sourceTree = "<group>"; };
 		0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTest.swift; sourceTree = "<group>"; };
@@ -2494,6 +2494,7 @@
 		0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookmarksSaverTests.swift; sourceTree = "<group>"; };
 		0B81AFEB2DB1000C000AF70F /* HomePageActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageActivity.swift; sourceTree = "<group>"; };
 		0B81AFED2DB1036B000AF70F /* HomePageActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageActivityTests.swift; sourceTree = "<group>"; };
+		0B84E7682DFC1471005103CA /* swipingTabsOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = swipingTabsOff.json; sourceTree = "<group>"; };
 		0B8749EB891EE229EA88FEF3 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDiffableDataSource.swift; sourceTree = "<group>"; };
 		0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDataSourceTests.swift; sourceTree = "<group>"; };
@@ -2531,6 +2532,7 @@
 		0BEE4E1D8F737D9B5F6DA666 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		0BF0DB931A8545800039F300 /* URLBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarView.swift; sourceTree = "<group>"; };
 		0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetButton.swift; sourceTree = "<group>"; };
+		0BF7FE412E09620900FD016A /* swipingTabsOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = swipingTabsOn.json; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		0BFF4E518FAC32125B26DFA9 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		0C0040FC9C93BE76DC96924D /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -14583,7 +14585,6 @@
 			isa = PBXGroup;
 			children = (
 				BD011FB72D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift */,
-				0B23E93B2DE5981E00401E20 /* AddressBarAddTabView.swift */,
 				E17798972BD6B44B00F6F0EB /* AddressToolbarContainer.swift */,
 				E16941B72C5119A200FF5F4E /* Autocompletable.swift */,
 				E1ABF9062BF49744009C995C /* Models */,
@@ -14686,6 +14687,8 @@
 			children = (
 				8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */,
 				8A3709E02DC128EA004B9350 /* defaultEnabledOff.json */,
+				0B84E7682DFC1471005103CA /* swipingTabsOff.json */,
+				0BF7FE412E09620900FD016A /* swipingTabsOn.json */,
 				E1AF27432A17BCF700CE5991 /* engagementNotificationWithoutConditions.json */,
 				E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */,
 			);
@@ -16582,6 +16585,7 @@
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				E1AF3565286DE5F800960045 /* UnitTest.xctestplan in Resources */,
 				1D91C1832CF11EA500B24960 /* disconnect-block-analytics.json in Resources */,
+				0B84E7692DFC1471005103CA /* swipingTabsOff.json in Resources */,
 				E1AF3564286DE5F800960045 /* SyncIntegrationTestPlan.xctestplan in Resources */,
 				0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */,
 				1D91C1822CF11EA500B24960 /* disconnect-block-content.json in Resources */,
@@ -16592,6 +16596,7 @@
 				1D91C17E2CF11EA500B24960 /* disconnect-block-cookies-analytics.json in Resources */,
 				8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
+				0BF7FE422E09620900FD016A /* swipingTabsOn.json in Resources */,
 				8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */,
 				1D91C1862CF11EA500B24960 /* disconnect-block-social.json in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
@@ -17506,7 +17511,6 @@
 				8C2937722BF79F0300146613 /* Address+Encodable.swift in Sources */,
 				214099622DCE57A4004881E1 /* GenericSectionHeaderView.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
-				0B23E93C2DE5981E00401E20 /* AddressBarAddTabView.swift in Sources */,
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				C8CD80DC2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift in Sources */,

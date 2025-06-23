@@ -21,6 +21,7 @@ let secondWebsiteUnselected = (
 )
 let homeTabName = "Homepage"
 let websiteWithSearchField = "developer.mozilla.org"
+let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: FeatureFlaggedTestBase {
 //  Disable test suite since in theory it does not make sense with Chron tabs implementation
@@ -70,7 +71,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        let fourthWebsitePosition = app.collectionViews.cells.element(boundBy: 3).label
+        let fourthWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 3).label
         checkTabsOrder(
             dragAndDropTab: false,
             firstTab: firstWebsite.tabName,
@@ -86,7 +87,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
             )
 
-            let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
+            let thirdWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 2).label
             // Disabling validation on iPad. Dragging and dropping action for the first and last tab is not working.
             // This is just automation related, manually the action performs successfully.
             if !iPad() {
@@ -242,8 +243,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 secondTab: firstWebsite.tabName
             )
             // Check that focus is kept on last website open
-            mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 0))
-            XCTAssertEqual(app.collectionViews.cells.element(boundBy: 0).label, secondWebsite.tabName)
+            mozWaitForElementToExist(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0))
+            XCTAssertEqual(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 }
@@ -284,16 +285,6 @@ private extension BaseTestCase {
                         secondTab: String,
                         file: StaticString = #file,
                         line: UInt = #line) {
-        waitForElementsToExist(
-            [
-                app.collectionViews.cells.element(
-                    boundBy: 0
-                ),
-                app.collectionViews.cells.element(
-                    boundBy: 1
-                )
-            ]
-        )
         // Determine which collection view to use based on the current screen
         let collectionView: XCUIElement
         if app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].exists {
@@ -304,6 +295,18 @@ private extension BaseTestCase {
             XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
             return
         }
+
+        waitForElementsToExist(
+            [
+                collectionView.cells.element(
+                    boundBy: 0
+                ),
+                collectionView.cells.element(
+                    boundBy: 1
+                )
+            ]
+        )
+
         let firstTabCell = collectionView.cells.element(boundBy: 0).label
         let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
