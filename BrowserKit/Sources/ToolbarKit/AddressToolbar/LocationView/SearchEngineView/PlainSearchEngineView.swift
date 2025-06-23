@@ -76,7 +76,7 @@ final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        searchEngineImageView.backgroundColor = isURLTextFieldCentered ? colors.layer3 : colors.layer2
+        searchEngineImageView.backgroundColor = isURLTextFieldCentered ? colors.layerSurfaceLow : colors.layer2
         self.theme = theme
     }
 }
