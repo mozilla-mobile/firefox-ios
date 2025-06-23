@@ -37,7 +37,7 @@ class JSAlertThrottlerTests: XCTestCase {
         XCTAssertFalse(throttler.canShowAlert())
     }
 
-    func testThatAletsShownAfterSufficientDelayDoNotPreventAddtlAlerts() {
+    func testThatAlertsShownAfterSufficientDelayDoNotPreventAddtlAlerts() {
         let customThrottler = JSAlertThrottler(resetTime: 1.0)
         let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to the max threshold
@@ -54,7 +54,7 @@ class JSAlertThrottlerTests: XCTestCase {
         wait(for: [expectation], timeout: 4.0)
     }
 
-    func testThatAletsShownAfterSufficientDelayResetAlertCount() {
+    func testThatAlertsShownAfterSufficientDelayResetAlertCount() {
         let customThrottler = JSAlertThrottler(resetTime: 1.0)
         let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to the max threshold
