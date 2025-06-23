@@ -2064,6 +2064,7 @@
 		F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */; };
 		F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F637D6722D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift */; };
 		F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F639D90D2D8A326C007EDC60 /* TabAnimation.swift */; };
+		F68F7DF52E0A1DD40084A9DA /* LegacyBookmarksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68F7DF42E0A1DD40084A9DA /* LegacyBookmarksCell.swift */; };
 		F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */; };
 		F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80DF7402703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift */; };
 		F80DF74B270CB9CA00E4C37D /* AppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65D89171C8647420006EA35 /* AppAuthenticator.swift */; };
@@ -10508,6 +10509,7 @@
 		F637D6722D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicAnimationControllerDelegate.swift; sourceTree = "<group>"; };
 		F639D90D2D8A326C007EDC60 /* TabAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabAnimation.swift; sourceTree = "<group>"; };
 		F63D438AB501007BE110524A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		F68F7DF42E0A1DD40084A9DA /* LegacyBookmarksCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBookmarksCell.swift; sourceTree = "<group>"; };
 		F6AA4920A08DE9E2F0BC44C2 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		F6EA434FA5D8305063BC630B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F72E4FF0B09846C8F8CE7450 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Today.strings; sourceTree = "<group>"; };
@@ -14025,6 +14027,7 @@
 		C87DC86027B2CC21006EFCE2 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
+				F68F7DF42E0A1DD40084A9DA /* LegacyBookmarksCell.swift */,
 				966206CC2698DE1E005C0A55 /* BookmarksViewModel.swift */,
 				5A3A7DCD2886F7880065F81A /* BookmarksDataAdaptor.swift */,
 			);
@@ -17939,6 +17942,7 @@
 				81F1010D2E2EB64A008F6FDC /* MerinoTestData.swift in Sources */,
 				8A9B87AF2C1B39EA0042B894 /* SearchListSection.swift in Sources */,
 				0E2E01DA2D77810D000BDBCF /* DownloadLiveActivityWrapper.swift in Sources */,
+				F68F7DF52E0A1DD40084A9DA /* LegacyBookmarksCell.swift in Sources */,
 				CA520E7A24913C1B00CCAB48 /* PasswordManagerViewModel.swift in Sources */,
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				43D16B8529831EA5009F8279 /* Style.swift in Sources */,
