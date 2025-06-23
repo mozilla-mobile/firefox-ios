@@ -163,4 +163,14 @@ struct PrivacyPolicyView: View {
             .ignoresSafeArea(edges: [.bottom])
         }
     }
+
+    var loadingContent: some View {
+        VStack {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+                .padding()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white.opacity(0.8))
+    }
 }
