@@ -355,4 +355,14 @@ struct DownloadLiveActivity: Widget {
             .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }
     }
+
+    var compactLeadingContent: some View {
+        Image(StandardImageIdentifiers.Large.download)
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .frame(width: UX.DynamicIsland.downloadIconSize, height: UX.DynamicIsland.downloadIconSize)
+            .foregroundStyle(.orange)
+            .padding([.leading, .trailing], 2)
+    }
 }
