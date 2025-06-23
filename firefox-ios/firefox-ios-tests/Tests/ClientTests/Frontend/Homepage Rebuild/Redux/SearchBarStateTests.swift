@@ -67,22 +67,6 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSearchBar)
     }
 
-    func test_toolbarCancelEditAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = searchBarReducer()
-
-        let newState = reducer(
-            initialState,
-            ToolbarAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: ToolbarActionType.cancelEdit
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertTrue(newState.shouldShowSearchBar)
-    }
-
     // MARK: - Private
     private func createSubject() -> SearchBarState {
         return SearchBarState(windowUUID: .XCTestDefaultUUID)

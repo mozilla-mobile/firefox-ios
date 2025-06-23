@@ -54,7 +54,8 @@ final class HomepageMiddleware: FeatureFlaggable {
             }
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
+            ToolbarActionType.cancelEdit:
             store.dispatchLegacy(
                 HomepageAction(
                     isSearchBarEnabled: self.shouldShowSearchBar(),
