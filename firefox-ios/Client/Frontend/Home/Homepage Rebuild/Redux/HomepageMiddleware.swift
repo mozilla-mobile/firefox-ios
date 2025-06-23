@@ -6,8 +6,9 @@ import Foundation
 import Redux
 import Common
 
-/// Middleware to handle generic homepage related actions, if this gets too big, can split out notifications
-final class HomepageMiddleware {
+/// Middleware to handle generic homepage related actions
+/// If this gets too big, can split out notifications and feature flags
+final class HomepageMiddleware: FeatureFlaggable {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
     private let windowManager: WindowManager
@@ -53,9 +54,30 @@ final class HomepageMiddleware {
             }
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
+            store.dispatchLegacy(
+                HomepageAction(
+                    isSearchBarEnabled: self.shouldShowSearchBar(),
+                    windowUUID: action.windowUUID,
+                    actionType: HomepageMiddlewareActionType.configuredSearchBar
+                )
+            )
         default:
             break
         }
+    }
+
+    private func shouldShowSearchBar(
+        for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+        and isLandscape: Bool = UIWindow.isLandscape
+    ) -> Bool {
+        let isHomepageSearchEnabled = featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+        let isCompact = device == .phone && !isLandscape
+
+        guard isHomepageSearchEnabled, isCompact else {
+            return false
+        }
+        return true
     }
 
     // MARK: - Notifications

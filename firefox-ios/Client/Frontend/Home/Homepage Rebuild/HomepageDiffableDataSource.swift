@@ -104,12 +104,9 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
         }
 
-        // TODO: FXIOS-12566 - Should update with state instead of adding private method
-        if shouldShowSearchBar(with: state.windowUUID) {
+        if state.searchState.shouldShowSearchBar {
             snapshot.appendSections([.searchBar])
-            if state.searchState.shouldShowSearchBar {
-                snapshot.appendItems([.searchBar], toSection: .searchBar)
-            }
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
@@ -191,19 +188,5 @@ final class HomepageDiffableDataSource:
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         guard state.shouldShowSection, !state.bookmarks.isEmpty else { return nil }
         return state.bookmarks.compactMap { .bookmark($0) }
-    }
-
-    private func shouldShowSearchBar(
-        with windowUUID: WindowUUID,
-        for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-        and isLandscape: Bool = UIWindow.isLandscape
-    ) -> Bool {
-        let isHomepageSearchEnabled = featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
-        let isCompact = device == .phone && !isLandscape
-
-        guard isHomepageSearchEnabled, isCompact else {
-            return false
-        }
-        return true
     }
 }

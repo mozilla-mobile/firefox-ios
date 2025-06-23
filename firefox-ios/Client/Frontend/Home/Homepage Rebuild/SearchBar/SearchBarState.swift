@@ -34,6 +34,8 @@ struct SearchBarState: StateType, Equatable {
         }
 
         switch action.actionType {
+        case HomepageMiddlewareActionType.configuredSearchBar:
+            return handleSearchBarInitialization(action: action, state: state)
         case NavigationBrowserActionType.tapOnHomepageSearchBar:
             return handleHidingSearchBar(action: action, state: state)
         case ToolbarActionType.cancelEdit:
@@ -41,6 +43,16 @@ struct SearchBarState: StateType, Equatable {
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleSearchBarInitialization(action: Action, state: Self) -> SearchBarState {
+        guard let isSearchBarEnabled = (action as? HomepageAction)?.isSearchBarEnabled else {
+            return defaultState(from: state)
+        }
+        return SearchBarState(
+            windowUUID: state.windowUUID,
+            shouldShowSearchBar: isSearchBarEnabled
+        )
     }
 
     private static func handleHidingSearchBar(action: Action, state: Self) -> SearchBarState {

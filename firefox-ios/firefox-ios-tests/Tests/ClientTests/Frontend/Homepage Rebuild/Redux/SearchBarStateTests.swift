@@ -16,6 +16,40 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(initialState.shouldShowSearchBar)
     }
 
+    func test_configuredSearchBarAction_withTrue_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = searchBarReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                isSearchBarEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertTrue(newState.shouldShowSearchBar)
+    }
+
+    func test_configuredSearchBarAction_withFalse_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = searchBarReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                isSearchBarEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.shouldShowSearchBar)
+    }
+
     func test_tapOnHomepageSearchBarAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = searchBarReducer()

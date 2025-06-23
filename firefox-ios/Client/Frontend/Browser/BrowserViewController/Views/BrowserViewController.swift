@@ -1120,7 +1120,6 @@ class BrowserViewController: UIViewController,
 
     /// If we are showing the homepage search bar, then we should hide the address toolbar
     private func shouldHideToolbar() -> Bool {
-        // TODO: FXIOS-12566 - Should update state to also include feature flag
         let shouldShowSearchBar = store.state.screenState(
             HomepageState.self,
             for: .homepage,
