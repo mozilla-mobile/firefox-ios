@@ -322,27 +322,7 @@ struct DownloadLiveActivity: Widget {
             } compactLeading: {
                 compactLeadingContent
             } compactTrailing: {
-                let circleProgressPercentage = min(
-                    liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
-                )
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: UX.DynamicIsland.lineWidth)
-                        .foregroundColor(.gray)
-                        .opacity(0.3)
-                        .frame(width: UX.DynamicIsland.circleWidth, height: UX.DynamicIsland.circleWidth)
-                        .padding(.leading, 2)
-                        .padding(.trailing, 1)
-                    Circle()
-                        .trim(from: 0.0, to: circleProgressPercentage)
-                        .stroke(style: StrokeStyle(lineWidth: UX.DynamicIsland.lineWidth))
-                        .rotationEffect(.degrees(UX.DynamicIsland.rotation))
-                        .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
-                        .foregroundStyle(.orange)
-                        .frame(width: UX.DynamicIsland.circleWidth, height: UX.DynamicIsland.circleWidth)
-                }
-                .padding(.leading, UX.DynamicIsland.downloadPaddingLeading)
-                .padding(.trailing, UX.DynamicIsland.downloadPaddingTrailing)
+                compactTrailingContent(liveDownload: liveDownload)
             } minimal: {
                 minimalViewBuilder(liveDownload: liveDownload)
             }
