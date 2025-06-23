@@ -285,7 +285,6 @@ private extension BaseTestCase {
                         secondTab: String,
                         file: StaticString = #file,
                         line: UInt = #line) {
-
         // Determine which collection view to use based on the current screen
         let collectionView: XCUIElement
         if app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].exists {
