@@ -1220,6 +1220,15 @@ class BrowserViewController: UIViewController,
         // add overKeyboardContainer after bottomContainer so the address toolbar shadow
         // for bottom toolbar doesn't get clipped
         view.addSubview(overKeyboardContainer)
+
+        if isSwipingTabsEnabled {
+            // Add Homepage to view hierarchy so it is possible to take screenshot from it
+            showEmbeddedHomepage(inline: false, isPrivate: false)
+            browserDelegate?.setHomepageVisibility(isVisible: false)
+            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
+                return self?.browserDelegate?.homepageScreenshotTool()
+            }
+        }
     }
 
     private func enqueueTabRestoration() {
@@ -1718,6 +1727,12 @@ class BrowserViewController: UIViewController,
             )
         }
 
+        if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
+            browserDelegate?.setHomepageVisibility(isVisible: true)
+        }
         updateBlurViews()
     }
 
@@ -4370,6 +4385,13 @@ extension BrowserViewController: TabManagerDelegate {
 
         if needsReload {
             selectedTab.reloadPage()
+        }
+
+        if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
+            browserDelegate?.setHomepageVisibility(isVisible: true)
         }
     }
 
