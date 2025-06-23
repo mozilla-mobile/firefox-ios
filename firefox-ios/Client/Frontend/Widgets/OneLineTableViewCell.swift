@@ -104,7 +104,6 @@ class OneLineTableViewCell: UITableViewCell,
     }
 
     private func updateReorderControl() {
-        guard isBookmarkRefactorEnabled else { return }
         reorderControlImageView?.image = reorderControlImageView?.image?.withRenderingMode(.alwaysTemplate)
     }
 
