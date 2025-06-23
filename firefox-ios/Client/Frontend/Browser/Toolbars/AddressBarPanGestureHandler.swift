@@ -204,7 +204,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             webPagePreview.transitionDidEnd()
 
             if shouldCompleteTransition {
-                store.dispatch(
+                store.dispatchLegacy(
                     ToolbarAction(
                         shouldAnimate: false,
                         windowUUID: windowUUID,
@@ -217,8 +217,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 if let nextTab {
                     tabManager.selectTab(nextTab)
                 } else {
-                    store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
-                                                        actionType: GeneralBrowserActionType.addNewTab))
+                    store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                              actionType: GeneralBrowserActionType.addNewTab))
                 }
             } else {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
