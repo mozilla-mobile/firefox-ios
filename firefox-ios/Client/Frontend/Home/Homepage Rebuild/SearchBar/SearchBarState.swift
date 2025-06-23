@@ -15,7 +15,7 @@ struct SearchBarState: StateType, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            shouldShowSearchBar: true
+            shouldShowSearchBar: false
         )
     }
 

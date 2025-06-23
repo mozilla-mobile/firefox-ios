@@ -13,7 +13,7 @@ final class SearchBarStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertTrue(initialState.shouldShowSearchBar)
+        XCTAssertFalse(initialState.shouldShowSearchBar)
     }
 
     func test_tapOnHomepageSearchBarAction_returnsExpectedState() {
