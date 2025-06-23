@@ -110,7 +110,6 @@
 		0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */; };
 		0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3432CA6E43100D501DF /* FolderHierarchyFetcher.swift */; };
 		0BDDB3462CA6E43A00D501DF /* BookmarksSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3452CA6E43A00D501DF /* BookmarksSaver.swift */; };
-		0BE181E72CBED065002DE979 /* LegacyBookmarkDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE181E62CBED065002DE979 /* LegacyBookmarkDetailPanel.swift */; };
 		0BE4158B2CA16B5300F3B7A1 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		0BED8EB42D12BFB0004E826B /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BED8EB32D12BFAF004E826B /* Strings.swift */; };
 		0BED8EB62D12BFED004E826B /* DeviceInfo+defaultClientName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BED8EB52D12BFED004E826B /* DeviceInfo+defaultClientName.swift */; };
@@ -594,7 +593,6 @@
 		580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B0C4121748CFE00448DF8 /* DataManagementTests.swift */; };
 		59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6825233896FC846499289 /* HistoryPanel.swift */; };
 		59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68B1F857A8638598A63A0 /* TwoLineImageOverlayCell.swift */; };
-		59A68E0B4ABBF55E14819668 /* LegacyBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* LegacyBookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		5A06135A29D6052E008F3D38 /* TabDataStore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A06135929D6052E008F3D38 /* TabDataStore */; };
 		5A1947152B8FA9E0009C7A6C /* BrowserViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */; };
@@ -1154,7 +1152,6 @@
 		8AB30ECA2B6C03C700BD9A9B /* DataClearanceAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB30EC92B6C03C700BD9A9B /* DataClearanceAnimation.swift */; };
 		8AB53B3A2D4138F200C97590 /* MessageCardMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB53B392D4138ED00C97590 /* MessageCardMiddleware.swift */; };
 		8AB53B3E2D41463900C97590 /* MessageCardAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB53B3D2D41463400C97590 /* MessageCardAction.swift */; };
-		8AB5958828413F6C0090F4AE /* LegacyBookmarksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958728413F6C0090F4AE /* LegacyBookmarksCell.swift */; };
 		8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */; };
 		8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571C27D929350075C173 /* TopSitesViewModel.swift */; };
 		8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */; };
@@ -2581,7 +2578,6 @@
 		0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderCell.swift; sourceTree = "<group>"; };
 		0BDDB3432CA6E43100D501DF /* FolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderHierarchyFetcher.swift; sourceTree = "<group>"; };
 		0BDDB3452CA6E43A00D501DF /* BookmarksSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksSaver.swift; sourceTree = "<group>"; };
-		0BE181E62CBED065002DE979 /* LegacyBookmarkDetailPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyBookmarkDetailPanel.swift; sourceTree = "<group>"; };
 		0BE44233918B5168E5028D9E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Menu.strings; sourceTree = "<group>"; };
 		0BE84E0CA7385E5C7E816F0A /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Search.strings; sourceTree = "<group>"; };
 		0BED8EB32D12BFAF004E826B /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
@@ -7759,7 +7755,6 @@
 		58EC442DAEFF1132932BDAB5 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		59704663991C80BA05B0525B /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/Shared.strings; sourceTree = "<group>"; };
 		59A6825233896FC846499289 /* HistoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HistoryPanel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		59A6839879D615FC1C0D71CE /* LegacyBookmarksPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyBookmarksPanel.swift; sourceTree = "<group>"; };
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
 		59A68B1F857A8638598A63A0 /* TwoLineImageOverlayCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineImageOverlayCell.swift; sourceTree = "<group>"; };
 		5A0748769E8BD3C8FC5BFEE5 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -8590,7 +8585,6 @@
 		8AB30EC92B6C03C700BD9A9B /* DataClearanceAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataClearanceAnimation.swift; sourceTree = "<group>"; };
 		8AB53B392D4138ED00C97590 /* MessageCardMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardMiddleware.swift; sourceTree = "<group>"; };
 		8AB53B3D2D41463400C97590 /* MessageCardAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardAction.swift; sourceTree = "<group>"; };
-		8AB5958728413F6C0090F4AE /* LegacyBookmarksCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBookmarksCell.swift; sourceTree = "<group>"; };
 		8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageSectionHandler.swift; sourceTree = "<group>"; };
 		8AB8571C27D929350075C173 /* TopSitesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesViewModel.swift; sourceTree = "<group>"; };
 		8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTopSiteCell.swift; sourceTree = "<group>"; };
@@ -10961,10 +10955,8 @@
 		0BBC50962CA1F86F00CB7248 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
-				0BE181E62CBED065002DE979 /* LegacyBookmarkDetailPanel.swift */,
 				8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */,
 				8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */,
-				59A6839879D615FC1C0D71CE /* LegacyBookmarksPanel.swift */,
 				8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */,
 				8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */,
 				8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */,
@@ -14033,7 +14025,6 @@
 		C87DC86027B2CC21006EFCE2 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				8AB5958728413F6C0090F4AE /* LegacyBookmarksCell.swift */,
 				966206CC2698DE1E005C0A55 /* BookmarksViewModel.swift */,
 				5A3A7DCD2886F7880065F81A /* BookmarksDataAdaptor.swift */,
 			);
@@ -17505,7 +17496,6 @@
 				8A5D1CB42A30D7D9005AD35C /* NoImageModeSetting.swift in Sources */,
 				8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
-				0BE181E72CBED065002DE979 /* LegacyBookmarkDetailPanel.swift in Sources */,
 				CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */,
 				8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */,
 				8A5D1CA82A30D6D3005AD35C /* HomeSetting.swift in Sources */,
@@ -18397,7 +18387,6 @@
 				2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */,
 				213B7AF02D779D2400DF0123 /* Download.swift in Sources */,
 				BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */,
-				59A68E0B4ABBF55E14819668 /* LegacyBookmarksPanel.swift in Sources */,
 				810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
 				BA6127D32E2967D4003EB129 /* SummarizationCheckError.swift in Sources */,
@@ -18430,7 +18419,6 @@
 				81C3E6092C93261A00A19A5A /* MainMenuDetailsViewController.swift in Sources */,
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
-				8AB5958828413F6C0090F4AE /* LegacyBookmarksCell.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
