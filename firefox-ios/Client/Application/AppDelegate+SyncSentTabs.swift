@@ -17,7 +17,7 @@ extension UIApplication {
 /// Sync will get the list of sent tabs, and try to display any in that list.
 /// Thus, push notifications are not needed to receive sent or closed tabs;
 /// they can be handled when the app performs a sync.
-class AppFxACommandsDelegate: FxACommandsDelegate {
+class AppFxACommandsDelegate: FxACommandsDelegate, @unchecked Sendable {
     private let app: ApplicationStateProvider
     private var applicationHelper: ApplicationHelper
     private var mainQueue: DispatchQueueInterface

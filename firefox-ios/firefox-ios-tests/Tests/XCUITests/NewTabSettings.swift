@@ -68,8 +68,9 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
-    func testChangeNewTabSettingsShowFirefoxHome_swipingTabsExperimentOff() {
+    func testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff_swipingTabsExperimentOff() {
         addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Set to history page first since FF Home is default
         waitForTabsButton()

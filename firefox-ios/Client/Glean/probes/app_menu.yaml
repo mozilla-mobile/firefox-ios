@@ -1,0 +1,491 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - AppMenu
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# App menu
+app_menu:
+  main_menu_option_selected:
+    type: event
+    description: |
+      Record event when user has tapped on the main menu option.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option type selected on the main menu.
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19329
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  save_menu_option_selected:
+    type: event
+    description: |
+      Record event when user has tapped on a save sub menu option.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option type selected on the save sub menu.
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23040
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23046
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  tools_menu_option_selected:
+    type: event
+    description: |
+      Record event when user has tapped on a tools sub menu option.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option type selected on the tools sub menu.
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23040
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23046
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  close_button:
+    type: event
+    description: |
+      Record event when user has tapped the close menu button.
+    extra_keys:
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19329
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  menu_dismissed:
+    type: event
+    description: |
+      Record event when user has dismissed the menu because of tapping outside or drag the menu.
+    extra_keys:
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19329
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  homepage_menu:
+    type: counter
+    description: |
+        Counts the number of times a user taps in the menu toolbar
+        on the homepage
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12716
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  site_menu:
+    type: counter
+    description: |
+        Counts the number of times a user taps in the menu toolbar
+        from a website
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12716
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  home:
+    type: counter
+    description: |
+        Counts the number of times a user taps Home in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  block_images_enabled:
+    type: counter
+    description: |
+        Counts the number of times a user enables Block Images
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  block_images_disabled:
+    type: counter
+    description: |
+        Counts the number of times a user disables Block Images
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  night_mode_enabled:
+    type: counter
+    description: |
+        Counts the number of times a user taps Enable Night Mode
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  night_mode_disabled:
+    type: counter
+    description: |
+        Counts the number of times a user taps Disable Night Mode
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  whats_new:
+    type: counter
+    description: |
+        Counts the number of times a user taps What's New in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  help:
+    type: counter
+    description: |
+        Counts the number of times a user taps Help in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12716
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  customize_homepage:
+    type: counter
+    description: |
+        Counts the number of times a user taps Customize Homepage
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12716
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  settings:
+    type: counter
+    description: |
+        Counts the number of times a user taps Settings in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  logins:
+    type: counter
+    description: |
+        Counts the number of times a user taps Logins & Passwords
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  sign_into_sync:
+    type: counter
+    description: |
+        Counts the number of times a user taps Sign Into Sync
+        in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/1544
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15181
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  passwords:
+    type: event
+    description: |
+      Records when the user taps Passwords in the app menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14902
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/16685
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+
+# Page Action menu
+page_action_menu:
+  share_page_with:
+    type: counter
+    description: |
+        Counts the number of times a user taps Share Page With in the
+        page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  send_to_device:
+    type: counter
+    description: |
+        Counts the number of times a user taps Send to Device
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  copy_address:
+    type: counter
+    description: |
+        Counts the number of times a user taps Copy Address
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  report_site_issue:
+    type: counter
+    description: |
+        Counts the number of times a user taps Report Site Issue
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  find_in_page:
+    type: counter
+    description: |
+        Counts the number of times a user taps Find in Page
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  request_desktop_site:
+    type: counter
+    description: |
+        Counts the number of times a user taps Request Desktop Site
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  request_mobile_site:
+    type: counter
+    description: |
+        Counts the number of times a user taps Request Mobile Site
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  pin_to_top_sites:
+    type: counter
+    description: |
+        Counts the number of times a user taps Pin to Top Sites
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  remove_pinned_site:
+    type: counter
+    description: |
+        Counts the number of times a user taps Pin to Top Sites
+        in the page action menu
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/8147
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/8167
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  view_downloads_panel:
+    type: counter
+    description: |
+      Counts the number of times a user navigates to the downloads panel
+      from the page action menu.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11029
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11714
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  view_history_panel:
+    type: counter
+    description: |
+      Counts the number of times a user navigates to the history panel
+      from the page action menu.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11029
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11714
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  create_new_tab:
+    type: counter
+    description: |
+      Counts the number of times a user creates a new tab from the
+      page action menu.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11029
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11714
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

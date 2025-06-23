@@ -5,17 +5,19 @@
 import Common
 import XCTest
 
-final class MicrosurveyTests: BaseTestCase {
+final class MicrosurveyTests: FeatureFlaggedTestBase {
     override func setUp() {
         launchArguments = [
             LaunchArguments.SkipIntro,
             LaunchArguments.ResetMicrosurveyExpirationCount
         ]
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         super.setUp()
+        app.launch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776931
-    func testShowMicrosurvey() {
+    func testShowMicrosurvey_tabTrayExperimentOff() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.waitAndTap()
@@ -40,7 +42,7 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776934
-    func testCloseButtonDismissesSurveyAndPrompt() {
+    func testCloseButtonDismissesSurveyAndPrompt_tabTrayExperimentOff() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.waitAndTap()
@@ -55,7 +57,7 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776933
-    func testCloseButtonDismissesMicrosurveyPrompt() {
+    func testCloseButtonDismissesMicrosurveyPrompt_tabTrayExperimentOff() {
         generateTriggerForMicrosurvey()
         waitForElementsToExist(
             [
@@ -71,7 +73,7 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776932
-    func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
+    func testURLBorderHiddenWhenMicrosurveyPromptShown_tabTrayExperimentOff() throws {
         guard !iPad() else {
             throw XCTSkip("Toolbar option not available for iPad")
         }

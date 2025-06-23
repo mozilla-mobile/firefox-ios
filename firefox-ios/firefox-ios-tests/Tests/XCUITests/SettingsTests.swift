@@ -225,7 +225,8 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951438
-    func testBrowsingSettingsOptionSubtitles() {
+    func testBrowsingSettingsOptionSubtitles_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         validateBrowsingUI()
         // Repeat steps for dark mode

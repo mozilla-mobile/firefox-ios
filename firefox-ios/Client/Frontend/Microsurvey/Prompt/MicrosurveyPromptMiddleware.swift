@@ -42,7 +42,7 @@ final class MicrosurveyPromptMiddleware {
             windowUUID: windowUUID,
             actionType: MicrosurveyPromptMiddlewareActionType.initialize
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
         microsurveyManager.handleMessageDisplayed()
     }
 

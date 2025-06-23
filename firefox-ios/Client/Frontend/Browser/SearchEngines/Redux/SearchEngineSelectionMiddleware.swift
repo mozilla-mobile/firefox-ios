@@ -38,7 +38,7 @@ final class SearchEngineSelectionMiddleware {
         case SearchEngineSelectionActionType.didTapSearchEngine:
             // Trigger editing in the toolbar
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
         default:
             break
@@ -51,6 +51,6 @@ final class SearchEngineSelectionMiddleware {
             actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
             searchEngines: searchEngines.map({ $0.generateModel() })
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 }

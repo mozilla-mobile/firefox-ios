@@ -5,9 +5,15 @@
 import Common
 import XCTest
 
-class TabCounterTests: BaseTestCase {
+class TabCounterTests: FeatureFlaggedTestBase {
+    override func setUp() {
+        super.setUp()
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2359077
-    func testTabIncrement() throws {
+    func testTabIncrement_tabTrayExperimentOff() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
@@ -36,7 +42,7 @@ class TabCounterTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359078
-    func testTabDecrement() throws {
+    func testTabDecrement_tabTrayExperimentOff() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 

@@ -10,10 +10,11 @@ import enum MozillaAppServices.AccountEvent
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
+// TODO: FXIOS-12610 make this code actually threadsafe which will involve the profile
 /// This class provides handles push messages from FxA.
 /// The main entry point is the `handleDecryptedMessage` method to accept the decrypted push message and parse it into a
 /// `PushMessage`
-class FxAPushMessageHandler {
+final class FxAPushMessageHandler: @unchecked Sendable {
     let profile: Profile
     private let logger: Logger
 
@@ -26,7 +27,7 @@ class FxAPushMessageHandler {
 extension FxAPushMessageHandler {
     func handleDecryptedMessage(
         message: String,
-        completion: @escaping (Result<PushMessage, PushMessageError>) -> Void
+        completion: @escaping @Sendable (Result<PushMessage, PushMessageError>) -> Void
     ) {
         // Reconfig has to happen on the main thread, since it calls `startup`
         // and `startup` asserts that we are on the main thread. Otherwise the notification

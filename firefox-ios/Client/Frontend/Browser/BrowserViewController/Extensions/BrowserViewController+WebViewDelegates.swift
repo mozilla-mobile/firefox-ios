@@ -872,7 +872,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
@@ -954,13 +954,13 @@ extension BrowserViewController: WKNavigationDelegate {
                         windowUUID: windowUUID,
                         actionType: ToolbarActionType.urlDidChange
                     )
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                     let middlewareAction = ToolbarMiddlewareAction(
                         scrollOffset: scrollController.contentOffset,
                         windowUUID: windowUUID,
                         actionType: ToolbarMiddlewareActionType.urlDidChange
                     )
-                    store.dispatch(middlewareAction)
+                    store.dispatchLegacy(middlewareAction)
                 } else {
                     legacyUrlBar?.currentURL = tab.url?.displayURL
                 }
@@ -1000,7 +1000,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
                     )
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)

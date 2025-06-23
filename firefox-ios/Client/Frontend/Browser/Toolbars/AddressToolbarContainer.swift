@@ -192,7 +192,7 @@ final class AddressToolbarContainer: UIView,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .toolbar)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -210,7 +210,7 @@ final class AddressToolbarContainer: UIView,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .toolbar)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         store.unsubscribe(self)
     }
 
@@ -406,13 +406,13 @@ final class AddressToolbarContainer: UIView,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
             if searchTerm.isEmpty, !toolbarState.addressToolbar.isEmptySearch {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             } else if !searchTerm.isEmpty, toolbarState.addressToolbar.isEmptySearch {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             } else if !toolbarState.addressToolbar.didStartTyping {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             }
         }
         self.searchTerm = searchTerm
@@ -427,7 +427,7 @@ final class AddressToolbarContainer: UIView,
 
         let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
                                              actionType: ToolbarMiddlewareActionType.didClearSearch)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func openBrowser(searchTerm: String) {
@@ -470,7 +470,7 @@ final class AddressToolbarContainer: UIView,
 
         let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
                                              actionType: ToolbarMiddlewareActionType.didStartDragInteraction)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func addressToolbarDidBeginDragInteraction() {
@@ -498,7 +498,7 @@ final class AddressToolbarContainer: UIView,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didPasteSearchTerm
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
@@ -506,7 +506,7 @@ final class AddressToolbarContainer: UIView,
                                        shouldAnimate: true,
                                        windowUUID: windowUUID,
                                        actionType: ToolbarActionType.didStartEditingUrl)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -521,7 +521,7 @@ final class AddressToolbarContainer: UIView,
 
         if toolbarState.addressToolbar.isEditing {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 

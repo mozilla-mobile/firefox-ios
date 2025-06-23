@@ -96,7 +96,7 @@ class MainMenuViewController: UIViewController,
         sheetPresentationController?.delegate = self
 
         subscribeToRedux()
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.didInstantiateView
@@ -110,7 +110,7 @@ class MainMenuViewController: UIViewController,
         }
         setupTableView()
         listenForThemeChange(view)
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.viewDidLoad
@@ -285,7 +285,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -301,7 +301,7 @@ class MainMenuViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
@@ -342,7 +342,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func dispatchCloseMenuAction() {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapCloseMenu,
@@ -352,7 +352,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func dispatchSyncSignInAction() {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -363,7 +363,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func dispatchSiteProtectionAction() {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -515,7 +515,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.menuDismissed,

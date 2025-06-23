@@ -407,7 +407,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         if themeManager.isNewAppearanceMenuOn {
             let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
