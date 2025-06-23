@@ -320,13 +320,7 @@ struct DownloadLiveActivity: Widget {
                 centerExpandedRegion(liveDownload: liveDownload)
                 trailingExpandedRegion(liveDownload: liveDownload)
             } compactLeading: {
-                Image(StandardImageIdentifiers.Large.download)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: UX.DynamicIsland.downloadIconSize, height: UX.DynamicIsland.downloadIconSize)
-                    .foregroundStyle(.orange)
-                    .padding([.leading, .trailing], 2)
+                compactLeadingContent
             } compactTrailing: {
                 let circleProgressPercentage = min(
                     liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
