@@ -123,13 +123,7 @@ struct PrivacyPolicyView: View {
                 WebView(url: url, viewModel: viewModel)
 
                 if viewModel.state == .loading {
-                    VStack {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .padding()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.white.opacity(0.8))
+                    loadingContent
                 }
 
                 if viewModel.state == .error {
