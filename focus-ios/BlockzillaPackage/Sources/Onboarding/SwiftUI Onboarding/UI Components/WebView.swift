@@ -167,4 +167,29 @@ struct PrivacyPolicyView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white.opacity(0.8))
     }
+
+    var errorContent: some View {
+        VStack {
+            Image(systemName: "wifi.slash")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundColor(.gray)
+                .padding()
+            
+            Text(errorMessage)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .padding()
+            
+            Button(action: {
+                viewModel.reload()
+            }) {
+                Text(retryButtonText)
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .padding(Constants.buttonPadding)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white.opacity(0.8))
+    }
 }
