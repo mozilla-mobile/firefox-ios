@@ -1253,6 +1253,10 @@
 		8C77849F2DF33707001FB8B0 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C77849E2DF33707001FB8B0 /* OnboardingService.swift */; };
 		8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */; };
 		8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */; };
+		8CAD5D712E0979F7009392AA /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
+		8CAD5D742E097A1A009392AA /* libAccount.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* libAccount.a */; };
+		8CAD5D772E097A30009392AA /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
+		8CAD5D7C2E097A59009392AA /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 8CAD5D7B2E097A59009392AA /* SiteImageView */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
 		8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
@@ -1281,9 +1285,7 @@
 		8CFA6BD92E09616800A6B1B1 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFA6BD82E09616800A6B1B1 /* GCDWebServers */; };
 		8CFA6BDB2E09617700A6B1B1 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFA6BDA2E09617700A6B1B1 /* Shared */; };
 		8CFA6BDC2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		8CFA6BDD2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CFA6BE12E09618500A6B1B1 /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
-		8CFA6BE22E09618500A6B1B1 /* Localizations.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CFA6BE52E0961EC00A6B1B1 /* DevicePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */; };
 		8CFA6BE62E09621C00A6B1B1 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		8CFA6BE72E09622700A6B1B1 /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
@@ -1305,7 +1307,6 @@
 		8CFA6BF72E09637500A6B1B1 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
 		8CFA6BF82E09638500A6B1B1 /* HostingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */; };
 		8CFA6BF92E0963F900A6B1B1 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		8CFA6BFA2E0963F900A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CFA6C042E0972E900A6B1B1 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CFA6C022E0972E900A6B1B1 /* Media.xcassets */; };
 		8CFA6C062E0972E900A6B1B1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CFA6C012E0972E900A6B1B1 /* InfoPlist.strings */; };
 		8CFA6C072E0972E900A6B1B1 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA6BFE2E0972E900A6B1B1 /* ActionViewController.swift */; };
@@ -2275,13 +2276,6 @@
 			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
 			remoteInfo = Account;
 		};
-		8C8FD2D22DAE5C0C000E2051 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
-			remoteInfo = Storage;
-		};
 		8C8FD2D62DAE5C78000E2051 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -2295,6 +2289,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43BE5774278BA4D900491291;
 			remoteInfo = RustMozillaAppServices;
+		};
+		8CAD5D6F2E0979E8009392AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
+			remoteInfo = Storage;
+		};
+		8CAD5D722E0979F7009392AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
+			remoteInfo = Storage;
+		};
+		8CAD5D752E097A1A009392AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
+			remoteInfo = Account;
+		};
+		8CAD5D792E097A30009392AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
 		};
 		8CFA6BDE2E09617F00A6B1B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2444,29 +2466,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8CFA6BE02E09617F00A6B1B1 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				8CFA6BDD2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */,
-				8CFA6BE22E09618500A6B1B1 /* Localizations.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8CFA6BFD2E0963FA00A6B1B1 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				8CFA6BFA2E0963F900A6B1B1 /* RustMozillaAppServices.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10859,12 +10858,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CAD5D712E0979F7009392AA /* libStorage.a in Frameworks */,
 				8C19C1D02D8C453B00BEAA17 /* UniformTypeIdentifiers.framework in Frameworks */,
 				8CFA6BE12E09618500A6B1B1 /* Localizations.framework in Frameworks */,
 				8CFA6BDB2E09617700A6B1B1 /* Shared in Frameworks */,
 				8CFA6BD92E09616800A6B1B1 /* GCDWebServers in Frameworks */,
 				8CFA6BDC2E09617F00A6B1B1 /* RustMozillaAppServices.framework in Frameworks */,
 				8CFA6BD72E09616200A6B1B1 /* Common in Frameworks */,
+				8CAD5D742E097A1A009392AA /* libAccount.a in Frameworks */,
+				8CAD5D7C2E097A59009392AA /* SiteImageView in Frameworks */,
+				8CAD5D772E097A30009392AA /* Sync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -16016,7 +16019,6 @@
 				8C19C1CA2D8C453B00BEAA17 /* Sources */,
 				8C19C1CB2D8C453B00BEAA17 /* Frameworks */,
 				8C19C1CC2D8C453B00BEAA17 /* Resources */,
-				8CFA6BE02E09617F00A6B1B1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -16025,12 +16027,16 @@
 				8C35369B2D9ED59100D0DB81 /* PBXTargetDependency */,
 				8CFA6BDF2E09617F00A6B1B1 /* PBXTargetDependency */,
 				8CFA6BE42E09618500A6B1B1 /* PBXTargetDependency */,
+				8CAD5D732E0979F7009392AA /* PBXTargetDependency */,
+				8CAD5D762E097A1A009392AA /* PBXTargetDependency */,
+				8CAD5D7A2E097A30009392AA /* PBXTargetDependency */,
 			);
 			name = ActionExtension;
 			packageProductDependencies = (
 				8CFA6BD62E09616200A6B1B1 /* Common */,
 				8CFA6BD82E09616800A6B1B1 /* GCDWebServers */,
 				8CFA6BDA2E09617700A6B1B1 /* Shared */,
+				8CAD5D7B2E097A59009392AA /* SiteImageView */,
 			);
 			productName = ActionExtension;
 			productReference = 8C19C1CE2D8C453B00BEAA17 /* ActionExtension.appex */;
@@ -16230,17 +16236,16 @@
 				F84B22461A0920C600AAB793 /* Frameworks */,
 				F84B22471A0920C600AAB793 /* Resources */,
 				43338D08278F725C00A23914 /* ShellScript */,
-				8CFA6BFD2E0963FA00A6B1B1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 				8C8FD2C92DAE5B31000E2051 /* PBXTargetDependency */,
-				8C8FD2D32DAE5C0C000E2051 /* PBXTargetDependency */,
 				8C8FD2D72DAE5C78000E2051 /* PBXTargetDependency */,
 				8C8FD2DC2DAE5CCE000E2051 /* PBXTargetDependency */,
 				8CFA6BFC2E0963F900A6B1B1 /* PBXTargetDependency */,
+				8CAD5D702E0979E8009392AA /* PBXTargetDependency */,
 			);
 			name = ShareTo;
 			packageProductDependencies = (
@@ -19103,11 +19108,6 @@
 			target = 2FA435FA1ABB83B4008031D1 /* Account */;
 			targetProxy = 8C8FD2C82DAE5B31000E2051 /* PBXContainerItemProxy */;
 		};
-		8C8FD2D32DAE5C0C000E2051 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FCAE2191ABB51F800877008 /* Storage */;
-			targetProxy = 8C8FD2D22DAE5C0C000E2051 /* PBXContainerItemProxy */;
-		};
 		8C8FD2D72DAE5C78000E2051 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2827315D1ABC9BE600AA1954 /* Sync */;
@@ -19117,6 +19117,26 @@
 			isa = PBXTargetDependency;
 			target = 43BE5774278BA4D900491291 /* RustMozillaAppServices */;
 			targetProxy = 8C8FD2DB2DAE5CCE000E2051 /* PBXContainerItemProxy */;
+		};
+		8CAD5D702E0979E8009392AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FCAE2191ABB51F800877008 /* Storage */;
+			targetProxy = 8CAD5D6F2E0979E8009392AA /* PBXContainerItemProxy */;
+		};
+		8CAD5D732E0979F7009392AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FCAE2191ABB51F800877008 /* Storage */;
+			targetProxy = 8CAD5D722E0979F7009392AA /* PBXContainerItemProxy */;
+		};
+		8CAD5D762E097A1A009392AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FA435FA1ABB83B4008031D1 /* Account */;
+			targetProxy = 8CAD5D752E097A1A009392AA /* PBXContainerItemProxy */;
+		};
+		8CAD5D7A2E097A30009392AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = 8CAD5D792E097A30009392AA /* PBXContainerItemProxy */;
 		};
 		8CFA6BDF2E09617F00A6B1B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -30072,6 +30092,10 @@
 			productName = Shared;
 		};
 		8C8FD2DE2DAE5D91000E2051 /* SiteImageView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SiteImageView;
+		};
+		8CAD5D7B2E097A59009392AA /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SiteImageView;
 		};
