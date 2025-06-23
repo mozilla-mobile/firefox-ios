@@ -72,6 +72,9 @@ ReadingListPanel:
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
 
+ShareSheet:
+  description: Corresponds to the iOS system share sheet for sharing content out of the app.
+
 TabsPanel:
   description: Corresponds to all things related to the tab panel.
 

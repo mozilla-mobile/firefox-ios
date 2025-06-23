@@ -3273,44 +3273,6 @@ urlbar:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
 
-# Share sheet specific metrics
-
-share_sheet:
-  shared_to:
-    type: event
-    description: |
-      Event to record that the user has shared content via the ShareManager.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/23704
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23786
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-    extra_keys:
-      activity_identifier:
-        type: string
-        description: |
-          The activity identifier indicating to where the user shared content.
-      share_type:
-        type: string
-        description: |
-          The type of content shared. Either a file, website, or tab.
-      has_share_message:
-        type: boolean
-        description: |
-          Whether an explicit share message (and optional subject line) was 
-          appended to the shared content.
-      is_enrolled_in_sent_from_firefox:
-        type: boolean
-        description: |
-          Whether the user is enrolled in the Sent from Firefox experiment.
-      is_opted_in_sent_from_firefox:
-        type: boolean
-        description: |
-          Whether the user is opted in to the Sent from Firefox experiment.
-          Only returns true if the user is both enrolled and opted in.
-
 # Share related metrics
 
 share:
