@@ -4,7 +4,7 @@
 
 import XCTest
 
-class ZoomingTests: BaseTestCase {
+class ZoomingTests: FeatureFlaggedTestBase {
     let zoomInButton = XCUIApplication().buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton]
     let zoomOutButton = XCUIApplication().buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton]
     var zoomLevel = XCUIApplication().staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
@@ -27,12 +27,15 @@ class ZoomingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
     func testZoomingActions() {
+        app.launch()
         // Regular browsing
         validateZoomActions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
-    func testZoomingActionsLandscape() {
+    func testZoomingActionsLandscape_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.openURL(websites[0])
         waitUntilPageLoad()
         // Tap on the hamburger menu -> Tap on Zoom
@@ -58,7 +61,9 @@ class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
-    func testZoomForceCloseFirefox() {
+    func testZoomForceCloseFirefox_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         openWebsiteAndReachZoomSetting(website: 0)
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
@@ -75,7 +80,9 @@ class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
-    func testSwitchingZoomedTabs() {
+    func testSwitchingZoomedTabs_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
         navigator.nowAt(BrowserTab)
@@ -88,7 +95,9 @@ class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2609150
-    func testSwitchingZoomedTabsLandscape() {
+    func testSwitchingZoomedTabsLandscape_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()
     }
