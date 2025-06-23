@@ -84,8 +84,7 @@ public struct TermsOfServiceViewiPad<VM: OnboardingCardInfoModelProtocol>: View 
         }
     }
 
-    @ViewBuilder
-    var imageView: some View {
+    @ViewBuilder var imageView: some View {
         if let img = viewModel.configuration.image {
             Image(uiImage: img)
                 .resizable()

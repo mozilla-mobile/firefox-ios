@@ -119,8 +119,7 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
         .frame(width: 313)
     }
 
-    @ViewBuilder
-    var secondaryButton: some View {
+    @ViewBuilder var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
             Button(
                 secondary.title,
