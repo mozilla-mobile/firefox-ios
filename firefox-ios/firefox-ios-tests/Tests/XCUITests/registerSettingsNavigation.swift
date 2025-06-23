@@ -2,12 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-// swiftlint:disable all
 import XCTest
 import MappaMundi
 
 func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
-
     let table = app.tables.element(boundBy: 0)
 
     map.addScreenState(SettingsScreen) { screenState in
@@ -21,7 +19,8 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title], to: AutofillPasswordSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title],
+                        to: AutofillPasswordSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.ContentBlocker.title],
@@ -70,9 +69,11 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
+    // swiftlint:disable closure_parameter_position
     map.addScreenState(LoginsSettings) {
         screenState in screenState.backAction = navigationControllerBackAction(for: app)
     }
+    // swiftlint:enable closure_parameter_position
 
     map.addScreenState(CreditCardsSettings) { screenState in
         screenState.backAction = navigationControllerBackAction(for: app)
@@ -232,5 +233,3 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 }
-
-// swiftlint:enable all

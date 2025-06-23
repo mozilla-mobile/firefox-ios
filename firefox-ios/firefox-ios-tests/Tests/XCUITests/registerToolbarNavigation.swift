@@ -28,7 +28,6 @@ private func configureToolBarAvailable(_ screenState: MMScreenStateNode<FxUserSt
     }
 }
 
-// swiftlint:disable all
 func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(NewTabScreen) { screenState in
         screenState.noop(to: HomePanelsScreen)
@@ -54,6 +53,7 @@ func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         }
     }
 
+    // swiftlint:disable closure_body_length
     map.addScreenState(BrowserTab) { screenState in
         configureURLBarAvailable(screenState, app: app)
 
@@ -74,7 +74,8 @@ func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             } else {
                 screenState.tap(
                     app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
-                forAction: Action.GoToHomePage)
+                    forAction: Action.GoToHomePage
+                )
             }
 
         screenState.tap(
@@ -119,5 +120,5 @@ func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             userState.isPrivate = !userState.isPrivate
         }
     }
+    // swiftlint:enable closure_body_length
 }
-// swiftlint:enable all
