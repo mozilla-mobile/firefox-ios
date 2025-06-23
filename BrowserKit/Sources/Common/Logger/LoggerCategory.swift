@@ -51,6 +51,9 @@ public enum LoggerCategory: String {
     /// Related to redux library or integration
     case redux
 
+    /// Related to the settings
+    case settings
+
     /// Related to the setup of services on app launch.
     case setup
 
