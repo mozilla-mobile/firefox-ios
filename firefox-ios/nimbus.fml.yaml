@@ -14,7 +14,6 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
-  - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/defaultZoomFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
