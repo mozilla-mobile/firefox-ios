@@ -110,7 +110,7 @@ class TabsTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        app.cells.staticTexts[urlLabel].firstMatch.waitAndTap()
+        app.otherElements["Tabs Tray"].cells.staticTexts[urlLabel].firstMatch.waitAndTap()
         guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
                 as? String else {
             XCTFail("Failed to retrieve the URL value from the Mozilla browser's URL bar")
