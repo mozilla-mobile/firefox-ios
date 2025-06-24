@@ -59,6 +59,7 @@ class JSAlertThrottlerTests: XCTestCase {
         let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
+            XCTAssertTrue(customThrottler.canShowAlert())
             customThrottler.willShowJSAlert()
         }
 
