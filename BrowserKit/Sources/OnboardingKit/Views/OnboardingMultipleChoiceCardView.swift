@@ -82,6 +82,39 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
         }
     }
 
+    private func scrollViewContent(geometry: GeometryProxy) -> some View {
+        // Determine scale factor based on current size vs base metrics
+        let widthScale = geometry.size.width / UX.CardView.baseWidth
+        let heightScale = geometry.size.height / UX.CardView.baseHeight
+        let scale = min(widthScale, heightScale)
+
+        return VStack {
+            VStack(spacing: UX.CardView.spacing * scale) {
+                Spacer()
+                titleView
+                Spacer()
+                OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
+                    selection: $selectedAction,
+                    items: viewModel.multipleChoiceButtons,
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
+                )
+                .onChange(of: selectedAction) { newAction in
+                    onMultipleChoiceAction(newAction, viewModel.name)
+                }
+                Spacer()
+                primaryButton
+            }
+            .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+            .padding(UX.CardView.verticalPadding * scale)
+            .background(
+                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                    .fill(cardBackgroundColor)
+            )
+            .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+        }
+    }
+
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
