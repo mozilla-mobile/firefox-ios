@@ -259,9 +259,6 @@ final class LocationView: UIView,
             iconContainerBackgroundView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor),
             iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
-            lockIconButton.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
-            lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
-
             iconContainerStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             iconContainerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
