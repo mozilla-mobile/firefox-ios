@@ -44,17 +44,24 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             // Redesigned stories constants
             static let redesignNumberOfItemsInColumn = 1
+            static let redesignedCellHeight: CGFloat = 70
+            static let redesignedFractionalWidthiPhonePortrait: CGFloat = 0.82
 
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
             static func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-                                          isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
+                                          isLandscape: Bool = UIWindow.isLandscape,
+                                          isStoriesRedesignEnabled: Bool) -> NSCollectionLayoutDimension {
                 if device == .pad {
                     return .absolute(UX.PocketConstants.cellWidth)
                 } else if isLandscape {
                     return .fractionalWidth(UX.PocketConstants.fractionalWidthiPhoneLandscape)
                 } else {
-                    return .fractionalWidth(UX.PocketConstants.fractionalWidthiPhonePortrait)
+                    let franctionalWidth = isStoriesRedesignEnabled
+                    ? UX.PocketConstants.redesignedFractionalWidthiPhonePortrait
+                    : UX.PocketConstants.fractionalWidthiPhonePortrait
+
+                    return .fractionalWidth(franctionalWidth)
                 }
             }
         }
@@ -174,15 +181,16 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func createPocketSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let cellHeight = isStoriesRedesignEnabled ? UX.PocketConstants.redesignedCellHeight : UX.PocketConstants.cellHeight
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.PocketConstants.cellHeight)
+            heightDimension: .absolute(cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: UX.PocketConstants.getWidthDimension(),
-            heightDimension: .estimated(UX.PocketConstants.cellHeight)
+            widthDimension: UX.PocketConstants.getWidthDimension(isStoriesRedesignEnabled: isStoriesRedesignEnabled),
+            heightDimension: .estimated(cellHeight)
         )
 
         let numberOfItemsInColumn = isStoriesRedesignEnabled ? UX.PocketConstants.redesignNumberOfItemsInColumn

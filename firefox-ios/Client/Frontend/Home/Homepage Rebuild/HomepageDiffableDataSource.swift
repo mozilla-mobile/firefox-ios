@@ -59,6 +59,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
+                StoryCell.self,
                 CustomizeHomepageSectionCell.self
             ]
         }
