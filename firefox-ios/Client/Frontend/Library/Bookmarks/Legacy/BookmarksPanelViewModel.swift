@@ -11,6 +11,23 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
+// Sophie - which of these do we actually need?
+let LegacyLocalizedRootBookmarkFolderStrings = [
+    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: String.LegacyBookmarksFolderTitleMobile,
+    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
+]
+
+let LocalizedRootBookmarkFolderStrings = [
+    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile,
+    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
+]
+
 final class BookmarksPanelViewModel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
@@ -141,13 +158,7 @@ final class BookmarksPanelViewModel {
     /// we need to account for this when saving bookmark index in A-S. This is done by subtracting
     /// the Local Desktop Folder number of rows it takes to the actual index.
     func getNewIndex(from index: Int) -> Int {
-        var isDesktopFolderPresent = false
-        if isBookmarkRefactorEnabled && hasDesktopFolders {
-            isDesktopFolderPresent = true
-        } else if isBookmarkRefactorEnabled == false {
-            isDesktopFolderPresent = true
-        }
-        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID, isDesktopFolderPresent else {
+        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID, hasDesktopFolders else {
             return max(index, 0)
         }
 
