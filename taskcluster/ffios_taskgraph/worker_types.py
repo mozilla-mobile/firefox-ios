@@ -86,3 +86,23 @@ def build_github_release_payload(config, task, task_def):
         ]
     )
 
+
+@payload_builder(
+    "scriptworker-shipit-release",
+    schema={
+        Required("branch"): str,
+        Required("phase"): str,
+        Required("product"): str,
+        Required("revision"): str,
+        Required("version"): str,
+    }
+)
+def build_shipit_release_payload(config, task, task_def):
+    task_def["payload"] = {
+        "product": task["worker"]["product"],
+        "branch": task["worker"]["branch"],
+        "phase": task["worker"]["phase"],
+        "version": task["worker"]["version"],
+        "cron_revision": task["worker"]["revision"],
+    }
+
