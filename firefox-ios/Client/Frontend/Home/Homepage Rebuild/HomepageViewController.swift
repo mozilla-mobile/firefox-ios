@@ -179,9 +179,13 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
+        guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
+
         store.dispatchLegacy(
             HomepageAction(
-                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
+                numberOfTopSitesPerRow: numberOfTilesPerRow,
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewDidLayoutSubviews
             )
