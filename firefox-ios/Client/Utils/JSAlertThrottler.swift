@@ -6,7 +6,11 @@
 /// over a short span of time, to prevent abuse or DOS attacks.
 final class JSAlertThrottler {
     struct Thresholds {
+        /// Max consecutive alerts allowed within a given time period (below)
+        /// after which throttling begins.
         static let maxConsecutiveAlerts = 5
+        /// The time within which the alert threshold may be reached. After this
+        /// many seconds since the first alert, the time and alert count are reset.
         static let defaultResetTime: TimeInterval = 20
     }
     var alertCount = 0
