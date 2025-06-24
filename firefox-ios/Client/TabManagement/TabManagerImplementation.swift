@@ -853,6 +853,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
 
+        guard let url = selectedTab?.url else { return }
+
+        if url.isFxHomeUrl {
+            return
+        }
+
         saveSessionData(forTab: selectedTab)
         preserveTabs(forced: true)
     }
