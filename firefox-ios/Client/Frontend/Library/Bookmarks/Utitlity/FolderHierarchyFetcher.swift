@@ -34,7 +34,7 @@ struct Folder: Equatable, Hashable {
     }
 }
 
-struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorFeatureFlagProvider {
+struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
     let profile: Profile
     let rootFolderGUID: String
 

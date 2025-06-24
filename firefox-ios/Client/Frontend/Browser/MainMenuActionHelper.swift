@@ -59,8 +59,7 @@ enum MenuButtonToastAction {
 class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
-                            AppVersionUpdateCheckerProtocol,
-                            BookmarksRefactorFeatureFlagProvider {
+                            AppVersionUpdateCheckerProtocol {
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
@@ -754,7 +753,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getBookmarkAction() -> SingleActionViewModel {
         guard isBookmarked else { return getAddBookmarkAction() }
-        return isBookmarkRefactorEnabled ? getEditBookmarkAction() : getRemoveBookmarkAction()
+        return getEditBookmarkAction()
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {
