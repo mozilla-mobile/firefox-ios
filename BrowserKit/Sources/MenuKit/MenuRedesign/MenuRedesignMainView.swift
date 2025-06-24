@@ -9,13 +9,14 @@ import ComponentLibrary
 public final class MenuRedesignMainView: UIView,
                                          ThemeApplicable {
     private struct UX {
-        static let headerTopMargin: CGFloat = 15
+        static let headerTopMargin: CGFloat = 24
         static let horizontalMargin: CGFloat = 16
         static let closeButtonSize: CGFloat = 30
         static let headerTopMarginWithButton: CGFloat = 8
     }
 
     public var closeButtonCallback: (() -> Void)?
+    public var onCalculatedHeight: ((CGFloat) -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
@@ -81,6 +82,29 @@ public final class MenuRedesignMainView: UIView,
     public func reloadDataView(with data: [MenuSection]) {
         setupView(with: data)
         tableView.reloadTableView(with: data)
+        updateMenuHeight(for: data)
+    }
+
+    private func updateMenuHeight(for data: [MenuSection]) {
+        // To avoid a glitch when expand the menu, we should not handle this action under DispatchQueue.main.async
+        if let expandedSection = data.first(where: { $0.isExpanded ?? false }),
+           let isExpanded = expandedSection.isExpanded,
+           isExpanded {
+            let height = self.tableView.tableViewContentSize + UX.headerTopMargin
+            onCalculatedHeight?(height + self.siteProtectionHeader.frame.height)
+            self.layoutIfNeeded()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                let height = self.tableView.tableViewContentSize + UX.headerTopMargin
+                if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
+                    self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+                } else {
+                    self.onCalculatedHeight?(height + self.siteProtectionHeader.frame.height)
+                }
+                self.layoutIfNeeded()
+            }
+        }
     }
 
     // MARK: - Callbacks
