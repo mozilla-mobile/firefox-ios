@@ -46,31 +46,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
             let scale = min(widthScale, heightScale)
 
             ScrollView {
-                VStack {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
-                        titleView
-                        Spacer()
-                        OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
-                            selection: $selectedAction,
-                            items: viewModel.multipleChoiceButtons,
-                            windowUUID: windowUUID,
-                            themeManager: themeManager
-                        )
-                        .onChange(of: selectedAction) { newAction in
-                            onMultipleChoiceAction(newAction, viewModel.name)
-                        }
-                        Spacer()
-                        primaryButton
-                    }
-                    .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                    .padding(UX.CardView.verticalPadding * scale)
-                    .background(
-                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                            .fill(cardBackgroundColor)
-                    )
-                    .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-                }
+                scrollViewContent(geometry: geometry)
             }
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
