@@ -223,19 +223,6 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
-    func test_tapOnHomepageSearchBar_navigationBrowserAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.navigationDestination)
-
-        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .zeroSearch)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.navigationDestination?.destination, .zeroSearch)
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
-    }
-
     // MARK: StartAtHomeAction
 
     func test_shouldStartAtHome_withStartAtHomeAction_returnsTrue() {
@@ -267,6 +254,56 @@ final class BrowserViewControllerStateTests: XCTestCase {
         let newState = reducer(initialState, action)
 
         XCTAssertFalse(newState.shouldStartAtHome)
+    }
+
+    // MARK: - Zero Search State
+
+    func test_tapOnHomepageSearchBar_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .zeroSearch)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .zeroSearch)
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
+    }
+
+    func test_didTapButtonToolbarAction_withHomepageSearch_navigateToZeroSearch() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = ToolbarMiddlewareAction(
+            isHomepageSearchBarEnabled: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .zeroSearch)
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
+    }
+
+    func test_didTapButtonToolbarAction_withoutHomepageSearch_doesNotNavigateToZeroSearch() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = ToolbarMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, nil)
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
     // MARK: - Private

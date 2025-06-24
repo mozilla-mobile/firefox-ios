@@ -60,11 +60,20 @@ struct NavigationToolbarContainerModel: Equatable {
         } : nil
     }
 
+    /// Handles user action for tapping on one of the buttons on the navigation toolbar.
+    /// In the case of tapping on search, we want to handle it differently for when we show homepage search bar feature.
     private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
         return { button in
+            let shouldShowSearchBar = store.state.screenState(
+                HomepageState.self,
+                for: .homepage,
+                window: windowUUID
+            )?.searchState.shouldShowSearchBar ?? false
+            let isHomepageSearchBarEnabled = shouldShowSearchBar && action.actionType == .search
             let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                  buttonTapped: button,
                                                  gestureType: .tap,
+                                                 isHomepageSearchBarEnabled: isHomepageSearchBarEnabled,
                                                  windowUUID: windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)
             store.dispatchLegacy(action)

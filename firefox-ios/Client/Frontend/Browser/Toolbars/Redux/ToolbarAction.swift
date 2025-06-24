@@ -114,17 +114,20 @@ class ToolbarMiddlewareAction: Action {
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
+    let isHomepageSearchBarEnabled: Bool?
 
     init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,
+         isHomepageSearchBarEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
+        self.isHomepageSearchBarEnabled = isHomepageSearchBarEnabled
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

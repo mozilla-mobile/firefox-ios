@@ -229,6 +229,71 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, StartAtHomeActionType.didBrowserBecomeActive)
     }
 
+    // MARK: - Zero Search State
+
+    func test_tapOnHomepageSearchBarAction_withBVCState_triggersGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.zeroSearch),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+            )
+        )
+        subject.newState(state: newState)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.enteredZeroSearchScreen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_didTapButtonToolbarAction_withHomepageSearchEnabled_triggersGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            ToolbarMiddlewareAction(
+                isHomepageSearchBarEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            )
+        )
+        subject.newState(state: newState)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.enteredZeroSearchScreen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_didTapButtonToolbarAction_withoutHomepageSearchEnabled_doesNotTriggersGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            ToolbarMiddlewareAction(
+                isHomepageSearchBarEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            )
+        )
+        subject.newState(state: newState)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.enteredZeroSearchScreen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,

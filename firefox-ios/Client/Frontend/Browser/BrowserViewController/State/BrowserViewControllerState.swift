@@ -131,6 +131,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return reduceStateForNavigationBrowserAction(action: action, state: state)
         } else if let action = action as? StartAtHomeAction {
             return reduceStateForStartAtHomeAction(action: action, state: state)
+        } else if let action = action as? ToolbarMiddlewareAction {
+            return reduceStateForToolbarAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -180,6 +182,27 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action.actionType {
         case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    static func reduceStateForToolbarAction(
+        action: ToolbarMiddlewareAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case ToolbarMiddlewareActionType.didTapButton:
+            guard action.isHomepageSearchBarEnabled ?? false else {
+                return defaultState(from: state, action: action)
+            }
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.zeroSearch)
+            )
         default:
             return defaultState(from: state, action: action)
         }
