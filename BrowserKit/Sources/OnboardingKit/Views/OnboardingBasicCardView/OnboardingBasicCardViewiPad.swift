@@ -47,7 +47,6 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
                     secondaryButton
                 }
             }
-            .frame(width: 500, height: 755)
             .padding(UX.CardView.verticalPadding)
             Spacer()
         }

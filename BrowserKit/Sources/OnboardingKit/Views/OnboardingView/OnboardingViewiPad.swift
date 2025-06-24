@@ -31,19 +31,20 @@ public struct OnboardingViewiPad<VM: OnboardingCardInfoModelProtocol>: View {
             VStack {
                 TabView(selection: $viewModel.pageCount) {
                     ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
-                        VStack {
-                            OnboardingBasicCardViewiPad(
-                                viewModel: card,
-                                windowUUID: windowUUID,
-                                themeManager: themeManager,
-                                onBottomButtonAction: viewModel.handleBottomButtonAction,
-                                onLinkTap: { _ in }
-                            )
-                        }
+                        OnboardingBasicCardViewiPad(
+                            viewModel: card,
+                            windowUUID: windowUUID,
+                            themeManager: themeManager,
+                            onBottomButtonAction: viewModel.handleBottomButtonAction,
+                            onLinkTap: { _ in }
+                        )
                         .tag(index)
                     }
                 }
-                .frame(width: UX.CardView.baseiPadWidth, height: UX.CardView.baseiPadHeight)
+                .frame(
+                    maxWidth: UX.CardView.baseiPadWidth,
+                    maxHeight: UX.CardView.baseiPadHeight
+                )
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 CustomPageControl(
                     currentPage: $viewModel.pageCount,
