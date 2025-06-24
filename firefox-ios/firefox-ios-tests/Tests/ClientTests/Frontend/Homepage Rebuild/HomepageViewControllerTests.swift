@@ -94,7 +94,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_scrollToTop_updatesStatusBarScrollDelegate_andSetsCollectionViewOffset() {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
-       let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
+        let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
         let newState = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             WallpaperAction(
@@ -198,6 +198,17 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidLayoutSubviews_withoutTopSitesChange_triggersNothing() throws {
+        let subject = createSubject()
+
+        subject.viewDidLayoutSubviews()
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertNotEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
     }
 
     func test_viewDidAppear_triggersHomepageAction() throws {
