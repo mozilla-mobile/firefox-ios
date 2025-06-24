@@ -55,7 +55,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        app.cells.staticTexts["Example Domain"].waitAndTap()
+        app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()
