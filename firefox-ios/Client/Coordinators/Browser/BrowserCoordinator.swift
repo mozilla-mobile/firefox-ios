@@ -30,7 +30,6 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)

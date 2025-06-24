@@ -9,7 +9,7 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
-protocol BookmarksFolderCell: BookmarksRefactorFeatureFlagProvider {
+protocol BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel
 
     @MainActor
@@ -73,20 +73,11 @@ extension BookmarkItemData: BookmarksFolderCell {
         } else {
             title = self.title
         }
-
-        if isBookmarkRefactorEnabled {
-            return OneLineTableViewCellViewModel(title: title,
-                                                 leftImageView: nil,
-                                                 accessoryView: UIImageView(image: chevronImage),
-                                                 accessoryType: .none,
-                                                 editingAccessoryView: UIImageView(image: chevronImage))
-        } else {
-            return OneLineTableViewCellViewModel(title: title,
-                                                 leftImageView: nil,
-                                                 accessoryView: nil,
-                                                 accessoryType: .disclosureIndicator,
-                                                 editingAccessoryView: nil)
-        }
+        return OneLineTableViewCellViewModel(title: title,
+                                             leftImageView: nil,
+                                             accessoryView: UIImageView(image: chevronImage),
+                                             accessoryType: .none,
+                                             editingAccessoryView: UIImageView(image: chevronImage))
     }
 
     @MainActor
