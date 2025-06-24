@@ -24,6 +24,9 @@ AppIcon:
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
+AppMenu:
+  description: Corresponds to the app's main menu.
+
 Autofill:
   description: "Corresponds to the website form autofill feature within the app: addresses autofill, credit cards autofill, and passwords autofill."
 
@@ -60,11 +63,17 @@ Passwords:
 PasswordGenerator:
   description: Corresponds to the generation of strong passwords for logins and autofill.
 
+ReaderMode:
+  description: Corresponds to the reading mode viewer for webpages.
+
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
+
+ShareSheet:
+  description: Corresponds to the iOS system share sheet for sharing content out of the app.
 
 TabsPanel:
   description: Corresponds to all things related to the tab panel.
@@ -72,9 +81,15 @@ TabsPanel:
 Toasts:
   description: Corresponds to the toast elements which can be shown over any screen in the app to provide feedback for user interaction and to sometimes revert user changes.
 
+Toolbar:
+  description: Corresponds to the toolbar which contains both the address bar and the navigation bar.
+
 TopSites:
   description: Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
     label on GitHub.
+
+TrackingProtection:
+  description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
 
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.

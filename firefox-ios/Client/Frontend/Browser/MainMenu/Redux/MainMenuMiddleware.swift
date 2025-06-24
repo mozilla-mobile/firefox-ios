@@ -183,7 +183,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         action: MainMenuAction,
         icon: UIImage? = nil
     ) {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateAccountHeader,
@@ -194,13 +194,13 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     private func handleViewDidLoadAction(action: MainMenuAction) {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.requestTabInfo
             )
         )
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader

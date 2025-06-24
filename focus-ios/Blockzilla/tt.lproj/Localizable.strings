@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Хокукларыгыз";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Куллану шартлары";
+
 /* Label on About screen */
 "About.safariBullet1" = "Хосусыйлыкны арттыру өчен күзәтүчеләрне блоклау";
 
@@ -178,6 +181,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Ябу";
 
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Янәдән тырышып карау";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Башлау";
 
@@ -214,6 +220,9 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Инкогнито режимы гына түгел";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "Хосусыйлык сәясәте";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Көйләүләрне үзгәртеп, никадәр мәгълүмат белән бүлешәчәгегез хакында үзезез карар бирегез.";
 
@@ -222,6 +231,24 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Сезнең хосусый гизү режимын киләсе дәрәҗәгә күтәрегез.";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Кабул итү һәм дәвам итү";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Дәвам итү";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Әзер";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Firefox куллану шартлары";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "Тиз. Хосусый. Бүлдерүләрсез.";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "%@ кушымтасына рәхим итегез";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Firefox %@ кушымтасына рәхим итегез!";
@@ -274,8 +301,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Эчтәлек күзәтүчеләрне блоклау";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Бу Mozilla-га актив кулланучылар санын бәяләргә ярдәм итә.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Көндәлек куллану пингы";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Караңгы";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Бу безгә браузердагы хаталарны ачыкларга һәм төзәтергә ярдәм итә.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ Сез адрес юлына язганны эзләү системагызга җибәрәчәк.";

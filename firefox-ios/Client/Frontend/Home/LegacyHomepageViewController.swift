@@ -244,7 +244,7 @@ class LegacyHomepageViewController:
             windowUUID: windowUUID,
             actionType: ToolbarActionType.traitCollectionDidChange
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: - Layout
@@ -447,11 +447,11 @@ class LegacyHomepageViewController:
            selectedTab.isFxHomeTab,
            selectedTab.url?.displayURL == nil {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             // On a website we just dismiss the keyboard
         } else {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -472,7 +472,7 @@ class LegacyHomepageViewController:
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            store.dispatch(
+            store.dispatchLegacy(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,
                     windowUUID: windowUUID,

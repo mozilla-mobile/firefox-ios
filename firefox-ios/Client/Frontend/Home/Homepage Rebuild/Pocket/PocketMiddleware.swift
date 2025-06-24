@@ -39,7 +39,7 @@ final class PocketMiddleware {
     private func getPocketDataAndUpdateState(for action: Action) {
         Task {
             let pocketStories = await pocketManager.getPocketItems()
-            store.dispatch(
+            store.dispatchLegacy(
                 PocketAction(
                     pocketStories: pocketStories,
                     windowUUID: action.windowUUID,

@@ -106,7 +106,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
     }
 
     private func dispatchTopSitesRetrievedAction(for windowUUID: WindowUUID, topSites: [TopSiteConfiguration]) {
-        store.dispatch(
+        store.dispatchLegacy(
             TopSitesAction(
                 topSites: topSites,
                 windowUUID: windowUUID,

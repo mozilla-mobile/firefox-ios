@@ -39,6 +39,7 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
+    private weak var privateHomepageViewController: PrivateHomepageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -160,8 +161,21 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
     }
 
+    func homepageScreenshotTool() -> (any Screenshotable)? {
+        if tabManager.selectedTab?.isPrivate == true {
+            return privateHomepageViewController
+        }
+        return homepageViewController ?? legacyHomepageViewController
+    }
+
+    func setHomepageVisibility(isVisible: Bool) {
+        let homepage = homepageViewController ?? legacyHomepageViewController
+        guard let homepage else { return }
+        homepage.view.isHidden = !isVisible
+    }
+
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 isZeroSearch: isZeroSearch,
                 windowUUID: windowUUID,
@@ -176,6 +190,7 @@ class BrowserCoordinator: BaseCoordinator,
             overlayManager: overlayManager
         )
         privateHomepageController.parentCoordinator = self
+        self.privateHomepageViewController = privateHomepageController
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
@@ -716,7 +731,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
+                store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
             }
         }
 
@@ -973,7 +988,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.onViewDismissed = { [weak self] in
             guard let self else { return }
             self.didDismissTabTray(from: tabTrayCoordinator)
-            store.dispatch(
+            store.dispatchLegacy(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
                     actionType: TabTrayActionType.modalSwipedToClose
@@ -1085,7 +1100,7 @@ class BrowserCoordinator: BaseCoordinator,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
             currentFrame: frame
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         let bottomSheetVM = BottomSheetViewModel(
             shouldDismissForTapOutside: true,

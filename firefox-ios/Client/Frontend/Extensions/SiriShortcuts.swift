@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Intents
 import IntentsUI
@@ -44,9 +45,11 @@ class SiriShortcuts {
     }
 
     @MainActor
-    static func manageSiri(for activityType: SiriShortcuts.activityType, in viewController: UIViewController) {
-        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
-            guard let voiceShortcuts = voiceShortcuts else { return }
+    static func manageSiri(for activityType: SiriShortcuts.activityType,
+                           in viewController: UIViewController,
+                           logger: Logger = DefaultLogger.shared) async {
+        do {
+            let voiceShortcuts = try await INVoiceShortcutCenter.shared.allVoiceShortcuts()
             let foundShortcut = voiceShortcuts.first(where: { (attempt) in
                 attempt.shortcut.userActivity?.activityType == activityType.rawValue
             })
@@ -56,6 +59,13 @@ class SiriShortcuts {
             } else {
                 self.displayAddToSiri(for: activityType, in: viewController)
             }
+        } catch {
+            logger.log(
+                "Could not get voice shortcurts: \(error.localizedDescription)",
+                level: .warning,
+                category: .settings,
+                extra: nil
+            )
         }
     }
 }

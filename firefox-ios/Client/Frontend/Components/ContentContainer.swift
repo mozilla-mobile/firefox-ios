@@ -17,7 +17,11 @@ protocol ContentContainable: UIViewController {
 }
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
-class ContentContainer: UIView {
+class ContentContainer: UIView,
+                        FeatureFlaggable {
+    private var isSwipingTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
+    }
     private var type: ContentType?
     private(set) var contentController: ContentContainable?
 
@@ -47,6 +51,16 @@ class ContentContainer: UIView {
 
     var hasNativeErrorPage: Bool {
         return type == .nativeErrorPage
+    }
+
+    /// Returns true if the previous content managed by the `ContentContainer` should be removed from screen.
+    ///
+    /// If the content shouldn't be removed then it's view hierarchy is kept on screen.
+    private var shouldRemovePreviousContent: Bool {
+        if isSwipingTabsEnabled {
+            return !hasWebView && !hasHomepage && !hasLegacyHomepage && !hasPrivateHomepage
+        }
+        return !hasWebView
     }
 
     /// Determine if the content can be added, making sure we only add once
@@ -84,16 +98,16 @@ class ContentContainer: UIView {
     /// - Parameter content: The content to update
     func update(content: ContentContainable) {
         removePreviousContent()
+        if isSwipingTabsEnabled {
+            bringSubviewToFront(content.view)
+        }
         saveContentType(content: content)
     }
 
     // MARK: - Private
 
     private func removePreviousContent() {
-        // Only remove previous content when it's the homepage or native error page.
-        // We're not removing the webview controller for now since if it's not loaded, the
-        // webview doesn't layout it's WKCompositingView which result in black screen
-        guard !hasWebView else { return }
+        guard shouldRemovePreviousContent else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()

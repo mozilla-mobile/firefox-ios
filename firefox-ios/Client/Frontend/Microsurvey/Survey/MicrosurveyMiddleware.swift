@@ -44,7 +44,7 @@ final class MicrosurveyMiddleware {
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {
-        store.dispatch(
+        store.dispatchLegacy(
             MicrosurveyPromptAction(
                 windowUUID: windowUUID,
                 actionType: MicrosurveyPromptActionType.closePrompt

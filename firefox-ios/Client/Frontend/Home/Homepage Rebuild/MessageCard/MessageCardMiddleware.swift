@@ -59,6 +59,6 @@ final class MessageCardMiddleware {
             windowUUID: windowUUID,
             actionType: MessageCardMiddlewareActionType.initialize
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
     }
 }

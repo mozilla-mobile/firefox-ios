@@ -12,7 +12,7 @@ let testURL = "https://storage.googleapis.com/mobile_test_assets/test_app/downlo
 let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
 let testBLOBFileSize = "35 bytes"
 
-class DownloadsTests: BaseTestCase {
+class DownloadsTests: FeatureFlaggedTestBase {
     override func tearDown() {
         // The downloaded file has to be removed between tests
         app.terminate()
@@ -39,6 +39,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306896
     func testDownloadFilesAppMenuFirstTime() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
@@ -49,6 +50,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306897
     func testDownloadFileContextMenu() {
+        app.launch()
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
@@ -74,6 +76,7 @@ class DownloadsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306898
     // Smoketest
     func testDownloadFile() {
+        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -91,6 +94,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306899
     func testDownloadBLOBFile() {
+        app.launch()
         downloadBLOBFile()
         mozWaitForElementToExist(app.buttons["Downloads"])
         navigator.goto(BrowserTabMenu)
@@ -105,6 +109,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306900
     func testDeleteDownloadedFile() throws {
+        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -117,6 +122,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306901
     func testShareDownloadedFile() throws {
+        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -159,6 +165,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306902
     func testLongPressOnDownloadedFile() {
+        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -219,6 +226,7 @@ class DownloadsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306903
     func testDownloadMoreThanOneFile() {
+        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 2)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -228,7 +236,9 @@ class DownloadsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306904
-    func testRemoveUserDataRemovesDownloadedFiles() {
+    func testRemoveUserDataRemovesDownloadedFiles_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
@@ -270,6 +280,7 @@ class DownloadsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306895
     // Smoketest
     func testToastButtonToGoToDownloads() {
+        app.launch()
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         app.buttons["Downloads"].waitAndTap()
         mozWaitForElementToExist(app.tables["DownloadsTable"])

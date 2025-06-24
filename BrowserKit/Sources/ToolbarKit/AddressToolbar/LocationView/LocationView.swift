@@ -259,9 +259,6 @@ final class LocationView: UIView,
             iconContainerBackgroundView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor),
             iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
-            lockIconButton.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
-            lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
-
             iconContainerStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             iconContainerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
@@ -490,7 +487,7 @@ final class LocationView: UIView,
     }
 
     private func setLockIconImage() {
-        guard let lockIconImageName else { return }
+        guard let lockIconImageName, !lockIconImageName.isEmpty else { return }
         var lockImage: UIImage?
 
         if let safeListedURLImageName {
@@ -501,7 +498,8 @@ final class LocationView: UIView,
             }
 
             if let dotImage = UIImage(named: safeListedURLImageName)?.withTintColor(safeListedURLImageColor) {
-                let image = lockImage?.overlayWith(image: dotImage, modifier: 0.4, origin: CGPoint(x: 13.5, y: 13))
+                let origin = isURLTextFieldCentered ? CGPoint(x: 10, y: 10) : CGPoint(x: 13.5, y: 13)
+                let image = lockImage?.overlayWith(image: dotImage, modifier: 0.4, origin: origin)
                 lockIconButton.setImage(image, for: .normal)
             }
         } else {

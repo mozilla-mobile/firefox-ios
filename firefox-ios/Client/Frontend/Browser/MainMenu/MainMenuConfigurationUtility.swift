@@ -141,7 +141,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -169,7 +169,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.history,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -188,7 +188,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -207,7 +207,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.downloads,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -226,7 +226,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.passwords,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -256,7 +256,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.signIn,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -275,7 +275,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.settings,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -301,7 +301,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -331,7 +331,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
                     isOptional: true,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -354,7 +354,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yId: AccessibilityIdentifiers.MainMenu.print,
                     isOptional: true,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -393,7 +393,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.bookmarkPage,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
@@ -420,7 +420,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.MainMenu.desktopSite,
             infoTitle: isActive ? .MainMenu.On : .MainMenu.Off,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapToggleUserAgent,
@@ -451,7 +451,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.moreLess,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapMoreOptions,
@@ -491,7 +491,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isOptional: true,
             infoTitle: "\(zoomLevel)",
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapZoom,
@@ -522,7 +522,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isOptional: true,
             infoTitle: nightModeIsOn ? .MainMenu.On : .MainMenu.Off,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapToggleNightMode,
@@ -557,7 +557,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
             isOptional: true,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
@@ -581,7 +581,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.newTab,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -600,7 +600,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.newPrivateTab,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -631,7 +631,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -652,7 +652,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yHint: getToolsSubmenuDescription(with: configuration),
                     a11yId: AccessibilityIdentifiers.MainMenu.tools,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapShowDetailsView,
@@ -673,7 +673,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     a11yHint: getSaveSubmenuDescription(with: configuration),
                     a11yId: AccessibilityIdentifiers.MainMenu.save,
                     action: {
-                        store.dispatch(
+                        store.dispatchLegacy(
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapShowDetailsView,
@@ -752,7 +752,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapToggleUserAgent,
@@ -806,7 +806,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapNavigateToDestination,
@@ -834,7 +834,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.print,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapNavigateToDestination,
@@ -862,7 +862,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.share,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapNavigateToDestination,
@@ -910,7 +910,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuDetailsActionType.tapZoom,
@@ -944,7 +944,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: readerModeState != .unavailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.readerView,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: GeneralBrowserActionType.showReaderMode,
@@ -952,7 +952,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                                      isActionOn: readerModeState == .active)
                     )
                 )
-                store.dispatch(
+                store.dispatchLegacy(
                     GeneralBrowserAction(
                         windowUUID: uuid,
                         actionType: GeneralBrowserActionType.showReaderMode
@@ -990,7 +990,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuDetailsActionType.tapToggleNightMode,
@@ -1039,7 +1039,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
@@ -1072,7 +1072,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
@@ -1106,7 +1106,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: tabInfo.readerModeIsAvailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
@@ -1131,7 +1131,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
             action: {
-                store.dispatch(
+                store.dispatchLegacy(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1158,7 +1158,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1177,7 +1177,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.history,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1196,7 +1196,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.downloads,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1215,7 +1215,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.passwords,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1245,7 +1245,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1270,7 +1270,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1295,7 +1295,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.getHelp,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
@@ -1317,7 +1317,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.settings,
                 action: {
-                    store.dispatch(
+                    store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
