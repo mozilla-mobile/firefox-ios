@@ -29,6 +29,10 @@ class MockGleanWrapper: GleanWrapper {
     var savedLabel: Any?
     var savedPing: Any?
 
+    var setUUIDWasCalled = false
+    var setPingBooleanWasCalled = false
+    var valueSetToPing: Bool?
+
     var savedHandleDeeplinkUrl: URL?
     var savedSetUploadIsEnabled: Bool?
     var savedTimerId = GleanTimerId(id: 0)
@@ -122,5 +126,14 @@ class MockGleanWrapper: GleanWrapper {
     func submit<ReasonCodesEnum>(ping: Ping<ReasonCodesEnum>) where ReasonCodesEnum: ReasonCodes {
         savedPing = ping
         submitPingCalled += 1
+    }
+
+    func setUUID(for metric: UuidMetricType, value: UUID) {
+        setUUIDWasCalled = true
+    }
+
+    func setPingBoolean<ReasonCodesEnum>(for ping: Ping<ReasonCodesEnum>, value: Bool) where ReasonCodesEnum: ReasonCodes {
+        setPingBooleanWasCalled = true
+        valueSetToPing = value
     }
 }
