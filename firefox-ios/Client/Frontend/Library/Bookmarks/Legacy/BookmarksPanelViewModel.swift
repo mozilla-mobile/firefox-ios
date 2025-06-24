@@ -11,7 +11,7 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
-final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
+final class BookmarksPanelViewModel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }

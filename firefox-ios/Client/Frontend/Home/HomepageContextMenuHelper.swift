@@ -29,7 +29,6 @@ enum BookmarkAction {
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol,
-                                 BookmarksRefactorFeatureFlagProvider,
                                  CanRemoveQuickActionBookmark {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private let profile: Profile

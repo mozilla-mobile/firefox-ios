@@ -12,7 +12,7 @@ extension LibraryViewController: UIToolbarDelegate {
     }
 }
 
-class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatureFlagProvider {
+class LibraryViewController: UIViewController, Themeable {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
@@ -360,7 +360,6 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     }
 
     private func updateSegmentControl() {
-        guard isBookmarkRefactorEnabled else { return }
         let panelState = getCurrentPanelState()
 
         switch panelState {

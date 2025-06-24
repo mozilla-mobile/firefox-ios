@@ -10,6 +10,14 @@ import SiteImageView
 
 import MozillaAppServices
 
+let LocalizedRootBookmarkFolderStrings = [
+    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile,
+    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
+]
+
 final class BookmarksViewController: SiteTableViewController,
                                LibraryPanel,
                                CanRemoveQuickActionBookmark,
