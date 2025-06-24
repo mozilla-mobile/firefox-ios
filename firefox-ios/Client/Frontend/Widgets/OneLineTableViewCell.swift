@@ -173,7 +173,7 @@ class OneLineTableViewCell: UITableViewCell,
         /* Ecosia: Update custom theming
         backgroundColor = theme.colors.layer5
         */
-        backgroundColor = theme.colors.ecosia.ntpCellBackground
+        backgroundColor = theme.colors.ecosia.backgroundElevation1
         titleLabel.textColor = theme.colors.textPrimary
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         accessoryView?.tintColor = theme.colors.iconSecondary

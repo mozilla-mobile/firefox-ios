@@ -156,8 +156,8 @@ final class EcosiaFindInPageBar: UIView, ThemeApplicable {
         searchTextField.attributedPlaceholder = .init(string: .localized(.findInPage),
                                                       attributes: [.foregroundColor: theme.colors.ecosia.textSecondary])
         matchCountLabel.textColor = theme.colors.ecosia.textSecondary
-        previousButton.tintColor = theme.colors.ecosia.iconPrimary
-        nextButton.tintColor = theme.colors.ecosia.iconPrimary
+        previousButton.tintColor = theme.colors.ecosia.buttonContentSecondary
+        nextButton.tintColor = theme.colors.ecosia.buttonContentSecondary
         closeButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
         topBorder.backgroundColor = theme.colors.ecosia.borderDecorative
     }

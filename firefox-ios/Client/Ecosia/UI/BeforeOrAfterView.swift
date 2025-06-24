@@ -106,7 +106,7 @@ final class BeforeOrAfterView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        container.backgroundColor = theme.colors.ecosia.modalBackground
+        container.backgroundColor = theme.colors.ecosia.backgroundSecondary
         label.textColor = theme.colors.ecosia.textPrimary
         treeImage.tintColor = theme.colors.ecosia.brandPrimary
         dot.applyTheme(theme: theme)

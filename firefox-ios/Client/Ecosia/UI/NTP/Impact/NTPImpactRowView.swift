@@ -46,18 +46,6 @@ final class NTPImpactRowView: UIView, ThemeApplicable {
         return image
     }()
 
-    /// A view displaying the total progress as part of the impact.
-    private lazy var totalProgressView: ProgressView = {
-        ProgressView(size: .init(width: UX.progressWidth, height: UX.progressHeight),
-                     lineWidth: UX.progressLineWidth)
-    }()
-
-    /// A view displaying the current progress as part of the impact.
-    private lazy var currentProgressView: ProgressView = {
-        ProgressView(size: .init(width: UX.progressWidth, height: UX.progressHeight),
-                     lineWidth: UX.progressLineWidth)
-    }()
-
     /// A label for displaying the title of the row.
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -210,33 +198,14 @@ final class NTPImpactRowView: UIView, ThemeApplicable {
         ])
     }
 
-    /// Configures and sets up the progress indicators for the impact row.
-    private func setupProgressIndicator() {
-        imageContainer.addSubview(totalProgressView)
-        imageContainer.addSubview(currentProgressView)
-
-        NSLayoutConstraint.activate([
-            totalProgressView.topAnchor.constraint(equalTo: imageContainer.topAnchor, constant: 4),
-            totalProgressView.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
-            currentProgressView.centerYAnchor.constraint(equalTo: totalProgressView.centerYAnchor),
-            currentProgressView.centerXAnchor.constraint(equalTo: totalProgressView.centerXAnchor),
-            imageView.topAnchor.constraint(equalTo: totalProgressView.topAnchor, constant: 10),
-            imageView.centerXAnchor.constraint(equalTo: totalProgressView.centerXAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: UX.imageHeightWithProgress),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor)
-        ])
-    }
-
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        backgroundColor = customBackgroundColor ?? theme.colors.ecosia.backgroundSecondary
+        backgroundColor = customBackgroundColor ?? theme.colors.ecosia.backgroundElevation1
         titleLabel.textColor = theme.colors.ecosia.textPrimary
         subtitleLabel.textColor = theme.colors.ecosia.textSecondary
         actionButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
         dividerView.backgroundColor = theme.colors.ecosia.borderDecorative
-        totalProgressView.color = theme.colors.ecosia.ntpBackground
-        currentProgressView.color = theme.colors.ecosia.brandPrimary
     }
 
     // MARK: - Actions

@@ -21,7 +21,7 @@ final class EcosiaDefaultBrowserSettings: Setting {
     override var accessoryView: UIImageView? { ecosiaDisclosureIndicator(theme: theme) }
 
     override var title: NSAttributedString? {
-        NSAttributedString(string: .localized(.defaultBrowserSettingTitle), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+        NSAttributedString(string: .localized(.defaultBrowserSettingTitle), attributes: [:])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -34,7 +34,7 @@ final class EcosiaDefaultBrowserSettings: Setting {
 
 final class SearchAreaSetting: Setting {
     override var title: NSAttributedString? {
-        NSAttributedString(string: .localized(.searchRegion), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+        NSAttributedString(string: .localized(.searchRegion), attributes: [:])
     }
 
     override var accessoryView: UIImageView? { return ecosiaDisclosureIndicator(theme: theme) }
@@ -67,7 +67,7 @@ final class SearchAreaSetting: Setting {
 
 final class SafeSearchSettings: Setting {
     override var title: NSAttributedString? {
-        NSAttributedString(string: .localized(.safeSearch), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+        NSAttributedString(string: .localized(.safeSearch), attributes: [:])
     }
 
     override var accessoryView: UIImageView? { return ecosiaDisclosureIndicator(theme: theme) }
@@ -141,7 +141,7 @@ final class PersonalSearchSettings: BoolSetting {
 
 final class EcosiaPrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .localized(.privacy), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+        return NSAttributedString(string: .localized(.privacy), attributes: [:])
     }
 
     override var url: URL? {
@@ -162,7 +162,7 @@ final class EcosiaPrivacyPolicySetting: Setting {
 
 final class EcosiaTermsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .localized(.terms), attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
+        return NSAttributedString(string: .localized(.terms), attributes: [:])
     }
 
     override var url: URL? {

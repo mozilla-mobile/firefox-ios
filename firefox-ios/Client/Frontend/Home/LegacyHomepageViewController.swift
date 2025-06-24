@@ -430,7 +430,7 @@ class LegacyHomepageViewController:
         /* Ecosia: Update NTP background
         view.backgroundColor = theme.colors.layer1
          */
-        view.backgroundColor = theme.colors.ecosia.ntpBackground
+        view.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top

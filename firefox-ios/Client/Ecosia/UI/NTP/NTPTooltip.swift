@@ -166,8 +166,8 @@ final class NTPTooltip: UICollectionReusableView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        tail.tintColor = theme.colors.ecosia.backgroundQuaternary
-        background.backgroundColor = theme.colors.ecosia.backgroundQuaternary
+        tail.tintColor = theme.colors.ecosia.buttonBackgroundPrimaryActive
+        background.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimaryActive
         textLabel.textColor = theme.colors.ecosia.textInversePrimary
         closeButton.tintColor = theme.colors.ecosia.textInversePrimary
     }

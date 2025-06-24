@@ -25,8 +25,8 @@ class FeedbackViewModel: ObservableObject {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = Color(theme.colors.ecosia.ntpBackground)
-        sectionBackgroundColor = Color(theme.colors.ecosia.barBackground)
+        backgroundColor = Color(theme.colors.ecosia.backgroundPrimaryDecorative)
+        sectionBackgroundColor = Color(theme.colors.ecosia.backgroundElevation1)
         feedbackTypeListItemBackgroundColor = Color(theme.colors.ecosia.backgroundPrimary)
         textPrimaryColor = Color(theme.colors.ecosia.textPrimary)
         textSecondaryColor = Color(theme.colors.ecosia.textSecondary)

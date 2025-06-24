@@ -345,6 +345,11 @@ class TabTrayViewController: UIViewController,
         newTabButton.tintColor = theme.colors.iconPrimary
         doneButton.tintColor = theme.colors.iconPrimary
         syncTabButton.tintColor = theme.colors.iconPrimary
+
+        // Ecosia: Add segmented control colors
+        segmentedControl.backgroundColor = theme.colors.ecosia.segmentedControlBackgroundRest
+        segmentedControl.selectedSegmentTintColor = theme.colors.ecosia.segmentedControlBackgroundActive
+        segmentedControl.tintColor = theme.colors.ecosia.buttonContentSecondary
     }
 
     // MARK: Private

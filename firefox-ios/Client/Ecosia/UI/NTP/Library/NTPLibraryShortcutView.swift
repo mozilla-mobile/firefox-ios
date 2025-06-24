@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import UIKit
+import Common
 
-class NTPLibraryShortcutView: UIView {
+class NTPLibraryShortcutView: UIView, ThemeApplicable {
     static let spacing: CGFloat = 14
     static let iconSize: CGFloat = 52
     static let titleMargin: CGFloat = 2
@@ -50,5 +51,11 @@ class NTPLibraryShortcutView: UIView {
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: Theme) {
+        title.textColor = theme.colors.ecosia.textPrimary
+        button.tintColor = theme.colors.ecosia.iconSecondary
+        button.backgroundColor = theme.colors.ecosia.backgroundElevation1
     }
 }

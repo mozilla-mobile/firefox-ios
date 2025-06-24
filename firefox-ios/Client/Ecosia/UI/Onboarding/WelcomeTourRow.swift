@@ -71,7 +71,7 @@ final class WelcomeTourRow: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.ecosia.barBackground
+        backgroundColor = theme.colors.ecosia.backgroundPrimary
         titleLabel.textColor = theme.colors.ecosia.textPrimary
         textLabel.textColor = theme.colors.ecosia.textSecondary
     }

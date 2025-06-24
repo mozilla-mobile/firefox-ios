@@ -229,8 +229,8 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = .clear
         titleLabel.textColor = theme.colors.ecosia.textPrimary
-        contentView.backgroundColor = theme.colors.ecosia.ntpIntroBackground
-        waves.tintColor = theme.colors.ecosia.ntpIntroBackground
+        contentView.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
+        waves.tintColor = theme.colors.ecosia.backgroundPrimaryDecorative
         actionButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
         skipButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
         actionButton.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimary

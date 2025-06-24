@@ -19,20 +19,14 @@ final class AddOneSeedSetting: HiddenSetting {
 
     // MARK: - Title
     override var title: NSAttributedString? {
-        return NSAttributedString(
-            string: "Debug: Add One Seed",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        )
+        return NSAttributedString(string: "Debug: Add One Seed", attributes: [:])
     }
 
     // MARK: - Status
     override var status: NSAttributedString? {
         let seedsCollected = progressManagerType.loadTotalSeedsCollected()
         let level = progressManagerType.loadCurrentLevel()
-        return NSAttributedString(
-            string: "Seeds: \(seedsCollected) | Level: \(level)",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        )
+        return NSAttributedString(string: "Seeds: \(seedsCollected) | Level: \(level)", attributes: [:])
     }
 
     // MARK: - Action
@@ -57,20 +51,14 @@ final class AddFiveSeedsSetting: HiddenSetting {
 
     // MARK: - Title
     override var title: NSAttributedString? {
-        return NSAttributedString(
-            string: "Debug: Add Five Seeds",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        )
+        return NSAttributedString(string: "Debug: Add Five Seeds", attributes: [:])
     }
 
     // MARK: - Status
     override var status: NSAttributedString? {
         let seedsCollected = progressManagerType.loadTotalSeedsCollected()
         let level = progressManagerType.loadCurrentLevel()
-        return NSAttributedString(
-            string: "Seeds: \(seedsCollected) | Level: \(level)",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        )
+        return NSAttributedString(string: "Seeds: \(seedsCollected) | Level: \(level)", attributes: [:])
     }
 
     // MARK: - Action
@@ -95,20 +83,14 @@ final class ResetSeedCounterSetting: HiddenSetting {
 
     // MARK: - Title
     override var title: NSAttributedString? {
-        return NSAttributedString(
-            string: "Debug: Reset Seed Counter",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        )
+        return NSAttributedString(string: "Debug: Reset Seed Counter", attributes: [:])
     }
 
     // MARK: - Status
     override var status: NSAttributedString? {
         let seedsCollected = progressManagerType.loadTotalSeedsCollected()
         let level = progressManagerType.loadCurrentLevel()
-        return NSAttributedString(
-            string: "Seeds: \(seedsCollected) | Level: \(level)",
-            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        )
+        return NSAttributedString(string: "Seeds: \(seedsCollected) | Level: \(level)", attributes: [:])
     }
 
     // MARK: - Action

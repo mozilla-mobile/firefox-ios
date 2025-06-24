@@ -1059,10 +1059,9 @@ extension URLBarView: ThemeApplicable {
         showQRButtonTintColor = theme.colors.textPrimary
         /* Ecosia: update background
         backgroundColor = theme.colors.layer1
-        line.backgroundColor = theme.colors.borderPrimary
          */
         backgroundColor = theme.colors.ecosia.backgroundPrimary
-        line.backgroundColor = theme.colors.ecosia.barSeparator
+        line.backgroundColor = theme.colors.borderPrimary
 
         /* Ecosia: Remove color for non-active location border state
         locationBorderColor = theme.colors.borderPrimary
@@ -1121,9 +1120,9 @@ extension URLBarView {
 
     func updateUIElementsWithTheme(_ theme: Theme) {
         progressBar.backgroundColor = theme.colors.ecosia.backgroundTertiary
-        progressBar.setGradientColors(startColor: theme.colors.ecosia.backgroundHighlighted,
-                                      middleColor: theme.colors.ecosia.backgroundHighlighted,
-                                      endColor: theme.colors.ecosia.backgroundHighlighted)
+        progressBar.setGradientColors(startColor: theme.colors.ecosia.stateLoading,
+                                      middleColor: theme.colors.ecosia.stateLoading,
+                                      endColor: theme.colors.ecosia.stateLoading)
         locationTextField?.applyUIMode(isPrivate: isPrivate, theme: theme)
         locationTextField?.applyTheme(theme: theme)
         locationActiveBorderColor = theme.colors.ecosia.buttonBackgroundPrimary

@@ -154,7 +154,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
             ($0 as? Themeable)?.applyTheme()
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
         })
-        collection.backgroundColor = theme.colors.ecosia.modalBackground
+        collection.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         updateBarAppearance()
 
         if traitCollection.userInterfaceIdiom == .pad {
@@ -168,9 +168,9 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         appearance.largeTitleTextAttributes = [.foregroundColor: theme.colors.ecosia.textPrimary]
         appearance.titleTextAttributes = [.foregroundColor: theme.colors.ecosia.textPrimary]
-        appearance.backgroundColor = theme.colors.ecosia.modalBackground
+        appearance.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         navigationItem.standardAppearance = appearance
-        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.modalBackground
+        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         navigationController?.navigationBar.tintColor = theme.colors.ecosia.brandPrimary
     }
 
@@ -208,7 +208,7 @@ private final class NewsSubHeader: UICollectionReusableView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.ecosia.modalBackground
+        backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         subtitle.textColor = theme.colors.ecosia.textSecondary
     }
 }

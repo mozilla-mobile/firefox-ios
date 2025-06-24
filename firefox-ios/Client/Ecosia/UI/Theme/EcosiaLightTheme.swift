@@ -20,12 +20,12 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
     }
 
     // MARK: - Layers
-    var layer1: UIColor { ecosia.ntpBackground }
+    var layer1: UIColor { ecosia.backgroundPrimaryDecorative }
     var layer2: UIColor { fallbackTheme.colors.layer2 }
-    var layer3: UIColor { ecosia.ntpBackground }
+    var layer3: UIColor { ecosia.backgroundPrimaryDecorative }
     var layer4: UIColor { fallbackTheme.colors.layer4 }
     var layer5: UIColor { ecosia.backgroundSecondary }
-    var layer5Hover: UIColor { ecosia.secondarySelectedBackground }
+    var layer5Hover: UIColor { ecosia.backgroundQuaternary }
     var layerScrim: UIColor { fallbackTheme.colors.layerScrim }
     var layerGradient: Gradient { fallbackTheme.colors.layerGradient }
     var layerGradientOverlay: Gradient { fallbackTheme.colors.layerGradientOverlay }
@@ -84,7 +84,7 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
     var textInvertedDisabled: UIColor { fallbackTheme.colors.textInvertedDisabled }
 
     // MARK: - Icons
-    var iconPrimary: UIColor { ecosia.iconPrimary }
+    var iconPrimary: UIColor { ecosia.buttonContentSecondary }
     var iconSecondary: UIColor { ecosia.iconSecondary }
     var iconDisabled: UIColor { fallbackTheme.colors.iconDisabled }
     var iconAccent: UIColor { ecosia.iconSecondary }
@@ -99,7 +99,7 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
     var iconRatingNeutral: UIColor { fallbackTheme.colors.iconRatingNeutral }
 
     // MARK: - Border
-    var borderPrimary: UIColor { ecosia.barSeparator }
+    var borderPrimary: UIColor { ecosia.borderDecorative }
     var borderAccent: UIColor { actionPrimary }
     var borderAccentNonOpaque: UIColor { actionPrimary }
     var borderAccentPrivate: UIColor { actionPrimary }
@@ -112,45 +112,30 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
 
 private struct EcosiaLightSemanticColors: EcosiaSemanticColors {
     var backgroundPrimary: UIColor = EcosiaColor.White
+    var backgroundPrimaryDecorative: UIColor = EcosiaColor.Gray10
     var backgroundSecondary: UIColor = EcosiaColor.Gray10
     var backgroundTertiary: UIColor = EcosiaColor.Gray20
-    var backgroundQuaternary: UIColor = EcosiaColor.DarkGreen50
+    var backgroundQuaternary: UIColor = EcosiaColor.Gray20
+    var backgroundElevation1: UIColor = EcosiaColor.White
+    var backgroundElevation2: UIColor = EcosiaColor.White
+    var backgroundBrandSecondaryAlt: UIColor = EcosiaColor.DarkGreen50
     var borderDecorative: UIColor = EcosiaColor.Gray30
     var brandPrimary: UIColor = EcosiaColor.Green50
     var buttonBackgroundPrimary: UIColor = EcosiaColor.Green50
-    var buttonBackgroundPrimaryActive: UIColor = EcosiaColor.Green70 // ⚠️ Mismatch
+    var buttonBackgroundPrimaryActive: UIColor = EcosiaColor.DarkGreen50
     var buttonBackgroundSecondary: UIColor = EcosiaColor.White
-    var buttonBackgroundSecondaryHover: UIColor = EcosiaColor.Gray10 // ⚠️ Mismatch
+    var buttonBackgroundSecondaryHover: UIColor = EcosiaColor.Gray30
     var buttonContentSecondary: UIColor = EcosiaColor.Gray70
     var buttonBackgroundTransparentActive: UIColor = EcosiaColor.Green70.withAlphaComponent(0.24)
-    var backgroundHighlighted: UIColor = EcosiaColor.Green10
-    var iconPrimary: UIColor = EcosiaColor.Black // ⚠️ Mismatch
-    var iconSecondary: UIColor = EcosiaColor.Green60 // ⚠️ Mismatch
+    var iconSecondary: UIColor = EcosiaColor.Green50
     var iconDecorative: UIColor = EcosiaColor.Gray50
-    var stateError: UIColor = EcosiaColor.Red40
-    var stateInformation: UIColor = EcosiaColor.Blue50 // ⚠️ No match
+    var iconInverseStrong: UIColor = EcosiaColor.White
+    var segmentedControlBackgroundActive: UIColor = EcosiaColor.White
+    var segmentedControlBackgroundRest: UIColor = EcosiaColor.Gray30
     var stateDisabled: UIColor = EcosiaColor.Gray30
-    var textPrimary: UIColor = EcosiaColor.Black // ⚠️ Mismatch
+    var stateError: UIColor = EcosiaColor.Red50
+    var stateLoading: UIColor = EcosiaColor.Green10
+    var textPrimary: UIColor = EcosiaColor.Gray70
     var textInversePrimary: UIColor = EcosiaColor.White
     var textSecondary: UIColor = EcosiaColor.Gray50
-    var textTertiary: UIColor = EcosiaColor.White
-
-    // MARK: Unmapped Snowflakes
-    var barBackground: UIColor = EcosiaColor.White
-    var barSeparator: UIColor = .Photon.Grey20
-    var ntpCellBackground: UIColor = EcosiaColor.White
-    var ntpBackground: UIColor = EcosiaColor.Gray20
-    var ntpIntroBackground: UIColor = EcosiaColor.White
-    var impactMultiplyCardBackground: UIColor = EcosiaColor.White
-    var newsPlaceholder: UIColor = EcosiaColor.Gray10
-    var modalBackground: UIColor = EcosiaColor.Gray20
-    var secondarySelectedBackground: UIColor = EcosiaColor.Gray10
-    var buttonBackgroundNTPCustomization: UIColor = EcosiaColor.Gray10
-    var privateButtonBackground: UIColor = .Photon.Grey70
-    var tabSelectedPrivateBackground: UIColor = EcosiaColor.Gray80
-    var toastImageTint: UIColor = EcosiaColor.LightGreen30
-    var newSeedCollectedCircle: UIColor = EcosiaColor.Peach30
-    var tabTrayScreenshotBackground: UIColor = EcosiaColor.White
-    var tableViewRowText: UIColor = .Photon.Grey90
-    var impactNavigationBarTitleBackground: UIColor = EcosiaColor.DarkGreen50
 }

@@ -232,12 +232,12 @@ class ButtonToast: Toast {
         /* Ecosia: Add image tintColor to look like v104
         imageView.tintColor = theme.colors.textInverted
          */
-        imageView.tintColor = theme.colors.ecosia.toastImageTint
+        imageView.tintColor = theme.colors.ecosia.iconInverseStrong
         roundedButton.setTitleColor(theme.colors.textInverted, for: [])
         /* Ecosia: Add `horizontalStackView` background as the Toast view is made clear
            so to have the padding effect from bottom, left and right
          */
-        horizontalStackView.backgroundColor = theme.colors.ecosia.backgroundQuaternary
+        horizontalStackView.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimaryActive
         // Ecosia: Review ToastView to look like v104
         // roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }

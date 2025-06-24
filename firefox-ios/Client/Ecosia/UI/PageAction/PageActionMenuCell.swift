@@ -178,7 +178,7 @@ extension PageActionMenuCell {
                    at indexPath: IndexPath,
                    theme: Theme) {
 
-        backgroundColor = theme.colors.ecosia.impactMultiplyCardBackground
+        backgroundColor = theme.colors.ecosia.backgroundElevation1
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         guard let item = actions.items.first else { return }
 

@@ -618,7 +618,7 @@ class SearchViewController: SiteTableViewController,
         }
 
         // Ecosia: Update cell background
-        cell.backgroundColor = currentTheme().colors.ecosia.ntpCellBackground
+        cell.backgroundColor = currentTheme().colors.ecosia.backgroundElevation1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -680,7 +680,7 @@ class SearchViewController: SiteTableViewController,
         /* Ecosia: Update background
         searchEngineContainerView.layer.backgroundColor = currentTheme().colors.layer1.cgColor
         */
-        searchEngineContainerView.layer.backgroundColor = currentTheme().colors.ecosia.barBackground.withAlphaComponent(0.8).cgColor
+        searchEngineContainerView.layer.backgroundColor = currentTheme().colors.ecosia.backgroundPrimary.cgColor
 
         searchEngineContainerView.layer.shadowColor = currentTheme().colors.shadowDefault.cgColor
         reloadData()
@@ -752,7 +752,7 @@ class SearchViewController: SiteTableViewController,
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
 
                 // Ecosia: Enrich background
-                oneLineCell.backgroundColor = currentTheme().colors.ecosia.barBackground
+                oneLineCell.backgroundColor = currentTheme().colors.ecosia.backgroundElevation1
                 cell = oneLineCell
             }
         case .openedTabs:
@@ -768,7 +768,7 @@ class SearchViewController: SiteTableViewController,
                     twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
                 }
                 // Ecosia: Enrich background
-                twoLineCell.backgroundColor = currentTheme().colors.ecosia.barBackground
+                twoLineCell.backgroundColor = currentTheme().colors.ecosia.backgroundElevation1
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -786,7 +786,7 @@ class SearchViewController: SiteTableViewController,
                 let urlString = remoteTab.URL.absoluteString
                 twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
                 // Ecosia: Enrich background
-                twoLineCell.backgroundColor = currentTheme().colors.ecosia.barBackground
+                twoLineCell.backgroundColor = currentTheme().colors.ecosia.backgroundElevation1
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }

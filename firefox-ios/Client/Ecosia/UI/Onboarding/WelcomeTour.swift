@@ -355,8 +355,8 @@ final class WelcomeTour: UIViewController, Themeable {
     // MARK: Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        view.backgroundColor = theme.colors.ecosia.modalBackground
-        waves.tintColor = theme.colors.ecosia.modalBackground
+        view.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
+        waves.tintColor = theme.colors.ecosia.backgroundPrimaryDecorative
         titleLabel.textColor = theme.colors.ecosia.textPrimary
         subtitleLabel.textColor = theme.colors.ecosia.textSecondary
         skipButton?.tintColor = theme.colors.ecosia.buttonBackgroundPrimary

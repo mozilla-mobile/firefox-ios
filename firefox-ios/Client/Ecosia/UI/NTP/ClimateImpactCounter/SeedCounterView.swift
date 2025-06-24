@@ -101,7 +101,8 @@ struct NewSeedCollectedCircleView: View {
     }
 
     func applyTheme(theme: Theme) {
-        newSeedCollectedCircleColor = Color(theme.colors.ecosia.newSeedCollectedCircle)
+        let peach = theme.type == .dark ? EcosiaColor.Peach50 : EcosiaColor.Peach30
+        newSeedCollectedCircleColor = Color(peach)
     }
 }
 

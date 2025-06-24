@@ -130,7 +130,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         cellBackground.isHidden = false
          */
         cellBackground.backgroundColor = colors.ecosia.buttonBackgroundPrimary
-        backgroundView?.backgroundColor = colors.ecosia.ntpCellBackground
 
         let tint = isSelectedTab ? colors.ecosia.textInversePrimary : colors.ecosia.textPrimary
         titleText.textColor = tint

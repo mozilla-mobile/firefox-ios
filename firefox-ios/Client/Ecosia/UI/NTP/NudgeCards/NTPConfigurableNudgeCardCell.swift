@@ -59,7 +59,7 @@ class NTPConfigurableNudgeCardCell: UICollectionViewCell, ThemeApplicable, Reusa
         let nudgeCardStyle = NudgeCardStyle(backgroundColor: theme.colors.ecosia.backgroundSecondary.color,
                                             textPrimaryColor: theme.colors.ecosia.textPrimary.color,
                                             textSecondaryColor: theme.colors.ecosia.textSecondary.color,
-                                            closeButtonTextColor: theme.colors.ecosia.iconDecorative.color,
+                                            closeButtonTextColor: theme.colors.ecosia.buttonContentSecondary.color,
                                             actionButtonTextColor: theme.colors.ecosia.buttonBackgroundPrimary.color)
         let configurableCardViewModel = NudgeCardViewModel(title: viewModel.title,
                                                            description: viewModel.description,

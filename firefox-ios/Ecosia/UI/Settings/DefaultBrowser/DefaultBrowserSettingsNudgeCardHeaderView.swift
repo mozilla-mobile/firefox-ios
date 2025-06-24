@@ -61,10 +61,10 @@ public final class DefaultBrowserSettingsNudgeCardHeaderView: UITableViewHeaderF
     public func configure(theme: Theme?) {
         self.theme = theme
         guard let theme else { return }
-        let nudgeCardStyle = NudgeCardStyle(backgroundColor: Color(theme.colors.ecosia.barBackground),
+        let nudgeCardStyle = NudgeCardStyle(backgroundColor: Color(theme.colors.ecosia.backgroundElevation1),
                                             textPrimaryColor: Color(theme.colors.ecosia.textPrimary),
                                             textSecondaryColor: Color(theme.colors.ecosia.textSecondary),
-                                            closeButtonTextColor: Color(theme.colors.ecosia.iconDecorative),
+                                            closeButtonTextColor: Color(theme.colors.ecosia.buttonContentSecondary),
                                             actionButtonTextColor: Color(theme.colors.ecosia.buttonBackgroundPrimary))
         let configurableCardViewModel = NudgeCardViewModel(title: .localized(.defaultBrowserCardTitle),
                                                            description: .localized(.defaultBrowserCardDescription),

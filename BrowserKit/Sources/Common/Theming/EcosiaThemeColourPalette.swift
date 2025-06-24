@@ -11,9 +11,13 @@ import UIKit
 public protocol EcosiaSemanticColors {
     // MARK: - Background
     var backgroundPrimary: UIColor { get }
+    var backgroundPrimaryDecorative: UIColor { get }
     var backgroundSecondary: UIColor { get }
     var backgroundTertiary: UIColor { get }
     var backgroundQuaternary: UIColor { get }
+    var backgroundElevation1: UIColor { get }
+    var backgroundElevation2: UIColor { get }
+    var backgroundBrandSecondaryAlt: UIColor { get }
 
     // MARK: - Border
     var borderDecorative: UIColor { get }
@@ -29,41 +33,24 @@ public protocol EcosiaSemanticColors {
     var buttonContentSecondary: UIColor { get }
     var buttonBackgroundTransparentActive: UIColor { get }
 
+    // MARK: - Icon
+    var iconSecondary: UIColor { get }
+    var iconDecorative: UIColor { get }
+    var iconInverseStrong: UIColor { get }
+
+    // MARK: - Segmented Control
+    var segmentedControlBackgroundActive: UIColor { get }
+    var segmentedControlBackgroundRest: UIColor { get }
+
     // MARK: - State
-    var stateInformation: UIColor { get }
     var stateDisabled: UIColor { get }
+    var stateError: UIColor { get }
+    var stateLoading: UIColor { get }
 
     // MARK: - Text
     var textPrimary: UIColor { get }
     var textInversePrimary: UIColor { get }
     var textSecondary: UIColor { get }
-    var textTertiary: UIColor { get }
-
-    // MARK: - Snowflakes ⚠️ to be assessed ⚠️
-    var iconPrimary: UIColor { get }
-    var iconSecondary: UIColor { get }
-    var iconDecorative: UIColor { get }
-    var stateError: UIColor { get }
-    var backgroundHighlighted: UIColor { get } // Mapped as "loading"
-
-    // MARK: Unmapped Snowflakes
-    var barBackground: UIColor { get } // Light.backgroundPrimary + Dark.backgroundSecondary
-    var barSeparator: UIColor { get }
-    var ntpCellBackground: UIColor { get }
-    var ntpBackground: UIColor { get } // Light.backgroundTertiary + Dark.backgroundPrimary
-    var ntpIntroBackground: UIColor { get } // == barBackground
-    var impactMultiplyCardBackground: UIColor { get } // == ntpCellBackground
-    var newsPlaceholder: UIColor { get }
-    var modalBackground: UIColor { get } // Light.backgroundTertiary + Dark.backgroundSecondary
-    var secondarySelectedBackground: UIColor { get }
-    var buttonBackgroundNTPCustomization: UIColor { get }
-    var privateButtonBackground: UIColor { get }
-    var tabSelectedPrivateBackground: UIColor { get }
-    var toastImageTint: UIColor { get }
-    var newSeedCollectedCircle: UIColor { get }
-    var tabTrayScreenshotBackground: UIColor { get }
-    var tableViewRowText: UIColor { get }
-    var impactNavigationBarTitleBackground: UIColor { get }
 }
 
 public protocol EcosiaThemeColourPalette: ThemeColourPalette {
@@ -74,9 +61,13 @@ public protocol EcosiaThemeColourPalette: ThemeColourPalette {
 /// Should never end up in production UI!
 class FakeEcosiaSemanticColors: EcosiaSemanticColors {
     var backgroundPrimary: UIColor = .systemGray
+    var backgroundPrimaryDecorative: UIColor = .systemGray
     var backgroundSecondary: UIColor = .systemGray
     var backgroundTertiary: UIColor = .systemGray
     var backgroundQuaternary: UIColor = .systemGray
+    var backgroundElevation1: UIColor = .systemGray
+    var backgroundElevation2: UIColor = .systemGray
+    var backgroundBrandSecondaryAlt: UIColor = .systemGray
     var borderDecorative: UIColor = .systemGray
     var brandPrimary: UIColor = .systemGray
     var buttonBackgroundPrimary: UIColor = .systemGray
@@ -85,32 +76,15 @@ class FakeEcosiaSemanticColors: EcosiaSemanticColors {
     var buttonBackgroundSecondaryHover: UIColor = .systemGray
     var buttonContentSecondary: UIColor = .systemGray
     var buttonBackgroundTransparentActive: UIColor = .systemGray
-    var iconPrimary: UIColor = .systemGray
     var iconSecondary: UIColor = .systemGray
     var iconDecorative: UIColor = .systemGray
-    var stateError: UIColor = .systemGray
-    var stateInformation: UIColor = .systemGray
+    var iconInverseStrong: UIColor = .systemGray
+    var segmentedControlBackgroundActive: UIColor = .systemGray
+    var segmentedControlBackgroundRest: UIColor = .systemGray
     var stateDisabled: UIColor = .systemGray
+    var stateError: UIColor = .systemGray
+    var stateLoading: UIColor = .systemGray
     var textPrimary: UIColor = .systemGray
     var textInversePrimary: UIColor = .systemGray
     var textSecondary: UIColor = .systemGray
-    var textTertiary: UIColor = .systemGray
-    var backgroundHighlighted: UIColor = .systemGray
-    var barBackground: UIColor = .systemGray
-    var barSeparator: UIColor = .systemGray
-    var ntpCellBackground: UIColor = .systemGray
-    var ntpBackground: UIColor = .systemGray
-    var ntpIntroBackground: UIColor = .systemGray
-    var impactMultiplyCardBackground: UIColor = .systemGray
-    var newsPlaceholder: UIColor = .systemGray
-    var modalBackground: UIColor = .systemGray
-    var secondarySelectedBackground: UIColor = .systemGray
-    var buttonBackgroundNTPCustomization: UIColor = .systemGray
-    var privateButtonBackground: UIColor = .systemGray
-    var tabSelectedPrivateBackground: UIColor = .systemGray
-    var toastImageTint: UIColor = .systemGray
-    var newSeedCollectedCircle: UIColor = .systemGray
-    var tabTrayScreenshotBackground: UIColor = .systemGray
-    var tableViewRowText: UIColor = .systemGray
-    var impactNavigationBarTitleBackground: UIColor = .systemGray
 }

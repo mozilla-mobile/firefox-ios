@@ -212,11 +212,11 @@ final class NTPNewsCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     func applyTheme(theme: Theme) {
-        defaultBackgroundColor = theme.colors.ecosia.ntpCellBackground
-        selectedBackgroundColor = theme.colors.ecosia.secondarySelectedBackground
+        defaultBackgroundColor = theme.colors.ecosia.backgroundElevation1
+        selectedBackgroundColor = theme.colors.ecosia.backgroundQuaternary
         background.backgroundColor = defaultBackgroundColor
         placeholder.tintColor = theme.colors.ecosia.iconDecorative
-        placeholder.backgroundColor = theme.colors.ecosia.newsPlaceholder
+        placeholder.backgroundColor = theme.colors.ecosia.backgroundQuaternary
         border.backgroundColor = theme.colors.ecosia.borderDecorative
         title.textColor = theme.colors.ecosia.textPrimary
         bottomLabel.textColor = theme.colors.ecosia.textSecondary

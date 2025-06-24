@@ -77,7 +77,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         detailTextLabel?.textColor = viewModel?.detailTextColor ?? theme.colors.textSecondary
         // Ecosia: Update background color
         // backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer5
-        backgroundColor = viewModel?.backgroundColor ?? theme.colors.ecosia.barBackground
+        backgroundColor = viewModel?.backgroundColor ?? theme.colors.ecosia.backgroundElevation1
         tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
     }
 

@@ -425,15 +425,15 @@ class MultiplyImpact: UIViewController, Themeable {
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
-        view.backgroundColor = theme.colors.ecosia.modalBackground
+        view.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         inviteButton.backgroundColor = theme.colors.ecosia.brandPrimary
         inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
         inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .highlighted)
         inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .selected)
         learnMoreButton?.setTitleColor(theme.colors.ecosia.brandPrimary, for: .normal)
-        waves?.tintColor = theme.colors.ecosia.modalBackground
-        topBackground?.backgroundColor = theme.colors.ecosia.impactNavigationBarTitleBackground
-        forestOverlay?.backgroundColor = theme.colors.ecosia.modalBackground
+        waves?.tintColor = theme.colors.ecosia.backgroundPrimaryDecorative
+        topBackground?.backgroundColor = theme.colors.ecosia.backgroundBrandSecondaryAlt
+        forestOverlay?.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         subtitle?.textColor = UX.hardcodedDarkTextColor
         copyControl?.backgroundColor = theme.colors.ecosia.backgroundSecondary
         copyControl?.layer.borderColor = theme.colors.ecosia.borderDecorative.cgColor
@@ -445,7 +445,7 @@ class MultiplyImpact: UIViewController, Themeable {
         }
 
         [sharing, flowBackground].forEach {
-            $0?.backgroundColor = theme.colors.ecosia.impactMultiplyCardBackground
+            $0?.backgroundColor = theme.colors.ecosia.backgroundElevation1
         }
 
         [firstStep, secondStep, thirdStep, fourthStep].forEach {
@@ -456,7 +456,7 @@ class MultiplyImpact: UIViewController, Themeable {
             $0?.backgroundColor = theme.colors.ecosia.borderDecorative
         }
 
-        referralImpactRowView.customBackgroundColor = theme.colors.ecosia.impactMultiplyCardBackground
+        referralImpactRowView.customBackgroundColor = theme.colors.ecosia.backgroundElevation1
         referralImpactRowView.applyTheme(theme: theme)
 
         updateBarAppearance(theme: theme)
@@ -467,11 +467,11 @@ class MultiplyImpact: UIViewController, Themeable {
         appearance.configureWithOpaqueBackground()
         appearance.largeTitleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
         appearance.titleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
-        appearance.backgroundColor = theme.colors.ecosia.impactNavigationBarTitleBackground
+        appearance.backgroundColor = theme.colors.ecosia.backgroundBrandSecondaryAlt
         appearance.shadowColor = nil
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.impactNavigationBarTitleBackground
+        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.backgroundBrandSecondaryAlt
         navigationController?.navigationBar.tintColor = theme.type == .light ? UX.hardcodedDarkTextColor : theme.colors.ecosia.brandPrimary
     }
 

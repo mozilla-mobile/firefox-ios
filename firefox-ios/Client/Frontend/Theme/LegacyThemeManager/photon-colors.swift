@@ -8,10 +8,6 @@ import UIKit
 
 extension UIColor {
     struct Photon {
-        // Ecosia: Add legacy color references needed on Ecosia code (to be removed)
-        static let DarkGrey30 = UIColor(rgb: 0x42414d)
-        static let Grey70 = UIColor(rgb: 0x38383d)
-
         static let DarkGrey60 = UIColor(rgb: 0x2b2a33)
         static let DarkGrey90 = UIColor(rgb: 0x15141a)
 

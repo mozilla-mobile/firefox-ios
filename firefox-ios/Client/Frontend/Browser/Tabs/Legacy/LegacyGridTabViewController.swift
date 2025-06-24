@@ -709,17 +709,9 @@ extension LegacyGridTabViewController {
                                            style: .destructive,
                                            handler: { _ in self.closeTabsTrayBackground() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        /* Ecosia: Update cancel button color
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: nil),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
-         */
-        let closeAllAction = UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
-                                           style: .cancel,
-                                           handler: nil)
-        closeAllAction.setValue(currentTheme().colors.ecosia.buttonBackgroundPrimaryActive, forKey: "titleTextColor")
-        controller.addAction(closeAllAction,
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)

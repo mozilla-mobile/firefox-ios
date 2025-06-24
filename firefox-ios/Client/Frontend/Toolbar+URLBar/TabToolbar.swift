@@ -148,16 +148,14 @@ extension TabToolbar: ThemeApplicable, PrivateModeUI {
     func applyTheme(theme: Theme) {
         /* Ecosia: Update theme colors
         backgroundColor = theme.colors.layer1
+         */
+        backgroundColor = theme.colors.ecosia.backgroundPrimary
+
         actionButtons.forEach { $0.applyTheme(theme: theme) }
 
+        // Ecosia: Badges are not used
         privateModeBadge.badge.tintBackground(color: theme.colors.layer1)
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
-         */
-        backgroundColor = theme.colors.ecosia.barBackground
-        actionButtons.forEach { $0.applyTheme(theme: theme) }
-
-        privateModeBadge.badge.tintBackground(color: theme.colors.ecosia.barBackground)
-        warningMenuBadge.badge.tintBackground(color: theme.colors.ecosia.barBackground)
     }
 
     func applyUIMode(isPrivate: Bool, theme: Theme) {

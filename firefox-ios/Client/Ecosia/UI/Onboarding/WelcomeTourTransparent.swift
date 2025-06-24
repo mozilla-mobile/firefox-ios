@@ -102,6 +102,6 @@ final class WelcomeTourTransparent: UIView, ThemeApplicable {
 
     func applyThemeToMonthView(theme: Theme) {
         monthView.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimary
-        monthViewLabel.textColor = theme.colors.ecosia.textTertiary
+        monthViewLabel.textColor = theme.colors.ecosia.textInversePrimary
     }
 }

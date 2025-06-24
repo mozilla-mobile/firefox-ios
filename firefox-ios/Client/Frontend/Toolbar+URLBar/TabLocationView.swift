@@ -527,9 +527,6 @@ extension TabLocationView: ThemeApplicable {
         setURLTextfieldPlaceholder(theme: theme)
         urlTextField.textColor = theme.colors.textPrimary
 
-        // Ecosia: Update `urlTextField` theme
-        urlTextField.tintColor = theme.colors.ecosia.stateInformation
-
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)

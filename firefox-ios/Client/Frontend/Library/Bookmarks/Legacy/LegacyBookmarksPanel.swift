@@ -163,7 +163,6 @@ class LegacyBookmarksPanel: SiteTableViewController,
         tableView.allowsSelectionDuringEditing = true
         tableView.dragInteractionEnabled = false
         // Ecosia: Update TableView properties
-        tableView.backgroundColor = currentTheme().colors.ecosia.modalBackground
         tableView.contentInset.top = 32
     }
 

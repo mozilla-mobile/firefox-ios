@@ -61,9 +61,9 @@ final class FilterController: ThemedTableViewController {
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
         }
 
-        view.backgroundColor = theme.colors.ecosia.ntpBackground
+        view.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         tableView.tintColor = theme.colors.ecosia.brandPrimary
         tableView.separatorColor = theme.colors.ecosia.borderDecorative
-        tableView.backgroundColor = theme.colors.ecosia.ntpBackground
+        tableView.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
     }
 }

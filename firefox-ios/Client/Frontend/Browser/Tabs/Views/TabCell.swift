@@ -152,7 +152,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     func applyTheme(theme: Theme) {
         headerView.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
-        /* Ecosia: Add legacy theme references
+        /* Ecosia: Add custom theme references
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary
@@ -160,7 +160,11 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
          */
-        self.ecosiaApplyTheme(theme: theme)
+        backgroundHolder.backgroundColor = theme.colors.ecosia.backgroundPrimary
+        closeButton.tintColor = theme.colors.ecosia.textPrimary
+        titleText.textColor = theme.colors.ecosia.textPrimary
+        screenshotView.backgroundColor = theme.colors.ecosia.backgroundElevation1
+        favicon.tintColor = theme.colors.ecosia.textPrimary
     }
 
     // MARK: - Configuration
@@ -315,44 +319,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             return String.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else {
             return baseName
-        }
-    }
-}
-
-// Ecosia: Add legacy theme references
-extension TabCell {
-
-    func ecosiaApplyTheme(theme: Theme) {
-
-        backgroundHolder.backgroundColor = theme.colors.ecosia.backgroundPrimary
-        screenshotView.backgroundColor = theme.colors.ecosia.tabTrayScreenshotBackground
-
-        let isPrivate = tabModel?.isPrivate == true
-        let activeBGColor = isPrivate ?
-            theme.colors.ecosia.tabSelectedPrivateBackground :
-            theme.colors.ecosia.buttonBackgroundPrimary
-
-        titleText.textColor = theme.colors.ecosia.textPrimary
-        favicon.tintColor = theme.colors.ecosia.textPrimary
-        closeButton.tintColor = theme.colors.ecosia.textPrimary
-
-        layer.shadowOffset = .zero
-
-        if isSelectedTab {
-            // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
-            layer.masksToBounds = false
-            layer.shadowOpacity = 1
-            layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
-            layer.shadowColor = activeBGColor.cgColor
-        } else if theme.type == .dark {
-            layer.masksToBounds = true
-            layer.shadowOpacity = 0
-        } else {
-            layer.masksToBounds = false
-            layer.shadowOffset = .init(width: 0, height: 1)
-            layer.shadowOpacity = 1.0
-            layer.shadowColor = UIColor(white: 0.059, alpha: 0.18).cgColor
-            layer.shadowRadius = 2
         }
     }
 }

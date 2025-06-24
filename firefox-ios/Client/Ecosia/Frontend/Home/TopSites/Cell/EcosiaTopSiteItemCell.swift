@@ -228,7 +228,7 @@ extension TopSiteItemCell: ThemeApplicable {
         pinImageView.tintColor = textColor ?? theme.colors.iconPrimary
         titleLabel.textColor = textColor ?? theme.colors.textPrimary
         selectedOverlay.backgroundColor = theme.colors.layer5Hover.withAlphaComponent(0.25)
-        rootContainer.backgroundColor = theme.colors.ecosia.buttonBackgroundSecondary
+        rootContainer.backgroundColor = theme.colors.ecosia.backgroundElevation1
     }
 }
 
