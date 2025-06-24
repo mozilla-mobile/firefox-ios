@@ -80,9 +80,8 @@ extension BrowserViewController: DownloadQueueDelegate {
             // Handle Passbook Pass downloads
             if let download = (download as? BlobDownload),
                OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
-                passBookHelper = OpenPassBookHelper(presenter: self)
-                passBookHelper?.open(data: download.data)
-                self.passBookHelper = nil
+                let passBookHelper = OpenPassBookHelper(presenter: self)
+                passBookHelper.open(data: download.data)
             }
 
             // Handle toast notification

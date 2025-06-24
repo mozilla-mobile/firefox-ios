@@ -116,7 +116,6 @@ class BrowserViewController: UIViewController,
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
     var currentMiddleButtonState: MiddleButtonState?
-    var passBookHelper: OpenPassBookHelper?
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress

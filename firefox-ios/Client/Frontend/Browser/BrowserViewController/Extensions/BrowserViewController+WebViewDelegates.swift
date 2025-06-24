@@ -686,11 +686,10 @@ extension BrowserViewController: WKNavigationDelegate {
         if let mimeType = response.mimeType, OpenPassBookHelper.shouldOpenWithPassBook(
             mimeType: mimeType,
             forceDownload: forceDownload) {
-            passBookHelper = OpenPassBookHelper(presenter: self)
             // Open our helper and nullifies the helper when done with it
             Task {
-                await passBookHelper?.open(response: response, cookieStore: cookieStore)
-                self.passBookHelper = nil
+                let passBookHelper = OpenPassBookHelper(presenter: self)
+                await passBookHelper.open(response: response, cookieStore: cookieStore)
             }
 
             // Cancel this response from the webview.
