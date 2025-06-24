@@ -1,1 +1,1 @@
-Arreglamos algunos bugs y añadimos algunas mejoras de estabilidad.
+Hemos solucionado algunos bugs y añadido algunas mejoras de estabilidad.
