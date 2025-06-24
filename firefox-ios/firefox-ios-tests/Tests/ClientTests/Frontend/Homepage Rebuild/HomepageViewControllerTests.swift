@@ -178,8 +178,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_viewDidLayoutSubviews_triggersHomepageAction() throws {
+    func test_viewDidLayoutSubviews_withTopSitesChange_triggersHomepageAction() throws {
         let subject = createSubject()
+
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                numberOfTopSitesPerRow: 10,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.viewDidLayoutSubviews
+            )
+        )
+        subject.newState(state: newState)
 
         subject.viewDidLayoutSubviews()
         let actionCalled = try XCTUnwrap(
