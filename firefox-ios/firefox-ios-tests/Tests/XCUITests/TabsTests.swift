@@ -131,6 +131,39 @@ class TabsTests: FeatureFlaggedTestBase {
         XCTAssertEqual(value, urlValueLong)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2354447
+    func testSwitchBetweenTabs_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Open two urls from tab tray and switch between them
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.openURL(urlExample)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+
+        app.cells.elementContainingText(urlLabel).waitAndTap()
+        guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String else {
+            XCTFail("Failed to retrieve the URL value from the Mozilla browser's URL bar")
+            return
+        }
+        XCTAssertEqual(valueMozilla, urlValueLong)
+
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+
+        app.cells.elementContainingText(urlLabelExample).waitAndTap()
+        guard let value = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String else {
+            XCTFail("Failed to retrieve the URL value from the Mozilla browser's URL bar")
+            return
+        }
+        XCTAssertEqual(value, urlValueLong)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2354449
     func testCloseOneTab_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
@@ -159,7 +192,8 @@ class TabsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
-    func testCloseAllTabsUndo() {
+    func testCloseAllTabsUndo_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
@@ -316,6 +350,25 @@ class TabsTests: FeatureFlaggedTestBase {
         if !iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
         }
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        // Close all tabs and check that the number of tabs is correct
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2354580
+    func testCloseAllTabsPrivateMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // A different tab than home is open to do the proper checks
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        waitForTabsButton()
+        // Add several tabs from tab tray menu and check that the  number is correct before closing all
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)

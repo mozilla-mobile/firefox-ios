@@ -79,6 +79,25 @@ class ZoomingTests: FeatureFlaggedTestBase {
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306949
+    func testZoomForceCloseFirefox_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        openWebsiteAndReachZoomSetting(website: 0)
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        // Tap on + and - buttons
+        zoomIn()
+        closeFromAppSwitcherAndRelaunch()
+        openWebsiteAndReachZoomSetting(website: 0)
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 150%")
+        zoomOut()
+        zoomOutButton.waitAndTap()
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
     func testSwitchingZoomedTabs_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")

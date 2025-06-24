@@ -166,6 +166,40 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306856
+    func testPrivateModeOffAlsoRemovesFromNormalMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        if skipPlatform { return }
+
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(RequestDesktopSite) // toggle on
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        // is now on in normal mode
+
+        navigator.nowAt(BrowserTab)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(RequestDesktopSite) // toggle off
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        // is now off in private, mode, confirm it is off in normal mode
+
+        navigator.nowAt(BrowserTab)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306857
     func testPrivateModeOnHasNoAffectOnNormalMode_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
@@ -186,6 +220,33 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        if #available(iOS 16, *) {
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306857
+    func testPrivateModeOnHasNoAffectOnNormalMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        if skipPlatform { return }
+
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(RequestDesktopSite)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        navigator.nowAt(BrowserTab)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         if #available(iOS 16, *) {
