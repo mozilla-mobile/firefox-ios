@@ -73,6 +73,10 @@ struct AccessibilityIdentifiers {
     }
 
     struct MainMenu {
+        struct SiteProtectionsHeaderView {
+            static let header = "MainMenu.SiteProtectionHeader"
+        }
+
         struct HeaderView {
             static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"
@@ -88,6 +92,7 @@ struct AccessibilityIdentifiers {
         static let newTab = "MainMenu.NewTab"
         static let newPrivateTab = "MainMenu.NewPrivateTab"
         static let switchToDesktopSite = "MainMenu.SwitchToDesktopSite"
+        static let desktopSite = "MainMenu.DesktopSite"
         static let findInPage = "MainMenu.FindInPage"
         static let tools = "MainMenu.Tools"
         static let save = "MainMenu.Save"
@@ -102,6 +107,7 @@ struct AccessibilityIdentifiers {
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
+        static let bookmarkPage = "MainMenu.BookmarkPage"
         static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
         static let saveAsPDF = "MainMenu.SaveAsPDF"
@@ -203,6 +209,10 @@ struct AccessibilityIdentifiers {
 
         struct TopSites {
             static let itemCell = "TopSitesCell"
+        }
+
+        struct SearchBar {
+            static let itemCell = "SearchBarCell"
         }
 
         struct Pocket {

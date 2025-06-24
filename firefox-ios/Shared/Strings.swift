@@ -410,7 +410,7 @@ extension String {
                     value: "Address Information Updated",
                     comment: "Toast message confirming that an address has been successfully updated."
                 )
-                 public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
+                public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
                     key: "Addresses.Toast.AddressUpdatedConfirmation.v132.v2",
                     tableName: "EditAddress",
                     value: "Address Saved",
@@ -1004,22 +1004,17 @@ extension String {
 
         public struct Pocket {
             public static let SectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Pocket.SectionTitle",
-                tableName: nil,
-                value: "Thought-Provoking Stories",
-                comment: "This is the title of the Pocket section on Firefox Homepage.")
-            public static let DiscoverMore = MZLocalizedString(
-                key: "FirefoxHome.Pocket.DiscoverMore",
-                tableName: nil,
-                value: "Discover more",
-                comment: "At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories.")
+                key: "FirefoxHome.Stories.SectionTitle.v140",
+                tableName: "FirefoxHomepage",
+                value: "Stories",
+                comment: "This is the title of the Stories section on Firefox Homepage.")
             public static let NumberOfMinutes = MZLocalizedString(
-                key: "FirefoxHome.Pocket.Minutes.v99",
+                key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
-                value: "%d min",
-                comment: "On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes")
+                value: "min: %d",
+                comment: "On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes")
             public static let Sponsored = MZLocalizedString(
-                key: "FirefoxHomepage.Pocket.Sponsored.v103",
+                key: "FirefoxHomepage.Stories.Sponsored.v140",
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
@@ -2083,16 +2078,11 @@ extension String {
                     tableName: nil,
                     value: "Recommended by Pocket",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
-                public static let ThoughtProvokingStories = MZLocalizedString(
-                    key: "Settings.Home.Option.ThoughtProvokingStories.v116",
+                public static let Stories = MZLocalizedString(
+                    key: "Settings.Home.Option.Stories.v140",
                     tableName: "CustomizeFirefoxHome",
-                    value: "Thought-Provoking Stories",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
-                public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
-                    key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
-                    tableName: "CustomizeFirefoxHome",
-                    value: "Articles powered by %@",
-                    comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. %@ is Pocket.")
+                    value: "Stories",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Stories recommendations section on the Firefox homepage on or off")
                 public static let Title = MZLocalizedString(
                     key: "Settings.Home.Option.Title.v101",
                     tableName: nil,
@@ -4157,7 +4147,7 @@ extension String {
         value: "View",
         comment: "Label for an action used to view one or more tabs from a notification.")
 
-// MARK: - Close tab notifications
+    // MARK: - Close tab notifications
     public static let CloseTab_ArrivingNotification_title = MZLocalizedString(
         key: "CloseTab.ArrivingNotification.title.v133",
         tableName: "FxANotification",
@@ -4296,12 +4286,41 @@ extension String {
 // MARK: - Main Menu
 extension String {
     public struct MainMenu {
+        public static let On = MZLocalizedString(
+            key: "MainMenu.On.Title.v141",
+            tableName: "MainMenu",
+            value: "On",
+            comment: "On the main menu, a title for a label that indicate the current option/action state is on.")
+        public static let Off = MZLocalizedString(
+            key: "MainMenu.Off.Title.v141",
+            tableName: "MainMenu",
+            value: "Off",
+            comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
+
         public struct AccessibilityLabels {
             public static let OptionDisabledHint = MZLocalizedString(
                 key: "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133",
                 tableName: "MainMenu",
                 value: "Dimmed",
                 comment: "On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed'")
+        }
+
+        public struct SiteProtection {
+            public static let ProtectionsOn = MZLocalizedString(
+                key: "MainMenu.SiteProtection.ProtectionsOn.Title.v141",
+                tableName: "MainMenu",
+                value: "Protections are ON",
+                comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON.")
+            public static let ProtectionsOff = MZLocalizedString(
+                key: "MainMenu.SiteProtection.ProtectionsOff.Title.v141",
+                tableName: "MainMenu",
+                value: "Protections are OFF",
+                comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF.")
+            public static let ConnectionNotSecure = MZLocalizedString(
+                key: "MainMenu.SiteProtection.ConnectionNotSecure.Title.v141",
+                tableName: "MainMenu",
+                value: "Connection is not secure",
+                comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure.")
         }
 
         public struct Account {
@@ -4397,10 +4416,20 @@ extension String {
                 tableName: "MainMenu",
                 value: "Switch to Mobile Site",
                 comment: "On the main menu, the title for the action that will switch a site from the desktop version to the mobile version.")
+            public static let DesktopSite = MZLocalizedString(
+                key: "MainMenu.ToolsSection.DesktopSite.Title.v141",
+                tableName: "MainMenu",
+                value: "Desktop Site",
+                comment: "On the main menu, the title for the action that will switch a site from the desktop version to the mobile version.")
             public static let FindInPage = MZLocalizedString(
                 key: "MainMenu.ToolsSection.FindInPage.Title.v131",
                 tableName: "MainMenu",
                 value: "Find in Page…",
+                comment: "On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
+            public static let FindInPageV2 = MZLocalizedString(
+                key: "MainMenu.ToolsSection.FindInPageV2.Title.v141",
+                tableName: "MainMenu",
+                value: "Find in Page",
                 comment: "On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
             public static let Tools = MZLocalizedString(
                 key: "MainMenu.ToolsSection.ToolsSubmenu.Title.v131",
@@ -4434,6 +4463,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Switch to mobile site",
                     comment: "On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version.")
+                public static let DesktopSite = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Desktop Site",
+                    comment: "On the main menu, the accessibility label for the action that will switch a site user agent value, if available.")
                 public static let FindInPage = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132",
                     tableName: "MainMenu",
@@ -4485,26 +4519,26 @@ extension String {
                 comment: "On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen.")
 
             public struct AccessibilityLabels {
-                 public static let Bookmarks = MZLocalizedString(
-                     key: "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132",
-                     tableName: "MainMenu",
-                     value: "Bookmarks",
-                     comment: "On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel.")
-                 public static let History = MZLocalizedString(
-                     key: "MainMenu.PanelLinkSection.AccessibilityLabels.History.v132",
-                     tableName: "MainMenu",
-                     value: "History",
-                     comment: "On the main menu, the accessibility label for the action that will take the user to the History panel.")
-                 public static let Downloads = MZLocalizedString(
-                     key: "MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132",
-                     tableName: "MainMenu",
-                     value: "Downloads",
-                     comment: "On the main menu, the accessibility label for the action that will take the user to the Downloads panel.")
-                 public static let Passwords = MZLocalizedString(
-                     key: "MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132",
-                     tableName: "MainMenu",
-                     value: "Passwords",
-                     comment: "On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen.")
+                public static let Bookmarks = MZLocalizedString(
+                    key: "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132",
+                    tableName: "MainMenu",
+                    value: "Bookmarks",
+                    comment: "On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel.")
+                public static let History = MZLocalizedString(
+                    key: "MainMenu.PanelLinkSection.AccessibilityLabels.History.v132",
+                    tableName: "MainMenu",
+                    value: "History",
+                    comment: "On the main menu, the accessibility label for the action that will take the user to the History panel.")
+                public static let Downloads = MZLocalizedString(
+                    key: "MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132",
+                    tableName: "MainMenu",
+                    value: "Downloads",
+                    comment: "On the main menu, the accessibility label for the action that will take the user to the Downloads panel.")
+                public static let Passwords = MZLocalizedString(
+                    key: "MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132",
+                    tableName: "MainMenu",
+                    value: "Passwords",
+                    comment: "On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen.")
             }
         }
 
@@ -4566,6 +4600,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Page Zoom (%@)",
                     comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. ")
+                public static let PageZoomV2 = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.PageZoomV2.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Page Zoom",
+                    comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level.")
                 public static let ZoomSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.Zoom.Subtitle.v131",
                     tableName: "MainMenu",
@@ -4607,6 +4646,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Turn off Website Dark Mode",
                     comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application.")
+                public static let WebsiteDarkMode = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Website Dark Mode",
+                    comment: "On the main menu, the title for the action that indicate, website dark mode can be turned on or off.")
 
                 public static let NightModeOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.NightMode.On.Title.v131",
@@ -4739,6 +4783,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Add Bookmark",
                     comment: "On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool.")
+                public static let BookmarkPage = MZLocalizedString(
+                    key: "MainMenu.BookmarkPage.Title.v141",
+                    tableName: "MainMenu",
+                    value: "Bookmark Page",
+                    comment: "On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page..")
                 public static let EditBookmark = MZLocalizedString(
                     key: "MainMenu.Submenus.Save.EditBookmark.Title.v131",
                     tableName: "MainMenu",
@@ -4796,6 +4845,11 @@ extension String {
                         tableName: "MainMenu",
                         value: "Add Bookmark",
                         comment: "On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool.")
+                    public static let BookmarkPage = MZLocalizedString(
+                        key: "MainMenu.AccessibilityLabels.BookmarkPage.Title.v41",
+                        tableName: "MainMenu",
+                        value: "Bookmark Page",
+                        comment: "On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page..")
                     public static let EditBookmark = MZLocalizedString(
                         key: "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132",
                         tableName: "MainMenu",
@@ -8076,6 +8130,41 @@ extension String {
                 tableName: nil,
                 value: "Tabs",
                 comment: "The title on the button to look at regular tabs.")
+            public static let ThoughtProvokingStories = MZLocalizedString(
+                key: "Settings.Home.Option.ThoughtProvokingStories.v116",
+                tableName: "CustomizeFirefoxHome",
+                value: "Thought-Provoking Stories",
+                comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off")
+            public static let SectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Pocket.SectionTitle",
+                tableName: nil,
+                value: "Thought-Provoking Stories",
+                comment: "This is the title of the Pocket section on Firefox Homepage.")
+            public static let ThoughtProvokingStoriesSubtitle = MZLocalizedString(
+                key: "Settings.Home.Option.ThoughtProvokingStories.subtitle.v116",
+                tableName: "CustomizeFirefoxHome",
+                value: "Articles powered by %@",
+                comment: "In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. %@ is Pocket.")
+            public static let SectionTitlePocket = MZLocalizedString(
+                key: "FirefoxHome.Pocket.SectionTitle.v140",
+                tableName: "FirefoxHomepage",
+                value: "Stories",
+                comment: "This is the title of the Pocket section on Firefox Homepage.")
+            public static let DiscoverMore = MZLocalizedString(
+                key: "FirefoxHome.Pocket.DiscoverMore",
+                tableName: nil,
+                value: "Discover more",
+                comment: "At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories.")
+            public static let NumberOfMinutes = MZLocalizedString(
+                key: "FirefoxHome.Pocket.Minutes.v99",
+                tableName: nil,
+                value: "%d min",
+                comment: "On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes")
+            public static let Sponsored = MZLocalizedString(
+                key: "FirefoxHomepage.Pocket.Sponsored.v103",
+                tableName: nil,
+                value: "Sponsored",
+                comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
         }
     }
 }

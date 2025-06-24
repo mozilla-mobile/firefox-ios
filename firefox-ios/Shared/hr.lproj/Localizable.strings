@@ -881,7 +881,7 @@
 "Oops! Firefox crashed" = "Ups! Firefox se srušio";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Otvori članke u prikazu za čitanje dodirom na ikonu knjige, kad se ikona pojavi u naslovnoj traci.";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Otvori članke u prikazu čitača dodirom na ikonu knjige kad se ikona pojavi u naslovnoj traci.";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Otvori postavke";
@@ -929,10 +929,10 @@
 "read" = "pročitano";
 
 /* Accessibility label for the Reader View button */
-"Reader View" = "Prikaz za čitanje";
+"Reader View" = "Prikaz čitača";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je modus čitanja";
+"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je modus čitača";
 
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "Označi kao pročitano";
@@ -977,7 +977,7 @@
 "Sans-serif" = "Sans-serif";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Spremi stranice na popis za čitanje, dodirom ikone za dodavanje knjige u kontrolama prikaza za čitanje.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Spremi stranice na popis za čitanje dodirom ikone za dodavanje knjige u kontrolama prikaza čitača.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "U redu";
@@ -1490,7 +1490,7 @@
 "Settings.Studies.Toggle.Title" = "Studije";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
-"Settings.Sync.ButtonDescription.v103" = "Prijavi se za sinkroniziranje kartica, zabilješki, lozinki i više.";
+"Settings.Sync.ButtonDescription.v103" = "Prijavi se za sinkroniziranje kartica, zabilješki, lozinki i još više.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sinkroniziraj i spremi podatke";

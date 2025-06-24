@@ -44,7 +44,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
 
     private func resolveMainMenuAction(action: MainMenuAction) {
         switch action.actionType {
-        case MainMenuDetailsActionType.tapToggleNightMode:
+        case MainMenuDetailsActionType.tapToggleNightMode, MainMenuActionType.tapToggleNightMode:
             updateNightMode()
         default:
             break
@@ -142,6 +142,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             windowUUID: oldAction.windowUUID,
             actionType: newActionType)
 
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 }

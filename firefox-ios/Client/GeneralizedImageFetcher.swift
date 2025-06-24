@@ -33,9 +33,7 @@ struct GeneralizedImageFetcher: URLCaching {
         )
 
         if let cachedImage = findCachedData(for: request, timestamp: timestamp) {
-            DispatchQueue.main.async {
-                completion(UIImage(data: cachedImage))
-            }
+            completion(UIImage(data: cachedImage))
         } else {
             fetchImage(request: request, completion: completion)
         }

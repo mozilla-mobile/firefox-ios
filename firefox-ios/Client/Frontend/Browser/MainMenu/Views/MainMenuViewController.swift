@@ -57,6 +57,8 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
+    private var hasBeenExpanded = false
+
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
 
@@ -81,13 +83,6 @@ class MainMenuViewController: UIViewController,
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
-        subscribeToRedux()
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.didInstantiateView
-            )
-        )
     }
 
     required init?(coder: NSCoder) {
@@ -100,6 +95,14 @@ class MainMenuViewController: UIViewController,
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
 
+        subscribeToRedux()
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.didInstantiateView
+            )
+        )
+
         if isMenuRedesign {
             setupRedesignView()
         } else {
@@ -107,14 +110,29 @@ class MainMenuViewController: UIViewController,
         }
         setupTableView()
         listenForThemeChange(view)
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.viewDidLoad
             )
         )
 
-        if !isMenuRedesign {
+        if isMenuRedesign {
+            menuRedesignContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
+
+            menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchSiteProtectionAction()
+            }
+
+            menuRedesignContent.closeButtonCallback = { [weak self] in
+                guard let self else { return }
+                self.dispatchCloseMenuAction()
+            }
+        } else {
             menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
                 guard let self else { return }
                 self.dispatchCloseMenuAction()
@@ -123,11 +141,6 @@ class MainMenuViewController: UIViewController,
             menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
                 guard let self else { return }
                 self.dispatchSyncSignInAction()
-            }
-        } else {
-            menuRedesignContent.closeButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchCloseMenuAction()
             }
         }
 
@@ -272,7 +285,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -288,7 +301,7 @@ class MainMenuViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(
+        store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
@@ -303,6 +316,10 @@ class MainMenuViewController: UIViewController,
         if let accountData = menuState.accountData {
             updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
             setupAccessibilityIdentifiers(mainButtonA11yLabel: accountData.title)
+        }
+
+        if let siteProtectionsData = menuState.siteProtectionsData {
+            updateSiteProtectionsHeaderWith(siteProtectionsData: siteProtectionsData)
         }
 
         if menuState.currentSubmenuView != nil {
@@ -320,11 +337,12 @@ class MainMenuViewController: UIViewController,
             return
         }
 
+        changeDetentIfNecessary()
         reloadTableView(with: menuState.menuElements)
     }
 
     private func dispatchCloseMenuAction() {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapCloseMenu,
@@ -334,11 +352,22 @@ class MainMenuViewController: UIViewController,
     }
 
     private func dispatchSyncSignInAction() {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapNavigateToDestination,
                 navigationDestination: MenuNavigationDestination(.syncSignIn),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
+    private func dispatchSiteProtectionAction() {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.siteProtections),
                 currentTabInfo: menuState.currentTabInfo
             )
         )
@@ -360,6 +389,28 @@ class MainMenuViewController: UIViewController,
                                                        warningIcon: accountData.warningIcon,
                                                        theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+    }
+
+    private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
+        var state = String.MainMenu.SiteProtection.ProtectionsOn
+        var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
+
+        switch siteProtectionsData.state {
+        case .notSecure:
+            state = String.MainMenu.SiteProtection.ConnectionNotSecure
+            stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        case .on: break
+        case .off:
+            state = String.MainMenu.SiteProtection.ProtectionsOff
+            stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        }
+
+        menuRedesignContent.siteProtectionHeader.setupDetails(
+            title: siteProtectionsData.title,
+            subtitle: siteProtectionsData.subtitle,
+            image: siteProtectionsData.image,
+            state: state,
+            stateImage: stateImage)
     }
 
     // MARK: - A11y
@@ -397,7 +448,8 @@ class MainMenuViewController: UIViewController,
                     menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
                     menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
-                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton)
+                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
+                    siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header)
             } else {
                 menuContent.setupAccessibilityIdentifiers(
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
@@ -450,9 +502,20 @@ class MainMenuViewController: UIViewController,
         return viewProvider.shouldPresentContextualHint()
     }
 
+    private func changeDetentIfNecessary() {
+        if let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
+           let isExpanded = element.isExpanded,
+           isExpanded {
+            if let sheet = self.sheetPresentationController, !hasBeenExpanded {
+                sheet.selectedDetentIdentifier = .large
+                hasBeenExpanded = true
+            }
+        }
+    }
+
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.menuDismissed,

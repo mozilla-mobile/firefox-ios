@@ -46,7 +46,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         } else {
             navigationHintDoubleTapTimer = nil
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -60,7 +60,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             actionOnDismiss: {
                 let action = ToolbarAction(windowUUID: self.windowUUID,
                                            actionType: ToolbarActionType.navigationHintFinishedPresenting)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             },
             andActionForButton: { },
             overlayState: overlayManager,
@@ -86,7 +86,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         } else {
             let action = ToolbarAction(windowUUID: self.windowUUID,
                                        actionType: ToolbarActionType.navigationHintFinishedPresenting)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -475,7 +475,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     }
 
     func showTrackingProtection() {
-        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
-                                            actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
     }
 }

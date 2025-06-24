@@ -31,7 +31,7 @@ class WallpaperMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         default:
             break
         }
@@ -45,7 +45,7 @@ class WallpaperMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidChange
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         default:
             break
         }

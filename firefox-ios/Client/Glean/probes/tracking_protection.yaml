@@ -1,0 +1,156 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - TrackingProtection
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Enhanced Tracking Protection metrics
+tracking_protection:
+  enabled:
+    type: boolean
+    description: |
+      Measures the state of the tracking-protection enabled
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  strength:
+    type: string
+    description: |
+      A string representing the selected strength of the
+      tracking-protection that is enabled. One of:
+      * basic
+      * strict
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  etp_setting_changed:
+    type: event
+    description: |
+      A user changed their tracking protection
+      level setting to either strict or standard
+    extra_keys:
+      etp_setting:
+       type: string
+       description: |
+         Records the protection level:
+         standard / strict
+      etp_enabled:
+       type: boolean
+       description: |
+         Records the state
+         true / false
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14903
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  show_clear_cookies_alert:
+    type: event
+    description: |
+      Records when the clear cookies alert is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  show_etp_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  show_etp_blocked_trackers_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection blocked trackers details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  show_etp_settings:
+    type: event
+    description: |
+      Records when the enhanced tracking protection settings screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  tapped_clear_cookies:
+    type: event
+    description: |
+      Records when the clear cookies button from the etp alert is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  dismiss_etp_panel:
+    type: event
+    description: |
+      Records when the enhanced tracking protection panel is dismissed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  show_certificates:
+    type: event
+    description: |
+      Records when the certificates screen from the enhanced tracking protection panel is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

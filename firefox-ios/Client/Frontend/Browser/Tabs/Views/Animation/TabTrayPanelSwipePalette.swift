@@ -92,6 +92,8 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerAutofillText: UIColor { base.layerAutofillText }
     var layerSearch: UIColor { base.layerSearch }
     var layerGradientURL: Gradient { base.layerGradientURL }
+    var layerSurfaceLow: UIColor { base.layerSurfaceLow }
+    var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }
 
     var layerRatingA: UIColor { base.layerRatingA }
     var layerRatingASubdued: UIColor { base.layerRatingASubdued }

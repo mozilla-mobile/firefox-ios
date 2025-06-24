@@ -120,10 +120,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         // Setup
         var sectionItems = [Setting]()
 
-        let pocketStatusText = String(
-            format: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle,
-            PocketAppName.shortName.rawValue)
-
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
@@ -135,7 +131,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
-                store.dispatch(
+                store.dispatchLegacy(
                     JumpBackInAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
@@ -152,7 +148,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: featureFlags.isFeatureEnabled(.hntBookmarksSection, checking: .userOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
-                store.dispatch(
+                store.dispatchLegacy(
                     BookmarksAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
@@ -169,10 +165,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
                 defaultValue: true,
-                titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
-                statusText: pocketStatusText
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.Stories
             ) { value in
-                store.dispatch(
+                store.dispatchLegacy(
                     PocketAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,

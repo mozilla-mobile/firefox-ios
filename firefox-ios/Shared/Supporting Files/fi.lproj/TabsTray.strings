@@ -19,6 +19,9 @@
 /* The title on the button to look at regular tabs. */
 "TabTray.TabsSelectorNormalTabsTitle.v140" = "Välilehdet";
 
+/* The title on the button to look at synced tabs. */
+"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synkronointi";
+
 /* Text for a button in the tabs tray used to open another menu to close older tabs. */
 "TabTrayCloseOldTabsTitle.v140" = "Sulje vanhat välilehdet…";
 

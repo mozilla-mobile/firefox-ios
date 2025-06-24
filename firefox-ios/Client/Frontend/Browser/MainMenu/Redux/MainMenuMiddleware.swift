@@ -7,7 +7,7 @@ import Redux
 import Account
 import Shared
 
-final class MainMenuMiddleware {
+final class MainMenuMiddleware: FeatureFlaggable {
     private enum TelemetryAction {
         static let newTab = "new_tab"
         static let newPrivateTab = "new_private_tab"
@@ -45,6 +45,10 @@ final class MainMenuMiddleware {
 
     private let logger: Logger
     private let telemetry = MainMenuTelemetry()
+
+    private var isMenuRedesignOn: Bool {
+        featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
+    }
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
@@ -107,7 +111,7 @@ final class MainMenuMiddleware {
         case MainMenuDetailsActionType.tapRemoveFromReadingList:
             telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
 
-        case MainMenuDetailsActionType.tapToggleNightMode:
+        case MainMenuDetailsActionType.tapToggleNightMode, MainMenuActionType.tapToggleNightMode:
             handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
 
         case MainMenuDetailsActionType.tapBackToMainMenu:
@@ -155,20 +159,22 @@ final class MainMenuMiddleware {
     }
 
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
-        if let accountData = getAccountData() {
-            if let iconURL = accountData.iconURL {
-                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                    guard let self else { return }
-                    self.dispatchUpdateAccountHeader(
-                        accountData: accountData,
-                        action: action,
-                        icon: image)
-                }
-            } else {
-                dispatchUpdateAccountHeader(accountData: accountData, action: action)
+        guard !isMenuRedesignOn else { return }
+        guard let accountData = getAccountData() else {
+            dispatchUpdateAccountHeader(action: action)
+            return
+        }
+
+        if let iconURL = accountData.iconURL {
+            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                guard let self else { return }
+                self.dispatchUpdateAccountHeader(
+                    accountData: accountData,
+                    action: action,
+                    icon: image)
             }
         } else {
-            dispatchUpdateAccountHeader(action: action)
+            dispatchUpdateAccountHeader(accountData: accountData, action: action)
         }
     }
 
@@ -177,7 +183,7 @@ final class MainMenuMiddleware {
         action: MainMenuAction,
         icon: UIImage? = nil
     ) {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateAccountHeader,
@@ -188,10 +194,16 @@ final class MainMenuMiddleware {
     }
 
     private func handleViewDidLoadAction(action: MainMenuAction) {
-        store.dispatch(
+        store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: action.windowUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader
             )
         )
     }
@@ -292,6 +304,9 @@ final class MainMenuMiddleware {
 
         case .zoom:
             self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
+
+        case .siteProtections: break
+            // TODO: FXIOS-12554 [Menu Redesign] Handle Telemetry for menu
         }
     }
 }

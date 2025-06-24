@@ -26,7 +26,7 @@ final class StartAtHomeMiddleware {
         switch action.actionType {
         case StartAtHomeActionType.didBrowserBecomeActive:
             let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
-            store.dispatch(
+            store.dispatchLegacy(
                 StartAtHomeAction(
                     shouldStartAtHome: shouldStartAtHome,
                     windowUUID: action.windowUUID,

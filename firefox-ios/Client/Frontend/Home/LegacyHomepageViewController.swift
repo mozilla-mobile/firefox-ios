@@ -244,7 +244,7 @@ class LegacyHomepageViewController:
             windowUUID: windowUUID,
             actionType: ToolbarActionType.traitCollectionDidChange
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: - Layout
@@ -259,9 +259,6 @@ class LegacyHomepageViewController:
         collectionView.register(LegacyLabelButtonHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: LegacyLabelButtonHeaderView.cellIdentifier)
-        collectionView.register(PocketFooterView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-                                withReuseIdentifier: PocketFooterView.cellIdentifier)
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
@@ -450,11 +447,11 @@ class LegacyHomepageViewController:
            selectedTab.isFxHomeTab,
            selectedTab.url?.displayURL == nil {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             // On a website we just dismiss the keyboard
         } else {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -475,7 +472,7 @@ class LegacyHomepageViewController:
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            store.dispatch(
+            store.dispatchLegacy(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,
                     windowUUID: windowUUID,
@@ -610,23 +607,6 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
             return headerView
         }
 
-        if kind == UICollectionView.elementKindSectionFooter {
-            guard let footerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: PocketFooterView.cellIdentifier,
-                for: indexPath) as? PocketFooterView else { return reusableView }
-            footerView.onTapLearnMore = {
-                guard let learnMoreURL = SupportUtils.URLForPocketLearnMore else {
-                    self.logger.log("Failed to retrieve learn more URL from SupportUtils.URLForPocketLearnMore",
-                                    level: .debug,
-                                    category: .legacyHomepage)
-                    return
-                }
-                self.showSiteWithURLHandler(learnMoreURL)
-            }
-            footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            return footerView
-        }
         return reusableView
     }
 

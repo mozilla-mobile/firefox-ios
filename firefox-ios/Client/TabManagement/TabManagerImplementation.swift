@@ -488,7 +488,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             return
         }
 
-        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty)",
+        logger.log("Tabs restore started being force; \(forced), with empty tabs; \(tabs.isEmpty), crashed at last launch is \(logger.crashedLastLaunch)",
                    level: .debug,
                    category: .tabs)
 
@@ -910,7 +910,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         let action = PrivateModeAction(isPrivate: isPrivate,
                                        windowUUID: windowUUID,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         if isPDFRefactorEnabled {
             tab.resumeDocumentDownload()
@@ -973,7 +973,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
                                           isNativeErrorPage: isNativeErrorPage,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {

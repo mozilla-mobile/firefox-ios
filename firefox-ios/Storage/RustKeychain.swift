@@ -22,13 +22,13 @@ public enum LoginEncryptionKeyError: Error {
 /// SecItemAdd status: -34018 - A required entitlement isn't present.
 /// This should be removed if we ever have keychain support on our CI.
 public class KeychainManager {
-    public static var shared = {
+    public static let shared = {
         AppConstants.isRunningTest
             ? MockRustKeychain.shared
             : RustKeychain.sharedClientAppContainerKeychain
     }()
 
-    public static var legacyShared = {
+    public static let legacyShared = {
         AppConstants.isRunningTest
             ? MockMZKeychainWrapper.shared
             : MZKeychainWrapper.sharedClientAppContainerKeychain

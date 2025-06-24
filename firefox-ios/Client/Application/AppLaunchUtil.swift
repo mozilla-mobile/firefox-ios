@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Shared
-import Storage
 import Account
 import Glean
 import MozillaAppServices
@@ -181,31 +180,47 @@ final class AppLaunchUtil {
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
+        let isFirstRun = introScreenManager.shouldShowIntroScreen
+
+        // If this is a first run, there won't be history to migrate since we are far past v110
+        guard !isFirstRun else {
+            // Mark migration as succeeded and return early
+            UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+            return
+        }
+
         let browserProfile = self.profile as? BrowserProfile
 
         let migrationSucceeded = UserDefaults.standard.bool(forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
         let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
         UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
+
         if !migrationSucceeded && migrationAttemptNumber < AppConstants.maxHistoryMigrationAttempt {
-            logger.log("Migrating Application services history",
+            HistoryTelemetry().attemptedApplicationServicesMigration()
+            logger.log("Migrating Application Services history",
                        level: .info,
                        category: .sync)
+
             browserProfile?.migrateHistoryToPlaces(
-            callback: { result in
-                self.logger.log("Successful Migration took \(result.totalDuration / 1000) seconds",
-                                level: .info,
-                                category: .sync)
-                UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
-                NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
-            },
-            errCallback: { err in
-                let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
-                self.logger.log("Migration failed with \(errDescription)",
-                                level: .warning,
-                                category: .sync)
-            })
+                callback: { result in
+                    self.logger.log("Successfully migrated history",
+                                    level: .info,
+                                    category: .sync,
+                                    extra: ["durationSeconds": "\(result.totalDuration / 1000)"])
+
+                    UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+                    NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
+                },
+                errCallback: { err in
+                    let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
+                    self.logger.log("History migration failed",
+                                    level: .fatal,
+                                    category: .sync,
+                                    extra: ["error": errDescription])
+                }
+            )
         } else {
-            self.logger.log("History Migration skipped",
+            self.logger.log("History migration skipped",
                             level: .debug,
                             category: .sync)
         }

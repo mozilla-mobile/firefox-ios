@@ -1,0 +1,126 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Library
+  - HistoryPanel
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Library
+library.history_panel:
+  cleared_history:
+    type: event
+    description: |
+      A user deleted history entries from a certain timeframe
+    extra_keys:
+      timeframe:
+        type: string
+        description: |
+          The timeframe all history was cleared from
+          Options are listed in the HistoryDeletionUtilityDateOptions enum
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24790
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25614
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - HistoryPanel
+        - Library
+
+# History Panel
+history:
+  opened:
+    type: event
+    description: |
+      A user opened the history screen.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  selected_item:
+    type: labeled_counter
+    description: |
+      Counts the number of times a user selected an item from
+      the history panel. This labeled counter will tell apart
+      items that appear inside a group, and those that do not.
+    labels:
+      - group-item
+      - non-grouped-item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10212
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  opened_item:
+    type: event
+    description: |
+      Recorded when a user opened a history item
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17296
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17462
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  search_tap:
+    type: event
+    description: |
+      Recorded when a user taps on search icon in history panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/9438
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10494
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  delete_tap:
+    type: event
+    description: |
+      Recorded when a user taps on trash icon in history panel
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/10020
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/10494
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  removed:
+    type: event
+    description: |
+      A user removed a history item.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

@@ -290,28 +290,36 @@ class UITestAppDelegate: AppDelegate {
 
     // MARK: - Private
     private func loadExperiment() {
-        let argumentExperimentFile = ProcessInfo.processInfo.arguments.first { string in
+        let argumentExperimentFile = ProcessInfo.processInfo.arguments.filter { string in
             string.starts(with: LaunchArguments.LoadExperiment)
         }
 
-        let argumentFeatureName = ProcessInfo.processInfo.arguments.first { string in
+        let argumentFeatureName = ProcessInfo.processInfo.arguments.filter { string in
             string.starts(with: LaunchArguments.ExperimentFeatureName)
         }
 
-        guard let argumentExperimentFile, let argumentFeatureName else { return }
+        guard !argumentExperimentFile.isEmpty, !argumentFeatureName.isEmpty else { return }
 
-        let experimentFeatureName = argumentFeatureName.replacingOccurrences(of: LaunchArguments.ExperimentFeatureName,
-                                                                             with: "")
-        let experimentFileName = argumentExperimentFile.replacingOccurrences(of: LaunchArguments.LoadExperiment,
-                                                                             with: "")
-        let fileURL = Bundle.main.url(forResource: experimentFileName, withExtension: "json")
-        if let fileURL {
-            do {
-                let fileContent = try String(contentsOf: fileURL)
-                let features = HardcodedNimbusFeatures(with: [experimentFeatureName: fileContent])
-                features.connect(with: FxNimbus.shared)
-            } catch {
+        let experimentsName = argumentFeatureName.map { string in
+            string.replacingOccurrences(of: LaunchArguments.ExperimentFeatureName, with: "")
+        }
+        let experimentFileName = argumentExperimentFile.map { string in
+            string.replacingOccurrences(of: LaunchArguments.LoadExperiment, with: "")
+        }
+
+        var injectingFeature = [String: String]()
+
+        for index in 0..<experimentsName.count {
+            let fileURL = Bundle.main.url(forResource: experimentFileName[index], withExtension: "json")
+            if let fileURL {
+                do {
+                    let fileContent = try String(contentsOf: fileURL)
+                    injectingFeature[experimentsName[index]] = fileContent
+                } catch {
+                }
             }
         }
+        let features = HardcodedNimbusFeatures(with: injectingFeature)
+        features.connect(with: FxNimbus.shared)
     }
 }

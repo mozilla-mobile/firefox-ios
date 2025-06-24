@@ -816,30 +816,13 @@ extension BrowserViewController: WKNavigationDelegate {
                 cookies: cookies
             )
             tempPDF.onDownloadProgressUpdate = { progress in
-                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
-                                   of: tab?.webView,
-                                   change: [.newKey: progress],
-                                   context: nil)
+                self?.handleDownloadProgressUpdate(progress: progress, tab: tab)
             }
             tempPDF.onDownloadStarted = {
-                self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
-                                   of: tab?.webView,
-                                   change: [.newKey: true],
-                                   context: nil)
-                if let url = request.url {
-                    self?.documentLogger.registerDownloadStart(url: url)
-                }
+                self?.handleDownloadStarted(tab: tab, request: request)
             }
             tempPDF.onDownloadError = { error in
-                self?.navigationHandler?.removeDocumentLoading()
-                self?.logger.log("Failed to download Document",
-                                 level: .warning,
-                                 category: .webview,
-                                 extra: [
-                                    "error": error?.localizedDescription ?? "",
-                                    "url": request.url?.absoluteString ?? "Unknown URL"])
-                guard let error, let webView = tab?.webView else { return }
-                self?.showErrorPage(webView: webView, error: error)
+                self?.handleDownloadError(tab: tab, request: request, error: error)
             }
             tab?.enqueueDocument(tempPDF)
             if let url = request.url {
@@ -853,6 +836,35 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleDownloadProgressUpdate(progress: Double, tab: Tab?) {
+        observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                     of: tab?.webView,
+                     change: [.newKey: progress],
+                     context: nil)
+    }
+
+    private func handleDownloadStarted(tab: Tab?, request: URLRequest) {
+        observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                     of: tab?.webView,
+                     change: [.newKey: true],
+                     context: nil)
+        if let url = request.url {
+            documentLogger.registerDownloadStart(url: url)
+        }
+    }
+
+    private func handleDownloadError(tab: Tab?, request: URLRequest, error: (any Error)?) {
+        navigationHandler?.removeDocumentLoading()
+        logger.log("Failed to download Document",
+                   level: .warning,
+                   category: .webview,
+                   extra: [
+                    "error": error?.localizedDescription ?? "",
+                    "url": request.url?.absoluteString ?? "Unknown URL"])
+        guard let error, let webView = tab?.webView else { return }
+        showErrorPage(webView: webView, error: error)
+    }
+
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         if isNativeErrorPageEnabled {
@@ -860,7 +872,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
@@ -942,13 +954,13 @@ extension BrowserViewController: WKNavigationDelegate {
                         windowUUID: windowUUID,
                         actionType: ToolbarActionType.urlDidChange
                     )
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                     let middlewareAction = ToolbarMiddlewareAction(
                         scrollOffset: scrollController.contentOffset,
                         windowUUID: windowUUID,
                         actionType: ToolbarMiddlewareActionType.urlDidChange
                     )
-                    store.dispatch(middlewareAction)
+                    store.dispatchLegacy(middlewareAction)
                 } else {
                     legacyUrlBar?.currentURL = tab.url?.displayURL
                 }
@@ -988,7 +1000,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
                     )
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)

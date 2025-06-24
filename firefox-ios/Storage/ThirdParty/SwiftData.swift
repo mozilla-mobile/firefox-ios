@@ -86,11 +86,11 @@ open class SwiftData {
     let schema: Schema
     let files: FileAccessor
 
-    static var EnableWAL = true
-    static var EnableForeignKeys = true
+    static let EnableForeignKeys = true
 
     /// Used to keep track of the corrupted databases we've logged.
-    static var corruptionLogsWritten = Set<String>()
+    /// TODO FXIOS-12603 This global property is not concurrency safe
+    nonisolated(unsafe) static var corruptionLogsWritten = Set<String>()
 
     /// For thread-safe access to the primary shared connection.
     fileprivate let primaryConnectionQueue: DispatchQueue
@@ -607,39 +607,37 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             }
         }
 
-        if SwiftData.EnableWAL {
-            logger.log("Enabling WAL mode.",
-                       level: .debug,
-                       category: .storage)
+        logger.log("Enabling WAL mode.",
+                   level: .debug,
+                   category: .storage)
 
-            let desiredPagesPerJournal = 16
-            let desiredCheckpointSize = desiredPagesPerJournal * desiredPageSize
-            let desiredJournalSizeLimit = 3 * desiredCheckpointSize
+        let desiredPagesPerJournal = 16
+        let desiredCheckpointSize = desiredPagesPerJournal * desiredPageSize
+        let desiredJournalSizeLimit = 3 * desiredCheckpointSize
 
-            /*
-             * With whole-module-optimization enabled in Xcode 7.2 and 7.2.1, the
-             * compiler seems to eagerly discard these queries if they're simply
-             * inlined, causing a crash in `pragma`.
-             *
-             * Hackily hold on to them.
-             */
-            let journalModeQuery = "journal_mode=WAL"
-            let autoCheckpointQuery = "wal_autocheckpoint=\(desiredPagesPerJournal)"
-            let journalSizeQuery = "journal_size_limit=\(desiredJournalSizeLimit)"
+        /*
+         * With whole-module-optimization enabled in Xcode 7.2 and 7.2.1, the
+         * compiler seems to eagerly discard these queries if they're simply
+         * inlined, causing a crash in `pragma`.
+         *
+         * Hackily hold on to them.
+         */
+        let journalModeQuery = "journal_mode=WAL"
+        let autoCheckpointQuery = "wal_autocheckpoint=\(desiredPagesPerJournal)"
+        let journalSizeQuery = "journal_size_limit=\(desiredJournalSizeLimit)"
 
-            try withExtendedLifetime(journalModeQuery, {
-                try pragma(journalModeQuery, expected: "wal",
-                           factory: StringFactory, message: "WAL journal mode set")
-            })
-            try withExtendedLifetime(autoCheckpointQuery, {
-                try pragma(autoCheckpointQuery, expected: desiredPagesPerJournal,
-                           factory: IntFactory, message: "WAL autocheckpoint set")
-            })
-            try withExtendedLifetime(journalSizeQuery, {
-                try pragma(journalSizeQuery, expected: desiredJournalSizeLimit,
-                           factory: IntFactory, message: "WAL journal size limit set")
-            })
-        }
+        try withExtendedLifetime(journalModeQuery, {
+            try pragma(journalModeQuery, expected: "wal",
+                       factory: StringFactory, message: "WAL journal mode set")
+        })
+        try withExtendedLifetime(autoCheckpointQuery, {
+            try pragma(autoCheckpointQuery, expected: desiredPagesPerJournal,
+                       factory: IntFactory, message: "WAL autocheckpoint set")
+        })
+        try withExtendedLifetime(journalSizeQuery, {
+            try pragma(journalSizeQuery, expected: desiredJournalSizeLimit,
+                       factory: IntFactory, message: "WAL journal size limit set")
+        })
 
         self.prepareShared()
     }
@@ -667,7 +665,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
         return true
     }
-
+    
     // Updates the database schema in an existing database.
     fileprivate func updateSchema() -> Bool {
         logger.log("Trying to update schema \(self.schema.name) from version \(self.version) to \(self.schema.version)",
