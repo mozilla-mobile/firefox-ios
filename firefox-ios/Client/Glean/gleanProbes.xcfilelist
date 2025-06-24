@@ -19,3 +19,4 @@ $(PROJECT_DIR)/Client/Glean/probes/tabs_panel.yaml
 $(PROJECT_DIR)/Client/Glean/probes/toast.yaml
 $(PROJECT_DIR)/Client/Glean/probes/tracking_protection.yaml
 $(PROJECT_DIR)/Client/Glean/probes/toolbar.yaml
+$(PROJECT_DIR)/Client/Glean/probes/zoom_bar.yaml
