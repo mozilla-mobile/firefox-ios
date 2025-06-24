@@ -540,10 +540,16 @@ class BrowserViewController: UIViewController,
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
+
+            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
+
+            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            header.bringSubviewToFront(addressToolbarContainer)
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -920,7 +926,10 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
-        setupTopTabsViewController()
+
+        if toolbarHelper.shouldShowTopTabs(for: traitCollection) {
+            setupTopTabsViewController()
+        }
 
         // Update theme of already existing views
         let theme = currentTheme()
@@ -1214,6 +1223,15 @@ class BrowserViewController: UIViewController,
         // add overKeyboardContainer after bottomContainer so the address toolbar shadow
         // for bottom toolbar doesn't get clipped
         view.addSubview(overKeyboardContainer)
+
+        if isSwipingTabsEnabled {
+            // Add Homepage to view hierarchy so it is possible to take screenshot from it
+            showEmbeddedHomepage(inline: false, isPrivate: false)
+            browserDelegate?.setHomepageVisibility(isVisible: false)
+            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
+                return self?.browserDelegate?.homepageScreenshotTool()
+            }
+        }
     }
 
     private func enqueueTabRestoration() {
@@ -1712,6 +1730,12 @@ class BrowserViewController: UIViewController,
             )
         }
 
+        if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
+            browserDelegate?.setHomepageVisibility(isVisible: true)
+        }
         updateBlurViews()
     }
 
@@ -3513,7 +3537,7 @@ class BrowserViewController: UIViewController,
             // we have to adjust the background color to match the homepage background color
             let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
             let colors = currentTheme.colors
-            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layer3
+            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
@@ -4364,6 +4388,13 @@ extension BrowserViewController: TabManagerDelegate {
 
         if needsReload {
             selectedTab.reloadPage()
+        }
+
+        if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
+            browserDelegate?.setHomepageVisibility(isVisible: true)
         }
     }
 

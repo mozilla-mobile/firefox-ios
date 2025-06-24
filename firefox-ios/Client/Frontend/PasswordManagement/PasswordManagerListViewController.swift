@@ -168,12 +168,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         dismiss(animated: true)
     }
 
-    func showToast() {
-        SimpleToast().showAlertWithText(.LoginListDeleteToast,
-                                        bottomContainer: view,
-                                        theme: themeManager.getCurrentTheme(for: windowUUID))
-    }
-
     lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit,
                                           target: self,
                                           action: #selector(beginEditing))
@@ -334,7 +328,6 @@ private extension PasswordManagerListViewController {
                         self.cancelSelection()
                         self.loadLogins()
                         self.sendLoginsDeletedTelemetry()
-                        self.showToast()
                     }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)

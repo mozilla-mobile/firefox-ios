@@ -77,8 +77,6 @@ func failOnNewFilesWithoutCoverage() {
 
         if let file = matchingFile {
             warn("New file `\(file)` has 0% test coverage. \(contactMessage)")
-        } else {
-            warn("New file `\(cleanedFile)` is missing from coverage report. \(contactMessage)")
         }
     }
 }
