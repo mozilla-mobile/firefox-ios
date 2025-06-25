@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import Storage
 import XCTest
+import Common
 
 @testable import Client
 
@@ -121,6 +122,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     public let syncManager: ClientSyncManager?
     public let firefoxSuggest: RustFirefoxSuggestProtocol?
     public let remoteSettingsService: RemoteSettingsService?
+    public let mockNotificationCenter: NotificationProtocol = MockNotificationCenter()
 
     fileprivate let name = "mockaccount"
 
@@ -233,7 +235,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
         ).appendingPathComponent("\(databasePrefix)_places.db").path
         try? files.remove("\(databasePrefix)_places.db")
 
-        let places = RustPlaces(databasePath: placesDatabasePath)
+        let places = RustPlaces(databasePath: placesDatabasePath, notificationCenter: mockNotificationCenter)
         _ = places.reopenIfClosed()
 
         return places

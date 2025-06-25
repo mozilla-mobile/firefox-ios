@@ -66,11 +66,11 @@ public class RustPlaces: BookmarksHandler {
     public fileprivate(set) var isOpen = false
 
     private var didAttemptToMoveToBackup = false
-    private var notificationCenter: NotificationCenter
+    private var notificationCenter: NotificationProtocol
     private var logger: Logger
 
     public init(databasePath: String,
-                notificationCenter: NotificationCenter = NotificationCenter.default,
+                notificationCenter: NotificationProtocol = NotificationCenter.default,
                 logger: Logger = DefaultLogger.shared) {
         self.databasePath = databasePath
         self.notificationCenter = notificationCenter
@@ -83,7 +83,7 @@ public class RustPlaces: BookmarksHandler {
         do {
             api = try PlacesAPI(path: databasePath)
             isOpen = true
-            notificationCenter.post(name: .RustPlacesOpened, object: nil)
+            notificationCenter.post(name: .RustPlacesOpened, withObject: nil)
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesApiError {
@@ -355,7 +355,7 @@ public class RustPlaces: BookmarksHandler {
                 return
             }
 
-            self.notificationCenter.post(name: .BookmarksUpdated, object: self)
+            self.notificationCenter.post(name: .BookmarksUpdated, withObject: self)
         }
     }
 
@@ -367,7 +367,7 @@ public class RustPlaces: BookmarksHandler {
                     return deferMaybe(error)
                 }
 
-                self.notificationCenter.post(name: .BookmarksUpdated, object: self)
+                self.notificationCenter.post(name: .BookmarksUpdated, withObject: self)
                 return succeed()
             }
         }
@@ -419,7 +419,7 @@ public class RustPlaces: BookmarksHandler {
                 title: title,
                 position: position
             )
-            self.notificationCenter.post(name: .BookmarksUpdated, object: self)
+            self.notificationCenter.post(name: .BookmarksUpdated, withObject: self)
             return response
         }
     }
@@ -439,7 +439,7 @@ public class RustPlaces: BookmarksHandler {
                     title: title,
                     position: position
                 )
-                self.notificationCenter.post(name: .BookmarksUpdated, object: self)
+                self.notificationCenter.post(name: .BookmarksUpdated, withObject: self)
                 return response
             }, completion: completion)
     }
@@ -623,7 +623,7 @@ extension RustPlaces {
         return withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)
         }.map { result in
-            self.notificationCenter.post(name: .TopSitesUpdated, object: nil)
+            self.notificationCenter.post(name: .TopSitesUpdated, withObject: nil)
             return result
         }
     }
