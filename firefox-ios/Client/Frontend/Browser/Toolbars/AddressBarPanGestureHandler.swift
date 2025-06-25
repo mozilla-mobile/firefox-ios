@@ -33,6 +33,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
 
+    private var isRTL: Bool {
+        return UIView.userInterfaceLayoutDirection(
+            for: addressToolbarContainer.semanticContentAttribute
+        ) == .rightToLeft
+    }
+
     // MARK: - Init
     init(
         addressToolbarContainer: AddressToolbarContainer,
@@ -162,7 +168,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         if shouldAddNewTab {
             let progress = abs(translation.x) / contentContainer.frame.width
             let scale = progress > UX.webPagePreviewAddNewTabScale ? progress : UX.webPagePreviewAddNewTabScale
-            let translation = contentContainer.frame.width * (1 - progress)
+            let width = isRTL ? -contentContainer.frame.width : contentContainer.frame.width
+            let translation = width * (1 - progress)
             webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: translation, y: 0.0)
             webPagePreview.alpha = progress
             webPagePreview.setScreenshot(homepageScreenshot)
@@ -241,7 +248,10 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     private func shouldAddNewTab(translation: CGFloat, nextTab: Tab?) -> Bool {
-        return translation < 0.0 && nextTab == nil && tabManager.selectedTab?.isFxHomeTab == false
+        guard nextTab == nil,
+              tabManager.selectedTab?.isFxHomeTab == false else { return false }
+
+        return (translation < 0.0 && !isRTL) || (translation > 0.0 && isRTL)
     }
 
     /// Calculates the index of the next tab to display based on the current index, swipe direction, and layout direction.
@@ -249,9 +259,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     /// both left-to-right (LTR) and right-to-left (RTL) user interfaces.
     /// Swiping left advances to the next tab in LTR, but to the previous tab in RTL, and vice versa.
     private func nextTabIndex(from index: Int, isSwipingLeft: Bool) -> Int {
-        let isRTL = UIView.userInterfaceLayoutDirection(
-            for: addressToolbarContainer.semanticContentAttribute
-        ) == .rightToLeft
         if isSwipingLeft {
             return isRTL ? index - 1 : index + 1
         } else {
