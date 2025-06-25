@@ -1030,17 +1030,17 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     private func getSiteProtectionState(for selectedTab: Tab) -> SiteProtectionsState {
         let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        guard let url = selectedTab.url,
+              !ContentBlocker.shared.isSafelisted(url: url),
+              isContentBlockingConfigEnabled else { return .off }
+
         let hasSecureContent = selectedTab.currentWebView()?.hasOnlySecureContent ?? false
 
         if !hasSecureContent {
             return .notSecure
         }
 
-        if isContentBlockingConfigEnabled {
-            return .on
-        }
-
-        return .off
+        return .on
     }
 
     // MARK: - Homepage Related Actions
