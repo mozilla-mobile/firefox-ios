@@ -23,12 +23,17 @@ public final class MenuRedesignMainView: UIView,
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
+    public var headerBanner: HeaderBanner = .build()
+
     public var siteProtectionHeader: MenuSiteProtectionsHeader = .build()
 
     private var viewConstraints: [NSLayoutConstraint] = []
 
+    // MARK: - Properties
+    private var isMenuDefaultBrowserBanner = false
+
     // MARK: - UI Setup
-    private func setupView(with data: [MenuSection]) {
+    private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
         self.removeConstraints(viewConstraints)
         viewConstraints.removeAll()
         self.addSubview(tableView)
@@ -40,12 +45,31 @@ public final class MenuRedesignMainView: UIView,
                 closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalMargin),
                 closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
                 closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-
-                tableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMarginWithButton),
-                tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-                tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
             ])
+
+            if isHeaderBanner && isMenuDefaultBrowserBanner {
+                self.addSubview(headerBanner)
+                viewConstraints.append(contentsOf: [
+                    headerBanner.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMargin),
+                    headerBanner.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    headerBanner.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+
+                    tableView.topAnchor.constraint(equalTo: headerBanner.bottomAnchor,
+                                                   constant: UX.headerTopMarginWithButton),
+                    tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                    tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+                ])
+            } else {
+                headerBanner.removeFromSuperview()
+                viewConstraints.append(contentsOf: [
+                    tableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
+                                                   constant: UX.headerTopMarginWithButton),
+                    tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                    tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+                ])
+            }
         } else if !data.isEmpty {
             self.closeButton.removeFromSuperview()
             self.addSubview(siteProtectionHeader)
@@ -72,16 +96,23 @@ public final class MenuRedesignMainView: UIView,
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yIdentifier)
         closeButton.configure(viewModel: closeButtonViewModel)
+        headerBanner.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
+                                        closeButtonA11yId: closeButtonA11yIdentifier)
         siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
                                                 closeButtonA11yId: closeButtonA11yIdentifier)
         siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
-        tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
+    }
+
+    public func setupDetails(title: String, subtitle: String, image: UIImage?, isBannerEnabled: Bool) {
+        headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
+        isMenuDefaultBrowserBanner = isBannerEnabled
     }
 
     // MARK: - Interface
     public func reloadDataView(with data: [MenuSection]) {
         setupView(with: data)
         tableView.reloadTableView(with: data)
+        handleBannerCallback(with: data)
         updateMenuHeight(for: data)
     }
 
@@ -98,12 +129,31 @@ public final class MenuRedesignMainView: UIView,
                 guard let self else { return }
                 let height = tableView.tableViewContentSize + UX.headerTopMargin
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
-                    onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+                    self.setHeightForHomepageMenu(height: height)
                 } else {
                     onCalculatedHeight?(height + siteProtectionHeader.frame.height)
                 }
                 layoutIfNeeded()
             }
+        }
+    }
+
+    private func setHeightForHomepageMenu(height: CGFloat) {
+        if isMenuDefaultBrowserBanner {
+            let headerBannerHeight = headerBanner.frame.height
+            self.onCalculatedHeight?(height +
+                                     UX.closeButtonSize +
+                                     UX.headerTopMarginWithButton +
+                                     headerBannerHeight +
+                                     UX.headerTopMargin)
+        } else {
+            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+        }
+    }
+
+    private func handleBannerCallback(with data: [MenuSection]) {
+        headerBanner.closeButtonCallback = { [weak self] in
+            self?.setupView(with: data, isHeaderBanner: false)
         }
     }
 
@@ -118,5 +168,6 @@ public final class MenuRedesignMainView: UIView,
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
         siteProtectionHeader.applyTheme(theme: theme)
+        headerBanner.applyTheme(theme: theme)
     }
 }
