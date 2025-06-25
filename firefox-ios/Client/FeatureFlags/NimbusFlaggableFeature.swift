@@ -76,11 +76,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .hntContentFeedRefresh,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
-<<<<<<< HEAD
                 .homepageStoriesRedesign,
-=======
                 .homepageSearchBar,
->>>>>>> 1d11ac1091 (add to debug, add tests, add animation)
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
