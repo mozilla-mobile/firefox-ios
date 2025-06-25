@@ -115,16 +115,7 @@ class StatusBarOverlay: UIView,
 
     // MARK: - Helper
 
-<<<<<<< HEAD
-    func applyTheme(theme: Theme) {
-        savedBackgroundColor = (hasTopTabs || isToolbarRefactorEnabled) ? theme.colors.layer3 : theme.colors.layer1
-        let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
-
-        // We only need no status bar for one edge case
-        let isHomepage = savedIsHomepage ?? false
-=======
     private func needsNoStatusBar(isHomepage: Bool) -> Bool {
->>>>>>> 1c24c99b8 (Bugfix FXIOS-12640 [Toolbar] Status bar overlay black when translucency is disabled (#27559))
         let isWallpaperedHomepage = isHomepage && wallpaperManager.currentWallpaper.hasImage
 
         if toolbarHelper.shouldBlur() {
@@ -149,7 +140,7 @@ class StatusBarOverlay: UIView,
 
     func applyTheme(theme: Theme) {
         savedBackgroundColor = (hasTopTabs || toolbarHelper.isToolbarRefactorEnabled) ?
-                                    theme.colors.layerSurfaceLow : theme.colors.layer1
+                                    theme.colors.layer3 : theme.colors.layer1
         let isHomepage: Bool = savedIsHomepage ?? false
         let needsNoStatusBar = needsNoStatusBar(isHomepage: isHomepage)
         updateStatusBarAlpha(isHomepage: isHomepage, needsNoStatusBar: needsNoStatusBar)
