@@ -66,6 +66,21 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
+    private func handleJavaScriptAlert<T: JavaScriptAlertProtocol & JSAlertInfo>(
+        _ alert: T,
+        for webView: WKWebView
+    ) {
+        if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(T.alertType) panel will be presented.", level: .info, category: .webview)
+            let alertController = alert.alertController()
+            alertController.delegate = self
+            present(alertController, animated: true)
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(T.alertType) panel is queued.", level: .info, category: .webview)
+            promptingTab.queueJavascriptAlertPrompt(alert)
+        }
+    }
+
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
@@ -76,16 +91,7 @@ extension BrowserViewController: WKUIDelegate {
                                         frame: frame,
                                         completionHandler: completionHandler)
 
-        if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript alert panel will be presented.", level: .info, category: .webview)
-
-            let alertController = messageAlert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript alert panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(messageAlert)
-        }
+        handleJavaScriptAlert(messageAlert, for: webView)
     }
 
     func webView(
@@ -99,16 +105,7 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(confirm)
         }
 
-        if shouldDisplayJSAlertForWebView(webView) {
-            self.logger.log("JavaScript confirm panel will be presented.", level: .info, category: .webview)
-
-            let alertController = confirmAlert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript confirm panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(confirmAlert)
-        }
+        handleJavaScriptAlert(confirmAlert, for: webView)
     }
 
     func webView(
@@ -123,16 +120,7 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(input)
         }
 
-        if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript text input panel will be presented.", level: .info, category: .webview)
-
-            let alertController = textInputAlert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript text input panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(textInputAlert)
-        }
+        handleJavaScriptAlert(textInputAlert, for: webView)
     }
 
     func webViewDidClose(_ webView: WKWebView) {
