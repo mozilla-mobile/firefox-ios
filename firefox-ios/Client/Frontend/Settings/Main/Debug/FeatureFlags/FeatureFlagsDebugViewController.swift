@@ -109,6 +109,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .homepageSearchBar,
+                    titleText: format(string: "Homepage Search Bar"),
+                    statusText: format(string: "Toggle to enable homepage search bar for redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .loginsVerificationEnabled,
                     titleText: format(string: "Logins Verification"),
                     statusText: format(string: "Toggle to enable logins verification")
