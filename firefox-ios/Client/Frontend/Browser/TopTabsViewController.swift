@@ -192,7 +192,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         if isToolbarRefactorEnabled,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.isTranslucent {
-            view.backgroundColor = colors.layer3.withAlphaComponent(toolbarHelper.backgroundAlpha())
+            view.backgroundColor = colors.layerSurfaceLow.withAlphaComponent(toolbarHelper.backgroundAlpha())
             collectionView.backgroundColor = .clear
         } else {
             view.backgroundColor = colors.layer3

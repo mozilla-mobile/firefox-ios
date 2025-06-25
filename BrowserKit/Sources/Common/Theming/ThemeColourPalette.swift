@@ -31,6 +31,8 @@ public protocol ThemeColourPalette {
     var layerAutofillText: UIColor { get }
     var layerSearch: UIColor { get }
     var layerGradientURL: Gradient { get }
+    var layerSurfaceLow: UIColor { get }
+    var layerSurfaceMedium: UIColor { get }
 
     // MARK: - Ratings
     var layerRatingA: UIColor { get }
