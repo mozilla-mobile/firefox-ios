@@ -90,6 +90,9 @@ TopSites:
 
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
+  
+User:
+  description: Corresponds to user properties and settings.
 
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.
