@@ -53,7 +53,6 @@ class BookmarksCoordinator: BaseCoordinator,
     private weak var libraryNavigationHandler: LibraryNavigationHandler?
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private let windowUUID: WindowUUID
-    private let isBookmarkRefactorEnabled: Bool
 
     // MARK: - Initializers
 
@@ -62,14 +61,12 @@ class BookmarksCoordinator: BaseCoordinator,
         profile: Profile,
         windowUUID: WindowUUID,
         libraryCoordinator: LibraryCoordinatorDelegate?,
-        libraryNavigationHandler: LibraryNavigationHandler?,
-        isBookmarkRefactorEnabled: Bool
+        libraryNavigationHandler: LibraryNavigationHandler?
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.libraryCoordinator = libraryCoordinator
         self.libraryNavigationHandler = libraryNavigationHandler
-        self.isBookmarkRefactorEnabled = isBookmarkRefactorEnabled
         super.init(router: router)
     }
 
