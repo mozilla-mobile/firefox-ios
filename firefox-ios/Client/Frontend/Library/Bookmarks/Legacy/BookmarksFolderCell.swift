@@ -11,14 +11,6 @@ import class MozillaAppServices.BookmarkItemData
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel
-
-    @MainActor
-    func didSelect(profile: Profile,
-                   searchEnginesManager: SearchEnginesManager,
-                   windowUUID: WindowUUID,
-                   libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?,
-                   logger: Logger)
 }
 
 extension BookmarkFolderData: BookmarksFolderCell {
@@ -29,20 +21,11 @@ extension BookmarkFolderData: BookmarksFolderCell {
         } else {
             title = self.title
         }
-
-        if isBookmarkRefactorEnabled {
-            return OneLineTableViewCellViewModel(title: title,
-                                                 leftImageView: leftImageView,
-                                                 accessoryView: UIImageView(image: chevronImage),
-                                                 accessoryType: .none,
-                                                 editingAccessoryView: UIImageView(image: chevronImage))
-        } else {
-            return OneLineTableViewCellViewModel(title: title,
-                                                 leftImageView: leftImageView,
-                                                 accessoryView: nil,
-                                                 accessoryType: .disclosureIndicator,
-                                                 editingAccessoryView: nil)
-        }
+        return OneLineTableViewCellViewModel(title: title,
+                                             leftImageView: leftImageView,
+                                             accessoryView: UIImageView(image: chevronImage),
+                                             accessoryType: .none,
+                                             editingAccessoryView: UIImageView(image: chevronImage))
     }
 
     func didSelect(profile: Profile,

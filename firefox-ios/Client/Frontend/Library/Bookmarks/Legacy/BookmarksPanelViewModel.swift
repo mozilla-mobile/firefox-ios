@@ -227,10 +227,10 @@ final class BookmarksPanelViewModel {
     // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
     // subfolders
     private func createDesktopBookmarksFolder(completion: @escaping () -> Void) {
-        self.bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
+        bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
             switch result {
             case .success(let bookmarkCount):
-                if bookmarkCount > 0 || !self.isBookmarkRefactorEnabled {
+                if bookmarkCount > 0 {
                     self.hasDesktopFolders = true
                     let desktopFolder = LocalDesktopFolder()
                     self.mainQueue.async {

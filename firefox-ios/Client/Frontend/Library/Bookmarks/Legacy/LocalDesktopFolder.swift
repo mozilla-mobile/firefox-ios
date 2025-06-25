@@ -55,7 +55,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
         let image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
             .withRenderingMode(.alwaysTemplate)
             .imageFlippedForRightToLeftLayoutDirection()
-        let accessoryView = isBookmarkRefactorEnabled ? UIImageView(image: image) : nil
+        let accessoryView = UIImageView(image: image)
 
         return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,

@@ -16,7 +16,7 @@ protocol BookmarksSaver {
                              completion: @escaping (GUID?) -> Void)
 }
 
-struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvider {
+struct DefaultBookmarksSaver: BookmarksSaver {
     enum SaveError: Error {
         case bookmarkTypeDontSupportSaving
         case saveOperationFailed
