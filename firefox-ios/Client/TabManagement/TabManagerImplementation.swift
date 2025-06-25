@@ -851,9 +851,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
-        guard tabRestoreHasFinished else { return }
-
-        guard let url = selectedTab?.url else { return }
+        guard tabRestoreHasFinished, let url = selectedTab?.url else { return }
 
         if url.isFxHomeUrl {
             return
