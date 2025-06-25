@@ -71,6 +71,7 @@
         "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
+        "CookiePersistenceTests",
         "CreditCardsTests",
         "DataManagementTests",
         "DatabaseFixtureTest",
