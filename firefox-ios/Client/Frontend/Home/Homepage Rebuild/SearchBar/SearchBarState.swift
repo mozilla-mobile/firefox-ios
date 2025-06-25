@@ -12,7 +12,7 @@ struct SearchBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     let shouldShowSearchBar: Bool
 
-    init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
             shouldShowSearchBar: true

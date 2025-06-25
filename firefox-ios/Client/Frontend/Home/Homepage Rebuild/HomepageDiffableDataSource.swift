@@ -198,16 +198,10 @@ final class HomepageDiffableDataSource:
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
     ) -> Bool {
-        let toolbarPosition = store.state.screenState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        )?.toolbarPosition
-
         let isHomepageSearchEnabled = featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
         let isCompact = device == .phone && !isLandscape
 
-        guard toolbarPosition == .top, isHomepageSearchEnabled, isCompact else {
+        guard isHomepageSearchEnabled, isCompact else {
             return false
         }
         return true

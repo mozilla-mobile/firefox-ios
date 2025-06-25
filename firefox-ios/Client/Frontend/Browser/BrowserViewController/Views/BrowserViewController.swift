@@ -2609,7 +2609,6 @@ class BrowserViewController: UIViewController,
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
-
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
             configureZeroSearchView()
         }
@@ -3525,6 +3524,8 @@ class BrowserViewController: UIViewController,
     /// Configures the scrim area for zero search state
     private func configureZeroSearchView() {
         addressToolbarContainer.isHidden = false
+
+        zeroSearchDimmingView.alpha = 0
         view.addSubview(zeroSearchDimmingView)
         view.bringSubviewToFront(zeroSearchDimmingView)
 
@@ -3534,6 +3535,10 @@ class BrowserViewController: UIViewController,
             zeroSearchDimmingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
             zeroSearchDimmingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
         ])
+
+        UIView.animate(withDuration: 0.3) {
+             self.zeroSearchDimmingView.alpha = 1
+        }
     }
 
     /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
@@ -3583,7 +3588,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim
+        zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim.withAlphaComponent(0.70)
 
         if isToolbarRefactorEnabled {
             // to make sure on homepage with bottom search bar the status bar is hidden

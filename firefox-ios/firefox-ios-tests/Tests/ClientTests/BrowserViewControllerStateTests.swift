@@ -223,6 +223,21 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
+    func test_tapOnHomepageSearchBar_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .zeroSearch)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .zeroSearch)
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
+    }
+
+    // MARK: StartAtHomeAction
+
     func test_shouldStartAtHome_withStartAtHomeAction_returnsTrue() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
