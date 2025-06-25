@@ -1296,18 +1296,20 @@ class TabManagerImplementation: NSObject,
 // MARK: - Notifiable
 extension TabManagerImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.willResignActiveNotification:
-            saveAllTabData()
-        case .TabMimeTypeDidSet:
-            guard windowUUID == notification.windowUUID else { return }
-            updateMenuItemsForSelectedTab()
-        case .BlockPopup:
-            blockPopUpDidChange()
-        case .AutoPlayChanged:
-            autoPlayDidChange()
-        default:
-            break
+        Task { @MainActor in
+            switch notification.name {
+            case UIApplication.willResignActiveNotification:
+                saveAllTabData()
+            case .TabMimeTypeDidSet:
+                guard windowUUID == notification.windowUUID else { return }
+                updateMenuItemsForSelectedTab()
+            case .BlockPopup:
+                blockPopUpDidChange()
+            case .AutoPlayChanged:
+                autoPlayDidChange()
+            default:
+                break
+            }
         }
     }
 }

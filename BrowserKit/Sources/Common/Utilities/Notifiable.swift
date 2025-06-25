@@ -43,25 +43,17 @@ extension NotificationCenter: NotificationProtocol {
 @objc
 public protocol Notifiable {
     var notificationCenter: NotificationProtocol { get set }
-    @MainActor
     func handleNotifications(_ notification: Notification)
 }
 
 public extension Notifiable {
     func setupNotifications(forObserver observer: Any,
                             observing notifications: [Notification.Name]) {
-        notifications.forEach { name in
-            notificationCenter.addObserver(name: name, queue: .main) { [weak self] notification in
-                /// There is really no way for this guard to fail since the notification queue is .main
-                /// but failing nicely is better than crashing?
-                guard Thread.isMainThread else {
-                    return
-                }
-
-                MainActor.assumeIsolated {
-                    self?.handleNotifications(notification)
-                }
-            }
+        notifications.forEach {
+            notificationCenter.addObserver(observer,
+                                           selector: #selector(handleNotifications),
+                                           name: $0,
+                                           object: nil)
         }
     }
 }
