@@ -21,6 +21,7 @@ class MainMenuViewController: UIViewController,
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
+        static let backgroundAlpha: CGFloat = 0.8
     }
     typealias SubscriberStateType = MainMenuState
 
@@ -123,6 +124,16 @@ class MainMenuViewController: UIViewController,
                 self.dispatchCloseMenuAction()
             }
 
+            menuRedesignContent.onCalculatedHeight = { [weak self] height in
+                guard let self else { return }
+                if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                    let customDetent = UISheetPresentationController.Detent.custom { context in
+                        return height
+                    }
+                    self.sheetPresentationController?.detents = [customDetent]
+                }
+            }
+
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
                 guard let self else { return }
                 self.dispatchSiteProtectionAction()
@@ -222,6 +233,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupRedesignView() {
+        view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
         view.addSubview(menuRedesignContent)
 
         NSLayoutConstraint.activate([
@@ -376,9 +388,13 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer3
-        menuRedesignContent.applyTheme(theme: theme)
-        menuContent.applyTheme(theme: theme)
+        if isMenuRedesign {
+            view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            menuRedesignContent.applyTheme(theme: theme)
+        } else {
+            view.backgroundColor = theme.colors.layer3
+            menuContent.applyTheme(theme: theme)
+        }
     }
 
     private func updateHeaderWith(accountData: AccountData, icon: UIImage?) {
@@ -503,12 +519,15 @@ class MainMenuViewController: UIViewController,
     }
 
     private func changeDetentIfNecessary() {
-        if let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
-           let isExpanded = element.isExpanded,
-           isExpanded {
-            if let sheet = self.sheetPresentationController, !hasBeenExpanded {
-                sheet.selectedDetentIdentifier = .large
-                hasBeenExpanded = true
+        // For iOS 16 or above we are using custom detents
+        if #unavailable(iOS 16) {
+            if let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
+               let isExpanded = element.isExpanded,
+               isExpanded {
+                if let sheet = self.sheetPresentationController, !hasBeenExpanded {
+                    sheet.selectedDetentIdentifier = .large
+                    hasBeenExpanded = true
+                }
             }
         }
     }
