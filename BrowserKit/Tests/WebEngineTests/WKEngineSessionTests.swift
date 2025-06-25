@@ -135,6 +135,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertNil(webViewProvider.webView.findInteraction)
     }
 
+    @available(iOS 16, *)
     func testShowFindInPageGivenFindInteractionThenPresentNavigatorCalledWithEmptySearchText() {
         let findInteraction = MockUIFindInteraction()
         let subject = createSubject()
@@ -147,6 +148,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(findInteraction.searchText, "")
     }
 
+    @available(iOS 16, *)
     func testShowFindInPageGivenSearchTextThenPresentNavigatorCalled() {
         let searchText = "SearchTerm"
         let findInteraction = MockUIFindInteraction()
