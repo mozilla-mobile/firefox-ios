@@ -286,12 +286,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
-        )
-        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
-        XCTAssertEqual(actionType, GeneralBrowserActionType.enteredZeroSearchScreen)
-        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
     private func createSubject() -> BrowserViewController {
