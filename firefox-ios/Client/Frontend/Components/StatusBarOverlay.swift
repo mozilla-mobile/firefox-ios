@@ -35,10 +35,6 @@ class StatusBarOverlay: UIView,
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
 
-    private var isToolbarRefactorEnabled: Bool {
-        toolbarHelper.isToolbarRefactorEnabled
-    }
-
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
     /// This is used as the alpha of the status bar background.
     /// 0 = no status bar background shown
@@ -80,17 +76,9 @@ class StatusBarOverlay: UIView,
 
     func resetState(isHomepage: Bool) {
         savedIsHomepage = isHomepage
-
-        // We only need no status bar for one edge case
-        var needsNoStatusBar = isHomepage && isBottomSearchBar
-        if !isToolbarRefactorEnabled {
-            needsNoStatusBar = needsNoStatusBar && wallpaperManager.currentWallpaper.hasImage
-        }
+        let needsNoStatusBar = needsNoStatusBar(isHomepage: isHomepage)
         scrollOffset = needsNoStatusBar ? 0 : 1
-
-        let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
-        let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
-        backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
+        updateStatusBarAlpha(isHomepage: isHomepage, needsNoStatusBar: needsNoStatusBar)
     }
 
     func showOverlay(animated: Bool) {
@@ -125,22 +113,29 @@ class StatusBarOverlay: UIView,
         }
     }
 
-    // MARK: - ThemeApplicable
+    // MARK: - Helper
 
+<<<<<<< HEAD
     func applyTheme(theme: Theme) {
         savedBackgroundColor = (hasTopTabs || isToolbarRefactorEnabled) ? theme.colors.layer3 : theme.colors.layer1
         let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         // We only need no status bar for one edge case
         let isHomepage = savedIsHomepage ?? false
+=======
+    private func needsNoStatusBar(isHomepage: Bool) -> Bool {
+>>>>>>> 1c24c99b8 (Bugfix FXIOS-12640 [Toolbar] Status bar overlay black when translucency is disabled (#27559))
         let isWallpaperedHomepage = isHomepage && wallpaperManager.currentWallpaper.hasImage
-        var needsNoStatusBar: Bool
 
-        if isToolbarRefactorEnabled {
-            needsNoStatusBar = isHomepage && isBottomSearchBar
+        if toolbarHelper.shouldBlur() {
+            return isHomepage && isBottomSearchBar
         } else {
-            needsNoStatusBar = isWallpaperedHomepage && isBottomSearchBar
+            return isWallpaperedHomepage && isBottomSearchBar
         }
+    }
+
+    private func updateStatusBarAlpha(isHomepage: Bool, needsNoStatusBar: Bool) {
+        let translucencyBackgroundAlpha = toolbarHelper.backgroundAlpha()
 
         if needsNoStatusBar {
             let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
@@ -148,6 +143,16 @@ class StatusBarOverlay: UIView,
         } else {
             backgroundColor = savedBackgroundColor?.withAlphaComponent(translucencyBackgroundAlpha)
         }
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        savedBackgroundColor = (hasTopTabs || toolbarHelper.isToolbarRefactorEnabled) ?
+                                    theme.colors.layerSurfaceLow : theme.colors.layer1
+        let isHomepage: Bool = savedIsHomepage ?? false
+        let needsNoStatusBar = needsNoStatusBar(isHomepage: isHomepage)
+        updateStatusBarAlpha(isHomepage: isHomepage, needsNoStatusBar: needsNoStatusBar)
     }
 
     // MARK: - StatusBarScrollDelegate
