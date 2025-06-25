@@ -855,6 +855,11 @@ final class HomepageViewController: UIViewController,
                 config: config,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
+        case .searchBar:
+            dispatchNavigationBrowserAction(
+                with: NavigationDestination(.zeroSearch),
+                actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+            )
         case .jumpBackIn(let config):
             store.dispatchLegacy(
                 JumpBackInAction(

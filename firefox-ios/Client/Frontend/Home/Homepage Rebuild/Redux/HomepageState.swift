@@ -12,6 +12,7 @@ struct HomepageState: ScreenState, Equatable {
     let headerState: HeaderState
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
+    let searchState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
     let bookmarkState: BookmarksSectionState
     let pocketState: PocketState
@@ -44,6 +45,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: homepageState.headerState,
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
+            searchState: homepageState.searchState,
             jumpBackInState: homepageState.jumpBackInState,
             bookmarkState: homepageState.bookmarkState,
             pocketState: homepageState.pocketState,
@@ -59,6 +61,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: HeaderState(windowUUID: windowUUID),
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
+            searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
@@ -73,6 +76,7 @@ struct HomepageState: ScreenState, Equatable {
         headerState: HeaderState,
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
+        searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
         pocketState: PocketState,
@@ -84,6 +88,7 @@ struct HomepageState: ScreenState, Equatable {
         self.headerState = headerState
         self.messageState = messageState
         self.topSitesState = topSitesState
+        self.searchState = searchState
         self.jumpBackInState = jumpBackInState
         self.bookmarkState = bookmarkState
         self.pocketState = pocketState
@@ -100,48 +105,64 @@ struct HomepageState: ScreenState, Equatable {
 
         switch action.actionType {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                messageState: MessageCardState.reducer(state.messageState, action),
-                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-                bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-                pocketState: PocketState.reducer(state.pocketState, action),
-                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-                isZeroSearch: state.isZeroSearch,
-                shouldTriggerImpression: false
-            )
+            return handleInitializeAndViewWillTransitionAction(state: state, action: action)
+
         case HomepageActionType.embeddedHomepage:
             guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
                 return defaultState(from: state)
             }
 
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                messageState: MessageCardState.reducer(state.messageState, action),
-                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
-                bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-                pocketState: PocketState.reducer(state.pocketState, action),
-                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-                isZeroSearch: isZeroSearch,
-                shouldTriggerImpression: false
-            )
+            return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
+
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
-            return handleDidTabChangeToHomepageState(state: state, action: action)
+            return handleDidTabChangeToHomepageAction(state: state, action: action)
+
         default:
             return defaultState(from: state, action: action)
         }
     }
 
-    private static func handleDidTabChangeToHomepageState(state: HomepageState, action: Action) -> HomepageState {
+    private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: PocketState.reducer(state.pocketState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false
+        )
+    }
+
+    private static func handleEmbeddedHomepageAction(state: HomepageState,
+                                                     action: Action,
+                                                     isZeroSearch: Bool) -> HomepageState {
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: PocketState.reducer(state.pocketState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: isZeroSearch,
+            shouldTriggerImpression: false
+        )
+    }
+
+    private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
             pocketState: PocketState.reducer(state.pocketState, action),
@@ -156,6 +177,7 @@ struct HomepageState: ScreenState, Equatable {
         var messageState = state.messageState
         var pocketState = state.pocketState
         var topSitesState = state.topSitesState
+        var searchState = state.searchState
         var jumpBackInState = state.jumpBackInState
         var bookmarkState = state.bookmarkState
         var wallpaperState = state.wallpaperState
@@ -164,6 +186,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState = HeaderState.reducer(state.headerState, action)
             messageState = MessageCardState.reducer(state.messageState, action)
             pocketState = PocketState.reducer(state.pocketState, action)
+            searchState = SearchBarState.reducer(state.searchState, action)
             jumpBackInState = JumpBackInSectionState.reducer(state.jumpBackInState, action)
             bookmarkState = BookmarksSectionState.reducer(state.bookmarkState, action)
             topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
@@ -175,6 +198,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: headerState,
             messageState: messageState,
             topSitesState: topSitesState,
+            searchState: searchState,
             jumpBackInState: jumpBackInState,
             bookmarkState: bookmarkState,
             pocketState: pocketState,
