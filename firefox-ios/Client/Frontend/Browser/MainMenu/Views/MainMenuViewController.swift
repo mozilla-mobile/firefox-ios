@@ -58,6 +58,10 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
+    private var isMenuDefaultBrowserBanner: Bool {
+        return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
+    }
+
     private var hasBeenExpanded = false
 
     // Used to save the last screen orientation
@@ -242,6 +246,11 @@ class MainMenuViewController: UIViewController,
             menuRedesignContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             menuRedesignContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+
+        menuRedesignContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
+                                         subtitle: .MainMenu.HeaderBanner.Subtitle,
+                                         image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
+                                         isBannerEnabled: isMenuDefaultBrowserBanner)
     }
 
     private func setupHintView() {
