@@ -165,6 +165,13 @@ class BrowserViewController: UIViewController,
         view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
+    // Overlay dimming view for zero search mode
+    private lazy var zeroSearchDimmingView: UIView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.ZeroSearch.dimmingView
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedZeroSearchScrim))
+        view.addGestureRecognizer(tapRecognizer)
+    }
+
     // BottomContainer stack view contains toolbar
     private lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
 
@@ -1111,7 +1118,22 @@ class BrowserViewController: UIViewController,
         )
     }
 
+    /// If we are showing the homepage search bar, then we should hide the address toolbar
+    private func shouldHideToolbar() -> Bool {
+        let shouldShowSearchBar = store.state.screenState(
+            HomepageState.self,
+            for: .homepage,
+            window: windowUUID
+        )?.searchState.shouldShowSearchBar ?? false
+        guard shouldShowSearchBar else { return false }
+        return true
+    }
+
     private func switchToolbarIfNeeded() {
+        guard !shouldHideToolbar() else {
+            addressToolbarContainer.isHidden = true
+            return
+        }
         var updateNeeded = false
 
         // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
@@ -1170,7 +1192,9 @@ class BrowserViewController: UIViewController,
     }
 
     private func addAddressToolbar() {
-        guard isToolbarRefactorEnabled else { return }
+        guard isToolbarRefactorEnabled, !shouldHideToolbar() else {
+            return
+        }
 
         addressToolbarContainer.configure(
             windowUUID: windowUUID,
@@ -2015,6 +2039,7 @@ class BrowserViewController: UIViewController,
     }
 
     func destroySearchController() {
+        zeroSearchDimmingView.removeFromSuperview()
         hideSearchController()
 
         searchController = nil
@@ -2583,6 +2608,10 @@ class BrowserViewController: UIViewController,
             )
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
+        case .zeroSearch:
+
+            overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
+            configureZeroSearchView()
         }
     }
 
@@ -3493,6 +3522,29 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    /// Configures the scrim area for zero search state
+    private func configureZeroSearchView() {
+        addressToolbarContainer.isHidden = false
+        view.addSubview(zeroSearchDimmingView)
+        view.bringSubviewToFront(zeroSearchDimmingView)
+
+        NSLayoutConstraint.activate([
+            zeroSearchDimmingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+            zeroSearchDimmingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+            zeroSearchDimmingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            zeroSearchDimmingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
+        ])
+    }
+
+    /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
+    @objc
+    private func tappedZeroSearchScrim() {
+        let overlayAction = GeneralBrowserAction(showOverlay: false,
+                                                 windowUUID: windowUUID,
+                                                 actionType: GeneralBrowserActionType.showOverlay)
+        store.dispatchLegacy(overlayAction)
+    }
+
     // Determines the view user should see when editing the url bar
     // Dimming view appears if private mode search suggest is disabled
     // Otherwise shows search suggests screen
@@ -3531,6 +3583,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim
 
         if isToolbarRefactorEnabled {
             // to make sure on homepage with bottom search bar the status bar is hidden

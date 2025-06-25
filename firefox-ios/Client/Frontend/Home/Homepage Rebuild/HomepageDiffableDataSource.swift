@@ -107,7 +107,9 @@ final class HomepageDiffableDataSource:
         // TODO: FXIOS-12566 - Should update with state instead of adding private method
         if shouldShowSearchBar(with: state.windowUUID) {
             snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
+            if state.searchState.shouldShowSearchBar {
+                snapshot.appendItems([.searchBar], toSection: .searchBar)
+            }
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
