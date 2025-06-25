@@ -1658,6 +1658,9 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
+    - script@1.2.1:
+        - content: |
+            sudo xcodes runtimes install "iOS 18.2"
     - xcode-test@6.0.1:
         timeout: 3000
         inputs:
@@ -2352,5 +2355,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-16.2.x
+    stack: osx-xcode-16.4.x
     machine_type_id: g2.mac.4large
