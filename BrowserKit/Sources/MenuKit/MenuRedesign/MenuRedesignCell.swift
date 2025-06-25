@@ -34,8 +34,8 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var iconImageView: UIImageView = .build()
 
-    var isFirstCell = false
-    var isLastCell = false
+    private var isFirstCell = false
+    private var isLastCell = false
 
     // MARK: - Properties
     var model: MenuElement?
@@ -52,18 +52,7 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.clipsToBounds = true
-        if isFirstCell && isLastCell {
-            self.layer.cornerRadius = UX.cornerRadius
-            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
-                                        .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        } else if isFirstCell {
-            self.layer.cornerRadius = UX.cornerRadius
-            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        } else if isLastCell {
-            self.layer.cornerRadius = UX.cornerRadius
-            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        }
+        configureCornerRadiusForCellPosition()
     }
 
     override func prepareForReuse() {
@@ -114,6 +103,18 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         let iconSize = isAccessibilityCategory ? UX.largeIconSize : UX.iconSize
         iconImageView.widthAnchor.constraint(equalToConstant: iconSize).isActive = true
         iconImageView.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
+    }
+
+    private func configureCornerRadiusForCellPosition() {
+        guard isFirstCell || isLastCell else { return }
+        self.clipsToBounds = true
+        layer.cornerRadius = UX.cornerRadius
+        layer.maskedCorners = {
+            var corners: CACornerMask = []
+            if isFirstCell { corners.formUnion([.layerMinXMinYCorner, .layerMaxXMinYCorner]) }
+            if isLastCell { corners.formUnion([.layerMinXMaxYCorner, .layerMaxXMaxYCorner]) }
+            return corners
+        }()
     }
 
     // MARK: - Theme Applicable

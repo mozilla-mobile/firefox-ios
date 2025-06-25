@@ -41,8 +41,8 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         return model?.iconImage != nil && (model?.needsReAuth == nil || model?.needsReAuth == false)
     }
 
-    var isFirstCell = false
-    var isLastCell = false
+    private var isFirstCell = false
+    private var isLastCell = false
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -62,19 +62,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
             iconImageView.layer.cornerRadius = 0
         }
         iconImageView.clipsToBounds = shouldConfigureImageView
-
-        self.clipsToBounds = true
-        if isFirstCell && isLastCell {
-            self.layer.cornerRadius = UX.cornerRadius
-            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
-                                        .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        } else if isFirstCell {
-            self.layer.cornerRadius = UX.cornerRadius
-            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        } else if isLastCell {
-            self.layer.cornerRadius = UX.cornerRadius
-            self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        }
+        configureCornerRadiusForCellPosition()
     }
 
     override func prepareForReuse() {
@@ -136,6 +124,18 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         let iconSize = isAccessibilityCategory ? UX.largeIconSize : UX.iconSize
         iconImageView.widthAnchor.constraint(equalToConstant: iconSize).isActive = true
         iconImageView.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
+    }
+
+    private func configureCornerRadiusForCellPosition() {
+        guard isFirstCell || isLastCell else { return }
+        self.clipsToBounds = true
+        layer.cornerRadius = UX.cornerRadius
+        layer.maskedCorners = {
+            var corners: CACornerMask = []
+            if isFirstCell { corners.formUnion([.layerMinXMinYCorner, .layerMaxXMinYCorner]) }
+            if isLastCell { corners.formUnion([.layerMinXMaxYCorner, .layerMaxXMaxYCorner]) }
+            return corners
+        }()
     }
 
     // MARK: - Theme Applicable

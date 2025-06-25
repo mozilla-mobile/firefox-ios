@@ -90,19 +90,19 @@ public final class MenuRedesignMainView: UIView,
         if let expandedSection = data.first(where: { $0.isExpanded ?? false }),
            let isExpanded = expandedSection.isExpanded,
            isExpanded {
-            let height = self.tableView.tableViewContentSize + UX.headerTopMargin
-            onCalculatedHeight?(height + self.siteProtectionHeader.frame.height)
-            self.layoutIfNeeded()
+            let height = tableView.tableViewContentSize + UX.headerTopMargin
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+            layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
-                let height = self.tableView.tableViewContentSize + UX.headerTopMargin
+                let height = tableView.tableViewContentSize + UX.headerTopMargin
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
-                    self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+                    onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
                 } else {
-                    self.onCalculatedHeight?(height + self.siteProtectionHeader.frame.height)
+                    onCalculatedHeight?(height + siteProtectionHeader.frame.height)
                 }
-                self.layoutIfNeeded()
+                layoutIfNeeded()
             }
         }
     }
