@@ -184,7 +184,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     titleText: format(string: "Stories Redesign"),
                     statusText: format(string: "Toggle to enable homepage stories section redesign")
                 ) { [weak self] _ in
-                    self?.reloadView()
+                    guard let self else { return }
+                    self.reloadView()
+                    store.dispatchLegacy(
+                        PocketAction(windowUUID: self.windowUUID,
+                                     actionType: PocketActionType.redesignToggled
+                        )
+                    )
                 },
                 FeatureFlagsBoolSetting(
                     with: .tabTrayUIExperiments,
