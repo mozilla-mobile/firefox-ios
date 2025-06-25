@@ -70,7 +70,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
     }
 
     private func createSubject(
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> MainMenuCoordinator {
         let subject = MainMenuCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID, profile: MockProfile())

@@ -202,7 +202,7 @@ class EditBookmarkViewModelTests: XCTestCase {
 
     func createSubject(folder: FxBookmarkNode,
                        parentFolder: FxBookmarkNode,
-                       file: StaticString = #file,
+                       file: StaticString = #filePath,
                        line: UInt = #line) -> EditBookmarkViewModel {
         let subject = EditBookmarkViewModel(parentFolder: parentFolder,
                                             node: folder,

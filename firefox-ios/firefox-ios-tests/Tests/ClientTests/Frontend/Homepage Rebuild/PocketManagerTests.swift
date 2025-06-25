@@ -33,7 +33,7 @@ final class PocketManagerTests: XCTestCase {
 
     private func createSubject(
         with pocketAPI: MockPocketAPI,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> PocketManager {
         let subject = PocketManager(pocketAPI: pocketAPI)
