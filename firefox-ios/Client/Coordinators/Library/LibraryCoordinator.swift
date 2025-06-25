@@ -132,17 +132,11 @@ class LibraryCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: parentCoordinator,
-            libraryNavigationHandler: self,
-            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
+            libraryNavigationHandler: self
         )
         add(child: bookmarksCoordinator)
-        if isBookmarkRefactorEnabled {
-            (navigationController.topViewController as? BookmarksViewController)?
-                .bookmarkCoordinatorDelegate = bookmarksCoordinator
-        } else {
-            (navigationController.topViewController as? LegacyBookmarksPanel)?
-                .bookmarkCoordinatorDelegate = bookmarksCoordinator
-        }
+        (navigationController.topViewController as? BookmarksViewController)?
+            .bookmarkCoordinatorDelegate = bookmarksCoordinator
     }
 
     private func makeHistoryCoordinator(navigationController: UINavigationController) {
