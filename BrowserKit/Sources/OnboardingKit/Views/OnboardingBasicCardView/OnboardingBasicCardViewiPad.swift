@@ -35,16 +35,18 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
     public var body: some View {
         VStack {
             Spacer()
-            VStack(spacing: UX.CardView.spacing) {
-                Spacer()
-                titleView
-                imageView
-                bodyView
-                linkView
-                Spacer()
-                VStack {
-                    primaryButton
-                    secondaryButton
+            VScrollView {
+                VStack(spacing: UX.CardView.spacing) {
+                    Spacer()
+                    titleView
+                    imageView
+                    bodyView
+                    linkView
+                    Spacer()
+                    VStack {
+                        primaryButton
+                        secondaryButton
+                    }
                 }
             }
             .padding(UX.CardView.verticalPadding)
