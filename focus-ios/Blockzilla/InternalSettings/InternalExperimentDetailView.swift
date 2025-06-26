@@ -68,6 +68,32 @@ extension InternalExperimentDetailView: View {
             }
         }
     }
+
+    private var activeBranchSection: some View {
+        SwiftUI.Section {
+            Picker(selection: $selectedBranchSlug, label: Text(verbatim: "Active Branch")) {
+                ForEach(pickerBranches, id: \.self) { branch in
+                    if branch == notEnrolledBranchSlug {
+                        Text(verbatim: "Not Enrolled")
+                    } else {
+                        Text(verbatim: branch)
+                    }
+                }
+            }.onReceive(Just(selectedBranchSlug)) { newValue in
+                if newValue != notEnrolledBranchSlug {
+                    if NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) != newValue {
+                        if let branch = experiment.branches.first(where: { $0.slug == newValue }) {
+                            NimbusWrapper.shared.optIn(toExperiment: experiment, withBranch: branch)
+                        }
+                    }
+                } else {
+                    if NimbusWrapper.shared.getEnrolledBranchSlug(forExperiment: experiment) != nil {
+                        NimbusWrapper.shared.optOut(ofExperiment: experiment)
+                    }
+                }
+            }
+        }
+    }
 }
 
 struct InternalExperimentDetailView_Previews: PreviewProvider {
