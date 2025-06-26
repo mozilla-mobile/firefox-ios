@@ -23,8 +23,7 @@ final class PocketMiddleware {
     lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize,
-             HomepageMiddlewareActionType.enteredForeground,
-             PocketActionType.redesignToggled:
+            HomepageMiddlewareActionType.enteredForeground:
             self.getPocketDataAndUpdateState(for: action)
         case PocketActionType.tapOnHomepagePocketCell:
             self.sendOpenPocketItemTelemetry(for: action)

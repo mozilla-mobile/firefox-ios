@@ -34,7 +34,6 @@ enum PocketActionType: ActionType {
     case toggleShowSectionSetting
     case tapOnHomepagePocketCell
     case viewedSection
-    case redesignToggled
 }
 
 enum PocketMiddlewareActionType: ActionType {
