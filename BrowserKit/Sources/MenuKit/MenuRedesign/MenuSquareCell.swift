@@ -15,6 +15,8 @@ final class MenuSquareView: UIView, ThemeApplicable {
         static let contentViewTopMargin: CGFloat = 12
         static let contentViewBottomMargin: CGFloat = 8
         static let contentViewHorizontalMargin: CGFloat = 4
+        static let cornerRadius: CGFloat = 16
+        static let backgroundAlpha: CGFloat = 0.8
     }
 
     // MARK: - UI Elements
@@ -47,6 +49,14 @@ final class MenuSquareView: UIView, ThemeApplicable {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) not yet supported")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = UX.cornerRadius
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
+                                    .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        self.clipsToBounds = true
     }
 
     func configureCellWith(model: MenuElement) {
@@ -97,7 +107,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         backgroundColor = .clear
         contentStackView.backgroundColor = .clear
-        backgroundContentView.backgroundColor = theme.colors.layer2
+        backgroundContentView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
         icon.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textSecondary
     }

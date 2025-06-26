@@ -46,7 +46,7 @@ class PocketDataAdaptorTests: XCTestCase {
 
 // MARK: Helper
 private extension PocketDataAdaptorTests {
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) -> PocketDataAdaptorImplementation {
         let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")
         let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,

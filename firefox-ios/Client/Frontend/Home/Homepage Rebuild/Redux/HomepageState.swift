@@ -12,6 +12,7 @@ struct HomepageState: ScreenState, Equatable {
     let headerState: HeaderState
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
+    let searchState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
     let bookmarkState: BookmarksSectionState
     let pocketState: PocketState
@@ -44,6 +45,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: homepageState.headerState,
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
+            searchState: homepageState.searchState,
             jumpBackInState: homepageState.jumpBackInState,
             bookmarkState: homepageState.bookmarkState,
             pocketState: homepageState.pocketState,
@@ -59,6 +61,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: HeaderState(windowUUID: windowUUID),
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
+            searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
@@ -73,6 +76,7 @@ struct HomepageState: ScreenState, Equatable {
         headerState: HeaderState,
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
+        searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
         pocketState: PocketState,
@@ -84,6 +88,7 @@ struct HomepageState: ScreenState, Equatable {
         self.headerState = headerState
         self.messageState = messageState
         self.topSitesState = topSitesState
+        self.searchState = searchState
         self.jumpBackInState = jumpBackInState
         self.bookmarkState = bookmarkState
         self.pocketState = pocketState
@@ -120,6 +125,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
             pocketState: PocketState.reducer(state.pocketState, action),
@@ -137,6 +143,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
             pocketState: PocketState.reducer(state.pocketState, action),
@@ -152,6 +159,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
             pocketState: PocketState.reducer(state.pocketState, action),
@@ -166,6 +174,7 @@ struct HomepageState: ScreenState, Equatable {
         var messageState = state.messageState
         var pocketState = state.pocketState
         var topSitesState = state.topSitesState
+        var searchState = state.searchState
         var jumpBackInState = state.jumpBackInState
         var bookmarkState = state.bookmarkState
         var wallpaperState = state.wallpaperState
@@ -174,6 +183,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState = HeaderState.reducer(state.headerState, action)
             messageState = MessageCardState.reducer(state.messageState, action)
             pocketState = PocketState.reducer(state.pocketState, action)
+            searchState = SearchBarState.reducer(state.searchState, action)
             jumpBackInState = JumpBackInSectionState.reducer(state.jumpBackInState, action)
             bookmarkState = BookmarksSectionState.reducer(state.bookmarkState, action)
             topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
@@ -185,6 +195,7 @@ struct HomepageState: ScreenState, Equatable {
             headerState: headerState,
             messageState: messageState,
             topSitesState: topSitesState,
+            searchState: searchState,
             jumpBackInState: jumpBackInState,
             bookmarkState: bookmarkState,
             pocketState: pocketState,

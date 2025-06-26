@@ -45,6 +45,8 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307027
+    // Smoketest
     func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOff_swipinTabsExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "swipingTabsOn", featureName: "toolbar-refactor-feature")
@@ -88,6 +90,8 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307027
+    // Smoketest
     func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOn_swipinTabsExperimentOn() {
         addLaunchArgument(jsonFileName: "swipingTabsOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
@@ -134,6 +138,7 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff_swipingTabsExperimentOn() {
         addLaunchArgument(jsonFileName: "swipingTabsOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
@@ -156,7 +161,9 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307029

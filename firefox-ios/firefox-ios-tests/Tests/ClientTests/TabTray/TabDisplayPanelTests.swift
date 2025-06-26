@@ -45,7 +45,7 @@ final class TabDisplayPanelTests: XCTestCase {
     private func createSubject(isPrivateMode: Bool,
                                emptyTabs: Bool,
                                emptyInactiveTabs: Bool,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> TabDisplayPanelViewController {
         let subjectState = createSubjectState(isPrivateMode: isPrivateMode,
                                               emptyTabs: emptyTabs,
