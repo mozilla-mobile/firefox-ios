@@ -151,6 +151,10 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
         }
     }
 
+    deinit {
+        shutdown()
+    }
+
     public func localName() -> String {
         return name
     }
