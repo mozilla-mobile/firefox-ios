@@ -136,7 +136,8 @@ class ZoomingTests: FeatureFlaggedTestBase {
     private func selectTabTrayWebsites(tab: Int) {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
-        app.collectionViews.staticTexts.element(boundBy: tab).waitAndTap()
+        let tabCollectionView = AccessibilityIdentifiers.TabTray.collectionView
+        app.collectionViews[tabCollectionView].cells.element(boundBy: tab).waitAndTap()
         waitUntilPageLoad()
         // Tap on the hamburger menu -> Tap on Zoom
         navigator.nowAt(BrowserTab)
