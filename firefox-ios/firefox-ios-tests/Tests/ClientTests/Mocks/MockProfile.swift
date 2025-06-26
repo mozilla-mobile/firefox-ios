@@ -149,6 +149,10 @@ open class MockProfile: Client.Profile {
         }
     }
 
+    deinit {
+        shutdown()
+    }
+
     public func localName() -> String {
         return name
     }
