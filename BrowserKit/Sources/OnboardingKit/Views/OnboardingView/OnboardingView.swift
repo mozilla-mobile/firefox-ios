@@ -7,8 +7,8 @@ import SwiftUI
 
 // MARK: - Main Onboarding View
 public struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
-    @Environment(\.deviceType)
-    var deviceType
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     @StateObject private var viewModel: OnboardingFlowViewModel<VM>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -27,18 +27,17 @@ public struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
 
     public var body: some View {
         Group {
-            switch deviceType {
-            case .pad:
-                iPadOnboardingView
-            default:
-                iPhoneOnboardingView
+            if horizontalSizeClass == .regular {
+                onboardingViewRegular
+            } else {
+                onboardingViewCompact
             }
         }
     }
 
     // MARK: - iPad Layout
-    private var iPadOnboardingView: some View {
-        OnboardingViewiPad(
+    private var onboardingViewRegular: some View {
+        OnboardingRegularView(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: viewModel
@@ -46,8 +45,8 @@ public struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
     }
 
     // MARK: - iPhone Layout
-    private var iPhoneOnboardingView: some View {
-        OnboardingViewiPhone(
+    private var onboardingViewCompact: some View {
+        OnboardingCompactView(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: viewModel

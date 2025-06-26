@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-public struct OnboardingViewiPhone<VM: OnboardingCardInfoModelProtocol>: View {
+public struct OnboardingCompactView<VM: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<VM>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager

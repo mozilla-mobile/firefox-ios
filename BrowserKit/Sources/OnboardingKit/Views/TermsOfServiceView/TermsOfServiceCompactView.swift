@@ -6,7 +6,7 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceViewiPhone<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear

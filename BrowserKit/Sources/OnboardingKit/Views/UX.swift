@@ -23,6 +23,7 @@ enum UX {
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonTopPadding: CGFloat = 8
         static let secondaryButtonBottomPadding: CGFloat = 24
+        static let primaryButtonWidthiPad: CGFloat = 313
 
         // Font sizes for base metrics
         static let titleFontSize: CGFloat = 28

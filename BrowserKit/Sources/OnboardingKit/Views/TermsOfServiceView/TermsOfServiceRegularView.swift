@@ -6,7 +6,7 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceViewiPad<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceRegularView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
@@ -37,7 +37,7 @@ public struct TermsOfServiceViewiPad<VM: OnboardingCardInfoModelProtocol>: View 
                 .ignoresSafeArea()
             VStack {
                 Spacer()
-                VStack {
+                VScrollView {
                     VStack(spacing: UX.CardView.spacing) {
                         Spacer()
                         imageView
@@ -48,7 +48,7 @@ public struct TermsOfServiceViewiPad<VM: OnboardingCardInfoModelProtocol>: View 
                         primaryButton
                         Spacer()
                     }
-                    .frame(width: 313)
+                    .frame(width: UX.CardView.primaryButtonWidthiPad)
                 }
                 .frame(width: UX.CardView.baseiPadWidth, height: UX.CardView.baseiPadHeight)
                 .padding(UX.CardView.verticalPadding)

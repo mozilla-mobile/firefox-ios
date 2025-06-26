@@ -13,8 +13,8 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var secondaryActionColor: Color = .clear
 
     @StateObject private var viewModel: TosFlowViewModel<VM>
-    @Environment(\.deviceType)
-    var deviceType
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let onEmbededLinkAction: (TosAction) -> Void
@@ -35,18 +35,17 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
 
     public var body: some View {
         Group {
-            switch deviceType {
-            case .pad:
-                iPadTermsOfServiceView
-            default:
-                iPhoneTermsOfServiceView
+            if horizontalSizeClass == .regular {
+                termsOfServiceViewRegular
+            } else {
+                termsOfServiceViewCompact
             }
         }
     }
 
     // MARK: - iPad Layout
-    private var iPadTermsOfServiceView: some View {
-        TermsOfServiceViewiPad(
+    private var termsOfServiceViewRegular: some View {
+        TermsOfServiceRegularView(
             viewModel: viewModel,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -55,8 +54,8 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
     }
 
     // MARK: - iPhone Layout
-    private var iPhoneTermsOfServiceView: some View {
-        TermsOfServiceViewiPhone(
+    private var termsOfServiceViewCompact: some View {
+        TermsOfServiceCompactView(
             viewModel: viewModel,
             windowUUID: windowUUID,
             themeManager: themeManager,

@@ -116,7 +116,7 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
         .font(UX.CardView.primaryActionFont)
         .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
         .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
-        .frame(width: 313)
+        .frame(width: UX.CardView.primaryButtonWidthiPad)
     }
 
     @ViewBuilder var secondaryButton: some View {
