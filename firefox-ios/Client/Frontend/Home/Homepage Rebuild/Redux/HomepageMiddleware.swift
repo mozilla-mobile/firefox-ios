@@ -55,14 +55,14 @@ final class HomepageMiddleware: FeatureFlaggable {
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit:
-            self.handleSearchBarConfigurationAction(action: action)
+            self.dispatchSearchBarConfigurationAction(action: action)
 
         default:
             break
         }
     }
 
-    private func handleSearchBarConfigurationAction(action: Action) {
+    private func dispatchSearchBarConfigurationAction(action: Action) {
         store.dispatchLegacy(
             HomepageAction(
                 isSearchBarEnabled: self.shouldShowSearchBar(),
