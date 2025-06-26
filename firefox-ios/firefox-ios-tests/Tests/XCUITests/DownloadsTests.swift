@@ -271,6 +271,40 @@ class DownloadsTests: FeatureFlaggedTestBase {
         checkTheNumberOfDownloadedItems(items: 0)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306904
+    func testRemoveUserDataRemovesDownloadedFiles_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        // The option to remove downloaded files from clear private data is off by default
+        navigator.goto(ClearPrivateDataSettings)
+        mozWaitForElementToExist(app.cells.switches["Downloaded Files"])
+        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
+
+        // Change the value of the setting to on (make an action for this)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
+
+        // Check there is one item
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_Downloads)
+
+        mozWaitForElementToExist(app.tables["DownloadsTable"])
+        checkTheNumberOfDownloadedItems(items: 1)
+
+        // Remove private data once the switch to remove downloaded files is enabled
+        navigator.goto(NewTabScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ClearPrivateDataSettings)
+        app.cells.switches["Downloaded Files"].waitAndTap()
+        navigator.performAction(Action.AcceptClearPrivateData)
+
+        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Downloads)
+        // Check the item has been removed
+        checkTheNumberOfDownloadedItems(items: 0)
+    }
+
     private func checkTheNumberOfDownloadedItems(items: Int) {
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         let list = app.tables["DownloadsTable"].cells.count
