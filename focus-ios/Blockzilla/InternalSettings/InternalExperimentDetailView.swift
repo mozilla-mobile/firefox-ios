@@ -60,6 +60,12 @@ extension InternalExperimentDetailView: View {
             }
         }.navigationBarTitle(Text(verbatim: experiment.userFacingName))
     }
+
+    private var descriptionSection: some View {
+        SwiftUI.Section {
+            Text(verbatim: experiment.userFacingDescription)
+        }
+    }
 }
 
 struct InternalExperimentDetailView_Previews: PreviewProvider {
