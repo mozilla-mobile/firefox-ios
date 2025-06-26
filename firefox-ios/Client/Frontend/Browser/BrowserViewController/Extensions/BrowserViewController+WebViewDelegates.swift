@@ -1046,6 +1046,19 @@ extension BrowserViewController: WKNavigationDelegate {
         webviewTelemetry.start()
         tab.url = webView.url
 
+        if !tab.adsTelemetryRedirectUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           !tab.adsTelemetryUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
+           let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
+           lastRedirectHost != startingRedirectHost {
+            AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+            tab.adsTelemetryUrlList.removeAll()
+            tab.adsTelemetryRedirectUrlList.removeAll()
+            tab.adsProviderName = ""
+        }
+
         // When tab url changes after web content starts loading on the page
         // We notify the content blocker change so that content blocker status
         // can be correctly shown on beside the URL bar
