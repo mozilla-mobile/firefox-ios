@@ -24,15 +24,7 @@ extension InternalExperimentDetailView: View {
     var body: some View {
         Form {
             descriptionSection
-            SwiftUI.Section(header: Text(verbatim: "Available Branches")) {
-                ForEach(experiment.branches, id: \.slug) { branch in
-                    HStack {
-                        Text(verbatim: branch.slug)
-                        Spacer()
-                        Text(verbatim: "\(branch.ratio)")
-                    }
-                }
-            }
+            availableBranchesSection
             SwiftUI.Section {
                 Picker(selection: $selectedBranchSlug, label: Text(verbatim: "Active Branch")) {
                     ForEach(pickerBranches, id: \.self) { branch in
