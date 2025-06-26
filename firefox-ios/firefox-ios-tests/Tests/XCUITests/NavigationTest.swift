@@ -154,6 +154,25 @@ class NavigationTest: FeatureFlaggedTestBase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2441494
+    func testTapSignInShowsFxAFromRemoteTabPanel_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
+        // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleExperimentSyncMode)
+
+        app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.navigationBars["Sync and Save Data"],
+                app.buttons["Use Email Instead"]
+            ]
+        )
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
     func testScrollsToTopWithMultipleTabs() {
         app.launch()
@@ -211,6 +230,24 @@ class NavigationTest: FeatureFlaggedTestBase {
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        longPressLinkOptions(optionSelected: "Copy Link")
+        navigator.goto(NewTabScreen)
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+
+        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        app.buttons["Go"].waitAndTap()
+        waitUntilPageLoad()
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2441497
+    func testCopyLinkPrivateMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
@@ -557,6 +594,21 @@ class NavigationTest: FeatureFlaggedTestBase {
         // A new tab loading the article page should open
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.staticTexts["Example Domain"])
+        let numTabs = app.otherElements[tabsTray].cells.count
+        XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2441772
+    func testOpenInNewTab_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Long-tap on an article link. Choose "Open in New Tab".
+        openContextMenuForArticleLink()
+        app.buttons["Open in New Tab"].waitAndTap()
+        // A new tab loading the article page should open
+        navigator.goto(TabTray)
+        mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))

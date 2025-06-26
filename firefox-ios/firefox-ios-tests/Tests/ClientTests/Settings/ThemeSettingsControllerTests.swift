@@ -123,7 +123,7 @@ class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Private
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> ThemeSettingsController {
         let subject = ThemeSettingsController(windowUUID: .XCTestDefaultUUID)
         let action = ScreenAction(windowUUID: .XCTestDefaultUUID,

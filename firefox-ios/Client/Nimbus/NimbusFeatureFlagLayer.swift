@@ -74,6 +74,9 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
+        case .menuDefaultBrowserBanner:
+            return checkMenuDefaultBrowserBanner(from: nimbus)
+
         case .menuRefactor:
             return checkMenuRefactor(from: nimbus)
 
@@ -395,6 +398,11 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
+    }
+
+    private func checkMenuDefaultBrowserBanner(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.menuRefactorFeature.value()
+        return config.menuDefaultBrowserBanner
     }
 
     private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {

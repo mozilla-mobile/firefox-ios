@@ -14,12 +14,14 @@ struct HomepageTelemetryExtras {
 }
 
 final class HomepageAction: Action {
+    let isSearchBarEnabled: Bool?
     let showiPadSetup: Bool?
     let numberOfTopSitesPerRow: Int?
     let telemetryExtras: HomepageTelemetryExtras?
     let isZeroSearch: Bool?
 
     init(
+        isSearchBarEnabled: Bool? = nil,
         numberOfTopSitesPerRow: Int? = nil,
         showiPadSetup: Bool? = nil,
         telemetryExtras: HomepageTelemetryExtras? = nil,
@@ -27,6 +29,7 @@ final class HomepageAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.isSearchBarEnabled = isSearchBarEnabled
         self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
         self.showiPadSetup = showiPadSetup
         self.telemetryExtras = telemetryExtras
@@ -52,4 +55,5 @@ enum HomepageMiddlewareActionType: ActionType {
     case jumpBackInRemoteTabsUpdated
     case bookmarksUpdated
     case enteredForeground
+    case configuredSearchBar
 }

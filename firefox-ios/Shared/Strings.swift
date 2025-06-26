@@ -4323,6 +4323,26 @@ extension String {
                 comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure.")
         }
 
+        public struct HeaderBanner {
+            public static let Title = MZLocalizedString(
+                key: "MainMenu.HeaderBanner.Title.v142",
+                tableName: "MainMenu",
+                value: "Make %@ your default",
+                comment: "On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name")
+            public static let Subtitle = MZLocalizedString(
+                key: "MainMenu.HeaderBanner.Subtitle.v142",
+                tableName: "MainMenu",
+                value: "Takes seconds. Change anytime.",
+                comment: "On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser.")
+            public struct AccessibilityLabels {
+                public static let CloseButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.CloseButton.v142",
+                    tableName: "MainMenu",
+                    value: "Close",
+                    comment: "The accessibility label for the close button of the header menu banner.")
+            }
+        }
+
         public struct Account {
             public static let SignedOutTitle = MZLocalizedString(
                 key: "MainMenu.Account.SignedOut.Title.v131",

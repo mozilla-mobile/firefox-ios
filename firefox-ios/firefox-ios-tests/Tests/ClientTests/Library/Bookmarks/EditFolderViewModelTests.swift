@@ -157,7 +157,7 @@ class EditFolderViewModelTests: XCTestCase {
 
     func createSubject(folder: FxBookmarkNode,
                        parentFolder: FxBookmarkNode,
-                       file: StaticString = #file,
+                       file: StaticString = #filePath,
                        line: UInt = #line) -> EditFolderViewModel {
         let subject = EditFolderViewModel(profile: profile,
                                           parentFolder: parentFolder,

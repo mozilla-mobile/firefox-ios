@@ -120,7 +120,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     // MARK: Helpers
-    private func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
+    private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchQueue = MockDispatchQueue()
         let notificationCenter = MockNotificationCenter()
 

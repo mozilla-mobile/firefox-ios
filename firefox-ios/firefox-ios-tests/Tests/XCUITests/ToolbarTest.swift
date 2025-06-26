@@ -82,6 +82,65 @@ class ToolbarTests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2344428
+    /**
+     * Tests landscape page navigation enablement with the URL bar with tab switching.
+     */
+    func testLandscapeNavigationWithTabSwitch_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        let urlPlaceholder = "Search or enter address"
+        let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+        XCTAssert(app.textFields[searchTextField].exists)
+        let defaultValuePlaceholder = app.textFields[searchTextField].placeholderValue!
+
+        // Check the url placeholder text and that the back and forward buttons are disabled
+        XCTAssertTrue(urlPlaceholder == defaultValuePlaceholder, "The placeholder does not show the correct value")
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+
+        // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
+        navigator.openURL(website1["url"]!)
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
+        guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String else {
+            XCTFail("Failed to retrieve the value from the Mozilla URL bar text field")
+            return
+        }
+        XCTAssertEqual(valueMozilla, urlValueLong)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
+        navigator.openURL(website2)
+        waitUntilPageLoad()
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "localhost")
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+        XCTAssertEqual(valueMozilla, urlValueLong)
+
+        waitUntilPageLoad()
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+
+        // Open new tab and then go back to previous tab to test navigation buttons.
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        mozWaitForElementToExist(app.cells.elementContainingText(website1["label"]!))
+        app.cells.element(boundBy: 0).waitAndTap()
+        XCTAssertEqual(valueMozilla, urlValueLong)
+
+        // Test to see if all the buttons are enabled.
+        waitUntilPageLoad()
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2344430
     func testClearURLTextUsingBackspace() {
         app.launch()
