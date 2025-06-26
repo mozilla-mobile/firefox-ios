@@ -17,8 +17,4 @@ $(PROJECT_DIR)/Client/Glean/probes/settings.yaml
 $(PROJECT_DIR)/Client/Glean/probes/tabs_panel.yaml
 $(PROJECT_DIR)/Client/Glean/probes/toast.yaml
 $(PROJECT_DIR)/Client/Glean/probes/toolbar.yaml
-<<<<<<< HEAD
-=======
-$(PROJECT_DIR)/Client/Glean/probes/zoom_bar.yaml
 $(PROJECT_DIR)/Client/Glean/probes/user.yaml
->>>>>>> 9286cfdce (Add FXIOS-12445 Add fx-accounts ping and firefox account UID string (#27296))
