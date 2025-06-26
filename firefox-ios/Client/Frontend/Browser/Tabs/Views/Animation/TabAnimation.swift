@@ -323,11 +323,12 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        // BVC snapshot animates from the cell to it's final position
         let contentContainer = browserVC.contentContainer
 
         let image = browserVC.tabManager.selectedTab?.screenshot
         let tabSnapshot = UIImageView(image: image)
+        // crop the tab screenshot to the contentContainer frame so the animation
+        // and the initial transform doesn't stutter
         if let image, let cropped = image.cgImage?.cropping(
             to: CGRect(
                 x: contentContainer.frame.origin.x * image.scale,
@@ -366,8 +367,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         UIView.animate(
             withDuration: UX.dismissDuration,
             delay: 0.0,
-//            usingSpringWithDamping: 0.75,
-//            initialSpringVelocity: 0.0,
             options: .curveEaseOut
         ) {
             cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
