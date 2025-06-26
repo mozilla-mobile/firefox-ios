@@ -40,7 +40,6 @@ include:
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
-  - nimbus-features/rustKeychainRefactor.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml

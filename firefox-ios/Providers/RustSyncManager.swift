@@ -9,7 +9,6 @@ import Sync
 import AuthenticationServices
 import Common
 
-import class MozillaAppServices.MZKeychainWrapper
 import enum MozillaAppServices.OAuthScope
 import enum MozillaAppServices.SyncEngineSelection
 import enum MozillaAppServices.SyncReason
@@ -39,7 +38,6 @@ public class RustSyncManager: NSObject, SyncManager {
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
-    var rustKeychainEnabled = false
     var loginsVerificationEnabled = false
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
@@ -73,7 +71,6 @@ public class RustSyncManager: NSObject, SyncManager {
 
     init(profile: BrowserProfile,
          creditCardAutofillEnabled: Bool = false,
-         rustKeychainEnabled: Bool = false,
          loginsVerificationEnabled: Bool = false,
          logger: Logger = DefaultLogger.shared,
          logins: SyncLoginProvider? = nil,
@@ -91,7 +88,6 @@ public class RustSyncManager: NSObject, SyncManager {
         self.tabs = tabs ?? profile.tabs
 
         super.init()
-        self.rustKeychainEnabled = rustKeychainEnabled
         self.loginsVerificationEnabled = loginsVerificationEnabled
     }
 
@@ -285,15 +281,9 @@ public class RustSyncManager: NSObject, SyncManager {
                     .prefsForSync
                     .branch("scratchpad")
                     .stringForKey("keyLabel") {
-                        if self.rustKeychainEnabled {
-                            RustKeychain
-                                .sharedClientAppContainerKeychain
-                                .removeObject(key: keyLabel)
-                        } else {
-                            MZKeychainWrapper
-                                .sharedClientAppContainerKeychain
-                                .removeObject(forKey: keyLabel)
-                        }
+                        RustKeychain
+                            .sharedClientAppContainerKeychain
+                            .removeObject(key: keyLabel)
                 }
                 self.prefsForSync.clearAll()
             }

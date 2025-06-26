@@ -8,12 +8,8 @@ import Shared
 import Common
 
 import class MozillaAppServices.LoginsStorage
-import class MozillaAppServices.MZKeychainWrapper
 import enum MozillaAppServices.LoginsApiError
-import enum MozillaAppServices.MZKeychainItemAccessibility
 import func MozillaAppServices.checkCanary
-import func MozillaAppServices.createCanary
-import func MozillaAppServices.createKey
 import struct MozillaAppServices.Login
 import struct MozillaAppServices.LoginEntry
 import protocol MozillaAppServices.KeyManager
@@ -203,91 +199,6 @@ public extension LoginEntry {
     }
 }
 
-public class RustLoginEncryptionKeys {
-    public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
-    let legacyKeychain = KeychainManager.legacyShared
-
-    let canaryPhraseKey = "canaryPhrase"
-    let canaryPhrase = "a string for checking validity of the key"
-
-    private let logger: Logger
-
-    public init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
-
-    fileprivate func createAndStoreKey() throws -> String {
-        do {
-            let secret = try createKey()
-            let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
-
-            DispatchQueue.global(qos: .background).sync {
-                legacyKeychain.set(secret,
-                                   forKey: loginPerFieldKeychainKey,
-                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-                legacyKeychain.set(canary,
-                                   forKey: canaryPhraseKey,
-                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            }
-            return secret
-        } catch let err as NSError {
-            if let loginsStoreError = err as? LoginsStoreError {
-                logLoginsStoreError(
-                    err: loginsStoreError,
-                    errorDomain: err.domain,
-                    errorMessage: "Error while creating and storing logins key")
-
-                throw LoginEncryptionKeyError.noKeyCreated
-            } else {
-                logger.log("Unknown error while creating and storing logins key",
-                           level: .warning,
-                           category: .storage,
-                           description: err.localizedDescription)
-
-                throw LoginEncryptionKeyError.noKeyCreated
-            }
-        }
-    }
-
-    private func logLoginsStoreError(
-        err: LoginsStoreError,
-        errorDomain: String,
-        errorMessage: String
-    ) {
-        var message: String {
-            switch err {
-            case .InvalidRecord(let message),
-                    .NoSuchRecord(let message),
-                    .Interrupted(let message),
-                    .SyncAuthInvalid(let message),
-                    .UnexpectedLoginsApiError(let message):
-                return message
-            case .InvalidKey:
-                return "InvalidKey"
-            case .MissingKey:
-                return "MissingKey"
-            case .EncryptionFailed(reason: let reason):
-                return "EncryptionFailed reason:\(reason)"
-            case .DecryptionFailed(reason: let reason):
-                return "DecryptionFailed reason:\(reason)"
-            case .NssUninitialized:
-                return "NssUninitialized"
-            case .NssAuthenticationError(reason: let reason):
-                return "NssAuthenticationError reason:\(reason)"
-            case .AuthenticationError(reason: let reason):
-                return "AuthenticationError reason:\(reason)"
-            case .AuthenticationCanceled:
-                return "AuthenticationCanceled"
-            }
-        }
-
-        logger.log(errorMessage,
-                   level: .warning,
-                   category: .storage,
-                   description: "\(errorDomain) - \(err.descriptionValue): \(message)")
-    }
-}
-
 public class LoginRecordError: MaybeErrorType {
     public let description: String
     public init(description: String) {
@@ -318,7 +229,6 @@ public class RustLogins: LoginsProtocol, KeyManager {
     let queue: DispatchQueue
     var storage: LoginsStorage?
     let rustKeychain = KeychainManager.shared
-    var rustKeychainEnabled = false
 
     private(set) var isOpen = false
 
@@ -327,11 +237,9 @@ public class RustLogins: LoginsProtocol, KeyManager {
     private let logger: Logger
 
     public init(databasePath: String,
-                logger: Logger = DefaultLogger.shared,
-                rustKeychainEnabled: Bool = false) {
+                logger: Logger = DefaultLogger.shared) {
         self.perFieldDatabasePath = databasePath
         self.logger = logger
-        self.rustKeychainEnabled = rustKeychainEnabled
 
         queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
     }
@@ -878,8 +786,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
         }
     }
 
-    private func resetLoginsAndKey(rustKeys: RustLoginEncryptionKeys,
-                                   completion: @escaping (Result<String, NSError>) -> Void) {
+    private func resetLoginsAndKey(completion: @escaping (Result<String, NSError>) -> Void) {
         self.wipeLocalEngine().upon { result in
             guard result.isSuccess else {
                 completion(.failure(result.failureValue! as NSError))
@@ -887,9 +794,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
             }
 
             do {
-                let key = self.rustKeychainEnabled ?
-                    try self.rustKeychain.createLoginsKeyData() :
-                    try rustKeys.createAndStoreKey()
+                let key = try self.rustKeychain.createLoginsKeyData()
                 completion(.success(key))
             } catch let error as NSError {
                 self.logger.log("Error creating logins encryption key",
@@ -901,54 +806,32 @@ public class RustLogins: LoginsProtocol, KeyManager {
         }
     }
 
-    private func getKeychainData(rustKeys: RustLoginEncryptionKeys) -> (String?, String?) {
-        var keychainData: (String?, String?) = (nil, nil)
-
-        DispatchQueue.global(qos: .background).sync {
-            let key = rustKeys.legacyKeychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
-            let encryptedCanaryPhrase = rustKeys.legacyKeychain.string(forKey: rustKeys.canaryPhraseKey)
-            keychainData = (key, encryptedCanaryPhrase)
-        }
-
-        return keychainData
-    }
-
     public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
-        let rustKeys = RustLoginEncryptionKeys()
-        var key: String?
-        var encryptedCanaryPhrase: String?
-
-        if self.rustKeychainEnabled {
-            (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
-        } else {
-            (key, encryptedCanaryPhrase) = getKeychainData(rustKeys: rustKeys)
-        }
+        let (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
 
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
-                self.handleExpectedKeyAction(rustKeys: rustKeys,
-                                             encryptedCanaryPhrase: encryptedCanaryPhrase,
+                self.handleExpectedKeyAction(encryptedCanaryPhrase: encryptedCanaryPhrase,
                                              key: key,
                                              completion: completion)
         case (.some(key), .none):
-            self.handleUnexpectedKeyAction(rustKeys: rustKeys, completion: completion)
+            self.handleUnexpectedKeyAction(completion: completion)
         case (.none, .some(encryptedCanaryPhrase)):
-            self.handleMissingKeyAction(rustKeys: rustKeys, completion: completion)
+            self.handleMissingKeyAction(completion: completion)
         case (.none, .none):
-            self.handleFirstTimeCallOrClearedKeychainAction(rustKeys: rustKeys, completion: completion)
+            self.handleFirstTimeCallOrClearedKeychainAction(completion: completion)
         default:
             self.handleIllegalStateAction(completion: completion)
         }
     }
 
-    private func handleExpectedKeyAction(rustKeys: RustLoginEncryptionKeys,
-                                         encryptedCanaryPhrase: String?,
+    private func handleExpectedKeyAction(encryptedCanaryPhrase: String?,
                                          key: String?,
                                          completion: @escaping (Result<String, NSError>) -> Void) {
         // We expected the key to be present, and it is.
         do {
             let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!,
-                                                text: rustKeys.canaryPhrase,
+                                                text: rustKeychain.loginsCanaryPhrase,
                                                 encryptionKey: key!)
             if canaryIsValid {
                 completion(.success(key!))
@@ -957,7 +840,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
                                 level: .warning,
                                 category: .storage)
                 GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
-                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                self.resetLoginsAndKey(completion: completion)
             }
         } catch let error as NSError {
             self.logger.log("Error validating logins encryption key",
@@ -968,30 +851,27 @@ public class RustLogins: LoginsProtocol, KeyManager {
         }
     }
 
-    private func handleUnexpectedKeyAction(rustKeys: RustLoginEncryptionKeys,
-                                           completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleUnexpectedKeyAction(completion: @escaping (Result<String, NSError>) -> Void) {
         // The key is present, but we didn't expect it to be there.
 
         self.logger.log("Logins key lost due to storage malfunction, new one generated",
                         level: .warning,
                         category: .storage)
         GleanMetrics.LoginsStoreKeyRegeneration.other.record()
-        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+        self.resetLoginsAndKey(completion: completion)
     }
 
-    private func handleMissingKeyAction(rustKeys: RustLoginEncryptionKeys,
-                                        completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleMissingKeyAction(completion: @escaping (Result<String, NSError>) -> Void) {
         // We expected the key to be present, but it's gone missing on us.
 
         self.logger.log("Logins key lost, new one generated",
                         level: .warning,
                         category: .storage)
         GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
-        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+        self.resetLoginsAndKey(completion: completion)
     }
 
-    private func handleFirstTimeCallOrClearedKeychainAction(rustKeys: RustLoginEncryptionKeys,
-                                                            completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleFirstTimeCallOrClearedKeychainAction(completion: @escaping (Result<String, NSError>) -> Void) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
 
@@ -1011,14 +891,12 @@ public class RustLogins: LoginsProtocol, KeyManager {
                 // Since the key data isn't present and we have login records in
                 // the database, we both clear the database and reset the key.
                 GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
-                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                self.resetLoginsAndKey(completion: completion)
             } else {
                 // There are no records in the database so we don't need to wipe any
                 // existing login records. We just need to create a new key.
                 do {
-                    let key = self.rustKeychainEnabled ?
-                        try self.rustKeychain.createLoginsKeyData() :
-                        try rustKeys.createAndStoreKey()
+                    let key = try self.rustKeychain.createLoginsKeyData()
                     completion(.success(key))
                 } catch let error as NSError {
                     completion(.failure(error))
@@ -1058,22 +936,14 @@ public class RustLogins: LoginsProtocol, KeyManager {
     * ```
     */
     public func getKey() throws -> Data {
-        if self.rustKeychainEnabled {
-            switch rustKeychain.queryKeychainForKey(key: rustKeychain.loginsKeyIdentifier) {
-            case .success(let result):
-                guard let data = result, let key = data.data(using: String.Encoding.utf8) else {
-                    throw LoginsStoreError.MissingKey
-                }
-                return key
-            case .failure:
+        switch rustKeychain.queryKeychainForKey(key: rustKeychain.loginsKeyIdentifier) {
+        case .success(let result):
+            guard let data = result, let key = data.data(using: String.Encoding.utf8) else {
                 throw LoginsStoreError.MissingKey
             }
-        } else {
-            let rustKeys = RustLoginEncryptionKeys()
-            guard let keyData = rustKeys.legacyKeychain.data(forKey: rustKeys.loginPerFieldKeychainKey) else {
-                throw LoginsStoreError.MissingKey
-            }
-            return keyData
+            return key
+        case .failure:
+            throw LoginsStoreError.MissingKey
         }
     }
 }
