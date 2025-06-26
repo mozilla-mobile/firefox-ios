@@ -16,12 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
-    private let rustKeychainEnabled = FxNimbus.shared
-        .features
-        .rustKeychainRefactor
-        .value()
-        .rustKeychainEnabled
-
     private let loginsVerificationEnabled = FxNimbus.shared
         .features
         .loginsVerification
@@ -31,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
-        rustKeychainEnabled: rustKeychainEnabled,
         loginsVerificationEnabled: loginsVerificationEnabled)
 
     lazy var searchEnginesManager = SearchEnginesManager(

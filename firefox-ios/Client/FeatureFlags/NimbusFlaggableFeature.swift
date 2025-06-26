@@ -62,7 +62,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case unifiedAds
     case unifiedSearch
     case updatedPasswordManager
-    case useRustKeychain
     case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -94,7 +93,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .downloadLiveActivities,
                 .unifiedAds,
                 .unifiedSearch,
-                .useRustKeychain,
                 .updatedPasswordManager,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
@@ -181,7 +179,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
-                .useRustKeychain,
                 .webEngineIntegrationRefactor:
             return nil
         }

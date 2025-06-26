@@ -68,9 +68,12 @@ extension BrowserViewController: WKUIDelegate {
 
     private func handleJavaScriptAlert<T: JavaScriptAlertProtocol & JSAlertInfo>(
         _ alert: T,
-        for webView: WKWebView
+        for webView: WKWebView,
+        spamCallback: @escaping () -> Void
     ) {
-        if shouldDisplayJSAlertForWebView(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
+            handleSpammedJSAlert(spamCallback)
+        } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript \(T.alertType) panel will be presented.", level: .info, category: .webview)
             let alertController = alert.alertController()
             alertController.delegate = self
@@ -91,7 +94,9 @@ extension BrowserViewController: WKUIDelegate {
                                         frame: frame,
                                         completionHandler: completionHandler)
 
-        handleJavaScriptAlert(messageAlert, for: webView)
+        handleJavaScriptAlert(messageAlert, for: webView) {
+            completionHandler()
+        }
     }
 
     func webView(
@@ -105,7 +110,9 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(confirm)
         }
 
-        handleJavaScriptAlert(confirmAlert, for: webView)
+        handleJavaScriptAlert(confirmAlert, for: webView) {
+            completionHandler(false)
+        }
     }
 
     func webView(
@@ -120,7 +127,9 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(input)
         }
 
-        handleJavaScriptAlert(textInputAlert, for: webView)
+        handleJavaScriptAlert(textInputAlert, for: webView) {
+            completionHandler("")
+        }
     }
 
     func webViewDidClose(_ webView: WKWebView) {
@@ -178,6 +187,13 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     // MARK: - Helpers
+
+    private func handleSpammedJSAlert(_ callback: @escaping () -> Void) {
+        // User is being spammed. Squelch alert. Note that we have to do this after
+        // a delay to avoid JS that could spin the CPU endlessly.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
+    }
+
     private func contextMenuConfiguration(for url: URL,
                                           webView: WKWebView,
                                           elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
@@ -1060,6 +1076,19 @@ extension BrowserViewController: WKNavigationDelegate {
         webviewTelemetry.start()
         tab.url = webView.url
 
+        if !tab.adsTelemetryRedirectUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           !tab.adsTelemetryUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
+           let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
+           lastRedirectHost != startingRedirectHost {
+            AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+            tab.adsTelemetryUrlList.removeAll()
+            tab.adsTelemetryRedirectUrlList.removeAll()
+            tab.adsProviderName = ""
+        }
+
         // When tab url changes after web content starts loading on the page
         // We notify the content blocker change so that content blocker status
         // can be correctly shown on beside the URL bar
@@ -1209,9 +1238,16 @@ private extension BrowserViewController {
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+        guard let tab = tabManager.selectedTab else { return false }
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView === webView))
-            && (self.presentedViewController == nil)
+        return (tab.webView === webView && self.presentedViewController == nil)
+    }
+
+    func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
+        guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
+        let canShow = tab.jsAlertThrottler.canShowAlert()
+        if canShow { tab.jsAlertThrottler.willShowJSAlert() }
+        return !canShow
     }
 
      func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
