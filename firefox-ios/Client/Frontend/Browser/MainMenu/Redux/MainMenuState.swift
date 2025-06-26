@@ -148,42 +148,7 @@ struct MainMenuState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
-            return defaultState(from: state)
-        }
-
-        switch action.actionType {
-        case MainMenuActionType.viewDidLoad:
-            return handleViewDidLoadAction(state: state)
-        case MainMenuMiddlewareActionType.updateAccountHeader:
-            return handleUpdateAccountHeaderAction(state: state, action: action)
-        case MainMenuActionType.updateSiteProtectionsHeader:
-            return handleUpdateSiteProtectionsHeaderAction(state: state, action: action)
-        case MainMenuActionType.updateCurrentTabInfo:
-            return handleUpdateCurrentTabInfoAction(state: state, action: action)
-        case MainMenuActionType.tapMoreOptions:
-            return handleShowMoreOptions(state: state, action: action)
-        case MainMenuActionType.tapShowDetailsView:
-            return handleTapShowDetailsViewAction(state: state, action: action)
-        case MainMenuActionType.tapNavigateToDestination:
-            return handleTapNavigateToDestinationAction(state: state, action: action)
-        case MainMenuActionType.tapToggleUserAgent,
-            MainMenuActionType.tapCloseMenu:
-            return handleTapToggleUserAgentAndTapCloseMenuAction(state: state)
-        case MainMenuActionType.tapAddToBookmarks:
-            return handleDismissMenuAction(state: state)
-        case MainMenuActionType.tapEditBookmark:
-            return handleTapEditBookmarkAction(state: state, action: action)
-        case MainMenuActionType.tapZoom:
-            return handleTapZoomAction(state: state)
-        case MainMenuActionType.tapToggleNightMode:
-            return handleDismissMenuAction(state: state)
-        case MainMenuActionType.tapAddToShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
-            return handleDismissMenuAction(state: state)
-        default:
-            return defaultState(from: state)
-        }
+        return handleReducer(state: state, action: action)
     }
 
     private static func handleReducer(state: MainMenuState, action: Action) -> MainMenuState {
