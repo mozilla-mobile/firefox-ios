@@ -132,7 +132,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         DispatchQueue.main.async { [self] in
             runDismissalAnimation(
                 context: context,
-                toViewController: toViewController,
                 toView: toView,
                 browserVC: bvc,
                 finalFrame: finalFrame,
@@ -301,7 +300,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
     private func runDismissalAnimation(
         context: UIViewControllerContextTransitioning,
-        toViewController: UIViewController,
         toView: UIView,
         browserVC: BrowserViewController,
         finalFrame: CGRect,
@@ -324,12 +322,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
 
         let contentContainer = browserVC.contentContainer
-
-        let image = browserVC.tabManager.selectedTab?.screenshot
-        let tabSnapshot = UIImageView(image: image)
+        let tabSnapshot = UIImageView(image: selectedTab.screenshot)
         // crop the tab screenshot to the contentContainer frame so the animation
         // and the initial transform doesn't stutter
-        if let image, let cropped = image.cgImage?.cropping(
+        if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
             to: CGRect(
                 x: contentContainer.frame.origin.x * image.scale,
                 y: contentContainer.frame.origin.y * image.scale,
@@ -337,7 +333,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 height: contentContainer.frame.height * image.scale
             )
         ) {
-            tabSnapshot.image = UIImage(cgImage: cropped)
+            tabSnapshot.image = UIImage(cgImage: croppedImage)
         }
 
         tabSnapshot.clipsToBounds = true
