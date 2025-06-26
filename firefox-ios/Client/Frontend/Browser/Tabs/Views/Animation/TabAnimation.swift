@@ -230,6 +230,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             self?.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
         }
 
+        // NOTE FOR SIMULATOR TESTING - Debug > Slow Animations setting on the simulator does not render this border animation correctly
+        // to see changes, it's best to make a recording of the simulator animation and play it back at a reduced speed or go frame-by-frame.
         let lineWidthAnimation = CABasicAnimation(keyPath: UX.lineWidthKeyPath)
         lineWidthAnimation.fromValue = UX.initialBorderWidth
         lineWidthAnimation.toValue = borderWidth
