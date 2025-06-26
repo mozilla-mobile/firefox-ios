@@ -166,13 +166,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .useRustKeychain,
-                    titleText: format(string: "Rust Keychain"),
-                    statusText: format(string: "Toggle to enable rust keychain")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .sentFromFirefox,
                     titleText: format(string: "Sent from Firefox"),
                     statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
