@@ -15,7 +15,7 @@ Don't forget to add a prefix to the pr title in this format
 
 ### Checklist
 
-- [ ] I performed some relevant testing on a real device and/or simulator
+- [ ] I performed some relevant testing on a real device and/or simulator for both iPhone and iPad
 - [ ] I wrote Unit Tests that confirm the expected behaviour
 - [ ] I updated only the [english localization source files](Client/Ecosia/L10N/es.lproj) if needed
 - [ ] I added the `// Ecosia:` helper comments where needed
