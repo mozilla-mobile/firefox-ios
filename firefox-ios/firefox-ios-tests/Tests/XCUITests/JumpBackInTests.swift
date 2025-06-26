@@ -286,8 +286,9 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
         app.buttons["Open in New Tab"].waitAndTap()
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.GoToHomePage)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
 
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
