@@ -156,7 +156,7 @@ struct MainMenuState: ScreenState, Equatable {
         else {
             return defaultState(from: state)
         }
-        
+
         switch action.actionType {
         case MainMenuActionType.viewDidLoad:
             return handleViewDidLoadAction(state: state)
