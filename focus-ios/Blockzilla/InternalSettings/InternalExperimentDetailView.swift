@@ -64,6 +64,18 @@ extension InternalExperimentDetailView: View {
             Text(verbatim: experiment.userFacingDescription)
         }
     }
+
+    private var availableBranchesSection: some View {
+        SwiftUI.Section(header: Text(verbatim: "Available Branches")) {
+            ForEach(experiment.branches, id: \.slug) { branch in
+                HStack {
+                    Text(verbatim: branch.slug)
+                    Spacer()
+                    Text(verbatim: "\(branch.ratio)")
+                }
+            }
+        }
+    }
 }
 
 struct InternalExperimentDetailView_Previews: PreviewProvider {
