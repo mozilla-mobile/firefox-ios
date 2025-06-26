@@ -8,16 +8,6 @@ import Shared
 import Storage
 import MozillaAppServices
 
-// Small iPhone screens in landscape require that the popup have a shorter height.
-func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
-    if !UX.enableResizeRowsForSmallScreens {
-        return false
-    }
-
-    let hasSmallScreen = DeviceInfo.screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
-    return hasSmallScreen && traitCollection.verticalSizeClass == .compact
-}
-
 /*
  The initial view controller is full-screen and is the only one with a valid extension context.
  It is just a wrapper with a semi-transparent background to darken the screen

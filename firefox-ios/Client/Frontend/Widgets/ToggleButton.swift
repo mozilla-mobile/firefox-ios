@@ -5,17 +5,16 @@
 import UIKit
 import Common
 
-private struct UX {
-    // The amount of pixels the toggle button will expand over the normal size.
-    // This results in the larger -> contract animation.
-    static let ExpandDelta: CGFloat = 5
-    static let ShowDuration: TimeInterval = 0.4
-    static let HideDuration: TimeInterval = 0.2
-
-    static let BackgroundSize = CGSize(width: 32, height: 32)
-}
-
 class ToggleButton: UIButton, ThemeApplicable {
+    private struct UX {
+        // The amount of pixels the toggle button will expand over the normal size.
+        // This results in the larger -> contract animation.
+        static let ExpandDelta: CGFloat = 5
+        static let ShowDuration: TimeInterval = 0.4
+        static let HideDuration: TimeInterval = 0.2
+
+        static let BackgroundSize = CGSize(width: 32, height: 32)
+    }
     func setSelected(_ selected: Bool, animated: Bool = true) {
         self.isSelected = selected
         if animated {
