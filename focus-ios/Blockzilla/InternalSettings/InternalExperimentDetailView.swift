@@ -23,9 +23,7 @@ struct InternalExperimentDetailView {
 extension InternalExperimentDetailView: View {
     var body: some View {
         Form {
-            SwiftUI.Section {
-                Text(verbatim: experiment.userFacingDescription)
-            }
+            descriptionSection
             SwiftUI.Section(header: Text(verbatim: "Available Branches")) {
                 ForEach(experiment.branches, id: \.slug) { branch in
                     HStack {
