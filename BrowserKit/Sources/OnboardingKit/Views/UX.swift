@@ -11,6 +11,8 @@ enum UX {
         // Base metrics for a standard device (e.g., iPhone 11)
         static let baseWidth: CGFloat = 375
         static let baseHeight: CGFloat = 812
+        static let baseiPadWidth: CGFloat = 510
+        static let baseiPadHeight: CGFloat = 755
 
         static let cardHeightRatio: CGFloat = 0.7
         static let spacing: CGFloat = 24
@@ -21,6 +23,7 @@ enum UX {
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonTopPadding: CGFloat = 8
         static let secondaryButtonBottomPadding: CGFloat = 24
+        static let primaryButtonWidthiPad: CGFloat = 313
 
         // Font sizes for base metrics
         static let titleFontSize: CGFloat = 28
