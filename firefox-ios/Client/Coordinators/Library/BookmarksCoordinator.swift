@@ -16,7 +16,6 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        updatePanelState: ((LibraryPanelSubState) -> Void)?,
         parentFolderSelector: ParentFolderSelector?
     )
 
@@ -30,13 +29,11 @@ extension BookmarksCoordinatorDelegate {
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil,
         parentFolderSelector: ParentFolderSelector? = nil
     ) {
         showBookmarkDetail(
             bookmarkType: bookmarkType,
             parentBookmarkFolder: parentBookmarkFolder,
-            updatePanelState: updatePanelState,
             parentFolderSelector: parentFolderSelector
         )
     }
