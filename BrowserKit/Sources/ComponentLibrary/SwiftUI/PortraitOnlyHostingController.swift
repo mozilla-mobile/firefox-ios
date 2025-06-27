@@ -14,7 +14,7 @@ public class PortraitOnlyHostingController<Content: View>: UIHostingController<C
     }
 
     @MainActor
-    required dynamic public init?(coder aDecoder: NSCoder) {
+    public required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
