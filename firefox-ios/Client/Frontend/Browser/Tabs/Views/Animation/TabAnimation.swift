@@ -366,23 +366,22 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         UIView.animate(
             withDuration: UX.dismissDuration,
             delay: 0.0,
-            options: .curveEaseOut
-        ) {
-            cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.opaqueAlpha
+            options: .curveEaseOut) {
+                cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+                cv.alpha = UX.opaqueAlpha
 
-            tabSnapshot.frame = contentContainer.frame
-            toView.alpha = UX.opaqueAlpha
-            toView.layer.cornerRadius = UX.zeroCornerRadius
-            tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
-        } completion: { _ in
-            contentContainer.isHidden = false
-            tabCell?.isHidden = false
-            self.view.removeFromSuperview()
-            tabSnapshot.removeFromSuperview()
-            toView.removeFromSuperview()
-            context.completeTransition(true)
-        }
+                tabSnapshot.frame = contentContainer.frame
+                toView.alpha = UX.opaqueAlpha
+                toView.layer.cornerRadius = UX.zeroCornerRadius
+                tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
+            } completion: { _ in
+                contentContainer.isHidden = false
+                tabCell?.isHidden = false
+                self.view.removeFromSuperview()
+                tabSnapshot.removeFromSuperview()
+                toView.removeFromSuperview()
+                context.completeTransition(true)
+            }
     }
 
     private func findItem(by id: String, dataSource: TabDisplayDiffableDataSource) -> TabDisplayDiffableDataSource.TabItem? {
