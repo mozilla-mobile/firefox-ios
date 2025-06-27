@@ -475,11 +475,8 @@ extension ShareViewController {
             // Intentionally block thread with database call.
 
             // Add new bookmark to the top of the folder
-            // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
-            let isBookmarkRefactorEnabled = profile.prefs.boolForKey(PrefsKeys.IsBookmarksRefactorEnabled) ?? false
             let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-            let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
-            _ = profile.places.createBookmark(parentGUID: parentGuid,
+            _ = profile.places.createBookmark(parentGUID: recentBookmarkFolderGuid,
                                               url: item.url,
                                               title: item.title,
                                               position: 0).value
