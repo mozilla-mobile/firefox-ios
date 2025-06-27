@@ -27,25 +27,6 @@ extension BookmarkFolderData: BookmarksFolderCell {
                                              accessoryType: .none,
                                              editingAccessoryView: UIImageView(image: chevronImage))
     }
-
-    func didSelect(profile: Profile,
-                   searchEnginesManager: SearchEnginesManager,
-                   windowUUID: WindowUUID,
-                   libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?,
-                   logger: Logger) {
-        let viewModel = BookmarksPanelViewModel(profile: profile,
-                                                bookmarksHandler: profile.places,
-                                                bookmarkFolderGUID: guid)
-        let nextController = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
-        if isRoot, let localizedString = LegacyLocalizedRootBookmarkFolderStrings[guid] {
-            nextController.title = localizedString
-        } else {
-            nextController.title = title
-        }
-        nextController.libraryPanelDelegate = libraryPanelDelegate
-        navigationController?.pushViewController(nextController, animated: true)
-    }
 }
 
 extension BookmarkItemData: BookmarksFolderCell {
@@ -61,28 +42,6 @@ extension BookmarkItemData: BookmarksFolderCell {
                                              accessoryView: UIImageView(image: chevronImage),
                                              accessoryType: .none,
                                              editingAccessoryView: UIImageView(image: chevronImage))
-    }
-
-    @MainActor
-    func didSelect(profile: Profile,
-                   searchEnginesManager: SearchEnginesManager,
-                   windowUUID: WindowUUID,
-                   libraryPanelDelegate: LibraryPanelDelegate?,
-                   navigationController: UINavigationController?,
-                   logger: Logger) {
-        // If we can't get a real URL out of what should be a URL, we let the user's
-        // default search engine give it a shot.
-        // Typically we'll be in this state if the user has tapped a bookmarked search template
-        // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
-        // they'd copied and pasted into the URL bar.
-        // See BrowserViewController.urlBar:didSubmitText:.
-        guard let url = URIFixup.getURL(url) ?? searchEnginesManager.defaultEngine?.searchURLForQuery(url) else {
-            logger.log("Invalid URL, and couldn't generate a search URL for it.",
-                       level: .warning,
-                       category: .library)
-            return
-        }
-        libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
     }
 }
 

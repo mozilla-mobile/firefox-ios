@@ -392,7 +392,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
                                                  buttonText: .BookmarksEdit)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { isButtonTapped in
-                isButtonTapped ? openBookmarkEditPanel(urlString: urlString) : nil
+                isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
             }
             show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
         case .removeBookmark:
