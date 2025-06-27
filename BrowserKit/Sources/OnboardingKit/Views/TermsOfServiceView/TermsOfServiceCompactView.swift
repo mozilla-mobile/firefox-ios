@@ -30,7 +30,6 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
     }
 
     // MARK: - Body
-
     public var body: some View {
         GeometryReader { geometry in
             let widthScale = geometry.size.width / UX.CardView.baseWidth
@@ -41,23 +40,7 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
                     .ignoresSafeArea()
                 ScrollView {
                     VStack {
-                        VStack(spacing: UX.CardView.spacing * scale) {
-                            Spacer()
-                            imageView(scale: scale)
-                            titleView
-                            bodyView
-                            Spacer()
-                            links
-                            primaryButton
-                        }
-                        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                        .padding(UX.CardView.verticalPadding * scale)
-                        .padding(.bottom)
-                        .background(
-                            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                                .fill(cardBackgroundColor)
-                        )
-                        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+                        cardContent(geometry: geometry, scale: scale)
                         Spacer()
                     }
                 }
@@ -70,6 +53,27 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
+        VStack(spacing: UX.CardView.spacing * scale) {
+            Spacer()
+            imageView(scale: scale)
+            titleView
+            bodyView
+            Spacer()
+            links
+            primaryButton
+        }
+        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+        .padding(UX.CardView.verticalPadding * scale)
+        .padding(.bottom)
+        .background(
+            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                .fill(cardBackgroundColor)
+        )
+        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
     }
 
     // MARK: - Subviews
