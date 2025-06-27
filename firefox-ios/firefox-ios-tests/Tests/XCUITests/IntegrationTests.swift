@@ -228,6 +228,27 @@ class IntegrationTests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
 
+    func testFxASyncTabsDesktop_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Sign into Mozilla Account
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+
+        // Check synced Tabs
+        app.buttons["Done"].waitAndTap()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleExperimentSyncMode)
+
+        // Need to swipe to get the data on the screen on focus
+        app.swipeDown()
+        mozWaitForElementToExist(app.tables.otherElements["profile1"])
+        XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
+    }
+
     func testFxASyncTabsDesktop_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
