@@ -366,8 +366,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         UIView.animate(
             withDuration: UX.dismissDuration,
             delay: 0.0,
-            options: .curveEaseOut
-        ) {
+            options: .curveEaseOut) {
             cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
             cv.alpha = UX.opaqueAlpha
 
