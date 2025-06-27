@@ -9,27 +9,27 @@ import SwiftUI
 /// Usage: `PortraitOnlyHostingController(rootView: MySwiftUIView())`
 @available(iOS 13.0, *)
 public class PortraitOnlyHostingController<Content: View>: UIHostingController<Content> {
-   
-   public override init(rootView: Content) {
-       super.init(rootView: rootView)
-   }
-   
-   @MainActor required dynamic public init?(coder aDecoder: NSCoder) {
-       fatalError("init(coder:) has not been implemented")
-   }
-   
-   /// Restricts orientation to portrait only
-   public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-       return .portrait
-   }
-   
-   /// Prevents automatic rotation
-   public override var shouldAutorotate: Bool {
-       return false
-   }
-   
-   /// Sets portrait as the preferred presentation orientation
-   public override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-       return .portrait
-   }
+    override public init(rootView: Content) {
+        super.init(rootView: rootView)
+    }
+
+    @MainActor
+    required dynamic public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    /// Restricts orientation to portrait only
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    /// Prevents automatic rotation
+    override public var shouldAutorotate: Bool {
+        return false
+    }
+
+    /// Sets portrait as the preferred presentation orientation
+    override public var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
 }

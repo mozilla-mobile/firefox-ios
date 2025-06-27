@@ -43,7 +43,7 @@ public struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>:
                 }
 
                 Spacer()
-                
+
                 CustomPageControl(
                     currentPage: $viewModel.pageCount,
                     numberOfPages: viewModel.onboardingCards.count,

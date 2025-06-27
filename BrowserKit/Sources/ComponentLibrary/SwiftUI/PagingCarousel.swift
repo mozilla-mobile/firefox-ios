@@ -25,7 +25,6 @@ import SwiftUI
 /// }
 /// ```
 public struct PagingCarousel<Item, Content: View>: View {
-
     // MARK: - UX Configuration
 
     /// User experience configuration constants for the carousel
@@ -134,7 +133,6 @@ public struct PagingCarousel<Item, Content: View>: View {
 // MARK: - Private Computed Properties
 
 private extension PagingCarousel {
-
     /// Calculates the width of each carousel item based on the available geometry
     func itemWidth(for geometry: GeometryProxy) -> CGFloat {
         geometry.size.width * ux.itemWidthRatio
@@ -183,7 +181,6 @@ private extension PagingCarousel {
 // MARK: - Private Methods
 
 private extension PagingCarousel {
-
     /// Scrolls to the currently selected item
     /// - Parameters:
     ///   - scrollAction: A closure that performs the scroll action
