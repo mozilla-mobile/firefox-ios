@@ -187,15 +187,25 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    // MARK: - Toolbar Action
+
+    /// Navigate to zero search state after tapping on search button on navigation toolbar
     static func reduceStateForToolbarAction(
         action: ToolbarMiddlewareAction,
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
         case ToolbarMiddlewareActionType.didTapButton:
-            guard action.isHomepageSearchBarEnabled ?? false else {
+            let shouldShowSearchBar = store.state.screenState(
+                HomepageState.self,
+                for: .homepage,
+                window: action.windowUUID
+            )?.searchState.shouldShowSearchBar ?? false
+
+            guard shouldShowSearchBar, action.buttonType == .search else {
                 return defaultState(from: state, action: action)
             }
+
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
