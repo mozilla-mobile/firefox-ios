@@ -42,6 +42,6 @@ public final class AddressToolbarAddTabView: UIView,
 
     public func applyTheme(theme: any Theme) {
         plusIconView.tintColor = theme.colors.textPrimary
-        backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layerSurfaceMedium
     }
 }
