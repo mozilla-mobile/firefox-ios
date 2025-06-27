@@ -320,7 +320,6 @@
         "NavigationTest\/testTapSigninShowsFxAFromSettings()",
         "NavigationTest\/testWriteToChildPopupTab()",
         "NewTabSettingsTest\/testChangeNewTabSettingsLabel()",
-        "NewTabSettingsTest\/testChangeNewTabSettingsShowCustomURL()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff_swipingTabsExperimentOff()",
