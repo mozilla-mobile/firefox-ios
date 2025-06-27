@@ -47,6 +47,24 @@ public struct AddressToolbarUXConfiguration {
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
+<<<<<<< HEAD
         return isLocationTextCentered ? theme.colors.layer2 : theme.colors.layerSearch
+=======
+        var backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        if shouldBlur {
+            backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
+        }
+
+        return backgroundColor
+    }
+
+    public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {
+        return switch addressBarPosition {
+        case .top:
+            (top: 8, bottom: 8)
+        case .bottom:
+            (top: 8, bottom: 4)
+        }
+>>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
     }
 }
