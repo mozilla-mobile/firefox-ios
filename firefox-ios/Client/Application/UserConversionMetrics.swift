@@ -18,7 +18,7 @@ struct UserConversionMetrics {
     func didOpenNewTab() {
         sendActivationEvent(conversionValue: .newTab)
     }
-
+//test/
     func didPerformSearch() {
         sendActivationEvent(conversionValue: .search)
     }
