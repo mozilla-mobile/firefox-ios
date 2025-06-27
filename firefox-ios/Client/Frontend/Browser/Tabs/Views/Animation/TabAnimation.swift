@@ -414,23 +414,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             backgroundView.alpha = UX.opaqueAlpha
         }
 
-<<<<<<< HEAD
         animator.addCompletion { _ in
-=======
-        UIView.animate(
-            withDuration: UX.dismissDuration,
-            delay: 0.0,
-            options: .curveEaseOut) {
-            cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.opaqueAlpha
-
-            tabSnapshot.frame = contentContainer.frame
-            toView.alpha = UX.opaqueAlpha
-            toView.layer.cornerRadius = UX.zeroCornerRadius
-            tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
-        } completion: { _ in
-            contentContainer.isHidden = false
->>>>>>> fda824858 (Bugfix FXIOS-12419 - Missing Screenshots issue (#27616))
             tabCell?.isHidden = false
             toView.isHidden = false
             self.view.removeFromSuperview()
