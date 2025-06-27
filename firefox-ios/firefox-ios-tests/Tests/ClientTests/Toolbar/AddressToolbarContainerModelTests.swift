@@ -142,8 +142,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                readerModeState: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
-                               alternativeSearchEngine: withSearchEngine,
-                               shouldHide: false)
+                               alternativeSearchEngine: withSearchEngine)
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {

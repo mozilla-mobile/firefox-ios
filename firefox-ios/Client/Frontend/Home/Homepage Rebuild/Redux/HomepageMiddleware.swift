@@ -5,7 +5,6 @@
 import Foundation
 import Redux
 import Common
-import ToolbarKit
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags

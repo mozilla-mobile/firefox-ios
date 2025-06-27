@@ -215,13 +215,6 @@ struct AddressBarState: StateType, Equatable {
         case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
-        case HomepageMiddlewareActionType.configuredSearchBar:
-            return handleConfiguredHomepageSearchBarAction(state: state, action: action)
-
-// zero state, we want to show
-//        case GeneralBrowserActionType.enteredZeroSearchScreen:
-//            return handleConfiguredHomepageSearchBarAction(state: state, action: action)
-
         default:
             return defaultState(from: state)
         }
@@ -521,6 +514,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
+            // should this be true?
             shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
@@ -852,30 +846,6 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleConfiguredHomepageSearchBarAction(state: Self, action: Action) -> AddressBarState {
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            didStartTyping: state.didStartTyping,
-            isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
-        )
-    }
-
     static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -927,24 +897,7 @@ struct AddressBarState: StateType, Equatable {
 
         return actions
     }
-
-    /// Unfortunately, cannot rely on BVC state to determine if we are currently on homepage,
-    /// so we will need to use this for the time being.
-    /// Checks whether we are on the homepage.
-    private static func isHomepage(for action: ToolbarAction) -> Bool {
-        guard let toolbarState = store.state.screenState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: action.windowUUID
-        ) else {
-            return false
-        }
-        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
-
-        return isHomepage
-    }
-
+    
     private static func leadingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,

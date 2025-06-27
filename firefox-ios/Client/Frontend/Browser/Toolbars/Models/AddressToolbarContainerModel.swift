@@ -165,6 +165,7 @@ final class AddressToolbarContainerModel: Equatable {
             searchTerm: nil,
             isEditing: false,
             didStartTyping: false,
+            // Cyn notes: need to confirm with winnie on these changes or if we should use isEditing or zero state boolean
             shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
             onTapLockIcon: { _ in },
