@@ -22,8 +22,7 @@ public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>
         onActionTap: @escaping (
             ViewModel.OnboardingActionType,
             String,
-            @escaping (Result<TabAction, Error>) -> Void
-        ) -> Void,
+            @escaping (Result<TabAction, Error>) -> Void) -> Void,
         onComplete: @escaping (String) -> Void
     ) {
         self.onboardingCards = onboardingCards
