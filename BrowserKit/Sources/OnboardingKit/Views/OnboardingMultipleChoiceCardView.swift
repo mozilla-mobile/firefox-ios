@@ -40,11 +40,6 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
 
     public var body: some View {
         GeometryReader { geometry in
-            // Determine scale factor based on current size vs base metrics
-            let widthScale = geometry.size.width / UX.CardView.baseWidth
-            let heightScale = geometry.size.height / UX.CardView.baseHeight
-            let scale = min(widthScale, heightScale)
-
             ScrollView {
                 scrollViewContent(geometry: geometry)
             }
@@ -87,7 +82,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
                 RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                     .fill(cardBackgroundColor)
             )
-            .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+            .padding(.top, UX.CardView.cardTopPadding)
         }
     }
 

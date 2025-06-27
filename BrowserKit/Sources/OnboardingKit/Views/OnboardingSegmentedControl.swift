@@ -91,6 +91,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
 
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
+            .opacity(UX.SegmentedControl.selectedColorOpacity)
         noSelection = Color(theme.colors.textOnDark)
     }
 }

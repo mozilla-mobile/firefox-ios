@@ -40,7 +40,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             let scale = min(widthScale, heightScale)
 
             ScrollView {
-                VStack {
+                VStack(spacing: UX.CardView.cardSecondaryContainerPadding) {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         titleView
@@ -56,10 +56,10 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
                         RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                             .fill(cardBackgroundColor)
                     )
-                    .padding(.horizontal, UX.CardView.horizontalPadding * scale)
                     secondaryButton(scale: scale)
                     Spacer()
                 }
+                .padding(.top, UX.CardView.cardTopPadding)
             }
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

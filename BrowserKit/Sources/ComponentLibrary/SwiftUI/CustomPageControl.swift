@@ -5,6 +5,20 @@
 import SwiftUI
 import Common
 
+public enum PageControlStyle {
+    case regular
+    case compact
+
+    func colors(from palette: ThemeColourPalette) -> (primary: UIColor, secondary: UIColor) {
+        switch self {
+        case .regular:
+            return (palette.actionPrimary, palette.iconDisabled)
+        case .compact:
+            return (palette.layer1, palette.iconDisabled)
+        }
+    }
+}
+
 public struct CustomPageControl: View {
     @State private var primaryActionColor: Color = .clear
     @State private var secondaryActionColor: Color = .clear
@@ -13,16 +27,20 @@ public struct CustomPageControl: View {
     let themeManager: ThemeManager
     let numberOfPages: Int
 
+    let style: PageControlStyle
+
     public init(
         currentPage: Binding<Int>,
         numberOfPages: Int,
         windowUUID: WindowUUID,
-        themeManager: ThemeManager
+        themeManager: ThemeManager,
+        style: PageControlStyle = .regular
     ) {
         self._currentPage = currentPage
         self.numberOfPages = numberOfPages
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.style = style
     }
 
     public var body: some View {
@@ -45,8 +63,8 @@ public struct CustomPageControl: View {
     }
 
     private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        primaryActionColor = Color(color.actionPrimary)
-        secondaryActionColor = Color(color.iconDisabled)
+        let colors = style.colors(from: theme.colors)
+        primaryActionColor = Color(colors.primary)
+        secondaryActionColor = Color(colors.secondary)
     }
 }

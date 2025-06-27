@@ -14,7 +14,9 @@ enum UX {
         static let baseiPadWidth: CGFloat = 510
         static let baseiPadHeight: CGFloat = 755
 
-        static let cardHeightRatio: CGFloat = 0.7
+        static let cardTopPadding: CGFloat = 32
+        static let cardSecondaryContainerPadding: CGFloat = 32
+        static let cardHeightRatio: CGFloat = 0.75
         static let spacing: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
@@ -41,6 +43,7 @@ enum UX {
         static let imageHeight: CGFloat = 150
         static let verticalPadding: CGFloat = 10
         static let checkmarkFontSize: CGFloat = 20
+        static let selectedColorOpacity: CGFloat = 0.8
 
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
