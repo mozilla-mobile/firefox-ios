@@ -475,11 +475,12 @@ extension ShareViewController {
             // Intentionally block thread with database call.
 
             // Add new bookmark to the top of the folder
-            let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-            _ = profile.places.createBookmark(parentGUID: recentBookmarkFolderGuid,
-                                              url: item.url,
-                                              title: item.title,
-                                              position: 0).value
+            // Save bookmark to recent bookmark folder, otherwise save to root folder
+            let folderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) ?? BookmarkRoots.MobileFolderGUID
+            profile.places.createBookmark(parentGUID: folderGuid,
+                                          url: item.url,
+                                          title: item.title,
+                                          position: 0)
             profile.shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")
