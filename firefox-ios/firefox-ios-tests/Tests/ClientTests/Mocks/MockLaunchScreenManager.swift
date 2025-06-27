@@ -30,7 +30,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         super.init(windowUUID: windowUUID)
     }
 
-    override func startLoading(appVersion: String) async {
+    override func startLoading(appVersion: String) {
         startLoadingCalled += 1
         if let mockLaunchType = mockLaunchType {
             delegate?.launchWith(launchType: mockLaunchType)
