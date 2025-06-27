@@ -33,11 +33,9 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
 
     public var body: some View {
         GeometryReader { geometry in
-            // Determine scale factor based on current size vs base metrics
             let widthScale = geometry.size.width / UX.CardView.baseWidth
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
-
             ZStack {
                 MilkyWayMetalView()
                     .ignoresSafeArea()
