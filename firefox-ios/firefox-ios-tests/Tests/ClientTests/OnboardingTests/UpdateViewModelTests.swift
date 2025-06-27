@@ -178,12 +178,6 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: - Private Helpers
-    /// <#Description#>
-    /// - Parameters:
-    ///   - hasOnboardingCards: <#hasOnboardingCards description#>
-    ///   - file: <#file description#>
-    ///   - line: <#line description#>
-    /// - Returns: <#description#>
     func createSubject(
         hasOnboardingCards: Bool = true,
         file: StaticString = #filePath,
