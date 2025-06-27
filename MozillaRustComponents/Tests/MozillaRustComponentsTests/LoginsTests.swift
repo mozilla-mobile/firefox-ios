@@ -4,22 +4,20 @@
 
 @testable import MozillaRustComponents
 @testable import MozillaAppServices
-import XCTest
 
-class CrashTestTests: XCTestCase {
+import Glean
+import XCTest
+import MozillaAppServices
+
+class LoginsTests: XCTestCase {
+    var storage: LoginsStorage!
+
     override func setUp() {
-        // This method is called before the invocation of each test method in the class.
+        super.setUp()
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
         // This method is called after the invocation of each test method in the class.
     }
-
-    func testErrorsAreThrown() {
-        XCTAssertThrowsError(try triggerRustError())
-    }
-
-    // We can't test `triggerRustAbort()` here because it's a hard crash.
-
-    // We can't test `triggerRustPanic()` here because it fails in a `try!` and crashes.
 }

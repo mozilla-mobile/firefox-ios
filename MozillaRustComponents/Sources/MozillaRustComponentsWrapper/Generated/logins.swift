@@ -2557,7 +2557,8 @@ public func createKey()throws  -> String  {
 })
 }
 /**
- * Create a LoginStore by passing in a db path and a static key
+ * Create a LoginStore with StaticKeyManager by passing in a db path and a
+ * static key
  */
 public func createLoginStoreWithStaticKeyManager(path: String, key: String) -> LoginStore  {
     return try!  FfiConverterTypeLoginStore_lift(try! rustCall() {
