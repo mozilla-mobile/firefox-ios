@@ -44,8 +44,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             // Redesigned stories constants
             static let redesignNumberOfItemsInColumn = 1
-            static let redesignedCellHeight: CGFloat = 70
-            static let redesignedFractionalWidthiPhonePortrait: CGFloat = 0.82
+            static let redesignedMinimumCellHeight: CGFloat = 70
+            static let redesignedFractionalWidthiPhonePortrait: CGFloat = 0.84
+            static let storiesSpacing: CGFloat = 12
 
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
@@ -63,6 +64,22 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
                     return .fractionalWidth(franctionalWidth)
                 }
+            }
+
+            static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                                             isLandscape: Bool = UIWindow.isLandscape) -> CGFloat {
+                var fractionalWidth: CGFloat
+                if device == .pad {
+                    return UX.PocketConstants.cellWidth
+                } else if isLandscape {
+                    fractionalWidth = UX.PocketConstants.fractionalWidthiPhoneLandscape
+                } else {
+                    fractionalWidth = UX.PocketConstants.redesignedFractionalWidthiPhonePortrait
+                }
+
+                return ((UIScreen.main.bounds.width - UX.standardInset)
+                       * fractionalWidth)
+                       + UX.PocketConstants.storiesSpacing
             }
         }
 
@@ -140,7 +157,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .pocket:
-            return createPocketSectionLayout(for: traitCollection)
+            return isStoriesRedesignEnabled ? createStoriesSectionLayout(for: traitCollection)
+                                            : createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
             return createSingleItemSectionLayout(
                 for: traitCollection,
@@ -181,21 +199,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func createPocketSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        let cellHeight = isStoriesRedesignEnabled ? UX.PocketConstants.redesignedCellHeight : UX.PocketConstants.cellHeight
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(cellHeight)
+            heightDimension: .estimated(UX.PocketConstants.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: UX.PocketConstants.getWidthDimension(isStoriesRedesignEnabled: isStoriesRedesignEnabled),
-            heightDimension: .estimated(cellHeight)
+            heightDimension: .estimated(UX.PocketConstants.cellHeight)
         )
 
-        let numberOfItemsInColumn = isStoriesRedesignEnabled ? UX.PocketConstants.redesignNumberOfItemsInColumn
-                                                             : UX.PocketConstants.numberOfItemsInColumn
-        let subItems = Array(repeating: item, count: numberOfItemsInColumn)
+        let subItems = Array(repeating: item, count: UX.PocketConstants.numberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
         group.interItemSpacing = UX.PocketConstants.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(
@@ -221,6 +236,48 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.orthogonalScrollingBehavior = .continuous
         return section
     }
+
+        private func createStoriesSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+            let absoluteCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
+
+            let maxHeight = measureTallestStoryCell(width: absoluteCellWidth)
+
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .estimated(maxHeight)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(absoluteCellWidth),
+                heightDimension: .estimated(maxHeight)
+            )
+
+            let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+            group.contentInsets = NSDirectionalEdgeInsets(
+                top: 0,
+                leading: 0,
+                bottom: 0,
+                trailing: UX.PocketConstants.storiesSpacing)
+
+            let section = NSCollectionLayoutSection(group: group)
+
+            let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                          heightDimension: .estimated(UX.sectionHeaderHeight))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
+                                                                     elementKind: UICollectionView.elementKindSectionHeader,
+                                                                     alignment: .top)
+            section.boundarySupplementaryItems = [header]
+
+            let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                            leading: leadingInset,
+                                                            bottom: UX.standardInset,
+                                                            trailing: 0)
+            section.orthogonalScrollingBehavior = .continuous
+            return section
+        }
 
     private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
@@ -429,5 +486,25 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
+    }
+
+    private func measureTallestStoryCell(width: CGFloat) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self,
+                                                  for: .homepage,
+                                                  window: windowUUID) else { return 0.0 }
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        let pocketItems = state.pocketState.pocketData
+        var maxHeight: CGFloat = 0
+        for item in pocketItems {
+            let cell = StoryCell()
+            cell.configure(story: item, theme: themeManager.getCurrentTheme(for: windowUUID))
+            let size = cell.systemLayoutSizeFitting(
+                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            maxHeight = max(maxHeight, size.height)
+        }
+        return max(ceil(maxHeight), UX.PocketConstants.redesignedMinimumCellHeight)
     }
 }

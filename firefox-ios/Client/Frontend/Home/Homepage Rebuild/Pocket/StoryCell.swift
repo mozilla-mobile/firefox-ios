@@ -7,12 +7,11 @@ import Foundation
 import SiteImageView
 
 /// The standard cell used in homepage pocket section
-class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable, Notifiable {
     struct UX {
         static let cellCornerRadius: CGFloat = 16
         static let thumbnailImageSize = CGSize(width: 62, height: 62)
         static let thumbnailCornerRadius: CGFloat = 12
-        static let thumbnailVerticalMargin: CGFloat = 4
         static let descriptionVerticalMargin: CGFloat = 8
         static let descriptionLeadingSpacing: CGFloat = 12
         static let descriptionTrailingMargin: CGFloat = 8
@@ -22,26 +21,35 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable 
     // MARK: - UI Elements
     private var thumbnailImageView: HeroImageView = .build { _ in }
 
-    private lazy var titleLabel: UILabel = .build { title in
-        title.adjustsFontForContentSizeCategory = true
-        title.font = FXFontStyles.Regular.footnote.scaledFont()
-        title.numberOfLines = 2
+    private lazy var titleLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
     }
 
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.caption2.scaledFont()
         label.text = .FirefoxHomepage.Pocket.Sponsored
+        label.numberOfLines = 1
     }
+
+    private lazy var descriptionStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = 8
+    }
+
+    var notificationCenter: NotificationProtocol
+    private var story: PocketStoryConfiguration?
 
     // MARK: - Inits
 
     override init(frame: CGRect) {
+        self.notificationCenter = NotificationCenter.default
         super.init(frame: .zero)
 
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
-
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         setupLayout()
     }
 
@@ -64,7 +72,9 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable 
     // MARK: - Helpers
 
     func configure(story: PocketStoryConfiguration, theme: Theme) {
+        self.story = story
         titleLabel.text = story.title
+        titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
         accessibilityLabel = story.accessibilityLabel
 
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL.absoluteString,
@@ -80,27 +90,36 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable 
     private func setupLayout() {
         contentView.layer.cornerRadius = UX.cellCornerRadius
 
-        contentView.addSubviews(thumbnailImageView, titleLabel, sponsoredLabel)
+        descriptionStackView.addArrangedSubview(titleLabel)
+        descriptionStackView.addArrangedSubview(sponsoredLabel)
+        contentView.addSubviews(thumbnailImageView, descriptionStackView)
 
         NSLayoutConstraint.activate([
-            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
             thumbnailImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
             thumbnailImageView.widthAnchor.constraint(equalToConstant: UX.thumbnailImageSize.width),
             thumbnailImageView.heightAnchor.constraint(equalToConstant: UX.thumbnailImageSize.height),
 
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.descriptionVerticalMargin),
-            titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor,
-                                                constant: UX.descriptionLeadingSpacing),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                 constant: -UX.descriptionTrailingMargin),
-
-            sponsoredLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor,
-                                                    constant: UX.descriptionLeadingSpacing),
-            sponsoredLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                     constant: -UX.descriptionTrailingMargin),
-            sponsoredLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                   constant: -UX.descriptionVerticalMargin)
+            descriptionStackView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor,
+                                                      constant: UX.descriptionVerticalMargin),
+            descriptionStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            descriptionStackView.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor,
+                                                          constant: UX.descriptionLeadingSpacing),
+            descriptionStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                           constant: -UX.descriptionTrailingMargin),
+            descriptionStackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
+                                                         constant: -UX.descriptionVerticalMargin),
         ])
+    }
+
+    private func getNumberOfLinesForTitle(isSponsoredStory: Bool) -> Int {
+        if UIApplication.shared.preferredContentSizeCategory > UIContentSizeCategory.large {
+            return 0
+        } else if isSponsoredStory {
+            return 2
+        } else {
+            return 3
+        }
     }
 
     private func setupShadow(theme: Theme) {
@@ -128,6 +147,16 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable 
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            guard let story = self.story else { return }
+            titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
+        default: break
         }
     }
 }
