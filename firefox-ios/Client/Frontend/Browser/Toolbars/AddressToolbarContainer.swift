@@ -385,7 +385,8 @@ final class AddressToolbarContainer: UIView,
                     -UX.toolbarHorizontalPadding : 0.0
                 self.layoutIfNeeded()
             }
-            addNewTabLeadingConstraint?.constant = transform.tx
+            let isRTL = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
+            addNewTabLeadingConstraint?.constant = isRTL ? -transform.tx : transform.tx
         }
     }
 
