@@ -345,12 +345,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusHomepageSearchBarForTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(searchBar: isEnabled)
-        }
-    }
-
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(swipingTabs: isEnabled)
