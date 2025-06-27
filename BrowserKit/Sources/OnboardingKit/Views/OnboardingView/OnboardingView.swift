@@ -6,17 +6,17 @@ import Common
 import SwiftUI
 
 // MARK: - Main Onboarding View
-public struct OnboardingView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
-    @StateObject private var viewModel: OnboardingFlowViewModel<VM>
+    @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
     public init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<VM>
+        viewModel: OnboardingFlowViewModel<ViewModel>
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager

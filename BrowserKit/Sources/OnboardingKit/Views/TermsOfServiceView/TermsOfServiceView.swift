@@ -6,13 +6,13 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryActionColor: Color = .clear
 
-    @StateObject private var viewModel: TosFlowViewModel<VM>
+    @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
     let windowUUID: WindowUUID
@@ -20,7 +20,7 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
     public let onEmbededLinkAction: (TosAction) -> Void
 
     public init(
-        viewModel: TosFlowViewModel<VM>,
+        viewModel: TosFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onEmbededLinkAction: @escaping (TosAction) -> Void

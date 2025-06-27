@@ -6,16 +6,16 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct OnboardingRegularView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct OnboardingRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
-    @StateObject private var viewModel: OnboardingFlowViewModel<VM>
+    @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
     public init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<VM>
+        viewModel: OnboardingFlowViewModel<ViewModel>
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager

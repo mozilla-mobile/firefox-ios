@@ -6,24 +6,24 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var selectedAction: VM.OnboardingMultipleChoiceActionType
+    @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
-    public let onMultipleChoiceAction: (VM.OnboardingMultipleChoiceActionType, String) -> Void
+    public let viewModel: ViewModel
+    public let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
+    public let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     public let onLinkTap: (String) -> Void
 
     public init?(
-        viewModel: VM,
+        viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
-        onMultipleChoiceAction: @escaping (VM.OnboardingMultipleChoiceActionType, String) -> Void,
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
+        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void,
         onLinkTap: @escaping (String) -> Void
     ) {
         self.viewModel = viewModel
@@ -64,7 +64,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
                 Spacer()
                 titleView
                 Spacer()
-                OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
+                OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                     selection: $selectedAction,
                     items: viewModel.multipleChoiceButtons,
                     windowUUID: windowUUID,

@@ -6,20 +6,20 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
-    public let onMultipleChoiceAction: (VM.OnboardingMultipleChoiceActionType, String) -> Void
+    public let viewModel: ViewModel
+    public let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
+    public let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     public let onLinkTap: (String) -> Void
 
     public init(
-        viewModel: VM,
+        viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
-        onMultipleChoiceAction: @escaping (VM.OnboardingMultipleChoiceActionType, String) -> Void,
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
+        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void,
         onLinkTap: @escaping (String) -> Void
     ) {
         self.viewModel = viewModel

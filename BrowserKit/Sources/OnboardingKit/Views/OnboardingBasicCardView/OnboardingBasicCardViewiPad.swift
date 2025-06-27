@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: View {
+public struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
@@ -14,15 +14,15 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
+    public let viewModel: ViewModel
+    public let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     public let onLinkTap: (String) -> Void
 
     public init(
-        viewModel: VM,
+        viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onLinkTap: @escaping (String) -> Void
     ) {
         self.viewModel = viewModel
