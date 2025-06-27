@@ -80,7 +80,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         }
     }
 
-    func hasSyncableAccount() async -> Bool {
+    func containsSyncableAccount() -> Bool {
         let hasSync = profile.hasAccount()
         hasSyncableAccount = hasSync
         return hasSync
