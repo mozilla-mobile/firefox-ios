@@ -50,16 +50,15 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSearchBar)
     }
 
-    func test_tapOnHomepageSearchBarAction_returnsExpectedState() {
+    func test_enteredZeroSearchState_withGeneralBrowserAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = searchBarReducer()
 
         let newState = reducer(
             initialState,
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.zeroSearch),
+            GeneralBrowserAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+                actionType: GeneralBrowserActionType.enteredZeroSearchScreen
             )
         )
 
