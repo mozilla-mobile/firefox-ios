@@ -10,7 +10,9 @@ import Storage
 class ShareSheetCoordinator: BaseCoordinator,
                              DevicePickerViewControllerDelegate,
                              InstructionsViewDelegate,
-                             JSPromptAlertControllerDelegate {
+                             JSPromptAlertControllerDelegate,
+                             // FXIOS-12609 Coordinators marked @unchecked Sendable should be @MainActor synchronized
+                             @unchecked Sendable {
     // MARK: - Properties
 
     private let tabManager: TabManager
