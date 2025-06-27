@@ -13,15 +13,18 @@ final class WKUIHandlerTests: XCTestCase {
     private var mockDecider: MockPolicyDecider!
     private var mockApplication: MockApplication!
     private let testURL = URL(string: "https://www.example.com")!
+    private var sessionCreator: MockSessionCreator!
 
     override func setUp() {
         super.setUp()
+        sessionCreator = MockSessionCreator()
         mockApplication = MockApplication()
         mockDecider = MockPolicyDecider()
         sessionDelegate = MockEngineSessionDelegate()
     }
 
     override func tearDown() {
+        sessionCreator = nil
         mockApplication = nil
         mockDecider = nil
         sessionDelegate = nil
@@ -94,7 +97,7 @@ final class WKUIHandlerTests: XCTestCase {
         )
 
         XCTAssertNotNil(webView)
-        XCTAssertEqual(sessionDelegate.onRequestOpenNewSessionCalled, 1)
+        XCTAssertEqual(sessionCreator.createPopupSessionCalled, 1)
     }
 
     func testRequestPopupWindow_whenPolicyIsCancel_returnsNil() {
@@ -109,7 +112,7 @@ final class WKUIHandlerTests: XCTestCase {
         )
 
         XCTAssertNil(webView)
-        XCTAssertEqual(sessionDelegate.onRequestOpenNewSessionCalled, 0)
+        XCTAssertEqual(sessionCreator.createPopupSessionCalled, 0)
     }
 
     func testRequestPopupWindow_whenPolicyIsLaunchExternalApps_returnsNil() {
@@ -124,7 +127,7 @@ final class WKUIHandlerTests: XCTestCase {
         )
 
         XCTAssertNil(webView)
-        XCTAssertEqual(sessionDelegate.onRequestOpenNewSessionCalled, 0)
+        XCTAssertEqual(sessionCreator.createPopupSessionCalled, 0)
     }
 
     func testRequestPopupWindow_whenPolicyIsLaunchExternalApps_launchExternalApp() {
@@ -139,7 +142,7 @@ final class WKUIHandlerTests: XCTestCase {
         )
 
         XCTAssertNil(webView)
-        XCTAssertEqual(sessionDelegate.onRequestOpenNewSessionCalled, 0)
+        XCTAssertEqual(sessionCreator.createPopupSessionCalled, 0)
         XCTAssertEqual(mockApplication.canOpenCalled, 1)
         XCTAssertEqual(mockApplication.openCalled, 1)
     }
@@ -157,7 +160,7 @@ final class WKUIHandlerTests: XCTestCase {
         )
 
         XCTAssertNil(webView)
-        XCTAssertEqual(sessionDelegate.onRequestOpenNewSessionCalled, 0)
+        XCTAssertEqual(sessionCreator.createPopupSessionCalled, 0)
         XCTAssertEqual(mockApplication.canOpenCalled, 1)
         XCTAssertEqual(mockApplication.openCalled, 0)
     }
@@ -165,11 +168,21 @@ final class WKUIHandlerTests: XCTestCase {
     func createSubject(isActive: Bool = false) -> WKUIHandler {
         let uiHandler = DefaultUIHandler(
             sessionDependencies: DefaultTestDependencies().sessionDependencies,
+            sessionCreator: sessionCreator,
             application: mockApplication,
             policyDecider: mockDecider
         )
         uiHandler.delegate = sessionDelegate
         uiHandler.isActive = isActive
         return uiHandler
+    }
+}
+
+class MockSessionCreator: SessionCreator {
+    var createPopupSessionCalled = 0
+
+    func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
+        createPopupSessionCalled += 1
+        return parent
     }
 }

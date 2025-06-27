@@ -75,9 +75,12 @@
 		0BA152502CE78DAD0090B869 /* UserAgentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA1524F2CE78DAD0090B869 /* UserAgentBuilderTests.swift */; };
 		0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E00D1B03FB0B007675AF /* NetError.html */; };
 		0BA1E0301B051A07007675AF /* NetError.css in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E02F1B051A07007675AF /* NetError.css */; };
+		0BAF20E52E02A1A4000D4542 /* BrowserWebUIDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAF20E42E02A1A4000D4542 /* BrowserWebUIDelegateTests.swift */; };
+		0BAF20E72E02AA7A000D4542 /* MockWKUIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAF20E62E02AA7A000D4542 /* MockWKUIHandler.swift */; };
 		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */; };
 		0BBC50952CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */; };
+		0BBFBF252DFC203100160911 /* BrowserWebUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBFBF242DFC203100160911 /* BrowserWebUIDelegate.swift */; };
 		0BC57FE92D48E9CF0049C2B9 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC57FE82D48E9CF0049C2B9 /* Metrics.swift */; };
 		0BC9C9C41F26F54D000E8AB5 /* SiteLoadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */; };
 		0BCC26922CFF10250072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26912CFF10250072CD5A /* Shared */; };
@@ -96,6 +99,7 @@
 		0BCC26AF2CFF16FF0072CD5A /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AE2CFF16FF0072CD5A /* GCDWebServers */; };
 		0BCC26B12CFF17250072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26B02CFF17250072CD5A /* Shared */; };
 		0BCC26B32CFF18C40072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26B22CFF18C40072CD5A /* Shared */; };
+		0BD049CE2DFC4AAE00614E61 /* PopupHTMLSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */; };
 		0BD4FAD52CFF199700E0FBF4 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
 		0BD4FAD62CFF199700E0FBF4 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8881592B20FFE0009635AE /* GCDWebServers */; };
 		0BD4FAD72CFF199700E0FBF4 /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815B2B2103AD009635AE /* WebEngine */; };
@@ -2512,13 +2516,19 @@
 		0BA1524F2CE78DAD0090B869 /* UserAgentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilderTests.swift; sourceTree = "<group>"; };
 		0BA1E00D1B03FB0B007675AF /* NetError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = NetError.html; sourceTree = "<group>"; };
 		0BA1E02F1B051A07007675AF /* NetError.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = NetError.css; sourceTree = "<group>"; };
+		0BAF20E42E02A1A4000D4542 /* BrowserWebUIDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWebUIDelegateTests.swift; sourceTree = "<group>"; };
+		0BAF20E62E02AA7A000D4542 /* MockWKUIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWKUIHandler.swift; sourceTree = "<group>"; };
 		0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginsHelper.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = easterEggGif.gif; sourceTree = "<group>"; };
 		0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksRefactorFeatureFlagProvider.swift; sourceTree = "<group>"; };
 		0BBD4108861715F8A60D6225 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		0BBD47CD96940FB07733C725 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
+		0BBFBF242DFC203100160911 /* BrowserWebUIDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWebUIDelegate.swift; sourceTree = "<group>"; };
 		0BC57FE82D48E9CF0049C2B9 /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteLoadTest.swift; sourceTree = "<group>"; };
+		0BCC268F2CFF0CD70072CD5A /* KeychainWrapperExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapperExtensions.swift; sourceTree = "<group>"; };
+		0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupHTMLSetting.swift; sourceTree = "<group>"; };
+		0BD049D02DFC4BB000614E61 /* testPopUp.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = testPopUp.html; sourceTree = "<group>"; };
 		0BD24470A8F71A8CE50A55E0 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewController.swift; sourceTree = "<group>"; };
 		0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewModel.swift; sourceTree = "<group>"; };
@@ -10882,6 +10892,22 @@
 			path = Legacy;
 			sourceTree = "<group>";
 		};
+		0BBFBF232DFC201300160911 /* WebEngineIntegration */ = {
+			isa = PBXGroup;
+			children = (
+				0BBFBF242DFC203100160911 /* BrowserWebUIDelegate.swift */,
+			);
+			path = WebEngineIntegration;
+			sourceTree = "<group>";
+		};
+		0BD049CF2DFC4B7900614E61 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				0BD049D02DFC4BB000614E61 /* testPopUp.html */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		0BDDB33B2CA6B19B00D501DF /* Edit Folder */ = {
 			isa = PBXGroup;
 			children = (
@@ -12430,6 +12456,7 @@
 		8A3EF7EE2A2FCF0000796E3A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */,
 				1DC598B52DC53CED0037D263 /* Performance */,
 				8ABCBE622C485CAA00480A21 /* FeatureFlags */,
 				8A3EF7FC2A2FCFAC00796E3A /* AppReviewPromptSetting.swift */,
@@ -13959,6 +13986,7 @@
 				8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				8A7A26E029D4785900EA76F1 /* MockRouter.swift */,
+				0BAF20E62E02AA7A000D4542 /* MockWKUIHandler.swift */,
 				ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */,
 				C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */,
 				21D884402A79628E00AF144C /* MockSettingsDelegate.swift */,
@@ -14161,6 +14189,7 @@
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
+				0BBFBF232DFC201300160911 /* WebEngineIntegration */,
 				5A2918C92B522326002B197E /* Actions */,
 				81122E1F2B2219AA003DD9F8 /* Views */,
 				81122E1E2B2219A0003DD9F8 /* State */,
@@ -14677,6 +14706,7 @@
 				2173326629CCD259007F20C7 /* TabScrollControllerTests.swift */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
 				E1AEC174286E0CF500062E29 /* WebView */,
+				0BAF20E42E02A1A4000D4542 /* BrowserWebUIDelegateTests.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -15400,6 +15430,7 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0BD049CF2DFC4B7900614E61 /* Debug */,
 				E699220D1B94E3EF007C480D /* About */,
 				D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */,
 				D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */,
@@ -15962,7 +15993,7 @@
 				F84B21BC1A090F8100AAB793 /* Resources */,
 				28CE83DE1A1D1E7C00576538 /* Frameworks */,
 				F84B22531A0920C600AAB793 /* Embed App Extensions */,
-				E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */,
+				E6639F191BF11E3A002D0853 /* Conditionally Add Optional Resources */,
 				E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */,
 				4368F81027955AE80013419B /* ShellScript */,
 			);
@@ -16856,7 +16887,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
-		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
+		E6639F191BF11E3A002D0853 /* Conditionally Add Optional Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -16864,12 +16895,12 @@
 			);
 			inputPaths = (
 			);
-			name = "Conditionally Add Settings Bundle";
+			name = "Conditionally Add Optional Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${INCLUDE_SETTINGS_BUNDLE}\" = \"YES\" ]\nthen\n    cp -r \"${PROJECT_DIR}/${TARGET_NAME}/Application/Settings.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\"\nfi\n";
+			shellScript = "## Add setting bundle to app bundle\nif [ \"${INCLUDE_SETTINGS_BUNDLE}\" = \"YES\" ]; then\n    cp -r \"${PROJECT_DIR}/${TARGET_NAME}/Application/Settings.bundle\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\"\nfi\n\n## copy debug files to app bundle\nif [ \"$CONFIGURATION\" = \"Fennec\" ]; then\n    cp -R \"${PROJECT_DIR}/${TARGET_NAME}/Assets/Debug/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/\"\nfi \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -18007,6 +18038,7 @@
 				C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
+				0BBFBF252DFC203100160911 /* BrowserWebUIDelegate.swift in Sources */,
 				F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */,
 				8A5D1CA62A30D6BD005AD35C /* NewTabPageSetting.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
@@ -18173,6 +18205,7 @@
 				43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */,
 				8187561A2BB4618500DCD1F3 /* OnboardingViewControllerState.swift in Sources */,
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
+				0BD049CE2DFC4AAE00614E61 /* PopupHTMLSetting.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
 				2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */,
@@ -18380,6 +18413,7 @@
 				E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */,
 				C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */,
 				2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */,
+				0BAF20E52E02A1A4000D4542 /* BrowserWebUIDelegateTests.swift in Sources */,
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */,
@@ -18434,6 +18468,7 @@
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
 				8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
+				0BAF20E72E02AA7A000D4542 /* MockWKUIHandler.swift in Sources */,
 				8A83B74C2A265061002FF9AC /* LibraryCoordinatorTests.swift in Sources */,
 				8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */,
 				21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */,
@@ -26760,6 +26795,7 @@
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -27534,6 +27570,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -27827,6 +27864,7 @@
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -28123,6 +28161,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -28646,6 +28685,7 @@
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;

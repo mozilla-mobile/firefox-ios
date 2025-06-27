@@ -468,6 +468,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ScreenshotSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
+            PopupHTMLSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
