@@ -59,11 +59,23 @@ final class NimbusFeatureFlagLayer {
         case .hntTopSitesVisualRefresh:
             return checkHntTopSitesVisualRefreshFeature(from: nimbus)
 
+        case .homepageRedesign:
+            return checkHomepageRedesignFeature(from: nimbus)
+
+        case .homepageSearchBar:
+            return checkHomepageSearchBarFeature(from: nimbus)
+
+        case .homepageStoriesRedesign:
+            return checkHomepageStoriesRedesignFeature(from: nimbus)
+
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
+
+        case .menuDefaultBrowserBanner:
+            return checkMenuDefaultBrowserBanner(from: nimbus)
 
         case .menuRefactor:
             return checkMenuRefactor(from: nimbus)
@@ -149,9 +161,6 @@ final class NimbusFeatureFlagLayer {
         case .revertUnsafeContinuationsRefactor:
             return checkRevertUnsafeContinuationsRefactor(from: nimbus)
 
-        case .useRustKeychain:
-            return checkUseRustKeychainFeature(from: nimbus)
-
         case .updatedPasswordManager:
             return checkUpdatedPasswordManagerFeature(from: nimbus)
 
@@ -219,6 +228,18 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHntTopSitesVisualRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntTopSitesVisualRefreshFeature.value().enabled
+    }
+
+    private func checkHomepageRedesignFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().enabled
+    }
+
+    private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().searchBar
+    }
+
+    private func checkHomepageStoriesRedesignFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().storiesRedesign
     }
 
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
@@ -376,6 +397,11 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
+    private func checkMenuDefaultBrowserBanner(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.menuRefactorFeature.value()
+        return config.menuDefaultBrowserBanner
+    }
+
     private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.menuRefactorFeature.value().enabled
     }
@@ -411,10 +437,6 @@ final class NimbusFeatureFlagLayer {
     private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
         return config.enabled
-    }
-
-    private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.rustKeychainRefactor.value().rustKeychainEnabled
     }
 
     private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {

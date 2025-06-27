@@ -7,7 +7,13 @@ import Foundation
 
 class MockNotificationManager: NotificationManagerProtocol {
     let wasAuthorizationSuccessful = true
+    var requestAuthorizationCalled = false
+    var shouldGrantPermission = true
+    var errorToReturn: Error?
+
     func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
+        requestAuthorizationCalled = true
+        completion(shouldGrantPermission, errorToReturn)
     }
 
     func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {

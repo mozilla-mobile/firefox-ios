@@ -39,11 +39,10 @@ extension AppDelegate {
         UNUserNotificationCenter.current().setNotificationCategories(categories)
 
         NotificationCenter.default.addObserver(forName: .RegisterForPushNotifications, object: nil, queue: .main) { _ in
-            UNUserNotificationCenter.current().getNotificationSettings { settings in
-                DispatchQueue.main.async {
-                    if settings.authorizationStatus != .denied {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
+            Task { @MainActor in
+                let settings = await UNUserNotificationCenter.current().notificationSettings()
+                if settings.authorizationStatus != .denied {
+                    UIApplication.shared.registerForRemoteNotifications()
                 }
             }
         }
@@ -137,7 +136,7 @@ extension AppDelegate {
             return
         }
 
-        Task {
+        Task { [profile] in
             do {
                 let autopush = try await Autopush(files: profile.files)
                 try await autopush.updateToken(withDeviceToken: deviceToken)

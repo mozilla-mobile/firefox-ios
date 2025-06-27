@@ -13,7 +13,6 @@ final class HomepageViewController: UIViewController,
                                     UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
-                                    Notifiable,
                                     Screenshotable,
                                     Themeable,
                                     StoreSubscriber {
@@ -137,7 +136,7 @@ final class HomepageViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 showiPadSetup: shouldUseiPadSetup(),
@@ -146,7 +145,6 @@ final class HomepageViewController: UIViewController,
             )
         )
 
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
@@ -156,7 +154,7 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
@@ -179,10 +177,25 @@ final class HomepageViewController: UIViewController,
         resetTrackedObjects()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
+        guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
+
+        store.dispatchLegacy(
+            HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow,
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewDidLayoutSubviews
+            )
+        )
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
                 windowUUID: windowUUID,
@@ -230,7 +243,7 @@ final class HomepageViewController: UIViewController,
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            store.dispatch(
+            store.dispatchLegacy(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,
                     windowUUID: windowUUID,
@@ -242,7 +255,7 @@ final class HomepageViewController: UIViewController,
         guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     /// Calculates the number of tiles that can fit in a single row based on the available width.
@@ -274,7 +287,7 @@ final class HomepageViewController: UIViewController,
             actionType: ScreenActionType.showScreen,
             screen: .homepage
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -309,17 +322,7 @@ final class HomepageViewController: UIViewController,
             actionType: ScreenActionType.closeScreen,
             screen: .homepage
         )
-        store.dispatch(action)
-    }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            dynamicTypeChanged()
-        default:
-            break
-        }
+        store.dispatchLegacy(action)
     }
 
     // MARK: - Theming
@@ -377,10 +380,6 @@ final class HomepageViewController: UIViewController,
             of: UICollectionView.elementKindSectionHeader,
             cellType: LabelButtonHeaderView.self
         )
-        collectionView.registerSupplementary(
-            of: UICollectionView.elementKindSectionFooter,
-            cellType: PocketFooterView.self
-        )
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
@@ -406,7 +405,12 @@ final class HomepageViewController: UIViewController,
                     category: .homepage,
                     extra: ["Section Index": "\(sectionIndex)"]
                 )
-                return nil
+
+                /// FXIOS-10131: Copied over from legacy homepage in that we want to create an empty layout
+                /// to avoid an app crash.
+                /// However, if we see this path getting hit, then something is wrong and
+                /// we should investigate the underlying issues. We should always be able to fetch the section.
+                return sectionProvider.makeEmptyLayoutSection()
             }
 
             return sectionProvider.createLayoutSection(
@@ -492,6 +496,16 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
+        case .searchBar:
+            guard let searchBar = collectionView?.dequeueReusableCell(
+                cellType: SearchBarCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            searchBar.applyTheme(theme: currentTheme)
+            return searchBar
+
         case .jumpBackIn(let tab):
             guard let jumpBackInCell = collectionView?.dequeueReusableCell(
                 cellType: JumpBackInCell.self,
@@ -533,6 +547,7 @@ final class HomepageViewController: UIViewController,
             }
             bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
+
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
@@ -544,17 +559,6 @@ final class HomepageViewController: UIViewController,
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
-        case .pocketDiscover(let item):
-            guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
-                cellType: PocketDiscoverCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            pocketDiscoverCell.configure(text: item.title, theme: currentTheme)
-
-            return pocketDiscoverCell
 
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
@@ -593,17 +597,6 @@ final class HomepageViewController: UIViewController,
                 return UICollectionReusableView()
             }
             return self.configureSectionHeader(for: section, with: sectionHeaderView)
-        case UICollectionView.elementKindSectionFooter:
-            guard let footerView = collectionView.dequeueSupplementary(
-                of: kind,
-                cellType: PocketFooterView.self,
-                for: indexPath)
-            else { return UICollectionReusableView() }
-            footerView.onTapLearnMore = {
-                self.navigateToPocketLearnMore()
-            }
-            footerView.applyTheme(theme: currentTheme)
-            return footerView
         default:
             return nil
         }
@@ -683,16 +676,9 @@ final class HomepageViewController: UIViewController,
         return screenshot(bounds: view.bounds)
     }
 
-    private func dynamicTypeChanged() {
-        collectionView?.visibleCells.forEach { cell in
-            guard let customCell = cell as? TopSiteCell else { return }
-            customCell.updateDynamicConstraints()
-        }
-    }
-
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
@@ -712,7 +698,7 @@ final class HomepageViewController: UIViewController,
     @objc
     private func dismissKeyboard() {
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: Long Press (Photon Action Sheet)
@@ -742,7 +728,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToHomepageSettings() {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
@@ -752,7 +738,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToPocketLearnMore() {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .link,
@@ -772,7 +758,7 @@ final class HomepageViewController: UIViewController,
             sourceView: sourceView,
             toastContainer: toastContainer
         )
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
                 windowUUID: windowUUID,
@@ -799,7 +785,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToBookmarksPanel() {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.bookmarksPanel),
                 windowUUID: windowUUID,
@@ -809,7 +795,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
-        store.dispatch(
+        store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: destination,
                 windowUUID: self.windowUUID,
@@ -820,7 +806,7 @@ final class HomepageViewController: UIViewController,
 
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
         let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
-        store.dispatch(
+        store.dispatchLegacy(
             PocketAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
@@ -835,7 +821,7 @@ final class HomepageViewController: UIViewController,
             position: index,
             topSiteConfiguration: config
         )
-        store.dispatch(
+        store.dispatchLegacy(
             TopSitesAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
@@ -869,8 +855,13 @@ final class HomepageViewController: UIViewController,
                 config: config,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
+        case .searchBar:
+            dispatchNavigationBrowserAction(
+                with: NavigationDestination(.zeroSearch),
+                actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+            )
         case .jumpBackIn(let config):
-            store.dispatch(
+            store.dispatchLegacy(
                 JumpBackInAction(
                     tab: config.tab,
                     windowUUID: self.windowUUID,
@@ -893,13 +884,6 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
             dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
-        case .pocketDiscover(let item):
-            let destination = NavigationDestination(
-                .link,
-                url: item.url,
-                visitType: .link
-            )
-            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         default:
             return
         }
@@ -922,7 +906,7 @@ final class HomepageViewController: UIViewController,
             itemType: item.telemetryItemType,
             topSitesTelemetryConfig: topSitesTelemetryConfig
         )
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 telemetryExtras: telemetryExtras,
                 windowUUID: windowUUID,

@@ -7,20 +7,12 @@ import UIKit
 import Shared
 
 open class Avatar {
-    open var image: UIImage?
     public let url: URL?
 
     init(url: URL?) {
         self.url = url
 
         downloadAvatar(url: url) { image in
-            guard let avatarImage = image else {
-                self.image = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)
-                NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
-                return
-            }
-
-            self.image = avatarImage
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }

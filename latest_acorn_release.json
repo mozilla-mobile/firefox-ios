@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/223716540",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/223716540/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/223716540/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.41.0",
-    "id": 223716540,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/226768696",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/226768696/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/226768696/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.43.0",
+    "id": 226768696,
     "author": {
         "login": "maggie-atkinson",
         "id": 175737951,
@@ -25,16 +25,16 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84NVaS8",
-    "tag_name": "v1.41.0",
+    "node_id": "RE_kwDOI1CID84NhDc4",
+    "tag_name": "v1.43.0",
     "target_commitish": "main",
-    "name": "v1.41.0",
+    "name": "v1.43.0",
     "draft": false,
     "prerelease": false,
-    "created_at": "2025-06-06T18:36:30Z",
-    "published_at": "2025-06-06T18:38:42Z",
+    "created_at": "2025-06-20T19:06:07Z",
+    "published_at": "2025-06-20T19:07:42Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.41.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.41.0",
-    "body": "# [Changelog]\r\n### [1.41.0]\r\n### Added\r\n- PDF\r\n  - localHostLarge.pdf\r\n  - localNetworkLarge.pdf\r\n\r\n- SVG\r\n  - local-host-24.svg\r\n  - local-network-24.svg\r\n\r\n- XML\r\n  - ic_local_host_24.xml\r\n  - ic_local_network_24.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.43.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.43.0",
+    "body": "# [Changelog]\r\n### [1.43.0]\r\n### Added\r\n- PDF\r\n    - localHostLarge.pdf\r\n    - localHostSlashLarge.pdf\r\n    - localNetworkLarge.pdf\r\n    - localNetworkSlashLarge.pdf\r\n- SVG\r\n    - local-host-24.svg\r\n    - local-host-slash-24.svg\r\n    - local-network-24.svg\r\n    - local-network-slash-24.svg\r\n- XML\r\n    - ic_local_host_24.xml\r\n    - ic_local_host_slash_24.xml\r\n    - ic_local_network_24.xml\r\n    - ic_local_network_slash_24.xml\r\n\r\n### Removed\r\n- PDF\r\n    - localHostLarge.pdf\r\n    - localNetworkLarge.pdf\r\n- SVG\r\n    - local-host-24.svg\r\n    - local-network-24.svg\r\n- XML\r\n    - ic_local_host_24.xml\r\n    - ic_local_network_24.xml"
 }

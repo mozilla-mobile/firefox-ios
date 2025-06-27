@@ -90,7 +90,6 @@
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",
-        "HistoryTabTrayUIExperimentTests",
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests",

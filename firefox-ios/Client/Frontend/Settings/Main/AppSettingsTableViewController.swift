@@ -373,7 +373,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                             statusText: .AppSettingsClosePrivateTabsDescription) { _ in
                                 let action = TabTrayAction(windowUUID: self.windowUUID,
                                                            actionType: TabTrayActionType.closePrivateTabsSettingToggled)
-                                store.dispatch(action)
+                                store.dispatchLegacy(action)
                 }
             )
         }

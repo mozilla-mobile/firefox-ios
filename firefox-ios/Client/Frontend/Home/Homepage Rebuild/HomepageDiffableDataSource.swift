@@ -19,6 +19,7 @@ final class HomepageDiffableDataSource:
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
+        case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
@@ -39,11 +40,11 @@ final class HomepageDiffableDataSource:
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
+        case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
         case pocket(PocketStoryConfiguration)
-        case pocketDiscover(PocketDiscoverConfiguration)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
@@ -53,11 +54,11 @@ final class HomepageDiffableDataSource:
                 LegacyTopSiteCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
+                SearchBarCell.self,
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
-                PocketDiscoverCell.self,
                 CustomizeHomepageSectionCell.self
             ]
         }
@@ -74,8 +75,6 @@ final class HomepageDiffableDataSource:
                 return .bookmark
             case .pocket:
                 return .story
-            case .pocketDiscover:
-                return .storyDiscoverMore
             case .customizeHomepage:
                 return .customizeHomepage
             default:
@@ -105,6 +104,11 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
         }
 
+        if state.searchState.shouldShowSearchBar {
+            snapshot.appendSections([.searchBar])
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
+        }
+
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
             snapshot.appendSections([.jumpBackIn(textColor, configuration)])
             snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor, configuration))
@@ -131,9 +135,8 @@ final class HomepageDiffableDataSource:
     private func getPocketStories(
         with pocketState: PocketState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        var stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
+        let stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
         guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
-        stories.append(.pocketDiscover(pocketState.pocketDiscoverItem))
         return stories
     }
 

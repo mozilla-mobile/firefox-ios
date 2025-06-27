@@ -46,14 +46,15 @@ func failOnNewFilesWithoutCoverage() {
         return
     }
 
-    // Build a dictionary of file coverage: [file path: coverage %]
-    var coverageByFile: [String: Double] = [:]
+    // Build an array with files with 0 coverage
+    var filesWithoutCoverage = [String]()
     for target in targets {
         if let files = target["files"] as? [[String: Any]] {
             for file in files {
-                guard let path = file["name"] as? String,
-                      let coverage = file["lineCoverage"] as? Double else { continue }
-                coverageByFile[path] = coverage * 100.0 // Convert from 0.0–1.0 to percent
+                if let path = file["name"] as? String,
+                      let coverage = file["lineCoverage"] as? Double, coverage == 0 {
+                    filesWithoutCoverage.append(path)
+                }
             }
         }
     }
@@ -62,24 +63,20 @@ func failOnNewFilesWithoutCoverage() {
     let newSwiftFiles = danger.git.createdFiles.filter {
         $0.hasSuffix(".swift") &&
         !$0.contains("Tests") &&
-        !$0.contains("/Generated/") // adjust if you use codegen folders
+        !$0.contains("/Generated/")
     }
 
+    let contactMessage = "Please add unit tests. (cc: @cyndichin @yoanarios)."
     for file in newSwiftFiles {
-        // Adjust path if needed to match coverage.json format
-        // Strip "./" and match suffixes
-        let cleanedFile = file.replacingOccurrences(of: "./", with: "")
+        let cleanedFile = URL(fileURLWithPath: file).lastPathComponent
 
         // Try to find a file in coverage report that ends with this file
-        let matching = coverageByFile.first { (coveragePath, _) in
+        let matchingFile = filesWithoutCoverage.first { coveragePath in
             coveragePath.hasSuffix(cleanedFile)
         }
 
-        if let (_, coveragePercent) = matching {
-            if coveragePercent == 0 {
-                let contact = "(cc: @cyndichin @yoanarios )."
-                warn("New file `\(file)` has 0% test coverage. Please add unit tests. \(contact)")
-            }
+        if let file = matchingFile {
+            warn("New file `\(file)` has 0% test coverage. \(contactMessage)")
         }
     }
 }

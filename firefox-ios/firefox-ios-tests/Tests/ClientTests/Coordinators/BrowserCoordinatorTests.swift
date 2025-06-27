@@ -143,6 +143,44 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
+    func testHomepageScreenshotTool_returnsHomepage_forNormalTab() throws {
+        let subject = createSubject()
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+
+        let screenshotTool = try XCTUnwrap(subject.homepageScreenshotTool())
+        XCTAssertTrue(screenshotTool is HomepageViewController)
+    }
+
+    func testHomepageScreenshotTool_returnsLegacyHomepage_forNormalTab() throws {
+        let subject = createSubject()
+        subject.showLegacyHomepage(
+            inline: false,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
+
+        let screenshotTool = try XCTUnwrap(subject.homepageScreenshotTool())
+        XCTAssertTrue(screenshotTool is LegacyHomepageViewController)
+    }
+
+    func testHomepageScreenshotTool_returnsPrivateHomepage_forPrivateTab() throws {
+        let subject = createSubject()
+        let tab = tabManager.addTab(nil, afterTab: nil, zombie: false, isPrivate: true)
+        tabManager.selectTab(tab)
+        subject.showPrivateHomepage(overlayManager: overlayModeManager)
+
+        let screenshotTool = try XCTUnwrap(subject.homepageScreenshotTool())
+        XCTAssertTrue(screenshotTool is PrivateHomepageViewController)
+    }
+
     // MARK: - Show new homepage
 
     func testShowNewHomepage_setsProperViewController() {
@@ -1174,7 +1212,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,

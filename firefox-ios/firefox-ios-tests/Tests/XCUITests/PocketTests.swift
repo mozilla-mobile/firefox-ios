@@ -50,7 +50,7 @@ class PocketTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         XCTAssertEqual(
             app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label,
-            "Thought-Provoking Stories"
+            "Stories"
         )
 
         // There should be at least 8 stories on iPhone and 7 on iPad.
@@ -74,22 +74,6 @@ class PocketTests: BaseTestCase {
         // The url textField is not empty
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         XCTAssertNotEqual(url.value as? String, "", "The url textField is empty")
-        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
-        backButton.waitAndTap()
-        if #unavailable(iOS 17) {
-            backButton.waitAndTap()
-        }
-
-        scrollToElement(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel],
-                        direction: SwipeDirection.up,
-                        maxSwipes: MAX_SWIPE)
-        app.swipeUp()
-        scrollToElement(app.cells.buttons["Discover more"], direction: .left, maxSwipes: MAX_SWIPE)
-
-        app.cells.buttons["Discover more"].waitAndTap()
-        waitUntilPageLoad()
-        mozWaitForElementToExist(url)
-        XCTAssertEqual(url.value as? String, "getpocket.com", "The url textField is empty")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
@@ -111,21 +95,5 @@ class PocketTests: BaseTestCase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2855361
-    func testValidateLearnMoreButton() {
-        navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
-        // Learn more link is displayed under the stories
-        app.swipeUp()
-        let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
-        let learnMoreLink = app.collectionViews[collectionView].staticTexts["Learn more"]
-        let pocketTitle = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
-        let addressBar = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-        mozWaitForElementToExist(learnMoreLink)
-        XCTAssertTrue(learnMoreLink.isBelow(element: app.staticTexts[pocketTitle]))
-        learnMoreLink.waitAndTap()
-        mozWaitForValueContains(app.textFields[addressBar], value: "mozilla.org")
     }
 }

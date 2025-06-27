@@ -244,7 +244,8 @@ extension PreviewModel {
         themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.all,
-            onComplete: { }
+            onActionTap: { _, _, _ in },
+            onComplete: { _ in }
         )
     )
 }

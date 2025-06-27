@@ -41,7 +41,8 @@ open class RustFirefoxAccounts {
     public static let shared = RustFirefoxAccounts()
     public var accountManager: FxAccountManager?
     public var avatar: Avatar?
-    fileprivate static var prefs: Prefs?
+    // TODO: FXIOS-12596 There is no need for this to be static. This should be an easier fix
+    nonisolated(unsafe) private static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
     private let logger: Logger
 

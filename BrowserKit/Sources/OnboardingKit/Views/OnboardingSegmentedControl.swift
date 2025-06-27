@@ -36,28 +36,9 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                     VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
                         let isSelected = item.action == selection
 
-                        if let img = item.image {
-                            Image(uiImage: img)
-                                .resizable()
-                                .colorMultiply(isSelected ? actionPrimary : noSelection)
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: UX.SegmentedControl.imageHeight)
-                                .accessibilityHidden(true)
-                        }
+                        itemImage(item: item, isSelected: isSelected)
 
-                        VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
-                            Text(item.title)
-                                .font(.footnote)
-                                .foregroundColor(.primary)
-                            Image(
-                                isSelected
-                                ? UX.SegmentedControl.radioButtonSelectedImage
-                                : UX.SegmentedControl.radioButtonNotSelectedImage,
-                                bundle: .module
-                            )
-                            .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
-                            .accessibilityHidden(true)
-                        }
+                        itemContent(item: item, isSelected: isSelected)
                     }
                     .padding(.vertical, UX.SegmentedControl.verticalPadding)
                     .frame(maxWidth: .infinity)
@@ -77,6 +58,34 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
             guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    @ViewBuilder
+    private func itemImage(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
+        if let img = item.image {
+            Image(uiImage: img)
+                .resizable()
+                .colorMultiply(isSelected ? actionPrimary : noSelection)
+                .aspectRatio(contentMode: .fit)
+                .frame(height: UX.SegmentedControl.imageHeight)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private func itemContent(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
+        VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
+            Text(item.title)
+                .font(.footnote)
+                .foregroundColor(.primary)
+            Image(
+                isSelected
+                ? UX.SegmentedControl.radioButtonSelectedImage
+                : UX.SegmentedControl.radioButtonNotSelectedImage,
+                bundle: .module
+            )
+            .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
+            .accessibilityHidden(true)
         }
     }
 

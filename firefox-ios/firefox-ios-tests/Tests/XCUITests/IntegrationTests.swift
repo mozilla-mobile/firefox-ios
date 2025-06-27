@@ -13,7 +13,7 @@ private let historyItemSavedOnDesktop = "https://www.example.com/"
 private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "https://example.com/"
 
-class IntegrationTests: BaseTestCase {
+class IntegrationTests: FeatureFlaggedTestBase {
     let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
@@ -93,6 +93,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistory () {
+        app.launch()
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
@@ -103,6 +104,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPageUsingChinaFxA () {
+        app.launch()
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
@@ -116,6 +118,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmark () {
+        app.launch()
         // Bookmark is added by the DB
         // Sign into Mozilla Account
         navigator.openURL(testingURL)
@@ -130,6 +133,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmarkDesktop () {
+        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -140,6 +144,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabs () {
+        app.launch()
         signInFxAccounts()
 
         // We only sync tabs if the user is signed in
@@ -167,6 +172,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncLogins () {
+        app.launch()
         navigator.openURL("gmail.com")
         waitUntilPageLoad()
 
@@ -187,6 +193,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistoryDesktop () {
+        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -199,6 +206,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPasswordDesktop () {
+        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -220,7 +228,9 @@ class IntegrationTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
 
-    func testFxASyncTabsDesktop () {
+    func testFxASyncTabsDesktop_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -240,6 +250,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxADisconnectConnect() {
+        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 

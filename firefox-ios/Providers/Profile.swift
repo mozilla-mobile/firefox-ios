@@ -14,7 +14,6 @@ import Shared
 import Storage
 import AuthenticationServices
 
-import class MozillaAppServices.MZKeychainWrapper
 import class MozillaAppServices.RemoteSettingsService
 import struct MozillaAppServices.RemoteSettingsContext
 import enum MozillaAppServices.Level
@@ -60,10 +59,8 @@ public protocol FxACommandsDelegate: AnyObject {
     func closeTabs(for urls: [URL])
 }
 
-class ProfileFileAccessor: FileAccessor {
-    convenience init(profile: Profile) {
-        self.init(localName: profile.localName())
-    }
+struct ProfileFileAccessor: FileAccessor, Sendable {
+    public var rootPath: String
 
     init(localName: String, logger: Logger = DefaultLogger.shared) {
         let profileDirName = "profile.\(localName)"
@@ -76,10 +73,10 @@ class ProfileFileAccessor: FileAccessor {
         ) {
             rootPath = url.path
         } else {
-            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+            rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         }
 
-        super.init(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
+        self.rootPath = URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path
     }
 }
 
@@ -216,7 +213,9 @@ extension Profile {
     }
 }
 
-open class BrowserProfile: Profile {
+// TODO: Removed unchecked flag with FXIOS-12610
+open class BrowserProfile: Profile,
+                           @unchecked Sendable {
     private let logger: Logger
     private lazy var directory: String = {
         do {
@@ -228,11 +227,9 @@ open class BrowserProfile: Profile {
             fatalError("Could not create directory at root path: \(error)")
         }
     }()
-    private var rustKeychainEnabled = false
     private var loginsVerificationEnabled = false
     fileprivate let name: String
     fileprivate let keychain: RustKeychain
-    fileprivate let legacyKeychain: MZKeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -257,7 +254,6 @@ open class BrowserProfile: Profile {
      */
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
-         rustKeychainEnabled: Bool = false,
          loginsVerificationEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
@@ -266,10 +262,8 @@ open class BrowserProfile: Profile {
                    category: .setup)
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.rustKeychainEnabled = rustKeychainEnabled
         self.loginsVerificationEnabled = loginsVerificationEnabled
         self.keychain = KeychainManager.shared
-        self.legacyKeychain = KeychainManager.legacyShared
         self.logger = logger
         self.fxaCommandsDelegate = fxaCommandsDelegate
 
@@ -306,11 +300,7 @@ open class BrowserProfile: Profile {
             logger.log("New profile. Removing old Keychain/Prefs data.",
                        level: .info,
                        category: .setup)
-            if rustKeychainEnabled {
-                RustKeychain.wipeKeychain()
-            } else {
-                MZKeychainWrapper.wipeKeychain()
-            }
+            RustKeychain.wipeKeychain()
             prefs.clearAll()
         }
 
@@ -320,7 +310,6 @@ open class BrowserProfile: Profile {
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
         self.syncManager = RustSyncManager(profile: self,
-                                           rustKeychainEnabled: rustKeychainEnabled,
                                            loginsVerificationEnabled: loginsVerificationEnabled)
 
         let notificationCenter = NotificationCenter.default
@@ -482,7 +471,7 @@ open class BrowserProfile: Profile {
         isDirectory: true
     ).appendingPathComponent("autofill.db").path
 
-    lazy var autofill = RustAutofill(databasePath: autofillDbPath, rustKeychainEnabled: rustKeychainEnabled)
+    lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
     func makePrefs() -> Prefs {
         return NSUserDefaultsPrefs(prefix: self.localName())
@@ -696,7 +685,7 @@ open class BrowserProfile: Profile {
             fileURLWithPath: directory,
             isDirectory: true
         ).appendingPathComponent("loginsPerField.db").path
-        return RustLogins(databasePath: databasePath, rustKeychainEnabled: self.rustKeychainEnabled)
+        return RustLogins(databasePath: databasePath)
     }()
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
@@ -801,53 +790,19 @@ open class BrowserProfile: Profile {
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
 
         // Save the keys that will be restored
-        let rustLoginsKeys = RustLoginEncryptionKeys()
-        let rustAutofillKey = RustAutofillEncryptionKeys()
-        var loginsKey: String?
-        var loginsCanary: String?
+        let (creditCardKey, creditCardCanary) = keychain.getCreditCardKeyData()
+        let (loginsKey, loginsCanary) = keychain.getLoginsKeyData()
 
-        var creditCardKey: String?
-        var creditCardCanary: String?
+        // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
+        // simply restore what is needed.
+        keychain.removeAllKeys()
 
-        if rustKeychainEnabled {
-            // Long before the new rust keychain logic was introduced, there was a bug in this logic caused by the canary not
-            // being saved with the key. We are correcting this in the new logic below but leaving the old logic unchanged.
-            // This is because we do not want to risk introducing another bug in the old code in case it is required as a
-            // fail safe should these changes need to be rolled back.
+        if let creditCardKey = creditCardKey, let creditCardCanary = creditCardCanary {
+            keychain.setCreditCardsKeyData(keyValue: creditCardKey, canaryValue: creditCardCanary)
+        }
 
-            (creditCardKey, creditCardCanary) = keychain.getCreditCardKeyData()
-            (loginsKey, loginsCanary) = keychain.getLoginsKeyData()
-
-            // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
-            // simply restore what is needed.
-            keychain.removeAllKeys()
-
-            if let creditCardKey = creditCardKey, let creditCardCanary = creditCardCanary {
-                keychain.setCreditCardsKeyData(keyValue: creditCardKey, canaryValue: creditCardCanary)
-            }
-
-            if let loginsKey = loginsKey, let loginsCanary = loginsCanary {
-                keychain.setLoginsKeyData(keyValue: loginsKey, canaryValue: loginsCanary)
-            }
-        } else {
-            creditCardKey = legacyKeychain.string(forKey: rustAutofillKey.ccKeychainKey)
-            loginsKey = legacyKeychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
-
-            // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
-            // simply restore what is needed.
-            legacyKeychain.removeAllKeys()
-
-            if let creditCardKey = creditCardKey {
-                legacyKeychain.set(creditCardKey,
-                                   forKey: rustAutofillKey.ccKeychainKey,
-                                   withAccessibility: .afterFirstUnlock)
-            }
-
-            if let loginsKey = loginsKey {
-                legacyKeychain.set(loginsKey,
-                                   forKey: rustLoginsKeys.loginPerFieldKeychainKey,
-                                   withAccessibility: .afterFirstUnlock)
-            }
+        if let loginsKey = loginsKey, let loginsCanary = loginsCanary {
+            keychain.setLoginsKeyData(keyValue: loginsKey, canaryValue: loginsCanary)
         }
 
         // Tell any observers that our account has changed.

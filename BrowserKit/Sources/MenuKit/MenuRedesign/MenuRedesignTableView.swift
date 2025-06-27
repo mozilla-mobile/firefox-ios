@@ -20,7 +20,9 @@ final class MenuRedesignTableView: UIView,
     private var menuData: [MenuSection]
     private var theme: Theme?
 
-    var updateHeaderLineView: ((_ isHidden: Bool) -> Void)?
+    public var tableViewContentSize: CGFloat {
+        tableView.contentSize.height
+    }
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -117,7 +119,10 @@ final class MenuRedesignTableView: UIView,
                 return UITableViewCell()
             }
             if let theme {
-                cell.configureCellWith(model: rowOption, theme: theme)
+                let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+                let isFirst = indexPath.row == 0
+                let isLast = indexPath.row == numberOfRows - 1
+                cell.configureCellWith(model: rowOption, theme: theme, isFirstCell: isFirst, isLastCell: isLast)
                 cell.applyTheme(theme: theme)
             }
             return cell
@@ -144,7 +149,10 @@ final class MenuRedesignTableView: UIView,
             return UITableViewCell()
         }
         if let theme {
-            cell.configureCellWith(model: rowOption, theme: theme)
+            let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+            let isFirst = indexPath.row == 0
+            let isLast = indexPath.row == numberOfRows - 1
+            cell.configureCellWith(model: rowOption, theme: theme, isFirstCell: isFirst, isLastCell: isLast)
             cell.applyTheme(theme: theme)
         }
         return cell
@@ -183,14 +191,6 @@ final class MenuRedesignTableView: UIView,
             menuData = data
         }
         tableView.reloadData()
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y >= UX.topPadding {
-            updateHeaderLineView?(false)
-        } else {
-            updateHeaderLineView?(true)
-        }
     }
 
     // MARK: - Theme Applicable

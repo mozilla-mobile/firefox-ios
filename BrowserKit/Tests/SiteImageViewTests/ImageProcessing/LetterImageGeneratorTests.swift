@@ -69,7 +69,7 @@ private extension LetterImageGeneratorTests {
                    green: CGFloat,
                    blue: CGFloat,
                    alpha: CGFloat,
-                   file: StaticString = #file,
+                   file: StaticString = #filePath,
                    line: UInt = #line) {
         var resultRed: CGFloat = 0
         var resultGreen: CGFloat = 0

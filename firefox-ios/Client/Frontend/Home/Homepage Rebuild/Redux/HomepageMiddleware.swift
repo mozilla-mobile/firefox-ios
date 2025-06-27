@@ -6,8 +6,9 @@ import Foundation
 import Redux
 import Common
 
-/// Middleware to handle generic homepage related actions, if this gets too big, can split out notifications
-final class HomepageMiddleware {
+/// Middleware to handle generic homepage related actions
+/// If this gets too big, can split out notifications and feature flags
+final class HomepageMiddleware: FeatureFlaggable {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
     private let windowManager: WindowManager
@@ -53,9 +54,35 @@ final class HomepageMiddleware {
             }
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit:
+            self.dispatchSearchBarConfigurationAction(action: action)
+
         default:
             break
         }
+    }
+
+    private func dispatchSearchBarConfigurationAction(action: Action) {
+        store.dispatchLegacy(
+            HomepageAction(
+                isSearchBarEnabled: self.shouldShowSearchBar(),
+                windowUUID: action.windowUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+    }
+
+    private func shouldShowSearchBar(
+        for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+        and isLandscape: Bool = UIWindow.isLandscape
+    ) -> Bool {
+        let isHomepageSearchEnabled = featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+        let isCompact = device == .phone && !isLandscape
+
+        guard isHomepageSearchEnabled, isCompact else {
+            return false
+        }
+        return true
     }
 
     // MARK: - Notifications
@@ -96,7 +123,7 @@ final class HomepageMiddleware {
                     windowUUID: windowUUID,
                     actionType: HomepageMiddlewareActionType.enteredForeground
                 )
-                store.dispatch(storiesAction)
+                store.dispatchLegacy(storiesAction)
 
             case .PrivateDataClearedHistory,
                     .TopSitesUpdated,
@@ -108,7 +135,7 @@ final class HomepageMiddleware {
                     windowUUID: windowUUID,
                     actionType: HomepageMiddlewareActionType.bookmarksUpdated
                 )
-                store.dispatch(bookmarksAction)
+                store.dispatchLegacy(bookmarksAction)
 
             case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
                 dispatchActionToFetchTopSites(windowUUID: windowUUID)
@@ -120,7 +147,7 @@ final class HomepageMiddleware {
     }
 
     private func dispatchActionToFetchTopSites(windowUUID: WindowUUID) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.topSitesUpdated
@@ -129,13 +156,13 @@ final class HomepageMiddleware {
     }
 
     private func dispatchActionToFetchTabs(windowUUID: WindowUUID) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated
             )
         )
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInRemoteTabsUpdated

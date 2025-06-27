@@ -344,9 +344,11 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
                 GeneralizedImageFetcher().getImageFor( url: actionIconUrl) { image in
                     guard let image = image else { return }
 
-                    self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
-                        .withRenderingMode(.alwaysOriginal)
-                    self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
+                    DispatchQueue.main.async {
+                        self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
+                            .withRenderingMode(.alwaysOriginal)
+                        self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
+                    }
                 }
             }
         case .TabsButton:

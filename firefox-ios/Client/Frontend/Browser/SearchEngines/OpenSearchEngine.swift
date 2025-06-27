@@ -5,7 +5,7 @@
 import UIKit
 
 class OpenSearchEngine: NSObject, NSSecureCoding {
-    static var supportsSecureCoding = true
+    static let supportsSecureCoding = true
 
     struct UX {
         static let preferredIconSize = 30

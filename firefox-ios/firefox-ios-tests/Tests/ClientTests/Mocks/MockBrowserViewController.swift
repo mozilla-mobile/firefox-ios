@@ -65,6 +65,7 @@ class MockBrowserViewController: BrowserViewController {
     var webViewDidCloseCalled = 0
     var contextMenuConfigurationCalled = 0
     var requestMediaCapturePermissionCalled = 0
+    var contextMenuDidEndForElementCalled = 0
 
     override var presentedViewController: UIViewController? {
         return viewControllerToPresent
@@ -231,6 +232,11 @@ class MockBrowserViewController: BrowserViewController {
         decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
     ) {
         requestMediaCapturePermissionCalled += 1
+    }
+
+    override func webView(_ webView: WKWebView,
+                          contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
+        contextMenuDidEndForElementCalled += 1
     }
 }
 

@@ -371,6 +371,11 @@ extension FxAWebViewModel {
         profile.rustFxA.accountManager?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager?.onAddedAccount()
 
+            // Set the user's Firefox account UID if available
+            if let accountUid = self.profile.rustFxA.accountManager?.accountProfile()?.uid {
+                UserTelemetry().setFirefoxAccountID(uid: accountUid)
+            }
+
             // only ask for notification permission if it's not onboarding related (e.g. settings)
             // or if the onboarding flow is missing the notifications card
             guard self.shouldAskForNotificationPermission else { return }

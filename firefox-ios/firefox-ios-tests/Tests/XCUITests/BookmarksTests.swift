@@ -29,7 +29,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306905
-    func testBookmarkingUI() {
+    func testBookmarkingUI_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
 
         // Go to a webpage, and add to bookmarks, check it's added
@@ -54,7 +55,47 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        app.cells.staticTexts["Example Domain"].waitAndTap()
+        app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"].waitAndTap()
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        checkBookmarked()
+
+        // Open it, then unbookmark it, and check it's no longer on bookmarks home panel
+        unbookmark(url: urlLabelExample_3)
+        waitForTabsButton()
+        checkUnbookmarked()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306905
+    func testBookmarkingUI_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        // Go to a webpage, and add to bookmarks, check it's added
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: url_1))
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        bookmark()
+        waitForTabsButton()
+        checkBookmarked()
+
+        // Load a different page on a new tab, check it's not bookmarked
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        checkUnbookmarked()
+
+        // Go back, check it's still bookmarked, check it's on bookmarks home panel
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_1_0"
+        XCTAssertEqual(app.cells[identifier].label, "Example Domain")
+        app.cells[identifier].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()
@@ -420,13 +461,28 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
-    func testLongTapRecentlySavedLink() {
+    func testLongTapRecentlySavedLink_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        validateLongTapOptionsFromBookmarkLink()
+        validateLongTapOptionsFromBookmarkLink(isExperiment: false)
         forceRestartApp()
+        app.launch()
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
-            validateLongTapOptionsFromBookmarkLink()
+            validateLongTapOptionsFromBookmarkLink(isExperiment: false)
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2445808
+    func testLongTapRecentlySavedLink_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        validateLongTapOptionsFromBookmarkLink(isExperiment: true)
+        forceRestartApp()
+        app.launch()
+        if #available(iOS 18, *) {
+            XCUIDevice.shared.orientation = .landscapeLeft
+            validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         }
     }
 
@@ -473,7 +529,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.cells["BookmarksCell"])
     }
 
-    private func validateLongTapOptionsFromBookmarkLink() {
+    private func validateLongTapOptionsFromBookmarkLink(isExperiment: Bool) {
         // Go to "Recently saved" section and long tap on one of the links
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
@@ -515,7 +571,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
         }
         navigator.goto(TabTray)
         // Tap to "Remove bookmark"
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        let action = isExperiment ? Action.ToggleExperimentRegularMode : Action.ToggleRegularMode
+        navigator.toggleOn(userState.isPrivate, withAction: action)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if iPad() {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()

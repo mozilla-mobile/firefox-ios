@@ -192,7 +192,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         if isToolbarRefactorEnabled,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.isTranslucent {
-            view.backgroundColor = colors.layer3.withAlphaComponent(toolbarHelper.backgroundAlpha())
+            view.backgroundColor = colors.layerSurfaceLow.withAlphaComponent(toolbarHelper.backgroundAlpha())
             collectionView.backgroundColor = .clear
         } else {
             view.backgroundColor = colors.layer3
@@ -225,7 +225,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     @objc
     func newTabTapped() {
         delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
-        store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapNewTab))
+        store.dispatchLegacy(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapNewTab))
     }
 
     @objc
@@ -382,7 +382,7 @@ extension TopTabsViewController: TopTabCellDelegate {
         topTabDisplayManager.closeActionPerformed(forCell: cell)
         delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
-        store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
+        store.dispatchLegacy(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
     }
 }
 

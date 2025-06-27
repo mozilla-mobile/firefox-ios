@@ -18,6 +18,9 @@ final class TabWebViewPreview: UIView {
     private lazy var faviconImageView: FaviconImageView = .build()
     /// Wether the next screenshot has invalid layout. When this is true we draw only the Favicon in the preview
     private var layoutWasInvalidated = false
+    private var screenCornerRadius: CGFloat {
+        return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
+    }
 
     // MARK: - Inits
     init() {
@@ -31,6 +34,7 @@ final class TabWebViewPreview: UIView {
 
     // MARK: - Layout
     private func setupLayout() {
+        webPageScreenshotImageView.layer.cornerRadius = screenCornerRadius
         addSubviews(webPageScreenshotImageView, faviconImageView)
 
         NSLayoutConstraint.activate([
@@ -77,6 +81,12 @@ final class TabWebViewPreview: UIView {
             }
             webPageScreenshotImageView.image = screenshot
         }
+    }
+
+    func setScreenshot(_ image: UIImage?) {
+        faviconImageView.isHidden = true
+        webPageScreenshotImageView.isHidden = false
+        webPageScreenshotImageView.image = image
     }
 
     func applyTransform(translationX: CGFloat) {

@@ -5,10 +5,11 @@
 import Common
 import XCTest
 
-class ReadingListTests: BaseTestCase {
+class ReadingListTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2287278f
     // Smoketest
     func testLoadReaderContent() {
+        app.launch()
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -33,6 +34,7 @@ class ReadingListTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306991
     // Smoketest
     func testAddToReadingList() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
@@ -53,7 +55,9 @@ class ReadingListTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306995
-    func testAddToReadingListPrivateMode() {
+    func testAddToReadingListPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -89,8 +93,44 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306995
+    func testAddToReadingListPrivateMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_ReadingList)
+
+        // Initially reading list is empty
+        checkReadingListNumberOfItems(items: 0)
+        app.buttons["Done"].waitAndTap()
+        // Add item to reading list and check that it appears
+        addContentToReaderView()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_ReadingList)
+
+        // Check that there is one item
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        mozWaitForElementToExist(savedToReadingList)
+        checkReadingListNumberOfItems(items: 1)
+        app.buttons["Done"].waitAndTap()
+        updateScreenGraph()
+        // Check that it appears on regular mode
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(LibraryPanel_ReadingList)
+        checkReadingListNumberOfItems(items: 1)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306992
     func testMarkAsReadAndUreadFromReaderView() {
+        app.launch()
         addContentToReaderView()
 
         // Mark the content as read, so the mark as unread buttons appear
@@ -104,6 +144,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306996
     func testRemoveFromReadingView() {
+        app.launch()
         addContentToReaderView()
         // Once the content has been added, remove it
         app.buttons["Remove from Reading List"].waitAndTap()
@@ -119,6 +160,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306997
     func testMarkAsReadAndUnreadFromReadingList() throws {
+        app.launch()
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
@@ -138,6 +180,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306998
     func testRemoveFromReadingList() {
+        app.launch()
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
@@ -156,6 +199,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306999
     func testAddToReadingListFromBrowserTabMenu() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
         navigator.goto(LibraryPanel_ReadingList)
@@ -174,6 +218,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307000
     func testOpenSavedForReadingLongPressInNewTab() {
+        app.launch()
         let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual(numTab, "1")
 
@@ -199,6 +244,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307001
     func testRemoveSavedForReadingLongPress() {
+        app.launch()
         // Add item to Reading List
         addContentToReaderView()
         navigator.goto(LibraryPanel_ReadingList)
@@ -217,6 +263,7 @@ class ReadingListTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306893
     // Smoketest
     func testReadingList() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)
         // Validate empty reading list panel
@@ -283,6 +330,7 @@ class ReadingListTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() {
+        app.launch()
         addContentToReaderView()
         // Check that Settings layouts options are shown
         app.buttons["ReaderModeBarView.settingsButton"].waitAndTap()

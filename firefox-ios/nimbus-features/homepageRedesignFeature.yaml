@@ -1,0 +1,34 @@
+# The configuration for the homepageRedesignFeature feature
+features:
+  homepage-redesign-feature:
+    description: >
+      This feature is for managing the roll out of the Homepage New Tab Redesign feature.
+    variables:
+      enabled:
+        description: >
+          Enables the feature.
+        type: Boolean
+        default: false
+      search_bar:
+        description: >
+          If true, enables the search bar feature on homepage for users.
+        type: Boolean
+        default: false
+      stories_redesign:
+        description: >
+          If true, enables the stories section redesign on homepage
+        type: Boolean
+        default: false
+
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+          search_bar: false
+          stories_redesign: false
+    
+      - channel: developer
+        value:
+          enabled: false
+          search_bar: false
+          stories_redesign: false

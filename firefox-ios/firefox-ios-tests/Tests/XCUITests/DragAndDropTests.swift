@@ -21,6 +21,7 @@ let secondWebsiteUnselected = (
 )
 let homeTabName = "Homepage"
 let websiteWithSearchField = "developer.mozilla.org"
+let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: FeatureFlaggedTestBase {
 //  Disable test suite since in theory it does not make sense with Chron tabs implementation
@@ -31,7 +32,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
-    func testRearrangeTabsTabTray() {
+    func testRearrangeTabsTabTray_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         openTwoWebsites()
         navigator.goto(TabTray)
@@ -49,7 +51,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
-    func testRearrangeMoreThan3TabsTabTray() {
+    func testRearrangeMoreThan3TabsTabTraytabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
@@ -68,7 +71,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        let fourthWebsitePosition = app.collectionViews.cells.element(boundBy: 3).label
+        let fourthWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 3).label
         checkTabsOrder(
             dragAndDropTab: false,
             firstTab: firstWebsite.tabName,
@@ -84,7 +87,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
             )
 
-            let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
+            let thirdWebsitePosition = app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 2).label
             // Disabling validation on iPad. Dragging and dropping action for the first and last tab is not working.
             // This is just automation related, manually the action performs successfully.
             if !iPad() {
@@ -128,7 +131,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         }
     }
 
-    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn() {
+    func testRearrangeTabsTabTrayLandscape_tabTrayExperimentOn() throws {
+        guard iPad() else {
+            throw XCTSkip("Drag and drop is only applicable for iPad with tab tray enabled")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Set the device in landscape mode
@@ -184,7 +190,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         }
     }
 
-    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOn() {
+    func testDragAndDropHomeTabTabsTray_tabTrayExperimentOn() throws {
+        guard iPad() else {
+            throw XCTSkip("Drag and drop is only applicable for iPad with tab tray enabled")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.openNewURL(urlString: secondWebsite.url)
@@ -208,7 +217,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361193
-    func testRearrangeTabsPrivateModeTabTray() {
+    func testRearrangeTabsPrivateModeTabTray_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -233,8 +243,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 secondTab: firstWebsite.tabName
             )
             // Check that focus is kept on last website open
-            mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 0))
-            XCTAssertEqual(app.collectionViews.cells.element(boundBy: 0).label, secondWebsite.tabName)
+            mozWaitForElementToExist(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0))
+            XCTAssertEqual(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 }
@@ -273,18 +283,8 @@ private extension BaseTestCase {
     func checkTabsOrder(dragAndDropTab: Bool,
                         firstTab: String,
                         secondTab: String,
-                        file: StaticString = #file,
+                        file: StaticString = #filePath,
                         line: UInt = #line) {
-        waitForElementsToExist(
-            [
-                app.collectionViews.cells.element(
-                    boundBy: 0
-                ),
-                app.collectionViews.cells.element(
-                    boundBy: 1
-                )
-            ]
-        )
         // Determine which collection view to use based on the current screen
         let collectionView: XCUIElement
         if app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].exists {
@@ -295,6 +295,18 @@ private extension BaseTestCase {
             XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
             return
         }
+
+        waitForElementsToExist(
+            [
+                collectionView.cells.element(
+                    boundBy: 0
+                ),
+                collectionView.cells.element(
+                    boundBy: 1
+                )
+            ]
+        )
+
         let firstTabCell = collectionView.cells.element(boundBy: 0).label
         let secondTabCell = collectionView.cells.element(boundBy: 1).label
 

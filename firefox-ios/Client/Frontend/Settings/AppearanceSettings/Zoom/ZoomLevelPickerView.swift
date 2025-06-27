@@ -13,10 +13,10 @@ struct ZoomLevelPickerView: View {
 
     private struct UX {
         static let chevronImageIdentifier = "chevron.down"
-        static var sectionPadding: CGFloat = 16
-        static var verticalPadding: CGFloat = 12
-        static var dividerHeight: CGFloat = 0.5
-        static var pickerLabelSpacing: CGFloat = 4
+        static let sectionPadding: CGFloat = 16
+        static let verticalPadding: CGFloat = 12
+        static let dividerHeight: CGFloat = 0.5
+        static let pickerLabelSpacing: CGFloat = 4
     }
 
     private var sectionBackground: Color {
@@ -59,40 +59,7 @@ struct ZoomLevelPickerView: View {
                 .background(theme.colors.borderPrimary.color)
 
             // Picker content
-            HStack {
-                Text(pickerText)
-                    .font(.body)
-                    .foregroundColor(theme.colors.textPrimary.color)
-
-                Spacer()
-
-                // Right side - picker with current value
-                Menu {
-                    Picker(selection: $selectedZoomLevel, label: EmptyView()) {
-                        ForEach(ZoomLevel.allCases, id: \.self) { item in
-                            Text(item.displayName)
-                                .tag(item)
-                        }
-                    }
-                    .onChange(of: selectedZoomLevel, perform: onZoomLevelChanged)
-                    .pickerStyle(.inline)
-                    .labelsHidden()
-                } label: {
-                    HStack(spacing: UX.pickerLabelSpacing) {
-                        Text(selectedZoomLevel.displayName)
-                            .font(.body)
-                            .foregroundColor(theme.colors.textPrimary.color)
-
-                        Image(systemName: UX.chevronImageIdentifier)
-                            .renderingMode(.template)
-                            .font(.caption)
-                            .foregroundColor(theme.colors.textPrimary.color)
-                            .accessibilityHidden(true)
-                    }
-                }
-            }
-            .padding(.horizontal, UX.sectionPadding)
-            .padding(.vertical, UX.verticalPadding)
+            pickerContent
 
             // Bottom divider
             Divider()
@@ -101,5 +68,42 @@ struct ZoomLevelPickerView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(backgroundColor)
+    }
+
+    var pickerContent: some View {
+        HStack {
+            Text(pickerText)
+                .font(.body)
+                .foregroundColor(theme.colors.textPrimary.color)
+
+            Spacer()
+
+            // Right side - picker with current value
+            Menu {
+                Picker(selection: $selectedZoomLevel, label: EmptyView()) {
+                    ForEach(ZoomLevel.allCases, id: \.self) { item in
+                        Text(item.displayName)
+                            .tag(item)
+                    }
+                }
+                .onChange(of: selectedZoomLevel, perform: onZoomLevelChanged)
+                .pickerStyle(.inline)
+                .labelsHidden()
+            } label: {
+                HStack(spacing: UX.pickerLabelSpacing) {
+                    Text(selectedZoomLevel.displayName)
+                        .font(.body)
+                        .foregroundColor(theme.colors.textPrimary.color)
+
+                    Image(systemName: UX.chevronImageIdentifier)
+                        .renderingMode(.template)
+                        .font(.caption)
+                        .foregroundColor(theme.colors.textPrimary.color)
+                        .accessibilityHidden(true)
+                }
+            }
+        }
+        .padding(.horizontal, UX.sectionPadding)
+        .padding(.vertical, UX.verticalPadding)
     }
 }

@@ -11,10 +11,10 @@ import ComponentLibrary
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     typealias SubscriberStateType = ThemeSettingsState
     struct UX {
-        static var rowHeight: CGFloat = 70
-        static var moonSunIconSize: CGFloat = 18
-        static var sliderLeftRightInset: CGFloat = 16
-        static var spaceBetweenTableSections: CGFloat = 20
+        static let rowHeight: CGFloat = 70
+        static let moonSunIconSize: CGFloat = 18
+        static let sliderLeftRightInset: CGFloat = 16
+        static let spaceBetweenTableSections: CGFloat = 20
     }
 
     enum Section: Int {
@@ -75,7 +75,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func subscribeToRedux() {
         let action = ThemeSettingsViewAction(windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.themeSettingsDidAppear)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -88,7 +88,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .themeSettings)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func newState(state: ThemeSettingsState) {
@@ -103,7 +103,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(useSystemAppearance: control.isOn,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
@@ -125,7 +125,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
         let action = ThemeSettingsViewAction(windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.receivedSystemBrightnessChange)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         brightnessChanged()
     }
@@ -144,7 +144,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(userBrightness: control.value,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.updateUserBrightness)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
@@ -299,7 +299,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(automaticBrightnessEnabled: isOn,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.enableAutomaticBrightness)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
         tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
@@ -314,7 +314,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let action = ThemeSettingsViewAction(manualThemeType: theme,
                                              windowUUID: windowUUID,
                                              actionType: ThemeSettingsViewActionType.switchManualTheme)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,

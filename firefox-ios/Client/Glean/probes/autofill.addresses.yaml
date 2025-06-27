@@ -1,0 +1,114 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Autofill
+  - Addresses
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Address autofill
+addresses:
+  form_detected:
+    type: event
+    description: |
+      Recorded when a form is recognized as an address form.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_prompt_shown:
+    type: event
+    description: |
+      Recorded when autofill popup is shown, indicating which field triggered this event.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_prompt_expanded:
+    type: event
+    description: |
+      Recorded when the autofill prompt was expanded.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_prompt_dismissed:
+    type: event
+    description: |
+      Recorded when the autofill prompt was dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofilled:
+    type: event
+    description: |
+      Recorded when a form is autofilled.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  modified:
+    type: event
+    description: |
+      Recorded when a field is autofilled and then modified by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  settings_autofill:
+    type: event
+    description: |
+      Recorded when the user has tapped Autofill in the settings menu.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  saved_all:
+    type: quantity
+    description: |
+      A counter of the number of all addresses that are currently saved by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18980
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    unit: quantity of addresses.saved_all

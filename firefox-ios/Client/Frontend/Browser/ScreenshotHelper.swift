@@ -73,7 +73,7 @@ class ScreenshotHelper {
                 }
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
-                store.dispatch(
+                store.dispatchLegacy(
                     ScreenshotAction(
                         windowUUID: windowUUID,
                         tab: tab,
@@ -89,7 +89,7 @@ class ScreenshotHelper {
                 let screenshot = view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = false
                 tab.setScreenshot(screenshot)
-                store.dispatch(
+                store.dispatchLegacy(
                     ScreenshotAction(
                         windowUUID: windowUUID,
                         tab: tab,
@@ -109,12 +109,14 @@ class ScreenshotHelper {
             if UIWindow.isPortrait && !isIpad {
                 configuration.rect = screenshotBounds
             }
+            webView.setPullRefreshVisibility(isVisible: false)
 
             webView.takeSnapshot(with: configuration) { image, error in
+                webView.setPullRefreshVisibility(isVisible: true)
                 if let image {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
-                    store.dispatch(
+                    store.dispatchLegacy(
                         ScreenshotAction(
                             windowUUID: windowUUID,
                             tab: tab,

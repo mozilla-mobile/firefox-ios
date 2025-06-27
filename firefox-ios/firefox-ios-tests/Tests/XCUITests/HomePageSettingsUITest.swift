@@ -13,7 +13,7 @@ let exampleUrl = "test-example.html"
 let urlExampleLabel = "Example Domain"
 let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
-class HomePageSettingsUITests: BaseTestCase {
+class HomePageSettingsUITests: FeatureFlaggedTestBase {
     private func enterWebPageAsHomepage(text: String) {
         app.textFields["HomeAsCustomURLTextField"].tapAndTypeText(text)
         let value = app.textFields["HomeAsCustomURLTextField"].value
@@ -36,6 +36,7 @@ class HomePageSettingsUITests: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         super.setUp()
+        app.launch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
@@ -63,7 +64,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("1", jumpBackIn as? String)
         let bookmarks = app.tables.cells.switches["Bookmarks"].value
         XCTAssertEqual("1", bookmarks as? String)
-        let sponsoredStories = app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value
+        let sponsoredStories = app.tables.cells.switches["Stories"].value
         XCTAssertEqual("1", sponsoredStories as? String)
 
         // Current Homepage
@@ -219,7 +220,9 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn() {
+    func testJumpBackIn_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -249,8 +252,38 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307033
+    func testJumpBackIn_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
+                app.otherElements
+                    .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
+                    .staticTexts[urlExampleLabel]]
+        )
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
+        // Tab tray is open with recently open tab
+        mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
+        app.buttons["Done"].waitAndTap()
+        // Validation for when Jump In section is not displayed
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        app.tables.cells.switches["Jump Back In"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
+        navigator.nowAt(NewTabScreen)
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
-    func testRecentlySaved() {
+    func testRecentlySaved_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
         addContentToReaderView()
@@ -278,10 +311,6 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
         checkBookmarks()
         app.scrollViews
             .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
@@ -330,13 +359,15 @@ class HomePageSettingsUITests: BaseTestCase {
 //        )
 
         XCTAssertEqual(
-            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as? String,
+            app.cells.switches["Stories"].value as? String,
             "1"
         )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
-    func testShortcutsRows() {
+    func testShortcutsRows_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         addWebsitesToShortcut(website: path(forTestPage: url_1))
         addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))
         addWebsitesToShortcut(website: path(forTestPage: url_3))

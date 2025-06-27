@@ -1,0 +1,274 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Autofill
+  - CreditCards
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Credit card autofill
+credit_card:
+  autofill_settings_tapped:
+    type: event
+    description: |
+      Recorded when the user taps on credit card autofill
+      settings item in settings screen.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12813
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12813
+      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  form_detected:
+    type: event
+    description: |
+      Recorded when the user taps on credit card form input
+      and we detect it.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofilled:
+    type: event
+    description: |
+      Recorded when a user taps a card from bottom sheet
+      select a card flow and the credit card gets
+      autofilled on the webpage
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_failed:
+    type: event
+    description: |
+      Recorded when a user taps a card from bottom sheet
+      select a card flow and the credit card does not
+      get autofilled on the webpage
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  save_prompt_create:
+    type: event
+    description: |
+      Recorded when a user saved a credit card using
+      the autofill save prompt.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_toggle:
+    type: event
+    description: |
+      Recorded when a user toggles to enable save and autofill
+      cards in autofill settings
+    send_in_pings:
+      - events
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  sync_toggle:
+    type: event
+    description: |
+      Recorded when a user toggles to enable save and autofill
+      cards in sync settings
+    send_in_pings:
+      - events
+    extra_keys:
+      is_enabled:
+        type: boolean
+        description: |
+          If is enabled or not (true / false)
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_enabled:
+    type: boolean
+    description: |
+      Recorded on startup to check if credit card
+      autofill settings are enabled
+    lifetime: application
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  sync_enabled:
+    type: boolean
+    description: |
+      Recorded on startup to check if credit card
+      sync settings are enabled
+    lifetime: application
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/15251
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_prompt_shown:
+    type: event
+    description: |
+      Records when the credit card autofill prompt was shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_prompt_expanded:
+    type: event
+    description: |
+      Records when the credit card autofill prompt was expanded.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  autofill_prompt_dismissed:
+    type: event
+    description: |
+      Records when the credit card autofill prompt was dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  save_prompt_shown:
+    type: event
+    description: |
+      Records when the credit card autofill save prompt is shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  save_prompt_update:
+    type: event
+    description: |
+      Records when the user updated a credit card using the autofill save prompt.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  management_add_tapped:
+    type: event
+    description: |
+      Records when the user has tapped the add button through credit card management settings.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  management_card_tapped:
+    type: event
+    description: |
+      Records when the user has tapped on a saved card through credit card management settings.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  saved:
+    type: counter
+    description: |
+      A counter of the number of credit cards that have been saved by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  saved_all:
+    type: quantity
+    description: |
+      Record the number of ALL the credit cards that have been currently stored by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    unit: quantity of credit_card.saved_all
+  deleted:
+    type: counter
+    description: |
+      A counter of the number of credit cards that have been deleted by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  modified:
+    type: counter
+    description: |
+      A counter of the number of credit cards that have been modified by the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/17331
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"

@@ -4,7 +4,7 @@
 
 import XCTest
 
-class SettingsTests: BaseTestCase {
+class SettingsTests: FeatureFlaggedTestBase {
     override func tearDown() {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
@@ -28,6 +28,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2334757
     func testHelpOpensSUMOInTab() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
@@ -50,6 +51,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2334760
     func testOpenSiriOption() {
+        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenSiriFromSettings)
@@ -58,6 +60,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2334756
     func testCopiedLinks() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowsingSettings)
 
@@ -88,6 +91,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307041
     func testOpenMailAppSettings() {
+        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(MailAppSettings)
@@ -120,7 +124,9 @@ class SettingsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307058
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
-    func testImageOnOff() {
+    func testImageOnOff_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         // Select no images or hide images, check it's hidden or not
         waitUntilPageLoad()
 
@@ -146,26 +152,61 @@ class SettingsTests: BaseTestCase {
         checkShowImages(showImages: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307058
+    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
+    // SmokeTest
+    func testImageOnOff_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Select no images or hide images, check it's hidden or not
+        waitUntilPageLoad()
+
+        // Select hide images under Browsing Settings page
+        let blockImagesSwitch = app.otherElements.tables.cells.switches[
+            AccessibilityIdentifiers.Settings.BlockImages.title
+        ]
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
+
+        mozWaitForElementToExist(blockImagesSwitch)
+        app.swipeUp()
+        navigator.performAction(Action.ToggleNoImageMode)
+        checkShowImages(showImages: false)
+
+        // Select show images
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
+        mozWaitForElementToExist(blockImagesSwitch)
+        navigator.performAction(Action.ToggleNoImageMode)
+        checkShowImages(showImages: true)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
+        app.launch()
         validateSettingsUIOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2989418
     func testSettingsOptionSubtitlesLandspace() {
+        app.launch()
         XCUIDevice.shared.orientation = .landscapeLeft
         validateSettingsUIOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2989420
     func testSettingsOptionSubtitlesDarkMode() {
+        app.launch()
         switchThemeToDarkOrLight(theme: "Dark")
         validateSettingsUIOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2986986
     func testSettingsOptionSubtitlesDarkModeLandscape() {
+        app.launch()
         switchThemeToDarkOrLight(theme: "Dark")
         XCUIDevice.shared.orientation = .landscapeLeft
         validateSettingsUIOptions()
@@ -173,6 +214,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2875583
     func testSettingsCrashReportsOption() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let crashReportToggle = app.switches["settings.sendCrashReports"]
@@ -183,7 +225,9 @@ class SettingsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951438
-    func testBrowsingSettingsOptionSubtitles() {
+    func testBrowsingSettingsOptionSubtitles_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
         validateBrowsingUI()
         // Repeat steps for dark mode
         navigator.nowAt(SettingsScreen)
@@ -200,6 +244,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
     func testAutofillPasswordSettingsOptionSubtitles() {
+        app.launch()
         validateAutofillAndPasswordsUI()
         // Repeat steps for dark mode
         navigator.nowAt(SettingsScreen)
@@ -216,6 +261,7 @@ class SettingsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951439
     func testAutoplayOptionUI() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         // Navigate to the Autoplay settings screen

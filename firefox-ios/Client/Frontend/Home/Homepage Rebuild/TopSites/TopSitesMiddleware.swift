@@ -17,11 +17,6 @@ final class TopSitesMiddleware: FeatureFlaggable {
     private let logger: Logger
     private let profile: Profile
 
-    // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
-    // but keeping logic consistent for now
-    private var otherSites: [TopSiteConfiguration] = []
-    private var sponsoredSites: [Site] = []
-
     init(
         profile: Profile = AppContainer.shared.resolve(),
         topSitesManager: TopSitesManagerInterface? = nil,
@@ -53,8 +48,9 @@ final class TopSitesMiddleware: FeatureFlaggable {
         case HomepageActionType.initialize,
             HomepageMiddlewareActionType.topSitesUpdated,
             TopSitesActionType.toggleShowSponsoredSettings:
-            self.getTopSitesDataAndUpdateState(for: action)
-
+            Task { @MainActor in
+                await self.getTopSitesDataAndUpdateState(for: action)
+            }
         case TopSitesActionType.topSitesSeen:
             self.handleSponsoredImpressionTracking(for: action)
 
@@ -101,46 +97,16 @@ final class TopSitesMiddleware: FeatureFlaggable {
         return site
     }
 
-    private func getTopSitesDataAndUpdateState(for action: Action) {
-        Task {
-            await withTaskGroup(of: Void.self) { group in
-                group.addTask {
-                    self.otherSites = await self.topSitesManager.getOtherSites()
-                    self.updateTopSites(
-                        for: action.windowUUID,
-                        otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredSites
-                    )
-                }
-                group.addTask {
-                    self.sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
-                    self.updateTopSites(
-                        for: action.windowUUID,
-                        otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredSites
-                    )
-                }
-
-                await group.waitForAll()
-                updateTopSites(
-                    for: action.windowUUID,
-                    otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredSites
-                )
-            }
-        }
+    @MainActor
+    private func getTopSitesDataAndUpdateState(for action: Action) async {
+        async let sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
+        async let otherSites = await self.topSitesManager.getOtherSites()
+        let topSites = await self.topSitesManager.recalculateTopSites(otherSites: otherSites, sponsoredSites: sponsoredSites)
+        dispatchTopSitesRetrievedAction(for: action.windowUUID, topSites: topSites)
     }
 
-    private func updateTopSites(
-        for windowUUID: WindowUUID,
-        otherSites: [TopSiteConfiguration],
-        sponsoredTiles: [Site]
-    ) {
-        let topSites = self.topSitesManager.recalculateTopSites(
-            otherSites: otherSites,
-            sponsoredSites: sponsoredSites
-        )
-        store.dispatch(
+    private func dispatchTopSitesRetrievedAction(for windowUUID: WindowUUID, topSites: [TopSiteConfiguration]) {
+        store.dispatchLegacy(
             TopSitesAction(
                 topSites: topSites,
                 windowUUID: windowUUID,

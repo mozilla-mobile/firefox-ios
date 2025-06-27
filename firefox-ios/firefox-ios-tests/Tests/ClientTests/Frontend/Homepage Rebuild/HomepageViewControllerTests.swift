@@ -52,8 +52,8 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 2)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIContentSizeCategory.didChangeNotification, .ThemeDidChange])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.observers, [.ThemeDidChange])
     }
 
     // MARK: - Deinit State
@@ -94,7 +94,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_scrollToTop_updatesStatusBarScrollDelegate_andSetsCollectionViewOffset() {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
-       let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
+        let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
         let newState = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             WallpaperAction(
@@ -167,6 +167,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_viewWillAppear_triggersHomepageAction() throws {
         let subject = createSubject()
+
         subject.viewWillAppear(false)
 
         let actionCalled = try XCTUnwrap(
@@ -175,6 +176,39 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.viewWillAppear)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidLayoutSubviews_withTopSitesChange_triggersHomepageAction() throws {
+        let subject = createSubject()
+
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                numberOfTopSitesPerRow: 10,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.viewDidLayoutSubviews
+            )
+        )
+        subject.newState(state: newState)
+
+        subject.viewDidLayoutSubviews()
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidLayoutSubviews_withoutTopSitesChange_triggersNothing() throws {
+        let subject = createSubject()
+
+        subject.viewDidLayoutSubviews()
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertNotEqual(actionType, HomepageActionType.viewDidLayoutSubviews)
     }
 
     func test_viewDidAppear_triggersHomepageAction() throws {

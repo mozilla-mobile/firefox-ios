@@ -959,7 +959,7 @@
 "Remove" = "Sil";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Okuma listesinden sil";
+"Remove from Reading List" = "Okuma Listesi’nden kaldır";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "İptal";

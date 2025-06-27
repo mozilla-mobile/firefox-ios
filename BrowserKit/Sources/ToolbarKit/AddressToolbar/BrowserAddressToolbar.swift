@@ -18,9 +18,6 @@ public class BrowserAddressToolbar: UIView,
                                     LocationViewDelegate,
                                     UIDragInteractionDelegate {
     private enum UX {
-        static let topEdgeSpace: CGFloat = 8
-        static let bottomPositionBottomEdgeSpace: CGFloat = 4
-        static let topPositionBottomEdgeSpace: CGFloat = 8
         static let horizontalSpace: CGFloat = 8
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
@@ -63,6 +60,7 @@ public class BrowserAddressToolbar: UIView,
     private var leadingLocationContainerConstraint: NSLayoutConstraint?
     private var dividerWidthConstraint: NSLayoutConstraint?
     private var toolbarBottomConstraint: NSLayoutConstraint?
+    private var toolbarTopConstraint: NSLayoutConstraint?
     private var toolbarTopBorderHeightConstraint: NSLayoutConstraint?
     private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
@@ -151,8 +149,9 @@ public class BrowserAddressToolbar: UIView,
                              toolbarPosition: AddressToolbarPosition) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
-        toolbarBottomConstraint?.constant = toolbarPosition == .bottom ?
-        -UX.bottomPositionBottomEdgeSpace : -UX.topPositionBottomEdgeSpace
+        let locationViewPaddings = config.locationViewVerticalPaddings(addressBarPosition: toolbarPosition)
+        toolbarBottomConstraint?.constant = -locationViewPaddings.bottom
+        toolbarTopConstraint?.constant = locationViewPaddings.top
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -219,16 +218,15 @@ public class BrowserAddressToolbar: UIView,
         locationContainerHeightConstraint?.isActive = true
 
         toolbarBottomConstraint = toolbarContainerView.bottomAnchor.constraint(
-            equalTo: toolbarBottomBorderView.bottomAnchor,
-            constant: -UX.topPositionBottomEdgeSpace
+            equalTo: toolbarBottomBorderView.bottomAnchor
         )
         toolbarBottomConstraint?.isActive = true
 
+        toolbarTopConstraint = toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor)
+        toolbarTopConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
-                                                      constant: UX.topEdgeSpace),
-
             toolbarContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 
             toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),

@@ -165,6 +165,13 @@ class BrowserViewController: UIViewController,
         view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
+    // Overlay dimming view for zero search mode
+    private lazy var zeroSearchDimmingView: UIView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.ZeroSearch.dimmingView
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedZeroSearchScrim))
+        view.addGestureRecognizer(tapRecognizer)
+    }
+
     // BottomContainer stack view contains toolbar
     private lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
 
@@ -524,7 +531,7 @@ class BrowserViewController: UIViewController,
             toolbarPosition: newSearchBarPosition,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
@@ -552,10 +559,16 @@ class BrowserViewController: UIViewController,
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
+
+            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
+
+            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            header.bringSubviewToFront(addressToolbarContainer)
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -594,7 +607,7 @@ class BrowserViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.showMenuWarningBadge
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         } else {
             legacyUrlBar?.warningMenuBadge(setVisible: showWarningBadge)
             toolbar.warningMenuBadge(setVisible: showWarningBadge)
@@ -786,7 +799,7 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: StartAtHomeActionType.didBrowserBecomeActive
         )
-        store.dispatch(startAtHomeAction)
+        store.dispatchLegacy(startAtHomeAction)
     }
 
     private func dismissModalsIfStartAtHome() {
@@ -800,13 +813,13 @@ class BrowserViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .browserViewController)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
 
         let browserAction = GeneralBrowserMiddlewareAction(
             toolbarPosition: searchBarPosition,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
-        store.dispatch(browserAction)
+        store.dispatchLegacy(browserAction)
 
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
@@ -820,7 +833,7 @@ class BrowserViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
@@ -887,7 +900,7 @@ class BrowserViewController: UIViewController,
                                     theme: currentTheme(),
                                     completion: { buttonPressed in
                 if let action = toast.reduxAction(for: uuid), buttonPressed {
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                 }
             })
 
@@ -932,7 +945,10 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
-        setupTopTabsViewController()
+
+        if toolbarHelper.shouldShowTopTabs(for: traitCollection) {
+            setupTopTabsViewController()
+        }
 
         // Update theme of already existing views
         let theme = currentTheme()
@@ -1105,7 +1121,7 @@ class BrowserViewController: UIViewController,
     private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
         updateBlurViews()
 
-        store.dispatch(
+        store.dispatchLegacy(
             ToolbarAction(
                 isTranslucent: toolbarHelper.shouldBlur(),
                 windowUUID: windowUUID,
@@ -1114,7 +1130,22 @@ class BrowserViewController: UIViewController,
         )
     }
 
+    /// If we are showing the homepage search bar, then we should hide the address toolbar
+    private func shouldHideToolbar() -> Bool {
+        let shouldShowSearchBar = store.state.screenState(
+            HomepageState.self,
+            for: .homepage,
+            window: windowUUID
+        )?.searchState.shouldShowSearchBar ?? false
+        guard shouldShowSearchBar else { return false }
+        return true
+    }
+
     private func switchToolbarIfNeeded() {
+        guard !shouldHideToolbar() else {
+            addressToolbarContainer.isHidden = true
+            return
+        }
         var updateNeeded = false
 
         // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
@@ -1173,7 +1204,9 @@ class BrowserViewController: UIViewController,
     }
 
     private func addAddressToolbar() {
-        guard isToolbarRefactorEnabled else { return }
+        guard isToolbarRefactorEnabled, !shouldHideToolbar() else {
+            return
+        }
 
         addressToolbarContainer.configure(
             windowUUID: windowUUID,
@@ -1226,6 +1259,15 @@ class BrowserViewController: UIViewController,
         // add overKeyboardContainer after bottomContainer so the address toolbar shadow
         // for bottom toolbar doesn't get clipped
         view.addSubview(overKeyboardContainer)
+
+        if isSwipingTabsEnabled {
+            // Add Homepage to view hierarchy so it is possible to take screenshot from it
+            showEmbeddedHomepage(inline: false, isPrivate: false)
+            browserDelegate?.setHomepageVisibility(isVisible: false)
+            addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
+                return self?.browserDelegate?.homepageScreenshotTool()
+            }
+        }
     }
 
     private func enqueueTabRestoration() {
@@ -1724,6 +1766,12 @@ class BrowserViewController: UIViewController,
             )
         }
 
+        if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
+            browserDelegate?.setHomepageVisibility(isVisible: true)
+        }
         updateBlurViews()
     }
 
@@ -1787,7 +1835,7 @@ class BrowserViewController: UIViewController,
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
 
-        store.dispatch(
+        store.dispatchLegacy(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
         )
     }
@@ -2003,6 +2051,7 @@ class BrowserViewController: UIViewController,
     }
 
     func destroySearchController() {
+        zeroSearchDimmingView.removeFromSuperview()
         hideSearchController()
 
         searchController = nil
@@ -2117,7 +2166,7 @@ class BrowserViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: GeneralBrowserActionType.showReaderMode
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             return true
         } else if let legacyUrlBar, !legacyUrlBar.locationView.readerModeButton.isHidden {
             legacyUrlBar.tabLocationViewDidTapReaderMode(legacyUrlBar.locationView)
@@ -2196,7 +2245,7 @@ class BrowserViewController: UIViewController,
             for: .toolbar,
             window: windowUUID
         )?.shouldAnimate == false else { return }
-        store.dispatch(
+        store.dispatchLegacy(
             ToolbarAction(
                 shouldAnimate: true,
                 windowUUID: windowUUID,
@@ -2267,7 +2316,7 @@ class BrowserViewController: UIViewController,
                     windowUUID: windowUUID,
                     actionType: ToolbarActionType.websiteLoadingStateDidChange
                 )
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             }
 
         case .URL:
@@ -2348,7 +2397,7 @@ class BrowserViewController: UIViewController,
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
         case .hasOnlySecureContent:
-            store.dispatch(
+            store.dispatchLegacy(
                 TrackingProtectionAction(windowUUID: windowUUID,
                                          actionType: TrackingProtectionActionType.updateConnectionStatus)
             )
@@ -2398,7 +2447,7 @@ class BrowserViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.readerModeStateChanged
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         } else {
             legacyUrlBar?.updateReaderModeState(readerModeState)
         }
@@ -2436,14 +2485,14 @@ class BrowserViewController: UIViewController,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
             // update toolbar borders
             let middlewareAction = ToolbarMiddlewareAction(
                 scrollOffset: scrollController.contentOffset,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
-            store.dispatch(middlewareAction)
+            store.dispatchLegacy(middlewareAction)
 
             configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
                                                  navigationToolbarView: navigationToolbarContainer)
@@ -2518,7 +2567,7 @@ class BrowserViewController: UIViewController,
                                    canGoForward: canGoForward,
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.backForwardButtonStateChanged)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     /// Used to handle general navigation for views that can be presented from multiple places
@@ -2571,6 +2620,9 @@ class BrowserViewController: UIViewController,
             )
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
+        case .zeroSearch:
+            overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
+            configureZeroSearchView()
         }
     }
 
@@ -2597,7 +2649,7 @@ class BrowserViewController: UIViewController,
             // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
-            store.dispatch(
+            store.dispatchLegacy(
                 ToolbarAction(
                     shouldAnimate: false,
                     windowUUID: windowUUID,
@@ -2650,7 +2702,7 @@ class BrowserViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.websiteLoadingStateDidChange
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
@@ -2928,7 +2980,7 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: ToolbarActionType.traitCollectionDidChange
         )
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     // MARK: Opening New Tabs
@@ -2947,7 +2999,7 @@ class BrowserViewController: UIViewController,
             let action = TabPanelViewAction(panelType: .tabs,
                                             windowUUID: self.windowUUID,
                                             actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
@@ -3015,7 +3067,7 @@ class BrowserViewController: UIViewController,
     private func cancelEditMode() {
         guard isToolbarRefactorEnabled else { return }
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 
     func closeAllPrivateTabs() {
@@ -3090,7 +3142,7 @@ class BrowserViewController: UIViewController,
                                            shouldAnimate: true,
                                            windowUUID: self.windowUUID,
                                            actionType: ToolbarActionType.didStartEditingUrl)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
             } else if let legacyUrlBar = self.legacyUrlBar {
                 legacyUrlBar.tabLocationViewDidTapLocation(legacyUrlBar.locationView)
 
@@ -3481,6 +3533,35 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    /// Configures the scrim area for zero search state
+    private func configureZeroSearchView() {
+        addressToolbarContainer.isHidden = false
+
+        zeroSearchDimmingView.alpha = 0
+        view.addSubview(zeroSearchDimmingView)
+        view.bringSubviewToFront(zeroSearchDimmingView)
+
+        NSLayoutConstraint.activate([
+            zeroSearchDimmingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+            zeroSearchDimmingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+            zeroSearchDimmingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            zeroSearchDimmingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor)
+        ])
+
+        UIView.animate(withDuration: 0.3) {
+             self.zeroSearchDimmingView.alpha = 1
+        }
+    }
+
+    /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
+    @objc
+    private func tappedZeroSearchScrim() {
+        let overlayAction = GeneralBrowserAction(showOverlay: false,
+                                                 windowUUID: windowUUID,
+                                                 actionType: GeneralBrowserActionType.showOverlay)
+        store.dispatchLegacy(overlayAction)
+    }
+
     // Determines the view user should see when editing the url bar
     // Dimming view appears if private mode search suggest is disabled
     // Otherwise shows search suggests screen
@@ -3519,13 +3600,14 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim.withAlphaComponent(0.70)
 
         if isToolbarRefactorEnabled {
             // to make sure on homepage with bottom search bar the status bar is hidden
             // we have to adjust the background color to match the homepage background color
             let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
             let colors = currentTheme.colors
-            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layer3
+            backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
@@ -4069,7 +4151,7 @@ extension BrowserViewController: HomePanelDelegate {
                     windowUUID: self.windowUUID,
                     actionType: ToolbarActionType.cancelEdit
                 )
-                store.dispatch(toolbarAction)
+                store.dispatchLegacy(toolbarAction)
                 self.tabManager.selectTab(tab)
             }
         })
@@ -4138,7 +4220,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         // Update search icon when the search engine changes
         if isToolbarRefactorEnabled {
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         } else {
             legacyUrlBar?.searchEnginesDidUpdate()
         }
@@ -4153,7 +4235,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didSetTextInLocationView
             )
-            store.dispatch(toolbarAction)
+            store.dispatchLegacy(toolbarAction)
 
             if search {
                 openSuggestions(searchTerm: text)
@@ -4377,6 +4459,13 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reloadPage()
         }
+
+        if isSwipingTabsEnabled {
+            // show the homepage in case it was not visible, as it is needed for screenshot purpose.
+            // note: the homepage is not going to be visible to user as in case a web view is there, it is going
+            // to overlay the homepage.
+            browserDelegate?.setHomepageVisibility(isVisible: true)
+        }
     }
 
     /// Updates the embedded content in the browser view controller (BVC) based on whether its a home page or web page.
@@ -4389,7 +4478,7 @@ extension BrowserViewController: TabManagerDelegate {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
             guard previousTab?.isFxHomeTab ?? false else { return }
-            store.dispatch(
+            store.dispatchLegacy(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
@@ -4501,7 +4590,7 @@ extension BrowserViewController: TabManagerDelegate {
         let action = ToolbarAction(numberOfTabs: count,
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.numberOfTabsChanged)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
     }
 }
 

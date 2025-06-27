@@ -84,7 +84,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     // MARK: - Private Helpers
     func createSubject(
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> IntroViewController {
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)

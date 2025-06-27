@@ -28,6 +28,7 @@ include:
   - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/hntTopSitesVisualRefresh.yaml
   - nimbus-features/homepageRebuildFeature.yaml
+  - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
@@ -39,7 +40,6 @@ include:
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
-  - nimbus-features/rustKeychainRefactor.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml

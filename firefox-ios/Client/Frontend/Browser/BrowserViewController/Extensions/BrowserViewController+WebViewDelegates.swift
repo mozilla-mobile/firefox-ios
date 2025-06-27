@@ -75,8 +75,9 @@ extension BrowserViewController: WKUIDelegate {
         let messageAlert = MessageAlert(message: message,
                                         frame: frame,
                                         completionHandler: completionHandler)
-
-        if shouldDisplayJSAlertForWebView(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
+            handleSpammedJSAlert(completionHandler)
+        } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript alert panel will be presented.", level: .info, category: .webview)
 
             let alertController = messageAlert.alertController()
@@ -99,7 +100,9 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(confirm)
         }
 
-        if shouldDisplayJSAlertForWebView(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
+            handleSpammedJSAlert { completionHandler(false) }
+        } else if shouldDisplayJSAlertForWebView(webView) {
             self.logger.log("JavaScript confirm panel will be presented.", level: .info, category: .webview)
 
             let alertController = confirmAlert.alertController()
@@ -123,7 +126,9 @@ extension BrowserViewController: WKUIDelegate {
             completionHandler(input)
         }
 
-        if shouldDisplayJSAlertForWebView(webView) {
+        if jsAlertExceedsSpamLimits(webView) {
+            handleSpammedJSAlert { completionHandler("") }
+        } else if shouldDisplayJSAlertForWebView(webView) {
             logger.log("JavaScript text input panel will be presented.", level: .info, category: .webview)
 
             let alertController = textInputAlert.alertController()
@@ -192,6 +197,13 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     // MARK: - Helpers
+
+    private func handleSpammedJSAlert(_ callback: @escaping () -> Void) {
+        // User is being spammed. Squelch alert. Note that we have to do this after
+        // a delay to avoid JS that could spin the CPU endlessly.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { callback() }
+    }
+
     private func contextMenuConfiguration(for url: URL,
                                           webView: WKWebView,
                                           elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
@@ -818,30 +830,13 @@ extension BrowserViewController: WKNavigationDelegate {
                 cookies: cookies
             )
             tempPDF.onDownloadProgressUpdate = { progress in
-                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
-                                   of: tab?.webView,
-                                   change: [.newKey: progress],
-                                   context: nil)
+                self?.handleDownloadProgressUpdate(progress: progress, tab: tab)
             }
             tempPDF.onDownloadStarted = {
-                self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
-                                   of: tab?.webView,
-                                   change: [.newKey: true],
-                                   context: nil)
-                if let url = request.url {
-                    self?.documentLogger.registerDownloadStart(url: url)
-                }
+                self?.handleDownloadStarted(tab: tab, request: request)
             }
             tempPDF.onDownloadError = { error in
-                self?.navigationHandler?.removeDocumentLoading()
-                self?.logger.log("Failed to download Document",
-                                 level: .warning,
-                                 category: .webview,
-                                 extra: [
-                                    "error": error?.localizedDescription ?? "",
-                                    "url": request.url?.absoluteString ?? "Unknown URL"])
-                guard let error, let webView = tab?.webView else { return }
-                self?.showErrorPage(webView: webView, error: error)
+                self?.handleDownloadError(tab: tab, request: request, error: error)
             }
             tab?.enqueueDocument(tempPDF)
             if let url = request.url {
@@ -855,6 +850,35 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleDownloadProgressUpdate(progress: Double, tab: Tab?) {
+        observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                     of: tab?.webView,
+                     change: [.newKey: progress],
+                     context: nil)
+    }
+
+    private func handleDownloadStarted(tab: Tab?, request: URLRequest) {
+        observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                     of: tab?.webView,
+                     change: [.newKey: true],
+                     context: nil)
+        if let url = request.url {
+            documentLogger.registerDownloadStart(url: url)
+        }
+    }
+
+    private func handleDownloadError(tab: Tab?, request: URLRequest, error: (any Error)?) {
+        navigationHandler?.removeDocumentLoading()
+        logger.log("Failed to download Document",
+                   level: .warning,
+                   category: .webview,
+                   extra: [
+                    "error": error?.localizedDescription ?? "",
+                    "url": request.url?.absoluteString ?? "Unknown URL"])
+        guard let error, let webView = tab?.webView else { return }
+        showErrorPage(webView: webView, error: error)
+    }
+
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         if isNativeErrorPageEnabled {
@@ -862,7 +886,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
@@ -944,13 +968,13 @@ extension BrowserViewController: WKNavigationDelegate {
                         windowUUID: windowUUID,
                         actionType: ToolbarActionType.urlDidChange
                     )
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                     let middlewareAction = ToolbarMiddlewareAction(
                         scrollOffset: scrollController.contentOffset,
                         windowUUID: windowUUID,
                         actionType: ToolbarMiddlewareActionType.urlDidChange
                     )
-                    store.dispatch(middlewareAction)
+                    store.dispatchLegacy(middlewareAction)
                 } else {
                     legacyUrlBar?.currentURL = tab.url?.displayURL
                 }
@@ -990,7 +1014,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
                     )
-                    store.dispatch(action)
+                    store.dispatchLegacy(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
@@ -1061,6 +1085,19 @@ extension BrowserViewController: WKNavigationDelegate {
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
+
+        if !tab.adsTelemetryRedirectUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           !tab.adsTelemetryUrlList.isEmpty,
+           !tab.adsProviderName.isEmpty,
+           let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
+           let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
+           lastRedirectHost != startingRedirectHost {
+            AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+            tab.adsTelemetryUrlList.removeAll()
+            tab.adsTelemetryRedirectUrlList.removeAll()
+            tab.adsProviderName = ""
+        }
 
         // When tab url changes after web content starts loading on the page
         // We notify the content blocker change so that content blocker status
@@ -1211,9 +1248,16 @@ private extension BrowserViewController {
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+        guard let tab = tabManager.selectedTab else { return false }
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView === webView))
-            && (self.presentedViewController == nil)
+        return (tab.webView === webView && self.presentedViewController == nil)
+    }
+
+    func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
+        guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
+        let canShow = tab.jsAlertThrottler.canShowAlert()
+        if canShow { tab.jsAlertThrottler.willShowJSAlert() }
+        return !canShow
     }
 
      func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {

@@ -52,7 +52,7 @@ class DataManagementTests: BaseTestCase {
         }
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         mozWaitForElementToExist(app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"])
-        XCTAssertEqual(0, app.cells.images.count)
+        XCTAssertEqual(0, app.cells.buttons.images.count)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307017
@@ -74,9 +74,9 @@ class DataManagementTests: BaseTestCase {
         }
         mozWaitForElementToExist(app.staticTexts["example.com"])
         if #available(iOS 17, *) {
-            XCTAssertEqual(1, app.cells.images.count)
+            XCTAssertTrue(app.cells.images.element(matching: .any, identifier: "circle").exists)
         } else {
-            XCTAssertEqual(1, app.cells.staticTexts.count-1)
+            XCTAssertTrue(app.cells.staticTexts.elementContainingText("example.com").exists)
         }
     }
 
