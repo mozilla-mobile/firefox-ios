@@ -29,6 +29,7 @@ class TabTraySelectorView: UIView,
     private var buttonTitles: [String]
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
     private var stackViewOffsetConstraint: NSLayoutConstraint?
+    private let edgeFadeGradientLayer = CAGradientLayer()
 
     private lazy var selectionBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = TabTraySelectorUX.cornerRadius
@@ -55,6 +56,11 @@ class TabTraySelectorView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateEdgeFadeMask()
+    }
+
     func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
         updateSelectionBackground(from: fromIndex, to: toIndex, progress: abs(progress), animated: false)
         simulateFontWeightTransition(from: fromIndex, to: toIndex, progress: abs(progress))
@@ -68,6 +74,7 @@ class TabTraySelectorView: UIView,
     private func setup() {
         addSubview(selectionBackgroundView)
         addSubview(stackView)
+        layer.mask = edgeFadeGradientLayer
 
         for (index, title) in buttonTitles.enumerated() {
             let button = createButton(with: index, title: title)
@@ -261,6 +268,17 @@ class TabTraySelectorView: UIView,
         selectionBackgroundWidthConstraint?.constant = interpolatedWidth
 
         layoutIfNeeded()
+    }
+
+    private func updateEdgeFadeMask() {
+        edgeFadeGradientLayer.frame = bounds
+        edgeFadeGradientLayer.colors = [UIColor.clear.cgColor,
+                                        UIColor.black.cgColor,
+                                        UIColor.black.cgColor,
+                                        UIColor.clear.cgColor]
+        edgeFadeGradientLayer.locations = [0.0, 0.05, 0.95, 1.0]
+        edgeFadeGradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        edgeFadeGradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
     }
 
     // MARK: - ThemeApplicable
