@@ -5,7 +5,6 @@
 import Common
 import UIKit
 
-// TODO: FXIOS-12302 Create the UI for different accessibility sizes, for horizontal options section
 final class MenuSquareView: UIView, ThemeApplicable {
     private struct UX {
         static let iconSize: CGFloat = 24
@@ -17,6 +16,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
         static let contentViewHorizontalMargin: CGFloat = 4
         static let cornerRadius: CGFloat = 16
         static let backgroundAlpha: CGFloat = 0.8
+        static let hyphenationFactor: Float = 1.0
     }
 
     // MARK: - UI Elements
@@ -25,7 +25,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
     private var contentStackView: UIStackView = .build { stack in
         stack.axis = .vertical
         stack.spacing = UX.contentViewSpacing
-        stack.distribution = .fillProportionally
+        stack.distribution = .fill
     }
 
     private var icon: UIImageView = .build { view in
@@ -33,9 +33,8 @@ final class MenuSquareView: UIView, ThemeApplicable {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.caption2.scaledFont()
-        label.numberOfLines = 1
-        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     // MARK: - Properties
@@ -61,7 +60,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
 
     func configureCellWith(model: MenuElement) {
         self.model = model
-        self.titleLabel.text = model.title
+        self.setTitle(with: model.title)
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         self.backgroundContentView.layer.cornerRadius = UX.backgroundViewCornerRadius
         self.isAccessibilityElement = true
@@ -96,11 +95,27 @@ final class MenuSquareView: UIView, ThemeApplicable {
                 constant: -UX.contentViewHorizontalMargin
             ),
             contentStackView.bottomAnchor.constraint(
-                equalTo: backgroundContentView.bottomAnchor,
+                lessThanOrEqualTo: backgroundContentView.bottomAnchor,
                 constant: -UX.contentViewBottomMargin
             ),
             icon.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
+    }
+
+    private func setTitle(with title: String) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.hyphenationFactor = UX.hyphenationFactor
+        paragraphStyle.alignment = .center
+
+        let attributedText = NSAttributedString(
+            string: title,
+            attributes: [
+                .paragraphStyle: paragraphStyle,
+                .font: FXFontStyles.Regular.caption2.scaledFont()
+            ]
+        )
+
+        titleLabel.attributedText = attributedText
     }
 
     // MARK: - Theme Applicable
