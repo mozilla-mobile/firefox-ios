@@ -64,6 +64,9 @@ public struct DefaultTabFileManager: TabFileManager {
         static let backup = "window-data-backup"
     }
 
+    /// As per Apple docs, the `FileManager.default` shared FileManager can safely be called from multiple threads. But if
+    /// we need to use any delegate methods, we should create our own FileManager instance.
+    /// Ref: https://developer.apple.com/documentation/foundation/filemanager#Threading-Considerations
     let fileManager: FileManager
     let logger: Logger
 

@@ -36,6 +36,7 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     nonisolated private let logger: Logger
+    // Note: The underlying shared `FileManager` of `DefaultTabFileManager` is safe to access from multiple threads
     nonisolated private let fileManager: TabFileManager
     private let throttleTime: UInt64
     private var windowDataToSave: WindowData?
