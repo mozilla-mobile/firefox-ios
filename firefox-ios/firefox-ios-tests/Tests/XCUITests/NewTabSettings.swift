@@ -81,10 +81,17 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        // Keyboard is not focused with the experiment ON
-        XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        let keyboardCount = app.keyboards.count
-        XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
+        // Keyboard is not focused with the experiment ON on iPhone
+        // For iPad the keyboard is shown
+        if iPad() {
+            XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+            let keyboardCount = app.keyboards.count
+            XCTAssertEqual(keyboardCount, 1, "The keyboard should be shown on iPad")
+        } else {
+            XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+            let keyboardCount = app.keyboards.count
+            XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
+        }
         mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
@@ -104,10 +111,17 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        // Keyboard is not focused with the experiment ON
-        XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        let keyboardCount = app.keyboards.count
-        XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
+        // Keyboard is not focused with the experiment ON on iPhone
+        // For iPad the keyboard is shown
+        if iPad() {
+            XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+            let keyboardCount = app.keyboards.count
+            XCTAssertEqual(keyboardCount, 1, "The keyboard should be shown on iPad")
+        } else {
+            XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+            let keyboardCount = app.keyboards.count
+            XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
+        }
         // With swiping tabs on, the homepage is cached so it should be having those elements
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToExist(app.links.staticTexts["YouTube"])
@@ -255,14 +269,14 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        validateKeyboardIsNotRaised()
+        validateKeyboardIsRaised()
 
         // Switch to Private Browsing
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        validateKeyboardIsNotRaised()
+        validateKeyboardIsRaised()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
@@ -301,10 +315,14 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
     }
 
-    private func validateKeyboardIsNotRaised() {
+    private func validateKeyboardIsRaised() {
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         XCTAssertFalse(url.isSelected, "The URL has the focus")
-        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+        if iPad() {
+            XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard should be shown on iPad")
+        } else {
+            XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+        }
     }
 }
