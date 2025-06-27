@@ -6,6 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
+/// State that is used to handle both the navigation toolbar and the address toolbar
 struct ToolbarState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
@@ -168,6 +169,9 @@ struct ToolbarState: ScreenState, Equatable {
         case SearchEngineSelectionActionType.didTapSearchEngine,
             SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleSearchEngineSelectionAction(state: state, action: action)
+
+        case HomepageMiddlewareActionType.configuredSearchBar:
+            return handleConfiguredHomepageSearchBarAction(state: state, action: action)
 
         default:
             return defaultState(from: state)
@@ -442,6 +446,28 @@ struct ToolbarState: ScreenState, Equatable {
         )
     }
 
+    private static func handleConfiguredHomepageSearchBarAction(state: Self, action: Action) -> ToolbarState {
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
+            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingTopTabs: state.isShowingTopTabs,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs,
+            showMenuWarningBadge: state.showMenuWarningBadge,
+            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
+            canShowDataClearanceAction: state.canShowDataClearanceAction,
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent
+        )
+    }
+
     private static func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition)
     -> AddressToolbarPosition {
         switch position {
@@ -455,6 +481,9 @@ struct ToolbarState: ScreenState, Equatable {
                             toolbarPosition: state.toolbarPosition,
                             toolbarLayout: state.toolbarLayout,
                             isPrivateMode: state.isPrivateMode,
+                            /// Cyn notes: why not have the reducer respond?
+                            /// This avoids having to parse action through the toolbar state.
+                            /// But I fear changing this may have side effects.
                             addressToolbar: state.addressToolbar,
                             navigationToolbar: state.navigationToolbar,
                             isShowingNavigationToolbar: state.isShowingNavigationToolbar,

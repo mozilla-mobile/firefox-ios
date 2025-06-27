@@ -1130,23 +1130,40 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    // TODO: FXIOS-12632 Refactor how we determine when to hide / show toolbar
-    /// If we are showing the homepage search bar, then we should hide the address toolbar
+    /// As part of the homepage search bar work, we want to hide the toolbar in certain cases
+    /// and this should be handled by the toolbar state. We also want to hide only in normal mode.
     private func shouldHideToolbar() -> Bool {
+        let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )
+//
+        let isKeyboardUp = toolbarState?.addressToolbar.shouldShowKeyboard ?? false
+        let isTopToolbar = toolbarState?.toolbarPosition == .top
         let shouldShowSearchBar = store.state.screenState(
             HomepageState.self,
             for: .homepage,
             window: windowUUID
         )?.searchState.shouldShowSearchBar ?? false
-        guard shouldShowSearchBar else { return false }
+
+        // Only hide address toolbar if we want to show homepage search bar
+        guard shouldShowSearchBar, !isKeyboardUp, isTopToolbar, contentContainer.hasHomepage else {
+            addressToolbarContainer.isHidden = false
+            store.dispatchLegacy(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didUnhideToolbar
+                )
+            )
+            return false
+        }
+        addressToolbarContainer.isHidden = true
         return true
     }
 
     private func switchToolbarIfNeeded() {
-        guard !shouldHideToolbar() else {
-            addressToolbarContainer.isHidden = true
-            return
-        }
+        guard !shouldHideToolbar() else { return }
         var updateNeeded = false
 
         // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
@@ -1205,9 +1222,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func addAddressToolbar() {
-        guard isToolbarRefactorEnabled, !shouldHideToolbar() else {
-            return
-        }
+        guard isToolbarRefactorEnabled else { return }
 
         addressToolbarContainer.configure(
             windowUUID: windowUUID,
@@ -1243,7 +1258,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        if isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled, !shouldHideToolbar() {
             addAddressToolbar()
         } else {
             createLegacyUrlBar()

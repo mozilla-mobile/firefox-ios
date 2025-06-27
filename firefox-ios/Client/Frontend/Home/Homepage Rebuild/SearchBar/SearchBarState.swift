@@ -36,7 +36,12 @@ struct SearchBarState: StateType, Equatable {
         switch action.actionType {
         case HomepageMiddlewareActionType.configuredSearchBar:
             return handleSearchBarInitialization(action: action, state: state)
-        case GeneralBrowserActionType.enteredZeroSearchScreen:
+        case GeneralBrowserActionType.enteredZeroSearchScreen, GeneralBrowserActionType.didUnhideToolbar:
+            return handleHidingSearchBar(action: action, state: state)
+        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
+            guard (action as? GeneralBrowserMiddlewareAction)?.toolbarPosition == .bottom else {
+                return defaultState(from: state)
+            }
             return handleHidingSearchBar(action: action, state: state)
         default:
             return defaultState(from: state)

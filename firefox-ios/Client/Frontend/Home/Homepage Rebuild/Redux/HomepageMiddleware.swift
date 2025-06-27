@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import ToolbarKit
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
@@ -54,7 +55,11 @@ final class HomepageMiddleware: FeatureFlaggable {
             }
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
+            ToolbarActionType.cancelEdit:
+            self.dispatchSearchBarConfigurationAction(action: action)
+
+        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
             self.dispatchSearchBarConfigurationAction(action: action)
 
         default:
