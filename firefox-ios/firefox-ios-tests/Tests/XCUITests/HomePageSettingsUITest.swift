@@ -252,38 +252,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
 
-<<<<<<< HEAD
-=======
-    // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.openURL(path(forTestPage: exampleUrl))
-        waitUntilPageLoad()
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
-                app.otherElements
-                    .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
-                    .staticTexts[urlExampleLabel]]
-        )
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
-        // Tab tray is open with recently open tab
-        mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
-        app.buttons["Done"].waitAndTap()
-        // Validation for when Jump In section is not displayed
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        app.tables.cells.switches["Jump Back In"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
-    }
-
->>>>>>> 0599032ea (Fixes [MTE-4717] - for history and new tab settings tests on iPad (#27608))
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
     func testRecentlySaved_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
