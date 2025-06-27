@@ -138,7 +138,7 @@ workflows:
         - scheme: Fennec
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "OTHER_SWIFT_FLAGS=-Xfrontend -enable-upcoming-feature -Xfrontend RegionBasedIsolation"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
         title: Override xctestrun file to UnitTests
