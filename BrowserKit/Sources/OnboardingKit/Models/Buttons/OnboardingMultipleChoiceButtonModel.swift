@@ -6,9 +6,9 @@ import Foundation
 import UIKit
 
 public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType> {
-    let title: String
-    let action: OnboardingMultipleChoiceActionType
-    var imageID: String
+    public let title: String
+    public let action: OnboardingMultipleChoiceActionType
+    public var imageID: String
 
     var image: UIImage? {
         if let image = UIImage(named: imageID, in: Bundle.main, compatibleWith: nil) {
