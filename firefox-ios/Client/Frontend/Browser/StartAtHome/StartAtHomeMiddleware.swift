@@ -23,8 +23,19 @@ final class StartAtHomeMiddleware {
     }
 
     lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
-        // TODO: FXIOS-12557 We have to spin this up into a task because we don't have a main actor isolated store
-        Task { @MainActor in
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want
+        // to also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            self.logger.log(
+                "Tab Manager Middleware is not being called from the main thread!",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
+
+        MainActor.assumeIsolated {
             switch action.actionType {
             case StartAtHomeActionType.didBrowserBecomeActive:
                 let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
