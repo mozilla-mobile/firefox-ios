@@ -2693,6 +2693,7 @@ class BrowserViewController: UIViewController,
             store.dispatchLegacy(action)
             addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
+            willNavigateAway(from: tabManager.selectedTab)
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }
     }
