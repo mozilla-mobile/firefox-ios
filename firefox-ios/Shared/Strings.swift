@@ -1011,7 +1011,7 @@ extension String {
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
-                value: "%d min",
+                value: "min: %d",
                 comment: "On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes")
             public static let Sponsored = MZLocalizedString(
                 key: "FirefoxHomepage.Stories.Sponsored.v140",
