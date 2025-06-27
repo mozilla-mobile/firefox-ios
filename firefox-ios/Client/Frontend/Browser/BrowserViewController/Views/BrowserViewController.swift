@@ -1130,6 +1130,7 @@ class BrowserViewController: UIViewController,
         )
     }
 
+    // TODO: FXIOS-12632 Refactor how we determine when to hide / show toolbar
     /// If we are showing the homepage search bar, then we should hide the address toolbar
     private func shouldHideToolbar() -> Bool {
         let shouldShowSearchBar = store.state.screenState(
@@ -2621,6 +2622,11 @@ class BrowserViewController: UIViewController,
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
+            store.dispatchLegacy(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.enteredZeroSearchScreen)
+            )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
             configureZeroSearchView()
         }
