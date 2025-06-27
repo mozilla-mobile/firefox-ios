@@ -897,7 +897,7 @@ struct AddressBarState: StateType, Equatable {
 
         return actions
     }
-    
+
     private static func leadingPageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
