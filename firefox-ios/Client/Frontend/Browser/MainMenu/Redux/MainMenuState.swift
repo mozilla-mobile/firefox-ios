@@ -148,6 +148,10 @@ struct MainMenuState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
+        return handleReducer(state: state, action: action)
+    }
+
+    private static func handleReducer(state: MainMenuState, action: Action) -> MainMenuState {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
             return defaultState(from: state)
