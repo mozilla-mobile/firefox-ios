@@ -673,8 +673,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showPrintSheet() {
         if let webView = browserViewController.tabManager.selectedTab?.webView {
+            let printInfo = UIPrintInfo(dictionary: nil)
+            printInfo.outputType = .general
+            printInfo.jobName = webView.title ?? "PDF"
             let printController = UIPrintInteractionController.shared
             printController.printFormatter = webView.viewPrintFormatter()
+            printController.printInfo = printInfo
             printController.present(animated: true, completionHandler: nil)
         }
     }
