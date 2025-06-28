@@ -61,6 +61,10 @@ protocol JSAlertInfo {
     func handleAlertDismissal(_ result: Any?)
 }
 
+protocol JavaScriptAlertProtocol {
+    static var alertType: String { get }
+}
+
 struct MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
@@ -176,6 +180,19 @@ struct TextInputAlert: JSAlertInfo {
             logger.log("Text input alert dismissed with no input.", level: .info, category: .webview)
         }
     }
+}
+
+// MARK: - Alert Type Extensions
+extension MessageAlert: JavaScriptAlertProtocol {
+    static var alertType: String { "alert" }
+}
+
+extension ConfirmPanelAlert: JavaScriptAlertProtocol {
+    static var alertType: String { "confirm" }
+}
+
+extension TextInputAlert: JavaScriptAlertProtocol {
+    static var alertType: String { "text input" }
 }
 
 /// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin

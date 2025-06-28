@@ -38,7 +38,7 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Click on a link on the pdf and check that the website is shown
-        app.links.element(boundBy: 0).tapOnApp()
+        app.webViews.links.element(boundBy: 0).tapOnApp()
         waitUntilPageLoad()
         let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
         if checkboxValidation.exists {

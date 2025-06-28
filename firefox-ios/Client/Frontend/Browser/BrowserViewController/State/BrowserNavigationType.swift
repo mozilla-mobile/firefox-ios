@@ -13,6 +13,7 @@ enum BrowserNavigationDestination: Equatable {
     case trackingProtectionSettings
     case tabTray(TabTrayPanelType)
     case bookmarksPanel
+    case zeroSearch
 
     // Webpage views
     case link

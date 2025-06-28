@@ -13,6 +13,8 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let largeIconSize: CGFloat = 48
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
+        static let cornerRadius: CGFloat = 16
+        static let backgroundAlpha: CGFloat = 0.8
     }
 
     // MARK: - UI Elements
@@ -39,6 +41,9 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         return model?.iconImage != nil && (model?.needsReAuth == nil || model?.needsReAuth == false)
     }
 
+    private var isFirstCell = false
+    private var isLastCell = false
+
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,15 +62,20 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
             iconImageView.layer.cornerRadius = 0
         }
         iconImageView.clipsToBounds = shouldConfigureImageView
+        configureCornerRadiusForCellPosition()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         iconImageView.image = nil
+        isFirstCell = false
+        isLastCell = false
     }
 
-    func configureCellWith(model: MenuElement, theme: Theme) {
+    func configureCellWith(model: MenuElement, theme: Theme, isFirstCell: Bool, isLastCell: Bool) {
         self.model = model
+        self.isFirstCell = isFirstCell
+        self.isLastCell = isLastCell
         titleLabel.text = model.title
         descriptionLabel.text = model.description
         contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
@@ -116,10 +126,22 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         iconImageView.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
     }
 
+    private func configureCornerRadiusForCellPosition() {
+        guard isFirstCell || isLastCell else { return }
+        self.clipsToBounds = true
+        layer.cornerRadius = UX.cornerRadius
+        layer.maskedCorners = {
+            var corners: CACornerMask = []
+            if isFirstCell { corners.formUnion([.layerMinXMinYCorner, .layerMaxXMinYCorner]) }
+            if isLastCell { corners.formUnion([.layerMinXMaxYCorner, .layerMaxXMaxYCorner]) }
+            return corners
+        }()
+    }
+
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         guard let model else { return }
-        backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
         if let needsReAuth = model.needsReAuth, needsReAuth {
             descriptionLabel.textColor = theme.colors.textCritical
         } else if model.iconImage != nil {

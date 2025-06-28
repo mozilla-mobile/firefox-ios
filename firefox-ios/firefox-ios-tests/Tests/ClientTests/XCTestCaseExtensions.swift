@@ -11,7 +11,7 @@ extension XCTestCase {
         XCTWaiter().wait(for: [expectation], timeout: timeout)
     }
 
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(
                 instance,
@@ -28,7 +28,7 @@ extension XCTestCase {
     ///
     /// it has to be done always in two steps, this method make it one line for users.
     func unwrapAsync<T>(asyncMethod: () async throws -> T?,
-                        file: StaticString = #file,
+                        file: StaticString = #filePath,
                         line: UInt = #line) async throws -> T {
         let returnValue = try await asyncMethod()
         return try XCTUnwrap(returnValue, file: file, line: line)

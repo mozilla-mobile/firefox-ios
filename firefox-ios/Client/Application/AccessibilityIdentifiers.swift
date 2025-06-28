@@ -274,6 +274,10 @@ struct AccessibilityIdentifiers {
         }
     }
 
+    struct ZeroSearch {
+        static let dimmingView = "ZeroSearch.dimmingView"
+    }
+
     struct TabTray {
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"

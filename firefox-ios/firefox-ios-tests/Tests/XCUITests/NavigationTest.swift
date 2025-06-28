@@ -136,13 +136,33 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441494
-    func testTapSignInShowsFxAFromRemoteTabPanel() {
+    func testTapSignInShowsFxAFromRemoteTabPanel_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
+
+        app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.navigationBars["Sync and Save Data"],
+                app.buttons["Use Email Instead"]
+            ]
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2441494
+    func testTapSignInShowsFxAFromRemoteTabPanel_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
+        // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
+        navigator.goto(TabTray)
+        navigator.performAction(Action.ToggleExperimentSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
         waitForElementsToExist(
@@ -205,10 +225,29 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441497
-    func testCopyLinkPrivateMode() {
+    func testCopyLinkPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        longPressLinkOptions(optionSelected: "Copy Link")
+        navigator.goto(NewTabScreen)
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+
+        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        app.buttons["Go"].waitAndTap()
+        waitUntilPageLoad()
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2441497
+    func testCopyLinkPrivateMode_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
@@ -343,7 +382,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441500
-    func testShareLinkPrivateMode() {
+    func testShareLinkPrivateMode_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -545,7 +585,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441772
-    func testOpenInNewTab() {
+    func testOpenInNewTab_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Long-tap on an article link. Choose "Open in New Tab".
         openContextMenuForArticleLink()
@@ -558,8 +599,24 @@ class NavigationTest: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2441772
+    func testOpenInNewTab_tabTrayExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+        // Long-tap on an article link. Choose "Open in New Tab".
+        openContextMenuForArticleLink()
+        app.buttons["Open in New Tab"].waitAndTap()
+        // A new tab loading the article page should open
+        navigator.goto(TabTray)
+        mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
+        let numTabs = app.otherElements[tabsTray].cells.count
+        XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
+        mozWaitForElementToExist(app.otherElements[tabsTray].cells.elementContainingText("Example Domain."))
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441773
-    func testOpenInNewPrivateTab() {
+    func testOpenInNewPrivateTab_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Long-tap on an article link. Choose "Open in New Private Tab".
         openContextMenuForArticleLink()
@@ -627,7 +684,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
-    func testOpenExternalLink() {
+    func testOpenExternalLink_tabTrayExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)

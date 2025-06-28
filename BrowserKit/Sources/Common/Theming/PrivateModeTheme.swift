@@ -45,6 +45,8 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
         FXColors.Ink90.withAlphaComponent(0),
         FXColors.Ink90.withAlphaComponent(1)
     ])
+    var layerSurfaceLow = UIColor(rgb: 0x342B4A)
+    var layerSurfaceMedium = UIColor(rgb: 0x24183A)
 
     // MARK: - Ratings
     var layerRatingA: UIColor = FXColors.Green20

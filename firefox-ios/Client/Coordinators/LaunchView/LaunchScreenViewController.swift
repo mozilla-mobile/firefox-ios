@@ -48,7 +48,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
         Task {
             try await delayStart()
-            await startLoading()
+            startLoading()
         }
     }
 
@@ -64,8 +64,8 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     }
 
     // MARK: - Loading
-    func startLoading() async {
-        await viewModel.startLoading()
+    func startLoading() {
+        viewModel.startLoading()
     }
 
     // MARK: - Setup

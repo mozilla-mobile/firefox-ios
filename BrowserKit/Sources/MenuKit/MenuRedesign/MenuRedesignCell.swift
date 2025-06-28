@@ -13,6 +13,8 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let largeIconSize: CGFloat = 48
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
+        static let cornerRadius: CGFloat = 16
+        static let backgroundAlpha: CGFloat = 0.8
     }
 
     // MARK: - UI Elements
@@ -32,6 +34,9 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var iconImageView: UIImageView = .build()
 
+    private var isFirstCell = false
+    private var isLastCell = false
+
     // MARK: - Properties
     var model: MenuElement?
 
@@ -45,13 +50,22 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        configureCornerRadiusForCellPosition()
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         iconImageView.image = nil
+        isFirstCell = false
+        isLastCell = false
     }
 
-    func configureCellWith(model: MenuElement, theme: Theme) {
+    func configureCellWith(model: MenuElement, theme: Theme, isFirstCell: Bool, isLastCell: Bool) {
         self.model = model
+        self.isFirstCell = isFirstCell
+        self.isLastCell = isLastCell
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
         self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
@@ -91,10 +105,22 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         iconImageView.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
     }
 
+    private func configureCornerRadiusForCellPosition() {
+        guard isFirstCell || isLastCell else { return }
+        self.clipsToBounds = true
+        layer.cornerRadius = UX.cornerRadius
+        layer.maskedCorners = {
+            var corners: CACornerMask = []
+            if isFirstCell { corners.formUnion([.layerMinXMinYCorner, .layerMaxXMinYCorner]) }
+            if isLastCell { corners.formUnion([.layerMinXMaxYCorner, .layerMaxXMaxYCorner]) }
+            return corners
+        }()
+    }
+
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         guard let model else { return }
-        backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             descriptionLabel.textColor = theme.colors.textSecondary

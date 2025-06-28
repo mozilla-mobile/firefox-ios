@@ -105,7 +105,7 @@ class SurveySurfaceManagerTests: XCTestCase {
 
 // MARK: - Helpers
 extension SurveySurfaceManagerTests {
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line
     ) -> SurveySurfaceManager {
         let subject = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)

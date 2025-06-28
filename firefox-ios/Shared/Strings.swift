@@ -1572,7 +1572,7 @@ extension String {
                     value: "Bottom",
                     comment: "On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen.")
                 public static let ContinueAction = MZLocalizedString(
-                    key: "Onboarding.Modern.Customization.Theme.Continue.Action.v123",
+                    key: "Onboarding.Modern.Customization.Theme.Continue.Action.v140",
                     tableName: "Onboarding",
                     value: "Continue",
                     comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
@@ -4336,6 +4336,26 @@ extension String {
                 tableName: "MainMenu",
                 value: "Connection is not secure",
                 comment: "On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure.")
+        }
+
+        public struct HeaderBanner {
+            public static let Title = MZLocalizedString(
+                key: "MainMenu.HeaderBanner.Title.v142",
+                tableName: "MainMenu",
+                value: "Make %@ your default",
+                comment: "On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name")
+            public static let Subtitle = MZLocalizedString(
+                key: "MainMenu.HeaderBanner.Subtitle.v142",
+                tableName: "MainMenu",
+                value: "Takes seconds. Change anytime.",
+                comment: "On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser.")
+            public struct AccessibilityLabels {
+                public static let CloseButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.CloseButton.v142",
+                    tableName: "MainMenu",
+                    value: "Close",
+                    comment: "The accessibility label for the close button of the header menu banner.")
+            }
         }
 
         public struct Account {

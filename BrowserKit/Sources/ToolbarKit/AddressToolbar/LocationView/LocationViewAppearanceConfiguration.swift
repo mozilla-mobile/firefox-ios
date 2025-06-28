@@ -15,7 +15,7 @@ struct LocationViewAppearanceConfiguration {
     static func getAppearanceForVersion(theme: Theme) -> Self {
         let colors = theme.colors
         return Self(
-            backgroundColor: colors.layer2,
+            backgroundColor: colors.layerSurfaceMedium,
             placeholderColor: colors.textPrimary,
             etpIconImageColor: colors.textSecondary,
             etpIconTintColor: colors.textSecondary,

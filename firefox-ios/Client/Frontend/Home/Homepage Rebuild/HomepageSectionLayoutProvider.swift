@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
-final class HomepageSectionLayoutProvider {
+final class HomepageSectionLayoutProvider: FeatureFlaggable {
     struct UX {
         static let standardInset: CGFloat = 16
         static let standardSpacing: CGFloat = 16
@@ -41,6 +41,9 @@ final class HomepageSectionLayoutProvider {
             static let fractionalWidthiPhonePortrait: CGFloat = 0.90
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.46
             static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
+
+            // Redesigned stories constants
+            static let redesignNumberOfItemsInColumn = 1
 
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
@@ -93,6 +96,9 @@ final class HomepageSectionLayoutProvider {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
+    private var isStoriesRedesignEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+    }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -179,7 +185,9 @@ final class HomepageSectionLayoutProvider {
             heightDimension: .estimated(UX.PocketConstants.cellHeight)
         )
 
-        let subItems = Array(repeating: item, count: UX.PocketConstants.numberOfItemsInColumn)
+        let numberOfItemsInColumn = isStoriesRedesignEnabled ? UX.PocketConstants.redesignNumberOfItemsInColumn
+                                                             : UX.PocketConstants.numberOfItemsInColumn
+        let subItems = Array(repeating: item, count: numberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
         group.interItemSpacing = UX.PocketConstants.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(

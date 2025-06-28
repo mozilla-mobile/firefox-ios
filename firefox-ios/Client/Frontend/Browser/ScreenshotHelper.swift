@@ -109,8 +109,10 @@ class ScreenshotHelper {
             if UIWindow.isPortrait && !isIpad {
                 configuration.rect = screenshotBounds
             }
+            webView.setPullRefreshVisibility(isVisible: false)
 
             webView.takeSnapshot(with: configuration) { image, error in
+                webView.setPullRefreshVisibility(isVisible: true)
                 if let image {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)

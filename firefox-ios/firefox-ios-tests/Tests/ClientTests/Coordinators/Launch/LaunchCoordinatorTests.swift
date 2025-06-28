@@ -232,7 +232,7 @@ final class LaunchCoordinatorTests: XCTestCase {
 
     // MARK: - Helpers
     private func createSubject(isIphone: Bool,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> LaunchCoordinator {
         let subject = LaunchCoordinator(
             router: mockRouter,

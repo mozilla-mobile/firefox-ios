@@ -171,7 +171,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         let colors = theme.colors
 
         let isToolbarRefactorEnabled = toolbarHelper.isToolbarRefactorEnabled
-        let color: UIColor = isToolbarRefactorEnabled ? colors.layer3 : colors.layer1
+        let color: UIColor = isToolbarRefactorEnabled ? colors.layerSurfaceLow : colors.layer1
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
 
         backgroundColor = color.withAlphaComponent(backgroundAlpha)

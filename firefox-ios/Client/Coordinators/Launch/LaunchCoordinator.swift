@@ -244,11 +244,21 @@ final class LaunchCoordinator: BaseCoordinator,
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let onboardingCards = onboardingModel.cards.filter { viewModel in
+            // Filter out cards that are not relevant for the current device type.
+            if isPad, let action = viewModel.multipleChoiceButtons.first?.action,
+               action == .toolbarTop || action == .toolbarBottom {
+                return false
+            }
+            return true
+        }
+
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: OnboardingFlowViewModel(
-                onboardingCards: onboardingModel.cards,
+                onboardingCards: onboardingCards,
                 onActionTap: { [weak self] action, cardName, completion in
                     guard let self = self else { return }
                     onboardingService.handleAction(
@@ -269,22 +279,10 @@ final class LaunchCoordinator: BaseCoordinator,
                 }
             )
         )
+
         let hostingController = UIHostingController(rootView: view)
-        if isFullScreen {
-            hostingController.modalPresentationStyle = .fullScreen
-            router.present(hostingController, animated: false)
-        } else {
-            hostingController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.IntroViewController.width,
-                height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            hostingController.modalPresentationStyle = .formSheet
-
-            if !onboardingModel.isDismissable {
-                hostingController.isModalInPresentation = true
-            }
-
-            router.present(hostingController, animated: true) {}
-        }
+        hostingController.modalPresentationStyle = .fullScreen
+        router.present(hostingController, animated: false)
     }
 
     // MARK: - Intro

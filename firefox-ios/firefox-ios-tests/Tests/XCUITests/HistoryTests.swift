@@ -713,7 +713,11 @@ class HistoryTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.staticTexts[webpage["label"]!])
-        app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+        if iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+        }
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)

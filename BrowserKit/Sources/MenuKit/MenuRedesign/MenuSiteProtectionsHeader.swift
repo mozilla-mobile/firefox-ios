@@ -19,8 +19,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         static let siteProtectionsContentHorizontalPadding: CGFloat = 10
         static let siteProtectionsContentVerticalPadding: CGFloat = 6
         static let siteProtectionsIcon: CGFloat = 16
+        static let protectionIconMargin: CGFloat = 2
         static let siteProtectionsMoreSettingsIcon: CGFloat = 20
         static let siteProtectionsContentSpacing: CGFloat = 4
+        static let closeButtonBackgroundAlpha: CGFloat = 0.8
     }
 
     public var closeButtonCallback: (() -> Void)?
@@ -126,7 +128,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
             siteProtectionsContent.topAnchor.constraint(equalTo: contentLabels.bottomAnchor,
                                                         constant: UX.siteProtectionsContentTopMargin),
-            siteProtectionsContent.leadingAnchor.constraint(equalTo: favicon.trailingAnchor),
+            siteProtectionsContent.leadingAnchor.constraint(
+                equalTo: favicon.trailingAnchor,
+                constant: UX.horizontalContentMargin - UX.siteProtectionsContentHorizontalPadding - UX.protectionIconMargin
+            ),
             siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
@@ -165,7 +170,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
-        closeButton.backgroundColor = theme.colors.layer2
+        closeButton.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.closeButtonBackgroundAlpha)
         siteProtectionsLabel.textColor = theme.colors.textSecondary
         siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
         siteProtectionsIcon.tintColor = theme.colors.iconSecondary

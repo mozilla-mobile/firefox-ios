@@ -104,7 +104,7 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = isTranslucent ? .clear : theme.colors.layer3
+        backgroundColor = isTranslucent ? .clear : theme.colors.layerSurfaceLow
         toolbarBorderView.backgroundColor = theme.colors.borderPrimary
 
         actionStack.arrangedSubviews.forEach { element in

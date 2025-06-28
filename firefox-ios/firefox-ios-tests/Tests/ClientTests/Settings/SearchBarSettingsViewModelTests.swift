@@ -141,7 +141,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
 // MARK: - Helper methods
 private extension SearchBarSettingsViewModelTests {
-    func createViewModel(file: StaticString = #file,
+    func createViewModel(file: StaticString = #filePath,
                          line: UInt = #line) -> SearchBarSettingsViewModel {
         let viewModel = SearchBarSettingsViewModel(prefs: prefs, notificationCenter: mockNotificationCenter)
         trackForMemoryLeaks(viewModel, file: file, line: line)

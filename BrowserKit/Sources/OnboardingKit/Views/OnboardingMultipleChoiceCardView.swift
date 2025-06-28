@@ -46,31 +46,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
             let scale = min(widthScale, heightScale)
 
             ScrollView {
-                VStack {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
-                        titleView
-                        Spacer()
-                        OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
-                            selection: $selectedAction,
-                            items: viewModel.multipleChoiceButtons,
-                            windowUUID: windowUUID,
-                            themeManager: themeManager
-                        )
-                        .onChange(of: selectedAction) { newAction in
-                            onMultipleChoiceAction(newAction, viewModel.name)
-                        }
-                        Spacer()
-                        primaryButton
-                    }
-                    .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                    .padding(UX.CardView.verticalPadding * scale)
-                    .background(
-                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                            .fill(cardBackgroundColor)
-                    )
-                    .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-                }
+                scrollViewContent(geometry: geometry)
             }
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -82,6 +58,39 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
         }
     }
 
+    private func scrollViewContent(geometry: GeometryProxy) -> some View {
+        // Determine scale factor based on current size vs base metrics
+        let widthScale = geometry.size.width / UX.CardView.baseWidth
+        let heightScale = geometry.size.height / UX.CardView.baseHeight
+        let scale = min(widthScale, heightScale)
+
+        return VStack {
+            VStack(spacing: UX.CardView.spacing * scale) {
+                Spacer()
+                titleView
+                Spacer()
+                OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
+                    selection: $selectedAction,
+                    items: viewModel.multipleChoiceButtons,
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
+                )
+                .onChange(of: selectedAction) { newAction in
+                    onMultipleChoiceAction(newAction, viewModel.name)
+                }
+                Spacer()
+                primaryButton
+            }
+            .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+            .padding(UX.CardView.verticalPadding * scale)
+            .background(
+                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                    .fill(cardBackgroundColor)
+            )
+            .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+        }
+    }
+
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
@@ -90,6 +99,7 @@ public struct OnboardingMultipleChoiceCardView<VM: OnboardingCardInfoModelProtoc
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     var primaryButton: some View {

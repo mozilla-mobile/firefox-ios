@@ -73,7 +73,7 @@ private extension DefaultBrowserOnboardingTests {
         UserDefaults.standard.set(didShowOnboarding, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
     }
 
-    func verify(expectedShouldShow: Bool, file: StaticString = #file, line: UInt = #line) {
+    func verify(expectedShouldShow: Bool, file: StaticString = #filePath, line: UInt = #line) {
         let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: prefs)
         XCTAssertEqual(shouldShow, expectedShouldShow, file: file, line: line)
     }

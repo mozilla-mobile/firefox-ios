@@ -22,6 +22,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() {
         super.setUp()
+        setIsSwipingTabsEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -169,6 +170,15 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.didSelectedTabChangeToHomepage)
     }
 
+    func testViewDidLoad_addsHomepage_whenSwipingTabsEnabled() {
+        let subject = createSubject()
+        setIsSwipingTabsEnabled(true)
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
+    }
+
     // MARK: - Handle PDF
 
     func testHandlePDFDownloadRequest_doesntDocumentLoadingView_whenTabNotSelected() {
@@ -219,6 +229,98 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, StartAtHomeActionType.didBrowserBecomeActive)
     }
 
+    // MARK: - Zero Search State
+
+    func test_tapOnHomepageSearchBarAction_withBVCState_triggersGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.zeroSearch),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
+            )
+        )
+        subject.newState(state: newState)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.last(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.enteredZeroSearchScreen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_didTapButtonToolbarAction_withHomepageSearch_andSearchButtonType_triggersGeneralBrowserAction() throws {
+        setupStoreForSearchBar()
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            ToolbarMiddlewareAction(
+                buttonType: .search,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            )
+        )
+        subject.newState(state: newState)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: { $0 is GeneralBrowserAction }) as? GeneralBrowserAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.enteredZeroSearchScreen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_didTapButtonToolbarAction_withHomepageSearch_andNoSearchButtonType_triggersGeneralBrowserAction() {
+        setupStoreForSearchBar()
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            ToolbarMiddlewareAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            )
+        )
+        subject.newState(state: newState)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_didTapButtonToolbarAction_withoutHomepageSearch_andSearchButtonType_doesNotTriggersGeneralBrowserAction() {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            ToolbarMiddlewareAction(
+                buttonType: .search,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            )
+        )
+        subject.newState(state: newState)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_didTapButtonToolbarAction_withoutHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            ToolbarMiddlewareAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            )
+        )
+        subject.newState(state: newState)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
@@ -226,6 +328,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
+        subject.browserDelegate = browserCoordinator
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -240,6 +343,48 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         FxNimbus.shared.features.homepageRebuildFeature.with { _, _ in
             return HomepageRebuildFeature(enabled: isEnabled)
         }
+    }
+
+    private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(swipingTabs: isEnabled)
+        }
+    }
+
+    /// We need to set up the state for the homepage search bar in order to test method that relies on this state.
+    func setupStoreForSearchBar() {
+        let initialHomepageState = HomepageState
+            .reducer(
+                HomepageState(windowUUID: .XCTestDefaultUUID),
+                HomepageAction(
+                    windowUUID: .XCTestDefaultUUID,
+                    actionType: HomepageActionType.initialize
+                )
+            )
+        let newHomepageState = HomepageState
+            .reducer(
+                initialHomepageState,
+                HomepageAction(
+                    isSearchBarEnabled: true,
+                    windowUUID: .XCTestDefaultUUID,
+                    actionType: HomepageMiddlewareActionType.configuredSearchBar
+                )
+            )
+        mockStore = MockStoreForMiddleware(state: AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: .XCTestDefaultUUID
+                        )
+                    ),
+                    .homepage(
+                        newHomepageState
+                    )
+                ]
+            )
+        ))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
     // MARK: StoreTestUtility

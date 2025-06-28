@@ -96,20 +96,4 @@ class PocketTests: BaseTestCase {
             ]
         )
     }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2855361
-    func testValidateLearnMoreButton() {
-        navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
-        // Learn more link is displayed under the stories
-        app.swipeUp()
-        let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
-        let learnMoreLink = app.collectionViews[collectionView].staticTexts["Learn more"]
-        let pocketTitle = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
-        let addressBar = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-        mozWaitForElementToExist(learnMoreLink)
-        XCTAssertTrue(learnMoreLink.isBelow(element: app.staticTexts[pocketTitle]))
-        learnMoreLink.waitAndTap()
-        mozWaitForValueContains(app.textFields[addressBar], value: "mozilla.org")
-    }
 }

@@ -1,0 +1,58 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - ShareSheet
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+# Share sheet specific metrics
+share_sheet:
+  shared_to:
+    type: event
+    description: |
+      Event to record that the user has shared content via the ShareManager.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23704
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23786
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    extra_keys:
+      activity_identifier:
+        type: string
+        description: |
+          The activity identifier indicating to where the user shared content.
+      share_type:
+        type: string
+        description: |
+          The type of content shared. Either a file, website, or tab.
+      has_share_message:
+        type: boolean
+        description: |
+          Whether an explicit share message (and optional subject line) was 
+          appended to the shared content.
+      is_enrolled_in_sent_from_firefox:
+        type: boolean
+        description: |
+          Whether the user is enrolled in the Sent from Firefox experiment.
+      is_opted_in_sent_from_firefox:
+        type: boolean
+        description: |
+          Whether the user is opted in to the Sent from Firefox experiment.
+          Only returns true if the user is both enrolled and opted in.

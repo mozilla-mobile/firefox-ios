@@ -98,7 +98,7 @@ final class WKContentScriptManagerTests: XCTestCase {
 
     // MARK: Helper
 
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) -> DefaultContentScriptManager {
         let subject = DefaultContentScriptManager()
         trackForMemoryLeaks(subject, file: file, line: line)

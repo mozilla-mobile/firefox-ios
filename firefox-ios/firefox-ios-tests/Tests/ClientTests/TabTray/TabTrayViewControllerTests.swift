@@ -122,7 +122,7 @@ final class TabTrayViewControllerTests: XCTestCase {
 
     // MARK: - Private
     private func createSubject(selectedSegment: TabTrayPanelType = .tabs,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> TabTrayViewController {
         let subject = TabTrayViewController(panelType: selectedSegment, windowUUID: .XCTestDefaultUUID)
         subject.delegate = delegate

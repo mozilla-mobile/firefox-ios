@@ -117,6 +117,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var readabilityResult: ReadabilityResult?
 
     var consecutiveCrashes: UInt = 0
+    let jsAlertThrottler = JSAlertThrottler()
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
@@ -1331,6 +1332,10 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
         pullRefresh?.stopObservingContentScroll()
         pullRefresh?.removeFromSuperview()
         pullRefresh = nil
+    }
+
+    func setPullRefreshVisibility(isVisible: Bool) {
+        pullRefresh?.isHidden = !isVisible
     }
 
     // MARK: - ThemeApplicable

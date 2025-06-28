@@ -91,7 +91,7 @@ class IntroViewControllerTests: XCTestCase {
     // MARK: - Private Helpers
     func createSubject(
         withCustomPrimaryActions: [OnboardingActions] = [.setDefaultBrowser, .syncSignIn, .requestNotifications],
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> IntroViewController {
         NimbusOnboardingTestingConfigUtility().setupNimbusWith(

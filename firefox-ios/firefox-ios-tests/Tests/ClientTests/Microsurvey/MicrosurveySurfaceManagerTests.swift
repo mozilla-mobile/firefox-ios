@@ -93,7 +93,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
     }
 
     private func createSubject(
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> MicrosurveySurfaceManager {
         let subject = MicrosurveySurfaceManager(messagingManager: messageManager)

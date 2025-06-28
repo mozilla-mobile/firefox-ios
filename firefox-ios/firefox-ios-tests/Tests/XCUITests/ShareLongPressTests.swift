@@ -162,13 +162,12 @@ class ShareLongPressTests: BaseTestCase {
     private func longPressLinkAndSelectShareOption(option: String) {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
-        app.links.element(boundBy: 0).press(forDuration: 1.5)
+        app.webViews["contentView"].links.element(boundBy: 0).press(forDuration: 1.5)
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Share Link"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
             app.collectionViews.cells[option].waitAndTap()
-            app.collectionViews.cells[option].tapIfExists()
         } else {
             app.buttons[option].waitAndTap()
         }

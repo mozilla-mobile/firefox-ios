@@ -5,17 +5,28 @@
 import Common
 import Shared
 
-import class MozillaAppServices.MZKeychainWrapper
 import enum MozillaAppServices.AutofillApiError
-import enum MozillaAppServices.MZKeychainItemAccessibility
 import func MozillaAppServices.checkCanary
 import func MozillaAppServices.createCanary
 import func MozillaAppServices.createKey
+import func MozillaAppServices.decryptString
 
 public enum LoginEncryptionKeyError: Error {
     case noKeyCreated
     case illegalState
     case dbRecordCountVerificationError(String)
+}
+
+public extension AutofillApiError {
+    var descriptionValue: String {
+        switch self {
+        case .SqlError: return "SqlError"
+        case .CryptoError: return "CryptoError"
+        case .NoSuchRecord: return "NoSuchRecord"
+        case .UnexpectedAutofillApiError: return "UnexpectedAutofillApiError"
+        case .InterruptedError: return "InterruptedError"
+        }
+    }
 }
 
 /// Running tests on Bitrise code that reads/writes to keychain silently fails.
@@ -26,12 +37,6 @@ public class KeychainManager {
         AppConstants.isRunningTest
             ? MockRustKeychain.shared
             : RustKeychain.sharedClientAppContainerKeychain
-    }()
-
-    public static let legacyShared = {
-        AppConstants.isRunningTest
-            ? MockMZKeychainWrapper.shared
-            : MZKeychainWrapper.sharedClientAppContainerKeychain
     }()
 }
 
@@ -210,6 +215,35 @@ open class RustKeychain {
              addOrUpdateKeychainKey(canaryValue, key: canaryIdentifier)
          }
          return keyValue
+    }
+
+    func decryptCreditCardNum(encryptedCCNum: String) -> String? {
+        var keyValue: String?
+        (keyValue, _) = getCreditCardKeyData()
+
+        guard let key = keyValue else { return nil }
+
+        do {
+            return try decryptString(key: key, ciphertext: encryptedCCNum)
+        } catch let err as NSError {
+            if let autofillStoreError = err as? AutofillApiError {
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while decrypting credit card")
+            } else {
+                logger.log("Unknown error while decrypting credit card",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
+            }
+            return nil
+        }
+    }
+
+    func checkCanary(canary: String,
+                     text: String,
+                     key: String) throws -> Bool {
+        return try decryptString(key: key, ciphertext: canary) == text
     }
 
     private class func deleteKeychainSecClass(_ secClass: AnyObject) {

@@ -102,7 +102,7 @@ class OnboardingButtonActionTests: XCTestCase {
     func setSubjectUpWith(
         firstAction: OnboardingActions,
         twoButtons: Bool = true,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> OnboardingBasicCardViewController {
         var buttons: OnboardingButtons

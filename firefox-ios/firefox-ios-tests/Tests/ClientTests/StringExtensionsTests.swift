@@ -23,7 +23,7 @@ class StringExtensionsTests: XCTestCase {
     }
 
     func testPercentEscaping() {
-        func roundtripTest(_ input: String, _ expected: String, file: StaticString = #file, line: UInt = #line) {
+        func roundtripTest(_ input: String, _ expected: String, file: StaticString = #filePath, line: UInt = #line) {
             let observed = input.escape()!
             XCTAssertEqual(observed, expected, "input is \(input)", file: file, line: line)
             let roundtrip = observed.unescape()
@@ -89,7 +89,7 @@ class StringExtensionsTests: XCTestCase {
     // Helper method
     func getResultFrom(inputString: String,
                        andRegex pattern: String,
-                       file: StaticString = #file,
+                       file: StaticString = #filePath,
                        line: UInt = #line) throws -> String {
         try XCTUnwrap(inputString.match(pattern), "Failed to extract the matching group.")
     }

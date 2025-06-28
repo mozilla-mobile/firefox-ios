@@ -137,7 +137,7 @@ final class SceneCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> SceneCoordinator {
         let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let subject = SceneCoordinator(scene: scene!)

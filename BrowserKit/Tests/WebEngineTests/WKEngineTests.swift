@@ -65,7 +65,7 @@ final class WKEngineTests: XCTestCase {
 
     // MARK: Helper
 
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) async -> WKEngine {
         let configProvider = await MockWKEngineConfigurationProvider()
         let subject = await WKEngine(userScriptManager: userScriptManager,

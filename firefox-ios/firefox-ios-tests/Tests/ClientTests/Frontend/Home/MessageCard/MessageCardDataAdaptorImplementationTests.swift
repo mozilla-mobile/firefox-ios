@@ -52,7 +52,7 @@ extension MessageCardDataAdaptorImplementationTests: MessageCardDelegate {
 
 // MARK: - Helpers
 extension MessageCardDataAdaptorImplementationTests {
-    func createSubject(file: StaticString = #file,
+    func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) -> MessageCardDataAdaptorImplementation {
         let subject = MessageCardDataAdaptorImplementation(messagingManager: messageManager)
         trackForMemoryLeaks(subject, file: file, line: line)

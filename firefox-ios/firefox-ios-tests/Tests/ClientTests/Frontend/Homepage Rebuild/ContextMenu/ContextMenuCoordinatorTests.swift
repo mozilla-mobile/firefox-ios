@@ -48,7 +48,7 @@ final class ContextMenuCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
-    private func createSubject(file: StaticString = #file,
+    private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> ContextMenuCoordinator {
         let configuration = ContextMenuConfiguration(homepageSection: .header, toastContainer: UIView())
         let subject = ContextMenuCoordinator(

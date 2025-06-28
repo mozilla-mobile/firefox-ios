@@ -123,38 +123,11 @@ struct PrivacyPolicyView: View {
                 WebView(url: url, viewModel: viewModel)
 
                 if viewModel.state == .loading {
-                    VStack {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .padding()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.white.opacity(0.8))
+                    loadingContent
                 }
 
                 if viewModel.state == .error {
-                    VStack {
-                        Image(systemName: "wifi.slash")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.gray)
-                            .padding()
-
-                        Text(errorMessage)
-                            .font(.headline)
-                            .multilineTextAlignment(.center)
-                            .padding()
-
-                        Button(action: {
-                            viewModel.reload()
-                        }) {
-                            Text(retryButtonText)
-                        }
-                        .buttonStyle(PrimaryButtonStyle())
-                        .padding(Constants.buttonPadding)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.white.opacity(0.8))
+                    errorContent
                 }
             }
             .navigationBarItems(trailing: Button(doneButtonText) {
@@ -162,5 +135,40 @@ struct PrivacyPolicyView: View {
             })
             .ignoresSafeArea(edges: [.bottom])
         }
+    }
+
+    var loadingContent: some View {
+        VStack {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+                .padding()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white.opacity(0.8))
+    }
+
+    var errorContent: some View {
+        VStack {
+            Image(systemName: "wifi.slash")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundColor(.gray)
+                .padding()
+            
+            Text(errorMessage)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .padding()
+            
+            Button(action: {
+                viewModel.reload()
+            }) {
+                Text(retryButtonText)
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .padding(Constants.buttonPadding)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white.opacity(0.8))
     }
 }

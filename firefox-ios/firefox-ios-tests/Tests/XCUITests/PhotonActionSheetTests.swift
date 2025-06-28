@@ -44,6 +44,8 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(cell)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306849
+    // Smoketest
     func testPinToShortcuts_testPinToShortcuts_topSitesVisualRefreshFlagEnabled() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
         app.launch()

@@ -1076,7 +1076,7 @@ extension XCTestCase {
     func testEventMetricRecordingSuccess<ExtraObject>(
         metric: EventMetricType<ExtraObject>,
         expectedCount: Int = 1,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) where ExtraObject: EventExtras {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on event metric \(metric)", file: file, line: line)
@@ -1090,7 +1090,7 @@ extension XCTestCase {
 
     func testCounterMetricRecordingSuccess(metric: CounterMetricType,
                                            value: Int32 = 1,
-                                           file: StaticString = #file,
+                                           file: StaticString = #filePath,
                                            line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on counter metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), value, file: file, line: line)
@@ -1102,7 +1102,7 @@ extension XCTestCase {
     }
 
     func testLabeledMetricSuccess(metric: LabeledMetricType<CounterMetricType>,
-                                  file: StaticString = #file,
+                                  file: StaticString = #filePath,
                                   line: UInt = #line) {
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidOverflow), 0, file: file, line: line)
@@ -1113,7 +1113,7 @@ extension XCTestCase {
     func testQuantityMetricSuccess(metric: QuantityMetricType,
                                    expectedValue: Int64,
                                    failureMessage: String,
-                                   file: StaticString = #file,
+                                   file: StaticString = #filePath,
                                    line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on quantity metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
@@ -1127,7 +1127,7 @@ extension XCTestCase {
     func testStringMetricSuccess(metric: StringMetricType,
                                  expectedValue: String,
                                  failureMessage: String,
-                                 file: StaticString = #file,
+                                 file: StaticString = #filePath,
                                  line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on string metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
@@ -1141,7 +1141,7 @@ extension XCTestCase {
     func testUrlMetricSuccess(metric: UrlMetricType,
                               expectedValue: String,
                               failureMessage: String,
-                              file: StaticString = #file,
+                              file: StaticString = #filePath,
                               line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on url metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
@@ -1155,7 +1155,7 @@ extension XCTestCase {
     func testUuidMetricSuccess(metric: UuidMetricType,
                                expectedValue: UUID,
                                failureMessage: String,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on uuid metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
@@ -1164,7 +1164,7 @@ extension XCTestCase {
     func testBoolMetricSuccess(metric: BooleanMetricType,
                                expectedValue: Bool,
                                failureMessage: String,
-                               file: StaticString = #file,
+                               file: StaticString = #filePath,
                                line: UInt = #line) {
         XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
