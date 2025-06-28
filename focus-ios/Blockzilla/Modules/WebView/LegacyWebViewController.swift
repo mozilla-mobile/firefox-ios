@@ -525,6 +525,60 @@ extension LegacyWebViewController: WKNavigationDelegate {
             return
         }
 
+        // Check for mobile configuration profile response
+        if responseMimeType == "application/x-apple-aspen-config" {
+            decisionHandler(.allow)
+            browserView.load(URLRequest(url: URL(string: "about:blank", invalidCharacters: false)!))
+
+            func presentConfigErrorAlert() {
+                let configErrorAlert = UIAlertController(title: UIConstants.strings.addConfigErrorAlertTitle, message: UIConstants.strings.addConfigErrorAlertMessage, preferredStyle: .alert)
+                let configErrorDismissAction = UIAlertAction(title: UIConstants.strings.addConfigErrorAlertDismiss, style: .default) { (UIAlertAction) in
+                    configErrorAlert.dismiss(animated: true, completion: nil)
+                }
+                configErrorAlert.addAction(configErrorDismissAction)
+                self.present(configErrorAlert, animated: true, completion: nil)
+            }
+
+            guard let responseURL = response.url else {
+                presentConfigErrorAlert()
+                return
+            }
+
+            guard let configData = try? Data(contentsOf: responseURL) else {
+                presentConfigErrorAlert()
+                return
+            }
+
+            // Create a temporary file to save the configuration data
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let tempFileURL = tempDirectory.appendingPathComponent("config.mobileconfig")
+
+            do {
+                try configData.write(to: tempFileURL)
+
+                // Open the configuration profile using the system
+                if UIApplication.shared.canOpenURL(tempFileURL) {
+                    UIApplication.shared.open(tempFileURL, options: [:]) { success in
+                        if !success {
+                            DispatchQueue.main.async {
+                                presentConfigErrorAlert()
+                            }
+                        }
+                        // Clean up temporary file
+                        try? FileManager.default.removeItem(at: tempFileURL)
+                    }
+                } else {
+                    presentConfigErrorAlert()
+                    // Clean up temporary file
+                    try? FileManager.default.removeItem(at: tempFileURL)
+                }
+            } catch {
+                presentConfigErrorAlert()
+            }
+
+            return
+        }
+
         decisionHandler(.allow)
     }
 
