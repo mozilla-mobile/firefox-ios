@@ -126,6 +126,44 @@ class ZoomPageManagerTests: XCTestCase {
         // When the tab is set we check if there is zoom level and set it
         XCTAssertEqual(zoomStore.findZoomLevelCalledCount, 1)
     }
+    
+    func testZoomLevelWhenTabIsNill_DefaultZoomLimit() {
+        let subject = createSubject()
+        
+        XCTAssertEqual(subject.getZoomLevel(), ZoomConstants.defaultZoomLimit)
+    }
+    
+    func testZoomLevelWhenTabIsNill_WhenZoomInIsCalledDefaultZoomLimit() {
+        let subject = createSubject()
+        
+        XCTAssertEqual(subject.zoomIn(), ZoomConstants.defaultZoomLimit)
+        XCTAssertEqual(zoomStore.findZoomLevelCalledCount, 0)
+    }
+    
+    func testZoomLevelWhenTabUrlIsNill_WhenZoomInIsCalledDefaultZoomLimit() {
+        let subject = createSubject()
+        let tab = Tab(profile: profile, windowUUID: windowUUID)
+        subject.tabDidGainFocus(tab)
+        
+        XCTAssertEqual(subject.zoomIn(), ZoomConstants.defaultZoomLimit)
+        XCTAssertEqual(zoomStore.findZoomLevelCalledCount, 0)
+    }
+    
+    func testZoomLevelWhenTabIsNill_WhenZoomOutIsCalledDefaultZoomLimit() {
+        let subject = createSubject()
+        
+        XCTAssertEqual(subject.zoomOut(), ZoomConstants.defaultZoomLimit)
+        XCTAssertEqual(zoomStore.findZoomLevelCalledCount, 0)
+    }
+    
+    func testZoomLevelWhenTabUrlIsNill_WhenZoomOutIsCalledDefaultZoomLimit() {
+        let subject = createSubject()
+        let tab = Tab(profile: profile, windowUUID: windowUUID)
+        subject.tabDidGainFocus(tab)
+        
+        XCTAssert(subject.zoomOut() == ZoomConstants.defaultZoomLimit)
+        XCTAssert(zoomStore.findZoomLevelCalledCount == 0)
+    }
 
     // MARK: - Private
     private func createSubject() -> ZoomPageManager {
