@@ -10,7 +10,6 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 16
         static let iconSize: CGFloat = 24
-        static let largeIconSize: CGFloat = 48
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
         static let cornerRadius: CGFloat = 16
@@ -25,11 +24,12 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.numberOfLines = 0
     }
 
     private var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
     }
 
     private var iconImageView: UIImageView = .build()
@@ -96,13 +96,6 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
             iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
             iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
-        adjustLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
-    }
-
-    private func adjustLayout(isAccessibilityCategory: Bool) {
-        let iconSize = isAccessibilityCategory ? UX.largeIconSize : UX.iconSize
-        iconImageView.widthAnchor.constraint(equalToConstant: iconSize).isActive = true
-        iconImageView.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
     }
 
     private func configureCornerRadiusForCellPosition() {

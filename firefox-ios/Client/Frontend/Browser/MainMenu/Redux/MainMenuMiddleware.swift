@@ -120,6 +120,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuDetailsActionType.tapDismissView:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
 
+        case MainMenuActionType.tapMoreOptions:
+            handleTapMoreOptions(action: action)
+
         default: break
         }
     }
@@ -247,6 +250,15 @@ final class MainMenuMiddleware: FeatureFlaggable {
                            subtitle: subtitle,
                            warningIcon: warningIcon,
                            iconURL: iconURL)
+    }
+
+    private func handleTapMoreOptions(action: MainMenuAction) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: String.MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint
+            )
+        }
     }
 
     private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,

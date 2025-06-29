@@ -32,6 +32,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         stack.distribution = .fillProportionally
         stack.axis = .vertical
         stack.spacing = UX.contentLabelsSpacing
+        stack.isAccessibilityElement = true
     }
 
     private var favicon: FaviconImageView = .build { favicon in
@@ -42,11 +43,13 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.callout.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private let subtitleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -78,6 +81,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityTraits = .button
     }
 
     private var siteProtectionsIcon: UIImageView = .build { imageView in
@@ -154,6 +158,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yId)
         closeButton.configure(viewModel: closeButtonViewModel)
+        contentLabels.accessibilityLabel = "\(titleLabel.text ?? "") \(subtitleLabel.text ?? "")"
     }
 
     @objc
