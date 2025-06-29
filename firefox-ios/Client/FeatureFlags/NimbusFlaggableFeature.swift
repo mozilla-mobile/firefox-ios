@@ -46,8 +46,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reportSiteIssue
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
-    case sentFromFirefox
-    case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
     case tabTrayUIExperiments
@@ -85,7 +83,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .searchEngineConsolidation,
-                .sentFromFirefox,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
@@ -130,8 +127,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SponsoredShortcuts
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
-        case .sentFromFirefox:
-            return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
@@ -165,7 +160,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
-                .sentFromFirefoxTreatmentA,
                 .splashScreen,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,

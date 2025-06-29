@@ -25,7 +25,14 @@ share_sheet:
   shared_to:
     type: event
     description: |
-      Event to record that the user has shared content via the ShareManager.
+      Records when the user has shared content out of the app via the iOS
+      system share sheet. The extra values describe the app the user chose
+      and the type of content being shared.
+
+      **Developer Note**: Telemetry is recorded for all shares that go through
+      the `ShareManager` via the `ShareTelemetryActivityItemProvider` action.
+
+      Owner: @andy
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23704
     data_reviews:
@@ -37,7 +44,7 @@ share_sheet:
       activity_identifier:
         type: string
         description: |
-          The activity identifier indicating to where the user shared content.
+          The activity identifier of the app to which the user has shared content.
       share_type:
         type: string
         description: |
@@ -46,13 +53,6 @@ share_sheet:
         type: boolean
         description: |
           Whether an explicit share message (and optional subject line) was 
-          appended to the shared content.
-      is_enrolled_in_sent_from_firefox:
-        type: boolean
-        description: |
-          Whether the user is enrolled in the Sent from Firefox experiment.
-      is_opted_in_sent_from_firefox:
-        type: boolean
-        description: |
-          Whether the user is opted in to the Sent from Firefox experiment.
-          Only returns true if the user is both enrolled and opted in.
+          appended to the shared content. For example, when a user shares
+          Firefox anniversary text to their friends. This text will generally
+          accompany a link.
