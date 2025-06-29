@@ -26,10 +26,10 @@
 "DeleteLoginAlert.Message.Local.v122" = "താങ്ങൾക്കു് ഈ പ്രവർത്തനം പഴയപടിയാക്കാനാവില്ല.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"DeleteLoginAlert.Message.Synced.v122" = "ഇതു് താങ്ങളുടെ എല്ലാ സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു ഈ രഹസ്യവാക്കു് മാറ്റും";
+"DeleteLoginAlert.Message.Synced.v122" = "ഇതു് താങ്ങളുടെ എല്ലാ സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു ഈ ഒളിവാക്കു് മാറ്റും";
 
 /* Title for the prompt that appears when the user deletes a login. */
-"DeleteLoginsAlert.Title.v122" = "രഹസ്യവാക്കു് മാറ്റുക?";
+"DeleteLoginsAlert.Title.v122" = "ഒളിവാക്കു് മാറ്റുക?";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "തിരഞ്ഞെടുത്തവ വേണ്ടെന്ന് വയ്ക്കുക";
@@ -41,7 +41,7 @@
 "Hide" = "മറയ്ക്കുക";
 
 /* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
-"LoginList.DeleteToast.v135" = "രഹസ്യവാക്കു് മാറ്റി";
+"LoginList.DeleteToast.v135" = "ഒളിവാക്കു് മാറ്റി";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "പ്രവേശനങ്ങൾ എന്നെന്നേക്കുമായി കളയുകയായിരിക്കും.";
@@ -56,13 +56,13 @@
 "No logins found" = "പ്രവേശനങ്ങള്‍ ഒന്നും കണ്ടില്ല";
 
 /* Label displayed when no logins are found after searching. */
-"NoLoginsFound.Title.v122" = "ഒരു രഹസ്യവാക്കു് കണ്ടെത്താൻ കഴിഞ്ഞില്ല";
+"NoLoginsFound.Title.v122" = "ഒരു ഒളിവാക്കു് കണ്ടെത്താൻ കഴിഞ്ഞില്ല";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "തുറക്കുക & നിറയ്ക്കുക";
 
 /* Label displayed above the password row in Login Detail View. */
-"Password" = "രഹസ്യവാക്ക്";
+"Password" = "ഒളിവാക്ക്";
 
 /* Reveal password text selection menu item */
 "Reveal" = "വെളിപ്പെടുത്തുക";

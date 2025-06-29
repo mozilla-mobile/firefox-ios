@@ -97,17 +97,29 @@
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.Skip.Action.v140" = "ບໍ່ແມ່ນດຽວນີ້";
 
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Sync.Title.v140" = "ສືບຕໍຈາກບ່ອນທີ່ທ່ານໄດ້ເຮັດຄ້າງປະໄວ້ໄດ້ໃນທັນທີ";
+
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "ສືບຕໍ່";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "ຈັດການ";
 
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "ເພື່ອຊ່ວຍປັບປຸງບຣາວເຊີໃຫ້ດີຂື້ນ, %1$@ ສົ່ງຂໍ້ມູນການວິເຄາະ ແລະ ການໂຕ້ຕອບມາທີ່ %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ ເປັນຫ່ວງກ່ຽວກັບຄວາມເປັນສ່ວນຕົວຂອງທ່ານ. ອ່ານເພີ່ມເຕີມໃນ %2$@ ຂອງພວກເຮົາ";
+
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "ສຶກສາເພີ່ມເຕີມ";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "ລາຍງານການຂັດຂ້ອງຊ່ວຍໃຫ້ພວກເຮົາສາມາດວິເຄາະຫາສາເຫດຂອງບັນຫາ ແລະ ແກ້ໄຂບັນຫາກ່ຽວກັບຕົວທ່ອງເວັບໄດ້. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "ສົ່ງລາຍງານການຂັດຂ້ອງໂດຍອັດຕະໂນມັດ";

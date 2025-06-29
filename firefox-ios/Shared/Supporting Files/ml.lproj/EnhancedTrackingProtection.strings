@@ -67,6 +67,9 @@
 /* Text to let users know how many analytics trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "പിന്തുടർച്ച ഉള്ളടക്കം: %@";
 
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. %@ is the number of cookies of this type detected. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "വെബ്ബിടകുറുകെ പിന്തുടൎച്ച കുക്കികൾ: %@";
+
 /* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "വിരലടയാളപ്പിന്തുടൎച്ചയന്ത്രങ്ങൾ: %@";
 
