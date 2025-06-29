@@ -8,7 +8,6 @@ public protocol Logger {
     var crashedLastLaunch: Bool { get }
 
     func setup(sendCrashReports: Bool)
-    func configure(crashManager: CrashManager)
     func logCustomError(error: Error)
 
     /// Log a new message to the logging system
