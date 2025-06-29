@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Common
+import XCTest
 
 @testable import Client
 
@@ -40,6 +41,7 @@ class MockTabManager: TabManager {
     var addTabWasCalled = false
     var notifyCurrentTabDidFinishLoadingCalled = 0
     var commitChangesCalled = 0
+    var selectTabExpectation: XCTestExpectation?
 
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
@@ -68,6 +70,8 @@ class MockTabManager: TabManager {
         if let previous = previous {
             lastSelectedPreviousTabs.append(previous)
         }
+
+        selectTabExpectation?.fulfill()
     }
 
     func addDelegate(_ delegate: TabManagerDelegate) {}

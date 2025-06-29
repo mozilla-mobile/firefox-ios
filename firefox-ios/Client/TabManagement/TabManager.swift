@@ -41,11 +41,15 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
 
     // MARK: - Select Tab
+    @MainActor
     func selectTab(_ tab: Tab?, previous: Tab?)
 
     // MARK: - Add Tab
+    @MainActor
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
+
     @discardableResult
+    @MainActor
     func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
@@ -75,8 +79,10 @@ protocol TabManager: AnyObject {
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date)
 
     // MARK: - Undo Close
+    @MainActor
     func undoCloseTab()
     /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
+    @MainActor
     func undoCloseAllTabs()
 
     // MARK: Inactive Tabs
@@ -98,6 +104,7 @@ protocol TabManager: AnyObject {
     func getTabForURL(_ url: URL) -> Tab?
 
     // MARK: Other Tab Actions
+    @MainActor
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
@@ -106,24 +113,31 @@ protocol TabManager: AnyObject {
     func commitChanges()
 
     func notifyCurrentTabDidFinishLoading()
+    @MainActor
     func restoreTabs(_ forced: Bool)
     func expireLoginAlerts()
     @discardableResult
+    @MainActor
     func switchPrivacyMode() -> SwitchPrivacyModeResult
+
+    @MainActor
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func tabDidSetScreenshot(_ tab: Tab)
 }
 
 extension TabManager {
+    @MainActor
     func selectTab(_ tab: Tab?) {
         selectTab(tab, previous: nil)
     }
 
+    @MainActor
     func restoreTabs(_ forced: Bool = false) {
         restoreTabs(forced)
     }
 
     @discardableResult
+    @MainActor
     func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
@@ -135,6 +149,7 @@ extension TabManager {
                isPrivate: isPrivate)
     }
 
+    @MainActor
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
         addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab, isPrivate: isPrivate)
     }

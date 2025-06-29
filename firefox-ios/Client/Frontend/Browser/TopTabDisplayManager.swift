@@ -30,6 +30,7 @@ protocol TabDisplayCompletionDelegate: AnyObject {
 
 @objc
 protocol TabSelectionDelegate: AnyObject {
+    @MainActor
     func didSelectTabAtIndex(_ index: Int)
 }
 
@@ -218,6 +219,7 @@ class TopTabDisplayManager: NSObject {
         return filteredTabs.firstIndex(of: tab)
     }
 
+    @MainActor
     func togglePrivateMode(isOn: Bool,
                            createTabOnEmptyPrivateMode: Bool,
                            shouldSelectMostRecentTab: Bool = false) {
@@ -395,6 +397,7 @@ extension TopTabDisplayManager: UICollectionViewDataSource {
 
 // MARK: - TabSelectionDelegate
 extension TopTabDisplayManager: TabSelectionDelegate {
+    @MainActor
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
         getTabs { [weak self] tabsToDisplay in
