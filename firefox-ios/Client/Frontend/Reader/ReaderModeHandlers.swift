@@ -8,13 +8,18 @@ import GCDWebServers
 import Shared
 import WebEngine
 
-protocol ReaderModeHandlersProtocol {
+protocol ReaderModeHandlersProtocol: Actor {
     func register(_ webServer: WebServerProtocol, profile: Profile)
 }
 
-struct ReaderModeHandlers: ReaderModeHandlersProtocol {
-    // TODO: FXIOS-12591 This global property is not concurrency safe
-    nonisolated(unsafe) static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
+actor ReaderModeHandlers: ReaderModeHandlersProtocol {
+    private static var _readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
+    private static let queue = DispatchQueue(label: "org.mozilla.ios.Fennec.readerModeHandlersQueue")
+
+    static var readerModeCache: ReaderModeCache {
+        get { queue.sync { _readerModeCache } }
+        set { queue.sync { _readerModeCache = newValue } }
+    }
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming
