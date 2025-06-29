@@ -200,6 +200,7 @@ class TabScrollController: NSObject,
         }
 
         guard !tabIsLoading() else { return }
+        guard !(tab?.isFxHomeTab ?? false) else { return }
 
         tab?.shouldScrollToTop = false
 
@@ -613,6 +614,7 @@ extension TabScrollController: UIScrollViewDelegate {
               !tabIsLoading(),
               !scrollReachBottom(),
               !tab.isFindInPageMode,
+              !tab.isFxHomeTab,
               shouldUpdateUIWhenScrolling else { return }
 
         tab.shouldScrollToTop = false
