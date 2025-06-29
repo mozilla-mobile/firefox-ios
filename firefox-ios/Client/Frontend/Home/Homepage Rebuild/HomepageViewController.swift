@@ -549,16 +549,23 @@ final class HomepageViewController: UIViewController,
             return bookmarksCell
 
         case .pocket(let story):
-            guard let pocketCell = collectionView?.dequeueReusableCell(
-                cellType: PocketStandardCell.self,
-                for: indexPath
-            ) else {
+            let isHomepageStoriesCardsEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign,
+                                                                              checking: .buildOnly)
+            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : PocketStandardCell.self
+
+            guard let storyCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
             }
 
-            pocketCell.configure(story: story, theme: currentTheme)
+            if let storyCell = storyCell as? StoryCell {
+                storyCell.configure(story: story, theme: currentTheme)
+                return storyCell
+            } else if let legacyPocketCell = storyCell as? PocketStandardCell {
+                legacyPocketCell.configure(story: story, theme: currentTheme)
+                return legacyPocketCell
+            }
 
-            return pocketCell
+            return UICollectionViewCell()
 
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
