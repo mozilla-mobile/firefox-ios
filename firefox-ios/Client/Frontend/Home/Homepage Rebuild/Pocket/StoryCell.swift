@@ -15,6 +15,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
         static let descriptionVerticalMargin: CGFloat = 8
         static let descriptionLeadingSpacing: CGFloat = 12
         static let descriptionTrailingMargin: CGFloat = 8
+        static let descriptionStackViewSpacing: CGFloat = 8
         static let horizontalMargin: CGFloat = 4
     }
 
@@ -35,7 +36,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
 
     private lazy var descriptionStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.spacing = 8
+        stackView.spacing = UX.descriptionStackViewSpacing
     }
 
     var notificationCenter: NotificationProtocol
