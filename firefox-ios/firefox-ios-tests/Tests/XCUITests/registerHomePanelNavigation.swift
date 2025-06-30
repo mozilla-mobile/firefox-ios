@@ -56,7 +56,7 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
 
         screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
             app.tables.cells["TopSitesRows"].waitAndTap()
-            select(rows: userState.numTopSitesRows)
+            select(rows: userState.numTopSitesRows, in: app)
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
 
