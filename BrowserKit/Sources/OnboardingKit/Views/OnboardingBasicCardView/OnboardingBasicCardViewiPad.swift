@@ -35,7 +35,7 @@ public struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProt
     public var body: some View {
         VStack {
             Spacer()
-            VScrollView {
+            ContentFittingScrollView {
                 VStack(spacing: UX.CardView.spacing) {
                     Spacer()
                     titleView
@@ -69,6 +69,7 @@ public struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProt
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder var imageView: some View {

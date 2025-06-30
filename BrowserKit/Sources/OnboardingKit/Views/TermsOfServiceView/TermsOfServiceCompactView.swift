@@ -38,12 +38,11 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             ZStack {
                 MilkyWayMetalView()
                     .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        cardContent(geometry: geometry, scale: scale)
-                        Spacer()
-                    }
+                VStack {
+                    cardContent(geometry: geometry, scale: scale)
+                    Spacer()
                 }
+                .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
@@ -57,14 +56,16 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
-        VStack(spacing: UX.CardView.spacing * scale) {
-            Spacer()
-            imageView(scale: scale)
-            titleView
-            bodyView
-            Spacer()
-            links
-            primaryButton
+        ContentFittingScrollView {
+            VStack(spacing: UX.CardView.spacing * scale) {
+                Spacer()
+                imageView(scale: scale)
+                titleView
+                bodyView
+                Spacer()
+                links
+                primaryButton
+            }
         }
         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
         .padding(UX.CardView.verticalPadding * scale)

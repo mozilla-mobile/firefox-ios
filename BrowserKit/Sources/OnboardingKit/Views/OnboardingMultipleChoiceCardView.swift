@@ -40,9 +40,7 @@ public struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoMode
 
     public var body: some View {
         GeometryReader { geometry in
-            ScrollView {
-                scrollViewContent(geometry: geometry)
-            }
+            scrollViewContent(geometry: geometry)
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
@@ -60,21 +58,23 @@ public struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoMode
         let scale = min(widthScale, heightScale)
 
         return VStack {
-            VStack(spacing: UX.CardView.spacing * scale) {
-                Spacer()
-                titleView
-                Spacer()
-                OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
-                    selection: $selectedAction,
-                    items: viewModel.multipleChoiceButtons,
-                    windowUUID: windowUUID,
-                    themeManager: themeManager
-                )
-                .onChange(of: selectedAction) { newAction in
-                    onMultipleChoiceAction(newAction, viewModel.name)
+            ContentFittingScrollView {
+                VStack(spacing: UX.CardView.spacing * scale) {
+                    Spacer()
+                    titleView
+                    Spacer()
+                    OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+                        selection: $selectedAction,
+                        items: viewModel.multipleChoiceButtons,
+                        windowUUID: windowUUID,
+                        themeManager: themeManager
+                    )
+                    .onChange(of: selectedAction) { newAction in
+                        onMultipleChoiceAction(newAction, viewModel.name)
+                    }
+                    Spacer()
+                    primaryButton
                 }
-                Spacer()
-                primaryButton
             }
             .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
             .padding(UX.CardView.verticalPadding * scale)

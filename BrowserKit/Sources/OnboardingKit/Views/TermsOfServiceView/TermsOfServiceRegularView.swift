@@ -37,7 +37,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
                 .ignoresSafeArea()
             VStack {
                 Spacer()
-                VScrollView {
+                ContentFittingScrollView {
                     VStack(spacing: UX.CardView.spacing) {
                         Spacer()
                         imageView

@@ -38,9 +38,8 @@ public struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol
             let widthScale = geometry.size.width / UX.CardView.baseWidth
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
-
-            ScrollView {
-                VStack(spacing: UX.CardView.cardSecondaryContainerPadding) {
+            VStack(spacing: UX.CardView.cardSecondaryContainerPadding) {
+                ContentFittingScrollView {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         titleView
@@ -50,17 +49,17 @@ public struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol
                         Spacer()
                         primaryButton
                     }
-                    .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                    .padding(UX.CardView.verticalPadding * scale)
-                    .background(
-                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                            .fill(cardBackgroundColor)
-                    )
-                    secondaryButton(scale: scale)
-                    Spacer()
                 }
-                .padding(.top, UX.CardView.cardTopPadding)
+                .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+                .padding(UX.CardView.verticalPadding * scale)
+                .background(
+                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                        .fill(cardBackgroundColor)
+                )
+                secondaryButton(scale: scale)
+                Spacer()
             }
+            .padding(.top, UX.CardView.cardTopPadding)
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
@@ -79,6 +78,7 @@ public struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder

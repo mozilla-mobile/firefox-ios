@@ -35,7 +35,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
     }
 
-    // MARK: - iPad Layout
+    // MARK: - Regular Layout
     private var onboardingViewRegular: some View {
         OnboardingRegularView(
             windowUUID: windowUUID,
@@ -44,7 +44,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         )
     }
 
-    // MARK: - iPhone Layout
+    // MARK: - Compact Layout
     private var onboardingViewCompact: some View {
         OnboardingCompactView(
             windowUUID: windowUUID,

@@ -43,7 +43,7 @@ public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
         }
     }
 
-    // MARK: - iPad Layout
+    // MARK: - Regular Layout
     private var termsOfServiceViewRegular: some View {
         TermsOfServiceRegularView(
             viewModel: viewModel,
@@ -53,7 +53,7 @@ public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
         )
     }
 
-    // MARK: - iPhone Layout
+    // MARK: - Compact Layout
     private var termsOfServiceViewCompact: some View {
         TermsOfServiceCompactView(
             viewModel: viewModel,
