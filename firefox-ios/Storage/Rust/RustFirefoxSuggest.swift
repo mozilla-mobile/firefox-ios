@@ -12,8 +12,7 @@ import enum MozillaAppServices.SuggestionProvider
 import struct MozillaAppServices.SuggestIngestionConstraints
 import struct MozillaAppServices.SuggestionQuery
 
-@preconcurrency
-public protocol RustFirefoxSuggestProtocol {
+public protocol RustFirefoxSuggestProtocol: Sendable {
     /// Downloads and stores new Firefox Suggest suggestions.
     func ingest(emptyOnly: Bool) async throws
 
@@ -33,8 +32,7 @@ public protocol RustFirefoxSuggestProtocol {
 
 /// Wraps the synchronous Rust `SuggestStore` binding to execute
 /// blocking operations on a dispatch queue.
-@preconcurrency
-public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
+public final class RustFirefoxSuggest: RustFirefoxSuggestProtocol, Sendable {
     private let store: SuggestStore
 
     // Using a pair of serial queues lets read and write operations run
