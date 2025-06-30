@@ -69,6 +69,7 @@ public struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoMode
                         windowUUID: windowUUID,
                         themeManager: themeManager
                     )
+                    .alignmentGuide(.descriptionAlignment) { d in d[.bottom] }
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
@@ -95,6 +96,7 @@ public struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoMode
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
             .fixedSize(horizontal: false, vertical: true)
+            .alignmentGuide(.titleAlignment) { d in d[.bottom] }
     }
 
     var primaryButton: some View {

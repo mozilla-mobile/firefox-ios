@@ -43,7 +43,9 @@ public struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         titleView
+                        Spacer()
                         imageView(scale: scale)
+                        Spacer()
                         bodyView
                         linkView
                         Spacer()
@@ -79,6 +81,7 @@ public struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
             .fixedSize(horizontal: false, vertical: true)
+            .alignmentGuide(.titleAlignment) { d in d[.bottom] }
     }
 
     @ViewBuilder
@@ -99,6 +102,7 @@ public struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
+            .alignmentGuide(.descriptionAlignment) { d in d[.bottom] }
     }
 
     @ViewBuilder var linkView: some View {
