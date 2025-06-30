@@ -1330,6 +1330,10 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
         pullRefresh = nil
     }
 
+    func setPullRefreshVisibility(isVisible: Bool) {
+        pullRefresh?.isHidden = !isVisible
+    }
+
     // MARK: - ThemeApplicable
 
     /// Updates the `background-color` of the webview to match

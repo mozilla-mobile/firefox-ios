@@ -109,10 +109,6 @@ class PocketViewModel {
 
         pocketStoriesViewModels.append(pocketStoryViewModel)
     }
-
-    private func showDiscoverMore() {
-        onTapTileAction?(PocketProvider.MoreStoriesURL)
-    }
 }
 
 // MARK: HomeViewModelProtocol
@@ -170,8 +166,7 @@ extension PocketViewModel: HomepageViewModelProtocol {
     }
 
     func numberOfItemsInSection() -> Int {
-        // Including discover more cell
-        return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count + 1 : 0
+        return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count : 0
     }
 
     var isEnabled: Bool {
