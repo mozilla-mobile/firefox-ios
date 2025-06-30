@@ -8,6 +8,7 @@ import Storage
 import Common
 import Shared
 import WebKit
+import WebEngine
 
 enum SwitchPrivacyModeResult {
     case createdNewTab
@@ -1286,7 +1287,7 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - SessionCreator
-
+    @MainActor
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
         guard let parentTab = self[parent] else { return nil }
         return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView
