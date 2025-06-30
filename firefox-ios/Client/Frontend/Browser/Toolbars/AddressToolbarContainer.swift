@@ -245,7 +245,9 @@ final class AddressToolbarContainer: UIView,
             enterOverlayMode(nil, pasted: false, search: true)
         }
         updateProgressBarPosition(toolbarState.toolbarPosition)
-
+        // When frame is zero it means the toolbar hasn't appeared on screen yet for the first time
+        // so to prevent a flashy animation on start disable the animation.
+        let shouldAnimate = newModel.shouldAnimate && frame != .zero
         regularToolbar.configure(
             config: newModel.addressToolbarConfig,
             toolbarPosition: toolbarState.toolbarPosition,
@@ -254,7 +256,7 @@ final class AddressToolbarContainer: UIView,
                                                        toolbarLayoutStyle: newModel.toolbarLayoutStyle),
             trailingSpace: calculateToolbarTrailingSpace(),
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: newModel.shouldAnimate)
+            animated: shouldAnimate)
 
         let addressBarVerticalPaddings = newModel.addressToolbarConfig.uxConfiguration
             .locationViewVerticalPaddings(addressBarPosition: toolbarState.toolbarPosition)
