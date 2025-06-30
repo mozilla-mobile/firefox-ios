@@ -88,6 +88,18 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     func newState(state: ToolbarState) {
         toolbarState = state
         disablePanGestureIfTopAddressBar()
+        
+        // While the address bar is in editing mode (for example, when the user is
+        // typing on the homepage with a keyboard), the swipe gesture
+        // that switches between tabs should be disabled. Once editing ends we can
+        // safely re-enable the gesture
+        
+        if state.addressToolbar.isEditing {
+            disablePanGestureRecognizer()
+        } else {
+            enablePanGestureRecognizer()
+            enablePanGestureOnHomepageIfNeeded()
+        }
     }
 
     // MARK: - Pan Gesture Availability
