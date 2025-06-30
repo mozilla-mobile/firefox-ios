@@ -109,8 +109,9 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         self.themeManager = themeManager
     }
 
+    @MainActor
     func getToolbarActions(navigationController: UINavigationController?,
-                           completion: @escaping @Sendable ([[PhotonRowActions]]) -> Void) {
+                           completion: @escaping @Sendable @MainActor ([[PhotonRowActions]]) -> Void) {
         var actions: [[PhotonRowActions]] = []
         let firstMiscSection = getFirstMiscSection(navigationController)
 
@@ -700,11 +701,10 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }
-            let name = UIDevice.current.name
             self.profile.readingList.createRecordWithURL(
                 url.absoluteString,
                 title: tab.title ?? "",
-                addedBy: name
+                addedBy: UIDevice.current.name
             )
             TelemetryWrapper.recordEvent(
                 category: .action,
