@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 protocol PocketDataAdaptor {
+    @MainActor
     func getPocketData() -> [PocketStory]
 }
 
@@ -13,8 +14,9 @@ protocol PocketDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
-    var notificationCenter: NotificationProtocol
+@MainActor
+final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable, Sendable, Notifiable {
+    let notificationCenter: NotificationProtocol
     private let pocketAPI: PocketStoriesProviding
     private let storyProvider: StoryProvider
     private var pocketStories = [PocketStory]()
@@ -22,16 +24,15 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
     weak var delegate: PocketDelegate?
 
     // Used for unit tests since pocket use async/await
-    private var dataCompletion: (() -> Void)?
+    private let dataCompletion: (@Sendable () -> Void)?
 
     init(pocketAPI: PocketStoriesProviding,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         dataCompletion: (() -> Void)? = nil) {
+         dataCompletion: (@Sendable () -> Void)? = nil) {
         self.pocketAPI = pocketAPI
         self.notificationCenter = notificationCenter
         self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
         self.dataCompletion = dataCompletion
-
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         Task {
@@ -43,15 +44,20 @@ class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
         return pocketStories
     }
 
+    func setDelegate(_ delegate: PocketDelegate?) {
+        self.delegate = delegate
+    }
+
     private func updatePocketSites() async {
-        pocketStories = await storyProvider.fetchPocketStories()
+        let stories = await storyProvider.fetchPocketStories()
+        pocketStories = stories
         delegate?.didLoadNewData()
         dataCompletion?()
     }
 }
 
-extension PocketDataAdaptorImplementation: Notifiable {
-    func handleNotifications(_ notification: Notification) {
+extension PocketDataAdaptorImplementation {
+    nonisolated func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willEnterForegroundNotification:
             Task {

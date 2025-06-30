@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-protocol PocketStoriesProviding {
+protocol PocketStoriesProviding: Sendable {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
 
     func fetchStories(items: Int) async throws -> [PocketFeedStory]
@@ -17,13 +17,13 @@ extension PocketStoriesProviding {
     }
 }
 
-class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
+final class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching, Sendable {
     private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
 
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
 
     private let pocketGlobalFeed: String
-    private var prefs: Prefs
+    private let prefs: Prefs
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
 
@@ -32,20 +32,17 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
          prefs: Prefs) {
         self.pocketGlobalFeed = endPoint
         self.prefs = prefs
+        self.urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent,
+                                         configuration: URLSessionConfiguration.defaultMPTCP)
+        self.pocketKey = Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
     }
 
     var urlCache: URLCache {
         return URLCache.shared
     }
 
-    private lazy var urlSession = makeURLSession(
-        userAgent: UserAgent.defaultClientUserAgent,
-        configuration: URLSessionConfiguration.defaultMPTCP
-    )
-
-    private lazy var pocketKey: String? = {
-        return Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
-    }()
+    private let urlSession: URLSession
+    private let pocketKey: String?
 
     enum Error: Swift.Error {
         case failure

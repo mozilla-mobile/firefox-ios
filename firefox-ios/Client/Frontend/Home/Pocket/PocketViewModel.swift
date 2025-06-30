@@ -7,7 +7,8 @@ import Foundation
 import Storage
 import Shared
 
-class PocketViewModel {
+// TODO: FXIOS-
+class PocketViewModel: @unchecked Sendable {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let fractionalWidthiPhonePortrait: CGFloat = 0.90
@@ -91,6 +92,7 @@ class PocketViewModel {
 
     // MARK: - Private
 
+    @MainActor
     private func updateData() {
         let stories = dataAdaptor.getPocketData()
         pocketStoriesViewModels = []
@@ -229,7 +231,7 @@ extension PocketViewModel: HomepageSectionHandler {
 
 extension PocketViewModel: PocketDelegate {
     func didLoadNewData() {
-        ensureMainThread {
+        DispatchQueue.main.async {
             self.updateData()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
