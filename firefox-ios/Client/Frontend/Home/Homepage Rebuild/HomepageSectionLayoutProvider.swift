@@ -46,6 +46,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let redesignNumberOfItemsInColumn = 1
             static let redesignedMinimumCellHeight: CGFloat = 70
             static let redesignedFractionalWidthiPhonePortrait: CGFloat = 0.84
+            static let redesignedFractionalWidthiPhoneLandscape: CGFloat = 0.37
             static let storiesSpacing: CGFloat = 12
 
             // The dimension of a cell
@@ -72,7 +73,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 if device == .pad {
                     return UX.PocketConstants.cellWidth
                 } else if isLandscape {
-                    fractionalWidth = UX.PocketConstants.fractionalWidthiPhoneLandscape
+                    fractionalWidth = UX.PocketConstants.redesignedFractionalWidthiPhoneLandscape
                 } else {
                     fractionalWidth = UX.PocketConstants.redesignedFractionalWidthiPhonePortrait
                 }
