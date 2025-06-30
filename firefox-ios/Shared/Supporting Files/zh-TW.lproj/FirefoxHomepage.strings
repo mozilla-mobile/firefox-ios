@@ -1,3 +1,9 @@
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle.v140" = "文章";
+
+/* This is the title of the Stories section on Firefox Homepage. */
+"FirefoxHome.Stories.SectionTitle.v140" = "文章";
+
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "已清除隱私瀏覽資料";
 
