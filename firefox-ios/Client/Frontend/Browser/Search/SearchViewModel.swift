@@ -178,7 +178,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             return
         }
 
-        _ = loadFirefoxSuggestions()
+        Task {
+            await loadFirefoxSuggestions()
+        }
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery,
@@ -210,16 +212,18 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         })
     }
 
-    func loadFirefoxSuggestions() -> Task<(), Never>? {
+    @MainActor
+    func loadFirefoxSuggestions() async {
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
+
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
                 && (includeNonSponsored || includeSponsored) else {
             if !firefoxSuggestions.isEmpty {
                 firefoxSuggestions = []
                 delegate?.reloadTableView()
             }
-            return nil
+            return
         }
 
         profile.firefoxSuggest?.interruptReader()
@@ -234,19 +238,20 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                 default: false
                 }
             }
-        return Task { [weak self] in
-            guard let self,
-                  let suggestions = try? await self.profile.firefoxSuggest?.query(
-                    tempSearchQuery,
-                    providers: providers,
-                    limit: maxNumOfFirefoxSuggestions
-            ) else { return }
-            await MainActor.run {
-                guard self.searchQuery == tempSearchQuery, self.firefoxSuggestions != suggestions else { return }
-                self.firefoxSuggestions = suggestions
-                self.delegate?.reloadTableView()
-            }
-        }
+
+        // TODO: FXIOS-12610 Profile should be refactored so it is **not** `Sendable`. That will cause future issues with
+        // passing `firefoxSuggest` out of this `@MainActor` isolated context.
+        guard let suggestions = try? await profile.firefoxSuggest?.query(
+            tempSearchQuery,
+            providers: providers,
+            limit: maxNumOfFirefoxSuggestions
+        ),
+              searchQuery == tempSearchQuery,
+              firefoxSuggestions != suggestions
+        else { return }
+
+        firefoxSuggestions = suggestions
+        delegate?.reloadTableView()
     }
 
     func searchTabs(for searchString: String) {
