@@ -2,17 +2,17 @@
 "LoginsHelper.PromptSaveLogin.Title.v122" = "ഉപയോക്തൃപ്പേരു് കരുതിവയ്ക്കണോ?";
 
 /* Prompt for saving a password in the Save Logins prompt. */
-"LoginsHelper.PromptSavePassword.Title.v122" = "രഹസ്യവാക്കു് കരുതിവയ്ക്കണോ?";
+"LoginsHelper.PromptSavePassword.Title.v122" = "ഒളിവാക്കു് കരുതിവയ്ക്കണോ?";
 
 /* Prompt for updating the password in the Update Password prompt. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "രഹസ്യവാക്കു് മാറ്റണോ?";
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "ഒളിവാക്കു് മാറ്റണോ?";
 
 /* Prompt for updating a password in the Update Password prompt. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "രഹസ്യവാക്കു് മാറ്റണോ?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "ഒളിവാക്കു് മാറ്റണോ?";
 
 /* Placeholder text for search box in logins list view. */
-"LoginsList.LoginsListSearchPlaceholder.v122" = "രഹസ്യവാക്കുകൾ തിരയുക";
+"LoginsList.LoginsListSearchPlaceholder.v122" = "ഒളിവാക്കുകൾ തിരയുക";
 
 /* Title for the list of logins saved by the app */
-"LoginsList.Title.v122" = "കരുതിവച്ച രഹസ്യവാക്കുകൾ";
+"LoginsList.Title.v122" = "കരുതിവച്ച ഒളിവാക്കുകൾ";
 

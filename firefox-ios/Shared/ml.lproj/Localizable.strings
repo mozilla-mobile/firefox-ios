@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. %@ is the hostname of the site. */
-"A username and password are being requested by %@." = "ഒരു ഉപയോക്തൃനാമവും രഹസ്യവാക്കും %@ ആവശ്യപ്പെടുന്നു.";
+"A username and password are being requested by %@." = "ഒരു ഉപയോക്തൃനാമവും ഒളിവാക്കും %@ ആവശ്യപ്പെടുന്നു.";
 
 /* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
-"A username and password are being requested by %@. The site says: %@" = "ഒരു ഉപയോക്തൃനാമവും രഹസ്യവാക്കും %1$@ ആവശ്യപ്പെടുന്നു. സൈറ്റ് പറയുന്നത്: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "ഒരു ഉപയോക്തൃനാമവും ഒളിവാക്കും %1$@ ആവശ്യപ്പെടുന്നു. സൈറ്റ് പറയുന്നത്: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "അആ";
@@ -53,10 +53,10 @@
 "AddPass.Error.Dismiss" = "ശരി";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "വാലെറ്റിൽ രഹസ്യവാക്കു് ചേർക്കുമ്പോൾ ഒരു പിശക് സംഭവിച്ചു. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.";
+"AddPass.Error.Message" = "വാലെറ്റിൽ ഒളിവാക്കു് ചേർക്കുമ്പോൾ ഒരു പിശക് സംഭവിച്ചു. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Title" = "രഹസ്യവാക്കു് ചേർക്കുന്നതിൽ പരാജയപ്പെട്ടു";
+"AddPass.Error.Title" = "ഒളിവാക്കു് ചേർക്കുന്നതിൽ പരാജയപ്പെട്ടു";
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "വിലാസവും തെരച്ചിലും";
@@ -122,7 +122,7 @@
 "BreachAlerts.BreachDate" = "ഈ ലംഘനം സംഭവിച്ചു";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "താങ്ങൾ അവസാനമായി രഹസ്യവാക്കു് മാറ്റിയതിനാൽ രഹസ്യവാക്കുകൾ ചോർന്നു അല്ലെങ്കിൽ മോഷ്ടിക്കപ്പെട്ടു. ഈ അക്കൗണ്ട് പരിരക്ഷിക്കുന്നതിന്, സൈറ്റിലേക്ക് പ്രവേശിച്ച് രഹസ്യവാക്കു് മാറ്റുക.";
+"BreachAlerts.Description" = "താങ്ങൾ അവസാനമായി ഒളിവാക്കു് മാറ്റിയതിനാൽ ഒളിവാക്കുകൾ ചോർന്നു അല്ലെങ്കിൽ മോഷ്ടിക്കപ്പെട്ടു. ഈ അക്കൗണ്ട് പരിരക്ഷിക്കുന്നതിന്, സൈറ്റിലേക്ക് പ്രവേശിച്ച് ഒളിവാക്കു് മാറ്റുക.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "കൂടുതല്‍ അറിയുക";
@@ -296,7 +296,7 @@
 "DownloadsPanel.Share.Title" = "പങ്കുവയ്ക്കുക";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "ബന്ധപ്പെടുത്താന്‍ താങ്കളുടെ രഹസ്യവാക്ക് നല്‍കുക";
+"Enter your password to connect" = "ബന്ധപ്പെടുത്താന്‍ താങ്കളുടെ ഒളിവാക്ക് നല്‍കുക";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "കൂടുതല്‍";
@@ -346,6 +346,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "കളയുക";
 
+/* On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Stories.Minutes.v140" = "കുറഞ്ഞത്: %d";
+
 /* Label showing how many pages there is in a search group. %d represents a number */
 "FirefoxHomepage.Common.PagesCount.v112" = "താളുകൾ: %d";
 
@@ -369,6 +372,9 @@
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "പണം കൊണ്ടു് പ്രചരിപ്പിച്ചതു്";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Stories.Sponsored.v140" = "പണം കൊണ്ടു് പ്രചരിപ്പിച്ചതു്";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "മുന്നോട്ട്";
@@ -650,13 +656,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "കൂടുതല്‍ അറിയുക";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "തനുപൂരിക്കൽ സവിശേഷത ഉപയോഗിക്കാൻ താങ്ങൾക്കു് ഒരു ഉപകരണ രഹസ്യസങ്കേതം പ്രവർത്തനക്ഷമമാക്കിവച്ചിരിക്കണം.";
+"Logins.PasscodeRequirement.Warning" = "തനുപൂരിക്കൽ സവിശേഷത ഉപയോഗിക്കാൻ താങ്ങൾക്കു് ഒരു ഉപകരണ ഒളിസങ്കേതം പ്രവർത്തനക്ഷമമാക്കിവച്ചിരിക്കണം.";
 
 /* Label displaying welcome view tagline under the title */
-"Logins.WelcomeView.Tagline" = "നിങ്ങളുടെ രഹസ്യവാക്കുകൾ എല്ലായിടത്തും കൊണ്ടപോവുക";
+"Logins.WelcomeView.Tagline" = "നിങ്ങളുടെ ഒളിവാക്കുകൾ എല്ലായിടത്തും കൊണ്ടപോവുക";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "ഫയർഫോക്സു് രഹസ്യവാക്കുകൾ തനുപൂരിക്കുക";
+"Logins.WelcomeView.Title2" = "ഫയർഫോക്സു് ഒളിവാക്കുകൾ തനുപൂരിക്കുക";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "താനെപ്പൂരിക്കൽ തുടങ്ങി വയ്ക്കുക";
@@ -683,7 +689,7 @@
 "LoginsList.Search.Cancel" = "റദ്ദാക്കുക";
 
 /* Label displaying select a password to fill instruction */
-"LoginsList.SelectPassword.Title" = "പൂരിപ്പിക്കാൻ ഒരു രഹസ്യവാക്കു് തിരഞ്ഞെടുക്കുക";
+"LoginsList.SelectPassword.Title" = "പൂരിപ്പിക്കാൻ ഒരു ഒളിവാക്കു് തിരഞ്ഞെടുക്കുക";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "സംരക്ഷിച്ച പ്രവേശനങ്ങള്‍";
@@ -755,7 +761,7 @@
 "Menu.NightModeTurnOn.Label2" = "രാത്രി രീതി തുടങ്ങി വയ്ക്കുക";
 
 /* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
-"Menu.Passwords.Label" = "രഹസ്യവാക്കുകൾ";
+"Menu.Passwords.Label" = "ഒളിവാക്കുകൾ";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "ഒട്ടിക്കുക";
@@ -830,7 +836,7 @@
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "നിങ്ങൾ ഓൺലൈനിൽ ചെയ്യുന്നതിനെക്കുറിച്ചുള്ള ഡാറ്റ ശേഖരിക്കുന്നതിന് ഈ കുക്കികൾ സൈറ്റിൽ നിന്ന് സൈറ്റിലേക്ക് നിങ്ങളെ പിന്തുടരുന്നു. പരസ്യദാതാക്കളും അനലിറ്റിക്സ് കമ്പനികളും പോലുള്ള മൂന്നാം കക്ഷികളാണ് അവ സജ്ജമാക്കുന്നത്.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "ഡിജിറ്റൽ പണം സ്വന്തമാക്കാൻ ക്രിപ്‌റ്റോമൈനറുകൾ നിങ്ങളുടെ സിസ്റ്റത്തിന്റെ കമ്പ്യൂട്ടിംഗ് കഴിവ് രഹസ്യമായി ഉപയോഗിക്കുന്നു. ക്രിപ്‌റ്റോമൈനിംഗ് സ്‌ക്രിപ്റ്റുകൾ നിങ്ങളുടെ ബാറ്ററി കുറയ്ക്കുന്നു, കമ്പ്യൂട്ടർ മന്ദഗതിയിലാക്കുന്നു, ഒപ്പം അവയ്ക്ക് നിങ്ങളുടെ വൈദ്യുതി ബിൽ വർദ്ധിപ്പിക്കാനും കഴിയും.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "ഡിജിറ്റൽ പണം സ്വന്തമാക്കാൻ ക്രിപ്‌റ്റോമൈനറുകൾ നിങ്ങളുടെ സിസ്റ്റത്തിന്റെ കമ്പ്യൂട്ടിംഗ് കഴിവ് ഒളിമായി ഉപയോഗിക്കുന്നു. ക്രിപ്‌റ്റോമൈനിംഗ് സ്‌ക്രിപ്റ്റുകൾ നിങ്ങളുടെ ബാറ്ററി കുറയ്ക്കുന്നു, കമ്പ്യൂട്ടർ മന്ദഗതിയിലാക്കുന്നു, ഒപ്പം അവയ്ക്ക് നിങ്ങളുടെ വൈദ്യുതി ബിൽ വർദ്ധിപ്പിക്കാനും കഴിയും.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "നിങ്ങളുടെ ബ്രൌസറിലെയും കമ്പ്യൂട്ടറിലെയും ക്രമീകരണങ്ങൾ അദ്വിതീയമാണ്. നിങ്ങളുടെ ഒരു പ്രൊഫൈൽ‌ സൃഷ്‌ടിക്കുന്നതിന് ഫിംഗർ‌പ്രിന്ററുകൾ‌ ഈ സവിശേഷമായ ക്രമീകരണങ്ങൾ‌ ശേഖരിക്കുന്നു, നിങ്ങൾ‌ ബ്രൌസ് ചെയ്യുമ്പോൾ‌ നിങ്ങളെ ട്രാക്ക് ചെയ്യുന്നതിന് ഇത് ഉപയോഗിക്കാം.";
@@ -896,7 +902,7 @@
 "OpenURL.Error.Title" = "താൾ തുറക്കാനാവുന്നില്ല";
 
 /* Password textbox in Authentication prompt */
-"Password" = "രഹസ്യവാക്ക്";
+"Password" = "ഒളിവാക്ക്";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ഇത് താങ്കളെ താങ്കളുടെ ക്യാമറ റോളിലേക്ക് ചിത്രം സൂക്ഷിക്കാന്‍ അനുവദിയ്ക്കുന്നു.";
@@ -1424,13 +1430,13 @@
 "Settings.OpenWith.SectionName" = "മെയില്‍ ആപ്പ്";
 
 /* Touch ID prompt subtitle when accessing logins and passwords */
-"Settings.Passwords.FingerPrintReason.v103" = "രഹസ്യവാക്കുകൾ ലഭിക്കാനായി താങ്കളുടെ വിരലടയാളം ഉപയോഗിക്കുക.";
+"Settings.Passwords.FingerPrintReason.v103" = "ഒളിവാക്കുകൾ ലഭിക്കാനായി താങ്കളുടെ വിരലടയാളം ഉപയോഗിക്കുക.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
-"Settings.Passwords.SavePasswords.v103" = "രഹസ്യവാക്കുകൾ കരുതിവയ്ക്കുക";
+"Settings.Passwords.SavePasswords.v103" = "ഒളിവാക്കുകൾ കരുതിവയ്ക്കുക";
 
 /* Title for the passwords screen. */
-"Settings.Passwords.Title.v103" = "രഹസ്യവാക്കുകൾ";
+"Settings.Passwords.Title.v103" = "ഒളിവാക്കുകൾ";
 
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "പ്രവേശനം സംരക്ഷിക്കുക";
@@ -1481,7 +1487,7 @@
 "Settings.Studies.Toggle.Title" = "പഠനങ്ങൾ";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
-"Settings.Sync.ButtonDescription.v103" = "ടാബുകളും അടയാളക്കുറിപ്പുകളും രഹസ്യവാക്കുകളും മറ്റും സമന്വയിപ്പിക്കാൻ പ്രവേശിക്കൽ ചെയ്യുക.";
+"Settings.Sync.ButtonDescription.v103" = "ടാബുകളും അടയാളക്കുറിപ്പുകളും ഒളിവാക്കുകളും മറ്റും സമന്വയിപ്പിക്കാൻ പ്രവേശിക്കൽ ചെയ്യുക.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "ദത്ത സമന്വയിപ്പിച്ചു് കരുതിവയ്ക്കുക";

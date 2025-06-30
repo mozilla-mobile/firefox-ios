@@ -82,6 +82,9 @@
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "ด้านล่าง";
 
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Modern.Customization.Toolbar.Title.v140" = "จัดวางแถบที่อยู่ของคุณ";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "ด้านบน";
 
@@ -145,6 +148,9 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
+
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "ตั้งค่าครั้งเดียวจะช่วยปกป้องคุณทุกที่ที่คุณท่องเว็บ คุณสามารถเปลี่ยนแปลงได้ตลอดเวลา";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "ไม่ใช่ตอนนี้";

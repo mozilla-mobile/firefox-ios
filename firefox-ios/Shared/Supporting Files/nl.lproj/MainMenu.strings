@@ -4,6 +4,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Nieuw: gestroomlijnd menu";
 
+/* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Bladwijzer voor pagina maken";
+
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Gedimd";
 
@@ -33,6 +36,15 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Meld u opnieuw aan om te synchroniseren";
+
+/* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.BookmarkPage.Title.v141" = "Bladwijzer voor pagina maken";
+
+/* On the main menu, a title for a label that indicate the current option/action state is off. */
+"MainMenu.Off.Title.v141" = "Uit";
+
+/* On the main menu, a title for a label that indicate the current option/action state is on. */
+"MainMenu.On.Title.v141" = "Aan";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Bladwijzers";
@@ -81,6 +93,15 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Nieuw in %@";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
+"MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Verbinding is niet beveiligd";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Beschermingen zijn UIT";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Beschermingen zijn AAN";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Startpagina";
@@ -214,6 +235,9 @@
 /* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. */
 "MainMenu.Submenus.Tools.PageZoom.Title.v140" = "Paginazoom (%@)";
 
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
+"MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "Paginazoom";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Afdrukken";
 
@@ -247,6 +271,9 @@
 /* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Donkere websitemodus inschakelen";
 
+/* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Donkere websitemodus";
+
 /* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
 "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
 
@@ -273,6 +300,9 @@
 
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "Nieuw tabblad";
+
+/* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Desktopwebsite";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Zoeken op pagina";
@@ -301,8 +331,14 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Submenu Extra";
 
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.DesktopSite.Title.v141" = "Desktopwebsite";
+
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Zoeken op pagina…";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPageV2.Title.v141" = "Zoeken op pagina";
 
 /* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.LessOptions.Title.v141" = "Minder";

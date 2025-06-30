@@ -73,6 +73,9 @@
 /* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
 "Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "Pour compléter cette liste, visitez un site et ajustez le niveau de zoom de la page à partir du menu";
 
+/* Page zoom settings title in Appearance settings */
+"Settings.Appearance.Zoom.Title.v140" = "Zoom sur la page";
+
 /* Zoom level title under page zoom settings to select the default zoom level for all websites */
 "Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "Niveau de zoom";
 

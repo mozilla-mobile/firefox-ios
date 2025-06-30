@@ -77,7 +77,7 @@
 "Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "വലിപ്പം നില";
 
 /* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
-"Settings.AutofillAndPassword.Title.v137" = "തനപൂരിപ്പിക്കലുകളും രഹസ്യവാക്കുകളും";
+"Settings.AutofillAndPassword.Title.v137" = "തനപൂരിപ്പിക്കലുകളും ഒളിവാക്കുകളും";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "പണം കൊടുക്കൽ മുറകൾ";
