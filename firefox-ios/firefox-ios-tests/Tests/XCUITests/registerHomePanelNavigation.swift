@@ -51,12 +51,12 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
 
         screenState.gesture(forAction: Action.TogglePocketInNewTab) { userState in
             userState.pocketInNewTab = !userState.pocketInNewTab
-            app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].waitAndTap()
+            app.tables.cells.switches["Stories"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
             app.tables.cells["TopSitesRows"].waitAndTap()
-            select(rows: userState.numTopSitesRows, in: app)
+            select(rows: userState.numTopSitesRows)
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
 

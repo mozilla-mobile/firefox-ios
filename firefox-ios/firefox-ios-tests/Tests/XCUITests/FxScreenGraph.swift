@@ -2,13 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-// swiftlint:disable all
-
 import Common
 import Foundation
 import MappaMundi
 import XCTest
-
 
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
     let map = MMScreenGraph(for: test, with: FxUserState.self)
@@ -24,10 +21,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
     }
-    
     return map
 }
-
 
 // MARK: - State Constants
 
@@ -86,7 +81,7 @@ let AddressesSettings = "AutofillAddress"
 let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 let BrowsingSettings = "BrowsingSettings"
-let AutofillPasswordSettings = "AutofillPasswordSettings"
+let AutofillPasswordSettings = "AutofillsPasswordsSettings"
 let Shortcuts = "Shortcuts"
 let AutoplaySettings = "AutoplaySettings"
 
@@ -130,19 +125,19 @@ let allHomePanels = [
 let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
-func navigationControllerBackAction(for app: XCUIApplication) ->  () -> Void {
+func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }
 
-func cancelBackAction(for app: XCUIApplication) ->  () -> Void {
+func cancelBackAction(for app: XCUIApplication) -> () -> Void {
     return {
         app.otherElements["PopoverDismissRegion"].waitAndTap()
     }
 }
 
-func dismissContextMenuAction(app: XCUIApplication) ->  () -> Void {
+func dismissContextMenuAction(app: XCUIApplication) -> () -> Void {
     return {
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
     }
@@ -155,7 +150,7 @@ func select(rows: Int, in app: XCUIApplication) {
 func type(text: String, in app: XCUIApplication) {
      text.forEach { char in
          app.keys[String(char)].waitAndTap()
-      }
+     }
 }
 
 class Action {
@@ -248,10 +243,6 @@ class Action {
     static let SentToDevice = "SentToDevice"
     static let AddToReadingListBrowserTabMenu = "AddToReadingListBrowserTabMenu"
 
-    static let SelectAutomatically = "SelectAutomatically"
-    static let SelectManually = "SelectManually"
-    static let SystemThemeSwitch = "SystemThemeSwitch"
-    
     static let SelectAutomaticTheme = "SelectAutomaticTheme"
     static let SelectLightTheme = "SelectLightTheme"
     static let SelectDarkTheme = "SelectDarkTheme"
@@ -389,5 +380,3 @@ extension XCUIElement {
         }
     }
 }
-
-// swiftlint:enable all

@@ -48,17 +48,16 @@ func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCU
 
 func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(NewTabScreen) { screenState in
+        let tabsButtonSelector = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         screenState.noop(to: HomePanelsScreen)
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-
         if isTablet {
-            screenState.tap(tabsButton, to: TabTray)
+            screenState.tap(tabsButtonSelector, to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                tabsButton.waitAndTap()
+                tabsButtonSelector.waitAndTap()
             }
         }
-        configureURLBarAvailable(screenState, app: app)
+        makeURLBarAvailable(screenState, app: app)
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {

@@ -35,25 +35,26 @@ func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
     }
 
     map.addScreenState(URLBarOpen) { screenState in
-        let urlField = app.textFields.firstMatch
         // This is used for opening BrowserTab with default mozilla URL
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
         screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
+            let searchTextField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
             // Workaround BB iOS13 be sure tap happens on url bar
-            urlField.waitAndTap()
-            urlField.waitAndTap()
-            urlField.typeText(url)
-            urlField.typeText("\r")
+            searchTextField.waitAndTap()
+            searchTextField.waitAndTap()
+            searchTextField.typeText(url)
+            searchTextField.typeText("\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
+            let textsField = app.textFields.firstMatch
             // Workaround BB iOS13 be sure tap happens on url bar
             sleep(1)
-            urlField.waitAndTap()
-            urlField.waitAndTap()
-            urlField.typeText("\(url)")
+            textsField.waitAndTap()
+            textsField.waitAndTap()
+            textsField.typeText("\(url)")
         }
 
         screenState.noop(to: HomePanelsScreen)

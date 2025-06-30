@@ -13,7 +13,7 @@ func registerMobileNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
             forAction: Action.ExitMobileBookmarksFolder,
             transitionTo: LibraryPanel_Bookmarks
         ) { userState in
-                bookmarksButton.waitAndTap()
+            bookmarksButton.waitAndTap()
         }
         screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
     }

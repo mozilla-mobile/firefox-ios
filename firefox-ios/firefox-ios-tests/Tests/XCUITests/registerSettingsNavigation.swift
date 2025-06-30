@@ -8,7 +8,7 @@ import MappaMundi
 func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     let table = app.tables.element(boundBy: 0)
 
-    map.addScreenState(SettingsScreen) { screenState in
+    map.addScreenState(DisplaySettings) { screenState in
         screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
         screenState.tap(table.cells["SignInToSync"], to: Intro_FxASignin, if: "fxaUsername == nil")
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Search.searchNavigationBar], to: SearchSettings)
@@ -104,15 +104,6 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(DisplaySettings) { screenState in
-        screenState.gesture(forAction: Action.SelectAutomatically) { userState in
-            app.cells.staticTexts["Automatically"].waitAndTap()
-        }
-        screenState.gesture(forAction: Action.SelectManually) { userState in
-            app.cells.staticTexts["Manually"].waitAndTap()
-        }
-        screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
-            app.switches["SystemThemeSwitchValue"].waitAndTap()
-        }
         screenState.gesture(forAction: Action.SelectAutomaticTheme) { userState in
             app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].waitAndTap()
         }
