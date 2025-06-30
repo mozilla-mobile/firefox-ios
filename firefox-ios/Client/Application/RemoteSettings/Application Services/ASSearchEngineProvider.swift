@@ -55,6 +55,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                                                        completion: @escaping SearchEngineCompletion) {
         let locale = Locale.current
         let prefsVersion = preferencesVersion
+        let closureLogger = logger
 
         // First load the unordered engines, based on the current locale and language
         getUnorderedBundledEnginesFor(locale: locale,
@@ -70,12 +71,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 // We haven't persisted the engine order, so use the default engine ordering.
                 // For AS-based engines we are guaranteed the preferred default to be at index 0
                 // (this happens in `fetchSearchEngines()`).
-<<<<<<< HEAD
-=======
                 closureLogger.log("[SEC] Search order prefs: NO. (Unavailable, or empty.)",
                                   level: .info,
                                   category: .remoteSettings)
->>>>>>> 960e0b8db (Refactor FXIOS-0000 [SEC] Logging tweaks (#27637))
                 ensureMainThread { completion(finalEngineOrderingPrefs, unorderedEngines) }
                 return
             }
@@ -84,12 +82,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             // We may have found engines that weren't persisted in the ordered list
             // (if the user changed locales or added a new engine); these engines
             // will be appended to the end of the list.
-<<<<<<< HEAD
-=======
             closureLogger.log("[SEC] Search order prefs: YES. Will apply (identifiers): \(orderedEngineNames)",
                               level: .info,
                               category: .remoteSettings)
->>>>>>> 960e0b8db (Refactor FXIOS-0000 [SEC] Logging tweaks (#27637))
             let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
                 let index1 = orderedEngineNames.firstIndex(of: engine1.engineID)
                 let index2 = orderedEngineNames.firstIndex(of: engine2.engineID)
@@ -106,15 +101,12 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 }
             }
 
-<<<<<<< HEAD
-=======
             let before = unorderedEngines.map { $0.shortName }
             let after = orderedEngines.map { $0.shortName }
             closureLogger.log("[SEC] Search order prefs result. Before: \(before) After: \(after).",
                               level: .info,
                               category: .remoteSettings)
 
->>>>>>> 960e0b8db (Refactor FXIOS-0000 [SEC] Logging tweaks (#27637))
             ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
     }
