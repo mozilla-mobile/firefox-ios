@@ -315,6 +315,9 @@ public class BrowserAddressToolbar: UIView,
                      navigationActionStack.arrangedSubviews +
                      leadingPageActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
+        // When frame is zero it means the toolbar hasn't appeared on screen yet for the first time
+        // so to prevent a flashy animation on start, disable the animation.
+        let animated = animated && frame != .zero
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
