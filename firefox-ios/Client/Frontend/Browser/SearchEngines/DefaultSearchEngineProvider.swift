@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-typealias SearchEngineCompletion = (SearchEnginePrefs, [OpenSearchEngine]) -> Void
+typealias SearchEngineCompletion = @Sendable (SearchEnginePrefs, [OpenSearchEngine]) -> Void
 
 protocol SearchEngineProvider {
     /// Takes a list of custom search engines (added by the user) along with an ordered
@@ -63,9 +63,9 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
                                                                               to: prefsVersion,
                                                                               availableEngines: unorderedEngines)
 
+            // If we haven't persisted the engine order, return whatever order we got from disk.
             guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
                   !orderedEngineNames.isEmpty else {
-                // We haven't persisted the engine order, so return whatever order we got from disk.
                 DispatchQueue.main.async {
                     completion(finalEngineOrderingPrefs, unorderedEngines)
                 }
