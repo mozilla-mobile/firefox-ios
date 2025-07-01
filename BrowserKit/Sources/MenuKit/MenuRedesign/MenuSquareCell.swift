@@ -40,11 +40,14 @@ final class MenuSquareView: UIView, ThemeApplicable {
 
     // MARK: - Properties
     var model: MenuElement?
+    var cellTapCallback: (() -> Void)?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.addGestureRecognizer(tapGesture)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -101,6 +104,11 @@ final class MenuSquareView: UIView, ThemeApplicable {
             ),
             icon.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
+    }
+
+    @objc
+    private func handleTap() {
+        cellTapCallback?()
     }
 
     // MARK: - Theme Applicable
