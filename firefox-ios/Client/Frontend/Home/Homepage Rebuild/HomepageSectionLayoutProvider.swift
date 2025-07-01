@@ -247,7 +247,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             alignment: .top
         )
         section.boundarySupplementaryItems = [header]
-        
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
