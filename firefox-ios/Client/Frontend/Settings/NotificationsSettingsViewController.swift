@@ -19,8 +19,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
             Task {
                 let shouldEnable = await self.notificationsChanged(value)
-                await self.syncNotifications.control.switchView.setOn(shouldEnable, animated: true)
-                await self.syncNotifications.writeBool(self.syncNotifications.control.switchView)
+                self.syncNotifications.control.switchView.setOn(shouldEnable, animated: true)
+                self.syncNotifications.writeBool(self.syncNotifications.control.switchView)
 
                 // enable/disable sync notifications
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
@@ -43,8 +43,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
             Task {
                 let shouldEnable = await self.notificationsChanged(value)
-                await self.tipsAndFeaturesNotifications.control.switchView.setOn(shouldEnable, animated: true)
-                await self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control.switchView)
+                self.tipsAndFeaturesNotifications.control.switchView.setOn(shouldEnable, animated: true)
+                self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control.switchView)
             }
         }
     }()
