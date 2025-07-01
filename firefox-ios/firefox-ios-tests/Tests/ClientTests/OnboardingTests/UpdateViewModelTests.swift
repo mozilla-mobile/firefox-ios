@@ -24,6 +24,13 @@ class UpdateViewModelTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
+    func testContainsSyncableAccounts_returnsMockValue() {
+        profile.hasSyncableAccountMock = true
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.containsSyncableAccount())
+    }
+
     // MARK: Enable cards
     func testEnabledCards_ForHasSyncAccount() {
         profile.hasSyncableAccountMock = true

@@ -10,6 +10,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
     private var profile: MockProfile!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
+    private var dispacthQueue: MockDispatchQueue!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -18,6 +19,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
+        dispacthQueue = MockDispatchQueue()
         viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: MockProfile())
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
@@ -25,6 +27,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         AppContainer.shared.reset()
+        dispacthQueue = nil
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
@@ -35,11 +38,10 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 0)
     }
 
-    @MainActor
-    func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() async {
+    func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let subject = createSubject()
-        await subject.startLoading()
+        subject.startLoading()
 
         guard case .intro = coordinatorDelegate.savedLaunchType else {
             XCTFail("Expected intro, but was \(String(describing: coordinatorDelegate.savedLaunchType))")
@@ -50,11 +52,10 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
-    @MainActor
-    func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() async {
+    func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() {
         viewModel.mockLaunchType = nil
         let subject = createSubject()
-        await subject.startLoading()
+        subject.startLoading()
 
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
         XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
@@ -75,7 +76,8 @@ final class LaunchScreenViewControllerTests: XCTestCase {
                                line: UInt = #line) -> LaunchScreenViewController {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,
                                                  coordinator: coordinatorDelegate,
-                                                 viewModel: viewModel)
+                                                 viewModel: viewModel,
+                                                 mainQueue: dispacthQueue)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

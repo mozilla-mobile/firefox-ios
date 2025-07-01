@@ -67,6 +67,9 @@
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "വലിപ്പക്ക്രമീകരണങ്ങൾ";
 
+/* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "പട്ടികയിൽ ചേൎക്കാൻ വെബ്ബിടത്തിലേക്കു് ചെന്നിട്ടു് താൾ വലിപ്പം കുറിപ്പടി വഴി ക്രമീകരിക്കുക";
+
 /* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
 "Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "പ്രത്യേക വെബിട ക്രമീകരണങ്ങൾ";
 
@@ -77,7 +80,7 @@
 "Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "വലിപ്പം നില";
 
 /* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
-"Settings.AutofillAndPassword.Title.v137" = "തനപൂരിപ്പിക്കലുകളും രഹസ്യവാക്കുകളും";
+"Settings.AutofillAndPassword.Title.v137" = "തനപൂരിപ്പിക്കലുകളും ഒളിവാക്കുകളും";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "പണം കൊടുക്കൽ മുറകൾ";

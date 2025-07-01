@@ -1,5 +1,5 @@
 base_ref: origin/main
-base_repository: https://github.com/mozilla-mobile/staging-firefox-ios
+base_repository: https://github.com/mozilla-mobile/firefox-ios
 base_rev: 6a5ff6fb20e56f7963c81509a8933d7019028e16
 build_date: 1747826577
 build_number: 1
@@ -17,7 +17,7 @@ files_changed:
 filters:
 - target_tasks_method
 head_ref: main
-head_repository: https://github.com/mozilla-mobile/staging-firefox-ios
+head_repository: https://github.com/mozilla-mobile/firefox-ios
 head_rev: 3943c2420bd7eb7357e067c9f469346264d6bd5e
 head_tag: ''
 level: '1'
@@ -26,7 +26,7 @@ next_version: null
 optimize_strategies: null
 optimize_target_tasks: true
 owner: cron@noreply.mozilla.org
-project: staging-firefox-ios
+project: firefox-ios
 pull_request_number: null
 pushdate: 0
 pushlog_id: '0'

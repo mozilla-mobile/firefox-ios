@@ -66,26 +66,36 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
+    private func handleJavaScriptAlert<T: JavaScriptAlertProtocol & JSAlertInfo>(
+        _ alert: T,
+        for webView: WKWebView,
+        spamCallback: @escaping () -> Void
+    ) {
+        if jsAlertExceedsSpamLimits(webView) {
+            handleSpammedJSAlert(spamCallback)
+        } else if shouldDisplayJSAlertForWebView(webView) {
+            logger.log("JavaScript \(T.alertType) panel will be presented.", level: .info, category: .webview)
+            let alertController = alert.alertController()
+            alertController.delegate = self
+            present(alertController, animated: true)
+        } else if let promptingTab = tabManager[webView] {
+            logger.log("JavaScript \(T.alertType) panel is queued.", level: .info, category: .webview)
+            promptingTab.queueJavascriptAlertPrompt(alert)
+        }
+    }
+
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void
+        completionHandler: @escaping @MainActor () -> Void
     ) {
         let messageAlert = MessageAlert(message: message,
                                         frame: frame,
                                         completionHandler: completionHandler)
-        if jsAlertExceedsSpamLimits(webView) {
-            handleSpammedJSAlert(completionHandler)
-        } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript alert panel will be presented.", level: .info, category: .webview)
 
-            let alertController = messageAlert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript alert panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(messageAlert)
+        handleJavaScriptAlert(messageAlert, for: webView) {
+            completionHandler()
         }
     }
 
@@ -93,24 +103,15 @@ extension BrowserViewController: WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping (Bool) -> Void
+        completionHandler: @escaping @MainActor (Bool) -> Void
     ) {
         let confirmAlert = ConfirmPanelAlert(message: message, frame: frame) { confirm in
             self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
             completionHandler(confirm)
         }
 
-        if jsAlertExceedsSpamLimits(webView) {
-            handleSpammedJSAlert { completionHandler(false) }
-        } else if shouldDisplayJSAlertForWebView(webView) {
-            self.logger.log("JavaScript confirm panel will be presented.", level: .info, category: .webview)
-
-            let alertController = confirmAlert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript confirm panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(confirmAlert)
+        handleJavaScriptAlert(confirmAlert, for: webView) {
+            completionHandler(false)
         }
     }
 
@@ -119,24 +120,15 @@ extension BrowserViewController: WKUIDelegate {
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping (String?) -> Void
+        completionHandler: @escaping @MainActor (String?) -> Void
     ) {
         let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
             self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
             completionHandler(input)
         }
 
-        if jsAlertExceedsSpamLimits(webView) {
-            handleSpammedJSAlert { completionHandler("") }
-        } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript text input panel will be presented.", level: .info, category: .webview)
-
-            let alertController = textInputAlert.alertController()
-            alertController.delegate = self
-            present(alertController, animated: true)
-        } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript text input panel is queued.", level: .info, category: .webview)
-            promptingTab.queueJavascriptAlertPrompt(textInputAlert)
+        handleJavaScriptAlert(textInputAlert, for: webView) {
+            completionHandler("")
         }
     }
 
@@ -154,7 +146,7 @@ extension BrowserViewController: WKUIDelegate {
     func webView(
         _ webView: WKWebView,
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
+        completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     ) {
         guard let url = elementInfo.linkURL,
               let currentTab = tabManager.selectedTab,
@@ -180,11 +172,13 @@ extension BrowserViewController: WKUIDelegate {
         ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
     }
 
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+        initiatedByFrame frame: WKFrameInfo,
+        type: WKMediaCaptureType,
+        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
+    ) {
         // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
         guard tabManager.selectedTab?.webView === webView, !contentContainer.hasAnyHomepage else {
             decisionHandler(.deny)
@@ -698,11 +692,11 @@ extension BrowserViewController: WKNavigationDelegate {
         if let mimeType = response.mimeType, OpenPassBookHelper.shouldOpenWithPassBook(
             mimeType: mimeType,
             forceDownload: forceDownload) {
-            passBookHelper = OpenPassBookHelper(presenter: self)
             // Open our helper and nullifies the helper when done with it
-            passBookHelper?.open(response: response, cookieStore: cookieStore, completion: {
-                self.passBookHelper = nil
-            })
+            Task {
+                let passBookHelper = OpenPassBookHelper(presenter: self)
+                await passBookHelper.open(response: response, cookieStore: cookieStore)
+            }
 
             // Cancel this response from the webview.
             decisionHandler(.cancel)

@@ -116,7 +116,6 @@ class BrowserViewController: UIViewController,
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
     var currentMiddleButtonState: MiddleButtonState?
-    var passBookHelper: OpenPassBookHelper?
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
@@ -256,6 +255,18 @@ class BrowserViewController: UIViewController,
     var pasteGoAction: AccessibleAction?
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
+
+    private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
+        engineResponder: DefaultUIHandler(sessionCreator: tabManager as? SessionCreator),
+        legacyResponder: self
+    )
+    /// The ui delegate used by a `WKWebView`
+    var wkUIDelegate: WKUIDelegate {
+        if featureFlags.isFeatureEnabled(.webEngineIntegrationRefactor, checking: .buildOnly) {
+            return browserWebUIDelegate
+        }
+        return self
+    }
 
     // MARK: Feature flags
 
@@ -1118,6 +1129,7 @@ class BrowserViewController: UIViewController,
         )
     }
 
+    // TODO: FXIOS-12632 Refactor how we determine when to hide / show toolbar
     /// If we are showing the homepage search bar, then we should hide the address toolbar
     private func shouldHideToolbar() -> Bool {
         let shouldShowSearchBar = store.state.screenState(
@@ -2609,6 +2621,11 @@ class BrowserViewController: UIViewController,
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
+            store.dispatchLegacy(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.enteredZeroSearchScreen)
+            )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
             configureZeroSearchView()
         }
@@ -2693,6 +2710,7 @@ class BrowserViewController: UIViewController,
             store.dispatchLegacy(action)
             addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
+            willNavigateAway(from: tabManager.selectedTab)
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }
     }
@@ -3919,7 +3937,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         beginObserving(webView: webView)
         self.scrollController.beginObserving(scrollView: webView.scrollView)
-        webView.uiDelegate = self
+        webView.uiDelegate = wkUIDelegate
 
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self

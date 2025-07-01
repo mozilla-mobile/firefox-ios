@@ -256,6 +256,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     func testJumpBackIn_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
