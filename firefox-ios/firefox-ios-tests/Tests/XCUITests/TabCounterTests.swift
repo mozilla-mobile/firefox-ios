@@ -110,9 +110,13 @@ class TabCounterTests: FeatureFlaggedTestBase {
         XCTAssertEqual("2", tabsOpen as? String)
 
         navigator.goto(TabTray)
-        app.otherElements[tabsTray]
-            .collectionViews.cells.element(boundBy: 0)
-            .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+        if iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.otherElements[tabsTray]
+                .collectionViews.cells.element(boundBy: 0)
+                .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+        }
 
         app.otherElements[tabsTray].cells.element(boundBy: 0).waitAndTap()
         navigator.nowAt(NewTabScreen)

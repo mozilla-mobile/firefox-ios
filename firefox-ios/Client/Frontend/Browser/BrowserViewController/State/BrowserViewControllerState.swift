@@ -131,6 +131,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return reduceStateForNavigationBrowserAction(action: action, state: state)
         } else if let action = action as? StartAtHomeAction {
             return reduceStateForStartAtHomeAction(action: action, state: state)
+        } else if let action = action as? ToolbarMiddlewareAction {
+            return reduceStateForToolbarAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -180,6 +182,37 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action.actionType {
         case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    // MARK: - Toolbar Action
+
+    /// Navigate to zero search state after tapping on search button on navigation toolbar
+    static func reduceStateForToolbarAction(
+        action: ToolbarMiddlewareAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case ToolbarMiddlewareActionType.didTapButton:
+            let shouldShowSearchBar = store.state.screenState(
+                HomepageState.self,
+                for: .homepage,
+                window: action.windowUUID
+            )?.searchState.shouldShowSearchBar ?? false
+
+            guard shouldShowSearchBar, action.buttonType == .search else {
+                return defaultState(from: state, action: action)
+            }
+
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.zeroSearch)
+            )
         default:
             return defaultState(from: state, action: action)
         }

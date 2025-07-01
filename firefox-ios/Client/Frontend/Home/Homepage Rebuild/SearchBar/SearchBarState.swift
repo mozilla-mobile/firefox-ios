@@ -36,7 +36,7 @@ struct SearchBarState: StateType, Equatable {
         switch action.actionType {
         case HomepageMiddlewareActionType.configuredSearchBar:
             return handleSearchBarInitialization(action: action, state: state)
-        case NavigationBrowserActionType.tapOnHomepageSearchBar:
+        case GeneralBrowserActionType.enteredZeroSearchScreen:
             return handleHidingSearchBar(action: action, state: state)
         default:
             return defaultState(from: state)

@@ -668,6 +668,24 @@
 		5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */; };
 		5F2B55FE2D4CD7FE00A4E2CF /* A11yUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */; };
 		5F2B55FF2D4CD7FE00A4E2CF /* A11yUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */; };
+		5F5424082DF6EF17000AA578 /* registerMiscellanousNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FE2DF6EF17000AA578 /* registerMiscellanousNavigation.swift */; };
+		5F5424092DF6EF17000AA578 /* NavigationRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F72DF6EF17000AA578 /* NavigationRegistry.swift */; };
+		5F54240A2DF6EF17000AA578 /* registerHomePanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FB2DF6EF17000AA578 /* registerHomePanelNavigation.swift */; };
+		5F54240B2DF6EF17000AA578 /* registerZoomNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424072DF6EF17000AA578 /* registerZoomNavigation.swift */; };
+		5F54240C2DF6EF17000AA578 /* registerTabMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424022DF6EF17000AA578 /* registerTabMenuNavigation.swift */; };
+		5F54240D2DF6EF17000AA578 /* registerCommonNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F82DF6EF17000AA578 /* registerCommonNavigation.swift */; };
+		5F54240E2DF6EF17000AA578 /* registerToolbarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424042DF6EF17000AA578 /* registerToolbarNavigation.swift */; };
+		5F54240F2DF6EF17000AA578 /* registerTrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424052DF6EF17000AA578 /* registerTrackingProtection.swift */; };
+		5F5424102DF6EF17000AA578 /* registerContextMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F92DF6EF17000AA578 /* registerContextMenuNavigation.swift */; };
+		5F5424112DF6EF17000AA578 /* registerLibraryPanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FC2DF6EF17000AA578 /* registerLibraryPanelNavigation.swift */; };
+		5F5424122DF6EF17000AA578 /* registerMiscellanousActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FD2DF6EF17000AA578 /* registerMiscellanousActions.swift */; };
+		5F5424132DF6EF17000AA578 /* registerTabTrayNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424032DF6EF17000AA578 /* registerTabTrayNavigation.swift */; };
+		5F5424142DF6EF17000AA578 /* registerFxAccountNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FA2DF6EF17000AA578 /* registerFxAccountNavigation.swift */; };
+		5F5424152DF6EF17000AA578 /* registerOnboardingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424002DF6EF17000AA578 /* registerOnboardingNavigation.swift */; };
+		5F5424162DF6EF17000AA578 /* registerMobileNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FF2DF6EF17000AA578 /* registerMobileNavigation.swift */; };
+		5F5424172DF6EF17000AA578 /* registerSettingsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424012DF6EF17000AA578 /* registerSettingsNavigation.swift */; };
+		5F5424182DF6EF17000AA578 /* registerUrlBarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424062DF6EF17000AA578 /* registerUrlBarNavigation.swift */; };
+		5F5424192DF6EF17000AA578 /* FxUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F62DF6EF17000AA578 /* FxUserState.swift */; };
 		5F7C8A042D09A62A00C9F89D /* A11yOnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7C8A032D09A62A00C9F89D /* A11yOnboardingTests.swift */; };
 		5FA2233C27F74071005B3D87 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA2233B27F74071005B3D87 /* Glean */; };
 		5FACA10C2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 5FACA10B2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan */; };
@@ -2526,7 +2544,6 @@
 		0BBFBF242DFC203100160911 /* BrowserWebUIDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWebUIDelegate.swift; sourceTree = "<group>"; };
 		0BC57FE82D48E9CF0049C2B9 /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteLoadTest.swift; sourceTree = "<group>"; };
-		0BCC268F2CFF0CD70072CD5A /* KeychainWrapperExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapperExtensions.swift; sourceTree = "<group>"; };
 		0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupHTMLSetting.swift; sourceTree = "<group>"; };
 		0BD049D02DFC4BB000614E61 /* testPopUp.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = testPopUp.html; sourceTree = "<group>"; };
 		0BD24470A8F71A8CE50A55E0 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -7796,6 +7813,24 @@
 		5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAWebViewModel.swift; sourceTree = "<group>"; };
 		5F194C3596E08BAB72BC6879 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11yUtils.swift; sourceTree = "<group>"; };
+		5F5423F62DF6EF17000AA578 /* FxUserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxUserState.swift; sourceTree = "<group>"; };
+		5F5423F72DF6EF17000AA578 /* NavigationRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRegistry.swift; sourceTree = "<group>"; };
+		5F5423F82DF6EF17000AA578 /* registerCommonNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerCommonNavigation.swift; sourceTree = "<group>"; };
+		5F5423F92DF6EF17000AA578 /* registerContextMenuNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerContextMenuNavigation.swift; sourceTree = "<group>"; };
+		5F5423FA2DF6EF17000AA578 /* registerFxAccountNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerFxAccountNavigation.swift; sourceTree = "<group>"; };
+		5F5423FB2DF6EF17000AA578 /* registerHomePanelNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerHomePanelNavigation.swift; sourceTree = "<group>"; };
+		5F5423FC2DF6EF17000AA578 /* registerLibraryPanelNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerLibraryPanelNavigation.swift; sourceTree = "<group>"; };
+		5F5423FD2DF6EF17000AA578 /* registerMiscellanousActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerMiscellanousActions.swift; sourceTree = "<group>"; };
+		5F5423FE2DF6EF17000AA578 /* registerMiscellanousNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerMiscellanousNavigation.swift; sourceTree = "<group>"; };
+		5F5423FF2DF6EF17000AA578 /* registerMobileNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerMobileNavigation.swift; sourceTree = "<group>"; };
+		5F5424002DF6EF17000AA578 /* registerOnboardingNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerOnboardingNavigation.swift; sourceTree = "<group>"; };
+		5F5424012DF6EF17000AA578 /* registerSettingsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerSettingsNavigation.swift; sourceTree = "<group>"; };
+		5F5424022DF6EF17000AA578 /* registerTabMenuNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerTabMenuNavigation.swift; sourceTree = "<group>"; };
+		5F5424032DF6EF17000AA578 /* registerTabTrayNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerTabTrayNavigation.swift; sourceTree = "<group>"; };
+		5F5424042DF6EF17000AA578 /* registerToolbarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerToolbarNavigation.swift; sourceTree = "<group>"; };
+		5F5424052DF6EF17000AA578 /* registerTrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerTrackingProtection.swift; sourceTree = "<group>"; };
+		5F5424062DF6EF17000AA578 /* registerUrlBarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerUrlBarNavigation.swift; sourceTree = "<group>"; };
+		5F5424072DF6EF17000AA578 /* registerZoomNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerZoomNavigation.swift; sourceTree = "<group>"; };
 		5F684EB59A149BD03A1E5247 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5F7C8A032D09A62A00C9F89D /* A11yOnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A11yOnboardingTests.swift; sourceTree = "<group>"; };
 		5FACA10B2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AccessibilityTestPlan.xctestplan; sourceTree = "<group>"; };
@@ -11638,6 +11673,24 @@
 		3BF4B8DA1D38493300493393 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				5F5423F62DF6EF17000AA578 /* FxUserState.swift */,
+				5F5423F72DF6EF17000AA578 /* NavigationRegistry.swift */,
+				5F5423F82DF6EF17000AA578 /* registerCommonNavigation.swift */,
+				5F5423F92DF6EF17000AA578 /* registerContextMenuNavigation.swift */,
+				5F5423FA2DF6EF17000AA578 /* registerFxAccountNavigation.swift */,
+				5F5423FB2DF6EF17000AA578 /* registerHomePanelNavigation.swift */,
+				5F5423FC2DF6EF17000AA578 /* registerLibraryPanelNavigation.swift */,
+				5F5423FD2DF6EF17000AA578 /* registerMiscellanousActions.swift */,
+				5F5423FE2DF6EF17000AA578 /* registerMiscellanousNavigation.swift */,
+				5F5423FF2DF6EF17000AA578 /* registerMobileNavigation.swift */,
+				5F5424002DF6EF17000AA578 /* registerOnboardingNavigation.swift */,
+				5F5424012DF6EF17000AA578 /* registerSettingsNavigation.swift */,
+				5F5424022DF6EF17000AA578 /* registerTabMenuNavigation.swift */,
+				5F5424032DF6EF17000AA578 /* registerTabTrayNavigation.swift */,
+				5F5424042DF6EF17000AA578 /* registerToolbarNavigation.swift */,
+				5F5424052DF6EF17000AA578 /* registerTrackingProtection.swift */,
+				5F5424062DF6EF17000AA578 /* registerUrlBarNavigation.swift */,
+				5F5424072DF6EF17000AA578 /* registerZoomNavigation.swift */,
 				8AC976C12DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift */,
 				5F2B55FD2D4CD7F000A4E2CF /* A11yUtils.swift */,
 				3BF4B8E81D38497A00493393 /* BaseTestCase.swift */,
@@ -17134,6 +17187,24 @@
 				5FEB88332D6F5E4A00ECE6B1 /* A11yHomePageTests.swift in Sources */,
 				2CCF17532105E4FD00705AE5 /* DisplaySettingsTests.swift in Sources */,
 				B1CA62822C0DB43600D31625 /* MultiWindowTests.swift in Sources */,
+				5F5424082DF6EF17000AA578 /* registerMiscellanousNavigation.swift in Sources */,
+				5F5424092DF6EF17000AA578 /* NavigationRegistry.swift in Sources */,
+				5F54240A2DF6EF17000AA578 /* registerHomePanelNavigation.swift in Sources */,
+				5F54240B2DF6EF17000AA578 /* registerZoomNavigation.swift in Sources */,
+				5F54240C2DF6EF17000AA578 /* registerTabMenuNavigation.swift in Sources */,
+				5F54240D2DF6EF17000AA578 /* registerCommonNavigation.swift in Sources */,
+				5F54240E2DF6EF17000AA578 /* registerToolbarNavigation.swift in Sources */,
+				5F54240F2DF6EF17000AA578 /* registerTrackingProtection.swift in Sources */,
+				5F5424102DF6EF17000AA578 /* registerContextMenuNavigation.swift in Sources */,
+				5F5424112DF6EF17000AA578 /* registerLibraryPanelNavigation.swift in Sources */,
+				5F5424122DF6EF17000AA578 /* registerMiscellanousActions.swift in Sources */,
+				5F5424132DF6EF17000AA578 /* registerTabTrayNavigation.swift in Sources */,
+				5F5424142DF6EF17000AA578 /* registerFxAccountNavigation.swift in Sources */,
+				5F5424152DF6EF17000AA578 /* registerOnboardingNavigation.swift in Sources */,
+				5F5424162DF6EF17000AA578 /* registerMobileNavigation.swift in Sources */,
+				5F5424172DF6EF17000AA578 /* registerSettingsNavigation.swift in Sources */,
+				5F5424182DF6EF17000AA578 /* registerUrlBarNavigation.swift in Sources */,
+				5F5424192DF6EF17000AA578 /* FxUserState.swift in Sources */,
 				2C97EC711E72C80E0092EC18 /* TabsTests.swift in Sources */,
 				39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */,
 				2CC1B3F01E9B861400814EEC /* DomainAutocompleteTests.swift in Sources */,
@@ -29081,7 +29152,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 142.0.20250625050341;
+				version = 142.0.20250628050320;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

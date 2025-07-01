@@ -7,6 +7,7 @@ import Storage
 import struct MozillaAppServices.Login
 
 protocol LoginStorage {
+    @MainActor
     func listLogins() async throws -> [Login]
 }
 

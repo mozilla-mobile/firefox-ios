@@ -64,6 +64,7 @@ enum GeneralBrowserActionType: ActionType {
     case clearData
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage
+    case enteredZeroSearchScreen
 }
 
 class GeneralBrowserMiddlewareAction: Action {

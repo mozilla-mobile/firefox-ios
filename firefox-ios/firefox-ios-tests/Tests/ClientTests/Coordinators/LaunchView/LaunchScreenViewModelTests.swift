@@ -42,11 +42,11 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 0)
     }
 
-    func testLaunchType_intro() async {
+    func testLaunchType_intro() {
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let subject = createSubject()
         subject.delegate = delegate
-        await subject.startLoading(appVersion: "112.0")
+        subject.startLoading(appVersion: "112.0")
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -60,14 +60,14 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_termsOfService() async {
+    func testLaunchType_termsOfService() {
         FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
             TosFeature(status: true)
         })
 
         let subject = createSubject()
         subject.delegate = delegate
-        await subject.startLoading(appVersion: "112.0")
+        subject.startLoading(appVersion: "112.0")
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -81,13 +81,13 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_update() async {
+    func testLaunchType_update() {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
         let subject = createSubject()
         subject.delegate = delegate
-        await subject.startLoading(appVersion: "113.0")
+        subject.startLoading(appVersion: "113.0")
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
@@ -101,7 +101,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_survey() async {
+    func testLaunchType_survey() {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         let message = createMessage()
@@ -109,7 +109,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
         let subject = createSubject()
         subject.delegate = delegate
-        await subject.startLoading(appVersion: "112.0")
+        subject.startLoading(appVersion: "112.0")
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
