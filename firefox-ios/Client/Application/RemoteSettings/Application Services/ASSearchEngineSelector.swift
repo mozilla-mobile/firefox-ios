@@ -62,7 +62,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
                 let isOptional = $0.optional ? " (OPTIONAL)" : ""
                 return $0.name + isOptional
             }
-            logger.log("Got search engines from \(serverName) for '\(locale)' and '\(region)': \(engineLogList)",
+            logger.log("[SEC] Got search engines from \(serverName) for '\(locale)' and '\(region)': \(engineLogList)",
                        level: .info,
                        category: .remoteSettings)
 

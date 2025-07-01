@@ -20,7 +20,7 @@ struct ASSearchEngineIconRecord {
             do {
                 return try JSONDecoder().decode(ASSearchEngineIconRecordFields.self, from: fieldData)
             } catch {
-                logger.log("Decoding search icon record JSON failed: \(error)", level: .debug, category: .remoteSettings)
+                logger.log("[SEC] Decoding search icon record JSON failed: \(error)", level: .debug, category: .remoteSettings)
             }
             return ASSearchEngineIconRecordFields.empty()
         }()

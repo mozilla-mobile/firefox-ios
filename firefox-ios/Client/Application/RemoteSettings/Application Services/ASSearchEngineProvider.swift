@@ -55,6 +55,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                                                        completion: @escaping SearchEngineCompletion) {
         let locale = Locale.current
         let prefsVersion = preferencesVersion
+        let closureLogger = logger
 
         // First load the unordered engines, based on the current locale and language
         getUnorderedBundledEnginesFor(locale: locale,
@@ -70,6 +71,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 // We haven't persisted the engine order, so use the default engine ordering.
                 // For AS-based engines we are guaranteed the preferred default to be at index 0
                 // (this happens in `fetchSearchEngines()`).
+                closureLogger.log("[SEC] Search order prefs: NO. (Unavailable, or empty.)",
+                                  level: .info,
+                                  category: .remoteSettings)
                 ensureMainThread { completion(finalEngineOrderingPrefs, unorderedEngines) }
                 return
             }
@@ -78,6 +82,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             // We may have found engines that weren't persisted in the ordered list
             // (if the user changed locales or added a new engine); these engines
             // will be appended to the end of the list.
+            closureLogger.log("[SEC] Search order prefs: YES. Will apply (identifiers): \(orderedEngineNames)",
+                              level: .info,
+                              category: .remoteSettings)
             let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
                 let index1 = orderedEngineNames.firstIndex(of: engine1.engineID)
                 let index2 = orderedEngineNames.firstIndex(of: engine2.engineID)
@@ -94,6 +101,12 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 }
             }
 
+            let before = unorderedEngines.map { $0.shortName }
+            let after = orderedEngines.map { $0.shortName }
+            closureLogger.log("[SEC] Search order prefs result. Before: \(before) After: \(after).",
+                              level: .info,
+                              category: .remoteSettings)
+
             ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
     }
@@ -107,7 +120,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
         guard let iconPopulator = iconDataFetcher, let selector else {
             let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"
             let logExtra2 = selector == nil ? "nil" : "ok"
-            logger.log("Icon fetcher and/or selector are nil. (\(logExtra1), \(logExtra2))",
+            logger.log("[SEC] Icon fetcher and/or selector are nil. (\(logExtra1), \(logExtra2))",
                        level: .fatal,
                        category: .remoteSettings)
             completion([])
@@ -116,13 +129,13 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
             if let error {
-                logger.log("Error fetching search engines via App Services: \(error)",
+                logger.log("[SEC] Error fetching search engines via App Services: \(error)",
                            level: .warning,
                            category: .remoteSettings)
             }
 
             guard let result, !result.engines.isEmpty else {
-                logger.log("AS search engine fetch returned empty results",
+                logger.log("[SEC] AS search engine fetch returned empty results",
                            level: .fatal,
                            category: .remoteSettings)
                 completion([])

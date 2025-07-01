@@ -75,6 +75,10 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         self.orderedEngines = []
         initPrefBasedSuggestions()
 
+        logger.log("[SEC] Search engine provider: \(String(describing: type(of: engineProvider)))",
+                   level: .info,
+                   category: .remoteSettings)
+
         getOrderedEngines { preferences, orderedEngines in
             self.orderedEngines = orderedEngines
 
