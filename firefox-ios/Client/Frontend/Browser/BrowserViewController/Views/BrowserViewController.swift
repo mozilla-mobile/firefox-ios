@@ -550,7 +550,7 @@ class BrowserViewController: UIViewController,
         let isKeyboardShowing = keyboardState != nil
 
         if isBottomSearchBar {
-            header.isClearBackground = false
+            header.isClearBackground = !showNavToolbar && enableBlur
 
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
@@ -611,6 +611,28 @@ class BrowserViewController: UIViewController,
             legacyUrlBar?.warningMenuBadge(setVisible: showWarningBadge)
             toolbar.warningMenuBadge(setVisible: showWarningBadge)
         }
+    }
+
+    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
+        guard searchBarPosition == .bottom, isToolbarRefactorEnabled else { return }
+
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        header.removeArrangedView(addressToolbarContainer, animated: false)
+        overKeyboardContainer.removeArrangedView(addressToolbarContainer, animated: false)
+
+        if isNavToolbar {
+            overKeyboardContainer.addArrangedSubview(addressToolbarContainer)
+        } else {
+            header.addArrangedSubview(addressToolbarContainer)
+        }
+        updateHeaderConstraints()
+
+        let action = GeneralBrowserMiddlewareAction(
+            scrollOffset: scrollController.contentOffset,
+            toolbarPosition: isNavToolbar ? searchBarPosition : .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+        store.dispatchLegacy(action)
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
@@ -1469,6 +1491,7 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
+            updateAddressToolbarContainerPosition(for: traitCollection)
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
@@ -1556,16 +1579,21 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateHeaderConstraints() {
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldHideHeader = isBottomSearchBar && (
+            (isNavToolbar && isToolbarRefactorEnabled) || !isToolbarRefactorEnabled
+        )
+
         header.snp.remakeConstraints { make in
-            if isBottomSearchBar {
-                make.left.right.equalTo(view)
-                make.top.equalTo(view.safeArea.top)
+            make.left.right.equalTo(view)
+            make.top.equalTo(view.safeArea.top)
+
+            if shouldHideHeader {
                 // The status bar is covered by the statusBarOverlay,
                 // if we don't have the URL bar at the top then header height is 0
                 make.height.equalTo(0)
             } else {
                 scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
-                make.left.right.equalTo(view)
             }
         }
     }
@@ -1588,12 +1616,12 @@ class BrowserViewController: UIViewController,
                 make.height.equalTo(UIConstants.BottomToolbarHeight)
             }
         }
-
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         overKeyboardContainer.snp.remakeConstraints { make in
             scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
-            } else if !isBottomSearchBar {
+            } else if (!isBottomSearchBar && !isToolbarRefactorEnabled) || (!isNavToolbar && isToolbarRefactorEnabled) {
                 make.height.equalTo(0)
             }
             make.leading.trailing.equalTo(view)
