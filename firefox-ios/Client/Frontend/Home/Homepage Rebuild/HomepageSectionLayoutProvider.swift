@@ -110,7 +110,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
-        case .header, .searchBar:
+        case .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
                 topInsets: UX.standardInset,

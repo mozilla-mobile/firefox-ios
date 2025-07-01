@@ -13,7 +13,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
                              Notifiable {
     struct UX {
         static let inBetweenSpace: CGFloat = 12
-        static let bottomSpace: CGFloat = 10
+        static let topSpacing: CGFloat = 32
+        static let bottomSpace: CGFloat = 16
         static let bottomButtonSpace: CGFloat = 6
         static let leadingInset: CGFloat = 0
     }
@@ -71,7 +72,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         stackViewLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
         ])
