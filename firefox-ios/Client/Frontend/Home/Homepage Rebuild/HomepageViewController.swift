@@ -607,6 +607,13 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
+        case .topSites(let textColor, _):
+            sectionLabelCell.configure(
+                state: homepageState.topSitesState.sectionHeaderState,
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
         case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
                 state: homepageState.jumpBackInState.sectionHeaderState,
