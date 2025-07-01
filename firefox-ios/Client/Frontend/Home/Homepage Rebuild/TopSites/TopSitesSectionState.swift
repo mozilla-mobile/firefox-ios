@@ -17,6 +17,11 @@ struct TopSitesSectionState: StateType, Equatable {
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
 
+    let sectionHeaderState = SectionHeaderConfiguration(
+        title: .FirefoxHomepage.Shortcuts.SectionTitle,
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites
+    )
+
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows

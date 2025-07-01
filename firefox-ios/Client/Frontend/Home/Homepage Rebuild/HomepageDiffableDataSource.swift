@@ -18,7 +18,7 @@ final class HomepageDiffableDataSource:
     enum HomeSection: Hashable {
         case header
         case messageCard
-        case topSites(NumberOfTilesPerRow)
+        case topSites(TextColor?, NumberOfTilesPerRow)
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
@@ -100,8 +100,8 @@ final class HomepageDiffableDataSource:
         }
 
         if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
-            snapshot.appendSections([.topSites(numberOfCellsPerRow)])
-            snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
+            snapshot.appendSections([.topSites(textColor, numberOfCellsPerRow)])
+            snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
         }
 
         if state.searchState.shouldShowSearchBar {
