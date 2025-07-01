@@ -215,19 +215,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         updateWallpaperMetadata()
         loadBackgroundTabs()
-<<<<<<< HEAD
-        /// On first run (when suggest‑data.db is empty) this populates the db; later calls are no‑ops due to `emptyOnly`.
-        /// For details, see:
-        ///     https://github.com/mozilla/application-services/blob/5aade8c09653ad2a2ec02746dc6bcf80dc8434c2/components/suggest/src/store.rs#L597-L599
-        /// Actual periodic refreshing happens in the background in `BackgroundFirefoxSuggestIngestUtility.swift`.
-        /// `.utility` priority is used here because this blocks on network calls and would otherwise trigger a
-        /// priority‑inversion warning if run at user‑initiated QoS.
-        Task(priority: .utility) {
-            try await self.profile.firefoxSuggest?.ingest(emptyOnly: true)
-        }
-=======
         ingestFirefoxSuggestions(in: application)
->>>>>>> 5e26c8c71 (Bugfix FXIOS-12650 [Suggest] Make sure that initial ingest call is not terminated when app goes to background quickly (#27599))
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
