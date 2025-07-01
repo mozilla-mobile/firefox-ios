@@ -212,10 +212,10 @@
 "Could not add page to Reading list" = "Δεν ήταν δυνατή η προσθήκη σελίδας στη λίστα ανάγνωσης";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Αδυναμία προσθήκης σελίδας στη Λίστα Ανάγνωσης. Μήπως είναι ήδη εκεί;";
+"Could not add page to Reading List. Maybe it’s already there?" = "Δεν ήταν δυνατή η προσθήκη της σελίδας στη λίστα ανάγνωσης. Μήπως βρίσκεται ήδη εκεί;";
 
 /* Error message that is shown in settings when there was a problem loading */
-"Could not load page." = "Αδυναμία φόρτωσης σελίδας.";
+"Could not load page." = "Δεν ήταν δυνατή η φόρτωση της σελίδας.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Description" = "Η ενσωματωμένη ενισχυμένη προστασία από καταγραφή εμποδίζει την καταγραφή σας από διαφημίσεις. Επιλέξτε την αυστηρή λειτουργία για φραγή ακόμη περισσότερων ιχνηλατών, διαφημίσεων και αναδυόμενων.";
@@ -346,6 +346,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Αφαίρεση";
 
+/* On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Stories.Minutes.v140" = "Λεπτά: %d";
+
 /* Label showing how many pages there is in a search group. %d represents a number */
 "FirefoxHomepage.Common.PagesCount.v112" = "Σελίδες: %d";
 
@@ -369,6 +372,9 @@
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Χορηγία";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Stories.Sponsored.v140" = "Χορηγία";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Εμπρός";
@@ -665,7 +671,7 @@
 "LoginsHelper.DontSave.Button" = "Χωρίς αποθήκευση";
 
 /* Button to not update the user's password */
-"LoginsHelper.DontUpdate.Button" = "Να μη γίνει ενημέρωση";
+"LoginsHelper.DontUpdate.Button" = "Να μην γίνει ενημέρωση";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Αποθήκευση σύνδεσης";
@@ -824,16 +830,16 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominer";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστότοποι μπορεί να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους συμβάλλει στην ταχύτερη φόρτωση ιστοτόπων, αλλά κάποια κουμπιά, φόρμες και πεδία σύνδεσης ενδέχεται να μη λειτουργούν.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Οι ιστότοποι ενδέχεται να φορτώνουν εξωτερικές διαφημίσεις, βίντεο και άλλο περιεχόμενο με κρυφούς ιχνηλάτες. Η φραγή τους μπορεί να συμβάλλει στην ταχύτερη φόρτωση των ιστοτόπων, αλλά ορισμένα κουμπιά, φόρμες και πεδία σύνδεσης ενδέχεται να μην λειτουργούν.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Αυτά τα cookie σάς ακολουθούν από ιστότοπο σε ιστότοπο για να συλλέξουν δεδομένα σχετικά με το τι κάνετε στο διαδίκτυο. Δημιουργούνται από τρίτους, όπως διαφημιστές και εταιρείες ανάλυσης.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominer χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να εξορύξουν κρυπτονομίσματα. Τα σενάρια εξόρυξης κρυπτονομισμάτων εξαντλούν την μπαταρία σας, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στο λογαριασμό τους ρεύματος.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Τα cryptominer χρησιμοποιούν κρυφά την υπολογιστική ισχύ του συστήματός σας για να κάνουν εξόρυξη κρυπτονομισμάτων. Τα σενάρια εξόρυξης κρυπτονομισμάτων καταναλώνουν μπαταρία, επιβραδύνουν τον υπολογιστή σας, ενώ ενδέχεται να δείτε αυξημένες χρεώσεις στον λογαριασμό ρεύματός σας.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Οι ρυθμίσεις στο πρόγραμμα περιήγησης και στον υπολογιστή σας είναι μοναδικές. Τα fingerprinters συλλέγουν πολλές από αυτές τις μοναδικές ρυθμίσεις για να δημιουργήσουν ένα προφίλ για εσάς, το οποίο μπορεί να χρησιμοποιηθεί για να την καταγραφή της περιήγησής σας.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Οι ρυθμίσεις του προγράμματος περιήγησης και της συσκευής σας είναι μοναδικές. Τα fingerprinter συλλέγουν πολλές από αυτές τις μοναδικές ρυθμίσεις για να δημιουργήσουν ένα προφίλ για εσάς, το οποίο μπορεί να χρησιμοποιηθεί για να την καταγραφή σας κατά την περιήγηση.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Τα μέσα κοινωνικής δικτύωσης τοποθετούν ιχνηλάτες σε άλλους ιστοτόπους για να δημιουργήσουν ένα πιο ολοκληρωμένο και στοχευμένο προφίλ για εσάς. Ο αποκλεισμός ιχνηλατών μειώνει αυτά που βλέπουν οι εταιρείες μέσω κοινωνικής δικτύωσης.";
@@ -851,7 +857,7 @@
 "mobile device" = "κινητή συσκευή";
 
 /* Relative date for dates older than a month and less than two months. */
-"more than a month ago" = "πάνω από ένα μήνα πριν";
+"more than a month ago" = "πάνω από έναν μήνα πριν";
 
 /* Description for a date more than a week ago, but less than a month ago. */
 "more than a week ago" = "πάνω από μία εβδομάδα πριν";
@@ -893,7 +899,7 @@
 "OpenURL.Error.Message" = "Το Firefox δεν μπορεί να ανοίξει τη σελίδα επειδή έχει μια μη έγκυρη διεύθυνση.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
-"OpenURL.Error.Title" = "Αδυναμία ανοίγματος σελίδας";
+"OpenURL.Error.Title" = "Δεν είναι δυνατό το άνοιγμα της σελίδας";
 
 /* Password textbox in Authentication prompt */
 "Password" = "Κωδικός πρόσβασης";
@@ -1070,7 +1076,7 @@
 "SendTo.NavBar.Title" = "Αποστολή καρτέλας";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Δεν έχετε συνδέσει καμία άλλη, διαθέσιμη προς συγχρονισμό, συσκευή σε αυτό το λογαριασμό Firefox.";
+"SendTo.NoDevicesFound.Message" = "Δεν έχετε συνδέσει καμία άλλη, διαθέσιμη προς συγχρονισμό, συσκευή σε αυτόν τον λογαριασμό Firefox.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Ανοίξτε το Firefox, μεταβείτε στις Ρυθμίσεις και συνδεθείτε για να συνεχίσετε.";
@@ -1187,7 +1193,7 @@
 "Settings.DataManagement.Title" = "Διαχείριση δεδομένων";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Το Firefox θα σταματήσει τον συγχρονισμό με τον λογαριασμό σας, αλλά δεν θα διαγράψει τα δεδομένα περιήγησής σας από αυτήν την συσκευή.";
+"Settings.Disconnect.Body" = "Το Firefox θα σταματήσει τον συγχρονισμό με τον λογαριασμό σας, αλλά δεν θα διαγράψει τα δεδομένα περιήγησής σας από αυτήν τη συσκευή.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Αποσύνδεση Sync";
@@ -1523,7 +1529,7 @@
 "Settings.Toolbar.Top" = "Πάνω";
 
 /* Dismiss button for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Button" = "OK, το 'πιασα";
+"Settings.TrackingProtection.Alert.Button" = "OK, το κατάλαβα";
 
 /* Decription for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Description" = "Εάν ένας ιστότοπος δεν λειτουργεί όπως πρέπει, πατήστε το λουκέτο στη γραμμή διευθύνσεων και απενεργοποιήστε την Ενισχυμένη προστασία από καταγραφή για αυτήν τη σελίδα.";
@@ -1706,7 +1712,7 @@
 "There was an error converting the page" = "Προέκυψε σφάλμα μετατροπής της σελίδας";
 
 /* Relative date for date in past week. */
-"this week" = "αυτή την εβδομάδα";
+"this week" = "αυτήν την εβδομάδα";
 
 /* Relative date for yesterday. */
 "TimeConstants.Yesterday.v106" = "χθες";

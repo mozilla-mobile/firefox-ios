@@ -163,9 +163,13 @@ final class MenuRedesignTableView: UIView,
         didSelectRowAt indexPath: IndexPath
     ) {
         tableView.deselectRow(at: indexPath, animated: false)
+        let section = menuData[indexPath.section]
 
-        if let action = menuData[indexPath.section].options[indexPath.row].action {
-            action()
+        // We handle the actions for horizontalTabs, in MenuSquaresViewContentCell
+        if !section.isHorizontalTabsSection {
+            if let action = section.options[indexPath.row].action {
+                action()
+            }
         }
     }
 

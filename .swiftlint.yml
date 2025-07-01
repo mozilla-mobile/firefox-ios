@@ -149,6 +149,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # Focus specific
   - focus-ios/Blockzilla/Generated
   - focus-ios-tests/tools/Localizations
+  # Application-services specific
+  - MozillaRustComponents/
 
 included:
   - /Users/vagrant/git

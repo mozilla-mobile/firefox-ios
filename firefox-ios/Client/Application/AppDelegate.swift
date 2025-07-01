@@ -52,6 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
     private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
+    private var suggestBackgroundUtility: BackgroundFirefoxSuggestIngestUtility?
+    private var suggestBackgroundTaskID: UIBackgroundTaskIdentifier = .invalid
+    private static let suggestBackgroundTaskName = "SuggestIngest"
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
     private lazy var metricKitWrapper = MetricKitWrapper()
@@ -148,10 +151,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         backgroundWorkUtility = BackgroundFetchAndProcessingUtility()
         backgroundWorkUtility?.registerUtility(BackgroundSyncUtility(profile: profile, application: application))
         backgroundWorkUtility?.registerUtility(BackgroundNotificationSurfaceUtility())
+
         if let firefoxSuggest = profile.firefoxSuggest {
-            backgroundWorkUtility?.registerUtility(BackgroundFirefoxSuggestIngestUtility(
-                firefoxSuggest: firefoxSuggest
-            ))
+            suggestBackgroundUtility = BackgroundFirefoxSuggestIngestUtility(firefoxSuggest: firefoxSuggest)
         }
 
         let topSitesProvider = TopSitesProviderImplementation(
@@ -206,15 +208,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         updateWallpaperMetadata()
         loadBackgroundTabs()
-        /// On first run (when suggest‑data.db is empty) this populates the db; later calls are no‑ops due to `emptyOnly`.
-        /// For details, see:
-        ///     https://github.com/mozilla/application-services/blob/5aade8c09653ad2a2ec02746dc6bcf80dc8434c2/components/suggest/src/store.rs#L597-L599
-        /// Actual periodic refreshing happens in the background in `BackgroundFirefoxSuggestIngestUtility.swift`.
-        /// `.utility` priority is used here because this blocks on network calls and would otherwise trigger a
-        /// priority‑inversion warning if run at user‑initiated QoS.
-        Task(priority: .utility) { [profile] in
-            try await profile.firefoxSuggest?.ingest(emptyOnly: true)
-        }
+        ingestFirefoxSuggestions(in: application)
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -277,6 +271,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         AppEventQueue.wait(for: requiredEvents) { [weak self] in
             self?.isLoadingBackgroundTabs = false
             self?.backgroundTabLoader.loadBackgroundTabs()
+        }
+    }
+
+    private func ingestFirefoxSuggestions(in application: UIApplication) {
+        /// Start a background task so that the ingest task doesn't get killed
+        /// immediately if the app goes to the background before ingest finishes. iOS will kill
+        /// our process as soon as we hit background if we don't have a background task running.
+        suggestBackgroundTaskID = application.beginBackgroundTask(
+            withName: Self.suggestBackgroundTaskName) { [weak self, application] in
+            guard let self = self else { return }
+            self.profile.firefoxSuggest?.interruptEverything()
+            application.endBackgroundTask(self.suggestBackgroundTaskID)
+            self.suggestBackgroundTaskID = .invalid
+        }
+
+        /// On first run (when suggest‑data.db is empty) this populates the db; later calls are no‑ops due to `emptyOnly`.
+        /// For details, see:
+        ///     https://github.com/mozilla/application-services/blob/5aade8c09653ad2a2ec02746dc6bcf80dc8434c2/components/suggest/src/store.rs#L597-L599
+        /// Actual periodic refreshing happens in the background in `BackgroundFirefoxSuggestIngestUtility.swift`.
+        /// `.utility` priority is used here because this blocks on network calls and would otherwise trigger a
+        /// priority‑inversion warning if run at user‑initiated QoS.
+        Task(priority: .utility) { [profile] in
+            do {
+                try await profile.firefoxSuggest?.ingest(emptyOnly: true)
+            } catch {
+                self.logger.log("Suggest ingest failed: \(error)", level: .warning, category: .storage)
+            }
+            /// Only schedule the periodic BGProcessingTask after the
+            /// initial on-launch ingest completes, to avoid double scheduling
+            /// or racing against our own background task.
+            self.suggestBackgroundUtility?.scheduleTaskOnAppBackground()
+            if self.suggestBackgroundTaskID != .invalid {
+                application.endBackgroundTask(self.suggestBackgroundTaskID)
+                self.suggestBackgroundTaskID = .invalid
+            }
         }
     }
 

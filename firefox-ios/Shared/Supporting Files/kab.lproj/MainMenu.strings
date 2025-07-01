@@ -4,6 +4,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Amaynut: Umuɣ afessas";
 
+/* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Creḍ asebter";
+
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Asenɣes n tafat";
 
@@ -27,6 +30,15 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Ales qqen i wakken ad tesnekreḍ amtawi";
+
+/* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.BookmarkPage.Title.v141" = "Creḍ asebter";
+
+/* On the main menu, a title for a label that indicate the current option/action state is off. */
+"MainMenu.Off.Title.v141" = "Yensa";
+
+/* On the main menu, a title for a label that indicate the current option/action state is on. */
+"MainMenu.On.Title.v141" = "Yermed";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Ticraḍ n isebtar";
@@ -75,6 +87,15 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Amaynut deg %@";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
+"MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "Tuqqna d taraɣelsant";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "Ammesten YENSA";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "Ammesten YERMED";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Asebter agejdan";
@@ -205,6 +226,9 @@
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Askar n yiḍ";
 
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
+"MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "Zoom n usebter";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Siggez";
 
@@ -237,6 +261,9 @@
 
 /* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Sermed askar aberkan n usmel web";
+
+/* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Askar aberkan n usmel web";
 
 /* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
 "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
@@ -294,6 +321,9 @@
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Af deg usebter…";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPageV2.Title.v141" = "Nadi deg usebter";
 
 /* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.LessOptions.Title.v141" = "Ddaw";
