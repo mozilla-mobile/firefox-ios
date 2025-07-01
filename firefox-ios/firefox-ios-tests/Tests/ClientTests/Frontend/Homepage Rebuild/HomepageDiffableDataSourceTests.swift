@@ -35,6 +35,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     // MARK: - applyInitialSnapshot
     func test_updateSnapshot_hasCorrectData() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         dataSource.updateSnapshot(
@@ -43,13 +44,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 2)
+        XCTAssertEqual(snapshot.numberOfSections, 1)
         let expectedSections: [HomepageSection] = [
-            .header,
             .customizeHomepage
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
 
@@ -91,6 +90,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnTopSites() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -114,16 +114,16 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, 4)), 8)
         let expectedSections: [HomepageSection] = [
-            .header,
-            .topSites(4),
+            .topSites(nil, 4),
             .customizeHomepage
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -140,7 +140,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
-            .header,
             .pocket(nil),
             .customizeHomepage
         ]
@@ -148,6 +147,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnMessageCard() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
         let configuration = MessageCardConfiguration(
             title: "Example Title",
@@ -170,7 +170,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
         let expectedSections: [HomepageSection] = [
-            .header,
             .messageCard,
             .customizeHomepage
         ]
@@ -178,6 +177,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnBookmarks() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -200,7 +200,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
         let expectedSections: [HomepageSection] = [
-            .header,
             .bookmarks(nil),
             .customizeHomepage
         ]
@@ -208,6 +207,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnJumpBackInSection() throws {
+        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -224,7 +224,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
         let expectedSections: [HomepageSection] = [
-            .header,
             .jumpBackIn(nil, mockSectionConfig),
             .customizeHomepage
         ]
@@ -239,22 +238,19 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
         let snapshot = dataSource.snapshot()
         let expectedSections: [HomepageSection] = [
-            .header,
             .customizeHomepage
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
-    func test_cusomizationSectionFlagDisabled_returnsExpectedSections() throws {
+    func test_customizationSectionFlagDisabled_returnsExpectedSections() throws {
         setupNimbusHNTCustomizationSectionTesting(isEnabled: false)
 
         let dataSource = try XCTUnwrap(diffableDataSource)
         let state = HomepageState(windowUUID: .XCTestDefaultUUID)
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
         let snapshot = dataSource.snapshot()
-        let expectedSections: [HomepageSection] = [
-            .header,
-        ]
+        let expectedSections: [HomepageSection] = []
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
