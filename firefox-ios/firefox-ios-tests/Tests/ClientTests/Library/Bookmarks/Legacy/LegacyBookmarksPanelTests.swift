@@ -53,6 +53,7 @@ class LegacyBookmarksPanelTests: XCTestCase {
         XCTAssertNil(panel.viewControllerPresented)
     }
 
+    @MainActor
     func testBottomLeftAction_InFolderEditModeState_BookmarkChangesState() {
         let panel = createPanel()
         panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
@@ -73,6 +74,7 @@ class LegacyBookmarksPanelTests: XCTestCase {
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
     }
 
+    @MainActor
     func testBottomLeftAction_InFolderEditModeState_FolderChangesState() {
         let panel = createPanel()
         panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
@@ -93,6 +95,7 @@ class LegacyBookmarksPanelTests: XCTestCase {
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
     }
 
+    @MainActor
     func testBottomLeftAction_InFolderEditModeState_SeparatorDoesntChangeState() {
         let panel = createPanel()
         panel.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
