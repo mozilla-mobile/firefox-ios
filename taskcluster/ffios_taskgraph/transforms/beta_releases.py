@@ -40,9 +40,10 @@ def resolve_beta_branch_and_head(config, tasks):
 
         if not taskgraph.fast:
             heads = Git().ls_remote("origin", "refs/heads/release/v*").splitlines()
-            branches = dict(head.split('\t')[::-1] for head in heads)
-            current_release_branch = max(branches, key=lambda branch: float(branch.removeprefix("refs/heads/release/v")))
-            revision = branches[current_release_branch]
+            branch_heads = dict(head.split('\t')[::-1] for head in heads)
+            current_release_head = max(branch_heads, key=lambda branch: float(branch.removeprefix("refs/heads/release/v")))
+            revision = branch_heads[current_release_head]
+            current_release_branch = current_release_head.removeprefix("refs/heads/")
 
             repository_url = config.params["base_repository"]
             if "git@" in repository_url:
