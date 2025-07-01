@@ -447,19 +447,6 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header(let state):
-            guard let headerCell = collectionView?.dequeueReusableCell(
-                cellType: HomepageHeaderCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            headerCell.configure(headerState: state)
-            headerCell.applyTheme(theme: currentTheme)
-
-            return headerCell
-
         case .messageCard(let config):
             guard let messageCardCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageMessageCardCell.self,
