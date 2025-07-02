@@ -18,7 +18,7 @@ protocol ToolbarHelperInterface {
 
 class ToolbarHelper: ToolbarHelperInterface {
     private enum UX {
-        static let backgroundAlphaForBlur: CGFloat = 0.8
+        static let backgroundAlphaForBlur: CGFloat = 0.85
     }
 
     var isToolbarRefactorEnabled: Bool {
