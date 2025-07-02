@@ -81,7 +81,7 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
             .fixedSize(horizontal: false, vertical: true)
-            .alignmentGuide(.titleAlignment) { d in d[.bottom] }
+            .alignmentGuide(.titleAlignment) { dimensions in dimensions[.bottom] }
     }
 
     @ViewBuilder
@@ -102,7 +102,7 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-            .alignmentGuide(.descriptionAlignment) { d in d[.bottom] }
+            .alignmentGuide(.descriptionAlignment) { dimensions in dimensions[.bottom] }
     }
 
     @ViewBuilder var linkView: some View {
