@@ -34,6 +34,8 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private func setupAccessibility() {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell
+        accessibilityTraits.insert(.button)
+        accessibilityLabel = .TabLocationURLPlaceholder
     }
 
     private func setupView() {
