@@ -75,8 +75,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // before any Application Services component gets used.
         Viaduct.shared.useReqwestBackend()
 
-        // Configure logger so we can start tracking logs early
-        logger.configure(crashManager: DefaultCrashManager())
         initializeRustErrors(logger: logger)
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,

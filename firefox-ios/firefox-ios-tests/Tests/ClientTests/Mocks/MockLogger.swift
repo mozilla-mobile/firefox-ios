@@ -12,7 +12,6 @@ class MockLogger: Logger {
     var savedExtra: [String: String]?
 
     func setup(sendCrashReports: Bool) {}
-    func configure(crashManager: Common.CrashManager) {}
     func copyLogsToDocuments() {}
     func logCustomError(error: Error) {}
     func deleteCachedLogFiles() {}
