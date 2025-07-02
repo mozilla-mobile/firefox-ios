@@ -103,7 +103,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
         let isTranslucent = model?.isTranslucent ?? false
         let backgroundAlpha: CGFloat = isTranslucent ? toolbarHelper.backgroundAlpha() : 1.0
-        backgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha)
+        backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(backgroundAlpha)
     }
 }
 
