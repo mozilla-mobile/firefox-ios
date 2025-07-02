@@ -212,6 +212,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         })
     }
 
+    /// Provides suggestions from external suggestion providers other than the local ones (history, bookmarks, etc.). For now
+    /// this includes suggestions from `amp` (sponsored ads) and `wikipedia`. Application Services supports the other ones.
+    /// This behaviour is currently geo-locked to the US, so to debug locally ensure your simulator region is set to US.
     @MainActor
     func loadFirefoxSuggestions() async {
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
