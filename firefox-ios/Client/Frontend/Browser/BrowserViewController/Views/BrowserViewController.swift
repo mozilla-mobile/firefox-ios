@@ -613,6 +613,16 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
+        guard searchBarPosition == .bottom, isToolbarRefactorEnabled else { return }
+
+        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
+        let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: newPosition]
+
+        notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
+    }
+
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
@@ -1469,6 +1479,7 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
+            updateAddressToolbarContainerPosition(for: traitCollection)
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
