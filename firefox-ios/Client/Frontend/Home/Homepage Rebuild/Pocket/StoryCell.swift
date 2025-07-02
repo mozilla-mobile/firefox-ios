@@ -6,7 +6,7 @@ import Common
 import Foundation
 import SiteImageView
 
-/// The standard cell used in homepage pocket section
+/// The cell used in homepage stories section
 class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable, Notifiable {
     struct UX {
         static let cellCornerRadius: CGFloat = 16

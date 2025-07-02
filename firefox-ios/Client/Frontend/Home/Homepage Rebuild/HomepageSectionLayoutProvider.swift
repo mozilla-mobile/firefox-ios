@@ -52,18 +52,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
             static func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-                                          isLandscape: Bool = UIWindow.isLandscape,
-                                          isStoriesRedesignEnabled: Bool) -> NSCollectionLayoutDimension {
+                                          isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
                 if device == .pad {
                     return .absolute(UX.PocketConstants.cellWidth)
                 } else if isLandscape {
                     return .fractionalWidth(UX.PocketConstants.fractionalWidthiPhoneLandscape)
                 } else {
-                    let franctionalWidth = isStoriesRedesignEnabled
-                    ? UX.PocketConstants.redesignedFractionalWidthiPhonePortrait
-                    : UX.PocketConstants.fractionalWidthiPhonePortrait
+                    let fractionalWidth = UX.PocketConstants.fractionalWidthiPhonePortrait
 
-                    return .fractionalWidth(franctionalWidth)
+                    return .fractionalWidth(fractionalWidth)
                 }
             }
 
@@ -207,7 +204,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: UX.PocketConstants.getWidthDimension(isStoriesRedesignEnabled: isStoriesRedesignEnabled),
+            widthDimension: UX.PocketConstants.getWidthDimension(),
             heightDimension: .estimated(UX.PocketConstants.cellHeight)
         )
 
@@ -238,47 +235,47 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
-        private func createStoriesSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-            let absoluteCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
+    private func createStoriesSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let absoluteCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
 
-            let maxHeight = measureTallestStoryCell(width: absoluteCellWidth)
+        let maxHeight = measureTallestStoryCell(width: absoluteCellWidth)
 
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(maxHeight)
-            )
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(maxHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(absoluteCellWidth),
-                heightDimension: .estimated(maxHeight)
-            )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(absoluteCellWidth),
+            heightDimension: .estimated(maxHeight)
+        )
 
-            let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-            group.contentInsets = NSDirectionalEdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 0,
-                trailing: UX.PocketConstants.storiesSpacing)
+        let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
+        group.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: 0,
+            bottom: 0,
+            trailing: UX.PocketConstants.storiesSpacing)
 
-            let section = NSCollectionLayoutSection(group: group)
+        let section = NSCollectionLayoutSection(group: group)
 
-            let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                          heightDimension: .estimated(UX.sectionHeaderHeight))
-            let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
-                                                                     elementKind: UICollectionView.elementKindSectionHeader,
-                                                                     alignment: .top)
-            section.boundarySupplementaryItems = [header]
+        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                      heightDimension: .estimated(UX.sectionHeaderHeight))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
+                                                                 elementKind: UICollectionView.elementKindSectionHeader,
+                                                                 alignment: .top)
+        section.boundarySupplementaryItems = [header]
 
-            let leadingInset = UX.leadingInset(traitCollection: traitCollection)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: leadingInset,
-                                                            bottom: UX.standardInset,
-                                                            trailing: 0)
-            section.orthogonalScrollingBehavior = .continuous
-            return section
-        }
+        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                        leading: leadingInset,
+                                                        bottom: UX.standardInset,
+                                                        trailing: 0)
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
 
     private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
