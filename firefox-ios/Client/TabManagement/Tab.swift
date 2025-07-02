@@ -258,6 +258,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var canGoBack: Bool {
+        print("🪩🪩🪩 \(webView!.canGoBack) 🪩🪩🪩🪩")
         // FXIOS-9785 This could result in the back button never being enabled for restored tabs
         assert(webView != nil, "We should not be trying to enable or disable the back button before the webView is set")
 
