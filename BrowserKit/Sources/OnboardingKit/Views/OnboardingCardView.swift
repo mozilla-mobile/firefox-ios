@@ -6,15 +6,15 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: ViewModel
-    public let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
-    public let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
-    public let onLinkTap: (String) -> Void
+    let viewModel: ViewModel
+    let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
+    let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
+    let onLinkTap: (String) -> Void
 
-    public init(
+    init(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
@@ -30,7 +30,7 @@ public struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: Vi
         self.onLinkTap = onLinkTap
     }
 
-    public var body: some View {
+    var body: some View {
         Group {
             switch viewModel.cardType {
             case .basic:

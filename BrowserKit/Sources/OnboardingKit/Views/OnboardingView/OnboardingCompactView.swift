@@ -6,12 +6,12 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
-    public init(
+    init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         viewModel: OnboardingFlowViewModel<ViewModel>
@@ -23,7 +23,7 @@ public struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>:
         )
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             MilkyWayMetalView()
                 .edgesIgnoringSafeArea(.all)

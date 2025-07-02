@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
@@ -14,11 +14,11 @@ public struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProt
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: ViewModel
-    public let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
-    public let onLinkTap: (String) -> Void
+    let viewModel: ViewModel
+    let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
+    let onLinkTap: (String) -> Void
 
-    public init(
+    init(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
@@ -32,7 +32,7 @@ public struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProt
         self.onLinkTap = onLinkTap
     }
 
-    public var body: some View {
+    var body: some View {
         VStack {
             Spacer()
             ContentFittingScrollView {
