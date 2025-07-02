@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+
 struct HomepageDimensionCalculator {
     static func isCompactLayout(
         traitCollection: UITraitCollection,
@@ -105,5 +107,24 @@ struct HomepageDimensionCalculator {
         let tilesPerRowCount = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
 
         return tilesPerRowCount
+    }
+
+    static func tallestStoryCellHeight(width: CGFloat, minCellHeight: CGFloat, windowUUID: WindowUUID) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self,
+                                                  for: .homepage,
+                                                  window: windowUUID) else { return 0.0 }
+        let pocketItems = state.pocketState.pocketData
+        var maxHeight: CGFloat = 0
+        for item in pocketItems {
+            let cell = StoryCell()
+            cell.configure(story: item, theme: LightTheme())
+            let size = cell.systemLayoutSizeFitting(
+                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            maxHeight = max(maxHeight, size.height)
+        }
+        return max(ceil(maxHeight), minCellHeight)
     }
 }

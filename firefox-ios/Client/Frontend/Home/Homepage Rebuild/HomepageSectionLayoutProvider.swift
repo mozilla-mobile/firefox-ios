@@ -118,6 +118,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
+    private var storiesCellCachedHeight: CGFloat?
+    private var storyCellHeight = UX.PocketConstants.redesignedMinimumCellHeight
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
@@ -166,6 +168,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .bookmarks:
             return createBookmarksSectionLayout(for: traitCollection)
         }
+    }
+
+    func updateStoryCellsHeight() {
+        let storyCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
+        storyCellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(
+            width: storyCellWidth,
+            minCellHeight: UX.PocketConstants.redesignedMinimumCellHeight,
+            windowUUID: windowUUID
+        )
     }
 
     private func createSingleItemSectionLayout(
@@ -238,17 +249,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createStoriesSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let absoluteCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
 
-        let maxHeight = measureTallestStoryCell(width: absoluteCellWidth)
-
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(maxHeight)
+            heightDimension: .estimated(storyCellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(absoluteCellWidth),
-            heightDimension: .estimated(maxHeight)
+            heightDimension: .estimated(storyCellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)
@@ -474,7 +483,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Returns an empty layout to avoid app crash when unable to section data
-    func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
+    static func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
         let zeroLayoutSize = NSCollectionLayoutSize(
             widthDimension: .absolute(0.0),
             heightDimension: .absolute(0.0)
@@ -484,25 +493,5 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
-    }
-
-    private func measureTallestStoryCell(width: CGFloat) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self,
-                                                  for: .homepage,
-                                                  window: windowUUID) else { return 0.0 }
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-        let pocketItems = state.pocketState.pocketData
-        var maxHeight: CGFloat = 0
-        for item in pocketItems {
-            let cell = StoryCell()
-            cell.configure(story: item, theme: themeManager.getCurrentTheme(for: windowUUID))
-            let size = cell.systemLayoutSizeFitting(
-                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
-                withHorizontalFittingPriority: .required,
-                verticalFittingPriority: .fittingSizeLevel
-            )
-            maxHeight = max(maxHeight, size.height)
-        }
-        return max(ceil(maxHeight), UX.PocketConstants.redesignedMinimumCellHeight)
     }
 }
