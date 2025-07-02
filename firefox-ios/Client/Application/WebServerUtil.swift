@@ -7,25 +7,24 @@ import Foundation
 import GCDWebServers
 import Shared
 
-class WebServerUtil {
-    private var readerModeHander: ReaderModeHandlersProtocol
-    private var webServer: WebServerProtocol
-    private var profile: Profile
+final class WebServerUtil {
+    private let readerModeHander: ReaderModeHandlersProtocol
+    private let webServer: WebServerProtocol
+    private let profile: Profile
 
-    init(readerModeHander: ReaderModeHandlersProtocol = ReaderModeHandlers(),
+    init(readerModeHandler: some ReaderModeHandlersProtocol,
          webServer: WebServer = WebServer.sharedInstance,
          profile: Profile) {
-        self.readerModeHander = readerModeHander
+        self.readerModeHander = readerModeHandler
         self.webServer = webServer
         self.profile = profile
     }
 
+    @MainActor
     func setUpWebServer() {
         guard !webServer.server.isRunning else { return }
 
-        Task {
-            await readerModeHander.register(webServer, profile: profile)
-        }
+        readerModeHander.register(webServer, profile: profile)
         let responders: [(String, InternalSchemeResponse)] =
              [(AboutHomeHandler.path, AboutHomeHandler()),
               (AboutLicenseHandler.path, AboutLicenseHandler()),

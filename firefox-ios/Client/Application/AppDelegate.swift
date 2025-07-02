@@ -108,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         // Set up a web server that serves us static content.
         // Do this early so that it is ready when the UI is presented.
-        webServerUtil = WebServerUtil(profile: profile)
+        webServerUtil = WebServerUtil(readerModeHandler: ReaderModeHandlers(), profile: profile)
         webServerUtil?.setUpWebServer()
 
         menuBuilderHelper = MenuBuilderHelper()

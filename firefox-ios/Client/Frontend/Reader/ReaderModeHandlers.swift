@@ -8,17 +8,17 @@ import GCDWebServers
 import Shared
 import WebEngine
 
-protocol ReaderModeHandlersProtocol: Actor {
+protocol ReaderModeHandlersProtocol {
+    @MainActor
     func register(_ webServer: WebServerProtocol, profile: Profile)
 }
 
-actor ReaderModeHandlers: ReaderModeHandlersProtocol {
-    private static var _readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
-    private static let queue = DispatchQueue(label: "org.mozilla.ios.Fennec.readerModeHandlersQueue")
+@MainActor
+struct ReaderModeHandlers: ReaderModeHandlersProtocol {
+    private static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
 
-    static var readerModeCache: ReaderModeCache {
-        get { queue.sync { _readerModeCache } }
-        set { queue.sync { _readerModeCache = newValue } }
+    static func setCache(_ cache: ReaderModeCache) {
+        readerModeCache = cache
     }
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
