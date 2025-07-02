@@ -128,13 +128,18 @@ class MainMenuViewController: UIViewController,
                 self.dispatchCloseMenuAction()
             }
 
-            menuRedesignContent.onCalculatedHeight = { [weak self] height in
-                guard let self else { return }
+            menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
                 if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
                     let customDetent = UISheetPresentationController.Detent.custom { context in
                         return height
                     }
-                    self.sheetPresentationController?.detents = [customDetent]
+                    if isExpanded {
+                        self?.sheetPresentationController?.animateChanges({
+                            self?.sheetPresentationController?.detents = [customDetent]
+                        })
+                    } else {
+                        self?.sheetPresentationController?.detents = [customDetent]
+                    }
                 }
             }
 

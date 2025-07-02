@@ -16,7 +16,7 @@ public final class MenuRedesignMainView: UIView,
     }
 
     public var closeButtonCallback: (() -> Void)?
-    public var onCalculatedHeight: ((CGFloat) -> Void)?
+    public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
@@ -122,7 +122,7 @@ public final class MenuRedesignMainView: UIView,
            let isExpanded = expandedSection.isExpanded,
            isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
-            onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height, true)
             layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
@@ -131,7 +131,7 @@ public final class MenuRedesignMainView: UIView,
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
                     self.setHeightForHomepageMenu(height: height)
                 } else {
-                    onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, false)
                 }
                 layoutIfNeeded()
             }
@@ -145,9 +145,10 @@ public final class MenuRedesignMainView: UIView,
                                      UX.closeButtonSize +
                                      UX.headerTopMarginWithButton +
                                      headerBannerHeight +
-                                     UX.headerTopMargin)
+                                     UX.headerTopMargin,
+                                     false)
         } else {
-            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, false)
         }
     }
 
