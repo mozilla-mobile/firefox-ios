@@ -37,8 +37,7 @@ struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                         windowUUID: windowUUID,
                         themeManager: themeManager,
                         onBottomButtonAction: viewModel.handleBottomButtonAction,
-                        onMultipleChoiceAction: viewModel.handleMultipleChoiceAction,
-                        onLinkTap: { _ in }
+                        onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
                     )
                 }
 

@@ -36,8 +36,7 @@ struct OnboardingRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                             viewModel: card,
                             windowUUID: windowUUID,
                             themeManager: themeManager,
-                            onBottomButtonAction: viewModel.handleBottomButtonAction,
-                            onLinkTap: { _ in }
+                            onBottomButtonAction: viewModel.handleBottomButtonAction
                         )
                         .tag(index)
                     }

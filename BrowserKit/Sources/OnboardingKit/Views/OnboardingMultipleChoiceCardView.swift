@@ -16,22 +16,19 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
     let viewModel: ViewModel
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
-    let onLinkTap: (String) -> Void
 
     init?(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
-        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void,
-        onLinkTap: @escaping (String) -> Void
+        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
-        self.onLinkTap = onLinkTap
         guard let firstAction = viewModel.multipleChoiceButtons.first?.action else {
             return nil
         }

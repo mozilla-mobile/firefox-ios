@@ -12,22 +12,19 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let viewModel: ViewModel
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
-    let onLinkTap: (String) -> Void
 
     init(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
-        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void,
-        onLinkTap: @escaping (String) -> Void
+        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
-        self.onLinkTap = onLinkTap
     }
 
     var body: some View {
@@ -38,8 +35,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
-                    onBottomButtonAction: onBottomButtonAction,
-                    onLinkTap: onLinkTap
+                    onBottomButtonAction: onBottomButtonAction
                 )
             case .multipleChoice:
                 OnboardingMultipleChoiceCardView(
@@ -47,8 +43,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     windowUUID: windowUUID,
                     themeManager: themeManager,
                     onBottomButtonAction: onBottomButtonAction,
-                    onMultipleChoiceAction: onMultipleChoiceAction,
-                    onLinkTap: onLinkTap
+                    onMultipleChoiceAction: onMultipleChoiceAction
                 )
             }
         }

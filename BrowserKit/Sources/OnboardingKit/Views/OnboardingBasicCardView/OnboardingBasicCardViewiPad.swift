@@ -16,20 +16,17 @@ struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: 
     var themeManager: ThemeManager
     let viewModel: ViewModel
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
-    let onLinkTap: (String) -> Void
 
     init(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
-        onLinkTap: @escaping (String) -> Void
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
-        self.onLinkTap = onLinkTap
     }
 
     var body: some View {
@@ -41,7 +38,6 @@ struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: 
                     titleView
                     imageView
                     bodyView
-                    linkView
                     Spacer()
                     VStack {
                         primaryButton
@@ -89,19 +85,6 @@ struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: 
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-    }
-
-    @ViewBuilder var linkView: some View {
-        if let linkVM = viewModel.link {
-            LinkButtonView(
-                viewModel: LinkInfoModel(
-                    title: linkVM.title,
-                    url: linkVM.url,
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)LinkButton"
-                ),
-                action: { onLinkTap(viewModel.name) }
-            )
-        }
     }
 
     var primaryButton: some View {
