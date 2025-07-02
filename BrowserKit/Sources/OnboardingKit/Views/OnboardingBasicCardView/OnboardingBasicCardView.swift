@@ -21,7 +21,7 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
