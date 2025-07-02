@@ -86,10 +86,10 @@ extension WKEngineWebView {
         in contentWorld: WKContentWorld,
         completionHandler: (@MainActor @Sendable (Result<Any, Error>) -> Void)? = nil
     ) {
-        evaluateJavaScript(javaScript,
-                           in: frame,
-                           in: contentWorld,
-                           completionHandler: completionHandler)
+//        evaluateJavaScript(javaScript,
+//                           in: frame,
+//                           in: contentWorld,
+//                           completionHandler: completionHandler)
     }
 
     /// Evaluates Javascript in a .defaultClient sandboxed content world

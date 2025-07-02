@@ -52,6 +52,7 @@
 		0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B5A93411B1EB572004F47A2 /* readablePage.html */; };
 		0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62EFD11AD63CD100ACB9CD /* Clearables.swift */; };
 		0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6AB0402DCA3CB900F03AF6 /* DocumentLoggerTests.swift */; };
+		0B6D1C882E15456F00919F1E /* SummarizeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B6D1C872E15456F00919F1E /* SummarizeKit */; };
 		0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B6FBAB11AC1F830007EC669 /* numberedPage.html */; };
 		0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
 		0B7B053D2D647D00007FD7AC /* TemporaryDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */; };
@@ -10671,6 +10672,7 @@
 				5A06135A29D6052E008F3D38 /* TabDataStore in Frameworks */,
 				EDD2A7F82CDACE7C00ED464C /* UnifiedSearchKit in Frameworks */,
 				216A0D762A40E7AB008077BA /* Redux in Frameworks */,
+				0B6D1C882E15456F00919F1E /* SummarizeKit in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */,
 			);
@@ -16085,6 +16087,7 @@
 				ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */,
 				0BF802E12CFF0937005633E5 /* Shared */,
 				8C51ED732DE0A64D00B3E58A /* OnboardingKit */,
+				0B6D1C872E15456F00919F1E /* SummarizeKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -29222,6 +29225,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0B6D1C872E15456F00919F1E /* SummarizeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SummarizeKit;
+		};
 		0BCC26912CFF10250072CD5A /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;

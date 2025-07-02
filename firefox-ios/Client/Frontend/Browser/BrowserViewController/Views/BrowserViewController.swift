@@ -792,6 +792,15 @@ class BrowserViewController: UIViewController,
         dispatchStartAtHomeAction()
     }
 
+    // MARK: - Summarize
+
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        guard motion == .motionShake else { return }
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
+        navigationHandler?.showSummarizePanel()
+    }
+
     // MARK: - Start At Home
     private func dispatchStartAtHomeAction() {
         let startAtHomeAction = StartAtHomeAction(

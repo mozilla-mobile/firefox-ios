@@ -9,6 +9,7 @@ import Shared
 import Storage
 import Redux
 import PDFKit
+import SummarizeKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -1047,6 +1048,38 @@ class BrowserCoordinator: BaseCoordinator,
 
     func removeDocumentLoading() {
         browserViewController.removeDocumentLoadingView()
+    }
+
+    func showSummarizePanel() {
+        let controller = SummarizeController()
+        let screenshot = tabManager.selectedTab?.screenshot
+        let image = UIImageView(image: screenshot)
+        image.contentMode = .top
+        controller.onDismiss = {
+            self.browserViewController.contentContainer.isHidden = false
+            self.browserViewController.scrollController.showToolbars(animated: true)
+            image.removeFromSuperview()
+            controller.removeFromParent()
+            controller.view.removeFromSuperview()
+        }
+        controller.onShouldTransformContainer = { [weak self] in
+            let frame = self?.browserViewController.contentContainer.frame ?? .zero
+            self?.browserViewController.scrollController.hideToolbars(animated: true)
+            image.layer.cornerRadius = 55.5
+            image.clipsToBounds = true
+            image.translatesAutoresizingMaskIntoConstraints = false
+            self?.browserViewController.view.insertSubview(image, belowSubview: controller.view)
+            self?.browserViewController.contentContainer.isHidden = true
+            image.pinToSuperview()
+            UIView.animate(withDuration: 0.3) {
+                image.transform = CGAffineTransform(translationX: 0, y: frame.height / 2)
+            }
+        }
+        browserViewController.addChild(controller)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        browserViewController.view.addSubview(controller.view)
+        controller.view.pinToSuperview()
+        controller.didMove(toParent: browserViewController)
     }
 
     // MARK: Microsurvey

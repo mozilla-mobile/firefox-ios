@@ -28,11 +28,57 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let rootVC = RootViewController(engineProvider: engineProvider, windowUUID: windowUUID)
 
             await MainActor.run {
-                window.rootViewController = rootVC
+                window.rootViewController = Container(rootController: rootVC)
 
                 let themeManager: ThemeManager = AppContainer.shared.resolve()
                 themeManager.setWindow(window, for: windowUUID)
                 themeManager.setSystemTheme(isOn: true)
+            }
+        }
+    }
+}
+
+import SummarizeKit
+
+class Container: UIViewController {
+    let rootController: RootViewController
+    let controller = SummarizeController()
+
+    init(rootController: RootViewController) {
+        self.rootController = rootController
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        rootController.onSummarize = {
+            self.summarizePage()
+        }
+        super.viewDidLoad()
+        rootController.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(rootController.view)
+        rootController.view.pinToSuperview()
+    }
+
+    func summarizePage() {
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(controller.view)
+        addChild(controller)
+        controller.view.pinToSuperview()
+        controller.didMove(toParent: self)
+        controller.view.layoutIfNeeded()
+
+        controller.animateGradient()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            UIView.animate(withDuration: 0.3) {
+                self.rootController.view.layer.cornerRadius = 55.0
+                self.rootController.view.transform = CGAffineTransform(translationX: 0.0, y: 400.0)
+            } completion: { _ in
+                self.controller.animateTransition()
             }
         }
     }

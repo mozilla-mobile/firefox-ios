@@ -75,6 +75,10 @@ class DefaultRouter: NSObject, Router {
         navigationController.isNavigationBarHidden = hideBar
     }
 
+    func embed(_ viewController: UIViewController, insets: NSDirectionalEdgeInsets) {
+        
+    }
+
     private func runCompletion(for controller: UIViewController) {
         guard let completion = completions[controller] else { return }
         completion()

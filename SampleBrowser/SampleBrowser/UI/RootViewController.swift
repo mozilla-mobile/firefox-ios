@@ -5,6 +5,7 @@
 import Common
 import ToolbarKit
 import UIKit
+import SummarizeKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
@@ -19,6 +20,7 @@ class RootViewController: UIViewController,
         static let addressToolbarContainerHorizontalPadding: CGFloat = 16.0
     }
 
+    var onSummarize: (() -> Void)?
     var currentWindowUUID: UUID?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -163,6 +165,12 @@ class RootViewController: UIViewController,
         _ = addressToolbarContainer.resignFirstResponder()
         browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
+    }
+
+    // MARK: - Summary
+
+    func summarizePage() {
+        onSummarize?()
     }
 
     // MARK: - BrowserToolbarDelegate

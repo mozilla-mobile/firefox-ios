@@ -106,6 +106,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
             delegate?.loadPopupWebSource()
         case .loadPrintWebSource:
             delegate?.loadPrintWebSource()
+        case .summarizePage:
+            delegate?.summarizePage()
         }
 
         dismiss(animated: true)
