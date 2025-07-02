@@ -7,6 +7,7 @@ import { FormAutofillNameUtils } from "resource://gre/modules/shared/FormAutofil
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { PhoneNumber } from "resource://gre/modules/shared/PhoneNumber.sys.mjs";
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
+import { AddressParser } from "resource://gre/modules/shared/AddressParser.sys.mjs";
 
 /**
  * The AddressRecord class serves to handle and normalize internal address records.
@@ -32,6 +33,7 @@ export class AddressRecord {
   static computeFields(address) {
     this.#computeNameFields(address);
     this.#computeAddressLineFields(address);
+    this.#computeStreetAndHouseNumberFields(address);
     this.#computeCountryFields(address);
     this.#computeTelFields(address);
   }
@@ -62,6 +64,17 @@ export class AddressRecord {
         address["address-line3"] = FormAutofillUtils.toOneLineAddress(
           streetAddress.slice(2)
         );
+      }
+    }
+  }
+
+  static #computeStreetAndHouseNumberFields(address) {
+    if (!("address-housenumber" in address) && "street-address" in address) {
+      let streetAddress = AddressParser.parseStreetAddress(
+        address["street-address"]
+      );
+      if (streetAddress) {
+        address["address-housenumber"] = streetAddress.street_number;
       }
     }
   }
