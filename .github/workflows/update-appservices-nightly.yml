@@ -1,0 +1,35 @@
+name: Create a PR for release with the newest A-S version available
+
+# Controls when the workflow will run
+on:
+  schedule:
+    # 08:00 UTC daily
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: appservices-nightly
+  cancel-in-progress: true
+
+jobs:
+  release-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Setup git information
+        run: |
+          git config user.email "sync-team@mozilla.com"
+          git config user.name "Firefox Sync Engineering"
+      - name: Run nightly update
+        run: python scripts/update_from_application_services.py nightly --push --remote=origin
