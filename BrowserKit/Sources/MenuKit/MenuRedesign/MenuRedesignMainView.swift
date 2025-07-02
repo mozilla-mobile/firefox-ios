@@ -32,6 +32,8 @@ public final class MenuRedesignMainView: UIView,
     // MARK: - Properties
     private var isMenuDefaultBrowserBanner = false
 
+    private var isBrowserDefault = false
+
     // MARK: - UI Setup
     private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
         self.removeConstraints(viewConstraints)
@@ -47,7 +49,7 @@ public final class MenuRedesignMainView: UIView,
                 closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             ])
 
-            if isHeaderBanner && isMenuDefaultBrowserBanner {
+            if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault {
                 self.addSubview(headerBanner)
                 viewConstraints.append(contentsOf: [
                     headerBanner.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMargin),
@@ -103,9 +105,14 @@ public final class MenuRedesignMainView: UIView,
         siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
     }
 
-    public func setupDetails(title: String, subtitle: String, image: UIImage?, isBannerEnabled: Bool) {
+    public func setupDetails(title: String,
+                             subtitle: String,
+                             image: UIImage?,
+                             isBannerEnabled: Bool,
+                             isBrowserDefault: Bool) {
         headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
         isMenuDefaultBrowserBanner = isBannerEnabled
+        self.isBrowserDefault = isBrowserDefault
     }
 
     // MARK: - Interface

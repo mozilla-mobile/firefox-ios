@@ -250,7 +250,8 @@ class MainMenuViewController: UIViewController,
         menuRedesignContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-                                         isBannerEnabled: isMenuDefaultBrowserBanner)
+                                         isBannerEnabled: isMenuDefaultBrowserBanner,
+                                         isBrowserDefault: DefaultBrowserUtil.isBrowserDefault)
     }
 
     private func setupHintView() {
