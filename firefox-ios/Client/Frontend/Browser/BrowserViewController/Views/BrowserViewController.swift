@@ -550,7 +550,7 @@ class BrowserViewController: UIViewController,
         let isKeyboardShowing = keyboardState != nil
 
         if isBottomSearchBar {
-            header.isClearBackground = !showNavToolbar && enableBlur
+            header.isClearBackground = false
 
             // we disable the translucency when the keyboard is getting displayed
             overKeyboardContainer.isClearBackground = enableBlur && !isKeyboardShowing
@@ -617,22 +617,10 @@ class BrowserViewController: UIViewController,
         guard searchBarPosition == .bottom, isToolbarRefactorEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        header.removeArrangedView(addressToolbarContainer, animated: false)
-        overKeyboardContainer.removeArrangedView(addressToolbarContainer, animated: false)
+        let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
+        let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: newPosition]
 
-        if isNavToolbar {
-            overKeyboardContainer.addArrangedSubview(addressToolbarContainer)
-        } else {
-            header.addArrangedSubview(addressToolbarContainer)
-        }
-        updateHeaderConstraints()
-
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollController.contentOffset,
-            toolbarPosition: isNavToolbar ? searchBarPosition : .top,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatchLegacy(action)
+        notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
@@ -1579,21 +1567,16 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateHeaderConstraints() {
-        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let shouldHideHeader = isBottomSearchBar && (
-            (isNavToolbar && isToolbarRefactorEnabled) || !isToolbarRefactorEnabled
-        )
-
         header.snp.remakeConstraints { make in
-            make.left.right.equalTo(view)
-            make.top.equalTo(view.safeArea.top)
-
-            if shouldHideHeader {
+            if isBottomSearchBar {
+                make.left.right.equalTo(view)
+                make.top.equalTo(view.safeArea.top)
                 // The status bar is covered by the statusBarOverlay,
                 // if we don't have the URL bar at the top then header height is 0
                 make.height.equalTo(0)
             } else {
                 scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                make.left.right.equalTo(view)
             }
         }
     }
@@ -1616,12 +1599,12 @@ class BrowserViewController: UIViewController,
                 make.height.equalTo(UIConstants.BottomToolbarHeight)
             }
         }
-        let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+
         overKeyboardContainer.snp.remakeConstraints { make in
             scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
-            } else if (!isBottomSearchBar && !isToolbarRefactorEnabled) || (!isNavToolbar && isToolbarRefactorEnabled) {
+            } else if !isBottomSearchBar {
                 make.height.equalTo(0)
             }
             make.leading.trailing.equalTo(view)
