@@ -39,12 +39,8 @@ class StatusBarOverlayTests: XCTestCase {
 
         XCTAssertFalse(subject.hasTopTabs)
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnHomepage_withoutWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
@@ -66,12 +62,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnHomepage_withWallpaperWithBottomURLBar_translucencyOn_notOpaque() throws {
@@ -101,12 +93,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnWebpage_withoutWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
@@ -117,12 +105,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnWebpage_withoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -133,12 +117,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnWebpage_withWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
@@ -153,12 +133,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnWebpage_withWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -173,12 +149,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testHasTopTabs_onHomepageWithoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -189,12 +161,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testHasTopTabs_onHomepageWithWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -209,12 +177,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testHasTopTabs_onWebpageWithoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -225,12 +189,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testHasTopTabs_onWebpageWithWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -245,12 +205,8 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-<<<<<<< HEAD
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(0.8).cgColor)
-=======
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
->>>>>>> 2fe643aae (Refactor FXIOS-12662 [Toolbar] Translucency color updates (#27613))
+                       LightTheme().colors.layer3.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     // MARK: Translucency enabled
