@@ -120,38 +120,38 @@ class MainMenuViewController: UIViewController,
 
         if isMenuRedesign {
             menuRedesignContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchCloseMenuAction()
+                self?.dispatchCloseMenuAction()
             }
 
-            menuRedesignContent.onCalculatedHeight = { [weak self] height in
-                guard let self else { return }
+            menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
                 if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
                     let customDetent = UISheetPresentationController.Detent.custom { context in
                         return height
                     }
-                    self.sheetPresentationController?.detents = [customDetent]
+                    if isExpanded {
+                        self?.sheetPresentationController?.animateChanges({
+                            self?.sheetPresentationController?.detents = [customDetent]
+                        })
+                    } else {
+                        self?.sheetPresentationController?.detents = [customDetent]
+                    }
                 }
             }
 
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchSiteProtectionAction()
+                self?.dispatchSiteProtectionAction()
             }
 
             menuRedesignContent.closeButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchCloseMenuAction()
+                self?.dispatchCloseMenuAction()
             }
         } else {
             menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchCloseMenuAction()
+                self?.dispatchCloseMenuAction()
             }
 
             menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
-                guard let self else { return }
-                self.dispatchSyncSignInAction()
+                self?.dispatchSyncSignInAction()
             }
         }
 
@@ -199,13 +199,12 @@ class MainMenuViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { [weak self] _ in
-            guard let self else { return }
             // We should dismiss CFR when device is rotating
-            if UIDevice.current.orientation != lastOrientation {
-                lastOrientation = UIDevice.current.orientation
-                self.adjustLayout(isDeviceRotating: true)
+            if UIDevice.current.orientation != self?.lastOrientation {
+                self?.lastOrientation = UIDevice.current.orientation
+                self?.adjustLayout(isDeviceRotating: true)
             } else {
-                self.adjustLayout()
+                self?.adjustLayout()
             }
         }, completion: nil)
     }
