@@ -16,7 +16,7 @@ public final class MenuRedesignMainView: UIView,
     }
 
     public var closeButtonCallback: (() -> Void)?
-    public var onCalculatedHeight: ((CGFloat) -> Void)?
+    public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
@@ -86,27 +86,55 @@ public final class MenuRedesignMainView: UIView,
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
+        let expandedSection = data.first(where: { $0.isExpanded ?? false })
+        let isExpanded = expandedSection?.isExpanded ?? false
+
         // To avoid a glitch when expand the menu, we should not handle this action under DispatchQueue.main.async
-        if let expandedSection = data.first(where: { $0.isExpanded ?? false }),
-           let isExpanded = expandedSection.isExpanded,
-           isExpanded {
+        if isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
-            onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
             layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 let height = tableView.tableViewContentSize + UX.headerTopMargin
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
+<<<<<<< HEAD
                     onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+=======
+                    self.setHeightForHomepageMenu(height: height, isExpanded: isExpanded)
+>>>>>>> 5fbf6e09f (Add FXIOS-12682 ⁃ [Menu Redesign] More option transition to full menu (#27707))
                 } else {
-                    onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
                 }
                 layoutIfNeeded()
             }
         }
     }
 
+<<<<<<< HEAD
+=======
+    private func setHeightForHomepageMenu(height: CGFloat, isExpanded: Bool) {
+        if isMenuDefaultBrowserBanner {
+            let headerBannerHeight = headerBanner.frame.height
+            self.onCalculatedHeight?(height +
+                                     UX.closeButtonSize +
+                                     UX.headerTopMarginWithButton +
+                                     headerBannerHeight +
+                                     UX.headerTopMargin,
+                                     isExpanded)
+        } else {
+            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isExpanded)
+        }
+    }
+
+    private func handleBannerCallback(with data: [MenuSection]) {
+        headerBanner.closeButtonCallback = { [weak self] in
+            self?.setupView(with: data, isHeaderBanner: false)
+        }
+    }
+
+>>>>>>> 5fbf6e09f (Add FXIOS-12682 ⁃ [Menu Redesign] More option transition to full menu (#27707))
     // MARK: - Callbacks
     @objc
     private func closeTapped() {
