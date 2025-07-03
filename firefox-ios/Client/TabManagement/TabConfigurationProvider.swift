@@ -50,7 +50,7 @@ class TabConfigurationProvider {
             blockPopups: blockPopups,
             isPrivate: isPrivate,
             autoPlay: autoPlay,
-            schemeHandler: WKInternalSchemeHandler()
+            schemeHandler: InternalSchemeHandler()
         )
         return configurationProvider.createConfiguration(parameters: parameters)
     }
