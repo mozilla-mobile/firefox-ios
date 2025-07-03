@@ -30,7 +30,7 @@ final class MainMenuAction: Action {
         siteProtectionsData: SiteProtectionsData? = nil,
         telemetryInfo: TelemetryInfo? = nil,
         isExpanded: Bool? = nil,
-        isBrowserDefault: Bool = false,
+        isBrowserDefault: Bool = false
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
