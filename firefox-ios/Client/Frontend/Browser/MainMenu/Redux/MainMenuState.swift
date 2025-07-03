@@ -79,6 +79,7 @@ struct MainMenuState: ScreenState, Equatable {
 
     var accountData: AccountData?
     var accountIcon: UIImage?
+    var isBrowserDefault: Bool
 
     var siteProtectionsData: SiteProtectionsData?
 
@@ -107,7 +108,8 @@ struct MainMenuState: ScreenState, Equatable {
             shouldDismiss: mainMenuState.shouldDismiss,
             accountData: mainMenuState.accountData,
             accountIcon: mainMenuState.accountIcon,
-            siteProtectionsData: mainMenuState.siteProtectionsData
+            siteProtectionsData: mainMenuState.siteProtectionsData,
+            isBrowserDefault: mainMenuState.isBrowserDefault
         )
     }
 
@@ -121,7 +123,8 @@ struct MainMenuState: ScreenState, Equatable {
             shouldDismiss: false,
             accountData: nil,
             accountIcon: nil,
-            siteProtectionsData: nil
+            siteProtectionsData: nil,
+            isBrowserDefault: false
         )
     }
 
@@ -134,7 +137,8 @@ struct MainMenuState: ScreenState, Equatable {
         shouldDismiss: Bool = false,
         accountData: AccountData?,
         accountIcon: UIImage?,
-        siteProtectionsData: SiteProtectionsData?
+        siteProtectionsData: SiteProtectionsData?,
+        isBrowserDefault: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -145,6 +149,7 @@ struct MainMenuState: ScreenState, Equatable {
         self.accountData = accountData
         self.accountIcon = accountIcon
         self.siteProtectionsData = siteProtectionsData
+        self.isBrowserDefault = isBrowserDefault
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -162,6 +167,8 @@ struct MainMenuState: ScreenState, Equatable {
             return handleViewDidLoadAction(state: state)
         case MainMenuMiddlewareActionType.updateAccountHeader:
             return handleUpdateAccountHeaderAction(state: state, action: action)
+        case MainMenuMiddlewareActionType.updateBannerVisibility:
+            return handleUpdateBannerVisibilityAction(state: state, action: action)
         case MainMenuActionType.updateSiteProtectionsHeader:
             return handleUpdateSiteProtectionsHeaderAction(state: state, action: action)
         case MainMenuActionType.updateCurrentTabInfo:
@@ -197,7 +204,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -208,7 +216,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -221,7 +230,22 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: state.currentTabInfo,
             accountData: action.accountData,
             accountIcon: action.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
+        )
+    }
+
+    private static func handleUpdateBannerVisibilityAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon,
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: action.isBrowserDefault
         )
     }
 
@@ -234,7 +258,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: action.siteProtectionsData
+            siteProtectionsData: action.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -253,7 +278,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: currentTabInfo,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -274,7 +300,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -288,7 +315,8 @@ struct MainMenuState: ScreenState, Equatable {
             submenuDestination: action.detailsViewToShow,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -302,7 +330,8 @@ struct MainMenuState: ScreenState, Equatable {
             navigationDestination: action.navigationDestination,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -314,7 +343,8 @@ struct MainMenuState: ScreenState, Equatable {
             shouldDismiss: true,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -326,7 +356,8 @@ struct MainMenuState: ScreenState, Equatable {
             shouldDismiss: true,
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -338,7 +369,8 @@ struct MainMenuState: ScreenState, Equatable {
             navigationDestination: MenuNavigationDestination(.editBookmark),
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 
@@ -350,7 +382,8 @@ struct MainMenuState: ScreenState, Equatable {
             navigationDestination: MenuNavigationDestination(.zoom),
             accountData: state.accountData,
             accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault
         )
     }
 }
