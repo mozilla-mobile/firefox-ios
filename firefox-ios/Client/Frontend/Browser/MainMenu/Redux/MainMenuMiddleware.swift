@@ -164,7 +164,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
                 dispatchUpdateAccountHeader(action: action)
                 return
             }
-            
             if let iconURL = accountData.iconURL {
                 GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
                     guard let self else { return }
