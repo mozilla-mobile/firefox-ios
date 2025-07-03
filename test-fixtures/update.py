@@ -87,7 +87,6 @@ if __name__ == '__main__':
     '''
 
     latest_stable_semver = latest_stable_stack().split(pattern)[1]
-    print(latest_stable_semver)
     latest_semver = latest_stack().split(pattern)[1]
     tmp_file = 'tmp.yml'
 
