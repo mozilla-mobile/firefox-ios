@@ -172,13 +172,13 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
     @objc
     private func didClick(_ gestureRecognizer: UITapGestureRecognizer?) {
-        guard let item = item,
+        guard var item = item,
               let handler = item.tapHandler
         else { return }
 
         isSelected = (gestureRecognizer?.state == .began) || (gestureRecognizer?.state == .changed)
 
-        item.isEnabled = !item.isEnabled
+        item = SingleActionViewModel.copy(item, isEnabled: item.isEnabled)
 
         // Notify the delegate then wait until all animations are completed before handling the item
         // (Note: The iOS16 system find interactor will only work if the settings menu dismiss animation has completed)

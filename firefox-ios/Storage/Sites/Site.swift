@@ -5,7 +5,14 @@
 import UIKit
 import SiteImageView
 
-public struct Site: Identifiable, Hashable, Equatable, Codable, CustomStringConvertible, CustomDebugStringConvertible {
+// TODO: FXIOS-12712 Make Site actually sendable
+public struct Site: @unchecked Sendable,
+                    Identifiable,
+                    Hashable,
+                    Equatable,
+                    Codable,
+                    CustomStringConvertible,
+                    CustomDebugStringConvertible {
     public let id: Int
     public let url: String
     public let title: String

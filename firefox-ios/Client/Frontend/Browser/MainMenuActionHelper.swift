@@ -56,7 +56,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper: PhotonActionSheetProtocol,
+final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
                             AppVersionUpdateCheckerProtocol,
@@ -109,8 +109,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.themeManager = themeManager
     }
 
+    @MainActor
     func getToolbarActions(navigationController: UINavigationController?,
-                           completion: @escaping ([[PhotonRowActions]]) -> Void) {
+                           completion: @escaping @Sendable @MainActor ([[PhotonRowActions]]) -> Void) {
         var actions: [[PhotonRowActions]] = []
         let firstMiscSection = getFirstMiscSection(navigationController)
 
@@ -133,6 +134,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     self.getLastSection()
                 ])
 
+                // Immutable copies need to be passed across async boundaries
+                let actions = actions
                 DispatchQueue.main.async {
                     completion(actions)
                 }
@@ -530,7 +533,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func syncMenuButton() -> PhotonRowActions? {
-        let action: (SingleActionViewModel) -> Void = { [weak self] action in
+        let action: @Sendable (SingleActionViewModel) -> Void = { [weak self] action in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let parameters = FxASignInViewParameters(launchParameters: fxaParams,
                                                      flowType: .emailLoginFlow,
@@ -698,7 +701,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }
-
             self.profile.readingList.createRecordWithURL(
                 url.absoluteString,
                 title: tab.title ?? "",
