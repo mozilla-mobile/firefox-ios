@@ -109,6 +109,7 @@ struct HomepageDimensionCalculator {
         return tilesPerRowCount
     }
 
+    // TODO: FXIOS-12727 - We can replace this code with `uniformAcrossSiblings` API in iOS 17+
     static func tallestStoryCellHeight(width: CGFloat, minCellHeight: CGFloat, windowUUID: WindowUUID) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self,
                                                   for: .homepage,
