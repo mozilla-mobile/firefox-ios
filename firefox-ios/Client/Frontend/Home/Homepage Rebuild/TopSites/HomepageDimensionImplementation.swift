@@ -110,11 +110,11 @@ struct HomepageDimensionCalculator {
     }
 
     // TODO: FXIOS-12727 - We can replace this code with `uniformAcrossSiblings` API in iOS 17+
-    static func tallestStoryCellHeight(width: CGFloat, minCellHeight: CGFloat, windowUUID: WindowUUID) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self,
-                                                  for: .homepage,
-                                                  window: windowUUID) else { return 0.0 }
-        let pocketItems = state.pocketState.pocketData
+    static func tallestStoryCellHeight(state: PocketState,
+                                       width: CGFloat,
+                                       minCellHeight: CGFloat,
+                                       windowUUID: WindowUUID) -> CGFloat {
+        let pocketItems = state.pocketData
         var maxHeight: CGFloat = 0
         for item in pocketItems {
             let cell = StoryCell()

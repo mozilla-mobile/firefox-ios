@@ -171,8 +171,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     func updateStoryCellsHeight() {
+        guard let state = store.state.screenState(HomepageState.self,
+                                                  for: .homepage,
+                                                  window: windowUUID) else { return }
         let storyCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
         storyCellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(
+            state: state.pocketState,
             width: storyCellWidth,
             minCellHeight: UX.PocketConstants.redesignedMinimumCellHeight,
             windowUUID: windowUUID

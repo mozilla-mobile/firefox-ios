@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import Redux
 import XCTest
 
 @testable import Client
@@ -142,5 +144,51 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 4)
+    }
+
+    func test_getTallestStoryCellHeight_returnsTallestCellHeight() {
+        DependencyHelperMock().bootstrapDependencies()
+
+        let homepageState = HomepageState(windowUUID: .XCTestDefaultUUID)
+        let reducer = HomepageState.reducer
+
+        let feedStories: [PocketFeedStory] = [
+            .make(title: """
+                         How a 27-Year-Old Texan Became the Face of Russia’s American TV Network As It Imploded. \
+                         And this will make the title a bit longer
+                         """),
+            .make(title: "feed2"),
+            .make(title: "feed3"),
+        ]
+
+        let stories = feedStories.compactMap {
+            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
+        }
+
+        let newState = reducer(
+            homepageState,
+            PocketAction(
+                pocketStories: stories,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+            )
+        )
+
+        let sampleWidth: CGFloat = 300.0
+        let cellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(state: newState.pocketState,
+                                                                            width: sampleWidth,
+                                                                            minCellHeight: 70,
+                                                                            windowUUID: .XCTestDefaultUUID)
+
+        let cell = StoryCell()
+        cell.configure(story: stories[0], theme: LightTheme())
+        let size = cell.systemLayoutSizeFitting(
+            CGSize(width: sampleWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+
+        XCTAssertEqual(newState.pocketState.pocketData.count, 3)
+        XCTAssertEqual(cellHeight, size, accuracy: 1.0)
     }
 }
