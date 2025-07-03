@@ -64,6 +64,7 @@ class MainMenuViewController: UIViewController,
 
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
+    private var isBrowserDefault = false
 
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
@@ -253,7 +254,8 @@ class MainMenuViewController: UIViewController,
         menuRedesignContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-                                         isBannerEnabled: isMenuDefaultBrowserBanner)
+                                         isBannerFlagEnabled: isMenuDefaultBrowserBanner,
+                                         isBrowserDefault: isBrowserDefault)
     }
 
     private func setupHintView() {
@@ -336,6 +338,8 @@ class MainMenuViewController: UIViewController,
 
     func newState(state: MainMenuState) {
         menuState = state
+
+        isBrowserDefault = menuState.isBrowserDefault
 
         if let accountData = menuState.accountData {
             updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
