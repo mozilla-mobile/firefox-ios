@@ -2,13 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
-//
-//  blurredPoints.metal
-//  OHarkonnen
-//
-//  Created by Nishant Bhasin on 2025-03-11.
-//
 #include <metal_stdlib>
 using namespace metal;
 
