@@ -42,7 +42,7 @@ def latest_stack():
     try:
         resp = requests.get(BITRISE_STACK_INFO)
         resp_json = resp.json()['available_stacks']
-        keys = sorted([key for key in resp_json.keys() if 'osx-xcode-edge' not in key], reverse=True)
+        keys = sorted([key for key in resp_json.keys() if 'osx-xcode-edge' not in key and pattern in key], reverse=True)
         return keys[0]
     except HTTPError as http_error:
         print('An HTTP error has occurred: {http_error}')
@@ -53,7 +53,7 @@ def latest_stable_stack():
     try:
         resp = requests.get(BITRISE_STACK_INFO)
         resp_json = resp.json()['available_stacks']
-        keys = sorted([key for key in resp_json.keys() if '-edge' not in key], reverse=True)
+        keys = sorted([key for key in resp_json.keys() if '-edge' not in key and 'latest' not in key and pattern in key], reverse=True)
         return keys[0]
     except HTTPError as http_error:
         print('An HTTP error has occurred: {http_error}')
