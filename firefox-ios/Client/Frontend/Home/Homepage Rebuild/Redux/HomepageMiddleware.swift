@@ -54,7 +54,13 @@ final class HomepageMiddleware: FeatureFlaggable {
             }
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
+            ToolbarActionType.cancelEdit:
+            self.dispatchSearchBarConfigurationAction(action: action)
+
+        // Update homepage search bar configuration when changing toolbar position
+        // since does not apply to bottom toolbar currently
+        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
             self.dispatchSearchBarConfigurationAction(action: action)
 
         default:
