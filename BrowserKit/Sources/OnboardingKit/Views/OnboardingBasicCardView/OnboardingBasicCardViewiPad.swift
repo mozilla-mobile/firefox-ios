@@ -60,7 +60,6 @@ struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: 
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")

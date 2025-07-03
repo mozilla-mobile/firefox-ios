@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SwiftUI
 
 public protocol DynamicFontHelper {
     /// Returns a font that will dynamically scale with dynamic text
@@ -81,5 +82,57 @@ public struct DefaultDynamicFontHelper: DynamicFontHelper {
 
     public static func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat) -> UIFont {
         return preferredFont(withTextStyle: textStyle, size: size, weight: .bold)
+    }
+
+    // MARK: - SwiftUI Font Methods
+
+    public static func preferredSwiftUIFont(withTextStyle textStyle: UIFont.TextStyle,
+                                            size: CGFloat,
+                                            sizeCap: CGFloat? = nil,
+                                            weight: Font.Weight? = nil,
+                                            design: Font.Design = .default) -> Font {
+        let swiftUITextStyle = textStyle.toSwiftUITextStyle()
+        var font = Font.system(swiftUITextStyle, design: design)
+
+        if let weight = weight {
+            font = font.weight(weight)
+        }
+
+        // Apply size cap if specified
+        if let sizeCap = sizeCap {
+            // Create a custom font that respects the size cap
+            return Font.custom("", size: min(size, sizeCap), relativeTo: swiftUITextStyle)
+        }
+
+        return font
+    }
+
+    public static func preferredBoldSwiftUIFont(withTextStyle textStyle: UIFont.TextStyle,
+                                                size: CGFloat,
+                                                design: Font.Design = .default) -> Font {
+        return preferredSwiftUIFont(withTextStyle: textStyle,
+                                    size: size,
+                                    weight: .bold,
+                                    design: design)
+    }
+}
+
+// MARK: - UIFont.TextStyle to SwiftUI Font.TextStyle Extension
+extension UIFont.TextStyle {
+    func toSwiftUITextStyle() -> Font.TextStyle {
+        switch self {
+        case .largeTitle: return .largeTitle
+        case .title1: return .title
+        case .title2: return .title2
+        case .title3: return .title3
+        case .headline: return .headline
+        case .subheadline: return .subheadline
+        case .body: return .body
+        case .callout: return .callout
+        case .footnote: return .footnote
+        case .caption1: return .caption
+        case .caption2: return .caption2
+        default: return .body
+        }
     }
 }

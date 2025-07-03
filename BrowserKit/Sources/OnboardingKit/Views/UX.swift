@@ -31,10 +31,10 @@ enum UX {
         static let titleFontSize: CGFloat = 28
         static let bodyFontSize: CGFloat = 16
 
-        static let titleFont = Font(FXFontStyles.Regular.title1.scaledFont())
-        static let bodyFont = Font(FXFontStyles.Regular.subheadline.scaledFont())
-        static let primaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
-        static let secondaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
+        static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
+        static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
+        static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
+        static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
     }
 
     enum SegmentedControl {

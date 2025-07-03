@@ -107,7 +107,6 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     var titleView: some View {
         Text(viewModel.configuration.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
