@@ -1141,7 +1141,6 @@ class BrowserViewController: UIViewController,
         )
 
         let isEditing = toolbarState?.addressToolbar.isEditing ?? false
-        let isTopToolbar = toolbarState?.toolbarPosition == .top
 
         let shouldShowSearchBar = store.state.screenState(
             HomepageState.self,
@@ -1149,7 +1148,7 @@ class BrowserViewController: UIViewController,
             window: windowUUID
         )?.searchState.shouldShowSearchBar ?? false
 
-        guard shouldShowSearchBar, !isEditing, isTopToolbar, contentContainer.hasHomepage else {
+        guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
             addressToolbarContainer.isHidden = false
             store.dispatchLegacy(
