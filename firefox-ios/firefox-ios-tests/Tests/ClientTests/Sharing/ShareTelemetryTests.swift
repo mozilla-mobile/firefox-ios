@@ -14,8 +14,6 @@ final class ShareTelemetryTests: XCTestCase {
     let activityIdentifierKey = "activity_identifier"
     let shareTypeKey = "share_type"
     let hasShareMessageKey = "has_share_message"
-    let hasIsEnrolledInSentFromFirefoxKey = "is_enrolled_in_sent_from_firefox"
-    let hasIsOptedInSentFromFirefoxKey = "is_opted_in_sent_from_firefox"
 
     override func setUp() {
         super.setUp()

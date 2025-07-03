@@ -4946,6 +4946,7 @@ extension String {
     }
 
     // MARK: - Sent from Firefox / Share Link Experiment
+    // NOTE: FXIOS-12736 These can be removed if we do not resume a similar experiment in the remainder of 2025
     public struct SentFromFirefox {
         public struct SocialMediaApp {
             public static let WhatsApp = MZLocalizedString(

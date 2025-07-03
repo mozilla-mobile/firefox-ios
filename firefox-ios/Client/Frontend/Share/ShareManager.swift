@@ -7,7 +7,7 @@ import MobileCoreServices
 import WebKit
 import UniformTypeIdentifiers
 
-class ShareManager: NSObject, FeatureFlaggable {
+class ShareManager: NSObject {
     private struct ActivityIdentifiers {
         static let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
         static let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
