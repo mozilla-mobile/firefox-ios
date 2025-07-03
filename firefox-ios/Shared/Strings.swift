@@ -1048,11 +1048,6 @@ extension String {
         public struct RecentlySaved { }
 
         public struct Shortcuts {
-            public static let SectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Shortcuts.SectionTitle.v140",
-                tableName: "FirefoxHomepage",
-                value: "Shortcuts",
-                comment: "This is the title of the Shortcuts section on Firefox Homepage.")
             public static let Sponsored = MZLocalizedString(
                 key: "FirefoxHomepage.Shortcuts.Sponsored.v100",
                 tableName: nil,
