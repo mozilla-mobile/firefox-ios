@@ -31,6 +31,7 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - Properties
     private var isMenuDefaultBrowserBanner = false
+    private let isMenuExpanded = false
 
     // MARK: - UI Setup
     private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
@@ -122,7 +123,7 @@ public final class MenuRedesignMainView: UIView,
            let isExpanded = expandedSection.isExpanded,
            isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
-            onCalculatedHeight?(height + siteProtectionHeader.frame.height, true)
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
             layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
@@ -131,7 +132,7 @@ public final class MenuRedesignMainView: UIView,
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
                     self.setHeightForHomepageMenu(height: height)
                 } else {
-                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, false)
+                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, isMenuExpanded)
                 }
                 layoutIfNeeded()
             }
@@ -146,9 +147,9 @@ public final class MenuRedesignMainView: UIView,
                                      UX.headerTopMarginWithButton +
                                      headerBannerHeight +
                                      UX.headerTopMargin,
-                                     false)
+                                     isMenuExpanded)
         } else {
-            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, false)
+            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isMenuExpanded)
         }
     }
 
