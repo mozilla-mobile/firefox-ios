@@ -25,6 +25,11 @@ class HistoryPanel: UIViewController,
     typealias HistoryPanelSections = HistoryPanelViewModel.Sections
     typealias a11yIds = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
+    enum HistoryItem: Hashable, Sendable {
+        case site(Site)
+        case historyActionables(HistoryActionablesModel)
+    }
+
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var historyCoordinatorDelegate: HistoryCoordinatorDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
@@ -44,7 +49,7 @@ class HistoryPanel: UIViewController,
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
-    var diffableDataSource: UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>?
+    var diffableDataSource: UITableViewDiffableDataSource<HistoryPanelSections, HistoryItem>?
 
     var shouldShowToolBar: Bool {
         return state == .history(state: .mainView) || state == .history(state: .search)
@@ -359,23 +364,18 @@ class HistoryPanel: UIViewController,
 
     /// Handles dequeuing the appropriate type of cell when needed.
     private func configureDataSource() {
-        diffableDataSource = UITableViewDiffableDataSource<
-            HistoryPanelSections,
-            AnyHashable
-        >(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        diffableDataSource = UITableViewDiffableDataSource<HistoryPanelSections, HistoryItem>(
+            tableView: tableView
+        ) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self else { return nil }
 
-            if var historyActionable = item as? HistoryActionablesModel {
+            switch item {
+            case .historyActionables(var historyActionable):
                 historyActionable.configureImage(for: windowUUID)
                 return getHistoryActionableCell(historyActionable: historyActionable, indexPath: indexPath)
-            }
-
-            if let site = item as? Site {
+            case .site(let site):
                 return getSiteCell(site: site, indexPath: indexPath)
             }
-
-            // This should never happen! You will have an empty row!
-            return UITableViewCell()
         }
     }
 
@@ -448,7 +448,7 @@ class HistoryPanel: UIViewController,
 
     /// The data source gets populated here for your choice of section.
     func applySnapshot(animatingDifferences: Bool = false) {
-        var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
+        var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, HistoryItem>()
 
         snapshot.appendSections(viewModel.visibleSections)
 
@@ -461,9 +461,13 @@ class HistoryPanel: UIViewController,
                 if sectionData.count > sectionDataUniqued.count {
                     let numberOfDuplicates = sectionData.count - sectionDataUniqued.count
                     logger.log(
-                        "Duplicates found in HistoryPanel applySnapshot method in section \(section): \(numberOfDuplicates)",
+                        "Duplicates found in HistoryPanel applySnapshot method",
                         level: .fatal,
-                        category: .library
+                        category: .library,
+                        extra: [
+                            "section": "\(section)",
+                            "numberOfDuplicates": "\(numberOfDuplicates)"
+                        ]
                     )
 
                     // If you crash here, please record your steps in ticket FXIOS-10996. Diagnose if possible as you
@@ -473,7 +477,7 @@ class HistoryPanel: UIViewController,
                 }
 
                 snapshot.appendItems(
-                    sectionDataUniqued, // FXIOS-10996 Force unique while we investigate history panel crashes
+                    sectionDataUniqued.map { HistoryItem.site($0) }, // FXIOS-10996 Force unique while we investigate history panel crashes
                     toSection: section
                 )
             }
@@ -485,7 +489,11 @@ class HistoryPanel: UIViewController,
         } else {
             snapshot.appendSections([.additionalHistoryActions])
         }
-        snapshot.appendItems(viewModel.historyActionables, toSection: .additionalHistoryActions)
+
+        snapshot.appendItems(
+            viewModel.historyActionables.map { HistoryItem.historyActionables($0) },
+            toSection: .additionalHistoryActions
+        )
 
         diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
         updateEmptyPanelState()
@@ -513,8 +521,8 @@ class HistoryPanel: UIViewController,
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
-        if let item = diffableDataSource?.itemIdentifier(for: indexPath),
-           item as? HistoryActionablesModel != nil {
+        guard let item = diffableDataSource?.itemIdentifier(for: indexPath),
+              case HistoryItem.historyActionables = item else {
             return nil
         }
 
@@ -523,7 +531,7 @@ class HistoryPanel: UIViewController,
             style: .destructive,
             title: .HistoryPanelDelete
         ) { [weak self] (_, _, completion) in
-            guard let self = self else {
+            guard let self else {
                 completion(false)
                 return
             }
@@ -674,11 +682,10 @@ extension HistoryPanel: UITableViewDelegate {
 
         guard let item = diffableDataSource?.itemIdentifier(for: indexPath) else { return }
 
-        if let site = item as? Site {
+        switch item {
+        case .site(let site):
             handleSiteItemTapped(site: site)
-        }
-
-        if let historyActionable = item as? HistoryActionablesModel {
+        case .historyActionables(let historyActionable):
             handleHistoryActionableTapped(historyActionable: historyActionable)
         }
     }
