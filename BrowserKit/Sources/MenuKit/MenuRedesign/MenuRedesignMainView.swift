@@ -99,11 +99,7 @@ public final class MenuRedesignMainView: UIView,
                 guard let self else { return }
                 let height = tableView.tableViewContentSize + UX.headerTopMargin
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
-<<<<<<< HEAD
-                    onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
-=======
-                    self.setHeightForHomepageMenu(height: height, isExpanded: isExpanded)
->>>>>>> 5fbf6e09f (Add FXIOS-12682 ⁃ [Menu Redesign] More option transition to full menu (#27707))
+                    onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isExpanded)
                 } else {
                     onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
                 }
@@ -112,29 +108,6 @@ public final class MenuRedesignMainView: UIView,
         }
     }
 
-<<<<<<< HEAD
-=======
-    private func setHeightForHomepageMenu(height: CGFloat, isExpanded: Bool) {
-        if isMenuDefaultBrowserBanner {
-            let headerBannerHeight = headerBanner.frame.height
-            self.onCalculatedHeight?(height +
-                                     UX.closeButtonSize +
-                                     UX.headerTopMarginWithButton +
-                                     headerBannerHeight +
-                                     UX.headerTopMargin,
-                                     isExpanded)
-        } else {
-            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isExpanded)
-        }
-    }
-
-    private func handleBannerCallback(with data: [MenuSection]) {
-        headerBanner.closeButtonCallback = { [weak self] in
-            self?.setupView(with: data, isHeaderBanner: false)
-        }
-    }
-
->>>>>>> 5fbf6e09f (Add FXIOS-12682 ⁃ [Menu Redesign] More option transition to full menu (#27707))
     // MARK: - Callbacks
     @objc
     private func closeTapped() {
