@@ -65,7 +65,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
 
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-                                             isLandscape: Bool = UIWindow.isLandscape) -> CGFloat {
+                                             isLandscape: Bool = UIWindow.isLandscape,
+                                             collectionViewWidth: CGFloat) -> CGFloat {
                 var fractionalWidth: CGFloat
                 if device == .pad {
                     return UX.PocketConstants.cellWidth
@@ -75,7 +76,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                     fractionalWidth = UX.PocketConstants.redesignedFractionalWidthiPhonePortrait
                 }
 
-                return ((UIScreen.main.bounds.width - UX.standardInset)
+                return ((collectionViewWidth - UX.standardInset)
                        * fractionalWidth)
                        + UX.PocketConstants.storiesSpacing
             }
@@ -119,7 +120,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private var logger: Logger
     private var windowUUID: WindowUUID
     private var storiesCellCachedHeight: CGFloat?
-    private var storyCellHeight = UX.PocketConstants.redesignedMinimumCellHeight
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
@@ -131,8 +131,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     func createLayoutSection(
         for section: HomepageSection,
-        with traitCollection: UITraitCollection
+        with environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
+        let traitCollection = environment.traitCollection
         switch section {
         case .header, .searchBar:
             return createSingleItemSectionLayout(
@@ -157,7 +158,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .pocket:
-            return isStoriesRedesignEnabled ? createStoriesSectionLayout(for: traitCollection)
+            return isStoriesRedesignEnabled ? createStoriesSectionLayout(for: environment)
                                             : createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
             return createSingleItemSectionLayout(
@@ -168,19 +169,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .bookmarks:
             return createBookmarksSectionLayout(for: traitCollection)
         }
-    }
-
-    func updateStoryCellsHeight() {
-        guard let state = store.state.screenState(HomepageState.self,
-                                                  for: .homepage,
-                                                  window: windowUUID) else { return }
-        let storyCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
-        storyCellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(
-            state: state.pocketState,
-            width: storyCellWidth,
-            minCellHeight: UX.PocketConstants.redesignedMinimumCellHeight,
-            windowUUID: windowUUID
-        )
     }
 
     private func createSingleItemSectionLayout(
@@ -250,18 +238,33 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
-    private func createStoriesSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        let absoluteCellWidth = UX.PocketConstants.getAbsoluteCellWidth()
+    private func createStoriesSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let traitCollection = environment.traitCollection
+        let cellHeight: CGFloat
+        let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
+            collectionViewWidth: environment.container.contentSize.width
+        )
+
+        if let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) {
+            cellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(
+                state: state.pocketState,
+                width: cellWidth,
+                minCellHeight: UX.PocketConstants.redesignedMinimumCellHeight,
+                windowUUID: windowUUID
+            )
+        } else {
+            cellHeight = UX.PocketConstants.redesignedMinimumCellHeight
+        }
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(storyCellHeight)
+            heightDimension: .estimated(cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(absoluteCellWidth),
-            heightDimension: .estimated(storyCellHeight)
+            widthDimension: .absolute(cellWidth),
+            heightDimension: .estimated(cellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)

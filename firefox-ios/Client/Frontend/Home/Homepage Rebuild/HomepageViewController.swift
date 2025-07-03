@@ -15,7 +15,6 @@ final class HomepageViewController: UIViewController,
                                     ContentContainable,
                                     Screenshotable,
                                     Themeable,
-                                    Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -50,9 +49,7 @@ final class HomepageViewController: UIViewController,
     private let jumpBackInContextualHintViewController: ContextualHintViewController
     private let syncTabContextualHintViewController: ContextualHintViewController
     private var homepageState: HomepageState
-    private var pocketData: [PocketStoryConfiguration] = []
     private var lastContentOffsetY: CGFloat = 0
-    private let homepageSectionLayoutProvider: HomepageSectionLayoutProvider
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -111,13 +108,10 @@ final class HomepageViewController: UIViewController,
             windowUUID: windowUUID
         )
 
-        self.homepageSectionLayoutProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
-
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -201,7 +195,6 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
-        homepageSectionLayoutProvider.updateStoryCellsHeight()
         store.dispatchLegacy(
             HomepageAction(
                 numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
@@ -321,11 +314,6 @@ final class HomepageViewController: UIViewController,
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
-
-        if pocketData != state.pocketState.pocketData {
-            homepageSectionLayoutProvider.updateStoryCellsHeight()
-        }
-        pocketData = state.pocketState.pocketData
     }
 
     func unsubscribeFromRedux() {
@@ -407,6 +395,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
@@ -424,9 +413,9 @@ final class HomepageViewController: UIViewController,
                 return HomepageSectionLayoutProvider.makeEmptyLayoutSection()
             }
 
-            return self?.homepageSectionLayoutProvider.createLayoutSection(
+            return sectionProvider.createLayoutSection(
                 for: section,
-                with: environment.traitCollection
+                with: environment
             )
         }
         return layout
@@ -655,16 +644,6 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         default:
             return nil
-        }
-    }
-
-    // MARK: - Notifiable
-
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            homepageSectionLayoutProvider.updateStoryCellsHeight()
-        default: break
         }
     }
 
