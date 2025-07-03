@@ -47,13 +47,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 0)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
 
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.observers, [.ThemeDidChange])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter?.observers, [.ThemeDidChange, UIContentSizeCategory.didChangeNotification])
     }
 
     // MARK: - Deinit State

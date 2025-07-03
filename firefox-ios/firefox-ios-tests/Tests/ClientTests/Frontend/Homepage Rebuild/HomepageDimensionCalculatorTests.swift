@@ -146,7 +146,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         XCTAssertEqual(numberOfTilesPerRow, 4)
     }
 
-    func test_getTallestStoryCellHeight_returnsTallestCellHeight() {
+    func test_getTallestCollectionViewCellHeightt_returnsTallestCellHeight() {
         DependencyHelperMock().bootstrapDependencies()
 
         let homepageState = HomepageState(windowUUID: .XCTestDefaultUUID)
@@ -174,21 +174,26 @@ class HomepageDimensionCalculatorTests: XCTestCase {
             )
         )
 
-        let sampleWidth: CGFloat = 300.0
-        let cellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(state: newState.pocketState,
-                                                                            width: sampleWidth,
-                                                                            minCellHeight: 70,
-                                                                            windowUUID: .XCTestDefaultUUID)
+        var storyCells: [StoryCell] = []
+        for story in newState.pocketState.pocketData {
+            let cell = StoryCell()
+            cell.configure(story: story, theme: LightTheme())
+            storyCells.append(cell)
+        }
 
-        let cell = StoryCell()
-        cell.configure(story: stories[0], theme: LightTheme())
-        let size = cell.systemLayoutSizeFitting(
+        let sampleWidth: CGFloat = 300.0
+        let cellHeight = HomepageDimensionCalculator.getTallestCollectionViewCellHeight(cells: storyCells,
+                                                                                        cellWidth: sampleWidth)
+
+        let controlCell = StoryCell()
+        controlCell.configure(story: stories[0], theme: LightTheme())
+        let controlCellHeight = controlCell.systemLayoutSizeFitting(
             CGSize(width: sampleWidth, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         ).height
 
         XCTAssertEqual(newState.pocketState.pocketData.count, 3)
-        XCTAssertEqual(cellHeight, size, accuracy: 1.0)
+        XCTAssertEqual(cellHeight, controlCellHeight, accuracy: 1.0)
     }
 }

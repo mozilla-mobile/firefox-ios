@@ -109,23 +109,16 @@ struct HomepageDimensionCalculator {
         return tilesPerRowCount
     }
 
-    // TODO: FXIOS-12727 - We can replace this code with `uniformAcrossSiblings` API in iOS 17+
-    static func tallestStoryCellHeight(state: PocketState,
-                                       width: CGFloat,
-                                       minCellHeight: CGFloat,
-                                       windowUUID: WindowUUID) -> CGFloat {
-        let pocketItems = state.pocketData
+    static func getTallestCollectionViewCellHeight(cells: [UICollectionViewCell], cellWidth: CGFloat) -> CGFloat {
         var maxHeight: CGFloat = 0
-        for item in pocketItems {
-            let cell = StoryCell()
-            cell.configure(story: item, theme: LightTheme())
+        for cell in cells {
             let size = cell.systemLayoutSizeFitting(
-                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                CGSize(width: cellWidth, height: UIView.layoutFittingCompressedSize.height),
                 withHorizontalFittingPriority: .required,
                 verticalFittingPriority: .fittingSizeLevel
             )
             maxHeight = max(maxHeight, size.height)
         }
-        return max(ceil(maxHeight), minCellHeight)
+        return maxHeight
     }
 }

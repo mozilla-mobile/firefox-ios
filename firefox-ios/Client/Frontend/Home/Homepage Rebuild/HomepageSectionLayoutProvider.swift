@@ -240,21 +240,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private func createStoriesSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
-        let cellHeight: CGFloat
         let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
             collectionViewWidth: environment.container.contentSize.width
         )
-
-        if let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) {
-            cellHeight = HomepageDimensionCalculator.tallestStoryCellHeight(
-                state: state.pocketState,
-                width: cellWidth,
-                minCellHeight: UX.PocketConstants.redesignedMinimumCellHeight,
-                windowUUID: windowUUID
-            )
-        } else {
-            cellHeight = UX.PocketConstants.redesignedMinimumCellHeight
-        }
+        let tallestCellHeight = getTallestStoryCellHeight(cellWidth: cellWidth)
+        let cellHeight = max(tallestCellHeight, UX.PocketConstants.redesignedMinimumCellHeight)
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -500,5 +490,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
+    }
+
+    // TODO: FXIOS-12727 - We can replace this code with `uniformAcrossSiblings` API in iOS 17+
+    private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
+        guard let  state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var storyCells: [StoryCell] = []
+        for story in state.pocketState.pocketData {
+            let cell = StoryCell()
+            cell.configure(story: story, theme: LightTheme())
+            storyCells.append(cell)
+        }
+        return HomepageDimensionCalculator.getTallestCollectionViewCellHeight(cells: storyCells,
+                                                                              cellWidth: cellWidth)
     }
 }
