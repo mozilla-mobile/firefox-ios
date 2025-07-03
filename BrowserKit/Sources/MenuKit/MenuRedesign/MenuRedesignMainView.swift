@@ -31,7 +31,6 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - Properties
     private var isMenuDefaultBrowserBanner = false
-    private let isMenuExpanded = false
 
     // MARK: - UI Setup
     private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
@@ -118,10 +117,11 @@ public final class MenuRedesignMainView: UIView,
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
+        let expandedSection = data.first(where: { $0.isExpanded ?? false })
+        let isExpanded = expandedSection?.isExpanded ?? false
+
         // To avoid a glitch when expand the menu, we should not handle this action under DispatchQueue.main.async
-        if let expandedSection = data.first(where: { $0.isExpanded ?? false }),
-           let isExpanded = expandedSection.isExpanded,
-           isExpanded {
+        if isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
             onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
             layoutIfNeeded()
@@ -130,16 +130,16 @@ public final class MenuRedesignMainView: UIView,
                 guard let self else { return }
                 let height = tableView.tableViewContentSize + UX.headerTopMargin
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
-                    self.setHeightForHomepageMenu(height: height)
+                    self.setHeightForHomepageMenu(height: height, isExpanded: isExpanded)
                 } else {
-                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, isMenuExpanded)
+                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
                 }
                 layoutIfNeeded()
             }
         }
     }
 
-    private func setHeightForHomepageMenu(height: CGFloat) {
+    private func setHeightForHomepageMenu(height: CGFloat, isExpanded: Bool) {
         if isMenuDefaultBrowserBanner {
             let headerBannerHeight = headerBanner.frame.height
             self.onCalculatedHeight?(height +
@@ -147,9 +147,9 @@ public final class MenuRedesignMainView: UIView,
                                      UX.headerTopMarginWithButton +
                                      headerBannerHeight +
                                      UX.headerTopMargin,
-                                     isMenuExpanded)
+                                     isExpanded)
         } else {
-            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isMenuExpanded)
+            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isExpanded)
         }
     }
 
