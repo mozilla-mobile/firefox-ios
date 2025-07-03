@@ -403,6 +403,7 @@
         "ShareToolbarTests",
         "SiteLoadTest",
         "SiteLoadTest\/testLoadSite()",
+        "SwipingTabsTests",
         "SyncUITests",
         "SyncUITests\/testCreateAnAccountLink()",
         "SyncUITests\/testQRPairing()",
