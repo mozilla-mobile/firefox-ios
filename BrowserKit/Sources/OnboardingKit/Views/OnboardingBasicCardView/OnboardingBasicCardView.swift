@@ -11,6 +11,8 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryActionColor: Color = .clear
+    @Environment(\.sizeCategory)
+    private var sizeCategory
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -35,7 +37,7 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             let widthScale = geometry.size.width / UX.CardView.baseWidth
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
-            VStack(spacing: UX.CardView.cardSecondaryContainerPadding) {
+            VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
                 ContentFittingScrollView {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()

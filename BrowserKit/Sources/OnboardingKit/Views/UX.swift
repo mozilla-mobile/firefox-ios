@@ -15,7 +15,14 @@ enum UX {
         static let baseiPadHeight: CGFloat = 755
 
         static let cardTopPadding: CGFloat = 32
-        static let cardSecondaryContainerPadding: CGFloat = 32
+        static func cardSecondaryContainerPadding(for sizeCategory: ContentSizeCategory) -> CGFloat {
+            switch sizeCategory {
+            case .accessibilityExtraExtraExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraLarge:
+                return 0
+            default:
+                return 32
+            }
+        }
         static let cardHeightRatio: CGFloat = 0.75
         static let spacing: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
