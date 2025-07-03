@@ -20,15 +20,11 @@ class ShareTelemetry {
     func sharedTo(
         activityType: UIActivity.ActivityType?,
         shareType: ShareType,
-        hasShareMessage: Bool,
-        isEnrolledInSentFromFirefox: Bool,
-        isOptedInSentFromFirefox: Bool
+        hasShareMessage: Bool
     ) {
         let extra = GleanMetrics.ShareSheet.SharedToExtra(
             activityIdentifier: activityType?.rawValue ?? "unknown",
             hasShareMessage: hasShareMessage,
-            isEnrolledInSentFromFirefox: isEnrolledInSentFromFirefox,
-            isOptedInSentFromFirefox: isOptedInSentFromFirefox,
             shareType: shareType.typeName
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareSheet.sharedTo, extras: extra)
