@@ -4,6 +4,15 @@
 
 import SwiftUI
 
+private struct PagingCarouselUX {
+    static let itemWidthRatio: CGFloat = 0.85
+    static let interItemSpacing: CGFloat = 12
+    static let scrollAnimationDuration: CGFloat = 0.5
+    static let itemAnimationDuration: CGFloat = 0.3
+    static let minimumSwipeDistance: CGFloat = 50
+    static let edgePaddingAdjustment: CGFloat = 30
+}
+
 /// A horizontal paging carousel that displays items with smooth scrolling and swipe gestures.
 /// Centers the selected item and provides natural navigation between items.
 ///
@@ -22,25 +31,13 @@ import SwiftUI
 ///         .cornerRadius(12)
 /// }
 /// ```
-private struct PagingCarouselUX {
-    static let itemWidthRatio: CGFloat = 0.85
-    static let interItemSpacing: CGFloat = 12
-    static let scrollAnimationDuration: CGFloat = 0.5
-    static let itemAnimationDuration: CGFloat = 0.3
-    static let minimumSwipeDistance: CGFloat = 50
-    static let edgePaddingAdjustment: CGFloat = 30
-}
-
 public struct PagingCarousel<Item, Content: View>: View {
-    /// PagingCarouselUX configuration constants
-
     @Binding public var selection: Int
     public let items: [Item]
     public let content: (Item) -> Content
 
     @State private var scrollOffset: CGFloat = 0
 
-    /// Creates a new paging carousel
     public init(
         selection: Binding<Int>,
         items: [Item],
