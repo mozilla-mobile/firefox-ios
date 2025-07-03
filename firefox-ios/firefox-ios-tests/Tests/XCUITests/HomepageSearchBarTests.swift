@@ -28,8 +28,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
-        mozWaitForElementToNotExist(homepageSearchBar)
-        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
 
         navigator.goto(ToolbarSettings)
         navigator.performAction(Action.SelectToolbarTop)
@@ -61,8 +61,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
 
-        mozWaitForElementToNotExist(homepageSearchBar)
-        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
     func test_homepageSearchBar_fromPortraitToLandscape_showsOnlyInPortrait_experimentOn() {
@@ -250,6 +250,236 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    // MARK: - Bottom Toolbar
+    func test_homepageSearchBar_forBottomToolbar_experimentOff_doesNotShowSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_homepageSearchBar_forBottomToolbar_showsOnlyInPortrait() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        XCUIDevice.shared.orientation = .landscapeLeft
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        XCUIDevice.shared.orientation = .portrait
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_tappingOnHomepageSearchBar_experimentOn_forBottomToolbar_showsZeroSearchState() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToExist(homepageSearchBar)
+        homepageSearchBar.tap()
+
+        let zeroSearchScrimDimmingView = app.otherElements[AccessibilityIdentifiers.ZeroSearch.dimmingView]
+        mozWaitForElementToExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_tappingOnSearchButton_forNavigationToolbar_forBottomToolbar_experimentOn_showsZeroSearchState() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        let searchButton = app.buttons[AccessibilityIdentifiers.Toolbar.searchButton]
+        mozWaitForElementToExist(searchButton)
+        searchButton.tap()
+
+        let zeroSearchScrimDimmingView = app.otherElements[AccessibilityIdentifiers.ZeroSearch.dimmingView]
+        mozWaitForElementToExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromTabTray_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromMenu_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].firstMatch.waitAndTap()
+        app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab].waitAndTap()
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromLongPress_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromNavigationToolbar_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromTabTray_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromMenu_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].firstMatch.waitAndTap()
+        app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab].waitAndTap()
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func test_openNewTabFromLongPress_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
         let homepageSearchBar = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField

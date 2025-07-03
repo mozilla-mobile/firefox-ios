@@ -58,11 +58,6 @@ final class HomepageMiddleware: FeatureFlaggable {
             ToolbarActionType.cancelEdit:
             self.dispatchSearchBarConfigurationAction(action: action)
 
-        // Update homepage search bar configuration when changing toolbar position
-        // since does not apply to bottom toolbar currently
-        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
-            self.dispatchSearchBarConfigurationAction(action: action)
-
         default:
             break
         }
