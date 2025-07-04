@@ -28,10 +28,7 @@ public final class MenuRedesignMainView: UIView,
     private var viewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Properties
-    private var isMenuDefaultBrowserBanner = false
     private var menuData: [MenuSection] = []
-    private var isBrowserDefault = false
-    private var bannerShown = false
 
     // MARK: - UI Setup
     override public func layoutSubviews() {

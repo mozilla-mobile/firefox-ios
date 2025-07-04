@@ -60,7 +60,6 @@ class MainMenuViewController: UIViewController,
 
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
-    private var isBrowserDefault = false
 
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
