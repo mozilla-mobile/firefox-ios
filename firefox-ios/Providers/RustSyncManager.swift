@@ -10,6 +10,7 @@ import AuthenticationServices
 import Common
 
 import enum MozillaAppServices.OAuthScope
+import enum MozillaAppServices.ServiceStatus
 import enum MozillaAppServices.SyncEngineSelection
 import enum MozillaAppServices.SyncReason
 import struct MozillaAppServices.DeviceSettings
@@ -38,6 +39,8 @@ public class RustSyncManager: NSObject, SyncManager {
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
+    private var syncBackOffTimer: Timer?
+    private let syncBackOffDelay = 180.0 // 3 Minutes
     var loginsVerificationEnabled = false
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
@@ -305,7 +308,7 @@ public class RustSyncManager: NSObject, SyncManager {
         return false
     }
 
-    public func getEngineEnablementChangesForAccount() -> [String: Bool] {
+    public func getEngineEnablementChangesForAccount(withStateChange: Bool = true) -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
 
         let engines = syncManagerAPI.rustTogglableEngines
@@ -314,7 +317,9 @@ public class RustSyncManager: NSObject, SyncManager {
         // screen on FxA.
         if let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines) {
             engines.forEach { engineEnablements[$0.rawValue] = !declined.contains($0.rawValue) }
-            UserDefaults.standard.removeObject(forKey: fxaDeclinedEngines)
+            if withStateChange {
+                UserDefaults.standard.removeObject(forKey: fxaDeclinedEngines)
+            }
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
@@ -618,7 +623,7 @@ public class RustSyncManager: NSObject, SyncManager {
      * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
      * and to preserve some ordering rules.
      */
-    public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+    public func syncNamedCollections(why: SyncReason, names: [String]) -> Deferred<Maybe<SyncResult>> {
         // Massage the list of names into engine identifiers.var engines = [String]()
         var engines = [String]()
 
@@ -627,7 +632,51 @@ public class RustSyncManager: NSObject, SyncManager {
             engines.append(name)
         }
 
-        return syncRustEngines(why: why, engines: engines) >>> succeed
+        return syncRustEngines(why: why, engines: engines)
+    }
+
+    /**
+     * A specialized version of `syncNamedCollections` for execution after a sync settings change. Allows selective
+     * sync of different collections and retries the sync if the initial call is backed off.
+     */
+    public func syncPostSyncSettingsChange(why: SyncReason, names: [String]) {
+        let enablements = getEngineEnablementChangesForAccount(withStateChange: false)
+        let enabledEngines = Array(enablements.filter({ $0.value }).keys)
+        let disabledEngines = Array(enablements.filter({ !$0.value }).keys)
+
+        // report sync settings telemetry changes
+        self.syncManagerAPI.reportSaveSyncSettingsTelemetry(enabledEngines: enabledEngines,
+                                                            disabledEngines: disabledEngines)
+
+        syncNamedCollections(why: why, names: names).upon { result in
+            guard result.isSuccess, let syncResult = result.successValue else {
+                return
+            }
+
+            // If the sync was backed off, retry it after a delay.
+            if syncResult.status == .backedOff {
+                self.retrySyncAfterDelay(why: why, names: names)
+            }
+        }
+    }
+
+    public func reportOpenSyncSettingsMenuTelemetry() {
+        self.syncManagerAPI.reportOpenSyncSettingsMenuTelemetry()
+    }
+
+    private func retrySyncAfterDelay(why: SyncReason, names: [String]) {
+        // If the timer property is set and is valid, we reset it. This will prevent the sync
+        // from being executed too often. It will run `self.syncBackOffDelay` seconds
+        // after the previous sync.
+        if self.syncBackOffTimer != nil && self.syncBackOffTimer?.isValid ?? false {
+            self.syncBackOffTimer?.invalidate()
+            self.syncBackOffTimer = nil
+        }
+
+        self.syncBackOffTimer = Timer.scheduledTimer(withTimeInterval: self.syncBackOffDelay,
+                                                     repeats: false) { _ in
+            _ = self.syncNamedCollections(why: why, names: names)
+        }
     }
 
     public func syncTabs() -> Deferred<Maybe<SyncResult>> {
