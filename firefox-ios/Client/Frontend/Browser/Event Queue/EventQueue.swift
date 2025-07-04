@@ -27,7 +27,7 @@ public enum QueueEventState: Int {
 
 /// A queue that provides synchronization between different areas of the codebase and coordinates
 /// actions that depend on one or more events or app states. For example events see: AppEvent.swift.
-public final class EventQueue<QueueEventType: Hashable> {
+public final class EventQueue<QueueEventType: Hashable & Sendable> {
     public struct EnqueuedAction {
         let token: ActionToken
         let action: EventQueueAction

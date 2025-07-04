@@ -38,6 +38,11 @@ class HistoryPanelViewModel: FeatureFlaggable {
         }
     }
 
+    enum HistoryItem: Hashable, Sendable {
+        case site(Site)
+        case historyActionables(HistoryActionablesModel)
+    }
+
     // MARK: - Properties
 
     private let profile: Profile
@@ -184,15 +189,17 @@ class HistoryPanelViewModel: FeatureFlaggable {
     func deleteGroupsFor(dateOption: HistoryDeletionUtilityDateOptions) {
         guard let deletableSections = getDeletableSection(for: dateOption) else { return }
         deletableSections.forEach { section in
-            let sectionItems = dateGroupedSites.itemsForSection(section.rawValue - 1)
+            let sectionItems = dateGroupedSites
+                .itemsForSection(section.rawValue - 1)
+                .map(HistoryItem.site)
             removeHistoryItems(item: sectionItems, at: section.rawValue)
         }
     }
 
     /// This handles removing a Site from the view.
-    func removeHistoryItems(item historyItem: [AnyHashable], at section: Int) {
+    func removeHistoryItems(item historyItem: [HistoryItem], at section: Int) {
         historyItem.forEach { item in
-            if let site = item as? Site {
+            if case HistoryItem.site(let site) = item {
                 deleteSingle(site: site)
             }
         }
