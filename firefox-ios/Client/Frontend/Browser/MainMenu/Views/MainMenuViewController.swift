@@ -59,6 +59,11 @@ class MainMenuViewController: UIViewController,
     }
 
     private var hasBeenExpanded = false
+<<<<<<< HEAD
+=======
+    private var currentCustomMenuHeight = 0.0
+    private var isBrowserDefault = false
+>>>>>>> 215cc7e77 (Bugfix FXIOS-12721 ⁃ Shaky menu movemenu when launched after opening a new tab (#27729))
 
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
@@ -124,16 +129,19 @@ class MainMenuViewController: UIViewController,
             }
 
             menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
-                if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
-                    let customDetent = UISheetPresentationController.Detent.custom { context in
-                        return height
-                    }
-                    if isExpanded {
-                        self?.sheetPresentationController?.animateChanges({
+                if let customHeight = self?.currentCustomMenuHeight, height > customHeight {
+                    self?.currentCustomMenuHeight = height
+                    if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                        let customDetent = UISheetPresentationController.Detent.custom { context in
+                            return height
+                        }
+                        if isExpanded {
+                            self?.sheetPresentationController?.animateChanges({
+                                self?.sheetPresentationController?.detents = [customDetent]
+                            })
+                        } else {
                             self?.sheetPresentationController?.detents = [customDetent]
-                        })
-                    } else {
-                        self?.sheetPresentationController?.detents = [customDetent]
+                        }
                     }
                 }
             }

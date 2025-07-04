@@ -27,8 +27,24 @@ public final class MenuRedesignMainView: UIView,
 
     private var viewConstraints: [NSLayoutConstraint] = []
 
+<<<<<<< HEAD
     // MARK: - UI Setup
     private func setupView(with data: [MenuSection]) {
+=======
+    // MARK: - Properties
+    private var isMenuDefaultBrowserBanner = false
+    private var menuData: [MenuSection] = []
+    private var isBrowserDefault = false
+    private var bannerShown = false
+
+    // MARK: - UI Setup
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateMenuHeight(for: menuData)
+    }
+
+    private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
+>>>>>>> 215cc7e77 (Bugfix FXIOS-12721 ⁃ Shaky menu movemenu when launched after opening a new tab (#27729))
         self.removeConstraints(viewConstraints)
         viewConstraints.removeAll()
         self.addSubview(tableView)
@@ -82,7 +98,12 @@ public final class MenuRedesignMainView: UIView,
     public func reloadDataView(with data: [MenuSection]) {
         setupView(with: data)
         tableView.reloadTableView(with: data)
+<<<<<<< HEAD
         updateMenuHeight(for: data)
+=======
+        handleBannerCallback(with: data)
+        menuData = data
+>>>>>>> 215cc7e77 (Bugfix FXIOS-12721 ⁃ Shaky menu movemenu when launched after opening a new tab (#27729))
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
