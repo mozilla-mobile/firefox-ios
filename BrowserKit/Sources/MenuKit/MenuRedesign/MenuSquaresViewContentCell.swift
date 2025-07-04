@@ -14,6 +14,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         stack.axis = .horizontal
         stack.spacing = UX.contentViewSpacing
         stack.distribution = .fillEqually
+        stack.accessibilityContainerType = .semanticGroup
     }
 
     private var menuData: [MenuSection]
@@ -58,9 +59,10 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         ])
     }
 
-    func reloadData(with data: [MenuSection]) {
+    func reloadData(with data: [MenuSection], and groupA11yLabel: String?) {
         menuData = data
         setupHorizontalTabs()
+        contentStackView.accessibilityLabel = groupA11yLabel
     }
 
     private func setupHorizontalTabs() {

@@ -4523,6 +4523,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "More",
                     comment: "On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu.")
+                public static let LibraryOptions = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142",
+                    tableName: "MainMenu",
+                    value: "Library",
+                    comment: "On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...)")
                 public static let LessOptions = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141",
                     tableName: "MainMenu",

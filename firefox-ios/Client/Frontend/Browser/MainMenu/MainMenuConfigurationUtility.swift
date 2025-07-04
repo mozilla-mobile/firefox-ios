@@ -158,6 +158,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
             isHorizontalTabsSection: true,
+            groupA11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions,
             isHomepage: tabInfo.isHomepage,
             options: [
             MenuElement(

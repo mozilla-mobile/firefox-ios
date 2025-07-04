@@ -105,7 +105,7 @@ final class MenuRedesignTableView: UIView,
                 return UITableViewCell()
             }
             if let theme { cell.applyTheme(theme: theme) }
-            cell.reloadData(with: menuData)
+            cell.reloadData(with: menuData, and: menuData[indexPath.section].groupA11yLabel)
             return cell
         }
 
