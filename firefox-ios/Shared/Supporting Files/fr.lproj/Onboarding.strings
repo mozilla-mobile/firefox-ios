@@ -77,7 +77,7 @@
 "Onboarding.LaterAction.v115" = "Ignorer";
 
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
-"Onboarding.Modern.Customization.Theme.Continue.Action.v123" = "Continuer";
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Continuer";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "En bas";
