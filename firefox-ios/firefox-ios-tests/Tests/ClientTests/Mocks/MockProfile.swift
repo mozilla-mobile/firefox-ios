@@ -109,17 +109,18 @@ class MockFiles: FileAccessor {
     }
 }
 
-open class MockProfile: Client.Profile {
+// TODO: FXIOS-12610 Profile should be refactored so it is **not** `Sendable`.
+final class MockProfile: Client.Profile, @unchecked Sendable {
     public var rustFxA: RustFirefoxAccounts {
         return RustFirefoxAccounts.shared
     }
 
     // Read/Writeable properties for mocking
 
-    public var files: FileAccessor
-    public var syncManager: ClientSyncManager?
-    public var firefoxSuggest: RustFirefoxSuggestProtocol?
-    public var remoteSettingsService: RemoteSettingsService?
+    public let files: FileAccessor
+    public let syncManager: ClientSyncManager?
+    public let firefoxSuggest: RustFirefoxSuggestProtocol?
+    public let remoteSettingsService: RemoteSettingsService?
 
     fileprivate let name = "mockaccount"
 
@@ -130,13 +131,14 @@ open class MockProfile: Client.Profile {
     init(
         databasePrefix: String = "mock",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
-        remoteSettingService: RemoteSettingsService? = nil,
+        remoteSettingsService: RemoteSettingsService? = nil,
         injectedPinnedSites: MockablePinnedSites? = nil
     ) {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
         self.databasePrefix = databasePrefix
         self.firefoxSuggest = firefoxSuggest
+        self.remoteSettingsService = remoteSettingsService
         self.injectedPinnedSites = injectedPinnedSites
 
         do {

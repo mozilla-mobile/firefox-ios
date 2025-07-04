@@ -80,10 +80,11 @@ struct ProfileFileAccessor: FileAccessor, Sendable {
     }
 }
 
+// TODO: FXIOS-12610 Profile should be refactored so it is **not** `Sendable`
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile: AnyObject {
+protocol Profile: AnyObject, Sendable {
     var autofill: RustAutofill { get }
     var places: RustPlaces { get }
     var prefs: Prefs { get }
