@@ -6,19 +6,19 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryActionColor: Color = .clear
 
-    @StateObject private var viewModel: TosFlowViewModel<VM>
+    @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let onEmbededLinkAction: (TosAction) -> Void
 
     public init(
-        viewModel: TosFlowViewModel<VM>,
+        viewModel: TosFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onEmbededLinkAction: @escaping (TosAction) -> Void
@@ -38,12 +38,11 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
             ZStack {
                 MilkyWayMetalView()
                     .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        cardContent(geometry: geometry, scale: scale)
-                        Spacer()
-                    }
+                VStack {
+                    cardContent(geometry: geometry, scale: scale)
+                    Spacer()
                 }
+                .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
@@ -57,14 +56,16 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
-        VStack(spacing: UX.CardView.spacing * scale) {
-            Spacer()
-            imageView(scale: scale)
-            titleView
-            bodyView
-            Spacer()
-            links
-            primaryButton
+        ContentFittingScrollView {
+            VStack(spacing: UX.CardView.spacing * scale) {
+                Spacer()
+                imageView(scale: scale)
+                titleView
+                bodyView
+                Spacer()
+                links
+                primaryButton
+            }
         }
         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
         .padding(UX.CardView.verticalPadding * scale)
@@ -106,7 +107,6 @@ public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: Vi
     var titleView: some View {
         Text(viewModel.configuration.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")

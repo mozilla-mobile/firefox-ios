@@ -171,7 +171,7 @@ final class LaunchCoordinator: BaseCoordinator,
             onEmbededLinkAction: { _ in }
         )
 
-        let viewController = UIHostingController(rootView: view)
+        let viewController = PortraitOnlyHostingController(rootView: view)
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
         router.present(viewController, animated: false)
@@ -280,7 +280,7 @@ final class LaunchCoordinator: BaseCoordinator,
             )
         )
 
-        let hostingController = UIHostingController(rootView: view)
+        let hostingController = PortraitOnlyHostingController(rootView: view)
         hostingController.modalPresentationStyle = .fullScreen
         router.present(hostingController, animated: false)
     }

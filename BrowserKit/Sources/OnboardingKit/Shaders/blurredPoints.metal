@@ -2,13 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-
-//
-//  blurredPoints.metal
-//  OHarkonnen
-//
-//  Created by Nishant Bhasin on 2025-03-11.
-//
 #include <metal_stdlib>
 using namespace metal;
 
@@ -63,15 +56,13 @@ fragment half4 milky_way_fragment(VertexOut in [[stage_in]],
     float2 p2 = float2(0.8 + 0.2 * cos(time * 0.6), 0.7 + 0.2 * sin(time * 0.6));
     float2 p3 = float2(0.6 + 0.2 * sin(time * 1.5), 0.3 + 0.2 * cos(time * 1.5));
     float2 p4 = float2(0.4 + 0.2 * cos(time * 1.1), 0.6 + 0.2 * sin(time * 1.1));
-    float2 p5 = float2(0.7 + 0.2 * sin(time * 0.9), 0.5 + 0.2 * cos(time * 0.9));
     
     // Colors for each control point
-    half3 color1 = half3(1.0, 0.47, 0.2);
-    half3 color2 = half3(0.2, 0.55, 1.0);
-    half3 color3 = half3(1.0, 0.31, 0.12);
-    half3 color4 = half3(0.5, 1.0, 0.4);
-    half3 color5 = half3(0.8, 0.2, 0.6);
-    
+    half3 color1 = half3(0.996, 0.514, 0.000); // Vivid Orange  #FE8300
+    half3 color2 = half3(0.180, 0.506, 0.996); // Electric Sky Blue #2E81FEh
+    half3 color3 = half3(0.949, 0.020, 0.004); // Crimson Red   #F20501
+    half3 color4 = half3(0.996, 0.396, 0.000); // Burnt Orange  #FE6500
+
     // Pulsating effect
     float sizeMod = 0.1 + 0.05 * sin(time * 1.2);
     float maxDistance = 0.725 + sizeMod;
@@ -81,24 +72,22 @@ fragment half4 milky_way_fragment(VertexOut in [[stage_in]],
     float d2 = pow(max(1.0 - distance(in.texCoord, p2) / maxDistance, 0.0), 2.0);
     float d3 = pow(max(1.0 - distance(in.texCoord, p3) / maxDistance, 0.0), 2.0);
     float d4 = pow(max(1.0 - distance(in.texCoord, p4) / maxDistance, 0.0), 2.0);
-    float d5 = pow(max(1.0 - distance(in.texCoord, p5) / maxDistance, 0.0), 2.0);
     
     // Add Perlin noise to influence size
     float noiseMod = noise(in.texCoord * 10.0 + time) * 0.1;
     maxDistance += noiseMod;
     
     // Normalize weights
-    float totalWeight = d1 + d2 + d3 + d4 + d5;
+    float totalWeight = d1 + d2 + d3 + d4;
     if (totalWeight > 0.001) {
         d1 /= totalWeight;
         d2 /= totalWeight;
         d3 /= totalWeight;
         d4 /= totalWeight;
-        d5 /= totalWeight;
     }
     
     // Blend colors based on influence
-    half3 blendedColor = d1 * color1 + d2 * color2 + d3 * color3 + d4 * color4 + d5 * color5;
+    half3 blendedColor = d1 * color1 + d2 * color2 + d3 * color3 + d4 * color4;
     
     // Sample the previous frame for motion blur
     half4 lastFrameColor = previousFrame.sample(sampler(coord::normalized), in.texCoord);

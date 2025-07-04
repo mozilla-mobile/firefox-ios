@@ -6,61 +6,60 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryActionColor: Color = .clear
+    @Environment(\.sizeCategory)
+    private var sizeCategory
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
-    public let onLinkTap: (String) -> Void
+    let viewModel: ViewModel
+    let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
 
-    public init(
-        viewModel: VM,
+    init(
+        viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
-        onLinkTap: @escaping (String) -> Void
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
-        self.onLinkTap = onLinkTap
     }
 
-    public var body: some View {
+    var body: some View {
         GeometryReader { geometry in
             // Determine scale factor based on current size vs base metrics
             let widthScale = geometry.size.width / UX.CardView.baseWidth
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
-
-            ScrollView {
-                VStack {
+            VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
+                ContentFittingScrollView {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         titleView
+                        Spacer()
                         imageView(scale: scale)
+                        Spacer()
                         bodyView
-                        linkView
                         Spacer()
                         primaryButton
                     }
-                    .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                    .padding(UX.CardView.verticalPadding * scale)
-                    .background(
-                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                            .fill(cardBackgroundColor)
-                    )
-                    .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-                    secondaryButton(scale: scale)
-                    Spacer()
                 }
+                .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+                .padding(UX.CardView.verticalPadding * scale)
+                .background(
+                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                        .fill(cardBackgroundColor)
+                )
+                secondaryButton(scale: scale)
+                Spacer()
             }
+            .padding(.top, UX.CardView.cardTopPadding)
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
@@ -74,11 +73,12 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
+            .alignmentGuide(.titleAlignment) { dimensions in dimensions[.bottom] }
     }
 
     @ViewBuilder
@@ -99,19 +99,7 @@ public struct OnboardingBasicCardView<VM: OnboardingCardInfoModelProtocol>: View
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-    }
-
-    @ViewBuilder var linkView: some View {
-        if let linkVM = viewModel.link {
-            LinkButtonView(
-                viewModel: LinkInfoModel(
-                    title: linkVM.title,
-                    url: linkVM.url,
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)LinkButton"
-                ),
-                action: { onLinkTap(viewModel.name) }
-            )
-        }
+            .alignmentGuide(.descriptionAlignment) { dimensions in dimensions[.bottom] }
     }
 
     var primaryButton: some View {
