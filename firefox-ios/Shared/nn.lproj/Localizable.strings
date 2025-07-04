@@ -74,7 +74,7 @@
 "Amazon" = "Amazon";
 
 /* Authentication prompt title */
-"Authentication required" = "Godkjenning er påkravd";
+"Authentication required" = "Autentisering er påkravd";
 
 /* Accessibility label for the Back button in the tab toolbar. */
 "Back" = "Tilbake";

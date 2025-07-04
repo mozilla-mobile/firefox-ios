@@ -41,10 +41,10 @@
 "MainMenu.BookmarkPage.Title.v141" = "Adicionar página aos marcadores";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
-"MainMenu.Off.Title.v141" = "Desligado";
+"MainMenu.Off.Title.v141" = "Desativado";
 
 /* On the main menu, a title for a label that indicate the current option/action state is on. */
-"MainMenu.On.Title.v141" = "Ligado";
+"MainMenu.On.Title.v141" = "Ativado";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Marcadores";
@@ -302,7 +302,7 @@
 "MainMenu.TabsSection.NewTab.Title.v131" = "Novo separador";
 
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
-"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Site de computador";
+"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Site para computador";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Localizar na página";
@@ -332,7 +332,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Sub-menu Ferramentas";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
-"MainMenu.ToolsSection.DesktopSite.Title.v141" = "Site de computador";
+"MainMenu.ToolsSection.DesktopSite.Title.v141" = "Site para computador";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Localizar na página…";

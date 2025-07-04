@@ -67,6 +67,9 @@
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "വലിപ്പക്ക്രമീകരണങ്ങൾ";
 
+/* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "പട്ടികയിൽ ചേൎക്കാൻ വെബ്ബിടത്തിലേക്കു് ചെന്നിട്ടു് താൾ വലിപ്പം കുറിപ്പടി വഴി ക്രമീകരിക്കുക";
+
 /* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
 "Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "പ്രത്യേക വെബിട ക്രമീകരണങ്ങൾ";
 
