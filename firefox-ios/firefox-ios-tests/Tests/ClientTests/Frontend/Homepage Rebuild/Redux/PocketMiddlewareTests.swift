@@ -157,7 +157,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_tappedOnOpenNewPrivateTabAction_doesNotSendTelemetryData() {
         let subject = createSubject(pocketManager: pocketManager)
         let action = ContextMenuAction(
-            section: .topSites(4),
+            section: .topSites(nil, 4),
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
