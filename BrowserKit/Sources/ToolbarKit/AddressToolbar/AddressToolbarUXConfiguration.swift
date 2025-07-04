@@ -47,7 +47,12 @@ public struct AddressToolbarUXConfiguration {
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
-        return isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        var backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        if shouldBlur {
+            backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
+        }
+
+        return backgroundColor
     }
 
     public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {
