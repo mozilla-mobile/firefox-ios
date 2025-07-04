@@ -63,6 +63,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private var hasBeenExpanded = false
+    private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
 
     // Used to save the last screen orientation
@@ -129,16 +130,19 @@ class MainMenuViewController: UIViewController,
             }
 
             menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
-                if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
-                    let customDetent = UISheetPresentationController.Detent.custom { context in
-                        return height
-                    }
-                    if isExpanded {
-                        self?.sheetPresentationController?.animateChanges({
+                if let customHeight = self?.currentCustomMenuHeight, height > customHeight {
+                    self?.currentCustomMenuHeight = height
+                    if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                        let customDetent = UISheetPresentationController.Detent.custom { context in
+                            return height
+                        }
+                        if isExpanded {
+                            self?.sheetPresentationController?.animateChanges({
+                                self?.sheetPresentationController?.detents = [customDetent]
+                            })
+                        } else {
                             self?.sheetPresentationController?.detents = [customDetent]
-                        })
-                    } else {
-                        self?.sheetPresentationController?.detents = [customDetent]
+                        }
                     }
                 }
             }

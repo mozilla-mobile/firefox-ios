@@ -31,10 +31,16 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - Properties
     private var isMenuDefaultBrowserBanner = false
+    private var menuData: [MenuSection] = []
     private var isBrowserDefault = false
     private var bannerShown = false
 
     // MARK: - UI Setup
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateMenuHeight(for: menuData)
+    }
+
     private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
         self.removeConstraints(viewConstraints)
         viewConstraints.removeAll()
@@ -120,7 +126,7 @@ public final class MenuRedesignMainView: UIView,
         setupView(with: data)
         tableView.reloadTableView(with: data)
         handleBannerCallback(with: data)
-        updateMenuHeight(for: data)
+        menuData = data
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
