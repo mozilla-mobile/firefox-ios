@@ -59,11 +59,8 @@ class MainMenuViewController: UIViewController,
     }
 
     private var hasBeenExpanded = false
-<<<<<<< HEAD
-=======
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
->>>>>>> 215cc7e77 (Bugfix FXIOS-12721 ⁃ Shaky menu movemenu when launched after opening a new tab (#27729))
 
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
