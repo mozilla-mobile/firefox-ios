@@ -76,6 +76,9 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePasswordNewAccount)
         mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
+        XCTAssertEqual(app.webViews.images.element(boundBy: 0).label,
+                       "failed",
+                       "The password validation image should be failed")
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
@@ -83,7 +86,10 @@ class SyncUITests: BaseTestCase {
         // Switching to the next text field is required to determine if the message still appears or not
         app.buttons["Done"].tapIfExists()
         app.webViews.secureTextFields.element(boundBy: 0).waitAndTap()
-        mozWaitForElementToNotExist(app.webViews.staticTexts["At least 8 characters"])
+        mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
+        XCTAssertEqual(app.webViews.images.element(boundBy: 0).label,
+                       "passed",
+                       "The password validation image should be passed")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2449603
