@@ -217,8 +217,7 @@ extension PreviewModel {
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onBottomButtonAction: { _, _ in },
-            onLinkTap: { _ in }
+            onBottomButtonAction: { _, _ in }
         )
     }
 }
@@ -232,8 +231,7 @@ extension PreviewModel {
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             onBottomButtonAction: { _, _ in },
-            onMultipleChoiceAction: { _, _ in },
-            onLinkTap: { _ in }
+            onMultipleChoiceAction: { _, _ in }
         )
     }
 }

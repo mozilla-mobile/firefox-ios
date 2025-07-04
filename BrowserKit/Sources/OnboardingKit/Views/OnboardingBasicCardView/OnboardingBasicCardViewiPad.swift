@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
@@ -14,34 +14,30 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
-    public let onLinkTap: (String) -> Void
+    let viewModel: ViewModel
+    let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
 
-    public init(
-        viewModel: VM,
+    init(
+        viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
-        onLinkTap: @escaping (String) -> Void
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
-        self.onLinkTap = onLinkTap
     }
 
-    public var body: some View {
+    var body: some View {
         VStack {
             Spacer()
-            VScrollView {
+            ContentFittingScrollView {
                 VStack(spacing: UX.CardView.spacing) {
                     Spacer()
                     titleView
                     imageView
                     bodyView
-                    linkView
                     Spacer()
                     VStack {
                         primaryButton
@@ -64,11 +60,11 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder var imageView: some View {
@@ -88,19 +84,6 @@ public struct OnboardingBasicCardViewiPad<VM: OnboardingCardInfoModelProtocol>: 
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-    }
-
-    @ViewBuilder var linkView: some View {
-        if let linkVM = viewModel.link {
-            LinkButtonView(
-                viewModel: LinkInfoModel(
-                    title: linkVM.title,
-                    url: linkVM.url,
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)LinkButton"
-                ),
-                action: { onLinkTap(viewModel.name) }
-            )
-        }
     }
 
     var primaryButton: some View {

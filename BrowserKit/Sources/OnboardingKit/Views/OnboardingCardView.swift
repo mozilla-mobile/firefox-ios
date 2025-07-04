@@ -6,31 +6,28 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    public let viewModel: VM
-    public let onBottomButtonAction: (VM.OnboardingActionType, String) -> Void
-    public let onMultipleChoiceAction: (VM.OnboardingMultipleChoiceActionType, String) -> Void
-    public let onLinkTap: (String) -> Void
+    let viewModel: ViewModel
+    let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
+    let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
-    public init(
-        viewModel: VM,
+    init(
+        viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        onBottomButtonAction: @escaping (VM.OnboardingActionType, String) -> Void,
-        onMultipleChoiceAction: @escaping (VM.OnboardingMultipleChoiceActionType, String) -> Void,
-        onLinkTap: @escaping (String) -> Void
+        onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
+        onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
-        self.onLinkTap = onLinkTap
     }
 
-    public var body: some View {
+    var body: some View {
         Group {
             switch viewModel.cardType {
             case .basic:
@@ -38,8 +35,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
-                    onBottomButtonAction: onBottomButtonAction,
-                    onLinkTap: onLinkTap
+                    onBottomButtonAction: onBottomButtonAction
                 )
             case .multipleChoice:
                 OnboardingMultipleChoiceCardView(
@@ -47,8 +43,7 @@ public struct OnboardingCardView<VM: OnboardingCardInfoModelProtocol>: View {
                     windowUUID: windowUUID,
                     themeManager: themeManager,
                     onBottomButtonAction: onBottomButtonAction,
-                    onMultipleChoiceAction: onMultipleChoiceAction,
-                    onLinkTap: onLinkTap
+                    onMultipleChoiceAction: onMultipleChoiceAction
                 )
             }
         }

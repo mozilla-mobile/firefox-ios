@@ -6,16 +6,17 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct OnboardingRegularView<VM: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
-    @StateObject private var viewModel: OnboardingFlowViewModel<VM>
+    @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
+
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
-    public init(
+    init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<VM>
+        viewModel: OnboardingFlowViewModel<ViewModel>
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -24,7 +25,7 @@ public struct OnboardingRegularView<VM: OnboardingCardInfoModelProtocol>: View {
         )
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             MilkyWayMetalView()
                 .edgesIgnoringSafeArea(.all)
@@ -35,8 +36,7 @@ public struct OnboardingRegularView<VM: OnboardingCardInfoModelProtocol>: View {
                             viewModel: card,
                             windowUUID: windowUUID,
                             themeManager: themeManager,
-                            onBottomButtonAction: viewModel.handleBottomButtonAction,
-                            onLinkTap: { _ in }
+                            onBottomButtonAction: viewModel.handleBottomButtonAction
                         )
                         .tag(index)
                     }

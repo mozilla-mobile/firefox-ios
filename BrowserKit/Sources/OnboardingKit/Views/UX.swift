@@ -14,7 +14,16 @@ enum UX {
         static let baseiPadWidth: CGFloat = 510
         static let baseiPadHeight: CGFloat = 755
 
-        static let cardHeightRatio: CGFloat = 0.7
+        static let cardTopPadding: CGFloat = 32
+        static func cardSecondaryContainerPadding(for sizeCategory: ContentSizeCategory) -> CGFloat {
+            switch sizeCategory {
+            case .accessibilityExtraExtraExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraLarge:
+                return 0
+            default:
+                return 32
+            }
+        }
+        static let cardHeightRatio: CGFloat = 0.75
         static let spacing: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
@@ -29,10 +38,10 @@ enum UX {
         static let titleFontSize: CGFloat = 28
         static let bodyFontSize: CGFloat = 16
 
-        static let titleFont = Font(FXFontStyles.Regular.title1.scaledFont())
-        static let bodyFont = Font(FXFontStyles.Regular.subheadline.scaledFont())
-        static let primaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
-        static let secondaryActionFont = Font(FXFontStyles.Bold.callout.scaledFont())
+        static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
+        static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
+        static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
+        static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
     }
 
     enum SegmentedControl {
@@ -41,6 +50,7 @@ enum UX {
         static let imageHeight: CGFloat = 150
         static let verticalPadding: CGFloat = 10
         static let checkmarkFontSize: CGFloat = 20
+        static let selectedColorOpacity: CGFloat = 0.8
 
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
