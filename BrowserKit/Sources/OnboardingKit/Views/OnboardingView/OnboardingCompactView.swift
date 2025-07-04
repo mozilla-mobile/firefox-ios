@@ -4,16 +4,17 @@
 
 import SwiftUI
 import Common
+import ComponentLibrary
 
-public struct OnboardingCompactView<VM: OnboardingCardInfoModelProtocol>: View {
-    @StateObject private var viewModel: OnboardingFlowViewModel<VM>
+struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+    @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
-    public init(
+    init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<VM>
+        viewModel: OnboardingFlowViewModel<ViewModel>
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -22,26 +23,35 @@ public struct OnboardingCompactView<VM: OnboardingCardInfoModelProtocol>: View {
         )
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             MilkyWayMetalView()
                 .edgesIgnoringSafeArea(.all)
-            TabView(selection: $viewModel.pageCount) {
-                ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
-                    VStack {
-                        OnboardingCardView(
-                            viewModel: card,
-                            windowUUID: windowUUID,
-                            themeManager: themeManager,
-                            onBottomButtonAction: viewModel.handleBottomButtonAction,
-                            onMultipleChoiceAction: viewModel.handleMultipleChoiceAction,
-                            onLinkTap: { _ in }
-                        )
-                    }
-                    .tag(index)
+            VStack {
+                PagingCarousel(
+                    selection: $viewModel.pageCount,
+                    items: viewModel.onboardingCards
+                ) { card in
+                    OnboardingCardView(
+                        viewModel: card,
+                        windowUUID: windowUUID,
+                        themeManager: themeManager,
+                        onBottomButtonAction: viewModel.handleBottomButtonAction,
+                        onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+                    )
                 }
+
+                Spacer()
+
+                CustomPageControl(
+                    currentPage: $viewModel.pageCount,
+                    numberOfPages: viewModel.onboardingCards.count,
+                    windowUUID: windowUUID,
+                    themeManager: themeManager,
+                    style: .compact
+                )
+                .padding(.bottom)
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
     }
 }
