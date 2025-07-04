@@ -55,6 +55,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .mainMenu:
             return CFRStrings.MainMenu.NewMenu.Title
 
+        case .mainMenuRedesign:
+            return CFRStrings.MainMenu.MenuRedesign.Title
+
         case .toolbarUpdate:
             return CFRStrings.Toolbar.ToolbarUpdateTitle
 
@@ -81,6 +84,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .mainMenu:
             descriptionCopy = CFRStrings.MainMenu.NewMenu.Body
 
+        case .mainMenuRedesign:
+            descriptionCopy = CFRStrings.MainMenu.MenuRedesign.Body
+
         case .navigation:
             descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
 
@@ -100,6 +106,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .inactiveTabs:
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .mainMenu:
+            actionCopy = ""
+        case .mainMenuRedesign:
             actionCopy = ""
         case .jumpBackIn,
                 .jumpBackInSyncedTab:

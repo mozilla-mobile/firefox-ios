@@ -24,6 +24,11 @@ features:
           If true, enables the menu Make Firefox your default banner, on top of the menu.
         type: Boolean
         default: false
+      menu-redesign-hint:
+        description: >
+          If true, enables the menu contextual hint for menu redesign.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
@@ -37,3 +42,4 @@ features:
           menu-hint: true
           menu-redesign: false
           menu-default-browser-banner: false
+          menu-redesign-hint: false

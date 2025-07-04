@@ -45,7 +45,7 @@ class MainMenuViewController: UIViewController,
     private var menuState: MainMenuState
     private let logger: Logger
 
-    let viewProvider: ContextualHintViewProvider
+    var viewProvider: ContextualHintViewProvider?
 
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -66,6 +66,17 @@ class MainMenuViewController: UIViewController,
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
 
+    private var isHomepage: Bool {
+        guard let element = menuState.menuElements.first(where: { $0.isHomepage }) else { return false }
+        return element.isHomepage
+    }
+
+    private var isExpanded: Bool {
+        guard let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
+              let isExpanded = element.isExpanded else { return false }
+        return isExpanded
+    }
+
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
 
@@ -83,10 +94,16 @@ class MainMenuViewController: UIViewController,
         self.themeManager = themeManager
         self.logger = logger
         menuState = MainMenuState(windowUUID: windowUUID)
-        viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
-                                                  with: profile)
         self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
+
+        if isMenuRedesign {
+            viewProvider = ContextualHintViewProvider(forHintType: .mainMenuRedesign,
+                                                      with: profile)
+        } else {
+            viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
+                                                      with: profile)
+        }
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
@@ -176,7 +193,7 @@ class MainMenuViewController: UIViewController,
         super.viewDidAppear(animated)
         updateModalA11y()
 
-        if shouldDisplayHintView() {
+        if shouldDisplayHintView(isMenuRedesign: isMenuRedesign) {
             setupHintView()
         }
     }
@@ -259,6 +276,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupHintView() {
+        guard let viewProvider else { return }
         var viewModel = ContextualHintViewModel(
             actionButtonTitle: viewProvider.getCopyFor(.action),
             title: viewProvider.getCopyFor(.title),
@@ -273,37 +291,36 @@ class MainMenuViewController: UIViewController,
         hintView.configure(viewModel: viewModel)
         viewProvider.markContextualHintPresented()
         hintView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            window.addSubview(hintView)
-            if isPad {
-                NSLayoutConstraint.activate([
-                    hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
-                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4)
-                ])
-                if isMenuRedesign {
-                    hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                                  constant: UX.hintViewMargin).isActive = true
-                } else {
-                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                  constant: UX.hintViewMargin).isActive = true
-                }
+        if isPad {
+            view.addSubview(hintView)
+            NSLayoutConstraint.activate([
+                hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
+                hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4)
+            ])
+            if isMenuRedesign {
+                hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                              constant: UX.hintViewMargin).isActive = true
             } else {
-                NSLayoutConstraint.activate([
-                    hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
-                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin)
-                ])
-                if isMenuRedesign {
-                    hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                                     constant: -UX.hintViewMargin).isActive = true
-                } else {
-                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                     constant: -UX.hintViewMargin).isActive = true
-                }
+                hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                              constant: UX.hintViewMargin).isActive = true
             }
-            hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
-            hintViewHeightConstraint?.isActive = true
+        } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first {
+            window.addSubview(hintView)
+            NSLayoutConstraint.activate([
+                hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
+                hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin)
+            ])
+            if isMenuRedesign {
+                hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                                 constant: -UX.hintViewMargin).isActive = true
+            } else {
+                hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                 constant: -UX.hintViewMargin).isActive = true
+            }
         }
+        hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
+        hintViewHeightConstraint?.isActive = true
         hintView.layer.cornerRadius = UX.hintViewCornerRadius
         hintView.layer.masksToBounds = true
         adjustLayout()
@@ -366,6 +383,7 @@ class MainMenuViewController: UIViewController,
         }
 
         changeDetentIfNecessary()
+        removeHintViewIfNecessary()
         reloadTableView(with: menuState.menuElements)
     }
 
@@ -516,7 +534,9 @@ class MainMenuViewController: UIViewController,
         view.layoutIfNeeded()
     }
 
-    private func shouldDisplayHintView() -> Bool {
+    private func shouldDisplayHintView(isMenuRedesign: Bool) -> Bool {
+        guard let viewProvider else { return false }
+
         // Don't display CFR in landscape mode for iPhones
         if UIDevice.current.isIphoneLandscape {
             return false
@@ -531,21 +551,27 @@ class MainMenuViewController: UIViewController,
             viewProvider.markContextualHintPresented()
             return false
         }
+
+        if isMenuRedesign, isHomepage {
+            return false
+        }
         return viewProvider.shouldPresentContextualHint()
     }
 
     private func changeDetentIfNecessary() {
         // For iOS 16 or above we are using custom detents
         if #unavailable(iOS 16) {
-            if let element = menuState.menuElements.first(where: { $0.isExpanded ?? false }),
-               let isExpanded = element.isExpanded,
-               isExpanded {
+            if isExpanded {
                 if let sheet = self.sheetPresentationController, !hasBeenExpanded {
                     sheet.selectedDetentIdentifier = .large
                     hasBeenExpanded = true
                 }
             }
         }
+    }
+
+    private func removeHintViewIfNecessary() {
+        if isExpanded { hintView.removeFromSuperview() }
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
