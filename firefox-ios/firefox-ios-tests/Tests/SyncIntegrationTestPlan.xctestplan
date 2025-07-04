@@ -145,6 +145,7 @@
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
+        "SwipingTabsTests",
         "SyncUITests",
         "TabCounterTests",
         "TabTraySearchTabsTests",
