@@ -126,7 +126,7 @@ struct ContextMenuState {
     }
 
     /// This unpin action removes the top site from the location it's in.
-    /// The tile can stil appear in the top sites as unpinned.
+    /// The tile can still appear in the top sites as unpinned.
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
                                      iconString: StandardImageIdentifiers.Large.pinSlash,
@@ -257,13 +257,20 @@ struct ContextMenuState {
     }
 
     private func getShareAction(siteURL: String) -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let logger = self.logger
+        let sourceView = configuration.sourceView ?? UIView()
+        let toastContainerView = configuration.toastContainer
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(
             title: .ShareContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.share,
             allowIconScaling: true,
             tapHandler: { _ in
                 guard let url = URL(string: siteURL) else {
-                    self.logger.log(
+                    logger.log(
                         "Unable to retrieve URL for \(siteURL), return early",
                         level: .warning,
                         category: .homepage
@@ -273,13 +280,16 @@ struct ContextMenuState {
                 let shareSheetConfiguration = ShareSheetConfiguration(
                     shareType: .site(url: url),
                     shareMessage: nil,
-                    sourceView: configuration.sourceView ?? UIView(),
+                    sourceView: sourceView,
                     sourceRect: nil,
-                    toastContainer: configuration.toastContainer,
+                    toastContainer: toastContainerView,
                     popoverArrowDirection: [.up, .down, .left]
                 )
 
-                dispatchShareSheetAction(shareSheetConfiguration: shareSheetConfiguration)
+                ContextMenuState.dispatchShareSheetAction(
+                    windowUUID: windowUUID,
+                    shareSheetConfiguration: shareSheetConfiguration
+                )
             }).items
     }
 
@@ -309,7 +319,7 @@ struct ContextMenuState {
         )
     }
 
-    private func dispatchShareSheetAction(shareSheetConfiguration: ShareSheetConfiguration) {
+    private static func dispatchShareSheetAction(windowUUID: WindowUUID, shareSheetConfiguration: ShareSheetConfiguration) {
         store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
