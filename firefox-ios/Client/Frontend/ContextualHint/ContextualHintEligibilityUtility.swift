@@ -51,7 +51,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
         }
 
-        return hintTypeShouldBePresented //&& !hasAlreadyBeenPresented(hintType)
+        return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
     }
 
     // MARK: - Private helpers
