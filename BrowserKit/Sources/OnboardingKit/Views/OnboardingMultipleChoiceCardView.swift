@@ -37,54 +37,17 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
 
     var body: some View {
         GeometryReader { geometry in
-<<<<<<< HEAD
-            // Determine scale factor based on current size vs base metrics
-            let widthScale = geometry.size.width / UX.CardView.baseWidth
-            let heightScale = geometry.size.height / UX.CardView.baseHeight
-            let scale = min(widthScale, heightScale)
-
-            ScrollView {
-                VStack {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
-                        titleView
-                        Spacer()
-                        OnboardingSegmentedControl<VM.OnboardingMultipleChoiceActionType>(
-                            selection: $selectedAction,
-                            items: viewModel.multipleChoiceButtons,
-                            windowUUID: windowUUID,
-                            themeManager: themeManager
-                        )
-                        .onChange(of: selectedAction) { newAction in
-                            onMultipleChoiceAction(newAction, viewModel.name)
-                        }
-                        Spacer()
-                        primaryButton
-                    }
-                    .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                    .padding(UX.CardView.verticalPadding * scale)
-                    .background(
-                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                            .fill(cardBackgroundColor)
-                    )
-                    .padding(.horizontal, UX.CardView.horizontalPadding * scale)
-                }
-            }
-=======
             scrollViewContent(geometry: geometry)
->>>>>>> a9e57bbb0 (FXIOS-12505 [Onboarding] Design QA (#27688))
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+        }
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
-<<<<<<< HEAD
-=======
     private func scrollViewContent(geometry: GeometryProxy) -> some View {
         // Determine scale factor based on current size vs base metrics
         let widthScale = geometry.size.width / UX.CardView.baseWidth
@@ -121,7 +84,6 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         }
     }
 
->>>>>>> a9e57bbb0 (FXIOS-12505 [Onboarding] Design QA (#27688))
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
