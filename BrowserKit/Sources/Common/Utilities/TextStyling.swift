@@ -55,7 +55,7 @@ public struct TextStyling {
                                                              design: .monospaced)
     }
 
-    private  func toSwiftUITextStyle(_ style: UIFont.TextStyle) -> Font.TextStyle {
+    private func toSwiftUITextStyle(_ style: UIFont.TextStyle) -> Font.TextStyle {
         switch style {
         case .largeTitle: return .largeTitle
         case .title1: return .title
