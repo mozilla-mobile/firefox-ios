@@ -27,7 +27,15 @@ public final class MenuRedesignMainView: UIView,
 
     private var viewConstraints: [NSLayoutConstraint] = []
 
+    // MARK: - Properties
+    private var menuData: [MenuSection] = []
+
     // MARK: - UI Setup
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateMenuHeight(for: menuData)
+    }
+
     private func setupView(with data: [MenuSection]) {
         self.removeConstraints(viewConstraints)
         viewConstraints.removeAll()
@@ -82,7 +90,7 @@ public final class MenuRedesignMainView: UIView,
     public func reloadDataView(with data: [MenuSection]) {
         setupView(with: data)
         tableView.reloadTableView(with: data)
-        updateMenuHeight(for: data)
+        menuData = data
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
