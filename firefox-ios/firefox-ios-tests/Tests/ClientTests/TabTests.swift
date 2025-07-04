@@ -12,9 +12,8 @@ class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
-    private var fileManager: MockFileManager!
+    private var mockFileManager: MockFileManager!
     private var mockTabWebView: MockTabWebView!
-    private var dispatchQueue: MockDispatchQueue!
     private let url = URL(string: "file://test.pdf")!
 
     override func setUp() {
@@ -22,8 +21,7 @@ class TabTests: XCTestCase {
         mockProfile = MockProfile()
         mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
         mockTabWebView.loadedURL = url
-        fileManager = MockFileManager()
-        dispatchQueue = MockDispatchQueue()
+        mockFileManager = MockFileManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies()
 
@@ -35,8 +33,7 @@ class TabTests: XCTestCase {
         tabDelegate = nil
         mockProfile = nil
         mockTabWebView = nil
-        fileManager = nil
-        dispatchQueue = nil
+        mockFileManager = nil
         setIsPDFRefactorFeature(isEnabled: false)
         DependencyHelperMock().reset()
         super.tearDown()
@@ -433,7 +430,7 @@ class TabTests: XCTestCase {
         let localPDFUrl = URL(string: "file://test.pdf")!
         let onlinePDFUrl = URL(string: "https://example.com/test.pdf")!
 
-        fileManager.fileExists = false
+        mockFileManager.fileExists = false
         subject.restoreTemporaryDocumentSession([localPDFUrl: onlinePDFUrl])
 
         let result = subject.shouldDownloadDocument(URLRequest(url: localPDFUrl))
@@ -466,17 +463,29 @@ class TabTests: XCTestCase {
     }
 
     func testDeinit_removesAllDocumentInSession() {
+        let numberOfDocumentsToRemove = 3
+
         var subject: Tab? = createSubject()
         let session = [
-            URL(string: "file://local.pdf")!: URL(string: "https://www.example.com")!
+            URL(string: "file://local.pdf")!: URL(string: "https://www.example.com")!,
+            URL(string: "file://local2.pdf")!: URL(string: "https://www.example2.com")!,
+            URL(string: "file://local3.pdf")!: URL(string: "https://www.example3.com")!
         ]
+
         subject?.restoreTemporaryDocumentSession(session)
+
+        let expectation = expectation(description: "Waiting to remove \(numberOfDocumentsToRemove) files")
+        mockFileManager.removeItemAtURLDispatch = { removeItemAtURLCalled in
+            if removeItemAtURLCalled == numberOfDocumentsToRemove {
+                expectation.fulfill()
+            }
+        }
 
         // deallocate object
         subject = nil
 
-        XCTAssertEqual(dispatchQueue.asyncCalled, 1)
-        XCTAssertEqual(fileManager.removeItemAtURLCalled, 1)
+        waitForExpectations(timeout: 2)
+        XCTAssertEqual(mockFileManager.removeItemAtURLCalled, 3)
     }
 
     // MARK: - Helpers
@@ -484,8 +493,7 @@ class TabTests: XCTestCase {
         let subject = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
-            backgroundDispatchQueue: dispatchQueue,
-            fileManager: fileManager
+            fileManager: mockFileManager
         )
         trackForMemoryLeaks(subject)
         return subject
