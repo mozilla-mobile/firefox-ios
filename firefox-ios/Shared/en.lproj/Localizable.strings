@@ -445,18 +445,6 @@
 /* Button to not update the user's password */
 "LoginsHelper.DontUpdate.Button" = "Don’t Update";
 
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Save login %1$@ for %2$@?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Save password for %@?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Update login for %@?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Update login %1$@ for %2$@?";
-
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "Save Login";
 
@@ -1090,9 +1078,6 @@
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Undo";
 
-/* The label indicating that all the tabs were closed */
-"Tabs.DeleteAllUndo.Title" = "%d tab(s) closed";
-
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "The page could not be displayed in Reader View.";
 
@@ -1209,4 +1194,3 @@
 
 /* Relative date for yesterday. */
 "yesterday" = "yesterday";
-
