@@ -52,7 +52,7 @@ public final class MenuRedesignMainView: UIView,
                 closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
                 closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalMargin),
                 closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-                closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+                closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
             ])
 
             if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {

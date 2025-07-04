@@ -479,7 +479,7 @@ class MainMenuViewController: UIViewController,
                 menuRedesignContent.setupAccessibilityIdentifiers(
                     menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
                     menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
-                    closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
+                    closeButtonA11yLabel: .MainMenu.AccessibilityLabels.CloseButton,
                     closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
                     siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header)
             } else {

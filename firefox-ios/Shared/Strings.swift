@@ -4303,6 +4303,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Dimmed",
                 comment: "On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed'")
+            public static let CloseButton = MZLocalizedString(
+                key: "MainMenu.AccessibilityLabels.CloseButton.142",
+                tableName: "MainMenu",
+                value: "Close Menu",
+                comment: "The accessibility label for the close button in the Main menu.")
         }
 
         public struct SiteProtection {
@@ -4488,6 +4493,16 @@ extension String {
                     tableName: "MainMenu",
                     value: "Desktop Site",
                     comment: "On the main menu, the accessibility label for the action that will switch a site user agent value, if available.")
+                public static let PageZoom = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142",
+                    tableName: "MainMenu",
+                    value: "Page Zoom",
+                    comment: "On the main menu, the accessibility label for the action that will open the page zoom tool.")
+                public static let WebsiteDarkMode = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142",
+                    tableName: "MainMenu",
+                    value: "Website Dark Mode",
+                    comment: "On the main menu, the accessibility label for the action that will switch dark mode to on or off.")
                 public static let FindInPage = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132",
                     tableName: "MainMenu",
@@ -4508,11 +4523,26 @@ extension String {
                     tableName: "MainMenu",
                     value: "More",
                     comment: "On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu.")
+                public static let LibraryOptions = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142",
+                    tableName: "MainMenu",
+                    value: "Library",
+                    comment: "On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...)")
                 public static let LessOptions = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141",
                     tableName: "MainMenu",
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
+                public static let CollapsedHint = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142",
+                    tableName: "MainMenu",
+                    value: "Collapsed",
+                    comment: "On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu.")
+                public static let ExpandedHint = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142",
+                    tableName: "MainMenu",
+                    value: "Expanded",
+                    comment: "On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded.")
             }
         }
 
