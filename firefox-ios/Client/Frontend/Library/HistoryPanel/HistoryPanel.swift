@@ -23,12 +23,8 @@ class HistoryPanel: UIViewController,
 
     // MARK: - Properties
     typealias HistoryPanelSections = HistoryPanelViewModel.Sections
+    typealias HistoryItem = HistoryPanelViewModel.HistoryItem
     typealias a11yIds = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-
-    enum HistoryItem: Hashable, Sendable {
-        case site(Site)
-        case historyActionables(HistoryActionablesModel)
-    }
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var historyCoordinatorDelegate: HistoryCoordinatorDelegate?
@@ -260,18 +256,18 @@ class HistoryPanel: UIViewController,
     }
 
     // Use to enable/disable the additional history action rows. `HistoryActionablesModel`
-    private func setTappableStateAndStyle(with item: AnyHashable, on cell: OneLineTableViewCell) {
+    private func setTappableStateAndStyle(with item: HistoryItem, on cell: OneLineTableViewCell) {
         var isEnabled = false
 
-        if let actionableItem = item as? HistoryActionablesModel {
+        switch item {
+        case .historyActionables(let actionableItem):
             switch actionableItem.itemIdentity {
-            case .clearHistory:
-                isEnabled = !viewModel.dateGroupedSites.isEmpty
             case .recentlyClosed:
                 isEnabled = viewModel.hasRecentlyClosed
                 recentlyClosedCell = cell
-            default: break
             }
+        default:
+            break
         }
 
         // Set interaction behavior and style
@@ -283,7 +279,9 @@ class HistoryPanel: UIViewController,
     // MARK: - Datasource helpers
 
     func siteAt(indexPath: IndexPath) -> Site? {
-        guard let siteItem = diffableDataSource?.itemIdentifier(for: indexPath) as? Site else { return nil }
+        guard let item = diffableDataSource?.itemIdentifier(for: indexPath),
+              case let HistoryItem.site(siteItem) = item
+        else { return nil }
 
         return siteItem
     }
@@ -309,17 +307,20 @@ class HistoryPanel: UIViewController,
     private func refreshRecentlyClosedCell() {
         guard let cell = recentlyClosedCell else { return }
 
-        let item: HistoryActionablesModel? =
-        HistoryActionablesModel.activeActionables
+        guard let historyActionable = HistoryActionablesModel.activeActionables
             .first(where: { $0.itemIdentity == .recentlyClosed })
-            .map {
+            .map({
                 var item = $0
                 item.configureImage(for: windowUUID)
                 return item
+            }) else {
+                return
             }
+
         self.setTappableStateAndStyle(
-            with: item,
-            on: cell)
+            with: HistoryItem.historyActionables(historyActionable),
+            on: cell
+        )
     }
 
     func handleNotifications(_ notification: Notification) {
@@ -397,20 +398,20 @@ class HistoryPanel: UIViewController,
     }
 
     private func configureHistoryActionableCell(
-        _ historyActionable: HistoryActionablesModel,
+        _ historyActionableModel: HistoryActionablesModel,
         _ cell: OneLineTableViewCell
     ) -> OneLineTableViewCell {
         cell.leftImageView.tintColor = currentTheme().colors.textPrimary
         cell.leftImageView.backgroundColor = .clear
 
-        let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
-                                                      leftImageView: historyActionable.itemImage,
+        let viewModel = OneLineTableViewCellViewModel(title: historyActionableModel.itemTitle,
+                                                      leftImageView: historyActionableModel.itemImage,
                                                       accessoryView: nil,
                                                       accessoryType: .none,
                                                       editingAccessoryView: nil)
         cell.configure(viewModel: viewModel)
-        cell.accessibilityIdentifier = historyActionable.itemA11yId
-        setTappableStateAndStyle(with: historyActionable, on: cell)
+        cell.accessibilityIdentifier = historyActionableModel.itemA11yId
+        setTappableStateAndStyle(with: .historyActionables(historyActionableModel), on: cell)
         cell.applyTheme(theme: currentTheme())
         return cell
     }
@@ -631,7 +632,7 @@ class HistoryPanel: UIViewController,
                                      value: .historyPanelNonGroupItem)
     }
 
-    // MARK: - LibraryPanelContextMenu
+    // MARK: - LibraryPanelContextMenu - override default extension methods
 
     func presentContextMenu(
         for site: Site,
@@ -714,13 +715,10 @@ extension HistoryPanel: UITableViewDelegate {
         updatePanelState(newState: .history(state: .inFolder))
 
         switch historyActionable.itemIdentity {
-        case .clearHistory:
-            showClearRecentHistory()
         case .recentlyClosed:
             guard viewModel.hasRecentlyClosed else { return }
             refreshControl?.endRefreshing()
             historyCoordinatorDelegate?.showRecentlyClosedTab()
-        default: break
         }
     }
 
@@ -849,7 +847,8 @@ extension HistoryPanel {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint),
-              diffableDataSource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel == nil
+              let item = diffableDataSource?.itemIdentifier(for: indexPath),
+              case HistoryItem.site = item
         else { return }
 
         presentContextMenu(for: indexPath)
