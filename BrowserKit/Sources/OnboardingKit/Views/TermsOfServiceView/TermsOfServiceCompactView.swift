@@ -6,7 +6,7 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceCompactView<VM: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
@@ -30,35 +30,17 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
     }
 
     // MARK: - Body
-
     public var body: some View {
         GeometryReader { geometry in
-            // Determine scale factor based on current size vs base metrics
             let widthScale = geometry.size.width / UX.CardView.baseWidth
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
-
             ZStack {
                 MilkyWayMetalView()
                     .ignoresSafeArea()
                 ScrollView {
                     VStack {
-                        VStack(spacing: UX.CardView.spacing * scale) {
-                            Spacer()
-                            imageView(scale: scale)
-                            titleView
-                            bodyView
-                            Spacer()
-                            links
-                            primaryButton
-                        }
-                        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                        .padding(UX.CardView.verticalPadding * scale)
-                        .background(
-                            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                                .fill(cardBackgroundColor)
-                        )
-                        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+                        cardContent(geometry: geometry, scale: scale)
                         Spacer()
                     }
                 }
@@ -71,6 +53,27 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
+        VStack(spacing: UX.CardView.spacing * scale) {
+            Spacer()
+            imageView(scale: scale)
+            titleView
+            bodyView
+            Spacer()
+            links
+            primaryButton
+        }
+        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+        .padding(UX.CardView.verticalPadding * scale)
+        .padding(.bottom)
+        .background(
+            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                .fill(cardBackgroundColor)
+        )
+        .padding(.horizontal, UX.CardView.horizontalPadding * scale)
     }
 
     // MARK: - Subviews
@@ -108,6 +111,7 @@ public struct TermsOfServiceView<VM: OnboardingCardInfoModelProtocol>: View {
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     var bodyView: some View {
