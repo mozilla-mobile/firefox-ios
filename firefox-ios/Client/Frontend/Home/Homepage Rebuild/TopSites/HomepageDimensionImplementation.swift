@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+
 struct HomepageDimensionCalculator {
     static func isCompactLayout(
         traitCollection: UITraitCollection,
@@ -105,5 +107,18 @@ struct HomepageDimensionCalculator {
         let tilesPerRowCount = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
 
         return tilesPerRowCount
+    }
+
+    static func getTallestCollectionViewCellHeight(cells: [UICollectionViewCell], cellWidth: CGFloat) -> CGFloat {
+        var maxHeight: CGFloat = 0
+        for cell in cells {
+            let size = cell.systemLayoutSizeFitting(
+                CGSize(width: cellWidth, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            maxHeight = max(maxHeight, size.height)
+        }
+        return maxHeight
     }
 }
