@@ -522,7 +522,7 @@ class HistoryPanel: UIViewController,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
         guard let item = diffableDataSource?.itemIdentifier(for: indexPath),
-              case HistoryItem.historyActionables = item else {
+              case HistoryItem.site = item else {
             return nil
         }
 
