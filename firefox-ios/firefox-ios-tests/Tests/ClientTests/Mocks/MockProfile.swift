@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import Storage
 import XCTest
+import Common
 
 @testable import Client
 
@@ -120,6 +121,7 @@ open class MockProfile: Client.Profile {
     public var syncManager: ClientSyncManager?
     public var firefoxSuggest: RustFirefoxSuggestProtocol?
     public var remoteSettingsService: RemoteSettingsService?
+    public var mockNotificationCenter: NotificationProtocol = MockNotificationCenter()
 
     fileprivate let name = "mockaccount"
 
@@ -145,6 +147,10 @@ open class MockProfile: Client.Profile {
             XCTFail("Could not create directory at root path: \(error)")
             fatalError("Could not create directory at root path: \(error)")
         }
+    }
+
+    deinit {
+        shutdown()
     }
 
     public func localName() -> String {
@@ -231,7 +237,7 @@ open class MockProfile: Client.Profile {
         ).appendingPathComponent("\(databasePrefix)_places.db").path
         try? files.remove("\(databasePrefix)_places.db")
 
-        let places = RustPlaces(databasePath: placesDatabasePath)
+        let places = RustPlaces(databasePath: placesDatabasePath, notificationCenter: mockNotificationCenter)
         _ = places.reopenIfClosed()
 
         return places

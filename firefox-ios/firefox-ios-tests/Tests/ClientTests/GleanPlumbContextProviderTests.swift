@@ -25,6 +25,7 @@ class GleanPlumbContextProviderTests: XCTestCase {
         profile = nil
         userDefaults = nil
         contextProvider = nil
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
