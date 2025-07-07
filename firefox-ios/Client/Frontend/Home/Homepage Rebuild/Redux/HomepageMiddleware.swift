@@ -56,21 +56,20 @@ final class HomepageMiddleware: FeatureFlaggable {
 
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
             ToolbarActionType.cancelEdit:
-<<<<<<< HEAD
-            store.dispatchLegacy(
-                HomepageAction(
-                    isSearchBarEnabled: self.shouldShowSearchBar(),
-                    windowUUID: action.windowUUID,
-                    actionType: HomepageMiddlewareActionType.configuredSearchBar
-                )
-            )
-=======
             self.dispatchSearchBarConfigurationAction(action: action)
-
->>>>>>> bf47a58f7 (Add FXIOS-12632 [HNT - Search Bar] showing / hiding address toolbar (#27666))
         default:
             break
         }
+    }
+    
+    private func dispatchSearchBarConfigurationAction(action: Action) {
+        store.dispatchLegacy(
+            HomepageAction(
+                isSearchBarEnabled: self.shouldShowSearchBar(),
+                windowUUID: action.windowUUID,
+                actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
     }
 
     private func shouldShowSearchBar(
