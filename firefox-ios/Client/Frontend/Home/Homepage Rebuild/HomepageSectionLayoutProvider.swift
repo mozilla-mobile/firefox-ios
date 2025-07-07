@@ -110,7 +110,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
-        case .header, .searchBar:
+        case .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
                 topInsets: UX.standardInset,
@@ -122,7 +122,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 itemHeight: UX.MessageCardConstants.height,
                 bottomInsets: UX.spacingBetweenSections
             )
-        case .topSites(let numberOfTilesPerRow):
+        case .topSites(_, let numberOfTilesPerRow):
             return createTopSitesSectionLayout(
                 for: traitCollection,
                 numberOfTilesPerRow: numberOfTilesPerRow
@@ -237,6 +237,16 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.standardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.sectionHeaderHeight)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
