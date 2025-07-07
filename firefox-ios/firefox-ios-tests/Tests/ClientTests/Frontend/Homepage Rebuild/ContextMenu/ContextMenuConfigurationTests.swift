@@ -45,7 +45,7 @@ final class ContextMenuConfigurationTests: XCTestCase {
             ), nil
         )
         let subject = ContextMenuConfiguration(
-            homepageSection: .topSites(4),
+            homepageSection: .topSites(nil, 4),
             item: topSiteItem,
             toastContainer: UIView()
         )
@@ -55,7 +55,7 @@ final class ContextMenuConfigurationTests: XCTestCase {
 
     func tests_initialState_forNoItem_returnsExpectedState() {
         let subject = ContextMenuConfiguration(
-            homepageSection: .topSites(4),
+            homepageSection: .topSites(nil, 4),
             item: nil,
             toastContainer: UIView()
         )
