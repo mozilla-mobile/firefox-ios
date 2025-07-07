@@ -1276,6 +1276,8 @@
 		8C51ED702DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */; };
 		8C51ED722DE0A5B500B3E58A /* OnboardingKitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */; };
 		8C51ED742DE0A64D00B3E58A /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C51ED732DE0A64D00B3E58A /* OnboardingKit */; };
+		8C5D30732E1BA71100687BFC /* OnboardingMultipleChoiceActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5D30722E1BA71100687BFC /* OnboardingMultipleChoiceActionExtension.swift */; };
+		8C5D30752E1BA73F00687BFC /* OnboardingCardInfoModelProtocolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5D30742E1BA73F00687BFC /* OnboardingCardInfoModelProtocolExtension.swift */; };
 		8C6AF26A2D38FB1500254698 /* GleanLifecycleObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6AF2692D38FB1500254698 /* GleanLifecycleObserverTests.swift */; };
 		8C77849F2DF33707001FB8B0 /* OnboardingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C77849E2DF33707001FB8B0 /* OnboardingService.swift */; };
 		8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */; };
@@ -8706,6 +8708,8 @@
 		8C51ED6B2DE0A49800B3E58A /* NimbusOnboardingKitFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingKitFeatureLayer.swift; sourceTree = "<group>"; };
 		8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitCardInfoModel.swift; sourceTree = "<group>"; };
 		8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitViewModel.swift; sourceTree = "<group>"; };
+		8C5D30722E1BA71100687BFC /* OnboardingMultipleChoiceActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMultipleChoiceActionExtension.swift; sourceTree = "<group>"; };
+		8C5D30742E1BA73F00687BFC /* OnboardingCardInfoModelProtocolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardInfoModelProtocolExtension.swift; sourceTree = "<group>"; };
 		8C6AF2692D38FB1500254698 /* GleanLifecycleObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanLifecycleObserverTests.swift; sourceTree = "<group>"; };
 		8C77849E2DF33707001FB8B0 /* OnboardingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingService.swift; sourceTree = "<group>"; };
 		8C7A4A32A98AD1B79E3D69BE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -14073,6 +14077,8 @@
 				81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */,
 				C88E7A582A0553440072E638 /* OnboardingCardInfoModel.swift */,
 				8C51ED6F2DE0A4D700B3E58A /* OnboardingKitCardInfoModel.swift */,
+				8C5D30742E1BA73F00687BFC /* OnboardingCardInfoModelProtocolExtension.swift */,
+				8C5D30722E1BA71100687BFC /* OnboardingMultipleChoiceActionExtension.swift */,
 				C88E7A5A2A0553510072E638 /* OnboardingLinkInfoModel.swift */,
 				C88E7A542A0553180072E638 /* OnboardingViewModel.swift */,
 				8C51ED712DE0A5B500B3E58A /* OnboardingKitViewModel.swift */,
@@ -17369,6 +17375,7 @@
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
 				602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */,
 				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
+				8C5D30732E1BA71100687BFC /* OnboardingMultipleChoiceActionExtension.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
@@ -18351,6 +18358,7 @@
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */,
+				8C5D30752E1BA73F00687BFC /* OnboardingCardInfoModelProtocolExtension.swift in Sources */,
 				21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */,
 				5A70EF1F295E3DFC00790249 /* UnitTestAppDelegate.swift in Sources */,
 				2128E27E2934F78600FB91BE /* CustomAppActivity.swift in Sources */,
