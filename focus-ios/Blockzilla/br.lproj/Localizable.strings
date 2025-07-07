@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Ho kwirioù";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Termenoù implij";
+
 /* Label on About screen */
 "About.safariBullet1" = "Stankit an heulierien evit difenn ho puhez prevez";
 
@@ -178,6 +181,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Serriñ";
 
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Klask en-dro";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Kregiñ ganti";
 
@@ -214,6 +220,9 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Gwelloc'h eget ur mod incognito";
 
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Firefox a ziwall ho puhez prevez. Lennit hiroc’h en hor %@.";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Keflugnit an arventennoù evit dibab pegen ha pegen nebeud e rannit.";
 
@@ -222,6 +231,27 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Kemerit ho merdeiñ prevez d'al live da-heul.";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Asantiñ ha kenderc’hel";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Kenderc’hel";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Graet eo";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Termenoù implij Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "Prim. Prevez. Disoursi.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "Ma kendalc’hit ec’h asantit d’an %@";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "Donemat war %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Degemer mat war Firefox %@!";
