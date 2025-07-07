@@ -46,7 +46,6 @@ private struct Delta: Codable {
     let content: String?
 }
 
-
 /// Errors produced by LiteLLMClient, with user-friendly descriptions.
 public enum LLMClientError: LocalizedError {
     case requestCreationFailed
@@ -154,7 +153,7 @@ public class LiteLLMClient: NSObject {
 
         var payload: [String: Any] = [
             "model": model,
-            "messages": messages.map { ["role":  $0.role.rawValue, "content": $0.content] },
+            "messages": messages.map { ["role": $0.role.rawValue, "content": $0.content] },
             "max_tokens": maxTokens
         ]
 
