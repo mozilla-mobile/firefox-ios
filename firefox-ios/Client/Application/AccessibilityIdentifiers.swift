@@ -77,6 +77,10 @@ struct AccessibilityIdentifiers {
             static let header = "MainMenu.SiteProtectionHeader"
         }
 
+        struct HeaderBanner {
+            static let closeButton = "MainMenu.HeaderBanner.CloseMenuButton"
+        }
+
         struct HeaderView {
             static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"
