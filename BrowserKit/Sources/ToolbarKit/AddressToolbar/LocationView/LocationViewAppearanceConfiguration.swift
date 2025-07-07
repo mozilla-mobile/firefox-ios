@@ -21,8 +21,8 @@ struct LocationViewAppearanceConfiguration {
             etpIconTintColor: colors.textSecondary,
             gradientColors: Gradient(
                 colors: [
-                    colors.layer2.withAlphaComponent(1),
-                    colors.layer2.withAlphaComponent(0)
+                    colors.layerSurfaceMedium.withAlphaComponent(1),
+                    colors.layerSurfaceMedium.withAlphaComponent(0)
                 ]
             ).cgColors
         )
