@@ -161,7 +161,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         collectionView.dropDelegate = topTabDisplayManager
 
         listenForThemeChange(view)
-        setupLayout()
+        setupSubviews()
 
         setupNotifications(forObserver: self,
                            observing: [.TabsTrayDidClose])
@@ -181,6 +181,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         )
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        setupConstraints()
     }
 
     func applyTheme() {
@@ -278,7 +283,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         }
     }
 
-    private func setupLayout() {
+    private func setupSubviews() {
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
 
@@ -289,6 +294,17 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
 
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
+    }
+
+    private func setupConstraints() {
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+
+        var safeLeadingInsetAnchor: NSLayoutXAxisAnchor = view.leadingAnchor
+        if #available(iOS 26.0, *) {
+            if let window = view.window, let rootVC = window.rootViewController {
+                safeLeadingInsetAnchor = rootVC.view.layoutGuide(for: .margins(cornerAdaptation: .horizontal)).leadingAnchor
+            }
+        }
 
         NSLayoutConstraint.activate([
             view.heightAnchor.constraint(equalToConstant: UX.topTabsViewHeight),
@@ -298,7 +314,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            privateModeButton.leadingAnchor.constraint(equalTo: safeLeadingInsetAnchor, constant: 10),
             privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
             privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
