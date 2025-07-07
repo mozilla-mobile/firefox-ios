@@ -269,6 +269,13 @@ final class LaunchCoordinator: BaseCoordinator,
                         completion: completion
                     )
                 },
+                onMultipleChoiceActionTap: { [weak self] action, cardName in
+                    guard let self = self else { return }
+                    onboardingService.handleMultipleChoiceAction(
+                        action,
+                        from: cardName
+                    )
+                },
                 onComplete: { [weak self] currentCardName in
                     guard let self = self else { return }
                     manager.didSeeIntroScreen()

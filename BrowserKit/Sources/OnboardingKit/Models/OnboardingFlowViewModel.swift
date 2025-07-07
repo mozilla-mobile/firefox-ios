@@ -7,7 +7,16 @@ import SwiftUI
 public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
     public let onboardingCards: [ViewModel]
-    public let onActionTap: (ViewModel.OnboardingActionType, String, @escaping (Result<TabAction, Error>) -> Void) -> Void
+    public let onActionTap: (
+        ViewModel.OnboardingActionType,
+        String,
+        @escaping (Result<TabAction, Error>) -> Void
+    ) -> Void
+    public let onMultipleChoiceActionTap: (
+        ViewModel.OnboardingMultipleChoiceActionType,
+        String
+    ) -> Void
+
 
     public enum TabAction {
         case advance(numberOfPages: Int)
@@ -23,10 +32,15 @@ public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>
             ViewModel.OnboardingActionType,
             String,
             @escaping (Result<TabAction, Error>) -> Void) -> Void,
+        onMultipleChoiceActionTap: @escaping (
+            ViewModel.OnboardingMultipleChoiceActionType,
+            String
+        ) -> Void,
         onComplete: @escaping (String) -> Void
     ) {
         self.onboardingCards = onboardingCards
         self.onActionTap = onActionTap
+        self.onMultipleChoiceActionTap = onMultipleChoiceActionTap
         self.onComplete = onComplete
     }
 
@@ -63,5 +77,6 @@ public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>
 
     public func handleMultipleChoiceAction(action: ViewModel.OnboardingMultipleChoiceActionType, cardName: String) {
         multipleChoiceSelections[cardName] = action
+        onMultipleChoiceActionTap(action, cardName)
     }
 }
