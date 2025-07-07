@@ -371,7 +371,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = ContextMenuAction(
-            section: .topSites(4),
+            section: .topSites(nil, 4),
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )

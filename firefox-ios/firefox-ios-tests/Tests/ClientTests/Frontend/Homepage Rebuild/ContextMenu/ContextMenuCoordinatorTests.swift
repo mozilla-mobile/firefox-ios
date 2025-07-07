@@ -50,7 +50,7 @@ final class ContextMenuCoordinatorTests: XCTestCase {
 
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> ContextMenuCoordinator {
-        let configuration = ContextMenuConfiguration(homepageSection: .header, toastContainer: UIView())
+        let configuration = ContextMenuConfiguration(homepageSection: .messageCard, toastContainer: UIView())
         let subject = ContextMenuCoordinator(
             configuration: configuration,
             router: mockRouter,
