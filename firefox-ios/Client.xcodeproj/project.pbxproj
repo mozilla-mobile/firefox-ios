@@ -1440,6 +1440,7 @@
 		BA6127D72E2967F1003EB129 /* SummarizationReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6127D62E2967EF003EB129 /* SummarizationReason.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
+		BA9EBA1C2E1BDDF300A11D91 /* LiteLLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBA1B2E1BDDEE00A11D91 /* LiteLLMClient.swift */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BAEB9EB22E2869C400F9F482 /* SummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */; };
 		BAEB9EB42E28726A00F9F482 /* SummarizationCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB32E28726100F9F482 /* SummarizationCheckerTests.swift */; };
@@ -9238,6 +9239,7 @@
 		BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressWebViewManager.swift; sourceTree = "<group>"; };
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
+		BA9EBA1B2E1BDDEE00A11D91 /* LiteLLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClient.swift; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcher.swift; sourceTree = "<group>"; };
 		BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizationChecker.swift; sourceTree = "<group>"; };
@@ -13737,6 +13739,7 @@
 				BA6127D42E2967DF003EB129 /* SummarizationCheckResult.swift */,
 				BA6127D22E2967D1003EB129 /* SummarizationCheckError.swift */,
 				BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */,
+				BA9EBA1B2E1BDDEE00A11D91 /* LiteLLMClient.swift */,
 			);
 			path = Summary;
 			sourceTree = "<group>";
@@ -17479,6 +17482,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA9EBA1C2E1BDDF300A11D91 /* LiteLLMClient.swift in Sources */,
 				8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */,
 				C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
