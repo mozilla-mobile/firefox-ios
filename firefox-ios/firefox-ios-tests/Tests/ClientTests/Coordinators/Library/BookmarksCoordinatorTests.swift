@@ -30,50 +30,10 @@ final class BookmarksCoordinatorTests: XCTestCase {
         navigationHandler = nil
     }
 
-    // MARK: Legacy Bookmarks
-
-    func testStart_legacy() {
-        let subject = createSubject()
-        let folder = LocalDesktopFolder()
-
-        subject.start(from: folder)
-
-        XCTAssertTrue(router.pushedViewController is LegacyBookmarksPanel)
-        XCTAssertEqual(router.pushCalled, 1)
-    }
-
-    func testShowBookmarksDetail_forFolder_legacy() {
-        let subject = createSubject()
-        let folder = LocalDesktopFolder()
-
-        subject.showBookmarkDetail(for: folder, folder: folder)
-
-        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
-        XCTAssertEqual(router.pushCalled, 1)
-    }
-
-    func testShowBookmarkDetail_forBookmarkCreation_legacy() {
-        let subject = createSubject()
-
-        subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
-
-        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
-        XCTAssertEqual(router.pushCalled, 1)
-    }
-
-    func testShowBookmarkDetail_forFolderCreation_legacy() {
-        let subject = createSubject()
-
-        subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
-
-        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
-        XCTAssertEqual(router.pushCalled, 1)
-    }
-
-    // MARK: Bookmark refactor
+    // MARK: Bookmarks
 
     func testStart() {
-        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let subject = createSubject()
         let folder = LocalDesktopFolder()
 
         subject.start(from: folder)
@@ -83,7 +43,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
     }
 
     func testShowBookmarksDetail_forFolder() {
-        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let subject = createSubject()
         let folder = LocalDesktopFolder()
 
         subject.showBookmarkDetail(for: folder, folder: folder)
@@ -93,7 +53,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
     }
 
     func testShowBookmarkDetail_forBookmarkCreation() {
-        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let subject = createSubject()
 
         subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
 
@@ -102,7 +62,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
     }
 
     func testShowBookmarkDetail_forFolderCreation() {
-        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let subject = createSubject()
 
         subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
 
@@ -176,7 +136,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
     // MARK: Helper methods
 
-    private func createSubject(isBookmarkRefactorEnabled: Bool = false) -> BookmarksCoordinator {
+    private func createSubject() -> BookmarksCoordinator {
         let subject = BookmarksCoordinator(
             router: router,
             profile: profile,
