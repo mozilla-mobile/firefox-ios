@@ -629,6 +629,9 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
+    /// This case can occur when scrolling on homepage or in search view
+    /// and the user is still in isEditing mode (aka Cancel button is shown)
+    /// But we don't show the keyboard and the cursor is not active
     private static func handleHideKeyboardAction(state: Self) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
