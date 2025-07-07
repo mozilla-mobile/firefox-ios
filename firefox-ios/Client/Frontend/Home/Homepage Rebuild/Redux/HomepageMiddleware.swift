@@ -61,7 +61,7 @@ final class HomepageMiddleware: FeatureFlaggable {
             break
         }
     }
-    
+
     private func dispatchSearchBarConfigurationAction(action: Action) {
         store.dispatchLegacy(
             HomepageAction(
