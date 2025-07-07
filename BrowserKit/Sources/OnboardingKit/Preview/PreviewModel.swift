@@ -7,7 +7,12 @@ import SwiftUI
 import Common
 
 private struct PreviewModel: OnboardingCardInfoModelProtocol {
-    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? = .init(title: "Bottom", action: OnboardingMultipleChoiceAction.toolbarBottom, imageID: "toolbarBottom")
+    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? =
+    OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
+        title: "Bottom",
+        action: OnboardingMultipleChoiceAction.toolbarBottom,
+        imageID: "toolbarBottom"
+    )
 
     var image: UIImage? { UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) }
     var cardType: OnboardingCardType
