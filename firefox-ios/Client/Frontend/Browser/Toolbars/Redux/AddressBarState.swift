@@ -598,6 +598,8 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
+    /// This case can occur when scrolling on homepage or in search view and the user is still in isEditing mode (aka Cancel button is shown)
+    /// But we don't show the keyboard and the cursor is not active
     private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 

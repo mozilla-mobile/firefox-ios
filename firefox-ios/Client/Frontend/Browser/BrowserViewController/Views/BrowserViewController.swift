@@ -878,6 +878,7 @@ class BrowserViewController: UIViewController,
         }
 
         dismissModalsIfStartAtHome()
+        shouldHideAddressToolbar()
     }
 
     private func showToastType(toast: ToastType) {
@@ -1139,23 +1140,37 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    // TODO: FXIOS-12632 Refactor how we determine when to hide / show toolbar
-    /// If we are showing the homepage search bar, then we should hide the address toolbar
-    private func shouldHideToolbar() -> Bool {
+    /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
+    /// The homepage search bar should not appear if we are in editing mode.
+    private func shouldHideAddressToolbar() {
+        guard featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) else { return }
+        let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )
+
+        let isEditing = toolbarState?.addressToolbar.isEditing ?? false
+        let isTopToolbar = toolbarState?.toolbarPosition == .top
+
         let shouldShowSearchBar = store.state.screenState(
             HomepageState.self,
             for: .homepage,
             window: windowUUID
         )?.searchState.shouldShowSearchBar ?? false
-        guard shouldShowSearchBar else { return false }
-        return true
+
+        guard shouldShowSearchBar, !isEditing, isTopToolbar, contentContainer.hasHomepage else {
+            guard addressToolbarContainer.isHidden == true else { return }
+            addressToolbarContainer.isHidden = false
+            store.dispatchLegacy(
+                GeneralBrowserAction(windowUUID: windowUUID, actionType: GeneralBrowserActionType.didUnhideToolbar)
+            )
+            return
+        }
+        addressToolbarContainer.isHidden = true
     }
 
     private func switchToolbarIfNeeded() {
-        guard !shouldHideToolbar() else {
-            addressToolbarContainer.isHidden = true
-            return
-        }
         var updateNeeded = false
 
         // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
@@ -1214,9 +1229,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func addAddressToolbar() {
-        guard isToolbarRefactorEnabled, !shouldHideToolbar() else {
-            return
-        }
+        guard isToolbarRefactorEnabled else { return }
 
         addressToolbarContainer.configure(
             windowUUID: windowUUID,
