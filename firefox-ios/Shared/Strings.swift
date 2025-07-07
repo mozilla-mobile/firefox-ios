@@ -285,6 +285,19 @@ extension String {
                     value: "Find what you need faster, from private browsing to save actions.",
                     comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint.")
             }
+
+            public struct MenuRedesign {
+                public static let Title = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.MenuRedesign.Title.v142",
+                    tableName: "MainMenu",
+                    value: "New menu, no clutter",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint.")
+                public static let Body = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.MenuRedesign.Body.v142",
+                    tableName: "MainMenu",
+                    value: "Bookmarks, history, and settings — all at your fingertips.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint.")
+            }
         }
 
         public struct TabsTray {
