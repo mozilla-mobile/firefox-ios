@@ -4321,6 +4321,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Close Menu",
                 comment: "The accessibility label for the close button in the Main menu.")
+            public static let DismissBanner = MZLocalizedString(
+                key: "MainMenu.AccessibilityLabels.DismissBanner.142",
+                tableName: "MainMenu",
+                value: "Dismiss banner",
+                comment: "The accessibility label for the dismiss button, for header banner, on top of the menu.")
         }
 
         public struct SiteProtection {

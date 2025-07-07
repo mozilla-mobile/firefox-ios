@@ -164,6 +164,10 @@ class MainMenuViewController: UIViewController,
                 }
             }
 
+            menuRedesignContent.bannerButtonCallback = {
+                DefaultApplicationHelper().openSettings()
+            }
+
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
                 self?.dispatchSiteProtectionAction()
             }
@@ -499,7 +503,9 @@ class MainMenuViewController: UIViewController,
                     menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
                     closeButtonA11yLabel: .MainMenu.AccessibilityLabels.CloseButton,
                     closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
-                    siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header)
+                    siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header,
+                    headerBannerCloseButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderBanner.closeButton,
+                    headerBannerCloseButtonA11yLabel: .MainMenu.AccessibilityLabels.DismissBanner)
             } else {
                 menuContent.setupAccessibilityIdentifiers(
                     closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,

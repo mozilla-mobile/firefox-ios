@@ -19,29 +19,43 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         static let foxImageHeight: CGFloat = 53
         static let foxImageWidth: CGFloat = 77
         static let backgroundAlpha: CGFloat = 0.8
+        static let labelsVerticalMargin: CGFloat = 8
         static let crossLarge = StandardImageIdentifiers.Large.cross
     }
 
     public var closeButtonCallback: (() -> Void)?
+    public var bannerButtonCallback: (() -> Void)?
 
     private lazy var headerView: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
     }
 
-    private lazy var headerLabelsContainer: UIStackView = .build { stack in
+    private lazy var headerLabelsContainer: UIStackView = .build { [weak self] stack in
         stack.alignment = .leading
         stack.axis = .vertical
         stack.spacing = UX.headerLabelDistance
+        stack.distribution = .fill
+        stack.isAccessibilityElement = true
+        stack.accessibilityTraits = .button
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self?.bannerButtonTapped))
+        stack.addGestureRecognizer(tapGesture)
+        stack.isUserInteractionEnabled = true
     }
 
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.isAccessibilityElement = false
     }
 
     private let subtitleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.isAccessibilityElement = false
     }
 
     private let foxImage: UIImageView = .build { imageView in
@@ -80,7 +94,10 @@ public final class HeaderBanner: UIView, ThemeApplicable {
                 equalTo: headerView.leadingAnchor,
                 constant: UX.horizontalMargin
             ),
-            headerLabelsContainer.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            headerLabelsContainer.topAnchor.constraint(equalTo: headerView.topAnchor,
+                                                       constant: UX.labelsVerticalMargin),
+            headerLabelsContainer.bottomAnchor.constraint(equalTo: headerView.bottomAnchor,
+                                                          constant: -UX.labelsVerticalMargin),
             headerLabelsContainer.trailingAnchor.constraint(
                 equalTo: foxImage.leadingAnchor,
                 constant: -UX.horizontalMargin
@@ -94,7 +111,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
 
-            foxImage.topAnchor.constraint(equalTo: closeButton.topAnchor),
+            foxImage.topAnchor.constraint(greaterThanOrEqualTo: closeButton.topAnchor),
             foxImage.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
             foxImage.trailingAnchor.constraint(equalTo: closeButton.trailingAnchor),
             foxImage.heightAnchor.constraint(equalToConstant: UX.foxImageHeight),
@@ -106,6 +123,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         foxImage.image = image
+        headerLabelsContainer.accessibilityLabel = "\(title) \(subtitle)"
     }
 
     public func setupAccessibility(closeButtonA11yLabel: String,
@@ -118,6 +136,11 @@ public final class HeaderBanner: UIView, ThemeApplicable {
     @objc
     func closeButtonTapped() {
         closeButtonCallback?()
+    }
+
+    @objc
+    func bannerButtonTapped() {
+        bannerButtonCallback?()
     }
 
     public func applyTheme(theme: Theme) {

@@ -17,6 +17,7 @@ public final class MenuRedesignMainView: UIView,
 
     public var closeButtonCallback: (() -> Void)?
     public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
+    public var bannerButtonCallback: (() -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
@@ -100,12 +101,14 @@ public final class MenuRedesignMainView: UIView,
                                               menuA11yLabel: String,
                                               closeButtonA11yLabel: String,
                                               closeButtonA11yIdentifier: String,
-                                              siteProtectionHeaderIdentifier: String) {
+                                              siteProtectionHeaderIdentifier: String,
+                                              headerBannerCloseButtonA11yIdentifier: String,
+                                              headerBannerCloseButtonA11yLabel: String) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yIdentifier)
         closeButton.configure(viewModel: closeButtonViewModel)
-        headerBanner.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
-                                        closeButtonA11yId: closeButtonA11yIdentifier)
+        headerBanner.setupAccessibility(closeButtonA11yLabel: headerBannerCloseButtonA11yLabel,
+                                        closeButtonA11yId: headerBannerCloseButtonA11yIdentifier)
         siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
                                                 closeButtonA11yId: closeButtonA11yIdentifier)
         siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
@@ -171,12 +174,20 @@ public final class MenuRedesignMainView: UIView,
             self?.setupView(with: data, isHeaderBanner: false)
             self?.bannerShown = true
         }
+        headerBanner.bannerButtonCallback = { [weak self] in
+            self?.bannerButtonTapped()
+        }
     }
 
     // MARK: - Callbacks
     @objc
     private func closeTapped() {
         closeButtonCallback?()
+    }
+
+    @objc
+    private func bannerButtonTapped() {
+        bannerButtonCallback?()
     }
 
     // MARK: - ThemeApplicable
