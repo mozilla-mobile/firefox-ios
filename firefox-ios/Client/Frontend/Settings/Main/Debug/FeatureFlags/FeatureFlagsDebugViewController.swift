@@ -221,6 +221,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
+                FeatureFlagsBoolSetting(
+                    with: .summarizer,
+                    titleText: format(string: "Summarizer Feature"),
+                    statusText: format(string: "Toggle to enable the summarizer feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }
