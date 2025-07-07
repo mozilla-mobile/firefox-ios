@@ -146,6 +146,9 @@ final class NimbusFeatureFlagLayer {
         case .toolbarTranslucency:
             return checkToolbarTranslucencyFeature(from: nimbus)
 
+        case .toolbarMinimalAddressBar:
+            return checkToolbarMinimalAddressBarFeature(from: nimbus)
+
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
 
@@ -270,6 +273,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.translucency
+    }
+
+    private func checkToolbarMinimalAddressBarFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.minimalAddressBar
     }
 
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
