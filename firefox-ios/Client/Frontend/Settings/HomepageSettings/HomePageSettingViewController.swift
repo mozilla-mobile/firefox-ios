@@ -128,7 +128,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.FeatureFlags.JumpBackInSection,
-                defaultValue: featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly),
+                defaultValue: !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatchLegacy(
@@ -145,7 +145,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.FeatureFlags.BookmarksSection,
-                defaultValue: featureFlags.isFeatureEnabled(.hntBookmarksSection, checking: .userOnly),
+                defaultValue: !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatchLegacy(
