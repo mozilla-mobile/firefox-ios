@@ -7,7 +7,7 @@ import Foundation
 import Storage
 import Shared
 
-// TODO: FXIOS-
+// TODO: - FXIOS-12756
 class PocketViewModel: @unchecked Sendable {
     struct UX {
         static let numberOfItemsInColumn = 3
