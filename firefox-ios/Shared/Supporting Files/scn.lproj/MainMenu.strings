@@ -16,6 +16,9 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Chiuji";
 
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "Chiuji";
+
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Trasi pi sincrunizzari chiavi, schedi e autru";
 
@@ -39,6 +42,12 @@
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "Junci pàggina ê nzingalibbra";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "Cci voli quarchi sicunnu, e u po' canciari quann'è-è.";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "Mposta %@ comu pridifinutu";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "Sdisattivu";

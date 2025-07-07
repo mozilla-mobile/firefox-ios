@@ -1,3 +1,15 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "Dilemel";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "Ar 4 sizhun tremenet";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "An eurvezh tremenet";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "7 devezh diwezhañ";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Ar 24 eurvezh diwezhañ";
+

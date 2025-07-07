@@ -76,6 +76,9 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Ignorer";
 
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Continuer";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "En bas";
 
@@ -130,8 +133,7 @@
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Aidez-nous à améliorer %@";
 
-/* Subtitle for the Terms of Service screen in the onboarding process. The '
-' symbols denote empty lines separating the first link parameter from the rest of the text. */
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
 "Onboarding.Modern.TermsOfService.Subtitle.v140" = "Chargement rapide des sites\nProtection automatique contre le pistage\nSynchronisation entre tous vos appareils";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
