@@ -66,6 +66,22 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSearchBar)
     }
 
+    func test_didUnhideToolbar_withGeneralBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = searchBarReducer()
+
+        let newState = reducer(
+            initialState,
+            GeneralBrowserAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.didUnhideToolbar
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.shouldShowSearchBar)
+    }
+
     // MARK: - Private
     private func createSubject() -> SearchBarState {
         return SearchBarState(windowUUID: .XCTestDefaultUUID)
