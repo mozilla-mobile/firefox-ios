@@ -54,4 +54,32 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         self.instructionsPopup = instructionsPopup
         self.embededLinkText = embededLinkText
     }
+
+    var defaultSelectedButton: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
+        guard !multipleChoiceButtons.isEmpty else { return nil }
+
+        let toolbarLayout = FxNimbus.shared.features
+            .toolbarRefactorFeature
+            .value()
+            .layout
+
+        let isVersionedLayout = [.version1, .version2, .baseline].contains(toolbarLayout)
+
+        if isVersionedLayout {
+            return findHighestPriorityButton() ?? multipleChoiceButtons.first
+        }
+
+        return multipleChoiceButtons.first
+    }
+
+    private func findHighestPriorityButton()
+    -> OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
+        let selectableButtons = multipleChoiceButtons
+            .filter { $0.action.hasDefaultSelection }
+            .map { ($0, $0.action.defaultSelectionPriority) }
+
+        return selectableButtons
+            .min(by: { $0.1 < $1.1 })?
+            .0 // Return the button, not the priority
+    }
 }
