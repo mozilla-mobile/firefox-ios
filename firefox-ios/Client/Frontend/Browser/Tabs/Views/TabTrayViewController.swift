@@ -718,6 +718,8 @@ class TabTrayViewController: UIViewController,
 
         if let scrollView = pageVC.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
             scrollView.delegate = self
+            // TODO: FXIOS-12431 - Uncomment this when the tab tray selector view is swipable
+//            scrollView.isScrollEnabled = false
         }
 
         self.pageViewController = pageVC
