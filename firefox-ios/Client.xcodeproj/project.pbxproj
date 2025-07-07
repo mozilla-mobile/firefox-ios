@@ -1421,8 +1421,6 @@
 		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
 		BD011FB82D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD011FB72D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift */; };
 		BD0D407A2D83124E00C38511 /* TabWebViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */; };
-		BD2577982C9D85B5007B344C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2577972C9D85B5007B344C /* AnyHashable.swift */; };
-		BD2577992C9D85B5007B344C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2577972C9D85B5007B344C /* AnyHashable.swift */; };
 		BD57D9A729D4C42B00039394 /* ZoomLevelStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */; };
 		BD6CC84229CDDA3400546A5D /* ZoomLevelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC84129CDDA3400546A5D /* ZoomLevelStore.swift */; };
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
@@ -9224,7 +9222,6 @@
 		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
 		BD011FB72D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarPanGestureHandler.swift; sourceTree = "<group>"; };
 		BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewPreview.swift; sourceTree = "<group>"; };
-		BD2577972C9D85B5007B344C /* AnyHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashable.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		BD514C7EA4DD08E991E5AF7F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/Storage.strings; sourceTree = "<group>"; };
 		BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelStoreTests.swift; sourceTree = "<group>"; };
@@ -12114,7 +12111,6 @@
 				E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */,
 				E1B04A9C28E20A8300670E54 /* InstructionsView.swift */,
 				D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */,
-				BD2577972C9D85B5007B344C /* AnyHashable.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -18372,7 +18368,6 @@
 				8A83C58C2DDF87E400FF60EF /* ProfilePrefsReader.swift in Sources */,
 				81A3F6F22C2DB00900BDD86B /* MainMenuViewController.swift in Sources */,
 				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
-				BD2577992C9D85B5007B344C /* AnyHashable.swift in Sources */,
 				ED371A682CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift in Sources */,
 				E177989E2BD7D75A00F6F0EB /* ToolbarMiddleware.swift in Sources */,
 				AB4FB4DC2C89FB10005EF0CC /* BlockedTrackerCell.swift in Sources */,
@@ -18815,7 +18810,6 @@
 				E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */,
 				8A9F4F092DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */,
-				BD2577982C9D85B5007B344C /* AnyHashable.swift in Sources */,
 				FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */,
 				EDDF340B2CDD1B7C008BB6A4 /* SearchEngineModel.swift in Sources */,
 				E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */,
@@ -26451,6 +26445,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "BR STG org.mozilla.ios.FirefoxBeta";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
@@ -26928,6 +26923,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -27709,6 +27705,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.Firefox";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -28011,6 +28008,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -28301,6 +28299,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -28815,6 +28814,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
