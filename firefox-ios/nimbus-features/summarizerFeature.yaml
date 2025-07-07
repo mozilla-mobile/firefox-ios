@@ -1,0 +1,18 @@
+# The configuration for the summarizer feature
+features:
+  summarizer-feature:
+    description: >
+      This feature enables the summarizer feature.
+    variables:
+      enabled:
+        description: >
+          Enables the summarizer feature.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

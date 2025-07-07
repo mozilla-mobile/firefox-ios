@@ -122,6 +122,9 @@ final class NimbusFeatureFlagLayer {
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
 
+        case .summarizer:
+            return checkSummarizerFeature(from: nimbus)
+
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
@@ -428,6 +431,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
+        return config.enabled
+    }
+
+    private func checkSummarizerFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.summarizerFeature.value()
         return config.enabled
     }
 
