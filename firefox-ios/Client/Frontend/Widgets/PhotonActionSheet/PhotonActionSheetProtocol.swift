@@ -76,8 +76,10 @@ extension PhotonActionSheetProtocol {
             accessibilityId: AccessibilityIdentifiers.Photon.pasteAction
         )
 
-        let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle,
-                                                      iconString: StandardImageIdentifiers.Large.link) { _ in
+        let copyAddressAction = SingleActionViewModel(
+            title: .CopyAddressTitle,
+            iconString: StandardImageIdentifiers.Large.link
+        ) { [tabManager] _ in
             let currentURL = tabManager.selectedTab?.currentURL()
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
                 UIPasteboard.general.url = url
