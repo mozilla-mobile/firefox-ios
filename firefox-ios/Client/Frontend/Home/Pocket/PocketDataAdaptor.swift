@@ -23,16 +23,11 @@ final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable
 
     weak var delegate: PocketDelegate?
 
-    // Used for unit tests since pocket use async/await
-    private let dataCompletion: (@Sendable () -> Void)?
-
     init(pocketAPI: PocketStoriesProviding,
-         notificationCenter: NotificationProtocol = NotificationCenter.default,
-         dataCompletion: (@Sendable () -> Void)? = nil) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.pocketAPI = pocketAPI
         self.notificationCenter = notificationCenter
         self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
-        self.dataCompletion = dataCompletion
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         Task {
@@ -52,7 +47,6 @@ final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable
         let stories = await storyProvider.fetchPocketStories()
         pocketStories = stories
         delegate?.didLoadNewData()
-        dataCompletion?()
     }
 }
 
