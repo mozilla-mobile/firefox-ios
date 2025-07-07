@@ -97,12 +97,10 @@ class DownloadHelper: NSObject {
                                              bold: true,
                                              customRender:
                                                 { label, contentView in
-                    label.numberOfLines = 2
+            label.numberOfLines = 2
             label.font = FXFontStyles.Bold.body.scaledFont()
             label.lineBreakMode = .byCharWrapping
-        },
-                                             customHeight:
-                                                { _ in
+        }, customHeight: { _ in
             return 80
         })
 
