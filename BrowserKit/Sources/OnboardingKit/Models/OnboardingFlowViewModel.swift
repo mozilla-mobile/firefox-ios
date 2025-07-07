@@ -17,7 +17,6 @@ public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>
         String
     ) -> Void
 
-
     public enum TabAction {
         case advance(numberOfPages: Int)
         case none
