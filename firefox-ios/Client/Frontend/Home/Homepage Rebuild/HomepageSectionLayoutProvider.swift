@@ -58,9 +58,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 } else if isLandscape {
                     return .fractionalWidth(UX.PocketConstants.fractionalWidthiPhoneLandscape)
                 } else {
-                    let fractionalWidth = UX.PocketConstants.fractionalWidthiPhonePortrait
-
-                    return .fractionalWidth(fractionalWidth)
+                    return .fractionalWidth(UX.PocketConstants.fractionalWidthiPhonePortrait)
                 }
             }
 
@@ -492,7 +490,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return NSCollectionLayoutSection(group: emptyGroup)
     }
 
-    // TODO: FXIOS-12727 - We can replace this code with `uniformAcrossSiblings` API in iOS 17+
+    // Determines the tallest story cell so that all story cells can have a uniform height. This is accomplished by creating
+    // "dummy" (never rendered) cells to determine the height of the tallest cell.
+    // Although this calculation occurs every time the layout is updated (with each new HomepageState), no noticeable
+    // performance impacts were seen with this O(n) function (where n = number of cells needing to be created, currently 9)
+    // TODO: FXIOS-12727 - Investigate replacing this code with `uniformAcrossSiblings` API in iOS 17+
     private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
         guard let  state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var storyCells: [StoryCell] = []
@@ -501,7 +503,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             cell.configure(story: story, theme: LightTheme())
             storyCells.append(cell)
         }
-        return HomepageDimensionCalculator.getTallestCollectionViewCellHeight(cells: storyCells,
-                                                                              cellWidth: cellWidth)
+        return HomepageDimensionCalculator.getTallestViewHeight(views: storyCells, viewWidth: cellWidth)
     }
 }

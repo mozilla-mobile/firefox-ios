@@ -2,8 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
-
 struct HomepageDimensionCalculator {
     static func isCompactLayout(
         traitCollection: UITraitCollection,
@@ -109,11 +107,12 @@ struct HomepageDimensionCalculator {
         return tilesPerRowCount
     }
 
-    static func getTallestCollectionViewCellHeight(cells: [UICollectionViewCell], cellWidth: CGFloat) -> CGFloat {
+    // Returns the height of the tallest view from a collection of views constrained to a given width
+    static func getTallestViewHeight(views: [UIView], viewWidth: CGFloat) -> CGFloat {
         var maxHeight: CGFloat = 0
-        for cell in cells {
-            let size = cell.systemLayoutSizeFitting(
-                CGSize(width: cellWidth, height: UIView.layoutFittingCompressedSize.height),
+        for view in views {
+            let size = view.systemLayoutSizeFitting(
+                CGSize(width: viewWidth, height: UIView.layoutFittingCompressedSize.height),
                 withHorizontalFittingPriority: .required,
                 verticalFittingPriority: .fittingSizeLevel
             )

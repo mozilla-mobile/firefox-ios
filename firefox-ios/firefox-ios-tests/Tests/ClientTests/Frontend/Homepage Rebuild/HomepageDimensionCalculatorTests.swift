@@ -146,54 +146,22 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         XCTAssertEqual(numberOfTilesPerRow, 4)
     }
 
-    func test_getTallestCollectionViewCellHeightt_returnsTallestCellHeight() {
-        DependencyHelperMock().bootstrapDependencies()
+    func test_getTallestViewHeight_returnsTallestHeight() throws {
+        let testWidth: CGFloat = 100
+        let testHeights: [CGFloat] = [20, 50, 80]
 
-        let homepageState = HomepageState(windowUUID: .XCTestDefaultUUID)
-        let reducer = HomepageState.reducer
-
-        let feedStories: [PocketFeedStory] = [
-            .make(title: """
-                         How a 27-Year-Old Texan Became the Face of Russia’s American TV Network As It Imploded. \
-                         And this will make the title a bit longer
-                         """),
-            .make(title: "feed2"),
-            .make(title: "feed3"),
-        ]
-
-        let stories = feedStories.compactMap {
-            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
+        // Create views with width height constraints
+        let views: [UIView] = testHeights.map { fixedHeight in
+            let v = UIView()
+            v.translatesAutoresizingMaskIntoConstraints = false
+            v.widthAnchor.constraint(equalToConstant: testWidth).isActive = true
+            v.heightAnchor.constraint(equalToConstant: fixedHeight).isActive = true
+            return v
         }
 
-        let newState = reducer(
-            homepageState,
-            PocketAction(
-                pocketStories: stories,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
-            )
-        )
+        let result = HomepageDimensionCalculator.getTallestViewHeight(views: views, viewWidth: testWidth)
 
-        var storyCells: [StoryCell] = []
-        for story in newState.pocketState.pocketData {
-            let cell = StoryCell()
-            cell.configure(story: story, theme: LightTheme())
-            storyCells.append(cell)
-        }
-
-        let sampleWidth: CGFloat = 300.0
-        let cellHeight = HomepageDimensionCalculator.getTallestCollectionViewCellHeight(cells: storyCells,
-                                                                                        cellWidth: sampleWidth)
-
-        let controlCell = StoryCell()
-        controlCell.configure(story: stories[0], theme: LightTheme())
-        let controlCellHeight = controlCell.systemLayoutSizeFitting(
-            CGSize(width: sampleWidth, height: UIView.layoutFittingCompressedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
-
-        XCTAssertEqual(newState.pocketState.pocketData.count, 3)
-        XCTAssertEqual(cellHeight, controlCellHeight, accuracy: 1.0)
+        let expectedMaxHeight = try XCTUnwrap(testHeights.max(), "testHeights must not be empty")
+        XCTAssertEqual(result, expectedMaxHeight, accuracy: 0.1)
     }
 }

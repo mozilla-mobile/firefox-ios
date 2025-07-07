@@ -113,6 +113,8 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
         ])
     }
 
+    // Allow full title wrapping when dynamic type > .large, since truncation at larger sizes omits too many words and
+    // hurts readability. Otherwise, show 3 lines of content (title + sponsored label)
     private func getNumberOfLinesForTitle(isSponsoredStory: Bool) -> Int {
         if UIApplication.shared.preferredContentSizeCategory > UIContentSizeCategory.large {
             return 0
