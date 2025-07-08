@@ -260,13 +260,18 @@ final class LaunchCoordinator: BaseCoordinator,
             viewModel: OnboardingFlowViewModel(
                 onboardingCards: onboardingCards,
                 onActionTap: { [weak self] action, cardName, completion in
-                    guard let self = self else { return }
-                    onboardingService.handleAction(
+                    self?.onboardingService.handleAction(
                         action,
                         from: cardName,
                         cards: onboardingModel.cards,
                         with: activityEventHelper,
                         completion: completion
+                    )
+                },
+                onMultipleChoiceActionTap: { [weak self] action, cardName in
+                    self?.onboardingService.handleMultipleChoiceAction(
+                        action,
+                        from: cardName
                     )
                 },
                 onComplete: { [weak self] currentCardName in
