@@ -177,7 +177,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         )
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        app.staticTexts["Shortcuts"].waitAndTap()
+        app.cells[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage].waitAndTap()
         XCTAssertTrue(app.switches["Shortcuts"].exists)
         app.switches["Shortcuts"].waitAndTap()
 
@@ -389,7 +389,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {
         navigator.goto(HomeSettings)
-        app.staticTexts["Shortcuts"].waitAndTap()
+        app.cells[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage].waitAndTap()
         app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2", "3", "4"]
         for i in 0...3 {

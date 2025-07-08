@@ -16,6 +16,9 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "დახურვა";
 
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "დახურვა";
+
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "შედით, რომ დაასინქრონოთ პაროლები, ჩანართები და სხვა";
 
@@ -39,6 +42,12 @@
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "გვერდის ჩანიშვნა";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "რამდენიმე წამს გასტანს. შეცვლით ნებისმიერ დროს.";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "გახადეთ %@ ნაგულისხმევი";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "გამორთ.";
@@ -125,7 +134,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "სანიშნის ჩასწორება";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
-"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "საკითხავი სიიდან ამოღება";
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "მოცილება საკითხავი სიიდან";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "მოცილება მალსახმობებიდან";

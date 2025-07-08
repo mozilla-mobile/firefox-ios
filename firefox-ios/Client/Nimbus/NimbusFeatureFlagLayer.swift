@@ -44,9 +44,6 @@ final class NimbusFeatureFlagLayer {
         case .hntBookmarksSection:
             return checkHNTBookmarksSectionFeature(from: nimbus)
 
-        case .hntContentFeedRefresh:
-            return checkHNTContentFeedRefreshFeature(from: nimbus)
-
         case .hntCusomizationSection:
             return checkHNTCustomizationSectionFeature(from: nimbus)
 
@@ -122,6 +119,9 @@ final class NimbusFeatureFlagLayer {
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
 
+        case .summarizer:
+            return checkSummarizerFeature(from: nimbus)
+
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
@@ -142,6 +142,9 @@ final class NimbusFeatureFlagLayer {
 
         case .toolbarTranslucency:
             return checkToolbarTranslucencyFeature(from: nimbus)
+
+        case .toolbarMinimalAddressBar:
+            return checkToolbarMinimalAddressBarFeature(from: nimbus)
 
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
@@ -195,10 +198,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntBookmarksSectionFeature.value().enabled
-    }
-
-    private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntContentFeedCleanupFeature.value().enabled
     }
 
     private func checkHNTCustomizationSectionFeature(from nimbus: FxNimbus) -> Bool {
@@ -267,6 +266,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.translucency
+    }
+
+    private func checkToolbarMinimalAddressBarFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.minimalAddressBar
     }
 
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
@@ -428,6 +432,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
+        return config.enabled
+    }
+
+    private func checkSummarizerFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.summarizerFeature.value()
         return config.enabled
     }
 

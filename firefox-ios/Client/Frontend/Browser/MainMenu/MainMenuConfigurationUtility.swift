@@ -417,9 +417,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: isActive,
             a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.DesktopSite,
-            a11yHint: isActive ? .MainMenu.On : .MainMenu.Off,
+            a11yHint: isActive ? .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
             a11yId: AccessibilityIdentifiers.MainMenu.desktopSite,
-            infoTitle: isActive ? .MainMenu.On : .MainMenu.Off,
+            infoTitle: isActive ? .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
             action: {
                 store.dispatchLegacy(
                     MainMenuAction(
@@ -508,6 +508,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         and tabInfo: MainMenuTabInfo
     ) -> MenuElement {
         typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
+        typealias Tools = String.MainMenu.Submenus.Tools
 
         let nightModeIsOn = NightModeHelper.isActivated()
 
@@ -517,10 +518,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: nightModeIsOn,
             a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode,
-            a11yHint: nightModeIsOn ? .MainMenu.On : .MainMenu.Off,
+            a11yHint: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
             a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
             isOptional: true,
-            infoTitle: nightModeIsOn ? .MainMenu.On : .MainMenu.Off,
+            infoTitle: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
             action: {
                 store.dispatchLegacy(
                     MainMenuAction(

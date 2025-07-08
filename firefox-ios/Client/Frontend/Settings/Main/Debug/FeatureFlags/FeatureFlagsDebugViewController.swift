@@ -95,13 +95,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .hntContentFeedRefresh,
-                    titleText: format(string: "Homepage Content Feed Refresh"),
-                    statusText: format(string: "Toggle to enable the content feed refresh")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .homepageRebuild,
                     titleText: format(string: "Homepage Rebuild"),
                     statusText: format(string: "Toggle to use the homepage rebuild")
@@ -218,6 +211,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .webEngineIntegrationRefactor,
                     titleText: format(string: "Web Engine Integration Refactor"),
                     statusText: format(string: "Toggle to enable the use of WebEngine library")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .summarizer,
+                    titleText: format(string: "Summarizer Feature"),
+                    statusText: format(string: "Toggle to enable the summarizer feature")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

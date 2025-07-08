@@ -1,12 +1,12 @@
-# The configuration for the hnt-contentfeed-cleanup feature
+# The configuration for the summarizer feature
 features:
-  hnt-content-feed-cleanup-feature:
+  summarizer-feature:
     description: >
-      Controls updates for the content feed
+      This feature enables the summarizer feature.
     variables:
       enabled:
         description: >
-          Whether or not the feature is enabled
+          Enables the summarizer feature.
         type: Boolean
         default: false
     defaults:
