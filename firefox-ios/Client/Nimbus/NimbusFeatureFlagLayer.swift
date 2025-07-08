@@ -41,6 +41,7 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+<<<<<<< HEAD
         case .hntBookmarksSection:
             return checkHNTBookmarksSectionFeature(from: nimbus)
 
@@ -53,6 +54,8 @@ final class NimbusFeatureFlagLayer {
         case .hntJumpBackInSection:
              return checkHNTJumpBackInSectionFeature(from: nimbus)
 
+=======
+>>>>>>> 9df533e86 (Refactor FXIOS-12703 [Homepage Redesign - Stories] Unify section removal under stories flag (#27806))
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
@@ -206,6 +209,7 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
+<<<<<<< HEAD
     private func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntBookmarksSectionFeature.value().enabled
     }
@@ -222,6 +226,8 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.hntJumpBackInSectionFeature.value().enabled
     }
 
+=======
+>>>>>>> 9df533e86 (Refactor FXIOS-12703 [Homepage Redesign - Stories] Unify section removal under stories flag (#27806))
     private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
     }

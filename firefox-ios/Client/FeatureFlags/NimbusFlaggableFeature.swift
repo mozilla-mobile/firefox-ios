@@ -21,10 +21,13 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
+<<<<<<< HEAD
     case hntBookmarksSection
     case hntContentFeedRefresh
     case hntCusomizationSection
     case hntJumpBackInSection
+=======
+>>>>>>> 9df533e86 (Refactor FXIOS-12703 [Homepage Redesign - Stories] Unify section removal under stories flag (#27806))
     case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
     case homepageRebuild
@@ -123,10 +126,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
-        case .hntBookmarksSection:
-            return FlagKeys.BookmarksSection
-        case .hntJumpBackInSection:
-            return FlagKeys.JumpBackInSection
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
         case .inactiveTabs:
@@ -145,8 +144,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
+<<<<<<< HEAD
                 .hntContentFeedRefresh,
                 .hntCusomizationSection,
+=======
+>>>>>>> 9df533e86 (Refactor FXIOS-12703 [Homepage Redesign - Stories] Unify section removal under stories flag (#27806))
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageRedesign,
