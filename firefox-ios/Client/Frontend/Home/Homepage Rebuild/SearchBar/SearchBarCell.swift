@@ -23,6 +23,9 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private lazy var placeholderLabel: UILabel = .build { view in
         view.text = .TabLocationURLPlaceholder
         view.font = FXFontStyles.Regular.body.scaledFont()
+        view.textAlignment = .center
+        view.numberOfLines = 0
+        view.adjustsFontForContentSizeCategory = true
     }
 
     override init(frame: CGRect) {
