@@ -269,7 +269,7 @@ final class LaunchCoordinator: BaseCoordinator,
                     )
                 },
                 onMultipleChoiceActionTap: { [weak self] action, cardName in
-                    self?onboardingService.handleMultipleChoiceAction(
+                    self?.onboardingService.handleMultipleChoiceAction(
                         action,
                         from: cardName
                     )
