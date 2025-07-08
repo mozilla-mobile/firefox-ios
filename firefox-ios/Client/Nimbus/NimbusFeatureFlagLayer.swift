@@ -41,17 +41,8 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
-        case .hntBookmarksSection:
-            return checkHNTBookmarksSectionFeature(from: nimbus)
-
         case .hntContentFeedRefresh:
             return checkHNTContentFeedRefreshFeature(from: nimbus)
-
-        case .hntCusomizationSection:
-            return checkHNTCustomizationSectionFeature(from: nimbus)
-
-        case .hntJumpBackInSection:
-             return checkHNTJumpBackInSectionFeature(from: nimbus)
 
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
@@ -206,20 +197,8 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    private func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntBookmarksSectionFeature.value().enabled
-    }
-
     private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hntContentFeedCleanupFeature.value().enabled
-    }
-
-    private func checkHNTCustomizationSectionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntCustomizationSectionFeature.value().enabled
-    }
-
-    private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntJumpBackInSectionFeature.value().enabled
     }
 
     private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {

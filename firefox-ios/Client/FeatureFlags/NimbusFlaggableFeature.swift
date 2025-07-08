@@ -21,10 +21,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
-    case hntBookmarksSection
     case hntContentFeedRefresh
-    case hntCusomizationSection
-    case hntJumpBackInSection
     case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
     case homepageRebuild
@@ -123,10 +120,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
-        case .hntBookmarksSection:
-            return FlagKeys.BookmarksSection
-        case .hntJumpBackInSection:
-            return FlagKeys.JumpBackInSection
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
         case .inactiveTabs:
@@ -146,7 +139,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .hntContentFeedRefresh,
-                .hntCusomizationSection,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageRedesign,
