@@ -7,9 +7,8 @@ import SwiftUI
 private struct PagingCarouselUX {
     static let itemWidthRatio: CGFloat = 0.85
     static let interItemSpacing: CGFloat = 12
-    static let scrollAnimationDuration: CGFloat = 0.5
-    static let itemAnimationDuration: CGFloat = 0.3
-    static let minimumSwipeDistance: CGFloat = 50
+    static let scrollAnimationDuration: CGFloat = 0.3
+    static let minimumSwipeVelocity: CGFloat = 50
     static let edgePaddingAdjustment: CGFloat = 30
 }
 
@@ -36,7 +35,9 @@ public struct PagingCarousel<Item, Content: View>: View {
     public let items: [Item]
     public let content: (Item) -> Content
 
-    @State private var scrollOffset: CGFloat = 0
+    @State private var dragOffset: CGFloat = 0
+    @State private var isDragging = false
+    @GestureState private var gestureOffset: CGFloat = 0
 
     public init(
         selection: Binding<Int>,
@@ -50,106 +51,139 @@ public struct PagingCarousel<Item, Content: View>: View {
 
     public var body: some View {
         GeometryReader { geometry in
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: PagingCarouselUX.interItemSpacing) {
-                        ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                            content(item)
-                                .frame(width: itemWidth(for: geometry))
-                                .animation(
-                                    .easeInOut(duration: PagingCarouselUX.itemAnimationDuration),
-                                    value: selection
-                                )
-                                .id(index)
-                        }
-                    }
-                    .padding(.leading, leadingPadding(for: geometry))
-                    .padding(.trailing, trailingPadding(for: geometry))
-                    .animation(
-                        .easeInOut(duration: PagingCarouselUX.scrollAnimationDuration),
-                        value: selection
-                    )
+            carouselContent(geometry: geometry)
+                .gesture(dragGesture(geometry: geometry))
+                .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.8), value: selection)
+                .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.8), value: gestureOffset)
+                .accessibilityAdjustableAction { direction in
+                    handleAccessibilityAdjustment(direction: direction)
                 }
-                .onAppear {
-                    scrollToSelection(scrollAction: {
-                        proxy.scrollTo(selection, anchor: .center)
-                    })
-                }
-                .onChange(of: selection) { _ in
-                    scrollToSelection(scrollAction: {
-                        proxy.scrollTo(selection, anchor: .center)
-                    }, animated: true)
-                }
-                .simultaneousGesture(swipeGesture)
-            }
         }
         .clipped()
     }
 
-    /// Calculates item width based on screen size
+    // MARK: - View Components
+
+    @ViewBuilder
+    private func carouselContent(geometry: GeometryProxy) -> some View {
+        HStack(spacing: PagingCarouselUX.interItemSpacing) {
+            ForEach(Array(items.enumerated()), id: \.offset) { index, item in
+                carouselItem(index: index, item: item, geometry: geometry)
+            }
+        }
+        .padding(.leading, leadingPadding(for: geometry))
+        .padding(.trailing, trailingPadding(for: geometry))
+        .offset(x: totalOffset(for: geometry))
+    }
+
+    @ViewBuilder
+    private func carouselItem(index: Int, item: Item, geometry: GeometryProxy) -> some View {
+        content(item)
+            .frame(width: itemWidth(for: geometry))
+            .environment(\.carouselPosition, CarouselPosition(
+                currentIndex: index,
+                totalItems: items.count
+            ))
+            .accessibilityElement(children: .contain)
+            .accessibilitySortPriority(index == selection ? 1 : 0)
+            // Hide cards that aren't currently selected
+            .accessibilityHidden(index != selection)
+            .accessibilityScrollAction { edge in
+                switch edge {
+                case .leading:
+                    if selection > 0 {
+                        selection -= 1
+                    }
+                case .trailing:
+                    if selection < items.count - 1 {
+                        selection += 1
+                    }
+                default:
+                    break
+                }
+            }
+    }
+
+    private func dragGesture(geometry: GeometryProxy) -> some Gesture {
+        DragGesture()
+            .updating($gestureOffset) { value, state, _ in
+                state = value.translation.width
+            }
+            .onChanged { _ in
+                isDragging = true
+            }
+            .onEnded { value in
+                isDragging = false
+                handleDragEnded(value: value, geometry: geometry)
+            }
+    }
+
+    private func handleAccessibilityAdjustment(direction: AccessibilityAdjustmentDirection) {
+        switch direction {
+        case .increment:
+            if selection < items.count - 1 {
+                selection += 1
+            }
+        case .decrement:
+            if selection > 0 {
+                selection -= 1
+            }
+        @unknown default:
+            break
+        }
+    }
+
+    // MARK: - Layout Calculations
+
     private func itemWidth(for geometry: GeometryProxy) -> CGFloat {
         geometry.size.width * PagingCarouselUX.itemWidthRatio
     }
 
-    /// Base margin for centering items
     private func baseSideMargin(for geometry: GeometryProxy) -> CGFloat {
         (geometry.size.width - itemWidth(for: geometry)) / 2
     }
 
-    /// Leading padding with edge adjustment
     private func leadingPadding(for geometry: GeometryProxy) -> CGFloat {
         let baseMargin = baseSideMargin(for: geometry)
-        return isFirstItemSelected ? baseMargin : baseMargin - PagingCarouselUX.edgePaddingAdjustment
+        return selection == 0 ? baseMargin : baseMargin - PagingCarouselUX.edgePaddingAdjustment
     }
 
-    /// Trailing padding with edge adjustment
     private func trailingPadding(for geometry: GeometryProxy) -> CGFloat {
         let baseMargin = baseSideMargin(for: geometry)
-        return isLastItemSelected ? baseMargin : baseMargin - PagingCarouselUX.edgePaddingAdjustment
+        return selection == items.count - 1 ? baseMargin : baseMargin - PagingCarouselUX.edgePaddingAdjustment
     }
 
-    private var isFirstItemSelected: Bool {
-        selection == 0
-    }
+    private func totalOffset(for geometry: GeometryProxy) -> CGFloat {
+        let itemFullWidth = itemWidth(for: geometry) + PagingCarouselUX.interItemSpacing
+        let baseOffset = -CGFloat(selection) * itemFullWidth
 
-    private var isLastItemSelected: Bool {
-        selection == items.count - 1
-    }
-
-    private var swipeGesture: some Gesture {
-        DragGesture()
-            .onEnded { value in
-                handleSwipeGesture(with: value.translation)
-            }
-    }
-
-    /// Scrolls to the currently selected item
-    func scrollToSelection(scrollAction: @escaping () -> Void, animated: Bool = false) {
-        if animated {
-            withAnimation(.easeInOut(duration: PagingCarouselUX.scrollAnimationDuration)) {
-                scrollAction()
-            }
-        } else {
-            scrollAction()
+        // Adjust for edge padding changes
+        var edgeAdjustment: CGFloat = 0
+        if selection > 0 {
+            edgeAdjustment += PagingCarouselUX.edgePaddingAdjustment
         }
+
+        return baseOffset + edgeAdjustment + gestureOffset
     }
 
-    /// Handles swipe gestures for navigation
-    private func handleSwipeGesture(with translation: CGSize) {
-        let horizontalTranslation = translation.width
+    // MARK: - Gesture Handling
 
-        if horizontalTranslation > PagingCarouselUX.minimumSwipeDistance && canNavigateToPrevious {
-            selection -= 1
-        } else if horizontalTranslation < -PagingCarouselUX.minimumSwipeDistance && canNavigateToNext {
-            selection += 1
+    private func handleDragEnded(value: DragGesture.Value, geometry: GeometryProxy) {
+        let dragThreshold = itemWidth(for: geometry) * 0.3
+        let velocity = value.predictedEndTranslation.width - value.translation.width
+
+        // Determine navigation based on drag distance and velocity
+        if value.translation.width > dragThreshold || velocity > PagingCarouselUX.minimumSwipeVelocity {
+            // Swipe right - go to previous
+            if selection > 0 {
+                selection -= 1
+            }
+        } else if value.translation.width < -dragThreshold || velocity < -PagingCarouselUX.minimumSwipeVelocity {
+            // Swipe left - go to next
+            if selection < items.count - 1 {
+                selection += 1
+            }
         }
-    }
-
-    private var canNavigateToPrevious: Bool {
-        selection > 0
-    }
-
-    private var canNavigateToNext: Bool {
-        selection < items.count - 1
+        // If neither threshold is met, spring back to current selection
     }
 }

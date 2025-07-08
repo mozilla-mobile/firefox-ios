@@ -10,6 +10,8 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
+    @Environment(\.carouselPosition)
+    private var carouselPosition
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -58,8 +60,10 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
             ContentFittingScrollView {
                 VStack(spacing: UX.CardView.spacing * scale) {
                     Spacer()
+                        .accessibilityHidden(true)
                     titleView
                     Spacer()
+                        .accessibilityHidden(true)
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
                         items: viewModel.multipleChoiceButtons,
@@ -71,6 +75,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
                     Spacer()
+                        .accessibilityHidden(true)
                     primaryButton
                 }
             }
@@ -79,6 +84,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
             .background(
                 RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                     .fill(cardBackgroundColor)
+                    .accessibilityHidden(true)
             )
             .padding(.top, UX.CardView.cardTopPadding)
         }
