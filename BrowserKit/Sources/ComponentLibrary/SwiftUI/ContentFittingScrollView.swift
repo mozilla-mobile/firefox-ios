@@ -101,6 +101,8 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
             }
         }
 
+        // For Dynamic Type changes, we need to completely recreate the hosting controller
+        // because SwiftUI views don't always update their intrinsic size properly
         private func recreateHostingController() {
             guard let containerView = self.containerView,
                   let oldHostingController = self.hostingController else { return }
