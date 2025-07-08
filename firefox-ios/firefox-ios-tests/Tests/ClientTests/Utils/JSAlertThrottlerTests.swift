@@ -7,11 +7,11 @@ import XCTest
 @testable import Client
 
 class JSAlertThrottlerTests: XCTestCase {
-    private var throttler: JSAlertThrottler!
+    private var throttler: PopupThrottler!
 
     override func setUp() {
         super.setUp()
-        throttler = JSAlertThrottler()
+        throttler = PopupThrottler()
     }
 
     override func tearDown() {
@@ -20,7 +20,7 @@ class JSAlertThrottlerTests: XCTestCase {
     }
 
     func testThatRapidAlertsUnderLimitDoNotPreventAddtlAlerts() {
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let threshold = PopupThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to but not over threshold
         for _ in 0..<(threshold - 1) {
             throttler.willShowJSAlert()
@@ -29,7 +29,7 @@ class JSAlertThrottlerTests: XCTestCase {
     }
 
     func testThatRapidAlertsExceedingLimitPreventAddtlAlerts() {
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let threshold = PopupThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
             throttler.willShowJSAlert()
@@ -38,8 +38,8 @@ class JSAlertThrottlerTests: XCTestCase {
     }
 
     func testThatAlertsShownAfterSufficientDelayDoNotPreventAddtlAlerts() {
-        let customThrottler = JSAlertThrottler(resetTime: 1.0)
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let customThrottler = PopupThrottler(resetTime: 1.0)
+        let threshold = PopupThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
             customThrottler.willShowJSAlert()
@@ -55,8 +55,8 @@ class JSAlertThrottlerTests: XCTestCase {
     }
 
     func testThatAlertsShownAfterSufficientDelayResetAlertCount() {
-        let customThrottler = JSAlertThrottler(resetTime: 1.0)
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let customThrottler = PopupThrottler(resetTime: 1.0)
+        let threshold = PopupThrottler.Thresholds.maxConsecutiveAlerts
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
             XCTAssertTrue(customThrottler.canShowAlert())
