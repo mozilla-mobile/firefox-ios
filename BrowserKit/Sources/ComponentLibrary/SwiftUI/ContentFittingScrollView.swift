@@ -84,19 +84,20 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
         var scrollView: UIScrollView?
         var containerView: UIView?
         var containerHeightConstraint: NSLayoutConstraint?
-        private var dynamicTypeObserver: NSObjectProtocol?
 
         func setupDynamicTypeObserver() {
-            dynamicTypeObserver = NotificationCenter.default.addObserver(
-                forName: UIContentSizeCategory.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                // For Dynamic Type changes, we need to completely recreate the hosting controller
-                // because SwiftUI views don't always update their intrinsic size properly
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self?.recreateHostingController()
-                }
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleDynamicTypeChange),
+                name: UIContentSizeCategory.didChangeNotification,
+                object: nil
+            )
+        }
+
+        @objc
+        private func handleDynamicTypeChange() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.recreateHostingController()
             }
         }
 
@@ -221,12 +222,6 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
                         scrollViewHeight: scrollView.bounds.height
                     )
                 }
-            }
-        }
-
-        deinit {
-            if let observer = dynamicTypeObserver {
-                NotificationCenter.default.removeObserver(observer)
             }
         }
     }
