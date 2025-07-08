@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Common
 
 public struct AttributedLinkText<Action: RawRepresentable>: View where Action.RawValue == String {
     let fullText: String
@@ -11,24 +12,28 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
     let linkAction: (Action) -> Void
 
     @State private var attributedString: AttributedString
+    let theme: Theme
 
     public init(
+        theme: Theme,
         fullText: String,
         linkText: String,
         action: Action,
         linkAction: @escaping (Action) -> Void
     ) {
+        self.theme = theme
         self.fullText = fullText
         self.linkText = linkText
         self.action = action
         self.linkAction = linkAction
 
         var attrString = AttributedString(fullText)
-        attrString.foregroundColor = Color(.secondaryLabel)
+        attrString.foregroundColor = Color(uiColor: theme.colors.textPrimary)
 
         let actionURL = URL(string: "action://\(action.rawValue)")!
         if let range = attrString.range(of: linkText) {
-            attrString[range].foregroundColor = .blue
+            attrString[range].underlineStyle = .single
+            attrString[range].foregroundColor = Color(uiColor: theme.colors.actionPrimary)
             attrString[range].link = actionURL
         }
 

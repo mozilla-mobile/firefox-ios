@@ -9,7 +9,7 @@ import Shared
 import ComponentLibrary
 import OnboardingKit
 
-final class OnboardingService {
+final class OnboardingService: FeatureFlaggable {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?
@@ -134,6 +134,24 @@ final class OnboardingService {
         case .endOnboarding:
             handleEndOnboarding(with: activityEventHelper)
             completion(.success(.none))
+        }
+    }
+
+    func handleMultipleChoiceAction(
+        _ action: OnboardingMultipleChoiceAction,
+        from cardName: String
+    ) {
+        switch action {
+        case .themeDark, .themeLight, .themeSystemDefault:
+            return
+        case .toolbarBottom:
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+            let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.bottom]
+            notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
+        case .toolbarTop:
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
+            let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.top]
+            notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         }
     }
 

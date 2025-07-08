@@ -54,4 +54,49 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         self.instructionsPopup = instructionsPopup
         self.embededLinkText = embededLinkText
     }
+
+    var defaultSelectedButton: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
+        guard !multipleChoiceButtons.isEmpty else { return nil }
+
+        let toolbarLayout = FxNimbus.shared.features
+            .toolbarRefactorFeature
+            .value()
+            .layout
+
+        let isVersionedLayout = [.version1, .version2, .baseline].contains(toolbarLayout)
+
+        if isVersionedLayout {
+            return findHighestPriorityButton() ?? multipleChoiceButtons.first
+        }
+
+        return multipleChoiceButtons.first
+    }
+
+    private func findHighestPriorityButton()
+    -> OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
+        let selectableButtons = multipleChoiceButtons
+            .filter { hasDefaultSelection($0.action) }
+            .map { ($0, defaultSelectionPriority($0.action)) }
+
+        return selectableButtons
+            .min(by: { $0.1 < $1.1 })?
+            .0 // Return the button, not the priority
+    }
+
+    private func hasDefaultSelection(_ action: OnboardingMultipleChoiceAction) -> Bool {
+        switch action {
+        case .toolbarBottom, .toolbarTop:
+            return true
+        default:
+            return false
+        }
+    }
+
+    private func defaultSelectionPriority(_ action: OnboardingMultipleChoiceAction) -> Int {
+        switch action {
+        case .toolbarBottom: return 1  // Highest priority
+        case .toolbarTop: return 2     // Lower priority
+        default: return Int.max        // No priority
+        }
+    }
 }
