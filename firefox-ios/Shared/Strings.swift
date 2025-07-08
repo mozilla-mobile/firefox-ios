@@ -4299,17 +4299,6 @@ extension String {
 // MARK: - Main Menu
 extension String {
     public struct MainMenu {
-        public static let On = MZLocalizedString(
-            key: "MainMenu.On.Title.v141",
-            tableName: "MainMenu",
-            value: "On",
-            comment: "On the main menu, a title for a label that indicate the current option/action state is on.")
-        public static let Off = MZLocalizedString(
-            key: "MainMenu.Off.Title.v141",
-            tableName: "MainMenu",
-            value: "Off",
-            comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
-
         public struct AccessibilityLabels {
             public static let OptionDisabledHint = MZLocalizedString(
                 key: "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133",
@@ -4464,6 +4453,16 @@ extension String {
                 tableName: "MainMenu",
                 value: "Desktop Site",
                 comment: "On the main menu, the title for the action that will switch a site from the desktop version to the mobile version.")
+            public static let DesktopSiteOn = MZLocalizedString(
+                key: "MainMenu.DesktopSiteOn.Title.v142",
+                tableName: "MainMenu",
+                value: "On",
+                comment: "On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON.")
+            public static let DesktopSiteOff = MZLocalizedString(
+                key: "MainMenu.DesktopSiteOff.Title.v142",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF.")
             public static let FindInPage = MZLocalizedString(
                 key: "MainMenu.ToolsSection.FindInPage.Title.v131",
                 tableName: "MainMenu",
@@ -4719,6 +4718,16 @@ extension String {
                     tableName: "MainMenu",
                     value: "Website Dark Mode",
                     comment: "On the main menu, the title for the action that indicate, website dark mode can be turned on or off.")
+                public static let WebsiteDarkModeOnV2 = MZLocalizedString(
+                    key: "MainMenu.WebsiteDarkModeOnV2.Title.v142",
+                    tableName: "MainMenu",
+                    value: "On",
+                    comment: "On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON.")
+                public static let WebsiteDarkModeOffV2 = MZLocalizedString(
+                    key: "MainMenu.WebsiteDarkModeOffV2.Title.v142",
+                    tableName: "MainMenu",
+                    value: "Off",
+                    comment: "On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF.")
 
                 public static let NightModeOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.NightMode.On.Title.v131",
@@ -8234,6 +8243,18 @@ extension String {
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
+        }
+        struct v141 {
+            public static let On = MZLocalizedString(
+                key: "MainMenu.On.Title.v141",
+                tableName: "MainMenu",
+                value: "On",
+                comment: "On the main menu, a title for a label that indicate the current option/action state is on.")
+            public static let Off = MZLocalizedString(
+                key: "MainMenu.Off.Title.v141",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
         }
     }
 }
