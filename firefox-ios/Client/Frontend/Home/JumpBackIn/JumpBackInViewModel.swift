@@ -309,6 +309,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
     var isEnabled: Bool {
         let isEnabled = !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+                     || !featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly)
         return !isPrivate && isEnabled
     }
 
