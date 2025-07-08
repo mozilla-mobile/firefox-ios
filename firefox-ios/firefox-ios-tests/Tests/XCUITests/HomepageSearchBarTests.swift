@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class HomepageSearchBarTests: FeatureFlaggedTestBase {
-    func test_homepageSearchBar_doesNotShowSearchBar_experimentOff() {
+    func testDoesNotShowSearchBar_homepageSearchBarExperimentOff() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
@@ -15,7 +15,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_switchFromTopToBottomToolbar_showsExpectedBehavior_experimentOn() {
+    func testSwitchFromTopToBottomToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -39,7 +39,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_switchFromBottomToTopToolbar_showsExpectedBehavior_experimentOn() {
+    func testSwitchFromBottomToTopToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -65,7 +65,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_fromPortraitToLandscape_showsOnlyInPortrait_experimentOn() {
+    func testFromPortraitToLandscapeShowsOnlyInPortrait_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -81,6 +81,30 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         XCUIDevice.shared.orientation = .portrait
 
         mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func testTappingOnShowsZeroSearchState_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToExist(homepageSearchBar)
+        homepageSearchBar.tap()
+
+        let zeroSearchScrimDimmingView = app.otherElements[AccessibilityIdentifiers.ZeroSearch.dimmingView]
+        mozWaitForElementToExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(zeroSearchScrimDimmingView)
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 

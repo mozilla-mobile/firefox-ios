@@ -120,6 +120,7 @@
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests\/testRecentlyVisited()",
+        "HomepageSearchBarTests",
         "InactiveTabsTest",
         "IntegrationTests",
         "IpadOnlyTestCase",
