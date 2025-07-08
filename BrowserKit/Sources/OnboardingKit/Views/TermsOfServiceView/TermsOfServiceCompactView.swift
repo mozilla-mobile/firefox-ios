@@ -83,6 +83,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(viewModel.configuration.embededLinkText, id: \.linkText) { link in
                 AttributedLinkText<TosAction>(
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
