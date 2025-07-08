@@ -53,7 +53,7 @@ final class PopupThrottler {
         return alertCountOK || timeOK
     }
 
-    func willShowJSAlert(type: PopupThrottler.PopupType) {
+    func willShowAlert(type: PopupThrottler.PopupType) {
         guard let count = alertCount[type] else { return }
         guard let date = lastAlertDate[type] else { return }
         guard let time = timespan[type] else { return }
