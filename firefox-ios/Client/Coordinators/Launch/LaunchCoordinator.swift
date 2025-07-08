@@ -269,11 +269,10 @@ final class LaunchCoordinator: BaseCoordinator,
                     )
                 },
                 onMultipleChoiceActionTap: { [weak self] action, cardName in
-                    onboardingService.handleMultipleChoiceAction(
-                        self?.onboardingService.handleMultipleChoiceAction(
-                            action,
-                            from: cardName
-                        )
+                    self?onboardingService.handleMultipleChoiceAction(
+                        action,
+                        from: cardName
+                    )
                 },
                 onComplete: { [weak self] currentCardName in
                     guard let self = self else { return }
