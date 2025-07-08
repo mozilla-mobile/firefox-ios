@@ -16,7 +16,7 @@ final class PopupThrottler {
         var maxPopupThreshold: Int {
             switch self {
             case .alert: return 5
-            case .popupWindow: return 3
+            case .popupWindow: return 2
             }
         }
 
