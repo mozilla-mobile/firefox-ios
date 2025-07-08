@@ -227,11 +227,5 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
                 }
             }
         }
-
-        deinit {
-            if let observer = dynamicTypeObserver {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
     }
 }
