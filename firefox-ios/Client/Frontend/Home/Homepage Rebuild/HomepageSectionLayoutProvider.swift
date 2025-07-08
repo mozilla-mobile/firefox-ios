@@ -478,7 +478,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Returns an empty layout to avoid app crash when unable to section data
-    static func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
+    func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
         let zeroLayoutSize = NSCollectionLayoutSize(
             widthDimension: .absolute(0.0),
             heightDimension: .absolute(0.0)

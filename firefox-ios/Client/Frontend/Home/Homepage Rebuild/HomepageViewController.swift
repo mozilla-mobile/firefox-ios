@@ -410,7 +410,7 @@ final class HomepageViewController: UIViewController,
                 /// to avoid an app crash.
                 /// However, if we see this path getting hit, then something is wrong and
                 /// we should investigate the underlying issues. We should always be able to fetch the section.
-                return HomepageSectionLayoutProvider.makeEmptyLayoutSection()
+                return sectionProvider.makeEmptyLayoutSection()
             }
 
             return sectionProvider.createLayoutSection(

@@ -2,8 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
-import Redux
 import XCTest
 
 @testable import Client
@@ -161,7 +159,6 @@ class HomepageDimensionCalculatorTests: XCTestCase {
 
         let result = HomepageDimensionCalculator.getTallestViewHeight(views: views, viewWidth: testWidth)
 
-        let expectedMaxHeight = try XCTUnwrap(testHeights.max(), "testHeights must not be empty")
-        XCTAssertEqual(result, expectedMaxHeight, accuracy: 0.1)
+        XCTAssertEqual(result, 80, accuracy: 0.1)
     }
 }
