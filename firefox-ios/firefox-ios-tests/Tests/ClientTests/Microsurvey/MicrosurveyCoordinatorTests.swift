@@ -48,6 +48,7 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
+    @MainActor
     func testMicrosurveyDelegate_showPrivacy_callsRouterDismiss_andCreatesNewTab() throws {
         let subject = createSubject()
         let languageIdentifier = Locale.preferredLanguages.first ?? ""
@@ -60,6 +61,7 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockTabManager.addTabsURLs, [URL(string: "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=modal&utm_campaign=microsurvey")])
     }
 
+    @MainActor
     func testMicrosurveyDelegate_showPrivacyWithContentParams_callsRouterDismiss_andCreatesNewTab() throws {
         let subject = createSubject()
         let languageIdentifier = Locale.preferredLanguages.first ?? ""

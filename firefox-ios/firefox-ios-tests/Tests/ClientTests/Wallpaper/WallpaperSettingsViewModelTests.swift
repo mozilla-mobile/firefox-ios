@@ -52,6 +52,7 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         XCTAssertEqual(subject.numberOfSections, 2)
     }
 
+    @MainActor
     func testNumberOfItemsInSection() {
         let subject = createSubject()
 
@@ -62,6 +63,7 @@ class WallpaperSettingsViewModelTests: XCTestCase {
                        wallpaperManager.availableCollections[safe: 1]?.wallpapers.count)
     }
 
+    @MainActor
     func testSectionHeaderViewModel_defaultCollectionWithoutLinkAndDescription() {
         let subject = createSubject()
         let headerViewModel = subject.sectionHeaderViewModel(for: 0) {
@@ -72,6 +74,7 @@ class WallpaperSettingsViewModelTests: XCTestCase {
         XCTAssertNil(headerViewModel?.buttonTitle)
     }
 
+    @MainActor
     func testSectionHeaderViewModel_limitedCollectionWithLinkAndDescription() {
         let subject = createSubject()
         let headerViewModel = subject.sectionHeaderViewModel(for: 1) {
