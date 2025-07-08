@@ -11,11 +11,12 @@ protocol PocketDataAdaptor {
 }
 
 protocol PocketDelegate: AnyObject {
+    @MainActor
     func didLoadNewData()
 }
 
 @MainActor
-final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable, Sendable, Notifiable {
+final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable, Notifiable {
     let notificationCenter: NotificationProtocol
     private let pocketAPI: PocketStoriesProviding
     private let storyProvider: StoryProvider
@@ -39,18 +40,14 @@ final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable
         return pocketStories
     }
 
-    func setDelegate(_ delegate: PocketDelegate?) {
-        self.delegate = delegate
-    }
-
     private func updatePocketSites() async {
         let stories = await storyProvider.fetchPocketStories()
         pocketStories = stories
         delegate?.didLoadNewData()
     }
-}
 
-extension PocketDataAdaptorImplementation {
+    // MARK: - Notifiable
+
     nonisolated func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willEnterForegroundNotification:

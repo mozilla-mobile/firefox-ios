@@ -7,7 +7,7 @@ import Foundation
 import Storage
 import Shared
 
-// TODO: - FXIOS-12756
+// TODO: - FXIOS-12756 the class should conform to Sendable
 class PocketViewModel: @unchecked Sendable {
     struct UX {
         static let numberOfItemsInColumn = 3
@@ -231,10 +231,8 @@ extension PocketViewModel: HomepageSectionHandler {
 
 extension PocketViewModel: PocketDelegate {
     func didLoadNewData() {
-        DispatchQueue.main.async {
-            self.updateData()
-            guard self.isEnabled else { return }
-            self.delegate?.reloadView()
-        }
+        updateData()
+        guard isEnabled else { return }
+        delegate?.reloadView()
     }
 }
