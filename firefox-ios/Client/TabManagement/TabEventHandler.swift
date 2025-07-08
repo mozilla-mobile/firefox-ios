@@ -186,7 +186,7 @@ private class ObserverWrapper: NSObject {
 }
 
 extension TabEventHandler {
-    // TODO: FXIOS-12782 Using a weakHandler here is a cheat to silence sendable warnings. 
+    // TODO: FXIOS-12782 Using a weakHandler here is a cheat to silence sendable warnings.
     /// Implementations of handles should use this method to register for events.
     /// `TabObservers` should be preserved for unregistering later.
     func register(_ observer: AnyObject, forTabEvents events: TabEventLabel...) {
