@@ -16,7 +16,7 @@ protocol BookmarksFolderCell {
 extension BookmarkFolderData: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
         var title: String
-        if isRoot, let localizedString = LegacyLocalizedRootBookmarkFolderStrings[guid] {
+        if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             title = localizedString
         } else {
             title = self.title
