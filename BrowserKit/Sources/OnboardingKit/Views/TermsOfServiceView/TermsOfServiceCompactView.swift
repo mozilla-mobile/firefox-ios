@@ -38,9 +38,11 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             ZStack {
                 MilkyWayMetalView()
                     .ignoresSafeArea()
+                    .accessibilityHidden(true)
                 VStack {
                     cardContent(geometry: geometry, scale: scale)
                     Spacer()
+                        .accessibilityHidden(true)
                 }
                 .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
@@ -59,10 +61,12 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         ContentFittingScrollView {
             VStack(spacing: UX.CardView.spacing * scale) {
                 Spacer()
+                    .accessibilityHidden(true)
                 imageView(scale: scale)
                 titleView
                 bodyView
                 Spacer()
+                    .accessibilityHidden(true)
                 links
                 primaryButton
             }
@@ -73,15 +77,17 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                 .fill(cardBackgroundColor)
+                .accessibilityHidden(true)
         )
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
+        .accessibilityElement(children: .contain)
     }
 
     // MARK: - Subviews
 
     var links: some View {
         VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
-            ForEach(viewModel.configuration.embededLinkText, id: \.linkText) { link in
+            ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TosAction>(
                     theme: themeManager.getCurrentTheme(for: windowUUID),
                     fullText: link.fullText,
@@ -91,6 +97,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 )
             }
         }
+        .accessibilityElement(children: .contain)
     }
 
     @ViewBuilder
@@ -100,7 +107,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: UX.CardView.tosImageHeight * scale)
-                .accessibilityLabel(viewModel.configuration.title)
+                .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)ImageView")
         }
     }
@@ -122,6 +129,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)DescriptionLabel")
+            .accessibilityLabel(viewModel.configuration.body)
     }
 
     var primaryButton: some View {
