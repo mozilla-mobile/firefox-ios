@@ -19,6 +19,12 @@ extension BrowserViewController: WKUIDelegate {
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
+        guard parentTab.popupThrottler.canShowAlert(type: .popupWindow) else {
+            logger.log("Popup window disallowed for exceeding threshold for tab.", level: .info, category: .webview)
+            return nil
+        }
+        parentTab.popupThrottler.willShowAlert(type: .popupWindow)
+
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
         else {
@@ -1263,7 +1269,7 @@ private extension BrowserViewController {
     func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
         guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
         let canShow = tab.popupThrottler.canShowAlert(type: .alert)
-        if canShow { tab.popupThrottler.willShowJSAlert(type: .alert) }
+        if canShow { tab.popupThrottler.willShowAlert(type: .alert) }
         return !canShow
     }
 
