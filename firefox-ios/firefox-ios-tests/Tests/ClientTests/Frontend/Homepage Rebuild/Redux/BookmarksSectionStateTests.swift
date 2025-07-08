@@ -102,54 +102,18 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_sectionFlagEnabled_withoutUserPref_returnsExpectedState() {
-        setupNimbusHNTBookmarksSectionTesting(isEnabled: true)
+    func test_sectionShown_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
 
         let initialState = createSubject()
         XCTAssertTrue(initialState.shouldShowSection)
     }
 
-    func test_sectionFlagDisabled_withoutUserPref_returnsExpectedState() {
-        setupNimbusHNTBookmarksSectionTesting(isEnabled: false)
+    func test_sectionHidden_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
 
         let initialState = createSubject()
         XCTAssertFalse(initialState.shouldShowSection)
-    }
-
-    func test_sectionFlagEnabled_withUserPref_returnsExpectedState() {
-        setupNimbusHNTBookmarksSectionTesting(isEnabled: true)
-
-        let initialState = createSubject()
-        let reducer = bookmarksSectionReducer()
-
-        // Updates the bookmarks section user pref
-        let newState = reducer(
-            initialState,
-            BookmarksAction(
-                isEnabled: false,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: BookmarksActionType.toggleShowSectionSetting
-            )
-        )
-        XCTAssertFalse(newState.shouldShowSection)
-    }
-
-    func test_sectionFlagDisabled_withUserPref_returnsExpectedState() {
-        setupNimbusHNTBookmarksSectionTesting(isEnabled: false)
-
-        let initialState = createSubject()
-        let reducer = bookmarksSectionReducer()
-
-        // Updates the bookmarks section user pref
-        let newState = reducer(
-            initialState,
-            BookmarksAction(
-                isEnabled: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: BookmarksActionType.toggleShowSectionSetting
-            )
-        )
-        XCTAssertTrue(newState.shouldShowSection)
     }
 
     // MARK: - Private
@@ -161,10 +125,10 @@ final class BookmarksSectionStateTests: XCTestCase {
         return BookmarksSectionState.reducer
     }
 
-    private func setupNimbusHNTBookmarksSectionTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hntBookmarksSectionFeature.with { _, _ in
-            return HntBookmarksSectionFeature(
-                enabled: isEnabled
+    private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(
+                storiesRedesign: storiesRedesignEnabled
             )
         }
     }
