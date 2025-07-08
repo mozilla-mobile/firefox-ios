@@ -665,13 +665,7 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     private func retrySyncAfterDelay(why: SyncReason, names: [String]) {
-        // If the timer property is set and is valid, we reset it. This will prevent the sync
-        // from being executed too often. It will run `self.syncBackOffDelay` seconds
-        // after the previous sync.
-        if self.syncBackOffTimer != nil && self.syncBackOffTimer?.isValid ?? false {
-            self.syncBackOffTimer?.invalidate()
-            self.syncBackOffTimer = nil
-        }
+        self.syncBackOffTimer?.invalidate()
 
         self.syncBackOffTimer = Timer.scheduledTimer(withTimeInterval: self.syncBackOffDelay,
                                                      repeats: false) { _ in
