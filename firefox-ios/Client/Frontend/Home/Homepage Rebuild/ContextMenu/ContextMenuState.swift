@@ -137,11 +137,15 @@ struct ContextMenuState {
     }
 
     private func getSettingsAction() -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings,
                                      iconString: StandardImageIdentifiers.Large.settings,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            dispatchSettingsAction(section: .topSites)
+            ContextMenuState.dispatchSettingsAction(windowUUID: windowUUID, section: .topSites)
             store.dispatchLegacy(
                 ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSettingsAction)
             )
@@ -149,23 +153,33 @@ struct ContextMenuState {
     }
 
     private func getSponsoredContentAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
-                                     iconString: StandardImageIdentifiers.Large.helpCircle,
-                                     allowIconScaling: true,
-                                     tapHandler: { _ in
-            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else {
-                self.logger.log(
-                    "Unable to retrieve URL for sponsor-privacy, return early",
-                    level: .warning,
-                    category: .homepage
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
+        return SingleActionViewModel(
+            title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
+            iconString: StandardImageIdentifiers.Large.helpCircle,
+            allowIconScaling: true,
+            tapHandler: { _ in
+                guard let url = SupportUtils.URLForTopic("sponsor-privacy") else {
+                    self.logger.log(
+                        "Unable to retrieve URL for sponsor-privacy, return early",
+                        level: .warning,
+                        category: .homepage
+                    )
+                    return
+                }
+                ContextMenuState.dispatchOpenNewTabAction(
+                    windowUUID: windowUUID,
+                    siteURL: url,
+                    isPrivate: false,
+                    selectNewTab: true
                 )
-                return
-            }
-            dispatchOpenNewTabAction(siteURL: url, isPrivate: false, selectNewTab: true)
-            store.dispatchLegacy(
-                ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSponsoredAction)
-            )
-        }).items
+                store.dispatchLegacy(
+                    ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSponsoredAction)
+                )
+            }).items
     }
 
     // MARK: - JumpBack In section item's context menu actions
@@ -205,23 +219,39 @@ struct ContextMenuState {
 
     // MARK: - Default actions
     private func getOpenInNewTabAction(siteURL: URL) -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(
             title: .OpenInNewTabContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.plus,
             allowIconScaling: true
         ) { _ in
-            dispatchOpenNewTabAction(siteURL: siteURL, isPrivate: false)
+            ContextMenuState.dispatchOpenNewTabAction(
+                windowUUID: windowUUID,
+                siteURL: siteURL,
+                isPrivate: false
+            )
             // TODO: FXIOS-10171 - Add telemetry
         }.items
     }
 
     private func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.privateMode,
             allowIconScaling: true
         ) { _ in
-            dispatchOpenNewTabAction(siteURL: siteURL, isPrivate: true)
+            ContextMenuState.dispatchOpenNewTabAction(
+                windowUUID: windowUUID,
+                siteURL: siteURL,
+                isPrivate: true
+            )
             dispatchContextMenuActionForSection(actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab)
         }.items
     }
@@ -294,7 +324,7 @@ struct ContextMenuState {
     }
 
     // MARK: Dispatch Actions
-    private func dispatchSettingsAction(section: Route.SettingsSection) {
+    private static func dispatchSettingsAction(windowUUID: WindowUUID, section: Route.SettingsSection) {
         store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.settings(section)),
@@ -304,7 +334,12 @@ struct ContextMenuState {
         )
     }
 
-    private func dispatchOpenNewTabAction(siteURL: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+    private static func dispatchOpenNewTabAction(
+        windowUUID: WindowUUID,
+        siteURL: URL,
+        isPrivate: Bool,
+        selectNewTab: Bool = false
+    ) {
         store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
