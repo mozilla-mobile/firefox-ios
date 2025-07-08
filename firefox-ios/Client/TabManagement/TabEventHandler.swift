@@ -186,20 +186,24 @@ private class ObserverWrapper: NSObject {
 }
 
 extension TabEventHandler {
+    // TODO: FXIOS-12782 Using a weakHandler here is a cheat to silence sendable warnings. 
     /// Implementations of handles should use this method to register for events.
     /// `TabObservers` should be preserved for unregistering later.
     func register(_ observer: AnyObject, forTabEvents events: TabEventLabel...) {
         let wrapper = ObserverWrapper()
-        wrapper.observers = events.map { [weak self] eventType in
-            center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
-                guard let self else { return }
-                guard let tab = notification.object as? Tab,
-                      let event = notification.userInfo?["payload"] as? TabEvent,
-                      self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
-                    return
-                }
+        let weakHandler: (Notification) -> Void = { [weak self] notification in
+            guard let self else { return }
+            guard let tab = notification.object as? Tab,
+                  let event = notification.userInfo?["payload"] as? TabEvent,
+                  self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
+                return
+            }
 
-                event.handle(tab, with: self)
+            event.handle(tab, with: self)
+        }
+        wrapper.observers = events.map { eventType in
+            center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
+                weakHandler(notification)
             }
         }
 
