@@ -1262,8 +1262,8 @@ private extension BrowserViewController {
 
     func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
         guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
-        let canShow = tab.jsAlertThrottler.canShowAlert()
-        if canShow { tab.jsAlertThrottler.willShowJSAlert() }
+        let canShow = tab.popupThrottler.canShowAlert(type: .alert)
+        if canShow { tab.popupThrottler.willShowJSAlert(type: .alert) }
         return !canShow
     }
 
