@@ -1446,6 +1446,7 @@
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
+		C743CB1D2DF201D50069CB23 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C743CB1C2DF201D50069CB23 /* StoryCell.swift */; };
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */; };
 		C7F051522D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051512D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift */; };
@@ -9292,6 +9293,7 @@
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
 		C7354071A05454E7FF3C70D8 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		C743CB1C2DF201D50069CB23 /* StoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCell.swift; sourceTree = "<group>"; };
 		C7664A29B78A808DC314353C /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Search.strings; sourceTree = "<group>"; };
 		C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewControllerTests.swift; sourceTree = "<group>"; };
 		C7A6413B89FE82B94F735FFD /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -13014,6 +13016,7 @@
 				8A454D2D2CB81668009436D9 /* PocketAction.swift */,
 				8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */,
 				8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */,
+				C743CB1C2DF201D50069CB23 /* StoryCell.swift */,
 			);
 			path = Pocket;
 			sourceTree = "<group>";
@@ -18020,6 +18023,7 @@
 				B2FEA6912B4661BE0058E616 /* AddressAutofillToggle.swift in Sources */,
 				B2FEA68F2B460D9E0058E616 /* AddressAutofillSettingsViewModel.swift in Sources */,
 				0BA02DB22942605600C92603 /* FormAutofillHelper.swift in Sources */,
+				C743CB1D2DF201D50069CB23 /* StoryCell.swift in Sources */,
 				B26ADF852B339ED000C6E127 /* AddressAutofillSetting.swift in Sources */,
 				8A19ACB82A329128001C2147 /* PrivacyPolicySetting.swift in Sources */,
 				254B760A2B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift in Sources */,
