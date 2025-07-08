@@ -41,6 +41,9 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
+        case .hntContentFeedRefresh:
+            return checkHNTContentFeedRefreshFeature(from: nimbus)
+
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
@@ -192,6 +195,10 @@ final class NimbusFeatureFlagLayer {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         default: return false
         }
+    }
+
+    private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hntContentFeedCleanupFeature.value().enabled
     }
 
     private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {

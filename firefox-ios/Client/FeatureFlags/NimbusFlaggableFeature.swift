@@ -21,6 +21,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
+    case hntContentFeedRefresh
     case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
     case homepageRebuild
@@ -137,6 +138,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
+                .hntContentFeedRefresh,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageRedesign,
