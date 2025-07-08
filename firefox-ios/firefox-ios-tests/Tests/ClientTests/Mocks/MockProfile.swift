@@ -37,10 +37,15 @@ open class ClientSyncManagerSpy: ClientSyncManager {
     open func syncEverything(why: SyncReason) -> Success { return succeed() }
 
     var syncNamedCollectionsCalled = 0
-    open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+    open func syncNamedCollections(why: SyncReason, names: [String]) -> Deferred<Maybe<SyncResult>> {
         syncNamedCollectionsCalled += 1
-        return succeed()
+        return emptySyncResult
     }
+    var syncPostSyncSettingsChangeCalled = 0
+    open func syncPostSyncSettingsChange(why: SyncReason, names: [String]) {
+        syncPostSyncSettingsChangeCalled += 1
+    }
+    open func reportOpenSyncSettingsMenuTelemetry() {}
     open func beginTimedSyncs() {}
     open func endTimedSyncs() {}
     open func applicationDidBecomeActive() {

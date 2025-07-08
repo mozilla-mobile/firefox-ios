@@ -173,9 +173,14 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.profile?.syncManager?.reportOpenSyncSettingsMenuTelemetry()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
-            _ = self.profile?.syncManager?.syncNamedCollections(
+            self.profile?.syncManager?.syncPostSyncSettingsChange(
                 why: .enabledChange,
                 names: Array(enginesToSyncOnExit)
             )
