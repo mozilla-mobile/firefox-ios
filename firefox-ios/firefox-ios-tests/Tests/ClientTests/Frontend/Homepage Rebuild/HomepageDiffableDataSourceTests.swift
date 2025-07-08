@@ -35,7 +35,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     // MARK: - applyInitialSnapshot
     func test_updateSnapshot_hasCorrectData() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         dataSource.updateSnapshot(
@@ -90,7 +90,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnTopSites() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -123,7 +123,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -147,7 +147,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnMessageCard() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
         let configuration = MessageCardConfiguration(
             title: "Example Title",
@@ -177,7 +177,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnBookmarks() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -207,7 +207,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     func test_updateSnapshot_withValidState_returnJumpBackInSection() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -230,8 +230,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
-    func test_cusomizationSectionFlagEnabled_returnsExpectedSections() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: true)
+    func test_customizationSectionShown_returnsExpectedSections() throws {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
 
         let dataSource = try XCTUnwrap(diffableDataSource)
         let state = HomepageState(windowUUID: .XCTestDefaultUUID)
@@ -243,8 +243,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
-    func test_customizationSectionFlagDisabled_returnsExpectedSections() throws {
-        setupNimbusHNTCustomizationSectionTesting(isEnabled: false)
+    func test_customizationSectionHidden_returnsExpectedSections() throws {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
 
         let dataSource = try XCTUnwrap(diffableDataSource)
         let state = HomepageState(windowUUID: .XCTestDefaultUUID)
@@ -294,10 +294,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         return tab
     }
 
-    private func setupNimbusHNTCustomizationSectionTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hntCustomizationSectionFeature.with { _, _ in
-            return HntCustomizationSectionFeature(
-                enabled: isEnabled
+    private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(
+                storiesRedesign: storiesRedesignEnabled
             )
         }
     }
