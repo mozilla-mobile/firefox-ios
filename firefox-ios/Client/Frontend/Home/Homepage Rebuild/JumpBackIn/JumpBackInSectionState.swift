@@ -30,7 +30,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         let isStoriesRedesignEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
                                                                                          checking: .buildOnly)
         let isJumpBackInSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection) ?? true
-        let shouldShowSection = !isStoriesRedesignEnabled && isJumpBackInSectionPrefEnabled
+        let shouldShowSection = isStoriesRedesignEnabled ? false : isJumpBackInSectionPrefEnabled
 
         self.init(
             windowUUID: windowUUID,
