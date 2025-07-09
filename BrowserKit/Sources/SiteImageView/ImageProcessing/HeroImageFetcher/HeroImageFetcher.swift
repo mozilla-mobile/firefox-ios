@@ -36,7 +36,25 @@ class DefaultHeroImageFetcher: HeroImageFetcher {
                 throw SiteImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
             }
 
-            return try await imageProvider.loadObject(ofClass: UIImage.self)
+            return try await withCheckedThrowingContinuation { continuation in
+                imageProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    guard error == nil else {
+                        continuation.resume(
+                            throwing: SiteImageError.unableToDownloadImage(error.debugDescription.description)
+                        )
+                        return
+                    }
+
+                    guard let image = image as? UIImage else {
+                        continuation.resume(
+                            throwing: SiteImageError.unableToDownloadImage("NSItemProviderReading not an image")
+                        )
+                        return
+                    }
+
+                    continuation.resume(returning: image)
+                }
+            }
         } catch {
             throw error
         }
