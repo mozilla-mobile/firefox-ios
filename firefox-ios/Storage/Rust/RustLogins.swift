@@ -285,10 +285,10 @@ public class RustLogins: LoginsProtocol, KeyManager {
     public func reopenIfClosed() -> NSError? {
         var error: NSError?
 
-        queue.sync {
-            guard !isOpen else { return }
+        queue.async {
+            guard !self.isOpen else { return }
 
-            error = open()
+            error = self.open()
         }
 
         return error
@@ -297,10 +297,10 @@ public class RustLogins: LoginsProtocol, KeyManager {
     public func forceClose() -> NSError? {
         var error: NSError?
 
-        queue.sync {
-            guard isOpen else { return }
+        queue.async {
+            guard self.isOpen else { return }
 
-            error = close()
+            error = self.close()
         }
 
         return error
