@@ -3,8 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class HomepageSearchBarTests: FeatureFlaggedTestBase {
-    func test_homepageSearchBar_doesNotShowSearchBar_experimentOff() {
+    func test_homepageSearchBar_tabTrayToolbarOnHomepageOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         let homepageSearchBar = app.collectionViews
@@ -265,8 +268,11 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     }
 
     // MARK: - Bottom Toolbar
-    func test_homepageSearchBar_forBottomToolbar_experimentOff_doesNotShowSearchBar() {
+    func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
