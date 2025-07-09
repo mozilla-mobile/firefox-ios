@@ -23,6 +23,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let shouldShowSection = !LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
                                                                                    checking: .buildOnly)
+                             && (profile.prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection) ?? true)
         self.init(
             windowUUID: windowUUID,
             bookmarks: [],
