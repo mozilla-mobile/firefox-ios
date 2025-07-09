@@ -23,7 +23,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
     }
 
@@ -88,6 +88,8 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
             }
         } else if let iconImage = model.iconImage {
             iconImageView.image = iconImage
+        } else {
+            iconImageView.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         }
         isAccessibilityElement = true
         isUserInteractionEnabled = !model.isEnabled ? false : true

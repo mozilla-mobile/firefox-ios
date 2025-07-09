@@ -84,6 +84,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuActionType.viewDidLoad:
             handleViewDidLoadAction(action: action)
 
+        case MainMenuActionType.updateMenuAppearance:
+            handleUpdateMenuAppearance(action: action)
+
         case MainMenuActionType.menuDismissed:
             telemetry.menuDismissed(isHomepage: isHomepage)
 
@@ -189,6 +192,16 @@ final class MainMenuMiddleware: FeatureFlaggable {
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateBannerVisibility,
                 isBrowserDefault: DefaultBrowserUtil.isBrowserDefault
+            )
+        )
+    }
+
+    private func handleUpdateMenuAppearance(action: MainMenuAction) {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: action.windowUUID,
+                actionType: MainMenuMiddlewareActionType.updateMenuAppearance,
+                isPhoneLandscape: UIDevice().isIphoneLandscape
             )
         )
     }

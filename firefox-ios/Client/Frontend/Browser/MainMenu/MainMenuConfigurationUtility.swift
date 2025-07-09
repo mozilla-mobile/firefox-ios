@@ -114,7 +114,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         } else if tabInfo.isHomepage {
-            menuSections.append(getCustomiseHomepageSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
         } else {
@@ -127,33 +126,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // MARK: - Menu Redesign Sections
-    // Customise Homepage Section
-    private func getCustomiseHomepageSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
-        return MenuSection(
-            isHomepage: tabInfo.isHomepage,
-            options: [
-                MenuElement(
-                    title: .MainMenu.OtherToolsSection.CustomizeHomepage,
-                    iconName: Icons.tools,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.CustomizeHomepage,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
-                    action: {
-                        store.dispatchLegacy(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapNavigateToDestination,
-                                navigationDestination: MenuNavigationDestination(.customizeHomepage),
-                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                            )
-                        )
-                    }
-                ),
-        ])
-    }
-
     // Horizontal Tabs Section
     private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
