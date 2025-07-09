@@ -22,6 +22,8 @@ tasks:
         unique-kinds: false
         copy-attributes: true
         with-attributes:
+          product-type:
+            - firefox
           release-type:
             - beta
             - release
@@ -39,3 +41,29 @@ tasks:
         artifact_prefix: public
         workflows:
           - release_promotion_push: []
+    appstoreconnect-focus:
+      description: Start push workflow for focus
+      from-deps:
+        group-by:
+          attribute: product-variant
+        unique-kinds: false
+        copy-attributes: true
+        with-attributes:
+          product-type:
+            - focus
+          release-type:
+            - release
+      run-on-tasks-for: []
+      treeherder:
+        symbol:
+          by-product-variant:
+            focus: Pf
+            klar: Pk
+        tier: 1
+        platform: ios/opt
+      worker-type: bitrise
+      shipping-phase: push
+      bitrise:
+        artifact_prefix: public
+        workflows:
+          - release_promotion_push_focus: []

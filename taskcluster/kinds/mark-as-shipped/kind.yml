@@ -10,6 +10,7 @@ transforms:
     - taskgraph.transforms.task
 
 kind-dependencies:
+    - github-release
     - version-bump
 
 tasks:
@@ -17,13 +18,13 @@ tasks:
     description: Mark Firefox iOS as shipped in ship-it
     from-deps:
       group-by:
-        attribute: release-type
+        attribute: product-type
       unique-kinds: false
       copy-attributes: true
       with-attributes:
-        release-type:
-          - beta
-          - release
+        product-type:
+          - firefox
+          - focus
     run-on-tasks-for: []
     worker-type: ship-it
     scopes:
@@ -38,9 +39,12 @@ tasks:
 
     treeherder:
       symbol:
-        by-release-type:
-          release: mark-shipped-release
-          beta: mark-shipped-beta
+        by-product-type:
+          firefox:
+            by-release-type:
+              release: mark-shipped-release
+              beta: mark-shipped-beta
+          focus: mark-shipped-focus
       platform: ios/opt
       kind: build
       tier: 2

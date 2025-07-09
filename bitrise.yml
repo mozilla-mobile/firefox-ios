@@ -2106,6 +2106,143 @@ workflows:
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
 
 # RelPro workflows
+  release_promotion_promote_focus:
+    before_run:
+    - focus-clone-and-build-dependencies
+    - focus-set-project-version
+    - focus-set-default-browser-entitlement
+    - focus-configure-nimbus
+    - focus-configure-sentry
+    steps:
+    - script@1.2.1:
+        title: Override default bitrise scheme
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            if [[ "$BITRISE_APP_TITLE" == "staging-firefox-ios" ]]; then
+                BUILD_TYPE="Debug"
+            else
+                BUILD_TYPE="Release"
+            fi
+
+            if [[ ! -z "${API_BITRISE_SCHEME}" ]]; then
+              envman add --key BITRISE_SCHEME --value "${API_BITRISE_SCHEME}"
+              envman add --key BITRISE_CONFIG --value "${API_BITRISE_SCHEME}${BUILD_TYPE}"
+            else
+              envman add --key BITRISE_SCHEME --value "Focus"
+              envman add --key BITRISE_CONFIG --value "Focus${BUILD_TYPE}"
+            fi
+    - script@1.2.1:
+        # If the current bitrise application is `staging-firefox-ios`, then
+        # this is a test release made from the staging repository.
+        # Ignore the value passed by release promotion for `BITRISE_SCHEME` and
+        # force it to `FirefoxStaging`, which makes it use non production
+        # certs/profiles. Also override the export method since the scheme is
+        # using a developer ID, not a distribution one
+        title: Set staging environment variables
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            envman add --key EXPORT_METHOD --value development
+        run_if: |-
+          {{enveq "BITRISE_APP_TITLE" "staging-firefox-ios"}}
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@5:
+        inputs:
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: "$EXPORT_METHOD"
+        - output_tool: xcodebuild
+        - distribution_method: "$EXPORT_METHOD"
+        - export_development_team: 43AQ936H96
+        - configuration: ${BITRISE_CONFIG}
+        - platform: "iOS"
+        - scheme: ${BITRISE_SCHEME}
+        title: Build Focus
+    - deploy-to-bitrise-io@2.9.2: {}
+    envs:
+    - opts:
+        is_expand: false
+      EXPORT_METHOD: app-store
+    description: This step is used during release promotion to build a focus release
+
+  release_promotion_push_focus:
+    before_run:
+    - SPM_Common_Steps
+    envs:
+    - IPA_PATH: /tmp/Client.ipa
+    - DSYM_PATH: /tmp/symbols.zip
+    steps:
+    - script@1.2.1:
+        title: Override default bitrise scheme
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            if [[ ! -z "${API_BITRISE_SCHEME}" ]]; then
+              envman add --key BITRISE_SCHEME --value "${API_BITRISE_SCHEME}"
+            else
+              envman add --key BITRISE_SCHEME --value "Focus"
+            fi
+
+            if [[ "${API_BITRISE_SCHEME}" == "Focus" ]]; then
+              envman add --key SENTRY_PROJECT --value "focus-ios"
+            else
+              envman add --key SENTRY_PROJECT --value "klar-ios"
+            fi
+    - file-downloader@1:
+        title: Download Artifact
+        inputs:
+        - destination: $IPA_PATH
+        - source: https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/$BUILD_TASK_ID/artifacts/public%2Frelease_promotion_promote_focus%2FFirefox%20${BITRISE_SCHEME}.ipa
+    - file-downloader@1:
+        title: Download symbols
+        inputs:
+        - destination: $DSYM_PATH
+        - source: https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/$BUILD_TASK_ID/artifacts/public%2Frelease_promotion_promote_focus%2FFirefox%20${BITRISE_SCHEME}.dSYM.zip
+    - script@1.2.1:
+        title: Check if IPA was downloaded
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            echo "$IPA_PATH"
+            file "$IPA_PATH"
+    - script@1.2.1:
+        title: Check if symbols were downloaded
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            echo "$DSYM_PATH"
+            file "$DSYM_PATH"
+    - script@1.2.1:
+        title: Upload Firefox Focus Symbols
+        run_if: |-
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -xe
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
+              --org mozilla --project ${SENTRY_PROJECT} "$DSYM_PATH"
+    - deploy-to-itunesconnect-application-loader@1:
+        title: Deploy to AppStoreConnect
+        run_if: |-
+          {{enveq "BITRISE_APP_TITLE" "firefox-ios"}}
+        inputs:
+        - connection: 'off'
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        - ipa_path: $IPA_PATH
+        - retries: 5
+
   release_promotion_promote:
     before_run:
     - SPM_Common_Steps

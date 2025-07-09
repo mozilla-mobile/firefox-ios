@@ -16,10 +16,10 @@ filters:
 head_ref: refs/heads/main
 head_repository: https://github.com/mozilla-mobile/firefox-ios
 head_rev: 2a56c4b0e6e7737816147da950196f99895ff3d3
-head_tag: firefox-v137b1
+head_tag: firefox-v137.0
 level: '1'
 moz_build_date: '20250226191326'
-next_version: 137.0.1
+next_version: '137.1'
 optimize_strategies: null
 optimize_target_tasks: true
 owner: nobody@mozilla.com
@@ -27,10 +27,11 @@ project: firefox-ios
 pull_request_number: null
 pushdate: 0
 pushlog_id: '0'
-release_type: beta
+release_type: release
 repository_type: git
-shipping_phase: ship
-target_tasks_method: ship
-product_type: firefox
+shipping_phase: promote_focus
+target_tasks_method: promote_focus
+product_type: focus
 tasks_for: action
-version: '137.0b1'
+version: '137.0'
+
