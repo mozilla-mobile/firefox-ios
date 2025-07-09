@@ -57,7 +57,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
             .imageFlippedForRightToLeftLayoutDirection()
         let accessoryView = UIImageView(image: image)
 
-        return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
+        return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,
                                              accessoryView: accessoryView,
                                              accessoryType: .disclosureIndicator,
