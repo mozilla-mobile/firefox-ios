@@ -134,7 +134,7 @@ struct ToolbarState: ScreenState, Equatable {
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbars(state: state, action: action)
-            
+
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
