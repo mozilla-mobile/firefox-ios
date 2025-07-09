@@ -108,6 +108,10 @@ struct ContextMenuState {
     /// This action removes the tile out of the top sites.
     /// If site is pinned, it removes it from pinned and remove from top sites in general.
     private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(
             title: .RemoveContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.cross,
@@ -122,6 +126,10 @@ struct ContextMenuState {
     }
 
     private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(
             title: .PinTopsiteActionTitle2,
             iconString: StandardImageIdentifiers.Large.pin,
@@ -138,6 +146,10 @@ struct ContextMenuState {
     /// This unpin action removes the top site from the location it's in.
     /// The tile can still appear in the top sites as unpinned.
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
         return SingleActionViewModel(
             title: .UnpinTopsiteActionTitle2,
             iconString: StandardImageIdentifiers.Large.pinSlash,
