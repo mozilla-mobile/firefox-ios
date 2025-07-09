@@ -78,15 +78,18 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
-        public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
-        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
+    }
+
+    public struct HomepageSettings {
+        public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
+        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
     }
 
     public struct SearchSettings {
