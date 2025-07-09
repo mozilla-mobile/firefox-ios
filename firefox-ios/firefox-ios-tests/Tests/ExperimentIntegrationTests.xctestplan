@@ -119,6 +119,7 @@
         "FxScreenGraphTests",
         "HistoryTests",
         "HomeButtonTests",
+        "HomePageSettingsUITests",
         "HomePageSettingsUITests\/testRecentlyVisited()",
         "HomepageSearchBarTests",
         "InactiveTabsTest",

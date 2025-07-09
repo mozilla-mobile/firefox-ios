@@ -11,6 +11,7 @@ public protocol NotificationProtocol {
                      selector aSelector: Selector,
                      name aName: NSNotification.Name?,
                      object anObject: Any?)
+    @discardableResult
     func addObserver(name: NSNotification.Name?,
                      queue: OperationQueue?,
                      using block: @escaping (Notification) -> Void) -> NSObjectProtocol?

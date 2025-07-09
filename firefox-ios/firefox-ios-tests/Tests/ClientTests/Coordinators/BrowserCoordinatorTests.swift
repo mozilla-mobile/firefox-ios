@@ -171,6 +171,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(screenshotTool is LegacyHomepageViewController)
     }
 
+    @MainActor
     func testHomepageScreenshotTool_returnsPrivateHomepage_forPrivateTab() throws {
         let subject = createSubject()
         let tab = tabManager.addTab(nil, afterTab: nil, zombie: false, isPrivate: true)

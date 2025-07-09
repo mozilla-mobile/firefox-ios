@@ -230,9 +230,11 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
-    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOn_swipingTabsExperimentOff() throws {
-        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
+    func testTopSitesOpenInNewPrivateTab_tabTrayToolbarOnHomepageOff() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
@@ -247,9 +249,12 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts.element(boundBy: 0))
         navigator.nowAt(TabTray)
+        XCTAssertFalse(
+            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].isHittable,
+            "TopSitesCell should not be visible or interactable on the current screen"
+        )
         app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
         // The website is open
-        mozWaitForElementToNotExist(TopSiteCellgroup)
         waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                              value: "wikipedia.org")
     }

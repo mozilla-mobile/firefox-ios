@@ -178,6 +178,23 @@ workflows:
         is_always_run: true
     - save-spm-cache@1.3.1:
         is_always_run: true
+    - script@1.1.1:
+        title: Clean before deploying
+        timeout: 360
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            echo "Removing raw-xcodebuild-output.log to reduce artifact size"
+            rm -f "$BITRISE_DEPLOY_DIR/raw-xcodebuild-output.log"
+
+            echo "Keeping only one swiftlint report file"
+            # Remove one format or duplicate copies
+            rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.txt" || true
+
+            echo "Removing unit test xcresult"
+            rm -f "$BITRISE_DEPLOY_DIR/Test-Fennec_UnitTest_iphonesimulator18.2-arm64.xcresult.zip"
     - deploy-to-bitrise-io@2.10.0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:

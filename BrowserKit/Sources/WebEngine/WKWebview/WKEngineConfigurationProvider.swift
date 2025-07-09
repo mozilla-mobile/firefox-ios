@@ -81,10 +81,11 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         // TODO: FXIOS-8086 - Evaluate if ignoresViewportScaleLimits is still needed
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
+        // TODO: FXIOS-12158 Add back after investigating why video player is broken
         configuration.ignoresViewportScaleLimits = true
-        if #available(iOS 15.4, *) {
-            configuration.preferences.isElementFullscreenEnabled = true
-        }
+//        if #available(iOS 15.4, *) {
+//            configuration.preferences.isElementFullscreenEnabled = true
+//        }
 
         // The cookie store should only be created once, otherwise we can loose them
         // https://mozilla-hub.atlassian.net/browse/FXIOS-11833
