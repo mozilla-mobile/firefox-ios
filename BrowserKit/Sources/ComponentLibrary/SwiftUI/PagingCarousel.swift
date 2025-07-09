@@ -204,7 +204,7 @@ public struct PagingCarousel<Item, Content: View>: View {
     /// Determines if an item should be hidden from accessibility
     private func shouldHideItem(at index: Int) -> Bool {
         // Only show the currently selected item and adjacent items for better performance
-        return abs(index - selection) > 1
+        return index != selection
     }
 
     /// Forces VoiceOver to refocus on the new content
