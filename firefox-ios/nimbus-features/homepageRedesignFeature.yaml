@@ -24,11 +24,11 @@ features:
       - channel: beta
         value:
           enabled: false
-          search_bar: false
-          stories_redesign: false
+          search-bar: false
+          stories-redesign: false
     
       - channel: developer
         value:
           enabled: false
-          search_bar: false
-          stories_redesign: false
+          search-bar: false
+          stories-redesign: false
