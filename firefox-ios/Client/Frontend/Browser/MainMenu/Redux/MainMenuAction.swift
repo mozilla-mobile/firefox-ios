@@ -17,6 +17,7 @@ final class MainMenuAction: Action {
     var telemetryInfo: TelemetryInfo?
     var isExpanded: Bool?
     var isBrowserDefault: Bool
+    var isPhoneLandscape: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -30,7 +31,8 @@ final class MainMenuAction: Action {
         siteProtectionsData: SiteProtectionsData? = nil,
         telemetryInfo: TelemetryInfo? = nil,
         isExpanded: Bool? = nil,
-        isBrowserDefault: Bool = false
+        isBrowserDefault: Bool = false,
+        isPhoneLandscape: Bool = false
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
@@ -42,6 +44,7 @@ final class MainMenuAction: Action {
         self.telemetryInfo = telemetryInfo
         self.isExpanded = isExpanded
         self.isBrowserDefault = isBrowserDefault
+        self.isPhoneLandscape = isPhoneLandscape
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -63,6 +66,7 @@ enum MainMenuActionType: ActionType {
     case tapAddToShortcuts
     case tapRemoveFromShortcuts
     case updateSiteProtectionsHeader
+    case updateMenuAppearance
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
@@ -70,6 +74,7 @@ enum MainMenuMiddlewareActionType: ActionType {
     case requestTabInfoForSiteProtectionsHeader
     case updateAccountHeader
     case updateBannerVisibility
+    case updateMenuAppearance
 }
 
 enum MainMenuDetailsActionType: ActionType {
