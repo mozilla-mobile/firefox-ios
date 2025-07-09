@@ -11,15 +11,6 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
-// Sophie - which of these do we actually need?
-let LegacyLocalizedRootBookmarkFolderStrings = [
-    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
-    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
-    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
-    BookmarkRoots.MobileFolderGUID: String.LegacyBookmarksFolderTitleMobile,
-    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
-]
-
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
     BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
