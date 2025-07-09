@@ -38,6 +38,8 @@ public struct PagingCarousel<Item, Content: View>: View {
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
     @GestureState private var gestureOffset: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion)
+    private var reduceMotion
 
     public init(
         selection: Binding<Int>,
@@ -86,18 +88,14 @@ public struct PagingCarousel<Item, Content: View>: View {
             ))
             .accessibilityElement(children: .contain)
             .accessibilitySortPriority(index == selection ? 1 : 0)
-            // Hide cards that aren't currently selected
-            .accessibilityHidden(index != selection)
+            .accessibilityHidden(shouldHideItem(at: index))
+            .accessibilityAddTraits(index == selection ? [.isSelected] : [])
             .accessibilityScrollAction { edge in
                 switch edge {
                 case .leading:
-                    if selection > 0 {
-                        selection -= 1
-                    }
+                    handleDecrementAction()
                 case .trailing:
-                    if selection < items.count - 1 {
-                        selection += 1
-                    }
+                    handleIncrementAction()
                 default:
                     break
                 }
@@ -121,15 +119,27 @@ public struct PagingCarousel<Item, Content: View>: View {
     private func handleAccessibilityAdjustment(direction: AccessibilityAdjustmentDirection) {
         switch direction {
         case .increment:
-            if selection < items.count - 1 {
-                selection += 1
-            }
+            handleIncrementAction()
         case .decrement:
-            if selection > 0 {
-                selection -= 1
-            }
+            handleDecrementAction()
         @unknown default:
             break
+        }
+    }
+
+    private func handleIncrementAction() {
+        if selection < items.count - 1 {
+            selection += 1
+            provideFeedback()
+            postScreenChangedNotification()
+        }
+    }
+
+    private func handleDecrementAction() {
+        if selection > 0 {
+            selection -= 1
+            provideFeedback()
+            postScreenChangedNotification()
         }
     }
 
@@ -177,13 +187,38 @@ public struct PagingCarousel<Item, Content: View>: View {
             // Swipe right - go to previous
             if selection > 0 {
                 selection -= 1
+                provideFeedback()
+                postScreenChangedNotification()
             }
         } else if value.translation.width < -dragThreshold || velocity < -PagingCarouselUX.minimumSwipeVelocity {
             // Swipe left - go to next
             if selection < items.count - 1 {
                 selection += 1
+                provideFeedback()
+                postScreenChangedNotification()
             }
         }
         // If neither threshold is met, spring back to current selection
+    }
+
+    /// Determines if an item should be hidden from accessibility
+    private func shouldHideItem(at index: Int) -> Bool {
+        // Only show the currently selected item and adjacent items for better performance
+        return abs(index - selection) > 1
+    }
+
+    /// Forces VoiceOver to refocus on the new content
+    private func postScreenChangedNotification() {
+        // Delay to ensure the new card is fully rendered
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            UIAccessibility.post(notification: .screenChanged, argument: nil)
+        }
+    }
+
+    /// Provides haptic feedback
+    private func provideFeedback() {
+        if !reduceMotion {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
     }
 }
