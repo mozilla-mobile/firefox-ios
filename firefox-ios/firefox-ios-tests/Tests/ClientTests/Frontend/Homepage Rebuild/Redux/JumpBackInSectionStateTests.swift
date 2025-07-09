@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Shared
 import Storage
 import XCTest
 
@@ -106,15 +107,47 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_sectionShown_returnsExpectedState() {
+    func test_storiesDisabled_returnsExpectedState() {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
 
         let initialState = createSubject()
         XCTAssertTrue(initialState.shouldShowSection)
     }
 
-    func test_sectionHidden_returnsExpectedState() {
+    func test_storiesEnabled_returnsExpectedState() {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_storiesDisabled_prefDisabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_storiesDisabled_prefEnabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
+
+        let initialState = createSubject()
+        XCTAssertTrue(initialState.shouldShowSection)
+    }
+
+    func test_storiesEnabled_prefDisabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_storiesEnabled_prefEnabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
 
         let initialState = createSubject()
         XCTAssertFalse(initialState.shouldShowSection)
@@ -122,7 +155,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
     // MARK: - Private
     private func createSubject() -> JumpBackInSectionState {
-        return JumpBackInSectionState(windowUUID: .XCTestDefaultUUID)
+        return JumpBackInSectionState(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
     }
 
     private func jumpBackInSectionReducer() -> Reducer<JumpBackInSectionState> {
