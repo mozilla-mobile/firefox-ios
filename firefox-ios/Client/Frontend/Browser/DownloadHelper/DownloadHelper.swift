@@ -62,7 +62,7 @@ class DownloadHelper: NSObject {
     }
 
     func downloadViewModel(windowUUID: WindowUUID,
-                           okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
+                           okAction: @Sendable @MainActor @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
         var requestUrl = request.url
         if let url = requestUrl, url.scheme == "blob" {
             requestUrl = url.removeBlobFromUrl()
