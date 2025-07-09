@@ -9,6 +9,7 @@ import UIKit
 /// Image provider wrapper around NSItemProvider from LPMetadataProvider
 /// Used in HeroImageFetcher
 protocol ImageProvider {
+    @MainActor
     func loadObject(ofClass: NSItemProviderReading.Type) async throws -> UIImage
 }
 
