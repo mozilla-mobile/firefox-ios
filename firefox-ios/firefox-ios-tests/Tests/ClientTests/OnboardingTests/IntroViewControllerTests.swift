@@ -76,6 +76,7 @@ class IntroViewControllerTests: XCTestCase {
         XCTAssertEqual(subject.pageControl.currentPage, 2)
     }
 
+    @MainActor
     func testViewMovesToNextScreenAfterNotification() {
         let subject = createSubject()
         XCTAssertEqual(subject.pageControl.currentPage, 0)

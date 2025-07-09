@@ -82,6 +82,19 @@ open class RustSyncManagerAPI {
         }
     }
 
+    public func reportOpenSyncSettingsMenuTelemetry() {
+        DispatchQueue.global().async {
+            SyncManagerComponent.reportOpenSyncSettingsMenuTelemetry()
+        }
+    }
+
+    public func reportSaveSyncSettingsTelemetry(enabledEngines: [String], disabledEngines: [String]) {
+        DispatchQueue.global().async {
+            SyncManagerComponent.reportSaveSyncSettingsTelemetry(enabledEngines: enabledEngines,
+                                                                 disabledEngines: disabledEngines)
+        }
+    }
+
     public func getAvailableEngines(completion: @escaping ([String]) -> Void) {
         DispatchQueue.global().async { [unowned self] in
             let engines = self.api.getAvailableEngines()

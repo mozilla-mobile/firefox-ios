@@ -83,7 +83,8 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                 : UX.SegmentedControl.radioButtonNotSelectedImage,
                 bundle: .module
             )
-            .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
+            .resizable()
+            .frame(width: UX.SegmentedControl.checkmarkFontSize, height: UX.SegmentedControl.checkmarkFontSize)
             .accessibilityHidden(true)
         }
     }

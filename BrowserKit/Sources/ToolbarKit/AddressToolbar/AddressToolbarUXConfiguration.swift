@@ -53,13 +53,7 @@ public struct AddressToolbarUXConfiguration {
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
         let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
-        if alpha == 0 {
-            return backgroundColor.withAlphaComponent(alpha)
-        }
-        if shouldBlur {
-            backgroundColor.withAlphaComponent(backgroundAlpha)
-        }
-
+        if alpha == 0 { return backgroundColor.withAlphaComponent(alpha) }
         return backgroundColor
     }
 

@@ -106,4 +106,18 @@ struct HomepageDimensionCalculator {
 
         return tilesPerRowCount
     }
+
+    // Returns the height of the tallest view from a collection of views constrained to a given width
+    static func getTallestViewHeight(views: [UIView], viewWidth: CGFloat) -> CGFloat {
+        var maxHeight: CGFloat = 0
+        for view in views {
+            let size = view.systemLayoutSizeFitting(
+                CGSize(width: viewWidth, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            maxHeight = max(maxHeight, size.height)
+        }
+        return maxHeight
+    }
 }

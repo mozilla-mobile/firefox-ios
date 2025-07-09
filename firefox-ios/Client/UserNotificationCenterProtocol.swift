@@ -5,16 +5,17 @@
 import Foundation
 import UserNotifications
 
-// Protocol with UNUserNotificationCenter methods so we can mock UNUserNotificationCenter for unit testing
+/// Protocol for `UNUserNotificationCenter` methods so we can mock `UNUserNotificationCenter` for unit testing. We do this
+/// because the `init` method is marked unavailable for subclasses of the `UNUserNotificationCenter` (can't override it).
 protocol UserNotificationCenterProtocol {
-    func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void)
+    func getNotificationSettings(completionHandler: @escaping @Sendable (UNNotificationSettings) -> Void)
     func requestAuthorization(options: UNAuthorizationOptions,
-                              completionHandler: @escaping (Bool, Error?) -> Void)
-    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?)
-    func getPendingNotificationRequests(completionHandler: @escaping ([UNNotificationRequest]) -> Void)
+                              completionHandler: @escaping @Sendable (Bool, Error?) -> Void)
+    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: (@Sendable (Error?) -> Void)?)
+    func getPendingNotificationRequests(completionHandler: @escaping @Sendable ([UNNotificationRequest]) -> Void)
     func removePendingNotificationRequests(withIdentifiers identifiers: [String])
     func removeAllPendingNotificationRequests()
-    func getDeliveredNotifications(completionHandler: @escaping ([UNNotification]) -> Void)
+    func getDeliveredNotifications(completionHandler: @escaping @Sendable ([UNNotification]) -> Void)
     func removeDeliveredNotifications(withIdentifiers identifiers: [String])
     func removeAllDeliveredNotifications()
 }

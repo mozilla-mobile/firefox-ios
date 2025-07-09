@@ -67,6 +67,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.logger = logger
     }
 
+    @MainActor
     func switchTo(tab: Tab) {
         tabManager.selectTab(tab, previous: nil)
         TelemetryWrapper.recordEvent(
@@ -307,7 +308,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     var isEnabled: Bool {
-        let isEnabled = featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly)
+        let isEnabled = !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
         return !isPrivate && isEnabled
     }
 
@@ -416,6 +417,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
         return UICollectionViewCell()
     }
 
+    @MainActor
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {

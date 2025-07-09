@@ -11,5 +11,5 @@
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Prova a connecter te ab un altere apparato. Controla le modem o le router. Disactiva e reactiva le connexion Wi-Fi.";
 
 /* On error page, this is the title for no internet connection */
-"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Il pare que il ha un problema con tu connexion internet.";
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Il pare haber un problema con tu connexion a internet.";
 

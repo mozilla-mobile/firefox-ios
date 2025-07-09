@@ -37,7 +37,9 @@ public protocol SyncManager {
 
     func syncTabs() -> Deferred<Maybe<SyncResult>>
     func syncHistory() -> Deferred<Maybe<SyncResult>>
-    func syncNamedCollections(why: SyncReason, names: [String]) -> Success
+    func syncNamedCollections(why: SyncReason, names: [String]) -> Deferred<Maybe<SyncResult>>
+    func syncPostSyncSettingsChange(why: SyncReason, names: [String])
+    func reportOpenSyncSettingsMenuTelemetry()
     @discardableResult
     func syncEverything(why: SyncReason) -> Success
 
@@ -80,10 +82,11 @@ struct ProfileFileAccessor: FileAccessor, Sendable {
     }
 }
 
+// TODO: FXIOS-12610 Profile should be refactored so it is **not** `Sendable`
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile: AnyObject {
+protocol Profile: AnyObject, Sendable {
     var autofill: RustAutofill { get }
     var places: RustPlaces { get }
     var prefs: Prefs { get }

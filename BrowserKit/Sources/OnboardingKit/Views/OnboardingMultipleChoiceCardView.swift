@@ -29,10 +29,10 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
-        guard let firstAction = viewModel.multipleChoiceButtons.first?.action else {
+        guard let defaultAction = viewModel.defaultSelectedButton?.action else {
             return nil
         }
-        _selectedAction = State(initialValue: firstAction)
+        _selectedAction = State(initialValue: defaultAction)
     }
 
     var body: some View {

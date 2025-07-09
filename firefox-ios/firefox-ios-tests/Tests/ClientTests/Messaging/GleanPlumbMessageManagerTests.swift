@@ -32,10 +32,10 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         messagingStore = nil
         subject = nil
+        Glean.shared.resetGlean(clearStores: true)
+        super.tearDown()
     }
 
     func testMessagingFeatureIsCoenrolling() {
@@ -48,6 +48,12 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                 "messaging": [
                     "messages": [
                         "default-browser": [
+                            "title": "Default Browser/DefaultBrowserCard.Title",
+                            "text": "Default Browser/DefaultBrowserCard.Description",
+                            "button-label": "Default Browser/DefaultBrowserCard.Button.v2",
+                            "surface": "new-tab-card",
+                            "style": "FALLBACK",
+                            "action": "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL",
                             "trigger-if-all": ["ALWAYS"],
                             "except-if-any": []
                         ]

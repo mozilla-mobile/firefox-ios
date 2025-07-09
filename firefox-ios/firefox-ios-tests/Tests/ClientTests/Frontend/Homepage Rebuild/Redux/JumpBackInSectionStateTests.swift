@@ -106,55 +106,19 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_sectionFlagEnabled_withoutUserPref_returnsExpectedState() {
-           setupNimbusHNTJumpBackInSectionTesting(isEnabled: true)
+    func test_sectionShown_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
 
-           let initialState = createSubject()
-           XCTAssertTrue(initialState.shouldShowSection)
-       }
+        let initialState = createSubject()
+        XCTAssertTrue(initialState.shouldShowSection)
+    }
 
-       func test_sectionFlagDisabled_withoutUserPref_returnsExpectedState() {
-           setupNimbusHNTJumpBackInSectionTesting(isEnabled: false)
+    func test_sectionHidden_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
 
-           let initialState = createSubject()
-           XCTAssertFalse(initialState.shouldShowSection)
-       }
-
-       func test_sectionFlagEnabled_withUserPref_returnsExpectedState() {
-           setupNimbusHNTJumpBackInSectionTesting(isEnabled: true)
-
-           let initialState = createSubject()
-           let reducer = jumpBackInSectionReducer()
-
-           // Updates the jump back in section user pref
-           let newState = reducer(
-               initialState,
-               JumpBackInAction(
-                   isEnabled: false,
-                   windowUUID: .XCTestDefaultUUID,
-                   actionType: JumpBackInActionType.toggleShowSectionSetting
-               )
-           )
-           XCTAssertFalse(newState.shouldShowSection)
-       }
-
-       func test_sectionFlagDisabled_withUserPref_returnsExpectedState() {
-           setupNimbusHNTJumpBackInSectionTesting(isEnabled: false)
-
-           let initialState = createSubject()
-           let reducer = jumpBackInSectionReducer()
-
-           // Updates the jump back in section user pref
-           let newState = reducer(
-               initialState,
-               JumpBackInAction(
-                   isEnabled: true,
-                   windowUUID: .XCTestDefaultUUID,
-                   actionType: JumpBackInActionType.toggleShowSectionSetting
-               )
-           )
-           XCTAssertTrue(newState.shouldShowSection)
-       }
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
 
     // MARK: - Private
     private func createSubject() -> JumpBackInSectionState {
@@ -171,10 +135,10 @@ final class JumpBackInSectionStateTests: XCTestCase {
         return tab
     }
 
-    private func setupNimbusHNTJumpBackInSectionTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hntJumpBackInSectionFeature.with { _, _ in
-            return HntJumpBackInSectionFeature(
-                enabled: isEnabled
+    private func setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(
+                storiesRedesign: storiesRedesignEnabled
             )
         }
     }

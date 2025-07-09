@@ -56,6 +56,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
+                StoryCell.self,
                 CustomizeHomepageSectionCell.self
             ]
         }
@@ -118,7 +119,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        if featureFlags.isFeatureEnabled(.hntCusomizationSection, checking: .buildOnly) {
+        if !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
             snapshot.appendSections([.customizeHomepage])
             snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
         }

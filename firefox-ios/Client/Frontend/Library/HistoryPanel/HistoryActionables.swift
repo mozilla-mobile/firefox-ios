@@ -21,7 +21,7 @@ struct HistoryActionablesModel: Hashable {
     let identifier = UUID()
 
     enum ActionableItem {
-        case clearHistory, recentlyClosed, syncHistory
+        case recentlyClosed
     }
 
     // MARK: - Init
