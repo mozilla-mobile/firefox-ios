@@ -60,13 +60,7 @@ extension HistoryPanel: UISearchBarDelegate {
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
-<<<<<<< HEAD
         snapshot.appendItems(self.viewModel.searchResultSites)
-=======
-        snapshot.appendItems(
-            self.viewModel.searchResultSites.map({ HistoryItem.site($0) })
-        )
->>>>>>> 3870c3da3 (Bugfix FXIOS-12791 - iPad toolbar is set to the bottom if was previously set on iPhone (#27855))
 
         self.diffableDataSource?.apply(snapshot, animatingDifferences: false)
         self.updateEmptyPanelState()
