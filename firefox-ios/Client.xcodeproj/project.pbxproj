@@ -1374,6 +1374,8 @@
 		B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
+		B184D4B62E1D4C2B00549CAC /* storiesRedesignOff.json in Resources */ = {isa = PBXBuildFile; fileRef = B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */; };
+		B184D4B82E1D4E1500549CAC /* storiesRedesignOn.json in Resources */ = {isa = PBXBuildFile; fileRef = B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */; };
 		B1B95C622D3680DB00FD1337 /* ShareToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B95C612D3680DB00FD1337 /* ShareToolbarTests.swift */; };
 		B1CA62822C0DB43600D31625 /* MultiWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CA62812C0DB43600D31625 /* MultiWindowTests.swift */; };
 		B1E156A62CD5080E009DF9E5 /* C_AddressesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E156A52CD5080E009DF9E5 /* C_AddressesTests.swift */; };
@@ -9090,6 +9092,8 @@
 		B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMenuTests.swift; sourceTree = "<group>"; };
 		B15058802AA0A878008B7382 /* OpeningScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningScreenTests.swift; sourceTree = "<group>"; };
 		B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardsTests.swift; sourceTree = "<group>"; };
+		B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = storiesRedesignOff.json; sourceTree = "<group>"; };
+		B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = storiesRedesignOn.json; sourceTree = "<group>"; };
 		B1864C62B7F68815AA1FE0C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		B18D4F2291BA5459431EDCA9 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Shared.strings"; sourceTree = "<group>"; };
 		B19648D5B3667FE0CB25D069 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -14781,6 +14785,8 @@
 		E1AF27422A17BCF700CE5991 /* TestData */ = {
 			isa = PBXGroup;
 			children = (
+				B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */,
+				B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */,
 				8A94DB942E0F16E60005FE69 /* homepageSearchBarOff.json */,
 				8A94DB952E0F16E70005FE69 /* homepageSearchBarOn.json */,
 				8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */,
@@ -16670,8 +16676,10 @@
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
 				1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */,
+				B184D4B62E1D4C2B00549CAC /* storiesRedesignOff.json in Resources */,
 				1D91C1842CF11EA500B24960 /* disconnect-block-cryptomining.json in Resources */,
 				78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */,
+				B184D4B82E1D4E1500549CAC /* storiesRedesignOn.json in Resources */,
 				39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */,
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,

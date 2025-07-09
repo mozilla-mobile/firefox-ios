@@ -194,6 +194,7 @@
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
         "HomePageSettingsUITests\/testShortcutsRows()",
         "HomePageSettingsUITests\/testTyping()",
+        "HomepageSearchBarTests",
         "InactiveTabsTest",
         "InactiveTabsTest\/testInactiveTabs()",
         "IntegrationTests",
