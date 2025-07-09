@@ -12,8 +12,10 @@ public struct AddressToolbarUXConfiguration {
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
+    let alpha: CGFloat
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
+                                  alpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 12.0,
@@ -21,11 +23,13 @@ public struct AddressToolbarUXConfiguration {
             isLocationTextCentered: true,
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha
+            backgroundAlpha: backgroundAlpha,
+            alpha: alpha
         )
     }
 
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
+                                 alpha: CGFloat = 1.0,
                                  shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
@@ -33,23 +37,27 @@ public struct AddressToolbarUXConfiguration {
             isLocationTextCentered: false,
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha
+            backgroundAlpha: backgroundAlpha,
+            alpha: alpha
         )
     }
 
     func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {
-        var backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceLow : theme.colors.layer1
+        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceLow : theme.colors.layer1
         if shouldBlur {
-            backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
+            return backgroundColor.withAlphaComponent(backgroundAlpha)
         }
 
         return backgroundColor
     }
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
-        var backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        if alpha == 0 {
+            return backgroundColor.withAlphaComponent(alpha)
+        }
         if shouldBlur {
-            backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
+            backgroundColor.withAlphaComponent(backgroundAlpha)
         }
 
         return backgroundColor

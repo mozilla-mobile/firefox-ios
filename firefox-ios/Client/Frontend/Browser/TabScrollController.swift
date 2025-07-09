@@ -7,12 +7,19 @@ import SnapKit
 import Shared
 import Common
 
-class TabScrollController: NSObject,
+final class TabScrollController: NSObject,
                            SearchBarLocationProvider,
                            Themeable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
+        static let minimalAddressBarAnimationDuration: CGFloat = 0.4
+        static let heightOffset: CGFloat = 14
+    }
+
+    private var isMinimalAddressBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly) &&
+        featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
 
     enum ScrollDirection {
@@ -82,6 +89,19 @@ class TabScrollController: NSObject,
         }
     }
     private var headerHeight: CGFloat { header?.frame.height ?? 0 }
+
+    private var headerOffset: CGFloat {
+        let baseOffset = -headerHeight
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isNavToolbarVisible = if let scrollView {
+            ToolbarHelper().shouldShowNavigationToolbar(for: scrollView.traitCollection)
+        } else { false }
+
+        guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
+            return baseOffset
+        }
+        return baseOffset + UX.heightOffset
+    }
 
     // Bottom toolbar offset updates related constraints
     private var overKeyboardContainerOffset: CGFloat = 0 {
@@ -256,7 +276,7 @@ class TabScrollController: NSObject,
         animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
-            headerOffset: -headerHeight,
+            headerOffset: headerOffset,
             bottomContainerOffset: bottomContainerScrollHeight,
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
@@ -349,7 +369,9 @@ private extension TabScrollController {
     var showDurationRatio: CGFloat {
         var durationRatio: CGFloat
         if isBottomSearchBar {
-            durationRatio = abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
+            durationRatio = if isMinimalAddressBarEnabled { UX.minimalAddressBarAnimationDuration } else {
+                abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
+            }
         } else {
             durationRatio = abs(headerTopOffset / headerHeight)
         }
@@ -482,7 +504,7 @@ private extension TabScrollController {
         guard hasScrollableContent else { return }
 
         let updatedOffset = headerTopOffset - delta
-        headerTopOffset = clamp(offset: updatedOffset, min: -headerHeight, max: 0)
+        headerTopOffset = clamp(offset: updatedOffset, min: headerOffset, max: 0)
         if isHeaderDisplayedForGivenOffset(headerTopOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
@@ -490,8 +512,10 @@ private extension TabScrollController {
         let bottomUpdatedOffset = bottomContainerOffset + delta
         bottomContainerOffset = clamp(offset: bottomUpdatedOffset, min: 0, max: bottomContainerScrollHeight)
 
-        let overKeyboardUpdatedOffset = overKeyboardContainerOffset + delta
-        overKeyboardContainerOffset = clamp(offset: overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
+        if !isMinimalAddressBarEnabled {
+            let overKeyboardUpdatedOffset = overKeyboardContainerOffset + delta
+            overKeyboardContainerOffset = clamp(offset: overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
+        }
 
         header?.updateAlphaForSubviews(scrollAlpha)
         zoomPageBar?.updateAlphaForSubviews(scrollAlpha)
@@ -550,17 +574,32 @@ private extension TabScrollController {
                                     overKeyboardOffset: CGFloat,
                                     alpha: CGFloat) -> () -> Void {
         return { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset
-            self.overKeyboardContainerOffset = overKeyboardOffset
 
-            self.header?.updateAlphaForSubviews(alpha)
-            self.header?.superview?.layoutIfNeeded()
+            if isMinimalAddressBarEnabled {
+                store.dispatchLegacy(
+                    ToolbarAction(
+                        alpha: Float(alpha),
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.alphaDidChange
+                    )
+                )
+            }
 
-            self.zoomPageBar?.updateAlphaForSubviews(alpha)
-            self.zoomPageBar?.superview?.layoutIfNeeded()
+            if !isMinimalAddressBarEnabled {
+                overKeyboardContainerOffset = overKeyboardOffset
+            }
+            overKeyboardContainer?.updateAlphaForSubviews(alpha)
+            overKeyboardContainer?.superview?.layoutIfNeeded()
+
+            header?.updateAlphaForSubviews(alpha)
+            header?.superview?.layoutIfNeeded()
+
+            zoomPageBar?.updateAlphaForSubviews(alpha)
+            zoomPageBar?.superview?.layoutIfNeeded()
         }
     }
 
