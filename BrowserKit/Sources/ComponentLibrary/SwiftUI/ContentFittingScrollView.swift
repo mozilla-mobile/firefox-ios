@@ -88,6 +88,7 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
         private var dynamicTypeObserver: NSObjectProtocol?
 
         func setupDynamicTypeObserver() {
+            // TODO: FXIOS-12794 This is a work around to silence swift 6 warnings about sendability
             let weaklyCapturedClosure = { [weak self] in
                 self?.recreateHostingController()
             }
