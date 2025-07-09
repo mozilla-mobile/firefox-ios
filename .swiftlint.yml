@@ -106,6 +106,10 @@ closure_body_length:
   warning: 34
   error: 34
 
+function_body_length:
+  warning: 364
+  error: 364
+
 file_header:
   required_string: |
                     // This Source Code Form is subject to the terms of the Mozilla Public
