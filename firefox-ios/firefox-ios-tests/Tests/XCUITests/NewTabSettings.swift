@@ -69,9 +69,11 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
-    func testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOn_swipinTabsExperimentOff() {
-        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
+    func testChangeNewTabSettingsShowBlankPage_tabTrayToolbarOnHomepageOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -92,7 +94,10 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
             let keyboardCount = app.keyboards.count
             XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
         }
-        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertFalse(
+            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].isHittable,
+            "TopSitesCell should not be visible or interactable on the current screen"
+        )
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
