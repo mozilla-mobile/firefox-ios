@@ -187,6 +187,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306940
     // Smoketest
     func testSearchEngine() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")
@@ -246,6 +247,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436092
     // Smoketest
     func testSearchStartAfterTypingTwoWords() {
+        app.launch()
         navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.typeText("foo bar")
@@ -294,6 +296,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306989
     // Smoketest
     func testOpenTabsInSearchSuggestions() throws {
+        app.launch()
         if #unavailable(iOS 16) {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
@@ -315,6 +318,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest
     func testBottomVIewURLBar() throws {
+        app.launch()
         if iPad() {
             throw XCTSkip("Toolbar option not available for iPad")
         } else {
