@@ -72,6 +72,7 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnContinueButton)
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
+        app.secureTextFields.element(boundBy: 1).waitAndTap()
         userState.fxaPassword = "foo"
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePasswordNewAccount)
