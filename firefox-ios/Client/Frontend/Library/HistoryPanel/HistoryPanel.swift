@@ -332,7 +332,7 @@ class HistoryPanel: UIViewController,
             if profile.hasSyncableAccount() {
                 resyncHistory()
             }
-            case .DynamicFontChanged:
+        case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -342,13 +342,13 @@ class HistoryPanel: UIViewController,
             if let dbName = notification.object as? String, dbName == "browser.db" {
                 fetchDataAndUpdateLayout(animating: true)
             }
-            case .OpenClearRecentHistory:
+        case .OpenClearRecentHistory:
             if viewModel.isSearchInProgress {
                 exitSearchState()
             }
 
             showClearRecentHistory()
-            case .OpenRecentlyClosedTabs:
+        case .OpenRecentlyClosedTabs:
             historyCoordinatorDelegate?.showRecentlyClosedTab()
             applySnapshot(animatingDifferences: true)
         default:

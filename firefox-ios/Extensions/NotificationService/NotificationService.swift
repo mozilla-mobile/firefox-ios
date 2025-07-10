@@ -138,18 +138,18 @@ class SyncDataDisplay {
         switch message {
         case .commandReceived(let command):
             switch command {
-                case .tabReceived(let tab):
-                    displayNewSentTabNotification(tab: tab)
-                case .tabsClosed(let urls):
-                    displayClosedTabNotification(urls: urls)
-                }
+            case .tabReceived(let tab):
+                displayNewSentTabNotification(tab: tab)
+            case .tabsClosed(let urls):
+                displayClosedTabNotification(urls: urls)
+            }
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected:
             displayDeviceDisconnectedNotification()
         case .thisDeviceDisconnected:
             displayThisDeviceDisconnectedNotification()
-            default:
+        default:
             displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
         }
     }

@@ -246,7 +246,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.learnMorePrivateMode:
             guard let urlRequest = action.urlRequest else { return }
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
-            case TabPanelViewActionType.toggleInactiveTabs:
+        case TabPanelViewActionType.toggleInactiveTabs:
             guard let tabState = state.screenState(TabsPanelState.self,
                                                    for: .tabsPanel,
                                                    window: action.windowUUID)

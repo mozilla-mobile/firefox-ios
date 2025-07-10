@@ -80,7 +80,7 @@ class ReadabilityOperation: Operation, @unchecked Sendable {
                                level: .warning,
                                category: .library)
                 }
-                case .error:
+            case .error:
                 logger.log("Result was of type error",
                            level: .warning,
                            category: .library)
