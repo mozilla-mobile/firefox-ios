@@ -58,16 +58,12 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             ContentFittingScrollView {
                 VStack(spacing: UX.CardView.spacing * scale) {
                     Spacer()
-                        .accessibilityHidden(true)
                     titleView
                     Spacer()
-                        .accessibilityHidden(true)
                     imageView(scale: scale)
                     Spacer()
-                        .accessibilityHidden(true)
                     bodyView
                     Spacer()
-                        .accessibilityHidden(true)
                     primaryButton
                 }
             }
@@ -80,7 +76,6 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             )
             secondaryButton(scale: scale)
             Spacer()
-                .accessibilityHidden(true)
         }
     }
 

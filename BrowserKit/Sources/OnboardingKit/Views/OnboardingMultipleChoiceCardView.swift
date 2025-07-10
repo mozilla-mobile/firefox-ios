@@ -60,10 +60,8 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
             ContentFittingScrollView {
                 VStack(spacing: UX.CardView.spacing * scale) {
                     Spacer()
-                        .accessibilityHidden(true)
                     titleView
                     Spacer()
-                        .accessibilityHidden(true)
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
                         items: viewModel.multipleChoiceButtons,
@@ -75,7 +73,6 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
                     Spacer()
-                        .accessibilityHidden(true)
                     primaryButton
                 }
             }

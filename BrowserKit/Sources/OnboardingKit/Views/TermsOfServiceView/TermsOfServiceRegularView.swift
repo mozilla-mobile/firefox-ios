@@ -53,20 +53,16 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     private var termsContent: some View {
         VStack {
             Spacer()
-                .accessibilityHidden(true)
             ContentFittingScrollView {
                 VStack(spacing: UX.CardView.spacing) {
                     Spacer()
-                        .accessibilityHidden(true)
                     imageView
                     titleView
                     bodyView
                     Spacer()
-                        .accessibilityHidden(true)
                     links
                     primaryButton
                     Spacer()
-                        .accessibilityHidden(true)
                 }
                 .frame(width: UX.CardView.primaryButtonWidthiPad)
             }
@@ -80,7 +76,6 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
             .padding(.horizontal, UX.CardView.horizontalPadding)
             .accessibilityElement(children: .contain)
             Spacer()
-                .accessibilityHidden(true)
         }
     }
 

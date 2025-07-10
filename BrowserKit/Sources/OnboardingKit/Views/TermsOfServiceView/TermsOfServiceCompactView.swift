@@ -42,7 +42,6 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 VStack {
                     cardContent(geometry: geometry, scale: scale)
                     Spacer()
-                        .accessibilityHidden(true)
                 }
                 .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
