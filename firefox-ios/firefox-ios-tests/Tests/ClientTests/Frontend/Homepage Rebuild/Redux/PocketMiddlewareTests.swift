@@ -56,7 +56,33 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: HomepageMiddlewareActionType.enteredForeground
         )
 
-        let expectation = XCTestExpectation(description: "Pocket action entered foreground dispatched")
+        let expectation = XCTestExpectation(description: "Homepage action entered foreground dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.pocketSectionProvider(AppState(), action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? PocketAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? PocketMiddlewareActionType)
+
+        XCTAssertEqual(actionType, PocketMiddlewareActionType.retrievedUpdatedStories)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertTrue(mockStore.dispatchedActions.first is PocketAction)
+        XCTAssertEqual(actionCalled.pocketStories?.count, 3)
+        XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
+    }
+
+    func test_toggleShowSectionSetting_getPocketData() throws {
+        let subject = createSubject(pocketManager: pocketManager)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: PocketActionType.toggleShowSectionSetting
+        )
+
+        let expectation = XCTestExpectation(description: "Pocket action toggled show section setting dispatched")
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
