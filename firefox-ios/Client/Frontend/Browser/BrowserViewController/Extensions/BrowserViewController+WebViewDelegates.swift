@@ -892,7 +892,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // web view don't invoke another download.
         pendingDownloadWebView = nil
 
-        let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
+        let downloadAction: @Sendable @MainActor (HTTPDownload) -> Void = { [weak self] download in
             self?.downloadQueue.enqueue(download)
         }
 
