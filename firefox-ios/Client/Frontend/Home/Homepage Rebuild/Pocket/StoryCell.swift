@@ -78,8 +78,6 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
         titleLabel.text = story.title
         titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
         accessibilityLabel = story.accessibilityLabel
-
-        // Set accessibility hint with position information
         if position > 0 && totalCount > 0 && position <= totalCount {
             accessibilityHint = String(format: .FirefoxHomepage.Pocket.StoryPositionAccessibilityHint,"\(position)", "\(totalCount)")
         } else {
