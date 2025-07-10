@@ -81,9 +81,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
 
         // Set accessibility hint with position information
         if position > 0 && totalCount > 0 && position <= totalCount {
-            accessibilityHint = String(format: .FirefoxHomepage.Pocket.StoryPositionAccessibilityHint,
-                                     "\(position)",
-                                     "\(totalCount)")
+            accessibilityHint = String(format: .FirefoxHomepage.Pocket.StoryPositionAccessibilityHint,"\(position)", "\(totalCount)")
         } else {
             accessibilityHint = nil
         }
