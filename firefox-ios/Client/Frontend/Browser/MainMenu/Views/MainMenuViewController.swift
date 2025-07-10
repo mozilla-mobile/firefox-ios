@@ -175,8 +175,8 @@ class MainMenuViewController: UIViewController,
                 }
             }
 
-            menuRedesignContent.bannerButtonCallback = {
-                DefaultApplicationHelper().openSettings()
+            menuRedesignContent.bannerButtonCallback = { [weak self] in
+                self?.dispatchDefaultBrowserAction()
             }
 
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
@@ -452,6 +452,17 @@ class MainMenuViewController: UIViewController,
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapNavigateToDestination,
                 navigationDestination: MenuNavigationDestination(.siteProtections),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
+    private func dispatchDefaultBrowserAction() {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.defaultBrowser),
                 currentTabInfo: menuState.currentTabInfo
             )
         )
