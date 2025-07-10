@@ -183,6 +183,7 @@ struct ContextMenuState {
         // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
         // this state across isolation boundaries...
         let windowUUID = windowUUID
+        let logger = logger
 
         return SingleActionViewModel(
             title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
@@ -190,7 +191,7 @@ struct ContextMenuState {
             allowIconScaling: true,
             tapHandler: { _ in
                 guard let url = SupportUtils.URLForTopic("sponsor-privacy") else {
-                    self.logger.log(
+                    logger.log(
                         "Unable to retrieve URL for sponsor-privacy, return early",
                         level: .warning,
                         category: .homepage
@@ -303,7 +304,7 @@ struct ContextMenuState {
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
-                                     tapHandler: { _ in
+                                     tapHandler: { [bookmarkDelegate] _ in
             bookmarkDelegate.removeBookmark(urlString: site.url, title: site.title, site: site)
         })
     }
@@ -312,7 +313,7 @@ struct ContextMenuState {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,
-                                     tapHandler: { _ in
+                                     tapHandler: { [bookmarkDelegate] _ in
             // The method in BVC also handles the toast for this use case
             bookmarkDelegate.addBookmark(urlString: site.url, title: site.title, site: site)
         })
