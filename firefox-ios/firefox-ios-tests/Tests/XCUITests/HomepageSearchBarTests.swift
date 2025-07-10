@@ -267,6 +267,23 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
+    func testNavigateBackFromWebpageToHomepageForTopToolbar_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
     // MARK: - Bottom Toolbar
     func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() throws {
         guard !iPad() else {
@@ -501,6 +518,25 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func testNavigateBackFromWebpageToHomepageForBottomToolbar_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
     private func navigateToWebPage(with homepageSearchBar: XCUIElement, searchTextFieldA11y: String) {
