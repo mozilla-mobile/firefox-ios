@@ -283,6 +283,30 @@ features:
               prerequisites:
                 - ALWAYS
               uiVariant: modern
+            customization-theme-modern:
+              card-type: multiple-choice
+              order: 21
+              title: Onboarding/Onboarding.Customization.Theme.Title.v123
+              body: Onboarding/Onboarding.Customization.Theme.Description.v123
+              image: themeing
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
+                  image: theme-system
+                  action: theme-system-default
+                - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
+                  image: theme-light
+                  action: theme-light
+                - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
+                  image: theme-dark
+                  action: theme-dark
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+              uiVariant: modern
           dismissable: true
 
 objects:
