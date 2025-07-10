@@ -13,6 +13,11 @@ protocol LetterImageGenerator: Sendable {
     /// - Returns: The generated letter image
     @MainActor
     func generateLetterImage(siteString: String) async throws -> UIImage
+
+    // Public helper methods (for increased testability)
+    @MainActor
+    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage
+    func generateLetter(fromSiteString siteString: String) throws -> String
 }
 
 final class DefaultLetterImageGenerator: LetterImageGenerator {
@@ -24,13 +29,7 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
 
     @MainActor
     func generateLetterImage(siteString: String) async throws -> UIImage {
-        guard let letter: Character = siteString.first else {
-            logger.log("No letter found for site, which should never happen",
-                       level: .warning,
-                       category: .images)
-            throw SiteImageError.noLetterImage
-        }
-        let capitalizedLetter = letter.uppercased()
+        let capitalizedLetter = try generateLetter(fromSiteString: siteString)
 
         let color = generateBackgroundColor(forSite: siteString)
         let image = generateImage(fromLetter: capitalizedLetter,
@@ -38,8 +37,19 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
         return image
     }
 
+    func generateLetter(fromSiteString siteString: String) throws -> String {
+        guard let letter: Character = siteString.first else {
+            logger.log("No letter found for site, which should never happen",
+                       level: .warning,
+                       category: .images)
+            throw SiteImageError.noLetterImage
+        }
+
+        return letter.uppercased()
+    }
+
     @MainActor
-    private func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
+    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
         var image = UIImage()
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         label.text = letter
