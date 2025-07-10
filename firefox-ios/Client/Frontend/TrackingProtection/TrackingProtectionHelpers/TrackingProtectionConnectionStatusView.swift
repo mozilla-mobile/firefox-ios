@@ -144,11 +144,10 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         connectionStatusImage.tintColor = theme.colors.iconSecondary
         connectionDetailArrow.isHidden = !isConnectionSecure
     }
-    
+
     private func setupAccessibilityConfiguration() {
         self.isAccessibilityElement = false
         connectionButton.isAccessibilityElement = true
         connectionButton.accessibilityTraits = .button
     }
 }
-
