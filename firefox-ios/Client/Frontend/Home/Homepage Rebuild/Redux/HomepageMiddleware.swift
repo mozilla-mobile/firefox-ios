@@ -55,7 +55,7 @@ final class HomepageMiddleware: FeatureFlaggable {
             self.homepageTelemetry.sendSectionLabeledCounter(for: type)
 
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
-            ToolbarActionType.cancelEdit:
+            ToolbarActionType.cancelEdit, GeneralBrowserActionType.navigateBack:
             self.dispatchSearchBarConfigurationAction(action: action)
         default:
             break
