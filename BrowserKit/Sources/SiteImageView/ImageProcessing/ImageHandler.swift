@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-protocol ImageHandler {
+protocol ImageHandler: Sendable {
     /// The ImageHandler will fetch the favicon with the following precedence:
     ///     1. Tries to fetch from the cache.
     ///     2. If there is a URL, tries to fetch from the web.
@@ -34,12 +34,12 @@ protocol ImageHandler {
     func clearCache()
 }
 
-class DefaultImageHandler: ImageHandler {
+final class DefaultImageHandler: ImageHandler {
     private let imageCache: SiteImageCache
     private let faviconFetcher: FaviconFetcher
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
-    private var logger: Logger = DefaultLogger.shared
+    private let logger: Logger = DefaultLogger.shared
 
     init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),

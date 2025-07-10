@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 /// Generate a default letter image from the domain name
-protocol LetterImageGenerator {
+protocol LetterImageGenerator: Sendable {
     /// Generates a letter image based on the first character in the domain name
     /// Runs main thread due to UILabel.initWithFrame(:)
     /// - Parameter domain: The string domain name
@@ -15,8 +15,8 @@ protocol LetterImageGenerator {
     func generateLetterImage(siteString: String) async throws -> UIImage
 }
 
-class DefaultLetterImageGenerator: LetterImageGenerator {
-    private var logger: Logger
+final class DefaultLetterImageGenerator: LetterImageGenerator {
+    private let logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
@@ -38,7 +38,8 @@ class DefaultLetterImageGenerator: LetterImageGenerator {
         return image
     }
 
-    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
+    @MainActor
+    private func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
         var image = UIImage()
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         label.text = letter
