@@ -160,7 +160,7 @@ class MainMenuViewController: UIViewController,
                 let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
                 if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                     self?.currentCustomMenuHeight = height
-                    if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                    if #available(iOS 16.0, *) {
                         let customDetent = UISheetPresentationController.Detent.custom { context in
                             return height
                         }
