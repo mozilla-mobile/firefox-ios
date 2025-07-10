@@ -13,11 +13,6 @@ protocol LetterImageGenerator: Sendable {
     /// - Returns: The generated letter image
     @MainActor
     func generateLetterImage(siteString: String) async throws -> UIImage
-
-    // Public helper methods (for increased testability)
-    @MainActor
-    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage
-    func generateLetter(fromSiteString siteString: String) throws -> String
 }
 
 final class DefaultLetterImageGenerator: LetterImageGenerator {
@@ -37,7 +32,7 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
         return image
     }
 
-    func generateLetter(fromSiteString siteString: String) throws -> String {
+    internal func generateLetter(fromSiteString siteString: String) throws -> String {
         guard let letter: Character = siteString.first else {
             logger.log("No letter found for site, which should never happen",
                        level: .warning,
@@ -49,7 +44,7 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
     }
 
     @MainActor
-    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
+    internal func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
         var image = UIImage()
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         label.text = letter
@@ -67,7 +62,7 @@ final class DefaultLetterImageGenerator: LetterImageGenerator {
         return image
     }
 
-    private func generateBackgroundColor(forSite siteString: String) -> UIColor {
+    internal func generateBackgroundColor(forSite siteString: String) -> UIColor {
         let index = abs(stableHash(siteString)) % (defaultBackgroundColors.count - 1)
         let colorHex = defaultBackgroundColors[index]
         return UIColor(colorString: colorHex)
