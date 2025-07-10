@@ -6,6 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
+// MARK: - Updated OnboardingBasicCardView
 struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
@@ -13,6 +14,8 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
     @State private var secondaryActionColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
+    @Environment(\.carouselPosition)
+    private var carouselPosition
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -33,40 +36,46 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
 
     var body: some View {
         GeometryReader { geometry in
-            // Determine scale factor based on current size vs base metrics
             let widthScale = geometry.size.width / UX.CardView.baseWidth
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
-            VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
-                ContentFittingScrollView {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
-                        titleView
-                        Spacer()
-                        imageView(scale: scale)
-                        Spacer()
-                        bodyView
-                        Spacer()
-                        primaryButton
-                    }
+
+            cardContent(scale: scale, geometry: geometry)
+                .padding(.top, UX.CardView.cardTopPadding)
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
-                .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-                .padding(UX.CardView.verticalPadding * scale)
-                .background(
-                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                        .fill(cardBackgroundColor)
-                )
-                secondaryButton(scale: scale)
-                Spacer()
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+        }
+    }
+
+    @ViewBuilder
+    private func cardContent(scale: CGFloat, geometry: GeometryProxy) -> some View {
+        VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
+            ContentFittingScrollView {
+                VStack(spacing: UX.CardView.spacing * scale) {
+                    Spacer()
+                    titleView
+                    Spacer()
+                    imageView(scale: scale)
+                    Spacer()
+                    bodyView
+                    Spacer()
+                    primaryButton
+                }
             }
-            .padding(.top, UX.CardView.cardTopPadding)
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+            .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+            .padding(UX.CardView.verticalPadding * scale)
+            .background(
+                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                    .fill(cardBackgroundColor)
+                    .accessibilityHidden(true)
+            )
+            secondaryButton(scale: scale)
+            Spacer()
         }
     }
 
@@ -88,7 +97,7 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: UX.CardView.imageHeight * scale)
-                .accessibilityLabel(viewModel.title)
+                .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
     }
