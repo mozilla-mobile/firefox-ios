@@ -27,8 +27,11 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         windowUUID: WindowUUID
     ) {
         // TODO: FXIOS-11412 / 11226 - Move profile dependency and show section also based on feature flags
-        let shouldShowSection = !LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
-                                                                                   checking: .buildOnly)
+        let isStoriesRedesignEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageStoriesRedesign,
+                                                                                         checking: .buildOnly)
+        let isJumpBackInSectionPrefEnabled = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection) ?? true
+        let shouldShowSection = isStoriesRedesignEnabled ? false : isJumpBackInSectionPrefEnabled
+
         self.init(
             windowUUID: windowUUID,
             jumpBackInTabs: [],

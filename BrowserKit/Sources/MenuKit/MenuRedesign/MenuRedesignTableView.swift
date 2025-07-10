@@ -11,7 +11,9 @@ final class MenuRedesignTableView: UIView,
                            UITableViewDataSource,
                            ThemeApplicable {
     private struct UX {
-        static let topPadding: CGFloat = 12
+        static let topPadding: CGFloat = 24
+        static let menuSiteTopPadding: CGFloat = 12
+        static let topPaddingWithBanner: CGFloat = 8
         static let tableViewMargin: CGFloat = 16
         static let distanceBetweenSections: CGFloat = 16
     }
@@ -19,6 +21,7 @@ final class MenuRedesignTableView: UIView,
     private var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
+    private var isBannerVisible = false
 
     public var tableViewContentSize: CGFloat {
         tableView.contentSize.height
@@ -78,7 +81,11 @@ final class MenuRedesignTableView: UIView,
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        return section == 0 ? UX.topPadding : UX.distanceBetweenSections
+        if let menuSection = menuData.first(where: { $0.isHomepage }), menuSection.isHomepage {
+            let topPadding = isBannerVisible ? UX.topPaddingWithBanner : UX.topPadding
+            return section == 0 ? topPadding : UX.distanceBetweenSections
+        }
+        return section == 0 ? UX.menuSiteTopPadding : UX.distanceBetweenSections
     }
 
     func tableView(
@@ -185,15 +192,14 @@ final class MenuRedesignTableView: UIView,
         return nil
     }
 
-    func reloadTableView(with data: [MenuSection]) {
-        // We handle independently Horizontal Tabs Section in MenuSquaresViewContentCell
-        if let firstSection = data.first, firstSection.isHorizontalTabsSection {
-            tableView.showsVerticalScrollIndicator = false
-            menuData = data
-            menuData.removeAll(where: { $0.isHorizontalTabsSection })
-        } else {
-            menuData = data
-        }
+    func reloadTableView(with data: [MenuSection], isBannerVisible: Bool) {
+        menuData = data
+        self.isBannerVisible = isBannerVisible
+        tableView.reloadData()
+    }
+
+    func reloadData(isBannerVisible: Bool) {
+        self.isBannerVisible = isBannerVisible
         tableView.reloadData()
     }
 

@@ -10,7 +10,7 @@ import Common
 
 /// Image downloader wrapper around Kingfisher image downloader
 /// Used in FaviconFetcher
-protocol SiteImageDownloader: AnyObject {
+protocol SiteImageDownloader: Sendable, AnyObject {
     /// Specifies the timeout on image downloads
     var timeoutDelay: Double { get }
     var logger: Logger { get }

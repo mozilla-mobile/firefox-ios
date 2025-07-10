@@ -16,7 +16,7 @@ features:
         default: false
       stories_redesign:
         description: >
-          If true, enables the stories section redesign on homepage
+          If true, enables the stories section redesign on homepage, which also includes the removal of other sections (i.e. jump back in, bookmarks)
         type: Boolean
         default: false
 
@@ -24,11 +24,11 @@ features:
       - channel: beta
         value:
           enabled: false
-          search_bar: false
-          stories_redesign: false
+          search-bar: false
+          stories-redesign: false
     
       - channel: developer
         value:
           enabled: false
-          search_bar: false
-          stories_redesign: false
+          search-bar: false
+          stories-redesign: false

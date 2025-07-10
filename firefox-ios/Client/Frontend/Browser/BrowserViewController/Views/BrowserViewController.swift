@@ -564,15 +564,17 @@ class BrowserViewController: UIViewController,
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
 
-            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            // move views to the front so the address toolbar shadow doesn't get clipped
             overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
+            view.bringSubviewToFront(overKeyboardContainer)
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
 
-            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
+            // move views to the front so the address toolbar shadow doesn't get clipped
             header.bringSubviewToFront(addressToolbarContainer)
+            view.bringSubviewToFront(header)
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -619,7 +621,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
-        guard searchBarPosition == .bottom, isToolbarRefactorEnabled else { return }
+        guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top

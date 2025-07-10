@@ -22,6 +22,7 @@ class MainMenuViewController: UIViewController,
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
         static let backgroundAlpha: CGFloat = 0.8
+        static let menuHeightTolerance: CGFloat = 30
     }
     typealias SubscriberStateType = MainMenuState
 
@@ -65,6 +66,7 @@ class MainMenuViewController: UIViewController,
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
+    private var isPhoneLandscape = false
 
     private var isHomepage: Bool {
         guard let element = menuState.menuElements.first(where: { $0.isHomepage }) else { return false }
@@ -127,8 +129,16 @@ class MainMenuViewController: UIViewController,
             )
         )
 
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.updateMenuAppearance
+            )
+        )
+
         if isMenuRedesign {
             setupRedesignView()
+            setupMenuOrientation()
         } else {
             setupView()
         }
@@ -147,7 +157,8 @@ class MainMenuViewController: UIViewController,
             }
 
             menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
-                if let customHeight = self?.currentCustomMenuHeight, height > customHeight {
+                let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
+                if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                     self?.currentCustomMenuHeight = height
                     if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
                         let customDetent = UISheetPresentationController.Detent.custom { context in
@@ -224,6 +235,13 @@ class MainMenuViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         adjustLayout()
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.updateMenuAppearance
+            )
+        )
+        setupMenuOrientation()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -279,6 +297,10 @@ class MainMenuViewController: UIViewController,
                                          isBrowserDefault: isBrowserDefault)
     }
 
+    private func setupMenuOrientation() {
+        menuRedesignContent.setupMenuMenuOrientation(isPhoneLandscape: isPhoneLandscape)
+    }
+
     private func setupHintView() {
         guard let viewProvider else { return }
         var viewModel = ContextualHintViewModel(
@@ -311,17 +333,28 @@ class MainMenuViewController: UIViewController,
         } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first {
             window.addSubview(hintView)
+
+            if UIScreen.main.bounds.height < UX.hintViewHeight + menuRedesignContent.frame.height {
+                if isMenuRedesign {
+                    hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                                  constant: UX.hintViewMargin).isActive = true
+                } else {
+                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                  constant: UX.hintViewMargin).isActive = true
+                }
+            } else {
+                if isMenuRedesign {
+                    hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                                     constant: -UX.hintViewMargin).isActive = true
+                } else {
+                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                     constant: -UX.hintViewMargin).isActive = true
+                }
+            }
             NSLayoutConstraint.activate([
                 hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
                 hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin)
             ])
-            if isMenuRedesign {
-                hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                                 constant: -UX.hintViewMargin).isActive = true
-            } else {
-                hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                 constant: -UX.hintViewMargin).isActive = true
-            }
         }
         hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
         hintViewHeightConstraint?.isActive = true
@@ -361,6 +394,7 @@ class MainMenuViewController: UIViewController,
         menuState = state
 
         isBrowserDefault = menuState.isBrowserDefault
+        isPhoneLandscape = menuState.isPhoneLandscape
 
         if let accountData = menuState.accountData {
             updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
