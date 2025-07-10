@@ -309,7 +309,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
-                                    .saveAsPDF,
+                                    .saveAsPDFV2,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
@@ -332,7 +332,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
-                                    .printSheet,
+                                    .printSheetV2,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)

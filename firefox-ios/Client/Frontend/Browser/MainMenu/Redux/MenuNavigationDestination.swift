@@ -7,6 +7,7 @@ import Foundation
 enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case bookmarks
     case customizeHomepage
+    case defaultBrowser
     case downloads
     case editBookmark
     case findInPage
@@ -19,8 +20,10 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case siteProtections
     case syncSignIn
     case printSheet
+    case printSheetV2
     case shareSheet
     case saveAsPDF
+    case saveAsPDFV2
     case zoom
 }
 
