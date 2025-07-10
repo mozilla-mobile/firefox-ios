@@ -11,7 +11,7 @@ final class ToolbarAction: Action {
     let toolbarLayout: ToolbarLayoutStyle?
     let isTranslucent: Bool?
     let numberOfTabs: Int?
-    let alpha: Float?
+    let addressBarAlpha: Float?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
@@ -35,7 +35,7 @@ final class ToolbarAction: Action {
          toolbarLayout: ToolbarLayoutStyle? = nil,
          isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
-         alpha: Float? = nil,
+         addressBarAlpha: Float? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
@@ -60,7 +60,7 @@ final class ToolbarAction: Action {
         self.toolbarLayout = toolbarLayout
         self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
-        self.alpha = alpha
+        self.addressBarAlpha = addressBarAlpha
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
@@ -113,7 +113,7 @@ enum ToolbarActionType: ActionType {
     case translucencyDidChange
 }
 
-class ToolbarMiddlewareAction: Action {
+final class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionConfiguration.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?

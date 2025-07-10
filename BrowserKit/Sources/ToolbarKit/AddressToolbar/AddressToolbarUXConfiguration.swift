@@ -12,10 +12,10 @@ public struct AddressToolbarUXConfiguration {
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
-    let alpha: CGFloat
+    let addressBarAlpha: CGFloat
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
-                                  alpha: CGFloat = 1.0,
+                                  addressBarAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 12.0,
@@ -24,12 +24,12 @@ public struct AddressToolbarUXConfiguration {
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
-            alpha: alpha
+            addressBarAlpha: addressBarAlpha
         )
     }
 
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
-                                 alpha: CGFloat = 1.0,
+                                 addressBarAlpha: CGFloat = 1.0,
                                  shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
@@ -38,7 +38,7 @@ public struct AddressToolbarUXConfiguration {
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
-            alpha: alpha
+            addressBarAlpha: addressBarAlpha
         )
     }
 
@@ -53,7 +53,7 @@ public struct AddressToolbarUXConfiguration {
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
         let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
-        if alpha == 0 { return backgroundColor.withAlphaComponent(alpha) }
+        if addressBarAlpha == 0 { return backgroundColor.withAlphaComponent(addressBarAlpha) }
         return backgroundColor
     }
 

@@ -582,7 +582,7 @@ private extension TabScrollController {
             if isMinimalAddressBarEnabled {
                 store.dispatchLegacy(
                     ToolbarAction(
-                        alpha: Float(alpha),
+                        addressBarAlpha: Float(alpha),
                         windowUUID: windowUUID,
                         actionType: ToolbarActionType.alphaDidChange
                     )

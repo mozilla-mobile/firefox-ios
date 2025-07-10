@@ -18,7 +18,7 @@ struct ToolbarState: ScreenState, Equatable {
     let canGoBack: Bool
     let canGoForward: Bool
     var numberOfTabs: Int
-    var alpha: Float
+    var addressBarAlpha: Float
     var showMenuWarningBadge: Bool
     var isNewTabFeatureEnabled: Bool
     var canShowDataClearanceAction: Bool
@@ -47,7 +47,7 @@ struct ToolbarState: ScreenState, Equatable {
                   canGoBack: toolbarState.canGoBack,
                   canGoForward: toolbarState.canGoForward,
                   numberOfTabs: toolbarState.numberOfTabs,
-                  alpha: toolbarState.alpha,
+                  addressBarAlpha: toolbarState.addressBarAlpha,
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
                   isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
                   canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
@@ -70,7 +70,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: false,
             canGoForward: false,
             numberOfTabs: 1,
-            alpha: 1,
+            addressBarAlpha: 1,
             showMenuWarningBadge: false,
             isNewTabFeatureEnabled: false,
             canShowDataClearanceAction: false,
@@ -92,7 +92,7 @@ struct ToolbarState: ScreenState, Equatable {
         canGoBack: Bool,
         canGoForward: Bool,
         numberOfTabs: Int,
-        alpha: Float,
+        addressBarAlpha: Float,
         showMenuWarningBadge: Bool,
         isNewTabFeatureEnabled: Bool,
         canShowDataClearanceAction: Bool,
@@ -111,7 +111,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.numberOfTabs = numberOfTabs
-        self.alpha = alpha
+        self.addressBarAlpha = addressBarAlpha
         self.showMenuWarningBadge = showMenuWarningBadge
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
@@ -200,7 +200,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: toolbarAction.isNewTabFeatureEnabled ?? state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: toolbarAction.canShowDataClearanceAction ?? state.canShowDataClearanceAction,
@@ -225,7 +225,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
             canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: toolbarAction.alpha ?? state.alpha,
+            addressBarAlpha: toolbarAction.addressBarAlpha ?? state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -249,7 +249,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -273,7 +273,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -302,7 +302,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -326,7 +326,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -350,7 +350,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
             canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -374,7 +374,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -398,7 +398,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -422,7 +422,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -449,7 +449,7 @@ struct ToolbarState: ScreenState, Equatable {
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
             numberOfTabs: state.numberOfTabs,
-            alpha: state.alpha,
+            addressBarAlpha: state.addressBarAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
@@ -479,7 +479,7 @@ struct ToolbarState: ScreenState, Equatable {
                             canGoBack: state.canGoBack,
                             canGoForward: state.canGoForward,
                             numberOfTabs: state.numberOfTabs,
-                            alpha: state.alpha,
+                            addressBarAlpha: state.addressBarAlpha,
                             showMenuWarningBadge: state.showMenuWarningBadge,
                             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
                             canShowDataClearanceAction: state.canShowDataClearanceAction,

@@ -32,7 +32,7 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
     let shouldAnimate: Bool
-    let alpha: Float
+    let addressBarAlpha: Float
 
     let windowUUID: UUID
 
@@ -41,7 +41,7 @@ final class AddressToolbarContainerModel: Equatable {
         let backgroundAlpha = toolbarHelper.backgroundAlpha()
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
-                                                                         alpha: CGFloat(alpha),
+                                                                         addressBarAlpha: CGFloat(addressBarAlpha),
                                                                          shouldBlur: shouldBlur)
 
         var droppableUrl: URL?
@@ -226,7 +226,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
-        self.alpha = state.alpha
+        self.addressBarAlpha = state.addressBarAlpha
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
     }
@@ -324,7 +324,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
-        lhs.alpha == rhs.alpha &&
+        lhs.addressBarAlpha == rhs.addressBarAlpha &&
 
         lhs.windowUUID == rhs.windowUUID
     }

@@ -158,7 +158,7 @@ final class LocationView: UIView,
             delegate: delegate
         )
 
-        applyToolbarAlphaIfNeeded(alpha: uxConfig.alpha, barPosition: addressBarPosition)
+        applyToolbarAlphaIfNeeded(alpha: uxConfig.addressBarAlpha, barPosition: addressBarPosition)
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
@@ -423,6 +423,8 @@ final class LocationView: UIView,
             } else {
                 resetSelfToIdentity()
             }
+        iconContainerBackgroundView.alpha = toolbarAlpha
+        if let theme { applyTheme(theme: theme) }
     }
 
     // MARK: - `urlTextField` Configuration
@@ -678,7 +680,7 @@ final class LocationView: UIView,
         gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
         iconContainerBackgroundView.backgroundColor = appearance.backgroundColor
-        lockIconButton.backgroundColor = appearance.backgroundColor
+        lockIconButton.backgroundColor = toolbarAlpha == 0 ? nil : appearance.backgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
