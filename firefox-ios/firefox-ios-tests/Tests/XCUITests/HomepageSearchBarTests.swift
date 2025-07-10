@@ -267,7 +267,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_navigateBack_FromWebpageToHomepage_forTopToolbar_showsSearchBarExperimentOn() {
+    func testNavigateBackFromWebpageToHomepageForTopToolbar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -520,7 +520,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_navigateBack_FromWebpageToHomepage_forBottomToolbar_showsSearchBarExperimentOn() {
+    func testNavigateBackFromWebpageToHomepageForBottomToolbar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
