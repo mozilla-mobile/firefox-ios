@@ -23,19 +23,19 @@ import:
         # This message displays on the homescreen, asking the user to set Firefox as the default.
         # It is triggered after a minimum of 4 launches of the app.
         - value:
-            messages:
-              default-browser:
-                surface: new-tab-card
-                style: FALLBACK
-                trigger-if-all:
-                  - SUPPORTS_DEFAULT_BROWSER
-                  - ON_FOURTH_LAUNCH_THIS_YEAR
-                except-if-any:
-                  - I_AM_DEFAULT_BROWSER
-                title: Default Browser/DefaultBrowserCard.Title
-                text: Default Browser/DefaultBrowserCard.Description
-                button-label: Default Browser/DefaultBrowserCard.Button.v2
-                action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
+            # messages:
+            # default-browser:
+            #   surface: new-tab-card
+            #   style: FALLBACK
+            #   trigger-if-all:
+            #     - SUPPORTS_DEFAULT_BROWSER
+            #     - ON_FOURTH_LAUNCH_THIS_YEAR
+            #   except-if-any:
+            #     - I_AM_DEFAULT_BROWSER
+            #   title: Default Browser/DefaultBrowserCard.Title
+            #   text: Default Browser/DefaultBrowserCard.Description
+            #   button-label: Default Browser/DefaultBrowserCard.Button.v2
+            #   action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
             triggers:
               ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
 
