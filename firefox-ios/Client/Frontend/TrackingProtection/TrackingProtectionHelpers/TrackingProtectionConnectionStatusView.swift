@@ -17,6 +17,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.layer.masksToBounds = true
+        image.isAccessibilityElement = false
     }
 
     private let connectionStatusLabel: UILabel = .build { label in
@@ -31,6 +32,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
             .withRenderingMode(.alwaysTemplate)
             .imageFlippedForRightToLeftLayoutDirection()
         image.transform = CGAffineTransform(rotationAngle: .pi)
+        image.isAccessibilityElement = false
     }
 
     private let connectionButton: UIButton = .build()
@@ -52,6 +54,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
     private func setupViews() {
         self.addSubviews(connectionStatusImage, connectionStatusLabel, connectionDetailArrow)
         self.addSubviews(connectionButton)
+        setupAccessibilityConfiguration()
     }
 
     private func updateLayout(isAccessibilityCategory: Bool) {
@@ -141,4 +144,11 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         connectionStatusImage.tintColor = theme.colors.iconSecondary
         connectionDetailArrow.isHidden = !isConnectionSecure
     }
+    
+    private func setupAccessibilityConfiguration() {
+        self.isAccessibilityElement = false
+        connectionButton.isAccessibilityElement = true
+        connectionButton.accessibilityTraits = .button
+    }
 }
+
