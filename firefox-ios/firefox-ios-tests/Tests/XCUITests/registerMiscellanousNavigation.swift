@@ -39,7 +39,7 @@ func registerMiscellanousNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
     }
 
     map.addScreenState(EnterNewBookmarkTitleAndUrl) { screenState in
-        screenState.gesture(forAction: Action.SaveCreatedBookmark) { userState in
+        screenState.gesture(forAction: Action.SaveCreatedBookmark) { _ in
             app.buttons["Save"].waitAndTap()
         }
     }

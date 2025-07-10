@@ -34,7 +34,7 @@ struct SplashScreenAnimation {
             animationView.heightAnchor.constraint(equalToConstant: CGFloat(UX.imageSize)),
             animationView.widthAnchor.constraint(equalToConstant: CGFloat(UX.imageSize)),
             animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 

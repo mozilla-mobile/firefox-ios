@@ -20,7 +20,7 @@ final class PocketMiddleware {
         self.logger = logger
     }
 
-    lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
+    lazy var pocketSectionProvider: Middleware<AppState> = { _, action in
         switch action.actionType {
         case HomepageActionType.initialize,
             HomepageMiddlewareActionType.enteredForeground,

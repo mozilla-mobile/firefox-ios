@@ -247,9 +247,10 @@ class WebsiteDataManagementViewController: UIViewController,
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = viewModel.siteRecords[safe: indexPath.row] else {
+                return
+            }
             viewModel.selectItem(item)
-            break
         case .showMore:
             viewModel.showMoreButtonPressed()
             tableView.reloadData()
@@ -266,9 +267,10 @@ class WebsiteDataManagementViewController: UIViewController,
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            guard let item = viewModel.siteRecords[safe: indexPath.row] else { return }
+            guard let item = viewModel.siteRecords[safe: indexPath.row] else {
+                return
+            }
             viewModel.deselectItem(item)
-            break
         default: break
         }
     }

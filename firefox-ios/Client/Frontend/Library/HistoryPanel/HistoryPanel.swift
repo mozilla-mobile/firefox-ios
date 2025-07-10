@@ -230,7 +230,7 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { [weak self] success in
+        viewModel.reloadData { [weak self] _ in
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
             }
@@ -332,29 +332,25 @@ class HistoryPanel: UIViewController,
             if profile.hasSyncableAccount() {
                 resyncHistory()
             }
-            break
-        case .DynamicFontChanged:
+            case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
             emptyStateOverlayView = createEmptyStateOverlayView()
             resyncHistory()
-            break
         case .DatabaseWasReopened:
             if let dbName = notification.object as? String, dbName == "browser.db" {
                 fetchDataAndUpdateLayout(animating: true)
             }
-        case .OpenClearRecentHistory:
+            case .OpenClearRecentHistory:
             if viewModel.isSearchInProgress {
                 exitSearchState()
             }
 
             showClearRecentHistory()
-            break
-        case .OpenRecentlyClosedTabs:
+            case .OpenRecentlyClosedTabs:
             historyCoordinatorDelegate?.showRecentlyClosedTab()
             applySnapshot(animatingDifferences: true)
-            break
         default:
             // no need to do anything at all
             break
@@ -367,7 +363,7 @@ class HistoryPanel: UIViewController,
     private func configureDataSource() {
         diffableDataSource = UITableViewDiffableDataSource<HistoryPanelSections, HistoryItem>(
             tableView: tableView
-        ) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        ) { [weak self] (_, indexPath, item) -> UITableViewCell? in
             guard let self else { return nil }
 
             switch item {

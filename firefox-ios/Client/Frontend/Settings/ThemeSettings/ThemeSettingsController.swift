@@ -166,7 +166,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             slider.topAnchor.constraint(equalTo: parent.topAnchor, constant: 4),
             slider.bottomAnchor.constraint(equalTo: parent.bottomAnchor, constant: -4),
             slider.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: UX.sliderLeftRightInset),
-            slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset),
+            slider.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -UX.sliderLeftRightInset)
         ])
         return slider
     }
@@ -208,7 +208,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: footer.topAnchor, constant: 4),
             label.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: UX.sliderLeftRightInset),
-            label.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -UX.sliderLeftRightInset),
+            label.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -UX.sliderLeftRightInset)
         ])
         return footer
     }

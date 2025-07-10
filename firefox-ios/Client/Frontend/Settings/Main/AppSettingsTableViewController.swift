@@ -396,7 +396,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func getSupportSettings() -> [SettingSection] {
         var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
-            SendFeedbackSetting(settingsDelegate: parentCoordinator),
+            SendFeedbackSetting(settingsDelegate: parentCoordinator)
         ]
 
         guard let sendTechnicalDataSetting,
@@ -416,7 +416,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         supportSettings.append(contentsOf: [
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                                   settingsDelegate: parentCoordinator),
+                                   settingsDelegate: parentCoordinator)
         ])
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),

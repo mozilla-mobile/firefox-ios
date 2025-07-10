@@ -12,7 +12,7 @@ class DeferredTests: XCTestCase {
         XCTAssertNil(d.peek(), "Value not yet filled.")
 
         let expectation = self.expectation(description: "Waiting on value.")
-        d.upon({ x in
+        d.upon({ _ in
             expectation.fulfill()
         })
 

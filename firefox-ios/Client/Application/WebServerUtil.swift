@@ -90,7 +90,7 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
             let fileHtml = try? String(contentsOfFile: filePath, encoding: .utf8)
             server.addHandler(forMethod: "GET",
                               path: "/test-fixture/\(name).html",
-                              request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+                              request: GCDWebServerRequest.self) { (_: GCDWebServerRequest?) in
                 return GCDWebServerDataResponse(html: fileHtml!)
             }
         }

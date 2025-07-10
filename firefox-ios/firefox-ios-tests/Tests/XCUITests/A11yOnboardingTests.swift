@@ -72,7 +72,7 @@ class A11yOnboardingTests: BaseTestCase {
                 app.images["\(rootA11yId)ImageView"],
                 app.staticTexts["\(rootA11yId)TitleLabel"],
                 app.staticTexts["\(rootA11yId)DescriptionLabel"],
-                app.buttons["\(rootA11yId)PrimaryButton"],
+                app.buttons["\(rootA11yId)PrimaryButton"]
             ]
         )
         try app.performAccessibilityAudit()

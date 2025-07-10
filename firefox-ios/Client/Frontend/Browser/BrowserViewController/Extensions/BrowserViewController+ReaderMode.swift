@@ -124,7 +124,7 @@ extension BrowserViewController {
             // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
             webView.evaluateJavascriptInDefaultContentWorld(
                 "\(ReaderModeInfo.namespace.rawValue).readerize()"
-            ) { object, error in
+            ) { object, _ in
                 guard let readabilityResult = ReadabilityResult(object: object as AnyObject?) else { return }
 
                 try? self.readerModeCache.put(currentURL, readabilityResult)

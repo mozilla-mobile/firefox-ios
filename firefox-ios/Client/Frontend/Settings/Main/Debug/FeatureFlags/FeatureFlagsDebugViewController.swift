@@ -220,7 +220,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     statusText: format(string: "Toggle to enable the summarizer feature")
                 ) { [weak self] _ in
                     self?.reloadView()
-                },
+                }
             ]
         )
     }

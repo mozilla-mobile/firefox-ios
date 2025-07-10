@@ -27,7 +27,7 @@ extension UIView: Screenshotable {
     func screenshot(bounds: CGRect) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
 
-        return renderer.image { context in
+        return renderer.image { _ in
             drawHierarchy(
                 in: bounds,
                 afterScreenUpdates: true

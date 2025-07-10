@@ -161,7 +161,7 @@ final class OnboardingServiceTests: XCTestCase {
             from: "testCard",
             cards: [],
             with: activityEventHelper
-        ) { result in
+        ) { _ in
             expectation.fulfill()
         }
 

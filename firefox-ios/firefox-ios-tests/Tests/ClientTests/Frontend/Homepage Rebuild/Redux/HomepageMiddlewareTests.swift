@@ -463,7 +463,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID
                         )
-                    ),
+                    )
                 ]
             )
         )

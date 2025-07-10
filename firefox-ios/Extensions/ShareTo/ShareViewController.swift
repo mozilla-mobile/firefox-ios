@@ -432,7 +432,7 @@ class ShareViewController: UIViewController {
             indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             indicator.widthAnchor.constraint(equalToConstant: defaultSize.width),
-            indicator.heightAnchor.constraint(equalToConstant: defaultSize.height),
+            indicator.heightAnchor.constraint(equalToConstant: defaultSize.height)
          ])
         indicator.startAnimating()
         spinner = indicator

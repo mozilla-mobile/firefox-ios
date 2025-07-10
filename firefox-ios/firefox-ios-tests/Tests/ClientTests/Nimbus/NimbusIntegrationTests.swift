@@ -30,7 +30,7 @@ class NimbusIntegrationTests: XCTestCase {
     func testStringFallbackBundleAccessExplicitLanguage() throws {
         let bundles = [
             Bundle.main,
-            Strings.bundle.fallbackTranslationBundle(language: "es"),
+            Strings.bundle.fallbackTranslationBundle(language: "es")
         ].compactMap { $0 }
         let stringWithNoTable = bundles.getString(named: "ShareExtension.OpenInFirefoxAction.Title")
         XCTAssertEqual(stringWithNoTable, "Abrir en Firefox")
@@ -42,7 +42,7 @@ class NimbusIntegrationTests: XCTestCase {
     func testStringFallbackBundleAccessImplicitLanguage() throws {
         let bundles = [
             Bundle.main,
-            Strings.bundle.fallbackTranslationBundle(),
+            Strings.bundle.fallbackTranslationBundle()
         ].compactMap { $0 }
         let stringWithNoTable = bundles.getString(named: "ShareExtension.OpenInFirefoxAction.Title")
         XCTAssertEqual(stringWithNoTable, "Open in Firefox")

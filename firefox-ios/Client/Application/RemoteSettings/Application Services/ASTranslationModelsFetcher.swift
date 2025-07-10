@@ -120,7 +120,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching {
                     "toLang": fields.toLang,
                     "fileType": fields.fileType,
                     "version": fields.version,
-                    "name": fields.name,
+                    "name": fields.name
                 ]
             ]
         }

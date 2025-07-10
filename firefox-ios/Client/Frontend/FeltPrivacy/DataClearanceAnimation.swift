@@ -72,7 +72,7 @@ struct DataClearanceAnimation {
             animationView.topAnchor.constraint(equalTo: view.topAnchor),
             animationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             animationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            animationView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            animationView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 

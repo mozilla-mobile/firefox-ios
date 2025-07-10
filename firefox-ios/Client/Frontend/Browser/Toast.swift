@@ -85,7 +85,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
                     self.animationConstraint?.constant = UX.shadowRadius
                     self.layoutIfNeeded()
                 }
-            ) { finished in
+            ) { _ in
                 if let duration = duration {
                     DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                         self.dismiss(false)
@@ -107,7 +107,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
                 self.animationConstraint?.constant = UX.toastHeightWithShadow
                 self.layoutIfNeeded()
             }
-        ) { finished in
+        ) { _ in
             self.removeFromSuperview()
             if !buttonPressed {
                 self.completionHandler?(false)

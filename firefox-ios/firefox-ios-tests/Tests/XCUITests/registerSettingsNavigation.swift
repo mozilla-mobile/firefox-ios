@@ -30,7 +30,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
                         to: ShowTourInSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Notifications.title],
                         to: NotificationsSettings)
-        screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
+        screenState.gesture(forAction: Action.ToggleNoImageMode) { _ in
             app.otherElements.tables.cells.switches[
                 AccessibilityIdentifiers.Settings.BlockImages.title].waitAndTap()
         }
@@ -50,7 +50,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
             to: AddCustomSearchSettings
         )
         screenState.backAction = navigationControllerBackAction(for: app)
-        screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
+        screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {_ in
             // Screengraph will go back to main Settings screen. Manually tap on settings
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].waitAndTap()
             if #unavailable(iOS 17) {
@@ -92,7 +92,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(SiriSettings) { screenState in
-        screenState.gesture(forAction: Action.OpenSiriFromSettings) { userState in
+        screenState.gesture(forAction: Action.OpenSiriFromSettings) { _ in
             // Tap on Open New Tab to open Siri
             app.cells["SiriSettings"].staticTexts.element(boundBy: 0).waitAndTap()
         }
@@ -104,16 +104,16 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(DisplaySettings) { screenState in
-        screenState.gesture(forAction: Action.SelectAutomaticTheme) { userState in
+        screenState.gesture(forAction: Action.SelectAutomaticTheme) { _ in
             app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SelectLightTheme) { userState in
+        screenState.gesture(forAction: Action.SelectLightTheme) { _ in
             app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SelectDarkTheme) { userState in
+        screenState.gesture(forAction: Action.SelectDarkTheme) { _ in
             app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SelectBrowserDarkTheme) { userState in
+        screenState.gesture(forAction: Action.SelectBrowserDarkTheme) { _ in
             app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction(for: app)
@@ -124,7 +124,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
             app.cells[AccessibilityIdentifiers.Settings.ClearData.websiteDataSection],
             to: WebsiteDataSettings
         )
-        screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
+        screenState.gesture(forAction: Action.AcceptClearPrivateData) { _ in
             app.tables.cells["ClearPrivateData"].waitAndTap()
             app.alerts.buttons["OK"].waitAndTap()
         }
@@ -161,7 +161,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(AddCustomSearchSettings) { screenState in
-        screenState.gesture(forAction: Action.AddCustomSearchEngine) { userState in
+        screenState.gesture(forAction: Action.AddCustomSearchEngine) { _ in
             app.tables.textViews["customEngineTitle"].staticTexts["Search Engine"].waitAndTap()
             app.typeText("Mozilla Engine")
             app.tables.textViews["customEngineUrl"].waitAndTap()
@@ -184,13 +184,13 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(NewTabSettings) { screenState in
-        screenState.gesture(forAction: Action.SelectNewTabAsBlankPage) { UserState in
+        screenState.gesture(forAction: Action.SelectNewTabAsBlankPage) { _ in
             table.cells["NewTabAsBlankPage"].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SelectNewTabAsFirefoxHomePage) { UserState in
+        screenState.gesture(forAction: Action.SelectNewTabAsFirefoxHomePage) { _ in
             table.cells["NewTabAsFirefoxHome"].waitAndTap()
         }
-        screenState.gesture(forAction: Action.SelectNewTabAsCustomURL) { UserState in
+        screenState.gesture(forAction: Action.SelectNewTabAsCustomURL) { _ in
             table.cells["NewTabAsCustomURL"].waitAndTap()
         }
 
@@ -198,26 +198,26 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     }
 
     map.addScreenState(WebsiteDataSettings) { screenState in
-        screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
+        screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { _ in
             app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].waitAndTap()
             app.alerts.buttons["OK"].waitAndTap()
         }
         // The swipeDown() is a workaround for an intermittent issue that the search filed is not always in view.
-        screenState.gesture(forAction: Action.TapOnFilterWebsites) { userState in
+        screenState.gesture(forAction: Action.TapOnFilterWebsites) { _ in
             app.searchFields["Filter Sites"].waitAndTap()
         }
-        screenState.gesture(forAction: Action.ShowMoreWebsiteDataEntries) { userState in
+        screenState.gesture(forAction: Action.ShowMoreWebsiteDataEntries) { _ in
             app.tables.cells["ShowMoreWebsiteData"].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 
     map.addScreenState(ToolbarSettings) { screenState in
-        screenState.gesture(forAction: Action.SelectToolbarBottom) { UserState in
+        screenState.gesture(forAction: Action.SelectToolbarBottom) { _ in
             app.buttons[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.SelectToolbarTop) { UserState in
+        screenState.gesture(forAction: Action.SelectToolbarTop) { _ in
             app.buttons[AccessibilityIdentifiers.Settings.SearchBar.topSetting].waitAndTap()
         }
 

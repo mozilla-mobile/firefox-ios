@@ -39,7 +39,7 @@ class InternalSchemeHandler: NSObject, SchemeHandler {
 
         let allowedInternalResources = [
             "/errorpage-resource/NetError.css",
-            "/errorpage-resource/CertError.css",
+            "/errorpage-resource/CertError.css"
            // "/reader-mode/..."
         ]
 

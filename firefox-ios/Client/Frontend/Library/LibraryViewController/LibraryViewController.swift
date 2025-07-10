@@ -32,7 +32,7 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     var currentWindowUUID: UUID? { windowUUID }
 
     // Views
-    private var controllerContainerView: UIView = .build { view in }
+    private var controllerContainerView: UIView = .build { _ in }
 
     // UI Elements
     private lazy var librarySegmentControl: UISegmentedControl = {

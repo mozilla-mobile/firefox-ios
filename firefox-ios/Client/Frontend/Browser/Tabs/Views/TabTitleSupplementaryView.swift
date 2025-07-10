@@ -54,7 +54,7 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
 
             favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
             favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
-            favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),
+            favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor)
         ])
     }
 

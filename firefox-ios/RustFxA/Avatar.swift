@@ -12,7 +12,7 @@ open class Avatar {
     init(url: URL?) {
         self.url = url
 
-        downloadAvatar(url: url) { image in
+        downloadAvatar(url: url) { _ in
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }

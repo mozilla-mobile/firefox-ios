@@ -76,13 +76,13 @@ class DisconnectSetting: Setting {
             preferredStyle: UIAlertController.Style.alert)
 
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .default) { (action) in
+            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .default) { (_) in
                 // Do nothing.
             }
         )
 
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
+            UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (_) in
                 self.profile?.removeAccount()
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncUserLoggedOut)
 
@@ -141,7 +141,7 @@ class DeviceNameSetting: StringSetting {
             forName: Notification.Name.constellationStateUpdate,
             object: nil,
             queue: nil
-        ) { [weak self] notification in
+        ) { [weak self] _ in
             self?.tableView?.tableView.reloadData()
         }
     }

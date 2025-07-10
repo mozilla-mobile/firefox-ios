@@ -51,7 +51,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         subject.browserBarViewDelegate = nil
         var completionDidRun = false
-        subject.onTapGroup = { tab in
+        subject.onTapGroup = { _ in
             completionDidRun = true
         }
 
@@ -66,7 +66,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         mockBrowserBarViewDelegate.inOverlayMode = true
         var completionDidRun = false
-        subject.onTapGroup = { tab in
+        subject.onTapGroup = { _ in
             completionDidRun = true
         }
 
@@ -81,7 +81,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         mockBrowserBarViewDelegate.inOverlayMode = true
         var completionDidRun = false
-        subject.onTapGroup = { tab in
+        subject.onTapGroup = { _ in
             completionDidRun = true
         }
 

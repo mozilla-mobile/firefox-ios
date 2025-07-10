@@ -20,7 +20,7 @@ final class MessageCardMiddleware {
         self.messagingManager = messagingManager
     }
 
-    lazy var messageCardProvider: Middleware<AppState> = { state, action in
+    lazy var messageCardProvider: Middleware<AppState> = { _, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

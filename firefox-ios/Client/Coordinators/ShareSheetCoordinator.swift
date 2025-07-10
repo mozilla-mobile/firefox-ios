@@ -53,7 +53,7 @@ class ShareSheetCoordinator: BaseCoordinator,
         let controller = ShareManager.createActivityViewController(
             shareType: shareType,
             shareMessage: shareMessage,
-            completionHandler: { [weak self] completed, activityType in
+            completionHandler: { [weak self] _, activityType in
                 guard let self else { return }
 
                 self.handleShareSheetCompletion(

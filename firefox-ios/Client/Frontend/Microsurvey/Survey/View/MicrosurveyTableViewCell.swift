@@ -119,7 +119,7 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
                 horizontalStackView.bottomAnchor.constraint(
                     equalTo: contentView.bottomAnchor,
                     constant: UX.padding.bottom
-                ),
+                )
             ]
         )
     }

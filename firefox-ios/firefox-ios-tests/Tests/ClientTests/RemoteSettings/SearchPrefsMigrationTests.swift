@@ -59,7 +59,7 @@ class SearchPrefsMigrationTests: XCTestCase {
             searchTemplate: "",
             suggestTemplate: "",
             isCustomEngine: true
-        ),
+        )
     ]
 
     private let mockXMLBasedEngines: [OpenSearchEngine] = [
@@ -98,7 +98,7 @@ class SearchPrefsMigrationTests: XCTestCase {
             searchTemplate: "",
             suggestTemplate: "",
             isCustomEngine: true
-        ),
+        )
     ]
 
     func testMigrateV1toV2Preferences() {

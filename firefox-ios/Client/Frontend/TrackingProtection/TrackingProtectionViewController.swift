@@ -319,7 +319,7 @@ class TrackingProtectionViewController: UIViewController,
             ),
             connectionDetailsHeaderView.topAnchor.constraint(
                 equalTo: baseView.topAnchor,
-                constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
+                constant: TPMenuUX.UX.connectionDetailsHeaderMargins)
         ]
         constraints.append(contentsOf: connectionHeaderConstraints)
     }
@@ -345,7 +345,7 @@ class TrackingProtectionViewController: UIViewController,
             connectionHorizontalLine.topAnchor.constraint(equalTo: trackersConnectionContainer.bottomAnchor),
             connectionHorizontalLine.leadingAnchor.constraint(equalTo: trackersConnectionContainer.leadingAnchor),
             connectionHorizontalLine.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
-            connectionHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
+            connectionHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height)
         ]
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = { [weak self] in
@@ -439,7 +439,7 @@ class TrackingProtectionViewController: UIViewController,
             settingsLinkButton.bottomAnchor.constraint(
                 equalTo: baseView.bottomAnchor,
                 constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing
-            ),
+            )
         ]
 
         constraints.append(contentsOf: protectionConstraints)
@@ -534,7 +534,7 @@ class TrackingProtectionViewController: UIViewController,
             headerContainer.layoutIfNeeded()
             scrollView.layoutIfNeeded()
             let contentHeight = headerContainer.frame.height + scrollView.contentSize.height
-            let customDetent = UISheetPresentationController.Detent.custom { context in
+            let customDetent = UISheetPresentationController.Detent.custom { _ in
                 return contentHeight
             }
             self.sheetPresentationController?.detents = [customDetent]

@@ -84,7 +84,7 @@ final class BookmarksMiddlewareTests: XCTestCase, StoreTestUtility {
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID
                         )
-                    ),
+                    )
                 ]
             )
         )

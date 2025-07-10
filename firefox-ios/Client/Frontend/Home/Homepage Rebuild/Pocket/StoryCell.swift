@@ -78,7 +78,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
         titleLabel.text = story.title
         titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
         accessibilityLabel = story.accessibilityLabel
-        
+
         // Set accessibility hint with position information
         if position > 0 && totalCount > 0 && position <= totalCount {
             accessibilityHint = String(format: .FirefoxHomepage.Pocket.StoryPositionAccessibilityHint,
@@ -119,7 +119,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
             descriptionStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                            constant: -UX.descriptionTrailingMargin),
             descriptionStackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
-                                                         constant: -UX.descriptionVerticalMargin),
+                                                         constant: -UX.descriptionVerticalMargin)
         ])
     }
 

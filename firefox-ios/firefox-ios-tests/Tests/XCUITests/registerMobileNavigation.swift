@@ -12,7 +12,7 @@ func registerMobileNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
         screenState.gesture(
             forAction: Action.ExitMobileBookmarksFolder,
             transitionTo: LibraryPanel_Bookmarks
-        ) { userState in
+        ) { _ in
             bookmarksButton.waitAndTap()
         }
         screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
@@ -20,22 +20,22 @@ func registerMobileNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
 
     map.addScreenState(MobileBookmarksEdit) { screenState in
         screenState.tap(app.buttons["libraryPanelBottomLeftButton"], to: MobileBookmarksAdd)
-        screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { userState in
+        screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { _ in
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).waitAndTap()
         }
-        screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
+        screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { _ in
             app.buttons["Delete"].waitAndTap()
         }
     }
 
     map.addScreenState(MobileBookmarksAdd) { screenState in
-        screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
+        screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { _ in
             app.otherElements["New Bookmark"].waitAndTap()
         }
-        screenState.gesture(forAction: Action.AddNewFolder) { userState in
+        screenState.gesture(forAction: Action.AddNewFolder) { _ in
             app.otherElements["New Folder"].waitAndTap()
         }
-        screenState.gesture(forAction: Action.AddNewSeparator) { userState in
+        screenState.gesture(forAction: Action.AddNewSeparator) { _ in
             app.otherElements["New Separator"].waitAndTap()
         }
     }

@@ -227,14 +227,14 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             pinImageBackgroundView.topAnchor.constraint(equalTo: rootContainer.topAnchor, constant: -4),
             pinImageBackgroundView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor, constant: -4),
             pinImageBackgroundView.widthAnchor.constraint(equalToConstant: UX.pinBackgroundSize.width),
-            pinImageBackgroundView.heightAnchor.constraint(equalToConstant: UX.pinBackgroundSize.height),
+            pinImageBackgroundView.heightAnchor.constraint(equalToConstant: UX.pinBackgroundSize.height)
         ])
 
         imageViewConstraints = [
             imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
+            imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor)
         ]
         NSLayoutConstraint.activate(imageViewConstraints)
     }

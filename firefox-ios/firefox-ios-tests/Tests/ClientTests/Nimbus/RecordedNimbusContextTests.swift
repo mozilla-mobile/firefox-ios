@@ -77,7 +77,7 @@ class RecordedNimbusContextTests: XCTestCase {
 
         var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
+        GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { _ in
             value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
             expectation.fulfill()
         }

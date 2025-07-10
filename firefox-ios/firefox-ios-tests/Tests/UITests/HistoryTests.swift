@@ -53,7 +53,6 @@ class HistoryTests: KIFTestCase {
 
         tester().waitForView(withAccessibilityLabel: "\(webRoot!)/numberedPage.html?page=1")
 
-
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
         tester().tapView(withAccessibilityIdentifier: "url")

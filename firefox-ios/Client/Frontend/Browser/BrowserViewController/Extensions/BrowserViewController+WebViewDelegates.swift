@@ -209,7 +209,7 @@ extension BrowserViewController: WKUIDelegate {
     private func contextMenuActionProvider(for url: URL,
                                            webView: WKWebView,
                                            elements: ContextMenuHelper.Elements) -> UIContextMenuActionProvider {
-        return { [self] (suggested) -> UIMenu? in
+        return { [self] (_) -> UIMenu? in
             guard let currentTab = tabManager.selectedTab else { return nil }
 
             let isPrivate = currentTab.isPrivate

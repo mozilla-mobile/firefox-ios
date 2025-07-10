@@ -90,7 +90,7 @@ func registerToolBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
             forAction: Action.ClickSearchButton
-        ) { userState in
+        ) { _ in
         }
 
         makeToolBarAvailable(screenState, app: app)

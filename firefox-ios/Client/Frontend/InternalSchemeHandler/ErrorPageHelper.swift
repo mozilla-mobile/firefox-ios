@@ -28,7 +28,7 @@ private let CertErrors = [
 private let CertErrorCodes = [
     -9813: "SEC_ERROR_UNKNOWN_ISSUER",
     -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
-    -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
+    -9843: "SSL_ERROR_BAD_CERT_DOMAIN"
 ]
 
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
@@ -217,7 +217,7 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         var variables = [
             "error_code": "\(errCode)",
             "error_title": errDescription,
-            "short_description": errDomain,
+            "short_description": errDomain
             ]
 
         let tryAgain: String = .ErrorPageTryAgain

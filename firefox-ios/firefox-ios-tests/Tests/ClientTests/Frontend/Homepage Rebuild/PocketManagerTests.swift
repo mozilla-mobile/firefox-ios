@@ -45,7 +45,7 @@ final class PocketManagerTests: XCTestCase {
         return [
             .make(title: "feed1"),
             .make(title: "feed2"),
-            .make(title: "feed3"),
+            .make(title: "feed3")
         ]
     }
 

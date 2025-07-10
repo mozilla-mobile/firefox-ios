@@ -105,7 +105,7 @@ class ExperimentsSettingsView: UIView {
                 gapView.topAnchor.constraint(equalTo: updateButton.bottomAnchor),
                 gapView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 gapView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                gapView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                gapView.bottomAnchor.constraint(equalTo: bottomAnchor)
             ]
         )
     }

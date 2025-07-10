@@ -189,10 +189,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
             switch button.fontSizeAction {
             case .bigger:
                 button.isEnabled = !viewModel.readerModeStyle.fontSize.isLargest()
-                break
-            case .smaller:
+                case .smaller:
                 button.isEnabled = !viewModel.readerModeStyle.fontSize.isSmallest()
-                break
             case .reset:
                 break
             }
@@ -224,7 +222,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         NSLayoutConstraint.activate([
             fontTypeStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: viewModel.fontTypeOffset),
             fontTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            fontTypeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            fontTypeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         fontTypeButtons = [
@@ -244,7 +242,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         NSLayoutConstraint.activate([
             fontSizeStackView.topAnchor.constraint(equalTo: separatorLines[0].bottomAnchor),
             fontSizeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            fontSizeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            fontSizeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         fontSizeButtons = [
@@ -265,7 +263,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         NSLayoutConstraint.activate([
             themeStackView.topAnchor.constraint(equalTo: separatorLines[1].bottomAnchor),
             themeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            themeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            themeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         // These UIButtons represent the ReaderModeTheme (Light/Sepia/Dark)

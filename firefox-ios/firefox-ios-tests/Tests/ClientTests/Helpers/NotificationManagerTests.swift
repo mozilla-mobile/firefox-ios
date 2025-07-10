@@ -22,7 +22,7 @@ class NotificationManagerTests: XCTestCase {
     }
 
     func testRequestAuthorization() {
-        notificationManager.requestAuthorization { (granted, error) in
+        notificationManager.requestAuthorization { (granted, _) in
             XCTAssertTrue(granted)
             XCTAssertTrue(self.center.requestAuthorizationWasCalled)
         }
@@ -30,7 +30,7 @@ class NotificationManagerTests: XCTestCase {
 
     func testGetNotificationSettings() {
         let expectation = self.expectation(description: "notification manager")
-        notificationManager.getNotificationSettings { settings in
+        notificationManager.getNotificationSettings { _ in
             XCTAssertTrue(self.center.getSettingsWasCalled)
             expectation.fulfill()
         }
@@ -54,13 +54,13 @@ class NotificationManagerTests: XCTestCase {
     }
 
     func testFindDeliveredNotifications() {
-        notificationManager.findDeliveredNotifications { notifications in
+        notificationManager.findDeliveredNotifications { _ in
             XCTAssertTrue(self.center.getDeliveredWasCalled)
         }
     }
 
     func testFindDeliveredNotificationForId() {
-        notificationManager.findDeliveredNotificationForId(id: "id1") { notifications in
+        notificationManager.findDeliveredNotificationForId(id: "id1") { _ in
             XCTAssertTrue(self.center.getDeliveredWasCalled)
         }
     }

@@ -91,7 +91,7 @@ class TestSQLitePinnedSites: XCTestCase {
             >>> dupePinnedSite
             >>> done
 
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 3) { _ in
             return
         }
     }
@@ -146,7 +146,7 @@ class TestSQLitePinnedSites: XCTestCase {
             >>> removePinnedSites
             >>> done
 
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 3) { _ in
             return
         }
     }
@@ -203,7 +203,7 @@ class TestSQLitePinnedSites: XCTestCase {
             >>> removePinnedSite
             >>> done
 
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 3) { _ in
             return
         }
     }

@@ -62,7 +62,7 @@ class MenuBuilderHelper {
                     input: "w",
                     modifierFlags: .command,
                     discoverabilityTitle: .KeyboardShortcuts.CloseCurrentTab
-                ),
+                )
             ]
         )
         fileMenu.children.forEach {
@@ -85,7 +85,7 @@ class MenuBuilderHelper {
                     input: "g",
                     modifierFlags: .command,
                     discoverabilityTitle: .KeyboardShortcuts.FindAgain
-                ),
+                )
             ]
         )
         findMenu.children.forEach {
@@ -248,7 +248,7 @@ class MenuBuilderHelper {
                     input: "9",
                     modifierFlags: .command,
                     discoverabilityTitle: .KeyboardShortcuts.ShowLastTab
-                ),
+                )
             ]
         )
 

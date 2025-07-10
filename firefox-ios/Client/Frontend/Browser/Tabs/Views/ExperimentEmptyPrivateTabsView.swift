@@ -130,7 +130,7 @@ class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
             learnMoreButton.trailingAnchor.constraint(lessThanOrEqualTo: centeredView.trailingAnchor),
             learnMoreButton.centerXAnchor.constraint(equalTo: centeredView.centerXAnchor),
             learnMoreButton.bottomAnchor.constraint(equalTo: centeredView.bottomAnchor,
-                                                    constant: -UX.paddingInBetweenItems),
+                                                    constant: -UX.paddingInBetweenItems)
         ])
     }
 

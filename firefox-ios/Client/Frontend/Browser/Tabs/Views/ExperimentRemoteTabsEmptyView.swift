@@ -119,7 +119,7 @@ class ExperimentRemoteTabsEmptyView: UIView, RemoteTabsEmptyViewProtocol {
             signInButton.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor),
             signInButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             signInButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                 constant: -UX.paddingInBetweenItems),
+                                                 constant: -UX.paddingInBetweenItems)
         ])
     }
 

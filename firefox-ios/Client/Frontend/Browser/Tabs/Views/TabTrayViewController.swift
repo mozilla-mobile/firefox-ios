@@ -163,7 +163,7 @@ class TabTrayViewController: UIViewController,
         let regularLayoutItems = [
             TabTrayPanelType.tabs.label,
             TabTrayPanelType.privateTabs.label,
-            TabTrayPanelType.syncedTabs.label,
+            TabTrayPanelType.syncedTabs.label
         ]
 
         return isRegularLayout ? regularLayoutItems : iPhoneItems
@@ -693,7 +693,7 @@ class TabTrayViewController: UIViewController,
             panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
             panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         panel.didMove(toParent: self)

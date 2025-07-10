@@ -102,7 +102,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             placeholder: .CustomNewPageURL,
             accessibilityIdentifier: "HomeAsCustomURL",
             isChecked: { return !showTopSites.isChecked() },
-            settingDidChange: { (string) in
+            settingDidChange: { (_) in
                 self.currentNewTabChoice = NewTabPage.homePage
                 onFinished()
             })
@@ -210,7 +210,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             Bool,
             StartAtHomeSetting,
             StartAtHomeSetting?
-        ) -> Void = { [weak self] state, newOption, previousOption in
+        ) -> Void = { [weak self] _, newOption, previousOption in
             self?.prefs.setString(newOption.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
             self?.tableView.reloadData()
 

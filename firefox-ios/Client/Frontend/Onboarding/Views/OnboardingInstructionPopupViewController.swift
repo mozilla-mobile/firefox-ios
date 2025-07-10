@@ -168,7 +168,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
                 ),
                 textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+                primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor)
             ]
         )
     }

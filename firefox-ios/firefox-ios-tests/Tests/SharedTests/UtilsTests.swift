@@ -58,7 +58,7 @@ class UtilsTests: XCTestCase {
             Example(arr: [1, 2], by: 1, expected: [[1], [2]]),
             Example(arr: [1, 2, 3], by: 2, expected: [[1, 2], [3]]),
             Example(arr: [1, 2], by: 3, expected: [[1, 2]]),
-            Example(arr: [1, 2, 3], by: 1, expected: [[1], [2], [3]]),
+            Example(arr: [1, 2, 3], by: 1, expected: [[1], [2], [3]])
         ]
         for example in examples {
             // Turn the ArraySlices back into Arrays for comparison.
@@ -74,7 +74,7 @@ class UtilsTests: XCTestCase {
             Example(arr: [1, 2], by: 1, expected: [[1], [2]]),
             Example(arr: [1, 2, 3], by: 2, expected: [[1, 2], [3]]),
             Example(arr: [1, 2], by: 3, expected: [[1, 2]]),
-            Example(arr: [1, 2, 3], by: 1, expected: [[1], [2], [3]]),
+            Example(arr: [1, 2, 3], by: 1, expected: [[1], [2], [3]])
             ]
         for example in examples {
             let actual = chunkCollection(example.arr, by: example.by) { xs in [xs] }

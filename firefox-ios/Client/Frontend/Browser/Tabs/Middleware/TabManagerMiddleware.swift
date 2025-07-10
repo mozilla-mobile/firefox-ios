@@ -246,15 +246,15 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.learnMorePrivateMode:
             guard let urlRequest = action.urlRequest else { return }
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.toggleInactiveTabs:
+            case TabPanelViewActionType.toggleInactiveTabs:
             guard let tabState = state.screenState(TabsPanelState.self,
                                                    for: .tabsPanel,
                                                    window: action.windowUUID)
-            else { return }
+            else {
+                return
+            }
             let expanded = tabState.isInactiveTabsExpanded
             inactiveTabTelemetry.sectionToggled(hasExpanded: expanded)
-            break
 
         default:
             break
@@ -771,7 +771,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                 canBeSaved = false
             }
             let browserProfile = self.profile as? BrowserProfile
-            browserProfile?.tabs.getClientGUIDs { (result, error) in
+            browserProfile?.tabs.getClientGUIDs { (result, _) in
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
                                          canCopyURL: !(tab?.isFxHomeTab ?? false),
                                          isSyncEnabled: !(result?.isEmpty ?? true),

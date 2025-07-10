@@ -43,7 +43,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         self.profile = profile
     }
 
-    lazy var topSitesProvider: Middleware<AppState> = { state, action in
+    lazy var topSitesProvider: Middleware<AppState> = { _, action in
         switch action.actionType {
         case HomepageActionType.initialize,
             HomepageMiddlewareActionType.topSitesUpdated,

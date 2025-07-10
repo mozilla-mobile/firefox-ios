@@ -959,7 +959,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
-        if setting as? DisconnectSetting != nil {
+        if setting is DisconnectSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
                 for: indexPath
@@ -967,7 +967,7 @@ class SettingsTableViewController: ThemedTableViewController {
                 return ThemedCenteredTableViewCell()
             }
             return cell
-        } else if setting as? SendDataSetting != nil {
+        } else if setting is SendDataSetting {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedLearnMoreTableViewCell.cellIdentifier,
                 for: indexPath

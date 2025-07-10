@@ -15,7 +15,7 @@ final class InactiveTabsTest: FeatureFlaggedTestBase {
             LaunchArguments.SkipWhatsNew,
             LaunchArguments.SkipETPCoverSheet,
             LaunchArguments.SkipContextualHints,
-            LaunchArguments.DisableAnimations,
+            LaunchArguments.DisableAnimations
         ]
         launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
@@ -83,7 +83,7 @@ final class InactiveTabsTest: FeatureFlaggedTestBase {
                 app.otherElements[tabsTray].staticTexts["Homepage"],
                 app.otherElements[tabsTray].staticTexts["Google"],
                 app.otherElements[tabsTray].staticTexts["Facebook - log in or sign up"],
-                app.otherElements[tabsTray].staticTexts["Amazon.com. Spend less. Smile more."],
+                app.otherElements[tabsTray].staticTexts["Amazon.com. Spend less. Smile more."]
             ]
         )
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])

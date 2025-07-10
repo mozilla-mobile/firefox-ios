@@ -95,7 +95,7 @@ class DownloadHelper: NSObject {
                                              iconString: "file",
                                              iconAlignment: .right,
                                              bold: true,
-                                             customRender: { label, contentView in
+                                             customRender: { label, _ in
             label.numberOfLines = 2
             label.font = FXFontStyles.Bold.body.scaledFont()
             label.lineBreakMode = .byCharWrapping

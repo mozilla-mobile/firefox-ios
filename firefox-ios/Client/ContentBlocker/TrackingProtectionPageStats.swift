@@ -169,7 +169,7 @@ class TPStatsBlocklists {
             BlocklistFileName.analyticsURLs,
             BlocklistFileName.socialURLs,
             BlocklistFileName.cryptomining,
-            BlocklistFileName.fingerprinting,
+            BlocklistFileName.fingerprinting
             ] {
             let list: [[String: AnyObject]]
             do {

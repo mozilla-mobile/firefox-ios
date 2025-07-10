@@ -15,11 +15,11 @@ func registerTrackingProtection(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.gesture(
             forAction: Action.OpenSettingsFromTPMenu,
             transitionTo: TrackingProtectionSettings
-        ) { userState in
+        ) { _ in
             app.cells["settings"].waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.CloseTPContextMenu) { userState in
+        screenState.gesture(forAction: Action.CloseTPContextMenu) { _ in
             if isTablet {
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].waitAndTap()

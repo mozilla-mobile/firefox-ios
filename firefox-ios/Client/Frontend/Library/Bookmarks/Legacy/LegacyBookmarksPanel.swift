@@ -263,7 +263,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderCancelButtonLabel,
                                                 style: .default))
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel,
-                                                style: .destructive) { [weak self] action in
+                                                style: .destructive) { [weak self] _ in
             self?.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
         })
         present(alertController, animated: true, completion: nil)

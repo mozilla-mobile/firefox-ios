@@ -114,13 +114,12 @@ class DownloadsPanel: UIViewController,
             switch notification.name {
             case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
                 self.reloadData()
-            case .DynamicFontChanged:
+                case .DynamicFontChanged:
                 self.reloadData()
                 if self.emptyStateOverlayView.superview != nil {
                     self.emptyStateOverlayView.removeFromSuperview()
                 }
                 self.emptyStateOverlayView = self.createEmptyStateOverlayView()
-                break
             case .DownloadPanelFileWasDeleted:
                 guard let uuid = notification.windowUUID,
                       uuid != self.windowUUID else { return }

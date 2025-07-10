@@ -10,7 +10,7 @@ func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
-        screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
+        screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { _ in
             doneButton.waitAndTap()
         }
     }
@@ -19,7 +19,7 @@ func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
         let readingListButton = app.buttons["readingListLarge"]
 
         screenState.dismissOnUse = true
-        screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
+        screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { _ in
             doneButton.waitAndTap()
         }
         screenState.tap(readingListButton, to: LibraryPanel_ReadingList)
@@ -34,10 +34,10 @@ func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
             app.cells[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.recentlyClosedCell],
             to: HistoryRecentlyClosed
         )
-        screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
+        screenState.gesture(forAction: Action.ClearRecentHistory) { _ in
             app.toolbars.matching(identifier: "Toolbar").buttons["historyBottomDeleteButton"].waitAndTap()
         }
-        screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
+        screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { _ in
             doneButton.waitAndTap()
         }
     }
@@ -47,7 +47,7 @@ func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
         let bookmarksTable = app.tables["Bookmarks List"]
 
         screenState.tap(mobileBookmarksCell, to: MobileBookmarks)
-        screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
+        screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { _ in
             doneButton.waitAndTap()
         }
 

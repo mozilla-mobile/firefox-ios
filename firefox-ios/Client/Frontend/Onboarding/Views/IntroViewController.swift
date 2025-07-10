@@ -124,7 +124,7 @@ class IntroViewController: UIViewController,
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -140,7 +140,7 @@ class IntroViewController: UIViewController,
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeHorizontalMargin),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
     }
 

@@ -22,7 +22,7 @@ final class StartAtHomeMiddleware {
         self.dateProvider = dateProvider
     }
 
-    lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
+    lazy var startAtHomeProvider: Middleware<AppState> = { _, action in
         // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
         // because we dispatch to the main thread in the store. We will want
         // to also isolate that to the @MainActor to remove this.

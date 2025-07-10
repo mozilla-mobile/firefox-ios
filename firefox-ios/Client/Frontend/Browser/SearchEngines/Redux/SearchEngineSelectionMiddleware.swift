@@ -18,7 +18,7 @@ final class SearchEngineSelectionMiddleware {
         self.searchEnginesManager = searchEnginesManager
     }
 
-    lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in
+    lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] _, action in
         guard let action = action as? SearchEngineSelectionAction else { return }
 
         switch action.actionType {
@@ -27,7 +27,7 @@ final class SearchEngineSelectionMiddleware {
 
             guard !searchEngines.isEmpty else {
                 // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
-                self.searchEnginesManager.getOrderedEngines { [weak self] preferences, searchEngines in
+                self.searchEnginesManager.getOrderedEngines { [weak self] _, searchEngines in
                     self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
                 }
                 return

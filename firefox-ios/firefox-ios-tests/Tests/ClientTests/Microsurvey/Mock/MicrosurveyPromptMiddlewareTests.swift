@@ -108,7 +108,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
                         MicrosurveyState(
                             windowUUID: .XCTestDefaultUUID
                         )
-                    ),
+                    )
                 ]
             )
         )

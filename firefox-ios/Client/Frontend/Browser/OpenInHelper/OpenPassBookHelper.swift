@@ -154,7 +154,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
                                                 preferredStyle: .alert)
 
         alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss,
-                                                style: .cancel) { (action) in })
+                                                style: .cancel) { (_) in })
         presenter.present(alertController, animated: true, completion: nil)
     }
 

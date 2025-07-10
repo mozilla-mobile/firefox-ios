@@ -114,7 +114,7 @@ class RustRemoteTabsTests: XCTestCase {
     }
 
     func testGetClientGUIDs() {
-        mockTabs.getClientGUIDs { (result, error) in
+        mockTabs.getClientGUIDs { (result, _) in
             XCTAssertNotNil(result)
             XCTAssertEqual(result!.count, 2)
             XCTAssertTrue(result!.contains("AAAAA"))

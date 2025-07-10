@@ -387,7 +387,7 @@ class ReadingListPanel: UITableViewController,
         let unreadToggleAction = UIContextualAction(
             style: .normal,
             title: toggleText.stringSplitWithNewline()
-        ) { [weak self] (_, view, completion) in
+        ) { [weak self] (_, _, completion) in
             guard let strongSelf = self else { completion(false); return }
             strongSelf.toggleItem(atIndex: indexPath)
             completion(true)

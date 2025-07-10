@@ -161,7 +161,7 @@ class MainMenuViewController: UIViewController,
                 if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                     self?.currentCustomMenuHeight = height
                     if #available(iOS 16.0, *) {
-                        let customDetent = UISheetPresentationController.Detent.custom { context in
+                        let customDetent = UISheetPresentationController.Detent.custom { _ in
                             return height
                         }
                         if isExpanded {
@@ -269,7 +269,7 @@ class MainMenuViewController: UIViewController,
             menuContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             menuContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         let icon = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)?
@@ -287,7 +287,7 @@ class MainMenuViewController: UIViewController,
             menuRedesignContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             menuRedesignContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             menuRedesignContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            menuRedesignContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            menuRedesignContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         menuRedesignContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),

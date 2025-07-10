@@ -274,7 +274,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         customEngines.remove(at: customEngines.firstIndex(of: engine)!)
         saveCustomEngines()
 
-        getOrderedEngines { enginePreferences, orderedEngines in
+        getOrderedEngines { _, orderedEngines in
             self.orderedEngines = orderedEngines
             self.delegate?.searchEnginesDidUpdate()
 

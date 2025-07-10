@@ -24,7 +24,7 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.share],
             forAction: Action.ShareBrowserTabMenuOption
-        ) { userState in
+        ) { _ in
         }
 
         screenState.dismissOnUse = true

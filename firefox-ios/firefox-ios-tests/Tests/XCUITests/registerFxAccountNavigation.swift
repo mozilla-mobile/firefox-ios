@@ -48,10 +48,10 @@ func registerFxAccountNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
             app.secureTextFields.element(boundBy: 0).tapAndTypeText(userState.fxaPassword!)
         }
-        screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
+        screenState.gesture(forAction: Action.FxATapOnContinueButton) { _ in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].waitAndTap()
         }
-        screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
+        screenState.gesture(forAction: Action.FxATapOnSignInButton) { _ in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.signInButton].waitAndTap()
         }
         screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)

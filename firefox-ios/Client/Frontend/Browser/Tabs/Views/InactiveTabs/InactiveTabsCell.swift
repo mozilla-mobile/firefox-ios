@@ -76,7 +76,7 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
             bottomSeparatorView.heightAnchor.constraint(equalToConstant: UX.separatorHeight),
             bottomSeparatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            bottomSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            bottomSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
 
         leftImageView.setContentHuggingPriority(.required, for: .vertical)

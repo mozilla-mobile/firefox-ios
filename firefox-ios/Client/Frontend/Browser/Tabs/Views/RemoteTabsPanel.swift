@@ -124,7 +124,7 @@ class RemoteTabsPanel: UIViewController,
                 tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
                 tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
         }
     }

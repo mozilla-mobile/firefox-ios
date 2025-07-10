@@ -310,7 +310,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             collectionView.topAnchor.constraint(equalTo: topTabFader.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: topTabFader.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor)
         ])
 
         if isToolbarRefactorEnabled {
@@ -323,7 +323,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
                 tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
                 tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace),
                 tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
-                tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+                tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor)
             ])
         }
     }

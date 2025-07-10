@@ -32,7 +32,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             (CookiesClearable(), true),
             (SiteDataClearable(), true),
             (TrackingProtectionClearable(), true),
-            (DownloadedFilesClearable(), false), // Don't clear downloaded files by default
+            (DownloadedFilesClearable(), false) // Don't clear downloaded files by default
         ]
 
         let spotlightConfig = FxNimbus.shared.features.spotlightSearch.value()
@@ -186,7 +186,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                 return pair.clearable.clear()
             }
             .allSucceed()
-            .uponQueue(.main) { result in
+            .uponQueue(.main) { _ in
                 self.profile.prefs.setObject(self.toggles, forKey: Keys.keyTogglesPref.rawValue)
 
                 // Disable the Clear Private Data button after it's clicked.

@@ -208,7 +208,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            ),
+            )
         ])
     }
 
@@ -257,7 +257,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                             )
                         )
                     }
-                ),
+                )
         ])
     }
 
@@ -339,7 +339,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                             )
                         )
                     }
-                ),
+                )
             ])
         }
         return MenuSection(isExpanded: isExpanded, options: options)
@@ -582,7 +582,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            ),
+            )
         ])
     }
 
@@ -655,7 +655,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                             )
                         )
                     }
-                ),
+                )
             ]
         )
     }
@@ -748,12 +748,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             MenuSection(options: [
                 configureZoomItem(with: uuid, and: tabInfo),
                 configureNightModeItem(with: uuid, and: tabInfo),
-                configureReportSiteIssueItem(with: uuid, tabInfo: tabInfo),
+                configureReportSiteIssueItem(with: uuid, tabInfo: tabInfo)
             ])
         } else {
             MenuSection(options: [
                 configureZoomItem(with: uuid, and: tabInfo),
-                configureNightModeItem(with: uuid, and: tabInfo),
+                configureNightModeItem(with: uuid, and: tabInfo)
             ])
         }
 
@@ -761,7 +761,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             firstSection,
             MenuSection(options: [
                 configurePrintItem(with: uuid, tabInfo: tabInfo),
-                configureShareItem(with: uuid, tabInfo: tabInfo),
+                configureShareItem(with: uuid, tabInfo: tabInfo)
             ])
         ]
     }
@@ -986,7 +986,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 configureBookmarkItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 configureReadingListItem(with: uuid, and: tabInfo),
-                configureSaveAsPDFItem(with: uuid, and: tabInfo),
+                configureSaveAsPDFItem(with: uuid, and: tabInfo)
             ]
         )]
     }
@@ -1197,7 +1197,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            ),
+            )
         ])
     }
 
@@ -1255,7 +1255,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            ),
+            )
         ]
 
         let standardOptions = [
@@ -1299,7 +1299,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            ),
+            )
         ]
 
         return MenuSection(options: isHomepage ? homepageOptions + standardOptions : standardOptions)

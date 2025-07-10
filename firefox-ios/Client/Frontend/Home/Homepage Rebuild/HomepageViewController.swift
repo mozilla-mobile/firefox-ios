@@ -365,7 +365,7 @@ final class HomepageViewController: UIViewController,
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -433,7 +433,7 @@ final class HomepageViewController: UIViewController,
 
         dataSource = HomepageDiffableDataSource(
             collectionView: collectionView
-        ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+        ) { [weak self] (_, indexPath, item) -> UICollectionViewCell? in
             return self?.configureCell(for: item, at: indexPath)
         }
 
@@ -579,7 +579,7 @@ final class HomepageViewController: UIViewController,
               case .pocket = section else {
             return 0
         }
-        
+
         let snapshot = dataSource?.snapshot()
         let items = snapshot?.itemIdentifiers(inSection: section) ?? []
         return items.count

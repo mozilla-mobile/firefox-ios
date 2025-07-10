@@ -39,7 +39,7 @@ class WallpaperBackgroundView: UIView {
             pictureView.leadingAnchor.constraint(equalTo: leadingAnchor),
             pictureView.topAnchor.constraint(equalTo: topAnchor),
             pictureView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            pictureView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            pictureView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 

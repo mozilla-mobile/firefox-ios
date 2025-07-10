@@ -102,7 +102,7 @@ class ReaderMode: TabContentScript {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeInfo.namespace.rawValue).setStyle(\(style.encode()))"
-                    ) { object, error in
+                    ) { _, _ in
                     return
                 }
             }

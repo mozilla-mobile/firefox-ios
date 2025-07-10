@@ -369,7 +369,7 @@ extension BrowserViewController {
         let searchLocationCommands = [
             // Navigate the suggestions
             UIKeyCommand(action: #selector(moveURLCompletionKeyCommand(sender:)), input: UIKeyCommand.inputDownArrow),
-            UIKeyCommand(action: #selector(moveURLCompletionKeyCommand(sender:)), input: UIKeyCommand.inputUpArrow),
+            UIKeyCommand(action: #selector(moveURLCompletionKeyCommand(sender:)), input: UIKeyCommand.inputUpArrow)
         ]
 
         let overridesTextEditing = [
@@ -392,13 +392,13 @@ extension BrowserViewController {
                 action: #selector(goForwardKeyCommand),
                 input: UIKeyCommand.inputRightArrow,
                 modifierFlags: .command
-            ),
+            )
         ]
 
         let windowShortcuts = [
             UIKeyCommand(action: #selector(nextTabKeyCommand), input: "]", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(previousTabKeyCommand), input: "[", modifierFlags: [.command, .shift]),
-            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift]),
+            UIKeyCommand(action: #selector(showTabTrayKeyCommand), input: "\\", modifierFlags: [.command, .shift])
         ]
 
         searchLocationCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
@@ -415,7 +415,7 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(selectTabFive), input: "5", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabSix), input: "6", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabSeven), input: "7", modifierFlags: .command),
-            UIKeyCommand(action: #selector(selectTabEight), input: "8", modifierFlags: .command),
+            UIKeyCommand(action: #selector(selectTabEight), input: "8", modifierFlags: .command)
         ] + windowShortcuts
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false

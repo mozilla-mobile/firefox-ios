@@ -13,7 +13,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockSearchEnginesManager: SearchEnginesManagerProvider!
     let mockSearchEngines: [OpenSearchEngine] = [
         OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage()),
-        OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage()),
+        OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage())
     ]
     var mockSearchEngineModels: [SearchEngineModel] {
         return mockSearchEngines.map({ $0.generateModel() })

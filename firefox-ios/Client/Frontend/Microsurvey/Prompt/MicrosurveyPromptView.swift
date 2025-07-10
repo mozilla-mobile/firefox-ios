@@ -175,7 +175,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
             toastView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UX.padding.bottom),
 
             headerView.widthAnchor.constraint(equalTo: toastView.widthAnchor),
-            titleLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
+            titleLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor)
         ])
     }
 

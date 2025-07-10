@@ -207,7 +207,7 @@ enum Experiments {
         let bundles = [
             Bundle.main,
             Strings.bundle,
-            Strings.bundle.fallbackTranslationBundle(language: "en-US"),
+            Strings.bundle.fallbackTranslationBundle(language: "en-US")
         ].compactMap { $0 }
 
         let nimbusRecordedContext = RecordedNimbusContext(

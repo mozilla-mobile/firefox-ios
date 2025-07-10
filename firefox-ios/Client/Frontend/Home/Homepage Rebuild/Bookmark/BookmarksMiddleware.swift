@@ -14,7 +14,7 @@ final class BookmarksMiddleware {
         self.bookmarksHandler = profile.places
     }
 
-    lazy var bookmarksProvider: Middleware<AppState> = { state, action in
+    lazy var bookmarksProvider: Middleware<AppState> = { _, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

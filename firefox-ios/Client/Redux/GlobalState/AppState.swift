@@ -79,7 +79,7 @@ let middlewares = [
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
-    StartAtHomeMiddleware().startAtHomeProvider,
+    StartAtHomeMiddleware().startAtHomeProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

@@ -67,7 +67,7 @@ struct SimpleToast: ThemeApplicable {
                                                 constant: UX.labelPadding),
             toastLabel.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor,
                                                  constant: -UX.labelPadding),
-            toastLabel.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
+            toastLabel.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor)
         ])
         applyTheme(theme: theme)
         animate(containerView)
@@ -112,7 +112,7 @@ struct SimpleToast: ThemeApplicable {
                 frame.size.height = Toast.UX.toastHeightWithShadow
                 toast.frame = frame
             },
-            completion: { finished in
+            completion: { _ in
                 let thousandMilliseconds = DispatchTimeInterval.milliseconds(1000)
                 let zeroMilliseconds = DispatchTimeInterval.milliseconds(0)
                 let voiceOverDelay = UIAccessibility.isVoiceOverRunning ? thousandMilliseconds : zeroMilliseconds
@@ -132,7 +132,7 @@ struct SimpleToast: ThemeApplicable {
                 heightConstraint.constant = 0
                 toast.superview?.layoutIfNeeded()
             },
-            completion: { finished in
+            completion: { _ in
                 toast.removeFromSuperview()
             }
         )

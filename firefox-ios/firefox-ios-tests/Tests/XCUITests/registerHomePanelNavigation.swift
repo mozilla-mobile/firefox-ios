@@ -41,11 +41,11 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
     }
 
     map.addScreenState(HomeSettings) { screenState in
-        screenState.gesture(forAction: Action.SelectHomeAsFirefoxHomePage) { UserState in
+        screenState.gesture(forAction: Action.SelectHomeAsFirefoxHomePage) { _ in
             app.cells["HomeAsFirefoxHome"].waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.SelectHomeAsCustomURL) { UserState in
+        screenState.gesture(forAction: Action.SelectHomeAsCustomURL) { _ in
             app.cells["HomeAsCustomURL"].waitAndTap()
         }
 
@@ -60,11 +60,11 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
+        screenState.gesture(forAction: Action.ToggleRecentlySaved) { _ in
             app.tables.cells.switches["Bookmarks"].waitAndTap()
         }
 
-        screenState.gesture(forAction: Action.SelectShortcuts) { userState in
+        screenState.gesture(forAction: Action.SelectShortcuts) { _ in
             let topSitesSetting = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
             app.tables.cells[topSitesSetting].waitAndTap()
         }

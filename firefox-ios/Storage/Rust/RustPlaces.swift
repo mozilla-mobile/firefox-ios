@@ -111,7 +111,7 @@ public class RustPlaces: BookmarksHandler {
     }
 
     private func withWriter<T>(
-        _ callback: @escaping(_ connection: PlacesWriteConnection) throws -> T
+        _ callback: @escaping (_ connection: PlacesWriteConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
@@ -171,7 +171,7 @@ public class RustPlaces: BookmarksHandler {
     }
 
     private func withReader<T>(
-        _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
+        _ callback: @escaping (_ connection: PlacesReadConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 

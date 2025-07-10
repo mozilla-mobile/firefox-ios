@@ -383,7 +383,7 @@ class TestHistory: XCTestCase {
             }
             completion()
         default:
-            places.deleteEverythingHistory().upon { success in completion() }
+            places.deleteEverythingHistory().upon { _ in completion() }
         }
     }
 

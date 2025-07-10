@@ -79,7 +79,7 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(privateModeSelector, forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { userState in
+        screenState.tap(syncModeSelector, forAction: Action.ToggleSyncMode) { _ in
         }
 
         // Tab tray selector for the tab tray UI experiment
@@ -89,7 +89,7 @@ func registerTabTrayNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(privateModeExperimentSelector, forAction: Action.ToggleExperimentPrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-        screenState.tap(syncModeExperimentSelector, forAction: Action.ToggleExperimentSyncMode) { userState in
+        screenState.tap(syncModeExperimentSelector, forAction: Action.ToggleExperimentSyncMode) { _ in
         }
 
         screenState.onEnter { userState in

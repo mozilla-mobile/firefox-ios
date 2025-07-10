@@ -218,7 +218,7 @@ class Authenticator {
         let action = UIAlertAction(
             title: .AuthenticatorLogin,
             style: .default
-        ) { (action) in
+        ) { (_) in
             guard let user = alert.textFields?[0].text,
                   let pass = alert.textFields?[1].text
             else {
@@ -237,7 +237,7 @@ class Authenticator {
         alert.addAction(action, accessibilityIdentifier: "authenticationAlert.loginRequired")
 
         // Add a cancel button.
-        let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) in
+        let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (_) in
             completionHandler(.failure(LoginRecordError(description: "Save password cancelled")))
         }
         alert.addAction(cancel, accessibilityIdentifier: "authenticationAlert.cancel")

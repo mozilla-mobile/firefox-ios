@@ -36,7 +36,7 @@ class RecordedNimbusContext: RecordedContext {
      * [EVENT_QUERIES] is a map of keys to Nimbus SDK EventStore queries.
      */
     static let EVENT_QUERIES = [
-        DAYS_OPENED_IN_LAST_28: "'events.app_opened'|eventCountNonZero('Days', 28, 0)",
+        DAYS_OPENED_IN_LAST_28: "'events.app_opened'|eventCountNonZero('Days', 28, 0)"
     ]
 
     var isFirstRun: Bool
@@ -183,7 +183,7 @@ class RecordedNimbusContext: RecordedContext {
             "days_since_update": daysSinceUpdate as Any,
             "is_default_browser": isDefaultBrowser,
             "is_bottom_toolbar_user": isBottomToolbarUser,
-            "has_enabled_tips_notifications": hasEnabledTipsNotifications,
+            "has_enabled_tips_notifications": hasEnabledTipsNotifications
         ]),
             let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {
