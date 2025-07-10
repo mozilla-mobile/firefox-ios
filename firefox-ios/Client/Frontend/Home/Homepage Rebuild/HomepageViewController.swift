@@ -545,7 +545,10 @@ final class HomepageViewController: UIViewController,
             }
 
             if let storyCell = storyCell as? StoryCell {
-                storyCell.configure(story: story, theme: currentTheme)
+                // Calculate position (1-based) and total count for accessibility
+                let position = indexPath.item + 1
+                let totalCount = getPocketStoriesCount(for: indexPath.section)
+                storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
                 return storyCell
             } else if let legacyPocketCell = storyCell as? PocketStandardCell {
                 legacyPocketCell.configure(story: story, theme: currentTheme)
@@ -568,6 +571,18 @@ final class HomepageViewController: UIViewController,
 
             return customizeHomeCell
         }
+    }
+
+    /// Helper method to get the total count of pocket stories in the given section
+    private func getPocketStoriesCount(for sectionIndex: Int) -> Int {
+        guard let section = dataSource?.sectionIdentifier(for: sectionIndex),
+              case .pocket = section else {
+            return 0
+        }
+        
+        let snapshot = dataSource?.snapshot()
+        let items = snapshot?.itemIdentifiers(inSection: section) ?? []
+        return items.count
     }
 
     private func configureSupplementaryCell(

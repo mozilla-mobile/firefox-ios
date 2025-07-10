@@ -1031,6 +1031,11 @@ extension String {
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
+            public static let StoryPositionAccessibilityHint = MZLocalizedString(
+                key: "FirefoxHomepage.Stories.StoryPosition.AccessibilityHint.v143",
+                tableName: "FirefoxHomepage",
+                value: "%@ of %@",
+                comment: "Accessibility hint for VoiceOver to announce the position of a story item within the stories list. The first %@ is the current position number, the second %@ is the total number of stories. For example: '1 of 4' indicates this is the first story out of 4 total stories.")
             public struct Footer {
                 public static let Title = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.Title.v116",

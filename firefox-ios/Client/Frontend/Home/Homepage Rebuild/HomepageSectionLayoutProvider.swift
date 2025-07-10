@@ -507,9 +507,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var storyCells: [StoryCell] = []
-        for story in state.pocketState.pocketData {
+        for (index, story) in state.pocketState.pocketData.enumerated() {
             let cell = StoryCell()
-            cell.configure(story: story, theme: LightTheme())
+            let position = index + 1 // 1-based position
+            let totalCount = state.pocketState.pocketData.count
+            cell.configure(story: story, theme: LightTheme(), position: position, totalCount: totalCount)
             storyCells.append(cell)
         }
         return HomepageDimensionCalculator.getTallestViewHeight(views: storyCells, viewWidth: cellWidth)
