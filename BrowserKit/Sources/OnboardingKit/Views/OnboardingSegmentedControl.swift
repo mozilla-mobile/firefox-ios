@@ -26,32 +26,35 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
     }
 
     var body: some View {
-        HStack {
-            ForEach(items, id: \.action) { item in
-                Button {
-                    withAnimation(.easeInOut) {
-                        selection = item.action
-                    }
-                } label: {
-                    VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
-                        let isSelected = item.action == selection
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                ForEach(Array(items.enumerated()), id: \.element.action) { index, item in
+                    Button {
+                        withAnimation(.easeInOut) {
+                            selection = item.action
+                        }
+                    } label: {
+                        VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
+                            let isSelected = item.action == selection
 
-                        itemImage(item: item, isSelected: isSelected)
+                            itemImage(item: item, isSelected: isSelected)
 
-                        itemContent(item: item, isSelected: isSelected)
+                            itemContent(item: item, isSelected: isSelected)
+                        }
+                        .padding(.vertical, UX.SegmentedControl.verticalPadding)
+                        .frame(maxWidth: .infinity)
                     }
-                    .padding(.vertical, UX.SegmentedControl.verticalPadding)
-                    .frame(maxWidth: .infinity)
+                    .buttonStyle(PlainButtonStyle())
+                    .accessibilityElement()
+                    .accessibilityLabel("\(item.title)")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityAddTraits(
+                        item.action == selection ? .isSelected : []
+                    )
                 }
-                .buttonStyle(PlainButtonStyle())
-                .accessibilityElement()
-                .accessibilityLabel(Text(item.title))
-                .accessibilityAddTraits(.isButton)
-                .accessibilityAddTraits(
-                    item.action == selection ? .isSelected : []
-                )
             }
         }
+        .accessibilityElement(children: .contain)
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }

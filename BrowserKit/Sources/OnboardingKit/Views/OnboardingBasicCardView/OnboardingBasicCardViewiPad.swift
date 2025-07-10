@@ -74,6 +74,7 @@ struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: 
                 .aspectRatio(contentMode: .fit)
                 .frame(height: UX.CardView.imageHeight)
                 .accessibilityLabel(viewModel.title)
+                .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
     }
