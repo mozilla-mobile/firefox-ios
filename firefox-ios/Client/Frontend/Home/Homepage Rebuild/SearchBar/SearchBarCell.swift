@@ -21,7 +21,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     private lazy var placeholderLabel: UILabel = .build { view in
-        view.text = .TabLocationURLPlaceholder
+        view.text = .FirefoxHomepage.SearchBar.PlaceholderTitle
         view.font = FXFontStyles.Regular.body.scaledFont()
         view.textAlignment = .center
         view.numberOfLines = 0
@@ -38,7 +38,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell
         accessibilityTraits.insert(.button)
-        accessibilityLabel = .TabLocationURLPlaceholder
+        accessibilityLabel = .FirefoxHomepage.SearchBar.PlaceholderTitle
     }
 
     private func setupView() {
