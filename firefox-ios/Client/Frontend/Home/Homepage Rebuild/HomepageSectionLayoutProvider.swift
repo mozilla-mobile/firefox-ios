@@ -74,9 +74,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                     fractionalWidth = UX.PocketConstants.redesignedFractionalWidthiPhonePortrait
                 }
 
-                return ((collectionViewWidth - UX.standardInset)
-                       * fractionalWidth)
-                       + UX.PocketConstants.storiesSpacing
+                return collectionViewWidth * fractionalWidth
             }
         }
 
@@ -246,13 +244,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(cellHeight)
+            heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .absolute(cellWidth),
-            heightDimension: .estimated(cellHeight)
+            heightDimension: .absolute(cellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.PocketConstants.redesignNumberOfItemsInColumn)
@@ -261,7 +259,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             top: 0,
             leading: 0,
             bottom: 0,
-            trailing: UX.PocketConstants.storiesSpacing)
+            trailing: 0)
 
         let section = NSCollectionLayoutSection(group: group)
 
@@ -276,8 +274,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: leadingInset,
                                                         bottom: UX.standardInset,
-                                                        trailing: 0)
+                                                        trailing: UX.standardInset)
         section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = UX.PocketConstants.storiesSpacing
         return section
     }
 
@@ -506,7 +505,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // performance impacts were seen with this O(n) function (where n = number of cells needing to be created, currently 9)
     // TODO: FXIOS-12727 - Investigate replacing this code with `uniformAcrossSiblings` API in iOS 17+
     private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
-        guard let  state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var storyCells: [StoryCell] = []
         for story in state.pocketState.pocketData {
             let cell = StoryCell()
