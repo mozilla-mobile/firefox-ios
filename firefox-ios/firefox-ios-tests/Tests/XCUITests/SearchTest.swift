@@ -131,7 +131,10 @@ class SearchTests: BaseTestCase {
             urlBarAddress.waitAndTap()
             urlBarAddress.waitAndTap()
         } else {
-            urlBarAddress.press(forDuration: 5)
+            urlBarAddress.press(forDuration: 1)
+        }
+        if !app.menuItems["Select All"].exists {
+            urlBarAddress.waitAndTap()
         }
         app.menuItems["Select All"].waitAndTap()
         app.menuItems["Copy"].waitAndTap()
