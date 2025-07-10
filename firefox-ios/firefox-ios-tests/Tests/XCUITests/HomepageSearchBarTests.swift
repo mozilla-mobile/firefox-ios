@@ -268,7 +268,10 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     }
 
     // MARK: - Bottom Toolbar
-    func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() {
+    func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() throws {
+        guard !iPad() else {
+            throw XCTSkip("Bottom address bar is not available for iPad")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")

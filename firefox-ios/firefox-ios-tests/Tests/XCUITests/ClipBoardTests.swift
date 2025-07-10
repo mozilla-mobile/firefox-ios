@@ -76,7 +76,10 @@ class ClipBoardTests: BaseTestCase {
             if iPad() {
                 urlBarAddress.waitAndTap()
             } else {
-                urlBarAddress.press(forDuration: 3)
+                urlBarAddress.press(forDuration: 1)
+            }
+            if !app.otherElements.buttons["Paste"].exists {
+                urlBarAddress.press(forDuration: 1)
             }
             app.otherElements.buttons["Paste"].waitAndTap()
             mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
