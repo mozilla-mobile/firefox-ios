@@ -60,6 +60,9 @@ public struct PagingCarousel<Item, Content: View>: View {
                 .accessibilityAdjustableAction { direction in
                     handleAccessibilityAdjustment(direction: direction)
                 }
+                .onChange(of: selection) { _ in
+                    postScreenChangedNotification()
+                }
         }
         .clipped()
     }
