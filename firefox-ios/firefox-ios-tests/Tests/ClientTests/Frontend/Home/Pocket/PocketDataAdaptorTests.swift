@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 class PocketDataAdaptorTests: XCTestCase {
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     var mockNotificationCenter: MockNotificationCenter!
@@ -38,8 +39,8 @@ class PocketDataAdaptorTests: XCTestCase {
         ]
         mockPocketAPI = MockPocketAPI(result: .success(stories))
         let subject = createSubject()
-        let data = subject.getPocketData()
         try await Task.sleep(nanoseconds: sleepTime)
+        let data = subject.getPocketData()
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
 }
@@ -48,13 +49,9 @@ class PocketDataAdaptorTests: XCTestCase {
 private extension PocketDataAdaptorTests {
     func createSubject(file: StaticString = #filePath,
                        line: UInt = #line) -> PocketDataAdaptorImplementation {
-        let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")
         let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,
-                                                      notificationCenter: mockNotificationCenter) {
-            expectation.fulfill()
-        }
+                                                      notificationCenter: mockNotificationCenter)
         trackForMemoryLeaks(subject, file: file, line: line)
-        wait(for: [expectation], timeout: 1)
         return subject
     }
 }

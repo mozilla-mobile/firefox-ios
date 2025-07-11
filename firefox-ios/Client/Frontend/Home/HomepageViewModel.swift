@@ -110,6 +110,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     }
 
     // MARK: - Initializers
+    @MainActor
     init(profile: Profile,
          isPrivate: Bool,
          tabManager: TabManager,

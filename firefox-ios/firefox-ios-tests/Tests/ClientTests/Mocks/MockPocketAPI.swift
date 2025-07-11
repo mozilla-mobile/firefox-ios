@@ -5,12 +5,12 @@
 import Foundation
 @testable import Client
 
-class MockPocketAPI: PocketStoriesProviding {
+final class MockPocketAPI: PocketStoriesProviding {
     init(result: Result<[PocketFeedStory], Error>) {
         self.result = result
     }
 
-    var result: Result<[PocketFeedStory], Error>
+    let result: Result<[PocketFeedStory], Error>
 
     func fetchStories(items: Int) async throws -> [PocketFeedStory] {
         switch result {

@@ -7,7 +7,8 @@ import Foundation
 import Storage
 import Shared
 
-class PocketViewModel {
+// TODO: - FXIOS-12756 the class should conform to Sendable
+class PocketViewModel: @unchecked Sendable {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let fractionalWidthiPhonePortrait: CGFloat = 0.90
@@ -91,6 +92,7 @@ class PocketViewModel {
 
     // MARK: - Private
 
+    @MainActor
     private func updateData() {
         let stories = dataAdaptor.getPocketData()
         pocketStoriesViewModels = []
@@ -229,10 +231,8 @@ extension PocketViewModel: HomepageSectionHandler {
 
 extension PocketViewModel: PocketDelegate {
     func didLoadNewData() {
-        ensureMainThread {
-            self.updateData()
-            guard self.isEnabled else { return }
-            self.delegate?.reloadView()
-        }
+        updateData()
+        guard isEnabled else { return }
+        delegate?.reloadView()
     }
 }

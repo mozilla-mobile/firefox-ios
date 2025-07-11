@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MockNotificationCenter: NotificationProtocol {
+final class MockNotificationCenter: NotificationProtocol, @unchecked Sendable {
     var postCallCount = 0
     var addObserverCallCount = 0
     var removeObserverCallCount = 0

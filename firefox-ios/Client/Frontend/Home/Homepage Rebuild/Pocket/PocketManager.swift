@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol PocketManagerProvider {
+protocol PocketManagerProvider: Sendable {
     func getPocketItems() async -> [PocketStoryConfiguration]
 }
 

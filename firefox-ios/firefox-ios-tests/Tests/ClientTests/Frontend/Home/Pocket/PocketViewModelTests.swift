@@ -9,6 +9,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     private var adaptor: MockPocketDataAdaptor!
     private var profile: MockProfile!
