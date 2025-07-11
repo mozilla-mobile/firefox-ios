@@ -19,8 +19,9 @@ struct TabTraySelectorUX {
     static let stackViewLeadingTrailingPadding: CGFloat = 8
 }
 
-class TabTraySelectorView: UIView,
-                           ThemeApplicable {
+@MainActor
+final class TabTraySelectorView: UIView,
+                                 @MainActor ThemeApplicable {
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme

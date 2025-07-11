@@ -6,7 +6,10 @@ import Common
 import SiteImageView
 import UIKit
 
-class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable {
+@MainActor
+final class InactiveTabsCell: UICollectionViewListCell,
+                              ReusableCell,
+                              @MainActor ThemeApplicable {
     struct UX {
         static let imageSize: CGFloat = 28
         static let labelTopBottomMargin: CGFloat = 11

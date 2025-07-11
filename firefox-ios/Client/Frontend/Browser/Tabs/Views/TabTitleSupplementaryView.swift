@@ -6,7 +6,10 @@ import Common
 import SiteImageView
 
 /// A supplementary view shown below the `ExperimentTabCell` containing the tab favicon and title
-final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable, ReusableCell {
+@MainActor
+final class TabTitleSupplementaryView: UICollectionReusableView,
+                                       @MainActor ThemeApplicable,
+                                       ReusableCell {
     struct UX {
         static let tabViewFooterSpacing: CGFloat = 4
         static let faviconSize = CGSize(width: 16, height: 16)

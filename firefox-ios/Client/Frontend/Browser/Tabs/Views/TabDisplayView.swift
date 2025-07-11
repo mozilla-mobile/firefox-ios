@@ -6,14 +6,15 @@ import Common
 import Redux
 import UIKit
 
-class TabDisplayView: UIView,
-                      ThemeApplicable,
-                      UICollectionViewDelegate,
-                      UICollectionViewDelegateFlowLayout,
-                      TabCellDelegate,
-                      SwipeAnimatorDelegate,
-                      InactiveTabsSectionManagerDelegate,
-                      FeatureFlaggable {
+@MainActor
+final class TabDisplayView: UIView,
+                            @MainActor ThemeApplicable,
+                            UICollectionViewDelegate,
+                            UICollectionViewDelegateFlowLayout,
+                            TabCellDelegate,
+                            SwipeAnimatorDelegate,
+                            InactiveTabsSectionManagerDelegate,
+                            FeatureFlaggable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }

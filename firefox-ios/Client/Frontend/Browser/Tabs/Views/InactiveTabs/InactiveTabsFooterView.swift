@@ -6,7 +6,10 @@ import Common
 import ComponentLibrary
 import UIKit
 
-class InactiveTabsFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
+@MainActor
+final class InactiveTabsFooterView: UICollectionReusableView,
+                                    ReusableCell,
+                                    @MainActor ThemeApplicable {
     struct UX {
         static let buttonImagePadding: CGFloat = 11
         static let iPadOffset: CGFloat = 100

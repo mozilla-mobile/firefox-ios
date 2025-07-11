@@ -5,7 +5,10 @@
 import Common
 import Foundation
 
-class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeApplicable {
+@MainActor
+final class InactiveTabsHeaderView: UICollectionReusableView,
+                                    ReusableCell,
+                                    @MainActor ThemeApplicable {
     private struct UX {
         static let titleMinimumScaleFactor: CGFloat = 0.7
         static let verticalPadding: CGFloat = 19

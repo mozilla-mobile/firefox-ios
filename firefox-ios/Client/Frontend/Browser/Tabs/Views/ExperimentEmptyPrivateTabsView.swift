@@ -13,7 +13,8 @@ protocol EmptyPrivateTabView: UIView, ThemeApplicable {
 }
 
 // View we display when there are no private tabs created
-class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
+@MainActor
+final class ExperimentEmptyPrivateTabsView: UIView, @MainActor EmptyPrivateTabView {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20

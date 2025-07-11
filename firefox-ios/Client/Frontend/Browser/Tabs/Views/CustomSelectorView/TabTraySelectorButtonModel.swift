@@ -14,7 +14,8 @@ struct TabTraySelectorButtonModel {
     let cornerRadius: CGFloat
 }
 
-final class TabTraySelectorButton: UIButton, ThemeApplicable {
+@MainActor
+final class TabTraySelectorButton: UIButton, @MainActor ThemeApplicable {
     private var foregroundColorNormal: UIColor = .clear
     private var foregroundColorHighlighted: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
