@@ -34,6 +34,7 @@ public class BrowserAddressToolbar: UIView,
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
+    private var addressBarPosition: AddressToolbarPosition = .bottom
 
     /// A cache of `ToolbarButton` instances keyed by their accessibility identifier (`a11yId`).
     /// This improves performance by reusing buttons instead of creating new instances.
@@ -85,9 +86,8 @@ public class BrowserAddressToolbar: UIView,
                 previousConfiguration.locationViewConfiguration,
                 delegate: self,
                 isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                toolbarCornerRadius: previousConfiguration.uxConfiguration.toolbarCornerRadius,
-                isLocationTextCentered: previousConfiguration.uxConfiguration.isLocationTextCentered,
-                locationTextFieldTrailingPadding: previousConfiguration.uxConfiguration.locationTextFieldTrailingPadding
+                uxConfig: previousConfiguration.uxConfiguration,
+                addressBarPosition: addressBarPosition
             )
         }
     }
@@ -120,26 +120,35 @@ public class BrowserAddressToolbar: UIView,
                           trailingSpace: CGFloat,
                           isUnifiedSearchEnabled: Bool,
                           animated: Bool) {
+        [navigationActionStack, leadingPageActionStack, pageActionStack, browserActionStack].forEach {
+            $0.isHidden = config.uxConfiguration.scrollAlpha == 0
+        }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousConfiguration = config
+        addressBarPosition = toolbarPosition
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
                   isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                  addressBarPosition: toolbarPosition,
                   animated: animated)
     }
 
-    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
+    public func configure(
+        config: AddressToolbarConfiguration,
+        isUnifiedSearchEnabled: Bool,
+        addressBarPosition: AddressToolbarPosition,
+        animated: Bool
+    ) {
         updateBorder(borderPosition: config.borderPosition)
 
         locationView.configure(
             config.locationViewConfiguration,
             delegate: self,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            toolbarCornerRadius: config.uxConfiguration.toolbarCornerRadius,
-            isLocationTextCentered: config.uxConfiguration.isLocationTextCentered,
-            locationTextFieldTrailingPadding: config.uxConfiguration.locationTextFieldTrailingPadding
+            uxConfig: config.uxConfiguration,
+            addressBarPosition: addressBarPosition
         )
         updateActions(config: config, animated: animated)
         droppableUrl = config.locationViewConfiguration.droppableUrl

@@ -16,7 +16,7 @@ protocol ToolbarHelperInterface {
     func backgroundAlpha() -> CGFloat
 }
 
-class ToolbarHelper: ToolbarHelperInterface {
+final class ToolbarHelper: ToolbarHelperInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
