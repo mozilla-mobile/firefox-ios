@@ -34,7 +34,7 @@ final class HomepageDiffableDataSource:
         }
     }
 
-    enum HomeItem: Hashable {
+    enum HomeItem: Hashable, Sendable {
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
