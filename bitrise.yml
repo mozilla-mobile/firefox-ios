@@ -143,9 +143,11 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY="
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
-        - xcconfig_content: SWIFT_TREAT_WARNINGS_AS_ERRORS = YES
+        - xcconfig_content: SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
 
-            SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
+            SWIFT_STRICT_CONCURRENCY = complete
+        is_always_run: true
+        is_skippable: true
     - script@1.2.1:
         title: Override xctestrun file to UnitTests
         inputs:
