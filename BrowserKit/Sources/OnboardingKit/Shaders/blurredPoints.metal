@@ -5,95 +5,193 @@
 #include <metal_stdlib>
 using namespace metal;
 
-struct VertexOut {
+// MARK: - Vertex Data Structures
+struct VertexOutput {
     float4 position [[position]];
-    float2 texCoord;
+    float2 textureCoordinate;
 };
 
-vertex VertexOut milky_way_vertex(uint vertexID [[vertex_id]]) {
-    float2 positions[4] = {
-        {-1, -1},  // Bottom-left
-        { 1, -1},  // Bottom-right
-        {-1,  1},  // Top-left
-        { 1,  1}   // Top-right
+struct GradientControlPoint {
+    float2 position;
+    half3 color;
+    float influence;
+};
+
+// MARK: - Utility Functions
+/**
+ * Generates a pseudo-random value from a 2D coordinate
+ * Uses a hash function for deterministic noise generation
+ */
+static float generatePseudoRandomValue(float2 coordinate) {
+    // Noise generation constants
+    const float kNoiseHashX = 127.1f;
+    const float kNoiseHashY = 311.7f;
+    const float kNoiseMultiplier = 43758.5453f;
+
+    const float2 hashVector = float2(kNoiseHashX, kNoiseHashY);
+    return fract(sin(dot(coordinate, hashVector)) * kNoiseMultiplier);
+}
+
+/**
+ * Generates smooth Perlin-like noise for given coordinates
+ * Used for organic movement and texture variation
+ */
+static float generatePerlinNoise(float2 coordinate) {
+    const float2 integerPart = floor(coordinate);
+    const float2 fractionalPart = fract(coordinate);
+
+    // Sample noise at four corners of the unit square
+    const float topLeftCorner = generatePseudoRandomValue(integerPart);
+    const float topRightCorner = generatePseudoRandomValue(integerPart + float2(1.0f, 0.0f));
+    const float bottomLeftCorner = generatePseudoRandomValue(integerPart + float2(0.0f, 1.0f));
+    const float bottomRightCorner = generatePseudoRandomValue(integerPart + float2(1.0f, 1.0f));
+
+    // Smooth interpolation (Hermite interpolation)
+    const float2 smoothInterpolation = fractionalPart * fractionalPart * (3.0f - 2.0f * fractionalPart);
+
+    // Bilinear interpolation
+    const float topEdgeInterpolation = mix(topLeftCorner, topRightCorner, smoothInterpolation.x);
+    const float bottomEdgeInterpolation = mix(bottomLeftCorner, bottomRightCorner, smoothInterpolation.x);
+
+    return mix(topEdgeInterpolation, bottomEdgeInterpolation, smoothInterpolation.y);
+}
+
+/**
+ * Calculates animated position for a control point using circular motion
+ */
+static float2 calculateAnimatedControlPointPosition(float2 basePosition, float currentTime, float animationSpeed) {
+    // Control point animation radius
+    const float kControlPointAnimationRadius = 0.2f;
+
+    const float2 circularOffset = float2(
+        kControlPointAnimationRadius * sin(currentTime * animationSpeed),
+        kControlPointAnimationRadius * cos(currentTime * animationSpeed)
+    );
+    return basePosition + circularOffset;
+}
+
+/**
+ * Calculates influence weight based on distance with exponential falloff
+ */
+static float calculateDistanceInfluence(float2 fragmentCoordinate, float2 controlPointPosition, float maxInfluenceDistance) {
+    // Smoothing constants
+    const float kInfluenceFalloffPower = 2.0f;
+
+    const float distanceToControlPoint = distance(fragmentCoordinate, controlPointPosition);
+    const float normalizedDistance = max(1.0f - distanceToControlPoint / maxInfluenceDistance, 0.0f);
+    return pow(normalizedDistance, kInfluenceFalloffPower);
+}
+
+// MARK: - Vertex Shader
+vertex VertexOutput animatedGradientVertex(uint vertexID [[vertex_id]]) {
+    // Full-screen quad vertices in normalized device coordinates
+    constexpr float2 fullScreenQuadPositions[4] = {
+        {-1.0f, -1.0f},  // Bottom-left
+        { 1.0f, -1.0f},  // Bottom-right
+        {-1.0f,  1.0f},  // Top-left
+        { 1.0f,  1.0f}   // Top-right
     };
-    
-    float2 texCoords[4] = {
-        {0, 0},  // Bottom-left
-        {1, 0},  // Bottom-right
-        {0, 1},  // Top-left
-        {1, 1}   // Top-right
+
+    constexpr float2 textureCoordinates[4] = {
+        {0.0f, 0.0f},  // Bottom-left
+        {1.0f, 0.0f},  // Bottom-right
+        {0.0f, 1.0f},  // Top-left
+        {1.0f, 1.0f}   // Top-right
     };
-    
-    VertexOut out;
-    out.position = float4(positions[vertexID], 0, 1);
-    out.texCoord = texCoords[vertexID];
-    return out;
+
+    VertexOutput vertexOutput;
+    vertexOutput.position = float4(fullScreenQuadPositions[vertexID], 0.0f, 1.0f);
+    vertexOutput.textureCoordinate = textureCoordinates[vertexID];
+
+    return vertexOutput;
 }
 
-// ✅ Made static to avoid linker conflicts
-static float random(float2 p) {
-    return fract(sin(dot(p, float2(127.1, 311.7))) * 43758.5453);
-}
+// MARK: - Fragment Shader
+fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
+                                       constant float &currentTime [[buffer(0)]],
+                                       texture2d<half> previousFrameTexture [[texture(0)]]) {
 
-static float noise(float2 p) {
-    float2 i = floor(p);
-    float2 f = fract(p);
-    
-    float a = random(i);
-    float b = random(i + float2(1.0, 0.0));
-    float c = random(i + float2(0.0, 1.0));
-    
-    float2 u = f * f * (3.0 - 2.0 * f);
-    return mix(a, b, u.x) + (c - a) * u.y * (b - a) * u.x;
-}
+    // Animation constants
+    const float kBaseInfluenceRadius = 0.725f;
+    const float kPulsationAmplitude = 0.05f;
+    const float kPulsationSpeed = 1.2f;
+    const float kNoiseScale = 10.0f;
+    const float kNoiseInfluence = 0.1f;
 
-fragment half4 milky_way_fragment(VertexOut in [[stage_in]],
-                                  constant float &time [[buffer(0)]],
-                                  texture2d<half> previousFrame [[texture(0)]]) {
-    // Five animated control points
-    float2 p1 = float2(0.2 + 0.2 * sin(time * 0.8), 0.3 + 0.2 * cos(time * 0.8));
-    float2 p2 = float2(0.8 + 0.2 * cos(time * 0.6), 0.7 + 0.2 * sin(time * 0.6));
-    float2 p3 = float2(0.6 + 0.2 * sin(time * 1.5), 0.3 + 0.2 * cos(time * 1.5));
-    float2 p4 = float2(0.4 + 0.2 * cos(time * 1.1), 0.6 + 0.2 * sin(time * 1.1));
-    
-    // Colors for each control point
-    half3 color1 = half3(0.996, 0.514, 0.000); // Vivid Orange  #FE8300
-    half3 color2 = half3(0.180, 0.506, 0.996); // Electric Sky Blue #2E81FEh
-    half3 color3 = half3(0.949, 0.020, 0.004); // Crimson Red   #F20501
-    half3 color4 = half3(0.996, 0.396, 0.000); // Burnt Orange  #FE6500
+    // Motion blur constants
+    const float kCurrentFrameWeight = 0.85f; // 85% current frame, 15% previous
 
-    // Pulsating effect
-    float sizeMod = 0.1 + 0.05 * sin(time * 1.2);
-    float maxDistance = 0.725 + sizeMod;
-    
-    // Influence calculation
-    float d1 = pow(max(1.0 - distance(in.texCoord, p1) / maxDistance, 0.0), 2.0);
-    float d2 = pow(max(1.0 - distance(in.texCoord, p2) / maxDistance, 0.0), 2.0);
-    float d3 = pow(max(1.0 - distance(in.texCoord, p3) / maxDistance, 0.0), 2.0);
-    float d4 = pow(max(1.0 - distance(in.texCoord, p4) / maxDistance, 0.0), 2.0);
-    
-    // Add Perlin noise to influence size
-    float noiseMod = noise(in.texCoord * 10.0 + time) * 0.1;
-    maxDistance += noiseMod;
-    
-    // Normalize weights
-    float totalWeight = d1 + d2 + d3 + d4;
-    if (totalWeight > 0.001) {
-        d1 /= totalWeight;
-        d2 /= totalWeight;
-        d3 /= totalWeight;
-        d4 /= totalWeight;
+    // Smoothing constants
+    const float kMinInfluenceThreshold = 0.001f;
+
+    // Control point animation speeds
+    const float kFirstPointAnimationSpeed = 0.8f;
+    const float kSecondPointAnimationSpeed = 0.6f;
+    const float kThirdPointAnimationSpeed = 1.5f;
+    const float kFourthPointAnimationSpeed = 1.1f;
+
+    // Gradient color palette (sRGB values)
+    const half3 kVividOrange = half3(0.996f, 0.514f, 0.000f);     // #FE8300
+    const half3 kElectricBlue = half3(0.180f, 0.506f, 0.996f);    // #2E81FE
+    const half3 kCrimsonRed = half3(0.949f, 0.020f, 0.004f);      // #F20501
+    const half3 kBurntOrange = half3(0.996f, 0.396f, 0.000f);     // #FE6500
+
+    // Define base positions for gradient control points
+    const float2 firstControlPointBase = float2(0.2f, 0.3f);
+    const float2 secondControlPointBase = float2(0.8f, 0.7f);
+    const float2 thirdControlPointBase = float2(0.6f, 0.3f);
+    const float2 fourthControlPointBase = float2(0.4f, 0.6f);
+
+    // Calculate animated control point positions
+    const float2 firstControlPointPosition = calculateAnimatedControlPointPosition(
+        firstControlPointBase, currentTime, kFirstPointAnimationSpeed);
+    const float2 secondControlPointPosition = calculateAnimatedControlPointPosition(
+        secondControlPointBase, currentTime, kSecondPointAnimationSpeed);
+    const float2 thirdControlPointPosition = calculateAnimatedControlPointPosition(
+        thirdControlPointBase, currentTime, kThirdPointAnimationSpeed);
+    const float2 fourthControlPointPosition = calculateAnimatedControlPointPosition(
+        fourthControlPointBase, currentTime, kFourthPointAnimationSpeed);
+
+    // Calculate dynamic influence radius with pulsation and noise variation
+    const float pulsationEffect = kPulsationAmplitude * sin(currentTime * kPulsationSpeed);
+    const float noiseVariation = generatePerlinNoise(fragmentInput.textureCoordinate * kNoiseScale + currentTime) * kNoiseInfluence;
+    const float dynamicInfluenceRadius = kBaseInfluenceRadius + pulsationEffect + noiseVariation;
+
+    // Calculate influence weights for each control point
+    const float firstPointInfluence = calculateDistanceInfluence(fragmentInput.textureCoordinate, firstControlPointPosition, dynamicInfluenceRadius);
+    const float secondPointInfluence = calculateDistanceInfluence(fragmentInput.textureCoordinate, secondControlPointPosition, dynamicInfluenceRadius);
+    const float thirdPointInfluence = calculateDistanceInfluence(fragmentInput.textureCoordinate, thirdControlPointPosition, dynamicInfluenceRadius);
+    const float fourthPointInfluence = calculateDistanceInfluence(fragmentInput.textureCoordinate, fourthControlPointPosition, dynamicInfluenceRadius);
+
+    // Calculate total influence for normalization
+    const float totalInfluence = firstPointInfluence + secondPointInfluence + thirdPointInfluence + fourthPointInfluence;
+
+    half3 blendedGradientColor = half3(0.0f);
+
+    if (totalInfluence > kMinInfluenceThreshold) {
+        // Normalize influence weights
+        const float normalizedFirstInfluence = firstPointInfluence / totalInfluence;
+        const float normalizedSecondInfluence = secondPointInfluence / totalInfluence;
+        const float normalizedThirdInfluence = thirdPointInfluence / totalInfluence;
+        const float normalizedFourthInfluence = fourthPointInfluence / totalInfluence;
+
+        // Blend colors based on normalized influence weights
+        blendedGradientColor = normalizedFirstInfluence * kVividOrange +
+                              normalizedSecondInfluence * kElectricBlue +
+                              normalizedThirdInfluence * kCrimsonRed +
+                              normalizedFourthInfluence * kBurntOrange;
     }
-    
-    // Blend colors based on influence
-    half3 blendedColor = d1 * color1 + d2 * color2 + d3 * color3 + d4 * color4;
-    
-    // Sample the previous frame for motion blur
-    half4 lastFrameColor = previousFrame.sample(sampler(coord::normalized), in.texCoord);
-    
-    // Apply motion blur by mixing with the last frame
-    half4 finalColor = half4(mix(lastFrameColor.rgb, blendedColor, 0.85), 1.0); // 85% current frame
-    
-    return finalColor;
+
+    // Sample previous frame for motion blur effect
+    constexpr sampler previousFrameSampler(coord::normalized,
+                                         address::clamp_to_edge,
+                                         filter::linear);
+    const half4 previousFrameColor = previousFrameTexture.sample(previousFrameSampler, fragmentInput.textureCoordinate);
+
+    // Apply motion blur by blending current and previous frames
+    const half3 finalGradientColor = mix(previousFrameColor.rgb,
+                                        blendedGradientColor,
+                                        half(kCurrentFrameWeight));
+
+    return half4(finalGradientColor, 1.0f);
 }
