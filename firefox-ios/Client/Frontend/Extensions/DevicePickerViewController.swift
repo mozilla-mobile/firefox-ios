@@ -10,7 +10,11 @@ import SwiftUI
 import Common
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
+    // FIXME obj C interop can we guarantee for this picker main thread delegate callbacks?
+    @MainActor
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
+
+    @MainActor
     func devicePickerViewController(
         _ devicePickerViewController: DevicePickerViewController,
         didPickDevices devices: [RemoteDevice]

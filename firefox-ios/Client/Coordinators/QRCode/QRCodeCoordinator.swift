@@ -6,9 +6,11 @@ import Foundation
 
 protocol QRCodeDismissHandler: AnyObject {
     /// Dismisses the current presented QRCodeViewController
+    @MainActor
     func dismiss(_ completion: (() -> Void)?)
 }
 
+@MainActor
 class QRCodeCoordinator: BaseCoordinator, QRCodeDismissHandler {
     private weak var parentCoordinator: ParentCoordinatorDelegate?
 

@@ -13,6 +13,7 @@ import struct MozillaAppServices.Login
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
+    @MainActor
     static func handleAuthRequest(
         _ viewController: UIViewController,
         challenge: URLAuthenticationChallenge,
@@ -184,6 +185,7 @@ class Authenticator {
         }
     }
 
+    @MainActor
     fileprivate static func promptForUsernamePassword(
         _ viewController: UIViewController,
         credentials: URLCredential?,

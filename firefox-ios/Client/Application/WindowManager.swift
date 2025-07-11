@@ -44,6 +44,7 @@ protocol WindowManager {
 
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
+    @MainActor
     func windowWillClose(uuid: WindowUUID)
 
     /// Supplies the UUID for the next window the iOS app should open. This
@@ -60,10 +61,12 @@ protocol WindowManager {
     /// any one event is always associated with one window in specific.
     /// - Parameter event: the event that occurred and any associated metadata.
     /// - Parameter windowUUID: the UUID of the window triggering the event.
+    @MainActor
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID)
 
     /// Performs a MultiWindowAction.
     /// - Parameter action: the action to perform.
+    @MainActor
     func performMultiWindowAction(_ action: MultiWindowAction)
 
     /// Returns the current window (if available) which hosts a specific tab.
@@ -145,6 +148,7 @@ final class WindowManagerImplementation: WindowManager {
         return Array(windows.keys) + (includingReserved ? reservedUUIDs : [])
     }
 
+    @MainActor
     func windowWillClose(uuid: WindowUUID) {
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
         updateWindow(nil, for: uuid)
@@ -236,6 +240,7 @@ final class WindowManagerImplementation: WindowManager {
         return result
     }
 
+    @MainActor
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
         windows.forEach { uuid, windowInfo in
             // Notify any interested Coordinators, in each window, of the
@@ -248,6 +253,7 @@ final class WindowManagerImplementation: WindowManager {
         }
     }
 
+    @MainActor
     func performMultiWindowAction(_ action: MultiWindowAction) {
         switch action {
         case .closeAllPrivateTabs:

@@ -70,6 +70,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 }
 
 extension HomepageHeaderViewModel: HomepageSectionHandler {
+    @MainActor
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let headerCell = cell as? LegacyHomepageHeaderCell else { return UICollectionViewCell() }
         headerCell.configure(with: HomepageHeaderCellViewModel(showiPadSetup: showiPadSetup))

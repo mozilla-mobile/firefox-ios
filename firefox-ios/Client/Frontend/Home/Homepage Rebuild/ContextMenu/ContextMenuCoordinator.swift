@@ -6,9 +6,11 @@ import Foundation
 import Common
 
 protocol ContextMenuCoordinatorDelegate: AnyObject {
+    @MainActor
     func dismissFlow()
 }
 
+@MainActor
 final class ContextMenuCoordinator: BaseCoordinator, ContextMenuCoordinatorDelegate {
     weak var parentCoordinator: ParentCoordinatorDelegate?
 

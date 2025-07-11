@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+@MainActor // maybe?
 open class BaseCoordinator: NSObject, Coordinator {
     var savedRoute: Route?
     var id = UUID()
@@ -42,8 +43,10 @@ open class BaseCoordinator: NSObject, Coordinator {
         return false
     }
 
+    @MainActor
     func handle(route: Route) { }
 
+    @MainActor
     @discardableResult
     func findAndHandle(route: Route) -> Coordinator? {
         guard let matchingCoordinator = find(route: route) else { return nil }

@@ -22,6 +22,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showShareSheetForCurrentlySelectedTab()
 }
 
+@MainActor
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?

@@ -32,6 +32,7 @@ class SendToDeviceHelper {
         self.delegate = delegate
     }
 
+    @MainActor
     func initialViewController() -> UIViewController {
         if !hasAccount() {
             // Display instructions to log in if user has no account
