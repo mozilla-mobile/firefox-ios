@@ -1737,13 +1737,13 @@ workflows:
         - is_compress: 'false'
     - slack@4.2.2:
         inputs:
-        - title: 'Swift 6 Regional Based Isolation Warning Count'
+        - title: ''
         - author_name: ''
         - webhook_url: "$SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX"
         - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
-        - pretext: "*Firefox-iOS* Swift 6 Progress"
+        - pretext: "*Firefox-iOS* Swift 6 Progress :swift:"
         - timestamp: 'yes'
         - fields: |
             Region Based Isolation Warning Count | ${DIFF_WARNING_COUNT}
