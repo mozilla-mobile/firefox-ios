@@ -1743,9 +1743,10 @@ workflows:
         - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
-        - pretext: "*Firefox-iOS* Swift 6 Region Based Isolation Warning Count"
+        - pretext: "*Firefox-iOS* Swift 6 Progress"
         - timestamp: 'yes'
-        - text: ${DIFF_WARNING_COUNT}
+        - fields: |
+            Region Based Isolation Warning Count | ${DIFF_WARNING_COUNT}
         - buttons: |
             Pipeline|${BITRISE_BUILD_URL}
             Logs|${BITRISE_BUILD_URL}?tab=artifacts
