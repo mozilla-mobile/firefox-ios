@@ -134,25 +134,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isHomepage: tabInfo.isHomepage,
             options: [
             MenuElement(
-                title: .MainMenu.PanelLinkSection.History,
-                iconName: Icons.history,
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
-                a11yHint: "",
-                a11yId: AccessibilityIdentifiers.MainMenu.history,
-                action: {
-                    store.dispatchLegacy(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.history),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
                 iconName: Icons.bookmarksTray,
                 isEnabled: true,
@@ -166,6 +147,25 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.bookmarks),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.History,
+                iconName: Icons.history,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.history,
+                action: {
+                    store.dispatchLegacy(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.history),
                             telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
@@ -309,7 +309,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
-                                    .saveAsPDF,
+                                    .saveAsPDFV2,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
@@ -332,7 +332,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
-                                    .printSheet,
+                                    .printSheetV2,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)

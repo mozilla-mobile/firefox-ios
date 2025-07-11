@@ -21,9 +21,7 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
-    private lazy var closeButton: CloseButton = .build { button in
-        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-    }
+
     public var headerBanner: HeaderBanner = .build()
 
     public var siteProtectionHeader: MenuSiteProtectionsHeader = .build()
@@ -50,25 +48,11 @@ public final class MenuRedesignMainView: UIView,
         self.addSubview(tableView)
         if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
             self.siteProtectionHeader.removeFromSuperview()
-            if isPhoneLandscape {
-                self.addSubview(closeButton)
-                viewConstraints.append(contentsOf: [
-                    closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
-                    closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalMargin),
-                    closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-                    closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
-                ])
-            } else {
-                self.closeButton.removeFromSuperview()
-            }
-
-            let topAnchor = isPhoneLandscape ? closeButton.bottomAnchor : self.topAnchor
-
             if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {
                 isBannerVisible = true
                 self.addSubview(headerBanner)
                 viewConstraints.append(contentsOf: [
-                    headerBanner.topAnchor.constraint(equalTo: topAnchor, constant: UX.headerTopMargin),
+                    headerBanner.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
                     headerBanner.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                     headerBanner.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 
@@ -82,7 +66,7 @@ public final class MenuRedesignMainView: UIView,
                 isBannerVisible = false
                 headerBanner.removeFromSuperview()
                 viewConstraints.append(contentsOf: [
-                    tableView.topAnchor.constraint(equalTo: topAnchor,
+                    tableView.topAnchor.constraint(equalTo: self.topAnchor,
                                                    constant: UX.headerTopMarginWithButton),
                     tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
                     tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -92,7 +76,6 @@ public final class MenuRedesignMainView: UIView,
         } else if !data.isEmpty {
             isBannerVisible = false
             headerBanner.removeFromSuperview()
-            self.closeButton.removeFromSuperview()
             self.addSubview(siteProtectionHeader)
             viewConstraints.append(contentsOf: [
                 siteProtectionHeader.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
@@ -116,9 +99,6 @@ public final class MenuRedesignMainView: UIView,
                                               siteProtectionHeaderIdentifier: String,
                                               headerBannerCloseButtonA11yIdentifier: String,
                                               headerBannerCloseButtonA11yLabel: String) {
-        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
-                                                        a11yIdentifier: closeButtonA11yIdentifier)
-        closeButton.configure(viewModel: closeButtonViewModel)
         headerBanner.setupAccessibility(closeButtonA11yLabel: headerBannerCloseButtonA11yLabel,
                                         closeButtonA11yId: headerBannerCloseButtonA11yIdentifier)
         siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,

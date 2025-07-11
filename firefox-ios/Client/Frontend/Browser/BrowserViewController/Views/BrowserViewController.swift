@@ -4404,7 +4404,7 @@ extension BrowserViewController: TabManagerDelegate {
             privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
         }
         readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
-        ReaderModeHandlers.readerModeCache = readerModeCache
+        ReaderModeHandlers.setCache(readerModeCache)
 
         scrollController.tab = selectedTab
 

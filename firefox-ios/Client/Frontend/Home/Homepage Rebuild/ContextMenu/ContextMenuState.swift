@@ -108,32 +108,59 @@ struct ContextMenuState {
     /// This action removes the tile out of the top sites.
     /// If site is pinned, it removes it from pinned and remove from top sites in general.
     private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .RemoveContextMenuTitle,
-                                     iconString: StandardImageIdentifiers.Large.cross,
-                                     allowIconScaling: true,
-                                     tapHandler: { _ in
-            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemoveTopSite)
-        }).items
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
+        return SingleActionViewModel(
+            title: .RemoveContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.cross,
+            allowIconScaling: true,
+            tapHandler: { _ in
+                ContextMenuState.dispatchContextMenuAction(
+                    windowUUID: windowUUID,
+                    site: site,
+                    actionType: ContextMenuActionType.tappedOnRemoveTopSite
+                )
+            }).items
     }
 
     private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .PinTopsiteActionTitle2,
-                                     iconString: StandardImageIdentifiers.Large.pin,
-                                     allowIconScaling: true,
-                                     tapHandler: { _ in
-            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnPinTopSite)
-        }).items
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
+        return SingleActionViewModel(
+            title: .PinTopsiteActionTitle2,
+            iconString: StandardImageIdentifiers.Large.pin,
+            allowIconScaling: true,
+            tapHandler: { _ in
+                ContextMenuState.dispatchContextMenuAction(
+                    windowUUID: windowUUID,
+                    site: site,
+                    actionType: ContextMenuActionType.tappedOnPinTopSite
+                )
+            }).items
     }
 
     /// This unpin action removes the top site from the location it's in.
     /// The tile can still appear in the top sites as unpinned.
     private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
-        return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
-                                     iconString: StandardImageIdentifiers.Large.pinSlash,
-                                     allowIconScaling: true,
-                                     tapHandler: { _ in
-            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnUnpinTopSite)
-        }).items
+        // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
+        // this state across isolation boundaries...
+        let windowUUID = windowUUID
+
+        return SingleActionViewModel(
+            title: .UnpinTopsiteActionTitle2,
+            iconString: StandardImageIdentifiers.Large.pinSlash,
+            allowIconScaling: true,
+            tapHandler: { _ in
+                ContextMenuState.dispatchContextMenuAction(
+                    windowUUID: windowUUID,
+                    site: site,
+                    actionType: ContextMenuActionType.tappedOnUnpinTopSite
+                )
+            }).items
     }
 
     private func getSettingsAction() -> PhotonRowActions {
@@ -156,6 +183,7 @@ struct ContextMenuState {
         // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
         // this state across isolation boundaries...
         let windowUUID = windowUUID
+        let logger = logger
 
         return SingleActionViewModel(
             title: .FirefoxHomepage.ContextualMenu.SponsoredContent,
@@ -163,7 +191,7 @@ struct ContextMenuState {
             allowIconScaling: true,
             tapHandler: { _ in
                 guard let url = SupportUtils.URLForTopic("sponsor-privacy") else {
-                    self.logger.log(
+                    logger.log(
                         "Unable to retrieve URL for sponsor-privacy, return early",
                         level: .warning,
                         category: .homepage
@@ -241,6 +269,7 @@ struct ContextMenuState {
         // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
         // this state across isolation boundaries...
         let windowUUID = windowUUID
+        let section = configuration.homepageSection
 
         return SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
@@ -252,7 +281,11 @@ struct ContextMenuState {
                 siteURL: siteURL,
                 isPrivate: true
             )
-            dispatchContextMenuActionForSection(actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab)
+            ContextMenuState.dispatchContextMenuActionForSection(
+                windowUUID: windowUUID,
+                section: section,
+                actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
+            )
         }.items
     }
 
@@ -271,7 +304,7 @@ struct ContextMenuState {
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
-                                     tapHandler: { _ in
+                                     tapHandler: { [bookmarkDelegate] _ in
             bookmarkDelegate.removeBookmark(urlString: site.url, title: site.title, site: site)
         })
     }
@@ -280,7 +313,7 @@ struct ContextMenuState {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,
-                                     tapHandler: { _ in
+                                     tapHandler: { [bookmarkDelegate] _ in
             // The method in BVC also handles the toast for this use case
             bookmarkDelegate.addBookmark(urlString: site.url, title: site.title, site: site)
         })
@@ -364,7 +397,7 @@ struct ContextMenuState {
         )
     }
 
-    private func dispatchContextMenuAction(site: Site, actionType: ActionType) {
+    private static func dispatchContextMenuAction(windowUUID: WindowUUID, site: Site, actionType: ActionType) {
         store.dispatchLegacy(
             ContextMenuAction(
                 site: site,
@@ -374,10 +407,14 @@ struct ContextMenuState {
         )
     }
 
-    private func dispatchContextMenuActionForSection(actionType: ActionType) {
+    private static func dispatchContextMenuActionForSection(
+        windowUUID: WindowUUID,
+        section: HomepageSection,
+        actionType: ActionType
+    ) {
         store.dispatchLegacy(
             ContextMenuAction(
-                section: configuration.homepageSection,
+                section: section,
                 windowUUID: windowUUID,
                 actionType: actionType
             )

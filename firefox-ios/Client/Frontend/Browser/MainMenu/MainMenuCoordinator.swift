@@ -39,6 +39,20 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         super.init(router: router)
     }
 
+    func startWithNavController() {
+        let mainMenuViewController = createMainMenuViewController()
+
+        let mainMenuNavController = UINavigationController(rootViewController: mainMenuViewController)
+        mainMenuNavController.isNavigationBarHidden = true
+
+        if let sheetPresentationController = mainMenuNavController.sheetPresentationController {
+            sheetPresentationController.detents = [.medium(), .large()]
+        }
+        mainMenuNavController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
+        mainMenuNavController.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(mainMenuNavController, animated: true, completion: nil)
+    }
+
     func start() {
         router.setRootViewController(
             createMainMenuViewController(),
@@ -119,13 +133,13 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             )
             navigationHandler?.showSignInView(fxaParameters: fxaParameters)
 
-        case .printSheet:
+        case .printSheet, .printSheetV2:
             navigationHandler?.showPrintSheet()
 
         case .shareSheet:
             navigationHandler?.showShareSheetForCurrentlySelectedTab()
 
-        case .saveAsPDF:
+        case .saveAsPDF, .saveAsPDFV2:
             navigationHandler?.presentSavePDFController()
 
         case .zoom:
@@ -133,6 +147,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .siteProtections:
             self.navigationHandler?.presentSiteProtections()
+
+        case .defaultBrowser:
+            DefaultApplicationHelper().openSettings()
         }
     }
 
