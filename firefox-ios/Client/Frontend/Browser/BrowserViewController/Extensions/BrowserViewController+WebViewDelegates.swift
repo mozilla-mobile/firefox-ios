@@ -1123,6 +1123,18 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let tab = tabManager[webView] {
+            if tab == tabManager.selectedTab {
+                screenshotHelper.takeScreenshot(
+                    tab,
+                    windowUUID: windowUUID,
+                    screenshotBounds: CGRect(
+                        x: contentContainer.frame.origin.x,
+                        y: -contentContainer.frame.origin.y,
+                        width: view.frame.width,
+                        height: view.frame.height
+                    )
+                )
+            }
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // If this tab had previously crashed, wait 5 seconds before resetting
