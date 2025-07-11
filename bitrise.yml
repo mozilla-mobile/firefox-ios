@@ -1745,8 +1745,7 @@ workflows:
         - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
         - pretext: "*Firefox-iOS* Swift 6 Region Based Isolation Warning Count"
         - timestamp: 'yes'
-        - fields: |
-            Region Based Isolation Warning Count | ${DIFF_WARNING_COUNT}
+        - text: ${DIFF_WARNING_COUNT}
         - buttons: |
             Pipeline|${BITRISE_BUILD_URL}
             Logs|${BITRISE_BUILD_URL}?tab=artifacts
