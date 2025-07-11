@@ -74,13 +74,17 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         guard let vertexFunction = shaderLibrary.makeFunction(name: AnimatedGradientUX.vertexShaderFunctionName) else {
             let errorMessage = "Missing vertex shader function: \(AnimatedGradientUX.vertexShaderFunctionName)"
             logger.log(errorMessage, level: .fatal, category: .onboarding)
-            throw AnimatedGradientRendererError.missingShaderFunction(functionName: AnimatedGradientUX.vertexShaderFunctionName)
+            throw AnimatedGradientRendererError.missingShaderFunction(
+                functionName: AnimatedGradientUX.vertexShaderFunctionName
+            )
         }
 
         guard let fragmentFunction = shaderLibrary.makeFunction(name: AnimatedGradientUX.fragmentShaderFunctionName) else {
             let errorMessage = "Missing fragment shader function: \(AnimatedGradientUX.fragmentShaderFunctionName)"
             logger.log(errorMessage, level: .fatal, category: .onboarding)
-            throw AnimatedGradientRendererError.missingShaderFunction(functionName: AnimatedGradientUX.fragmentShaderFunctionName)
+            throw AnimatedGradientRendererError.missingShaderFunction(
+                functionName: AnimatedGradientUX.fragmentShaderFunctionName
+            )
         }
 
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
