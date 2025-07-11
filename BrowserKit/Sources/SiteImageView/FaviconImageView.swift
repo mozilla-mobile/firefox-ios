@@ -10,6 +10,7 @@ import UIKit
 /// - Favicon
 ///     - Can be set through `setFavicon(_ viewModel: SiteImageViewFaviconModel)`
 ///     - No theming calls needed
+@MainActor
 public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
