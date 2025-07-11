@@ -36,7 +36,7 @@ final class LocationView: UIView,
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
-    private var toolbarAlpha: CGFloat = 1
+    private var scrollAlpha: CGFloat = 1
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -50,7 +50,7 @@ final class LocationView: UIView,
     /// An additional offset (default is 0) used when reader mode is available,
     /// to ensure the text does not overlap the icon when the view is constrained to its superview.
     private func isURLTextFieldWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
-        guard let text = urlTextField.text, let font = urlTextField.font, toolbarAlpha == 1 else {
+        guard let text = urlTextField.text, let font = urlTextField.font, !scrollAlpha.isZero else {
             return false
         }
         let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace - offset
@@ -158,7 +158,7 @@ final class LocationView: UIView,
             delegate: delegate
         )
 
-        applyToolbarAlphaIfNeeded(alpha: uxConfig.addressBarAlpha, barPosition: addressBarPosition)
+        applyToolbarAlphaIfNeeded(alpha: uxConfig.scrollAlpha, barPosition: addressBarPosition)
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
@@ -396,15 +396,15 @@ final class LocationView: UIView,
         lockIconWidthAnchor?.isActive = true
     }
 
-    // MARK: - `Self` Transformation
-    private func transformSelfToSmallerScale(barPosition: AddressToolbarPosition) {
+    // MARK: - LocationView Scaling
+    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? UX.bottomAddressBarYoffset : UX.topAddressBarYoffset
         transform = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
         urlTextField.isUserInteractionEnabled = false
     }
 
-    private func resetSelfToIdentity() {
+    private func restoreLocationViewSize() {
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
             delay: 0,
@@ -416,14 +416,14 @@ final class LocationView: UIView,
     }
 
     private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
-        guard toolbarAlpha != alpha  else { return }
-            toolbarAlpha = alpha
-            if toolbarAlpha == 0 {
-                transformSelfToSmallerScale(barPosition: barPosition)
-            } else {
-                resetSelfToIdentity()
-            }
-        iconContainerBackgroundView.alpha = toolbarAlpha
+        guard scrollAlpha != alpha else { return }
+        scrollAlpha = alpha
+        if scrollAlpha.isZero {
+            shrinkLocationView(barPosition: barPosition)
+        } else {
+            restoreLocationViewSize()
+        }
+        //        iconContainerBackgroundView.alpha = scrollAlpha
         if let theme { applyTheme(theme: theme) }
     }
 
@@ -679,8 +679,8 @@ final class LocationView: UIView,
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = appearance.backgroundColor
-        lockIconButton.backgroundColor = toolbarAlpha == 0 ? nil : appearance.backgroundColor
+        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
+        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",

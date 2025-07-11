@@ -121,7 +121,7 @@ public class BrowserAddressToolbar: UIView,
                           isUnifiedSearchEnabled: Bool,
                           animated: Bool) {
         [navigationActionStack, leadingPageActionStack, pageActionStack, browserActionStack].forEach {
-            $0.isHidden = config.uxConfiguration.addressBarAlpha == 0
+            $0.isHidden = config.uxConfiguration.scrollAlpha == 0
         }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled

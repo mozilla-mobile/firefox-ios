@@ -12,10 +12,12 @@ public struct AddressToolbarUXConfiguration {
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
-    let addressBarAlpha: CGFloat
+    /// Alpha value that controls element visibility during scroll-based address bar transitions.
+    /// Changes between 0 (hidden) and 1 (visible) based on scroll direction.
+    let scrollAlpha: CGFloat
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
-                                  addressBarAlpha: CGFloat = 1.0,
+                                  scrollAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 12.0,
@@ -24,12 +26,12 @@ public struct AddressToolbarUXConfiguration {
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
-            addressBarAlpha: addressBarAlpha
+            scrollAlpha: scrollAlpha
         )
     }
 
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
-                                 addressBarAlpha: CGFloat = 1.0,
+                                 scrollAlpha: CGFloat = 1.0,
                                  shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
@@ -38,7 +40,7 @@ public struct AddressToolbarUXConfiguration {
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
-            addressBarAlpha: addressBarAlpha
+            scrollAlpha: scrollAlpha
         )
     }
 
@@ -53,7 +55,7 @@ public struct AddressToolbarUXConfiguration {
 
     func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
         let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
-        if addressBarAlpha == 0 { return backgroundColor.withAlphaComponent(addressBarAlpha) }
+        if scrollAlpha == 0 { return backgroundColor.withAlphaComponent(scrollAlpha) }
         return backgroundColor
     }
 

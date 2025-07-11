@@ -90,6 +90,14 @@ final class TabScrollController: NSObject,
     }
     private var headerHeight: CGFloat { header?.frame.height ?? 0 }
 
+    /// Calculates the header offset based on device type and toolbar visibility.
+    ///
+    /// The minimal address bar is enabled under these circumstances:
+    /// - On iPad devices (all orientations).
+    /// - On iPhone when the navigation toolbar is visible (portrait mode).
+    ///
+    /// When minimal mode is active, an additional height offset is applied to provide
+    /// space for displaying the minimized address bar with the domain/subdomain URL.
     private var headerOffset: CGFloat {
         let baseOffset = -headerHeight
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -582,14 +590,12 @@ private extension TabScrollController {
             if isMinimalAddressBarEnabled {
                 store.dispatchLegacy(
                     ToolbarAction(
-                        addressBarAlpha: Float(alpha),
+                        scrollAlpha: Float(alpha),
                         windowUUID: windowUUID,
-                        actionType: ToolbarActionType.alphaDidChange
+                        actionType: ToolbarActionType.scrollAlphaDidChange
                     )
                 )
-            }
-
-            if !isMinimalAddressBarEnabled {
+            } else {
                 overKeyboardContainerOffset = overKeyboardOffset
             }
             overKeyboardContainer?.updateAlphaForSubviews(alpha)

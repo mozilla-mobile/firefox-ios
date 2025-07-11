@@ -11,7 +11,7 @@ final class ToolbarAction: Action {
     let toolbarLayout: ToolbarLayoutStyle?
     let isTranslucent: Bool?
     let numberOfTabs: Int?
-    let addressBarAlpha: Float?
+    let scrollAlpha: Float?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
@@ -35,7 +35,7 @@ final class ToolbarAction: Action {
          toolbarLayout: ToolbarLayoutStyle? = nil,
          isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
-         addressBarAlpha: Float? = nil,
+         scrollAlpha: Float? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
@@ -60,7 +60,7 @@ final class ToolbarAction: Action {
         self.toolbarLayout = toolbarLayout
         self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
-        self.addressBarAlpha = addressBarAlpha
+        self.scrollAlpha = scrollAlpha
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
@@ -87,7 +87,7 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
-    case alphaDidChange
+    case scrollAlphaDidChange
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
