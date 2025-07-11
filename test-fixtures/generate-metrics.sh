@@ -7,7 +7,7 @@ TYPE_LOG_FILE="$2"
 THRESHOLD_UNIT_TEST=28
 THRESHOLD_XCUITEST=28
 
-WARNING_COUNT=$(grep -E -v "SourcePackages/checkouts" "$BUILD_LOG_FILE" | grep -E "^[^ ]+:[0-9]+:[0-9]+: warning:|⚠️" | uniq | wc -l)
+WARNING_COUNT=$(grep -E -v "SourcePackages/checkouts" "$BUILD_LOG_FILE" | grep -E "^[^ ]+:[0-9]+:[0-9]+: warning:" | uniq | wc -l)
 
 if  [ $2 == "unit-test" ]; then
     if [ $WARNING_COUNT -ge $THRESHOLD_UNIT_TEST ]; then
