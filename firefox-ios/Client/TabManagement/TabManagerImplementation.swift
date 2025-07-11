@@ -768,7 +768,8 @@ class TabManagerImplementation: NSObject,
     }
 
     private func preserveTabs(forced: Bool) {
-        Task {
+        Task { @MainActor in
+            // FIXME sending self risks data races
             // FIXME FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
             let windowData = WindowData(id: windowUUID,
                                         activeTabId: self.selectedTabUUID ?? UUID(),

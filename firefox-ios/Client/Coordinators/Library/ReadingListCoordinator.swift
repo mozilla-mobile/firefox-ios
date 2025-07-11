@@ -7,6 +7,7 @@ import Foundation
 import enum MozillaAppServices.VisitType
 
 protocol ReadingListNavigationHandler: AnyObject, LibraryPanelCoordinatorDelegate {
+    @MainActor
     func openUrl(_ url: URL, visitType: VisitType)
 }
 
@@ -30,10 +31,12 @@ class ReadingListCoordinator: BaseCoordinator, ReadingListNavigationHandler {
 
     // MARK: - ReadingListNavigationHandler
 
+    @MainActor
     func openUrl(_ url: URL, visitType: VisitType) {
         parentCoordinator?.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView) {
         navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
     }

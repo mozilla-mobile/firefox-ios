@@ -7,6 +7,7 @@ import SnapKit
 import Shared
 import Common
 
+@MainActor
 final class TabScrollController: NSObject,
                            SearchBarLocationProvider,
                            Themeable {
@@ -153,7 +154,7 @@ final class TabScrollController: NSObject,
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
 
-    var themeManager: any ThemeManager
+    let themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
@@ -170,10 +171,28 @@ final class TabScrollController: NSObject,
     }
 
     deinit {
+        // FIXME !!! How will we deallocate these? Deinit is nonisolated.
+        // Can we make the thread wait for deallocation to complete?
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
-        guard let themeObserver else { return }
-        notificationCenter.removeObserver(themeObserver)
+
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                observedScrollViews.forEach({
+                    $0.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
+                })
+                guard let themeObserver else { return }
+                notificationCenter.removeObserver(themeObserver)
+            }
+        } else {
+            // Checking thread to avoid deadlocks..... this is awful
+            DispatchQueue.main.sync {
+                observedScrollViews.forEach({
+                    $0.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
+                })
+                guard let themeObserver else { return }
+                notificationCenter.removeObserver(themeObserver)
+            }
+        }
     }
 
     init(windowUUID: WindowUUID,
@@ -220,6 +239,8 @@ final class TabScrollController: NSObject,
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
+    // FIXME case where we can't guarantee @MainActor isolation because of obj C interoperability. Does the recognizer always
+    // call main thread?
     @objc
     func handlePan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.state != .ended, gesture.state != .cancelled else {
@@ -303,6 +324,8 @@ final class TabScrollController: NSObject,
         scrollView.addObserver(self, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
     }
 
+    // FIXME needed for deinit... which is synchronous. Best alternative? Other code calls this too though and needs
+    // MainActor, like BrowserViewController.
     func stopObserving(scrollView: UIScrollView) {
         guard observedScrollViews.contains(scrollView) else {
             logger.log("Duplicate KVO de-registration for scroll view", level: .warning, category: .webview)
@@ -319,10 +342,12 @@ final class TabScrollController: NSObject,
         change: [NSKeyValueChangeKey: Any]?,
         context: UnsafeMutableRawPointer?
     ) {
-        if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
+        Task { @MainActor in
+            if keyPath == "contentSize" {
+                guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
 
-            showToolbars(animated: true)
+                showToolbars(animated: true)
+            }
         }
     }
 

@@ -6,9 +6,18 @@ import Foundation
 import Common
 
 protocol ApplicationHelper {
+    @MainActor
     func openSettings()
+
+    @MainActor
     func open(_ url: URL)
+
+    @MainActor
     func open(_ url: URL, inWindow: WindowUUID)
+
+    // NOTE: I don't like how we can do this and then suddenly conforming methods are @MainActor without explicitly writing
+    // above each method...
+    @MainActor
     func closeTabs(_ urls: [URL]) async
 }
 

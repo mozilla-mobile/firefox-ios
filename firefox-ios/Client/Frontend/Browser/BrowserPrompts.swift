@@ -8,6 +8,7 @@ import WebKit
 
 @objc
 protocol JSPromptAlertControllerDelegate: AnyObject {
+    @MainActor // FIXME can we guarantee thread of callback with obj c interop?
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController)
 }
 

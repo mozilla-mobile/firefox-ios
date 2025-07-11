@@ -30,12 +30,18 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 }
 
 protocol TabContentScript {
-    static func name() -> String
+    static nonisolated func name() -> String
+
+    @MainActor
     func scriptMessageHandlerNames() -> [String]?
+
+    @MainActor
     func userContentController(
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     )
+
+    @MainActor
     func prepareForDeinit()
 }
 

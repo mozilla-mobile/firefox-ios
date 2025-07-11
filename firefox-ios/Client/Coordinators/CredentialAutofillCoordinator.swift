@@ -42,6 +42,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    @MainActor
     func showCreditCardAutofill(creditCard: CreditCard?,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
@@ -196,6 +197,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         )
     }
 
+    @MainActor
     func showPassCodeController() {
         let passwordController = DevicePasscodeRequiredViewController(windowUUID: windowUUID)
         passwordController.profile = profile

@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+@MainActor // maybe?
 protocol Coordinator: AnyObject {
     var id: UUID { get }
     var childCoordinators: [Coordinator] { get }
@@ -22,6 +23,7 @@ protocol Coordinator: AnyObject {
 
     /// Handle the Route, if able. This is implemented by each coordinator for Route they will handle.
     /// - Parameter route: The Route to navigate to
+    @MainActor
     func handle(route: Route)
 
     /// When the coordinator cannot handle this particular Route, it returns false.

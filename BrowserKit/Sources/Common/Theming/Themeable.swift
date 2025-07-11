@@ -5,20 +5,23 @@
 import UIKit
 
 public protocol Themeable: ThemeUUIDIdentifiable, AnyObject {
-    var shouldUsePrivateOverride: Bool { get }
-    var shouldBeInPrivateTheme: Bool { get }
-    var themeManager: ThemeManager { get }
-    var themeObserver: NSObjectProtocol? { get set }
-    var notificationCenter: NotificationProtocol { get set }
+    nonisolated var shouldUsePrivateOverride: Bool { get }
+    nonisolated var shouldBeInPrivateTheme: Bool { get }
+    nonisolated var themeManager: ThemeManager { get }
+    nonisolated var themeObserver: NSObjectProtocol? { get set } // FIXME Thread safe?
+    nonisolated var notificationCenter: NotificationProtocol { get set }  // FIXME Thread safe?
 
+    @MainActor
     func listenForThemeChange(_ subview: UIView)
+
+    @MainActor
     func applyTheme()
 }
 
 /// Protocol for views to identify which iPad window (UUID) the view is associated with.
 /// By default, all UIViews conform to this automatically. See: UIView+ThemeUUIDIdentifiable.swift.
 public protocol ThemeUUIDIdentifiable: AnyObject {
-    var currentWindowUUID: WindowUUID? { get }
+    nonisolated var currentWindowUUID: WindowUUID? { get }
 }
 
 /// Protocol that views or controllers may optionally adopt when they provide an explicit (typically, injected)
@@ -36,6 +39,7 @@ extension Themeable {
     // Determines if we want views to be in private theme or not
     public var shouldBeInPrivateTheme: Bool { return false }
 
+    @MainActor
     public func listenForThemeChange(_ subview: UIView) {
         let mainQueue = OperationQueue.main
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
@@ -59,7 +63,11 @@ extension Themeable {
         }
 
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
-        themeViews.forEach { $0.applyTheme(theme: theme) }
+        themeViews.forEach { view in
+            Task { @MainActor in
+               view.applyTheme(theme: theme)
+            }
+        }
     }
 
     public func getAllSubviews<T>(for view: UIView, ofType type: T.Type) -> [T] {

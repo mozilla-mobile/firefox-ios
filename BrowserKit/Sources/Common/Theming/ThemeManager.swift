@@ -4,7 +4,7 @@
 
 import UIKit
 
-public protocol ThemeManager {
+public protocol ThemeManager: Sendable {
     // Current theme
     func getCurrentTheme(for window: WindowUUID?) -> Theme
 

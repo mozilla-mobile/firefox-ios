@@ -7,6 +7,7 @@ import Common
 import Shared
 import Storage
 
+@MainActor
 class ShareSheetCoordinator: BaseCoordinator,
                              DevicePickerViewControllerDelegate,
                              InstructionsViewDelegate,
@@ -43,6 +44,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     // MARK: - Methods
 
     /// Presents the share sheet from the source view
+    @MainActor
     func start(
         shareType: ShareType,
         shareMessage: ShareMessage?,
@@ -81,6 +83,7 @@ class ShareSheetCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor // FIXME can we guarantee execution on the main thread or is this one of those gotchya situations?
     private func handleShareSheetCompletion(
         activityType: UIActivity.ActivityType?,
         shareType: ShareType,
@@ -160,6 +163,7 @@ class ShareSheetCoordinator: BaseCoordinator,
         router.present(alertController)
     }
 
+    @MainActor
     private func showToast(text: String) {
         SimpleToast().showAlertWithText(text,
                                         bottomContainer: self.alertContainer,

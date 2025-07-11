@@ -14,6 +14,7 @@ import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
 import ComponentLibrary
 
+@MainActor // maybe?
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
                           BrowserDelegate,
@@ -56,6 +57,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     override var isDismissable: Bool { false }
 
+    @MainActor
     init(router: Router,
          screenshotService: ScreenshotService,
          tabManager: TabManager,
@@ -115,7 +117,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserDelegate
-
+    @MainActor
     func showLegacyHomepage(
         inline: Bool,
         toastContainer: UIView,
@@ -140,6 +142,7 @@ class BrowserCoordinator: BaseCoordinator,
         screenshotService.screenshotableView = nil
     }
 
+    @MainActor
     func showHomepage(
         overlayManager: OverlayModeManager,
         isZeroSearch: Bool,
@@ -168,6 +171,7 @@ class BrowserCoordinator: BaseCoordinator,
         return homepageViewController ?? legacyHomepageViewController
     }
 
+    @MainActor
     func setHomepageVisibility(isVisible: Bool) {
         let homepage = homepageViewController ?? legacyHomepageViewController
         guard let homepage else { return }
@@ -184,6 +188,7 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    @MainActor
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
         let privateHomepageController = PrivateHomepageViewController(
             windowUUID: windowUUID,
@@ -197,6 +202,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
@@ -213,6 +219,7 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
     }
 
+    @MainActor
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
         let navigationController = DismissableNavigationViewController()
         let router = DefaultRouter(navigationController: navigationController)
@@ -234,6 +241,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - PrivateHomepageDelegate
+    @MainActor
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
@@ -243,6 +251,7 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.tabManager.switchPrivacyMode()
     }
 
+    @MainActor
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
@@ -274,6 +283,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     private func getHomepage(inline: Bool,
                              toastContainer: UIView,
                              homepanelDelegate: HomePanelDelegate,
@@ -301,7 +311,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - ETPCoordinatorSSLStatusDelegate
 
-    var showHasOnlySecureContentInTrackingPanel: Bool {
+    @MainActor var showHasOnlySecureContentInTrackingPanel: Bool {
         if browserViewController.isToolbarRefactorEnabled {
             return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
         }
@@ -394,6 +404,7 @@ class BrowserCoordinator: BaseCoordinator,
         startLaunch(with: launchType)
     }
 
+    @MainActor
     private func handleQRCode() {
         browserViewController.handleQRCode()
     }
@@ -406,6 +417,7 @@ class BrowserCoordinator: BaseCoordinator,
         windowManager.performMultiWindowAction(.closeAllPrivateTabs)
     }
 
+    @MainActor
     private func handle(homepanelSection section: Route.HomepanelSection) {
         switch section {
         case .bookmarks:
@@ -427,18 +439,22 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Handle Deeplink Open URL / text
 
+    @MainActor
     private func handle(query: String, isPrivate: Bool) {
         browserViewController.handle(query: query, isPrivate: isPrivate)
     }
 
+    @MainActor
     private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
     }
 
+    @MainActor
     private func handle(searchURL: URL?, tabId: String) {
         browserViewController.handle(url: searchURL, tabId: tabId)
     }
 
+    @MainActor
     private func handle(fxaParams: FxALaunchParams) {
         browserViewController.presentSignInViewController(fxaParams)
     }
@@ -447,6 +463,7 @@ class BrowserCoordinator: BaseCoordinator,
     /// - Parameters:
     ///   - shareType: The content to share.
     ///   - shareMessage: An optional textual message to accompany the shared content. May contain a Mail subject line.
+    @MainActor
     private func handleShareRoute(shareType: ShareType, shareMessage: ShareMessage?) {
         // FIXME: FXIOS-10829 Deep link shares should set a reasonable sourceView for iPad... or sourceView could be optional
         startShareSheetCoordinator(
@@ -466,6 +483,7 @@ class BrowserCoordinator: BaseCoordinator,
         return true
     }
 
+    @MainActor
     private func handleSettings(with section: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
@@ -492,6 +510,7 @@ class BrowserCoordinator: BaseCoordinator,
         present(navigationController)
     }
 
+    @MainActor
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
         windowManager.postWindowEvent(event: .libraryOpened, windowUUID: windowUUID)
         if let libraryCoordinator = childCoordinators[LibraryCoordinator.self] {
@@ -524,6 +543,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - SettingsCoordinatorDelegate
 
+    @MainActor
     func openURLinNewTab(_ url: URL) {
         browserViewController.openURLInNewTab(url)
     }
@@ -533,6 +553,7 @@ class BrowserCoordinator: BaseCoordinator,
         remove(child: coordinator)
     }
 
+    @MainActor
     func openDebugTestTabs(count: Int) {
         guard let url = URL(string: "https://www.mozilla.org") else { return }
         browserViewController.debugOpen(numberOfNewTabs: count, at: url)
@@ -540,6 +561,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - LibraryCoordinatorDelegate
 
+    @MainActor
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
     }
@@ -570,12 +592,14 @@ class BrowserCoordinator: BaseCoordinator,
         remove(child: coordinator)
     }
 
+    @MainActor
     func settingsOpenPage(settings: Route.SettingsSection) {
         handleSettings(with: settings)
     }
 
     // MARK: - MainMenuCoordinatorDelegate
 
+    @MainActor
     func showMainMenu() {
         if featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly) {
             let mainMenuCoordinator = MainMenuCoordinator(router: router,
@@ -591,12 +615,14 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     func openURLInNewTab(_ url: URL?) {
         if let url {
             browserViewController.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
         }
     }
 
+    @MainActor
     func openNewTab(inPrivateMode isPrivate: Bool) {
         browserViewController.openNewTabFromMenu(
             focusLocationField: true,
@@ -604,25 +630,30 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    @MainActor
     func showLibraryPanel(_ panel: Route.HomepanelSection) {
         showLibrary(with: panel)
     }
 
+    @MainActor
     func showSettings(at destination: Route.SettingsSection) {
         presentWithModalDismissIfNeeded {
             self.handleSettings(with: destination, onDismiss: nil)
         }
     }
 
+    @MainActor
     func editBookmarkForCurrentTab() {
         guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
         browserViewController.openBookmarkEditPanel(urlString: urlString)
     }
 
+    @MainActor
     func showFindInPage() {
         browserViewController.showFindInPage()
     }
 
+    @MainActor
     func updateZoomPageBarVisibility() {
         browserViewController.updateZoomPageBarVisibility(visible: true)
     }
@@ -630,6 +661,7 @@ class BrowserCoordinator: BaseCoordinator,
     /// Share the currently selected tab using the share sheet.
     ///
     /// Part of the MainMenuCoordinatorDelegate implementation, called from the New Menu > Tools > Share.
+    @MainActor
     func showShareSheetForCurrentlySelectedTab() {
         // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
         guard let selectedTab = tabManager.selectedTab,
@@ -647,10 +679,12 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    @MainActor
     func presentSiteProtections() {
         showETPMenu(sourceView: browserViewController.addressToolbarContainer)
     }
 
+    @MainActor
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
         if selectedTab.mimeType == MIMEType.PDF {
@@ -687,6 +721,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     func showPrintSheet() {
         if let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView {
             let printInfo = UIPrintInfo(dictionary: nil)
@@ -698,6 +733,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             mainMenuCoordinator.dismissMenuModal(animated: false)
@@ -724,6 +760,7 @@ class BrowserCoordinator: BaseCoordinator,
         return navigationController
     }
 
+    @MainActor
     func showSignInView(fxaParameters: FxASignInViewParameters?) {
         guard let fxaParameters else { return }
         browserViewController.presentSignInViewController(fxaParameters.launchParameters,
@@ -733,6 +770,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - SearchEngineSelectionCoordinatorDelegate
 
+    @MainActor
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
         let isEditing = store.state.screenState(ToolbarState.self,
@@ -768,6 +806,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserNavigationHandler
+    @MainActor
     func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(
             url,
@@ -793,6 +832,7 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    @MainActor
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         presentWithModalDismissIfNeeded {
             self.handleSettings(with: settings, onDismiss: onDismiss)
@@ -801,6 +841,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     /// Not all flows are handled by coordinators at the moment so we can't call router.dismiss for all
     /// This bridges to use the presentWithModalDismissIfNeeded method we have in older flows
+    @MainActor
     private func presentWithModalDismissIfNeeded(completion: @escaping () -> Void) {
         if let presentedViewController = router.navigationController.presentedViewController {
             presentedViewController.dismiss(animated: false, completion: {
@@ -811,6 +852,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     func show(homepanelSection: Route.HomepanelSection) {
         showLibrary(with: homepanelSection)
     }
@@ -893,6 +935,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     func showCreditCardAutofill(creditCard: CreditCard?,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
@@ -909,17 +952,18 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     @MainActor
-    @preconcurrency
     func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId, field: field)
     }
 
+    @MainActor
     func showAddressAutofill(frame: WKFrameInfo?) {
         let bottomSheetCoordinator = makeAddressAutofillCoordinator()
         bottomSheetCoordinator.showAddressAutofill(frame: frame)
     }
 
+    @MainActor
     func showRequiredPassCode() {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showPassCodeController()
@@ -957,6 +1001,7 @@ class BrowserCoordinator: BaseCoordinator,
         return bottomSheetCoordinator
     }
 
+    @MainActor
     func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
         windowManager.postWindowEvent(event: .qrScannerOpened, windowUUID: windowUUID)
         var coordinator: QRCodeCoordinator
@@ -980,6 +1025,7 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.showQRCode(delegate: delegate)
     }
 
+    @MainActor
     func showTabTray(selectedPanel: TabTrayPanelType) {
         guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
@@ -1025,6 +1071,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // This implementation of present is specifically for the animation on .tabTrayUIExperiments
+    @MainActor
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
                          style: UIModalPresentationStyle) {
@@ -1040,11 +1087,13 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     private func present(_ viewController: UIViewController) {
         browserViewController.willNavigateAway(from: tabManager.selectedTab)
         router.present(viewController)
     }
 
+    @MainActor
     func showBackForwardList() {
         guard let backForwardList = tabManager.selectedTab?.backForwardList else { return }
         let backForwardListVC = BackForwardListViewController(profile: profile,
@@ -1057,16 +1106,19 @@ class BrowserCoordinator: BaseCoordinator,
         present(backForwardListVC)
     }
 
+    @MainActor
     func showDocumentLoading() {
         browserViewController.showDocumentLoadingView()
     }
 
+    @MainActor
     func removeDocumentLoading() {
         browserViewController.removeDocumentLoadingView()
     }
 
     // MARK: Microsurvey
 
+    @MainActor
     func showMicrosurvey(model: MicrosurveyModel) {
         guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
             return
@@ -1093,6 +1145,7 @@ class BrowserCoordinator: BaseCoordinator,
         present(navigationController)
     }
 
+    @MainActor
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
@@ -1105,12 +1158,14 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     private func setiPadLayoutDetents(for controller: UIViewController) {
         guard controller.shouldUseiPadSetup() else { return }
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
     }
 
     // MARK: - Password Generator
+    @MainActor
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
 
@@ -1165,6 +1220,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - WindowEventCoordinator
 
+    @MainActor
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
         switch event {
         case .windowWillClose:
@@ -1239,6 +1295,7 @@ class BrowserCoordinator: BaseCoordinator,
     /// - Parameters:
     ///   - coordinatorType: the type of coordinator.
     ///   - action: the action to perform. The Coordinator instance is supplied for convenience.
+    @MainActor
     private func performIfCoordinatorRootVCIsPresented<T: Coordinator>(_ coordinatorType: T.Type,
                                                                        action: (T) -> Void) {
         guard let expectedCoordinator = childCoordinators[coordinatorType] else { return }

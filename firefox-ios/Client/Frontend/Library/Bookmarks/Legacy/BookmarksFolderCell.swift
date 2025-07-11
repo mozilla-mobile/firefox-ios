@@ -10,8 +10,10 @@ import class MozillaAppServices.BookmarkItemData
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell: BookmarksRefactorFeatureFlagProvider {
+    @MainActor
     func getViewModel() -> OneLineTableViewCellViewModel
 
+    @MainActor
     func didSelect(profile: Profile,
                    searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
@@ -65,6 +67,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
 }
 
 extension BookmarkItemData: BookmarksFolderCell {
+    @MainActor
     func getViewModel() -> OneLineTableViewCellViewModel {
         var title: String
         if self.title.isEmpty {
@@ -88,6 +91,7 @@ extension BookmarkItemData: BookmarksFolderCell {
         }
     }
 
+    @MainActor
     func didSelect(profile: Profile,
                    searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,

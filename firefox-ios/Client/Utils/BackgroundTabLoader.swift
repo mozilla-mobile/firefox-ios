@@ -37,7 +37,7 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
     }
 
     private func dequeueQueuedTabs() {
-        tabQueue.getQueuedTabs { [weak self] urls in
+        tabQueue.getQueuedTabs { @MainActor [weak self] urls in // FIXME why can't I annotate this?
             guard let self = self else { return }
             // This assumes that the DB returns rows in a sane order.
             guard !urls.isEmpty else { return }
@@ -51,10 +51,11 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
             // Clear after making an attempt to open. We're making a bet that
             // it's better to run the risk of perhaps opening twice on a crash,
             // rather than losing data.
-            self.tabQueue.clearQueuedTabs()
+            self.tabQueue.clearQueuedTabs() // FIXME should this be background?
         }
     }
 
+    @MainActor
     private func open(urls: [URL]) {
         for urlToOpen in urls {
             let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)"
