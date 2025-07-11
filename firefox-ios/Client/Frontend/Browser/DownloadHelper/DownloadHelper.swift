@@ -53,12 +53,13 @@ class DownloadHelper: NSObject {
         return !canShowInWebView || forceDownload
     }
 
-    func shouldDownloadAttachment(isForMainFrame: Bool) -> Bool {
+    private func shouldDownloadAttachment(isForMainFrame: Bool) -> Bool {
         let contentDisposition = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         let isAttachment = contentDisposition?.starts(with: "attachment") ?? false
         let canBeDownloaded = MIMEType.canBeDownloaded(preflightResponse.mimeType) && !isForMainFrame
 
-        return isAttachment && canBeDownloaded
+        // Bugzilla #1976304; always resepct content-disposition: attachment
+        return isAttachment || canBeDownloaded
     }
 
     func downloadViewModel(windowUUID: WindowUUID,
