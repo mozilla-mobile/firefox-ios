@@ -1749,8 +1749,8 @@ workflows:
             Warnings | ${OLD_WARNING_COUNT}
             Warnings WITH region based isolation flag | ${NEW_WARNING_COUNT}
             Difference in warning count | ${DIFF_WARNING_COUNT}
-        - buttons: |
-            View Pipeline Build|${BITRISEIO_PIPELINE_BUILD_URL}
+        - buttons:
+            Pipeline|${BITRISEIO_PIPELINE_BUILD_URL}
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
