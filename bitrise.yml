@@ -145,7 +145,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcconfig_content: SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
 
-            SWIFT_STRICT_CONCURRENCY = complete
+            SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES
         is_always_run: true
         is_skippable: true
     - script@1.2.1:
