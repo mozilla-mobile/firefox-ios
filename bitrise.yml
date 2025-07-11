@@ -141,6 +141,26 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
+        title: Detect number of warnings
+        is_always_run: true
+        inputs:
+        - content: |
+            set -e
+            set -x
+
+            echo "bitrise_xcode"
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $BITRISE_XCODEBUILD_TEST_LOG_PATH all)
+
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+    - script@1.2.1:
         title: Override xctestrun file to UnitTests
         inputs:
         - content: |-
@@ -231,26 +251,6 @@ workflows:
 
     - cache-push@2.7.1:
         is_always_run: true
-    - script@1.2.1:
-        title: Detect number of warnings
-        is_always_run: true
-        inputs:
-        - content: |
-            set -e
-            set -x
-
-            echo "bitrise_xcode"
-            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $BITRISE_XCODEBUILD_TEST_LOG_PATH all)
-
-            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
-            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
-
-            STR=$COUNT_XCUI
-            SUB='greater'
-            if [[ "$STR" == *"$SUB"* ]]; then
-                echo "Failure, the number of warnings increased"
-                exit 1
-            fi
     - slack@4.2.1:
         is_always_run: true
         inputs:
