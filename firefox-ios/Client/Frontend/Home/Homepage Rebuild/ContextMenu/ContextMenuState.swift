@@ -16,11 +16,12 @@ protocol BookmarksHandlerDelegate: AnyObject {
     func removeBookmark(urlString: String, title: String?, site: Site?)
 }
 
+// TODO: FXIOS-12781 Make ContextMenuState actually sendable
 /// State to populate actions for the `PhotonActionSheet` view
 /// Ideally, we want that view to subscribe to the store and update its state following the redux pattern
 /// For now, we will instantiate this state and populate the associated view model instead to avoid
 /// increasing scope of homepage rebuild project.
-struct ContextMenuState {
+struct ContextMenuState: @unchecked Sendable {
     var site: Site?
     var actions: [[PhotonRowActions]] = [[]]
 
