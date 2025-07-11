@@ -58,7 +58,7 @@ class DownloadHelper: NSObject {
         let isAttachment = contentDisposition?.starts(with: "attachment") ?? false
         let canBeDownloaded = MIMEType.canBeDownloaded(preflightResponse.mimeType) && !isForMainFrame
 
-        // Bugzilla #1976304; always resepct content-disposition: attachment
+        // Bugzilla #1976304; always respect content-disposition: attachment
         return isAttachment || canBeDownloaded
     }
 
