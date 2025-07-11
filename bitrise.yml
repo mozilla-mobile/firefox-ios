@@ -1735,7 +1735,7 @@ workflows:
         inputs:
         - deploy_path: ./raw-xcodebuild-output-WITH-region-based-isolation.log
         - is_compress: 'false'
-    - slack@4.2.1:
+    - slack@4.2.2:
         inputs:
         - title: 'Swift 6 Regional Based Isolation Warning Count'
         - author_name: ''
@@ -1749,6 +1749,8 @@ workflows:
             Warnings | ${OLD_WARNING_COUNT}
             Warnings WITH region based isolation flag | ${NEW_WARNING_COUNT}
             Difference in warning count | ${DIFF_WARNING_COUNT}
+        - buttons: |
+            View Pipeline Build|${BITRISEIO_PIPELINE_BUILD_URL}
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
