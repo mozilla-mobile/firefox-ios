@@ -5,7 +5,7 @@
 import Foundation
 import QuickLook
 
-class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
+final class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
     private var previewItem = NSURL()
     private let presenter: Presenter
     private let previewController: QLPreviewController
@@ -49,18 +49,22 @@ class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource, QLPreviewCon
         }
     }
 
+    // MARK: - QLPreviewControllerDelegate
+
+    @MainActor
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         return 1
     }
 
+    @MainActor
     func previewController(_ controller: QLPreviewController,
                            previewItemAt index: Int) -> QLPreviewItem {
         return previewItem
     }
 
-    // MARK: - QLPreviewControllerDelegate
-
-    func previewControllerDidDismiss(_ controller: QLPreviewController) {
-        completionHandler?()
+    nonisolated func previewControllerDidDismiss(_ controller: QLPreviewController) {
+        Task { @MainActor in
+            self.completionHandler?()
+        }
     }
 }
