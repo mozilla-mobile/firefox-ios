@@ -5,7 +5,12 @@
 import Foundation
 import Common
 
-struct JumpBackInTabConfiguration: Equatable, Hashable, CustomStringConvertible, CustomDebugStringConvertible {
+// TODO: FXIOS-12817 Fix @unchecked Sendable to due non-Sendable type 'Tab'
+struct JumpBackInTabConfiguration: @unchecked Sendable,
+                                   Equatable,
+                                   Hashable,
+                                   CustomStringConvertible,
+                                   CustomDebugStringConvertible {
     let tab: Tab
     let titleText: String
     let descriptionText: String
