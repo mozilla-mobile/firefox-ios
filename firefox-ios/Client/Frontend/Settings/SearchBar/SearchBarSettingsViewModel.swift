@@ -106,7 +106,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         return position
     }
 
-    var topSetting: CheckmarkSetting {
+    @MainActor var topSetting: CheckmarkSetting {
         return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.top.getLocalizedTitle),
                                 subtitle: nil,
                                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.topSetting,
@@ -115,7 +115,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         )
     }
 
-    var bottomSetting: CheckmarkSetting {
+    @MainActor var bottomSetting: CheckmarkSetting {
         return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.bottom.getLocalizedTitle),
                                 subtitle: nil,
                                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.bottomSetting,

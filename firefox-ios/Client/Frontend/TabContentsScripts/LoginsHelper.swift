@@ -32,6 +32,7 @@ struct LoginItem: Codable {
     var hostname: String
 }
 
+@MainActor
 class LoginsHelper: TabContentScript, FeatureFlaggable {
     private weak var tab: Tab?
     private let profile: Profile

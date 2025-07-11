@@ -6,6 +6,7 @@ import SwiftUI
 import UIKit
 
 protocol InstructionsViewDelegate: AnyObject {
+    @MainActor
     func dismissInstructionsView()
 }
 

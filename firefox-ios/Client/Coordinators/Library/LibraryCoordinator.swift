@@ -12,11 +12,17 @@ protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyCl
 }
 
 protocol LibraryNavigationHandler: AnyObject {
+    @MainActor
     func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView)
+
+    @MainActor
     func setNavigationBarHidden(_ value: Bool)
 }
 
+@MainActor
 class LibraryCoordinator: BaseCoordinator,
                           LibraryPanelDelegate,
                           LibraryNavigationHandler,
@@ -29,6 +35,7 @@ class LibraryCoordinator: BaseCoordinator,
     override var isDismissable: Bool { false }
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
+    @MainActor
     init(
         router: Router,
         profile: Profile = AppContainer.shared.resolve(),
@@ -40,6 +47,7 @@ class LibraryCoordinator: BaseCoordinator,
         initializeLibraryViewController()
     }
 
+    @MainActor
     private func initializeLibraryViewController() {
         let libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
         router.setRootViewController(libraryViewController)
@@ -50,10 +58,12 @@ class LibraryCoordinator: BaseCoordinator,
         self.libraryViewController = libraryViewController
     }
 
+    @MainActor
     func start(with homepanelSection: Route.HomepanelSection) {
         libraryViewController?.setupOpenPanel(panelType: homepanelSection.libraryPanel)
     }
 
+    @MainActor
     private func makeChildPanels() -> [UINavigationController] {
         let bookmarksPanel: UIViewController
         if isBookmarkRefactorEnabled {
@@ -91,6 +101,7 @@ class LibraryCoordinator: BaseCoordinator,
         }
     }
 
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView) {
         if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
             // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
@@ -118,6 +129,7 @@ class LibraryCoordinator: BaseCoordinator,
         coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView)
     }
 
+    @MainActor
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
         guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)

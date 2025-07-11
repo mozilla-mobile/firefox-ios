@@ -10,10 +10,14 @@ protocol SearchEngineSelectionCoordinatorDelegate: AnyObject {
 }
 
 protocol SearchEngineSelectionCoordinator: AnyObject {
+    @MainActor
     func navigateToSearchSettings(animated: Bool)
+
+    @MainActor
     func dismissModal(animated: Bool)
 }
 
+@MainActor
 class DefaultSearchEngineSelectionCoordinator: BaseCoordinator,
                                                FeatureFlaggable,
                                                SearchEngineSelectionCoordinator {

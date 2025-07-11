@@ -191,6 +191,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
+    @MainActor
     func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?, shouldExpire: Bool = true) {
         messagingStore.onMessagePressed(message, shouldExpire: shouldExpire)
 
@@ -208,6 +209,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      extras: extras)
     }
 
+    @MainActor
     private func handleLinkAction(
         for message: GleanPlumbMessage,
         action: String,
