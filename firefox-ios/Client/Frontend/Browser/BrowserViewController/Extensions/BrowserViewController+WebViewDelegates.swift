@@ -448,10 +448,11 @@ extension BrowserViewController: WKNavigationDelegate {
     // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
+    @MainActor
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
@@ -667,10 +668,11 @@ extension BrowserViewController: WKNavigationDelegate {
         handleDownloadFiles(downloadHelper: downloadHelper)
     }
 
+    @MainActor
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse,
-        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
     ) {
         let response = navigationResponse.response
         let responseURL = response.url
@@ -1017,10 +1019,11 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    @MainActor
     func webView(
         _ webView: WKWebView,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
             handleServerTrust(
@@ -1053,7 +1056,7 @@ extension BrowserViewController: WKNavigationDelegate {
             challenge: challenge,
             loginsHelper: loginsHelper
         ) { res in
-            self.mainQueue.async {
+            Task { @MainActor in
                 switch res {
                 case .success(let credentials):
                     completionHandler(.useCredential, credentials.credentials)
