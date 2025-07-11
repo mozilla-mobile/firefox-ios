@@ -437,7 +437,7 @@ class MockURLAuthenticationChallengeSender: NSObject, URLAuthenticationChallenge
     func cancel(_ challenge: URLAuthenticationChallenge) {}
 }
 
-class MockFileManager: FileManagerProtocol {
+final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var fileExistsCalled = 0
     var fileExists = false
     var urlsForDirectoryCalled = 0
