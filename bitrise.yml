@@ -1680,6 +1680,59 @@ workflows:
         - maximum_test_repetitions: 10
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
+
+  Swift_6_error_count:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - xcode-build-for-test@3:
+        inputs:
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+    - script@1.2.1:
+        title: Count warnings WITHOUT region based isolation flag
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+            OLD_WARNING_COUNT=$(grep -E -v "SourcePackages/checkouts" "$BITRISE_XCODE_RAW_RESULT_TEXT_PATH" | grep -E "^[^ ]+:[0-9]+:[0-9]+: warning:" | uniq | wc -l)
+            envman add --key OLD_WARNING_COUNT --value "$OLD_WARNING_COUNT"
+            echo "*** Number of warnings without region based isolation flag: $OLD_WARNING_COUNT"
+    - xcode-build-for-test@3:
+        inputs:
+        - scheme: Fennec
+        - configuration: Fennec_Testing
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "SWIFT_TREAT_WARNINGS_AS_ERRORS=NO" "SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION=YES"'
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+    - deploy-to-bitrise-io@2.10.0:
+        inputs:
+        - deploy_path: $BITRISE_XCODE_RAW_RESULT_TEXT_PATH
+        - is_compress: 'false'
+    - script@1.2.1:
+        title: Count warnings WITH region based isolation flag
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+            NEW_WARNING_COUNT=$(grep -E -v "SourcePackages/checkouts" "$BITRISE_XCODE_RAW_RESULT_TEXT_PATH" | grep -E "^[^ ]+:[0-9]+:[0-9]+: warning:" | uniq | wc -l)
+            envman add --key NEW_WARNING_COUNT --value "$NEW_WARNING_COUNT"
+            echo "*** Number of warnings WITH region based isolation flag: $NEW_WARNING_COUNT"
+
+            DIFF_WARNING_COUNT=$((NEW_WARNING_COUNT - OLD_WARNING_COUNT))
+            envman add --key DIFF_WARNING_COUNT --value "$DIFF_WARNING_COUNT"
+            echo "*** Difference in warning count: $DIFF_WARNING_COUNT"
+
+            cp $BITRISE_XCODE_RAW_RESULT_TEXT_PATH ./with-region-based-isolation.log
+    - deploy-to-bitrise-io@2.10.0:
+        inputs:
+        - deploy_path: ./with-region-based-isolation.log
+        - is_compress: 'false'
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
