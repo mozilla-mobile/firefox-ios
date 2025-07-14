@@ -10,6 +10,7 @@ private struct PagingCarouselUX {
     static let scrollAnimationDuration: CGFloat = 0.3
     static let minimumSwipeVelocity: CGFloat = 50
     static let edgePaddingAdjustment: CGFloat = 30
+    static let swipeAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.7)
 }
 
 /// A horizontal paging carousel that displays items with smooth scrolling and swipe gestures.
@@ -55,8 +56,8 @@ public struct PagingCarousel<Item, Content: View>: View {
         GeometryReader { geometry in
             carouselContent(geometry: geometry)
                 .gesture(dragGesture(geometry: geometry))
-                .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.8), value: selection)
-                .animation(.interactiveSpring(response: 0.3, dampingFraction: 0.8), value: gestureOffset)
+                .animation(PagingCarouselUX.swipeAnimation, value: selection)
+                .animation(PagingCarouselUX.swipeAnimation, value: gestureOffset)
                 .accessibilityAdjustableAction { direction in
                     handleAccessibilityAdjustment(direction: direction)
                 }
