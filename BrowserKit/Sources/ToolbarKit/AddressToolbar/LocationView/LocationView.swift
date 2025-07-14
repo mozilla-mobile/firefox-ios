@@ -423,7 +423,6 @@ final class LocationView: UIView,
         } else {
             restoreLocationViewSize()
         }
-        //        iconContainerBackgroundView.alpha = scrollAlpha
         if let theme { applyTheme(theme: theme) }
     }
 
