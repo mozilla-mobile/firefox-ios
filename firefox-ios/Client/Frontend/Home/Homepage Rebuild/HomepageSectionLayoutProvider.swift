@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
+@MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
     struct UX {
         static let standardInset: CGFloat = 16
@@ -16,6 +17,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 34
 
+        @MainActor
         static func leadingInset(
             traitCollection: UITraitCollection,
             interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
@@ -40,7 +42,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let numberOfItemsInColumn = 3
             static let fractionalWidthiPhonePortrait: CGFloat = 0.90
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.46
-            static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
+            @MainActor static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
 
             // Redesigned stories constants
             static let redesignNumberOfItemsInColumn = 1
@@ -51,6 +53,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
+            @MainActor
             static func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                                           isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
                 if device == .pad {
@@ -62,6 +65,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 }
             }
 
+            @MainActor
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                                              isLandscape: Bool = UIWindow.isLandscape,
                                              collectionViewWidth: CGFloat) -> CGFloat {
@@ -89,6 +93,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let syncedItemCompactHeight: CGFloat = 182
             static let maxItemsPerGroup = 2
 
+            @MainActor
             static func getWidthDimension(
                 for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                 layoutType: JumpBackInSectionLayoutConfiguration.LayoutType
