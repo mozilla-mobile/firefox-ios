@@ -23,7 +23,7 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
     }
 

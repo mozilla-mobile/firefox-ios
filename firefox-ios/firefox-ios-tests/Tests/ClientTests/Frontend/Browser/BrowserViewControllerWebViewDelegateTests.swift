@@ -437,7 +437,7 @@ class MockURLAuthenticationChallengeSender: NSObject, URLAuthenticationChallenge
     func cancel(_ challenge: URLAuthenticationChallenge) {}
 }
 
-class MockFileManager: FileManagerProtocol {
+final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var fileExistsCalled = 0
     var fileExists = false
     var urlsForDirectoryCalled = 0
@@ -447,6 +447,11 @@ class MockFileManager: FileManagerProtocol {
     var copyItemCalled = 0
     var createDirectoryCalled = 0
     var contentOfDirectoryAtPathCalled = 0
+
+    /// Fires every time `removeItem(at: URL)` is called. This is useful for tests that fire this on a background thread
+    /// (e.g. in a deinit) and we want to wait for an expectation of a file removal to be fulfilled.
+    /// Closure contains the updated value of `removeItemAtURLCalled`.
+    var removeItemAtURLDispatch: ((Int) -> Void)?
 
     func fileExists(atPath path: String) -> Bool {
         fileExistsCalled += 1
@@ -475,6 +480,7 @@ class MockFileManager: FileManagerProtocol {
 
     func removeItem(at url: URL) throws {
         removeItemAtURLCalled += 1
+        removeItemAtURLDispatch?(removeItemAtURLCalled)
     }
 
     func copyItem(at srcURL: URL, to dstURL: URL) throws {

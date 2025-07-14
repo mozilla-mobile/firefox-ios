@@ -5,7 +5,7 @@
 import UIKit
 import Kingfisher
 
-protocol FaviconFetcher {
+protocol FaviconFetcher: Sendable {
     /// Fetches a favicon image from a specific URL
     /// - Parameters:
     ///   - imageURL: Given a certain image URL

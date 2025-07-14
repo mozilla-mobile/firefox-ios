@@ -61,7 +61,7 @@ extension HistoryPanel: UISearchBarDelegate {
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, HistoryItem>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
         snapshot.appendItems(
-            self.viewModel.searchResultSites.map( { HistoryItem.site($0) })
+            self.viewModel.searchResultSites.map({ HistoryItem.site($0) })
         )
 
         self.diffableDataSource?.apply(snapshot, animatingDifferences: false)

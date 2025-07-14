@@ -17,9 +17,8 @@ struct TopSitesSectionState: StateType, Equatable {
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
 
-    // TODO: FXIOS-12725 - Add new l10n strings
     let sectionHeaderState = SectionHeaderConfiguration(
-        title: .Settings.Homepage.Shortcuts.ShortcutsPageTitle,
+        title: .FirefoxHomepage.Shortcuts.SectionTitle,
         a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites
     )
 

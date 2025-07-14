@@ -3,20 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Shared
 import Storage
 import XCTest
 
 @testable import Client
 
 final class BookmarksSectionStateTests: XCTestCase {
+    private var mockProfile: MockProfile!
+
     override func setUp() {
         super.setUp()
+        mockProfile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
+        mockProfile = nil
         super.tearDown()
     }
 
@@ -102,15 +107,47 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_sectionShown_returnsExpectedState() {
+    func test_storiesDisabled_returnsExpectedState() {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
 
         let initialState = createSubject()
         XCTAssertTrue(initialState.shouldShowSection)
     }
 
-    func test_sectionHidden_returnsExpectedState() {
+    func test_storiesEnabled_returnsExpectedState() {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_storiesDisabled_prefDisabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_storiesDisabled_prefEnabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
+
+        let initialState = createSubject()
+        XCTAssertTrue(initialState.shouldShowSection)
+    }
+
+    func test_storiesEnabled_prefDisabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
+
+        let initialState = createSubject()
+        XCTAssertFalse(initialState.shouldShowSection)
+    }
+
+    func test_storiesEnabled_prefEnabled_returnsExpectedState() {
+        setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
 
         let initialState = createSubject()
         XCTAssertFalse(initialState.shouldShowSection)
@@ -118,7 +155,7 @@ final class BookmarksSectionStateTests: XCTestCase {
 
     // MARK: - Private
     private func createSubject() -> BookmarksSectionState {
-        return BookmarksSectionState(windowUUID: .XCTestDefaultUUID)
+        return BookmarksSectionState(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
     }
 
     private func bookmarksSectionReducer() -> Reducer<BookmarksSectionState> {

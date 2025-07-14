@@ -305,9 +305,29 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    // Bottom toolbar off shows no homepage search bar
+    func testNavigateBackFromWebpageToHomepageForTopToolbar_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    // MARK: - Bottom Toolbar
     // https://mozilla.testrail.io/index.php?/cases/view/3090311
     func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() {
+        guard !iPad() else {
+            throw XCTSkip("Bottom address bar is not available for iPad")
+        }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
@@ -547,6 +567,25 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func testNavigateBackFromWebpageToHomepageForBottomToolbar_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
     private func navigateToWebPage(with homepageSearchBar: XCUIElement, searchTextFieldA11y: String) {

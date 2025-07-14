@@ -145,7 +145,8 @@ class BrowserViewController: UIViewController,
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(
-            isSwipingTabsEnabled: self.isSwipingTabsEnabled
+            isSwipingTabsEnabled: self.isSwipingTabsEnabled,
+            isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled
         )
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
@@ -293,6 +294,10 @@ class BrowserViewController: UIViewController,
 
     var isSwipingTabsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
+    }
+
+    var isMinimalAddressBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
     }
 
     var isToolbarNavigationHintEnabled: Bool {
@@ -523,7 +528,7 @@ class BrowserViewController: UIViewController,
         toolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
-        updateBlurViews()
+        updateToolbarDisplay()
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
@@ -531,6 +536,21 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatchLegacy(action)
+    }
+
+    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
+        guard isToolbarRefactorEnabled else { return }
+
+        // move views to the front so the address toolbar shadow doesn't get clipped
+        if isBottomSearchBar {
+            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
+            view.bringSubviewToFront(overKeyboardContainer)
+        } else {
+            header.bringSubviewToFront(addressToolbarContainer)
+            view.bringSubviewToFront(header)
+        }
+
+        updateBlurViews(scrollOffset: scrollOffset)
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
@@ -558,16 +578,10 @@ class BrowserViewController: UIViewController,
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
-
-            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
-            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
-
-            // move addressToolbarContainer view to the front so the address toolbar shadow doesn't get clipped
-            header.bringSubviewToFront(addressToolbarContainer)
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -614,7 +628,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
-        guard searchBarPosition == .bottom, isToolbarRefactorEnabled else { return }
+        guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
@@ -684,7 +698,8 @@ class BrowserViewController: UIViewController,
 
         header.setNeedsLayout()
         view.layoutSubviews()
-        updateBlurViews()
+
+        updateToolbarDisplay()
 
         if let tab = tabManager.selectedTab,
            let webView = tab.webView,
@@ -1129,7 +1144,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
-        updateBlurViews()
+        updateToolbarDisplay()
 
         store.dispatchLegacy(
             ToolbarAction(
@@ -1382,7 +1397,7 @@ class BrowserViewController: UIViewController,
 
         // when toolbars are hidden/shown the mask on the content view that is used for
         // toolbar translucency needs to be updated
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     func checkForJSAlerts() {
@@ -1762,7 +1777,7 @@ class BrowserViewController: UIViewController,
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
-            updateBlurViews()
+            updateToolbarDisplay()
             return
         }
 
@@ -1795,7 +1810,8 @@ class BrowserViewController: UIViewController,
             // to overlay the homepage.
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
-        updateBlurViews()
+
+        updateToolbarDisplay()
     }
 
     func showEmbeddedWebview() {
@@ -1820,7 +1836,7 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     // MARK: - Document Loading
@@ -4209,7 +4225,7 @@ extension BrowserViewController: HomePanelDelegate {
 
     // MARK: - BrowserStatusBarScrollDelegate
     func homepageScrollViewDidScroll(scrollOffset: CGFloat) {
-        updateBlurViews(scrollOffset: scrollOffset)
+        updateToolbarDisplay(scrollOffset: scrollOffset)
     }
 }
 
@@ -4397,7 +4413,7 @@ extension BrowserViewController: TabManagerDelegate {
             privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
         }
         readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
-        ReaderModeHandlers.readerModeCache = readerModeCache
+        ReaderModeHandlers.setCache(readerModeCache)
 
         scrollController.tab = selectedTab
 
@@ -4692,7 +4708,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -4708,7 +4724,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {

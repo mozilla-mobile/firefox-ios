@@ -486,7 +486,7 @@ struct AccessibilityIdentifiers {
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
-            static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
+            static let showPrivateSuggestions = "PrivateMode.showPrivateSuggestions"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
         }
 

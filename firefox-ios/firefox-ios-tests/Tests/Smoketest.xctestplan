@@ -403,6 +403,8 @@
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
         "SearchTests\/testFirefoxSuggest()",
+        "SearchTests\/testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn()",
+        "SearchTests\/testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn()",
         "SearchTests\/testPromptPresence()",
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchSuggestions()",

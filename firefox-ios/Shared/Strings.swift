@@ -1048,6 +1048,11 @@ extension String {
         public struct RecentlySaved { }
 
         public struct Shortcuts {
+            public static let SectionTitle = MZLocalizedString(
+                key: "FirefoxHomepage.Shortcuts.SectionTitle.v142",
+                tableName: "FirefoxHomepage",
+                value: "Shortcuts",
+                comment: "This is the section title for the Shortcuts section on Firefox Homepage.")
             public static let Sponsored = MZLocalizedString(
                 key: "FirefoxHomepage.Shortcuts.Sponsored.v100",
                 tableName: nil,
@@ -1060,6 +1065,14 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+        }
+
+        public struct SearchBar {
+            public static let PlaceholderTitle = MZLocalizedString(
+                key: "FirefoxHomepage.SearchBar.PlaceholderTitle.v142",
+                tableName: "FirefoxHomepage",
+                value: "Search or enter address",
+                comment: "This is the placeholder text that is at the center of the search bar on the Firefox Homepage.")
         }
 
         public struct YourLibrary { }

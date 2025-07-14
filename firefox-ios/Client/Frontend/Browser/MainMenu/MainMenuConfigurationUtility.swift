@@ -114,7 +114,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         } else if tabInfo.isHomepage {
-            menuSections.append(getCustomiseHomepageSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
         } else {
@@ -127,33 +126,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // MARK: - Menu Redesign Sections
-    // Customise Homepage Section
-    private func getCustomiseHomepageSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
-        return MenuSection(
-            isHomepage: tabInfo.isHomepage,
-            options: [
-                MenuElement(
-                    title: .MainMenu.OtherToolsSection.CustomizeHomepage,
-                    iconName: Icons.tools,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.CustomizeHomepage,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
-                    action: {
-                        store.dispatchLegacy(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapNavigateToDestination,
-                                navigationDestination: MenuNavigationDestination(.customizeHomepage),
-                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                            )
-                        )
-                    }
-                ),
-        ])
-    }
-
     // Horizontal Tabs Section
     private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
@@ -161,25 +133,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             groupA11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions,
             isHomepage: tabInfo.isHomepage,
             options: [
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.History,
-                iconName: Icons.history,
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
-                a11yHint: "",
-                a11yId: AccessibilityIdentifiers.MainMenu.history,
-                action: {
-                    store.dispatchLegacy(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.history),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                        )
-                    )
-                }
-            ),
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
                 iconName: Icons.bookmarksTray,
@@ -194,6 +147,25 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.bookmarks),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.History,
+                iconName: Icons.history,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.history,
+                action: {
+                    store.dispatchLegacy(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.history),
                             telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
@@ -337,7 +309,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
-                                    .saveAsPDF,
+                                    .saveAsPDFV2,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
@@ -360,7 +332,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
-                                    .printSheet,
+                                    .printSheetV2,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
