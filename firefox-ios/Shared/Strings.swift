@@ -28,16 +28,17 @@ public struct Strings {
 ///   - comment: The comment is an explanation aimed towards people that will translate the string value. Make sure it follow the l10n documentation
 ///   https://mozilla-l10n.github.io/documentation/localization/dev_best_practices.html#add-localization-notes
 private func MZLocalizedString(
-    key: String,
+    key: StaticString,
     tableName: String?,
     value: String?,
-    comment: String
+    comment: StaticString
 ) -> String {
-    return NSLocalizedString(key,
-                             tableName: tableName,
-                             bundle: Strings.bundle,
-                             value: value ?? "",
-                             comment: comment)
+    return String(localized: key,
+                  defaultValue: String.LocalizationValue(value ?? ""),
+                  table: tableName,
+                  bundle: Strings.bundle,
+                  locale: .current,
+                  comment: comment)
 }
 
 // This file contains all strings for Firefox iOS.
