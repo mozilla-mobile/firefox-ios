@@ -448,6 +448,11 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var createDirectoryCalled = 0
     var contentOfDirectoryAtPathCalled = 0
 
+    /// Fires every time `removeItem(at: URL)` is called. This is useful for tests that fire this on a background thread
+    /// (e.g. in a deinit) and we want to wait for an expectation of a file removal to be fulfilled.
+    /// Closure contains the updated value of `removeItemAtURLCalled`.
+    var removeItemAtURLDispatch: ((Int) -> Void)?
+
     func fileExists(atPath path: String) -> Bool {
         fileExistsCalled += 1
         return fileExists
@@ -475,6 +480,7 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
 
     func removeItem(at url: URL) throws {
         removeItemAtURLCalled += 1
+        removeItemAtURLDispatch?(removeItemAtURLCalled)
     }
 
     func copyItem(at srcURL: URL, to dstURL: URL) throws {
