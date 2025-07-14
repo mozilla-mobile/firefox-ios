@@ -142,7 +142,9 @@ class DeviceNameSetting: StringSetting {
             object: nil,
             queue: nil
         ) { [weak self] notification in
-            self?.tableView?.tableView.reloadData()
+            Task { @MainActor in
+                self?.tableView?.tableView.reloadData()
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import Foundation
 protocol MessageSurfaceProtocol {
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
     func handleMessageDisplayed()
+    @MainActor
     func handleMessagePressed()
     func handleMessageDismiss()
 }
