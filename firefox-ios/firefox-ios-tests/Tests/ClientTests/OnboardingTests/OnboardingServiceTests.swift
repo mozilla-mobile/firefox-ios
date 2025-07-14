@@ -91,6 +91,7 @@ class MockActivityEventHelper: ActivityEventHelper {
 
 // MARK: - Test Class
 
+@MainActor
 final class OnboardingServiceTests: XCTestCase {
     var sut: OnboardingService!
     var mockDelegate: MockOnboardingServiceDelegate!

@@ -8,6 +8,7 @@ import OnboardingKit
 import XCTest
 @testable import Client
 
+@MainActor
 final class LaunchCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
