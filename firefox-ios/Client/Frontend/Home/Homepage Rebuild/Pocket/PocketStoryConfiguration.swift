@@ -5,7 +5,7 @@
 import Foundation
 
 /// Converts the pocket story model to be presentable for the `PocketStandardCell` view
-class PocketStoryConfiguration: Equatable, Hashable {
+final class PocketStoryConfiguration: Sendable, Equatable, Hashable {
     private let story: PocketStory
 
     init(story: PocketStory) {
