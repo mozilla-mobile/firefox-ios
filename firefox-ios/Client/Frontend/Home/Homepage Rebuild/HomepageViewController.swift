@@ -239,7 +239,7 @@ final class HomepageViewController: UIViewController,
             )
         }
 
-        // We only want to dispatch action if content is exceeds the frame (aka scrollable),
+        // We only want to proceed if content exceeds the frame (aka scrollable),
         // otherwise we will spamming the redux action (GeneralBrowserMiddlewareAction) below
         guard scrollView.contentSize.height > scrollView.frame.height else { return }
 
