@@ -125,7 +125,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "სანიშნის ჩასწორება";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
-"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "საკითხავი სიიდან ამოღება";
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "მოცილება საკითხავი სიიდან";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "მოცილება მალსახმობებიდან";

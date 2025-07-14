@@ -2,7 +2,7 @@
 "DefaultBrowserPopup.ButtonTitle.v114" = "設定を開く";
 
 /* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their browser is the default browser. %@ is the app name (e.g. Firefox). If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.DescriptionFooter.v124" = "*%@ を既定のブラウザーに設定済みですか？* このメッセージを閉じて [スキップ] をタップしてください。";
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*%@ をデフォルトウェブブラウザーに設定済みですか？* このメッセージを閉じて [スキップ] をタップしてください。";
 
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.FirstLabel.v114" = "1. *環境設定* を開く";
@@ -76,6 +76,9 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "スキップ";
 
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "続ける";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "画面下部";
 
@@ -130,8 +133,7 @@
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "%@ の改善にご協力ください";
 
-/* Subtitle for the Terms of Service screen in the onboarding process. The '
-' symbols denote empty lines separating the first link parameter from the rest of the text. */
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
 "Onboarding.Modern.TermsOfService.Subtitle.v140" = "光速でサイトを読み込み\n自動で追跡防止\nすべての端末で同期";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
@@ -144,7 +146,7 @@
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ 利用規約。";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
-"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "既定のブラウザーに設定";
+"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "デフォルトブラウザーに設定";
 
 /* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Welcome.Description.v140" = "一つの選択によって、ウェブ上のあらゆる場所で保護されます。後からいつでも変更できます。";

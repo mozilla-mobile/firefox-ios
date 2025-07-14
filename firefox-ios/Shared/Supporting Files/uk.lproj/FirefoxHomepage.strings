@@ -17,5 +17,5 @@
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Не залишайте слідів на цьому пристрої";
 
 /* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
-"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Прикріплено: %@";
+"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Закріплено: %@";
 
