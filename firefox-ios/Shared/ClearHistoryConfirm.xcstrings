@@ -1,0 +1,1821 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "Cancel" : {
+      "comment" : "The cancel button when confirming clear history.",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аԥыхра"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kanselleer"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रद्द करोॅ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ألغِ"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encaboxar"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ləğv et"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасаваць"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отказ"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "বাতিল"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "འདོར་བ།"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nullañ"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otkaži"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel·la"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbandunà"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zrušit"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diddymu"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuller"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśetergnuś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ακύρωση"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuligi"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loobu"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utzi"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peruuta"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikansela"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cealaigh"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sguir dheth"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "રદ કરો"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ביטול"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रद्द करें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odustani"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přetorhnyć"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mégse"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Չեղարկել"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancellar"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batal"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hætta við"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batal"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გაუქმება"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sefsex"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бас тарту"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "បោះបង់"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ರದ್ದು ಮಾಡು"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຍົກເລີກ"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atsisakyti"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atcelt"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "റദ്ദാക്കുക"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रद्द करा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batal"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "မဆောင်ရွက်တော့ပါ"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avbryt"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रद्द गर्नुहोस्"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleren"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avbryt"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anullar"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ନାକଚ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਰੱਦ ਕਰੋ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuluj"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interrumper"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anulează"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмена"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱵᱟᱹᱰᱨᱟᱹ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sfai"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naŋ"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "අවලංගු"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zrušiť"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prekliči"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuloje"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolay"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avbryt"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ரத்து"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "రద్దుచేయి"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бекор кардан"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ยกเลิก"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İptal"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Баш тарту"
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ⵙⵔ"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ۋاز كەچ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "منسوخ کریں"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekor qilish"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hủy bỏ"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "comment" : "The confirmation button that clears history even when Sync is connected.",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ИБЗИОУП"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goed"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acceptar"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ठीक"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنا"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D'acuerdu"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamam"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добре"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ঠিক আছে"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ཆོག"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mat eo"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U redu"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D'acord"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vai"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iawn"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W pórěźe"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akcepti"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Olgu"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ados"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تایید"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אישור"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ठीक"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U redu"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W porjadku"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rendben"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Լավ"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oke"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OKÉ"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "კარგი"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IH"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ОК"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "យល់ព្រម"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK‍"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຕົກລົງ"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerai"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ശരി"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ठीक आहे"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "အိုကေ"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ठिक छ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D'acòrdi"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଠିକ ଅଛି"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਠੀਕ ਹੈ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ok"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱴᱷᱤᱠ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayyo"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "හරි"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "V redu"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OKÉH"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சரி"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "సరే"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ХУБ"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตกลง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamam"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ОК"
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ⵡⴰⵅⵅⴰ"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جەزملە"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ٹھیک ہے"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確定"
+          }
+        }
+      }
+    },
+    "This action will clear all of your private data, including history from your synced devices." : {
+      "comment" : "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ари аус ухатә даннақәа зегьы аныхуеит, аҭоурыхгьы уахь иналаҵаны, асинхронизациа зызу ахархәагақәа зегьы рҟынтә."
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dié aksie sal al u private data skrap, insluitend geskiedenis vanaf gesinkroniseerde toestelle."
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará totz los tuyos datos privaus, incluyindo l'historial d'os tuyos dispositivos sincronizaus."
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इ क्रिया आपनों निजी डेटा के साफ़ कैर देतै, जेकरो मेॅ आपनो सिंक करलो उपकरणों के इतिहास भी शामिल छै"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سيمحي هذا الإجراء كل بياناتك الخاصة من الأجهزة المتزامنة، بما في ذلك التأريخ."
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta aición va borrar tolos datos privaos qu'inclúin l'historial de tolos preseos sincronizaos."
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu əməliyyat sinxronlaşdırılmış cihazlarınızın tarixçəsi daxil bütün şəxsi məlumatlarınızı siləcək."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гэта дзеянне выдаліць усю вашу прыватную інфармацыю, у тым ліку гісторыю з сінхранізаваных прылад."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Това действие ще изчисти всичките ви лични данни, включително историята от синхронизираните ви устройства."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এটি আপনার ডিভাইসের ইতিহাসসহ, সব ব্যাক্তিগত তথ্য মুছে ফেলবে।"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An obererezh-mañ a ziverko ho holl roadennoù prevez, an roll istor hag an trevnadoù goubredet en o zouez."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ova radnja će očistiti sve vaše privatne podatke, uključujući historiju iz vaših sinhronizovanih uređaja."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquesta acció esborrarà totes les vostres dades privades, inclòs l'historial dels dispositius sincronitzats."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "St’azzione squasserà l’inseme di i vostri dati privati, includendu a cronolugia, da i vostri apparechji sincrunizati."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tato akce smaže všechna vaše data, včetně historie prohlížení ze všech synchronizovaných zařízení."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bydd y weithred hon yn clirio eich data preifat i gyd, gan gynnwys hanes o'ch dyfeisiau sydd wedi eu cydweddu."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denne handling rydder alle dine private data, inklusiv historik fra dine synkroniserede enheder."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Aktion löscht Ihre persönlichen Daten, einschließlich Chronik von Ihren synchronisierten Geräten."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toś ta akcija wšykne z wašych priwatnych datow wulašujo, inkluziwnje historiju z wašych synchronizěrowanych rědow."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτή η ενέργεια θα διαγράψει όλα τα ιδιωτικά σας δεδομένα, καθώς και το ιστορικό, από τις συγχρονισμένες συσκευές σας."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This action will clear all of your private data, including history from your synced devices."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This action will clear all of your private data, including history from your synced devices."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This action will clear all of your private data, including history from your synced devices."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiu ĉi ago viŝos ĉiujn viajn privatajn datumojn, kiuj inkluzivas historion el viaj spegulitaj aparatoj."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará todos tus datos privados, incluyendo el historial de tus dispositivos sincronizados."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará todos tus datos privados, incluyendo el historial de tus dispositivos sincronizados."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará todos tus datos privado, incluido el historial de tus dispositivos sincronizados."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará todos tus datos privados, incluyendo el historial de tus dispositivos sincronizados."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará todos tus datos privados, incluyendo el historial de tus dispositivos sincronizados."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See tegevus kustutab kõik sinu privaatsed andmed, kaasa arvatud ajaloo sinu sünkroniseeritud seadmetest."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekintza honek zure datu pribatuak garbituko ditu, sinkronizatutako gailuetako historia barne."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این عمل تمامی داده های خصوصی شما را پاک می‌کند، شامل تاریخچه که از روی دستگاه‌های همگام شما وجود دارد."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tämä toiminto tyhjentää kaikki yksityiset tiedot, mukaan lukien synkronoitujen laitteiden historian."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buburahin nito lahat ng iyong pribadong data kasama ang history ng iyong mga synced devices"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette action effacera l’ensemble de vos données personnelles, y compris l’historique de vos appareils synchronisés."
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gheofar réidh le do shonraí pearsanta má dhéanfar seo, stair do ghléasanna sioncronaithe san áireamh."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falamhaichidh an gnìomh seo an dàta prìobhaideach agad uile, a’ gabhail a-steach an eachdraidh o na h-uidheaman sioncronaichte agad."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción borrará todos os seus datos privados, incluíndo o historial dos seus dispositivos sincronizados."
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "આ ક્રિયા તમારા સમન્વયિત ઉપકરણોથી ઇતિહાસ સહિત, તમારા બધા ખાનગી ડેટાને સાફ કરશે."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פעולה זו תמחק את כל הנתונים האישיים שלך, לרבות ההיסטוריה מהמכשירים המסונכרנים שלך."
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यह कार्यवाही आपके समन्वयित उपकरणों से इतिहास सहित आपके सभी निज़ी डेटा मिटा देगी।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ova radnja će izbrisat sve tvoje privatne podatke, uključujući povijest sa sinkroniziranih uređaja."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tuta akcija wšě z wašich priwatnych datow zhaša, inkluziwnje historiju z wašich synchronizowanych gratow."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ez a művelet töröl minden személyes adatát, beleértve a szinkronizált eszközökön lévő előzményeket is."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Այս գործողությունը կմաքրի ողջ ձեր անձնական տվյալները, ներառյալ ձեր համաժամեցրած սարքերի պատմությունը։"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iste action delera tote tu datos private, includente le chronologia de tu apparatos synchronisate."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tindakan ini akan membersihkan seluruh data pribadi Anda, termasuk riwayat dari perangkat yang tersinkronisasi."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Þessi aðgerð eyðir öllum einkagögnum þínum, jafnvel ferlum þeirra tækja sem þú hefur samstillt."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verranno eliminati tutti i dati personali, inclusa la cronologia da altri dispositivi sincronizzati."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この操作は、同期した端末からの履歴を含め、あなたのプライベートデータをすべて削除します。"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tumindak iki bakal mbusek kabeh data pribadi sampéyan, kalebu riwayat kang kasambung ing piranti sampéyan."
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შედეგად, თქვენი ყველა პირადი მონაცემი გასუფთავდება, მათ შორის დასინქრონებული მოწყობილობებიდან."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tigawt-a ad tesfeḍ akk isefka-inek usligen, ula d amazray seg ibenkan-inek yemtawin."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бұл әрекет сіздің барлық жеке деректеріңізді, соның ішінде синхрондалған құрылғылар тарихын, өшіреді."
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ទង្វើ​នេះ​នឹង​ជម្រះ​ទិន្នន័យ​ឯកជន​របស់​អ្នក​ទាំងអស់ រួម​ទាំង​ប្រវត្តិ​ពី​ឧបករណ៍​ដែល​ធ្វើ​សមកាលកម្ម​របស់​អ្នក។"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 작업을 수행하면 동기화된 기기의 방문 기록을 포함한 모든 개인 정보가 삭제됩니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ການກະທຳນີ້ຈະລົບລ້າງຂູ້ມູນສ່ວນຕົວທັງຫມົດຂອງທ່ານ, ລວມທັງປະຫວັດກາານ sync ຈາກອຸປະກອນຂອງທ່ານ."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bus išvalyti visi jūsų privatūs duomenys, įskaitant žurnalo įrašus iš sinchronizuotų įrenginių."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šis izdzēsīs visus jūsu privātos datus, ieskaitot vēsturi no citām pievienotajām ierīcēm."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഈ പ്രവര്‍ത്തി മൂലം താങ്കളുടെ സമന്വയിപ്പിച്ച ചെയ്തിട്ടുള്ള ഉപകരണങ്ങളിൽ നാള്‍വഴി അടക്കം താങ്കളുടെ സ്വകാര്യ ദത്ത ഇല്ലാതാക്കും."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यामुळे आपण ताळमेळ केलेल्या सर्व उपकरणांवरच्या इतिहासासह आपली सर्व खाजगी माहिती नष्ट होईल."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tindakan ini akan membuang semua data peribadi anda, termasuk sejarah dari peranti sync anda."
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ယခုလုပ်ဆောင်မှုသည် ချိတ်ဆက်ထားသည့် ကိရိယာများရှိ မှတ်တမ်းအပါအဝင် သင့်ကိုယ်ပိုင်အချက်အလက်များကို ရှင်းလင်းပါမည်။"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denne handlingen vil slette alle dine private data, inkludert historikk fra dine synkroniserte enheter."
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यस कार्यले तपाईँको समन्वयन यन्त्रहरूबाट इतिहास सहित, निजी डाटा सबै खाली गर्नेछ।"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze actie zal al uw privégegevens wissen, inclusief geschiedenis van uw gesynchroniseerde apparaten."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denne handlinga vil slette alle private data, inkludert historikk frå dei synkroniserte einingane dine."
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquò escafarà totas vòstras donadas privadas, tanben l’istoric d’autres periferics sincronizats. Aquò pòt pas èsser anullat."
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଏହି କ୍ରିୟା ଆପଣଙ୍କର ସିଙ୍କ୍ ହୋଇଥିବା ଡିଭାଇସରୁ ଇତିହାସ ଅନ୍ତର୍ଭୁକ୍ତ କରି, ସମସ୍ତ ବ୍ୟକ୍ତିଗତ ତଥ୍ୟକୁ ସଫା କରିବ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਇਹ ਕਾਰਵਾਈ ਤੁਹਾਡੀਆਂ ਸਿੰਕ ਕੀਤੀਆਂ ਡਿਵਾਈਸਾਂ ਤੋਂ ਅਤੀਤ ਸਮੇਤ, ਤੁਹਾਡੇ ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰ ਦੇਵੇਗੀ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wszystkie dane prywatne zostaną usunięte, łącznie z historią przeglądania na synchronizowanych urządzeniach."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta ação irá limpar todos os seus dados privativos, incluindo o histórico de seus dispositivos sincronizados."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta ação irá limpar todos os seus dados privados, incluindo o histórico dos seus dispositivos sincronizados."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa acziun stizza tut tias datas privatas. Quai includa era la cronologia da tes apparats sincronisads."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Această acțiune va șterge toate datele tale private, inclusiv istoricul de pe dispozitivele sincronizate."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это действие удалит все ваши личные данные, включая историю со всех синхронизированных устройств."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱟᱢᱟᱜ ᱡᱷᱚᱛᱚ ᱱᱤᱡᱚᱨ ᱥᱟᱹᱡᱷᱤᱭᱟᱹᱛ ᱠᱚ ᱢᱮᱴᱟᱣ ᱛᱟᱢᱟᱭ, ᱦᱤᱛᱟᱹᱞ ᱟᱨ ᱟᱛᱩᱨ ᱟᱬᱜᱚ ᱥᱟᱫᱷᱚᱱ ᱠᱚ ᱢᱮᱥᱟ ᱠᱟᱛᱮ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "St’azzioni scancella tutti i to dati privati e a crunuluggìa dî to dispusitivi sincrunizzati."
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goyoo woo ga war boŋ bayhayey kul tuusu, sanda war jinay hangantey taarikoo."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "මෙම ක්‍රියාමාර්ගය ඔබගේ සියළුම පෞද්. දත්ත මකා දමයි, සමමුහූර්තිත උපාංග වල ඉතිහාසයද සමඟ."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Táto akcia vymaže všetky vaše súkromné dáta, vrátane histórie zo synchronizovaných zariadení."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To dejanje bo počistilo vse vaše zasebne podatke, vključno z zgodovino iz sinhroniziranih naprav."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ky veprim do të fshijë krejt të dhënat tuaja private, përfshi historikun prej pajisjesh tuaja të njëkohësuara."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ieu peta bakal meresihan sakumna data pribadi anjeun, kaasup jujutan ti parangkat anjeun nu geus disaluyukeun."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denna handling kommer att ta bort all din privata data, inklusive historik från dina synkroniserade enheter."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இச்செயலானது ஒத்திசைத்த சாதனங்களிலிருந்து வரலாறு முதற்கொண்டு அந்தரங்க தரவு அனைத்தையும துடைத்துவிடும்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఈ చర్య మీ సింక్ చేసిన పరికరాల నుండి చరిత్ర సహా, మీ వ్యక్తిగత డేటాను అన్ని క్లియర్ చేస్తుంది."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ин амал тамоми маълумоти шахсии шуморо, аз ҷумла таърих аз дастгоҳҳои ҳамоҳангшудаи шумо, пок месозад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "การกระทำนี้จะล้างข้อมูลส่วนตัวทั้งหมดของคุณ รวมถึงประวัติจากอุปกรณ์ที่ซิงค์ของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu işlem, eşitlenen cihazlarınızdaki geçmişiniz de dahil olmak üzere tüm kişisel verilerinizi kaldıracaktır."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бу гамәл барлык хосусый мәгълүматларыгызны, синхронланган җиһазлар тарихын да кертеп, бетерәчәк."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بۇ ھەرىكەت بارلىق شەخسىي ئۇچۇرلىرىڭىزنى تازىلايدۇ، ماس قەدەملىك ئۈسكۈنىلىرىڭىزدىكى تارىخ خاتىرىسىمۇ شۇنىڭ ئىچىدە."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ця дія призведе до стирання всіх ваших особистих даних, включаючи історію з ваших синхронізованих пристроїв."
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "س حرکت سے تمام نجی کوائف بشمول آپکے ہمہ وقت ساز آلات سے سابقات صاف کر دی جائیں گی۔"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu amal tufayli barcha shaxsiy maʼlumotlaringiz, shuningdek, sinxronlangan qurilmalardan olingan tarix ham oʻchib ketadi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hành động này sẽ xóa tất cả dữ liệu riêng tư của bạn, bao gồm cả lịch sử khỏi các thiết bị được đồng bộ hóa của bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此操作将清除您的所有隐私数据，包括您所有已同步设备上的历史记录。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將清除您所有的隱私資料，包含所有已同步裝置中的瀏覽紀錄。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

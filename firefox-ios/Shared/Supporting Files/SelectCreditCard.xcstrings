@@ -1,0 +1,420 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "CreditCard.SelectCreditCard.MainTitle.v122" : {
+      "comment" : "This value is used as the title for the select a credit card from list of available cards.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иеиқәырхоу ахсаала ахархәара"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выкарыстаць захаваную карту"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ober gant ur gartenn enrollet"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koristi sačuvanu karticu"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilitza una targeta desada"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impiegà una carta arregistrata"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Použít uloženou kartu"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defnyddio cerdyn sydd wedi'i gadw"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug gemt kort"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine gespeicherte Karte verwenden"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skłaźonu kórtu wužywaś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χρήση αποθηκευμένης κάρτας"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use saved card"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use saved card"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Use saved card"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uzi konservitan karton"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar tarjeta guardada"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar tarjeta guardada"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar tarjeta guardada"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar tarjeta guardada"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar tarjeta guardada"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erabili gordetako txartela"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käytä tallennettua korttia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser une carte enregistrée"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleachd cairt a shàbhail thu"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar unha tarxeta gardada"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שימוש בכרטיס השמור"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koristi spremljenu kreditnu karticu"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Składowanu kartu wužiwać"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mentett kártya használata"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Օգտագործել պահված քարտը"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar un carta salvate"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan kartu tersimpan"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nota vistað kort"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilizza carta salvata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存したカード情報を使用"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შენახული ბარათის გამოყენება"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seqdec tkarḍa yettwaskelsen"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сақталған картаны пайдалану"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장된 카드 사용"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ໃຊ້ບັດທີ່ບັນທຶກໄວ້"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "കരുതിവച്ച ചീട്ടു് ഉപയോഗിക്കുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk lagret kort"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opgeslagen kaart gebruiken"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk lagra kort"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਸੰਭਾਲੇ ਕਾਰਡ ਨੂੰ ਵਰਤੋਂ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj zachowanej karty"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar cartão salvo"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilizar cartão guardado"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisar ina carta memorisada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать сохранённую карту"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱠᱟᱰ ᱵᱮᱵᱷᱟᱨ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa a carta sarbata"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "සුරැකි පත යොදාගන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Použiť uloženú platobnú kartu"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uporabi shranjeno kartico"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Përdor kartë të ruajtur"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paké kartu nu disimpen"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Använd sparat kort"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Истифодаи корти нигоҳдошташуда"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ใช้บัตรที่บันทึกไว้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıtlı kartı kullan"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сакланган картаны куллану"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ساقلانغان كارتىنى ئىشلەت"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використати збережену картку"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sử dụng thẻ đã lưu"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用保存的卡片"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用儲存的卡片資訊"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

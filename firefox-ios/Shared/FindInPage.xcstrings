@@ -1,0 +1,2408 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "Done" : {
+      "comment" : "Done button in Find in Page Toolbar.",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Амазеи"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feito"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पूर्ण भेल"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمّ"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecho"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamam"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гатова"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "সম্পন্ন"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Graet"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotovo"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fet"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compiu"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hotovo"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gorffen"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Færdig"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokóńcony"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τέλος"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farita"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Realizado"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valmis"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eginda"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انجام شد"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valmis"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déanta"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deiseil"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feito"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "થઈ ગયું"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "סיום"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "संपन्न"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotovo"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokónčeny"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kész"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Պատրաստ է"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Facite"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesai"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loka"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fatto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rampung"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "მზადაა"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immed"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дайын"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ធ្វើ​រួច"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಆಯಿತು"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ສຳເລັດ"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atlikta"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gatavs"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "സമ്പൂര്‍ണം"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पूर्ण"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesai"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ကောင်းပြီ"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferdig"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पूरा भयो"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gereed"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferdig"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acabat"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ହୋଇଗଲା"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਮੁਕੰਮਲ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotowe"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concluído"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finì"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱦᱩᱭᱮᱱᱟ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fattu"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A ben"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "අහවරයි"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hotovo"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Končaj"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U bë"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anggeus"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klar"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "முடிந்தது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "పూర్తయింది"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тайёр"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เสร็จสิ้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitti"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Әзер"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تامام"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ہوگیا"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tayyor"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xong"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        }
+      }
+    },
+    "Find in Page" : {
+      "comment" : "Text selection menu item",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Адаҟьаҿы аԥшаара"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vind in bladsy"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trobar en a pachina"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पेज में खोलहोॅ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابحث في الصفحة"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atopar na páxina"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səhifədə Tap"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знайсці на старонцы"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Търсене в страницата"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "পাতাটিতে খুঁজুন"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kavout er bajennad"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronađi na stranici"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca a la pàgina"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Circà in a pagina"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Najít na stránce"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canfod ar y Dudalen"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find på side"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seite durchsuchen"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na boku pytaś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Εύρεση στη σελίδα"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find in Page"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find in Page"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find in Page"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serĉi en paĝo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar en la página"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar en la página"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar en la página"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar en la página"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar en la página"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otsi lehelt"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilatu orrian"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یافتن در این صفحه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etsi sivulta"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanapin sa Page"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans la page"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aimsigh sa Leathanach"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lorg air an duilleag"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atopar na páxina"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "પૃષ્ઠમાં શોધો"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חיפוש בדף"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पृष्ठ मे ढूंढें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronađi na stranici"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na stronje pytać"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keresés az oldalon"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Գտնել էջում"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cercar in pagina"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temukan di Halaman"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finna á síðu"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trova nella pagina"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ページ内検索"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Golèk ing Kaca"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "პოვნა გვერდზე"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadi deg usebter"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Беттен табу"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "រកមើល​នៅ​ក្នុង​ទំព័រ"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಪುಟದಲ್ಲಿ ಹುಡುಕು‍"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "페이지내 검색"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຄົ້ນຫາໃນຫນ້ານີ້"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rasti tinklalapyje"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meklēt lapā"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താളില്‍ തിരയുക"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पृष्ठामध्ये शोधा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari dalam Halaman"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ဒီစာမျက်နှာတွင် ရှာပါ"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk på siden"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पृष्ठमा फेला पार्नुहोस्"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoeken op pagina"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk på sida"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cercar dins la pagina"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଏହି ପୃଷ୍ଠାରେ ଖୋଜନ୍ତୁ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਸਫ਼ੇ ਵਿੱਚ ਲੱਭੋ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajdź na stronie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Procurar na página"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Localizar na página"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tschertgar sin la pagina"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caută în pagină"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск на странице"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱥᱟᱠᱟᱢ ᱨᱮ ᱯᱟᱱᱛᱮ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attrova nnâ pàggina"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceeci moɲoo ra"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "පිටුවේ සොයන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hľadať na stránke"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Najdi na strani"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjej në Faqe"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téangan dina Kaca"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitta på sidan"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இங்கே தேடு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "పేజీలో వెతకండి"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ҷустуҷӯ дар саҳифа"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ค้นหาในหน้า"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sayfada bul"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Биттән табу"
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ⴰⴼ ⴳ ⵜⴰⵙⵏⴰ"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بەتتىن ئىزدە"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знайти на сторінці"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صفحے میں ڈھونڈیں"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sahifa ichidan topish"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm trong trang"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "页内查找"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在頁面中搜尋"
+          }
+        }
+      }
+    },
+    "Next in-page result" : {
+      "comment" : "Accessibility label for next result button in Find in Page Toolbar.",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анаҩстәи аҭак адаҟьаҿы"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volgende resultaat op bladsy"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguient resultau en a pachina"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इन-पेज परिणाम रो आगोॅ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النتيجة التالية في الصفحة"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultáu siguiente"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səhifə nəticələrində növbəti"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наступны вынік на старонцы"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следващ резултат"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "পরবর্তী পেজের ফলাফল"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disoc’h a zeu er bajenn"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sljedeći rezultat stranice"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultat següent de la cerca a la pàgina"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occurrenza seguente in a pagina"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Další výsledek na stránce"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canlyniad o fewn tudalen nesaf"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Næste resultat på siden"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächstes Suchergebnis auf dieser Seite"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśiducy wuslědk na boku"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επόμενο αποτέλεσμα εντός σελίδας"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next in-page result"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next in-page result"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next in-page result"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venonta rezulto en paĝo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente resultado en la página"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente resultado en la página"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente resultado en la página"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente resultado en la página"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente resultado en la página"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Järgmine lehel olev tulemus"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orriko hurrengo emaitza"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نتیجه بعدی در این صفحه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seuraava hakutulos sivulta"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasunod na resulta in-page"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occurrence suivante dans la page"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An chéad toradh eile sa leathanach"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An ath‑thoradh air an duilleag"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguinte resultado na páxina"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "પૃષ્ઠમાં આગળના પરિણામો"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "התוצאה הבאה בעמוד"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पृष्ठ परिणाम मे अगला"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sljedeći rezultat na stranici"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přichodny wuslědk na stronje"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Következő lapon belüli találat"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Հաջորդը արդյունքը էջում"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultato sequente in pagina"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasil pencarian selanjutnya dalam halaman"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Næsta síða af niðurstöðum"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risultato successivo della ricerca nella pagina"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ページ内で次を検索"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasil kaca-sabanjure"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შემდეგი შედეგი"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agmuḍ d-iteddun deg usebter"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Беттен келесі нәтиже"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "លទ្ធផល​ក្នុង​ទំព័រ​បន្ទាប់"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಮುಂದಿನ ಪುಟದಲ್ಲಿನ ಫಲಿತಾಂಶ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음 페이지 결과"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຜົນລັບຢູ່ໃນຫນ້າຖັດໄປ"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kitas rezultatas tinklalapyje"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nākamais rezultāts"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "അടുത്ത താളിലേ ഫലം കാണുക"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पुढील पृष्ठामधील परिणाम"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keputusan dalam-halaman seterusnya"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "နောက်ထပ် ရှာဖွေမှု ရလဒ်များ"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neste resultat"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अर्को इन-पेज परिणाम"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volgende resultaat op pagina"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neste resultat"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocurréncia seguenta"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ପୃଷ୍ଠାଭିତରର ଫଳାଫଳ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਸਫ਼ੇ ਵਿਚਲਾ ਅਗਲਾ ਨਤੀਜਾ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następny wynik na stronie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próximo resultado na página"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado seguinte na página"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proxim resultat sin la pagina"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezultatul următor din pagină"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующий результат на странице"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ ᱚᱱᱟᱼᱥᱟᱠᱟᱢ ᱠᱩᱲᱟᱹᱭ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pròssimu risurtatu nnâ pàggina"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jine moo-kuna hunyan"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ඊළඟ පිටුව-තුළ ප්‍රතිඵලය"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ďalší výskyt na stránke"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naslednji zadetek na strani"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Përfundimi pasues në faqe"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasil satuluyna dina kaca"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nästa resultat på sidan"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "பக்கத்தில் அடத்தது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "తదుపరి పేజీలో ఫలితం"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натиҷаи навбатӣ дар саҳифа"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ผลลัพธ์ถัดไปในหน้านี้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonraki sayfa içi sonuç"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Биттәге киләсе нәтиҗә"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كېيىنكى بەتتىكى نەتىجىسى"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наступний результат на сторінці"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اگلے صفحہ میں نتیجہ"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sahifadagi keyingi natija"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kết quả tiếp theo trong trang"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一个页内结果"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一筆搜尋結果"
+          }
+        }
+      }
+    },
+    "Previous in-page result" : {
+      "comment" : "Accessibility label for previous result button in Find in Page Toolbar.",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уаанӡатәи алҵшәа адаҟьаҿы"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorige resultaat op bladsy"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultau anterior en a pachina"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इन-पेज परिणाम रो पिछोॅ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النتيجة السابقة في الصفحة"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultáu anterior"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səhifə nəticələrində əvvəlki"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Папярэдні вынік на старонцы"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предишен резултат"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "পূর্ববর্তী পেজের ফলাফল"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disoc’h kent er bajenn"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prethodni rezultat stranice"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultat anterior de la cerca a la pàgina"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occurrenza precedente in a pagina"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Předchozí výsledek na stránce"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canlyniad o fewn tudalen blaenorol"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forrige resultat på siden"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriges Suchergebnis auf dieser Seite"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pjerwjejšny wuslědk na boku"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προηγούμενο αποτέλεσμα εντός σελίδας"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous in-page result"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous in-page result"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous in-page result"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antaŭa rezulto en paĝo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anterior resultado en la página"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado anterior en la página"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado anterior en la página"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anterior resultado en la página"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anterior resultado en la página"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eelmine lehel olev tulemus"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orriko aurreko emaitza"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نتیجه قبلی در این صفحه"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edellinen hakutulos sivulta"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naunang resulta in-page"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occurrence précédente dans la page"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An toradh roimhe seo sa leathanach"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An toradh roimhe air an duilleag"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado anterior na páxina"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "પાછલા પૃષ્ઠ પરિણામોમાં"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "התוצאה הקודמת בעמוד"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पृष्ठ परिणाम मे पिछला"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prethodni rezultat na stranici"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Předchadny wuslědk na stronje"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Előző lapon belüli találat"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Նախորդ արդյունքը էջում"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultato precedente in pagina"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasil pencarian sebelumnya dalam halaman"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fyrri síða af niðurstöðum"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risultato precedente della ricerca nella pagina"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ページ内で前を検索"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasil kaca-sadurunge"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "წინა შედეგი"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agmuḍ yezrin deg usebter"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Беттен алдыңғы нәтиже"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "លទ្ធផល​ក្នុង​ទំព័រ​មុន"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‍ಹಿಂದಿನ ಪುಟದಲ್ಲಿನ ಫಲಿತಾಂಶ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 페이지 결과"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຜົນລັບຢູ່ໃນຫນ້າກ່ອນຫນ້ານີ້"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ankstesnis rezultatas tinklalapyje"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iepriekšējais rezultāts"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "മുമ്പുള്ള താളിലേ ഫലം കാണുക"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मागील पृष्ठामधील परिणाम"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keputusan dalam-halaman dahulu"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "အရင် ရှာဖွေမှု ရလဒ်များ"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forrige resultat"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अघिल्लो इन-पेज परिणाम"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorige resultaat op pagina"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Førre resultat"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocurréncia precedenta"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଆଗ ପୃଷ୍ଠାଭିତରର ଫଳାଫଳ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਸਫ਼ੇ ਵਿਚਲਾ ਪਿਛਲਾ ਨਤੀਜਾ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poprzedni wynik na stronie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado anterior na página"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado anterior na página"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultat precedent sin la pagina"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezultatul anterior din pagină"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предыдущий результат на странице"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱚᱱᱟ ᱢᱟᱲᱟᱝ ᱚᱱᱟᱼᱥᱟᱠᱟᱢ ᱠᱩᱲᱟᱹᱭ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risurtatu nnâ pàggina di prima"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Banda moo-kuna hunyan"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "කලින් පිටුව-තුළ ප්‍රතිඵලය"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predchádzajúci výskyt na stránke"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prejšnji zadetek na strani"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Përfundimi i mëparshëm në faqe"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasil saméméhna dina kaca"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Föregående resultat på sidan"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "பக்கத்தில் முந்தையது"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "మునుపటి పేజీలో ఫలితం"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натиҷаи қаблӣ дар саҳифа"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ผลลัพธ์ก่อนหน้าในหน้านี้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Önceki sayfa içi sonuç"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Биттәге үткән нәтиҗә"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئالدىنقى بەتتىكى نەتىجە"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попередній результат на сторінці"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پچھلے صفحہ میں نتیجہ"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sahifadagi oldingi natija"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kết quả trước trong trang"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一个页内结果"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前一筆搜尋結果"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

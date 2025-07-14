@@ -1,0 +1,2202 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" : {
+      "comment" : "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp).",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Širite vijest o %1$@ svaki put kada podijelite link na %2$@."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menciona el %1$@ en compartir un enllaç en %2$@."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fate cunnosce %1$@ ogni volta chì vo spartite un liame nant’à %2$@."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šířit informace o aplikaci %1$@ pokaždé, když sdílíte odkaz na síti %2$@."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dywedwch wrth bawb am %1$@ bob tro y byddwch yn rhannu dolen ar %2$@."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortæl andre om %1$@, hver gang du deler et link på %2$@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erzählen Sie von %1$@, wenn Sie einen Link auf %2$@ teilen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wulicujśo wó %1$@ kuždy raz, gaž wótkaz na %2$@ źěliśo."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ενημερώστε άλλα άτομα για το %1$@ κάθε φορά που κοινοποιείτε έναν σύνδεσμο μέσω %2$@."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spread the word about %1$@ every time you share a link on %2$@."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spread the word about %1$@ every time you share a link on %2$@."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Spread the word about %1$@ every time you share a link on %2$@."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diskonigu %1$@ ĉiufoje kiam vi dividas ligilon en %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz correr la voz acerca de %1$@ cada vez que compartas un enlace en %2$@."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corré la voz sobre %1$@ cada vez que compartas un enlace en %2$@."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corre la voz acerca de %1$@ cada vez que compartas un enlace en %2$@."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz correr la voz acerca de %1$@ cada vez que compartas un enlace en %2$@."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corre la voz acerca de %1$@ cada vez que compartas un enlace en %2$@."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zabaldu %1$@(r)i buruzko hitza %2$@(e)n lotura bat partekatzen duzun aldiro."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Levitä sanaa %1$@ista aina, kun jaat linkin %2$@issa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites connaître %1$@ à chaque fois que vous partagez un lien sur %2$@."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corre a voz sobre %1$@ cada vez que compartas unha ligazón en %2$@."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הפיצו את הבשורה על %1$@ בכל שיתוף קישור ב־%2$@."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Širi vijest o %1$@u svaki put kada dijeliš poveznicu na %2$@."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powědajće wo %1$@ kóždy raz, hdyž wotkaz na %2$@ dźěliće."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terjessze a %1$@ hírét, valahányszor egy hivatkozást oszt meg a(z) %2$@ segítségével."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Տարածեք %1$@-ի մասին ամեն անգամ, երբ կիսում եք հղումը %2$@-ում:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diffunde %1$@ cata vice que tu comparti un ligamine sur %2$@."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sebarkan info tentang %1$@ setiap kali Anda membagikan tautan di %2$@."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Láttu orð út ganga um %1$@ í hvert skipti sem þú deilir tengli á %2$@."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai sapere a tutti di %1$@ ogni volta che condividi un link su %2$@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ でリンクを共有するときに、%1$@ についても広めましょう。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გააცანით %1$@ სხვებსაც ყოველ ჯერზე ბმულის გაზიარებით %2$@-ზე."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuzer awal ɣef %1$@ yal mi ara tebḍuḍ aseɣwen ɣef %2$@."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ арқылы сілтемені бөліскен сайын %1$@ туралы хабарды таратыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@에서 링크를 공유할 때마다 %1$@에 대한 소문을 올리세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ເຜີຍແຜ່ກ່ຽວກັບ %1$@ ທຸກໆຄັ້ງທີ່ທ່ານແບ່ງປັນລິ້ງໃນ %2$@."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഓരോ തവണ താങ്ങൾ %2$@-ൽ കണ്ണി പങ്കിടുമ്പോൾ %1$@-നെ കുറിച്ചു് എല്ലാവരെയും അറിയിക്കണം."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortell andre om %1$@ hver gang du deler en lenke på %2$@."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over %1$@ vertellen telkens als u een koppeling op %2$@ deelt."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortel andre om %1$@ kvar gong du deler ei lenke på %2$@."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਜਦੋਂ ਵੀ ਤੁਸੀਂ %2$@ ਉੱਤੇ ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ ਤਾਂ ਹਰ ਵਾਰ %1$@ ਬਾਰੇ ਪ੍ਰਚਾਰ ਕਰੋ।"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Divulgar o %1$@ toda vez que compartilhar um link no %2$@."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espalhe a palavra sobre o %1$@ sempre que partilhar uma ligação no %2$@."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fa a savair tuts da %1$@ mintga giada cura che ti partas ina colliaziun sin %2$@."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рассказывайте о %1$@ каждый раз, когда вы делитесь ссылкой на %2$@."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱡᱟᱦᱟᱸ ᱛᱤᱱ ᱨᱮᱜᱮ ᱟᱢ %2$@ ᱨᱮ ᱞᱤᱝᱠ ᱮᱢ ᱦᱟᱹᱴᱤᱧᱟ %1$@ ᱵᱟᱵᱚᱛ ᱠᱟᱛᱷᱟ ᱯᱟᱥᱱᱟᱣ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai canùsciri %1$@ a tutti ogni vota chi sparti na lijami cu %2$@."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informujte o %1$@e vždy, keď budete zdieľať odkaz na %2$@e."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Širite besedo o %1$@u vsakokrat, ko delite povezavo na %2$@u."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Përhapni fjalën për %1$@ sa herë që ndani një lidhje me të tjerët në %2$@."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berätta för alla om %1$@ varje gång du delar en länk på %2$@."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ҳар дафъае, ки шумо пайвандро дар «%2$@» мубодила мекунед, дар бораи «%1$@» маълумотро паҳн намоед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "บอกต่อเกี่ยวกับ %1$@ ในทุกๆ ครั้งที่คุณแบ่งปันลิงก์ทาง %2$@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ ile bağlantı paylaşırken %1$@ tarayıcınızı tanıtın."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ھەر قېتىم %2$@ غا ھەمبەھىرلىگەندە %1$@ نىمۇ تەشۋىق قىلىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поширюйте інформацію про %1$@ щоразу, коли ділитеся посиланням у %2$@."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lan truyền thông tin về %1$@ mỗi khi bạn chia sẻ liên kết trên %2$@."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享链接到 %2$@ 上时，顺带宣传 %1$@。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在每次使用 %2$@ 分享鏈結時，也同時宣傳 %1$@。"
+          }
+        }
+      }
+    },
+    "SentFromFirefox.SocialShare.SettingsToggle.Title.v134" : {
+      "comment" : "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp).",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uključi %1$@ link za preuzimanje na %2$@ dijeljenja"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclou l’enllaç de baixada del %1$@ amb les comparticions en %2$@"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include un liame di scaricamentu di %1$@@ in e spartere nant’à %2$@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahrnout odkaz na stažení aplikace %1$@ při sdílení na síti %2$@"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cynhwyswch %1$@ Dolen Llwytho Lawr wrth Rannu ar %2$@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluder et link til at hente %1$@, når du deler noget på %2$@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@-Download-Link einfügen, wenn Inhalte auf %2$@ geteilt werden"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ześěgnjeński wótkaz %1$@ zapśimjeś, kótaryž se na %2$@ źěli"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθήκη συνδέσμου λήψης του %1$@ στις κοινοποιήσεις μέσω %2$@"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include %1$@ Download Link on %2$@ Shares"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include %1$@ Download Link on %2$@ Shares"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Include %1$@ Download Link on %2$@ Shares"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluzivi ligilon por elŝuti %1$@ en dividitaĵoj en %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir el enlace de descarga de %1$@ al compartir en %2$@"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir enlace de descarga de %1$@ en compartidos de %2$@"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir el enlace de descarga de %1$@ al compartir en %2$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir el enlace de descarga de %1$@ al compartir en %2$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir el enlace de descarga de %1$@ al compartir en %2$@"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sartu %1$@ (e)n deskarga-lotura %2$@ aplikazioko partekatzeetan"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sisällytä %1$@in latauslinkki %2$@-jakoihin"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclure un lien de téléchargement de %1$@ dans les partages %2$@"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclúe a ligazón de descarga de %1$@ nos compartidos de %2$@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לכלול קישור להורדה ל־%1$@ בשיתופים ב־%2$@"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uključi %1$@ poveznicu za preuzimanje na %2$@ dijeljenju"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sćehnjenski wotkaz %1$@ zapřijeć, kotryž so na %2$@ dźěli"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ letöltési hivatkozás hozzáadása a(z) %2$@-megosztásokhoz"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ներառեք %1$@-ի ներբեռնման հղումը %2$@-ի կիսումների վրա"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include un ligamine de discargamento de %1$@ sur le compartimentos de %2$@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sertakan Tautan Unduhan %1$@ saat Berbagi ke %2$@"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hafa %1$@ niðurhalstengil með á %2$@ sameignum"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Includi link per il download di %1$@ nelle condivisioni su %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ で共有するときに、%1$@ のダウンロードリンクを追加する"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გააზიარეთ %1$@ ჩამოსატვირთი ბმულით %2$@-ზე"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seddu aseɣwen n usader n %1$@ deg ibeṭṭuyen n %2$@."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ жүктеп алу сілтемесін %2$@ бөлісу сілтемелеріне қосыңыз"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ Shares에 %1$@ 다운로드 링크 포함"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ລວມເອົາ %1$@ ລິ້ງດາວໂຫຼດຢູ່ໃນ %2$@ Shares"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ പങ്കിടലുകളിൽ %1$@ ഇറക്കിവയ്ക്കൽ-കണ്ണി ഉൾപ്പെടുത്തുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluder nedlastingslenke til %1$@ når du deler på %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadkoppeling voor %1$@ bijvoegen bij delen op %2$@"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluder nedlastingslenke til %1$@ når du deler på %2$@"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ ਸਾਂਝਾ ਕਰਨ ਵੇਲੇ %1$@ ਦੇ ਡਾਊਨਲੋਡ ਦਾ ਲਿੰਕ ਸ਼ਾਮਲ ਕਰੋ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir link para baixar o %1$@ em compartilhamentos no %2$@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir ligação de transferência %1$@ nas partilhas %2$@"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Includer ina colliaziun per telechargiar %1$@ cun parter cuntegns sin %2$@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включите ссылку на загрузку %1$@, когда делитесь в %2$@"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ᱰᱟᱩᱱᱞᱳᱰ ᱞᱤᱝᱠ ᱫᱚ %2$@ ᱦᱟᱹᱴᱤᱧ ᱠᱚ ᱨᱮ ᱥᱮᱞᱮᱫ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mèttici na lijami di scarricamentu di %1$@ nnî spartuti cu %2$@"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahrnúť odkaz na stiahnutie %1$@u pri zdieľaní na %2$@e"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vsebini, deljeni prek %2$@a, priloži povezavo za prenos %1$@a"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Përfshi Lidhje Shkarkimi për %1$@ në Ndarje me të tjerë në %2$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkludera nedladdningslänk till %1$@ när du delar på %2$@"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Илова кардани пайванди боргирии «%1$@» ба воситаҳои мубодила дар «%2$@»"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "รวมลิงก์ดาวน์โหลด %1$@ ไว้บนข้อความที่แบ่งปันทาง %2$@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ paylaşımlarına %1$@ indirme bağlantısını ekle"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ غا ھەمبەھىرلىگەن مەزمۇندا %1$@ چۈشۈرۈش ئۇلانمىسى بار"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додайте посилання для завантаження %1$@, поширюючи інформацію у %2$@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bao gồm liên kết tải xuống %1$@ trên chia sẻ của %2$@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在分享到 %2$@ 的内容中附带 %1$@ 下载链接"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 %2$@ 分享內容中加入 %1$@ 的下載鏈結"
+          }
+        }
+      }
+    },
+    "SentFromFirefox.SocialShare.ShareMessageA.Title.v134" : {
+      "comment" : "When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Kaset eus %2$@ 🦊 Esaeit ar merdeer hezoug: %3$@"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Poslano sa %2$@ 🦊 Isprobajte mobilni pretraživač: %3$@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviat des del %2$@ 🦊 Proveu el navegador mòbil: %3$@"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Mandatu da %2$@ 🦊 Pruvate u navigatore mobile : %3$@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sdílen z aplikace %2$@ 🦊 Vyzkoušejte mobilní prohlížeč: %3$@"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Wedi'i anfon o %2$@ 🦊 Rhowch gynnig ar y porwr symudol: %3$@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendt fra %2$@ 🦊 Prøv den mobile browser: %3$@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Gesendet von %2$@ 🦊 Probieren Sie den mobilen Browser aus: %3$@"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ pśez %2$@ pósłany 🦊 Wopytajśo mobilny wobglědowak: %3$@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Απεστάλη από το %2$@ 🦊 Δοκιμάστε το πρόγραμμα περιήγησης για κινητές συσκευές: %3$@"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sent from %2$@ 🦊 Try the mobile browser: %3$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sent from %2$@ 🦊 Try the mobile browser: %3$@"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Sent from %2$@ 🦊 Try the mobile browser: %3$@"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendita de %2$@ 🦊 Provu la poŝaparatan retumilon: %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Probá el navegador móvil: %3$@"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 🦊 %2$@ bidez bidalia. Probatu mugikorrerako nabigatzailea. %3$@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Lähetetty %2$@ista 🦊 Kokeile mobiiliselainta: %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Envoyé depuis %2$@ 🦊 Essayez le navigateur mobile : %3$@"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Proba o navegador móbil: %3$@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‏%1$@ נשלח מ־%2$@ 🦊 נסו את הדפדפן הנייד: %3$@"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Poslano s %2$@a 🦊 Isprobaj mobilni preglednik: %3$@"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ přez %2$@ pósłany 🦊 Spytajće mobilny wobhladowak: %3$@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ból 🦊 küldve. Próbálja ki a mobilböngészőt: %3$@"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ուղարկված է %2$@-ից 🦊 Փորձեք բջջային դիտարկիչը՝ %3$@"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Inviate ab %2$@ 🦊 Tenta le navigator mobile: %3$@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Dikirim dari %2$@ 🦊 Coba peramban seluler: %3$@"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sent frá %2$@ 🦊 Prófaðu farsímavafrann: %3$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Inviato da %2$@ 🦊 Prova il browser per dispositivi mobili: %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ から送信されました 🦊 モバイル版ブラウザーをお試しください: %3$@"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ გთავაზობთ მოსინჯოთ %2$@ 🦊 გამოცადეთ მობილური ბრაუზერი: %3$@"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ yettwazen sɣur %2$@ 🦊 Ԑreḍ iminig aziraz: %3$@"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@ арқылы жіберілді 🦊 Мобильді браузерді қолданып көріңіз: %3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@에서 보냄 🦊 모바일 브라우저를 사용해 보세요: %3$@"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ສົ່ງມາຈາກ %2$@ 🦊 ລອງໃຊ້ໂປຣແກຣມທ່ອງເວັບໃນມືຖື: %3$@"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@-ൽ നിന്നു് അയച്ചു 🦊മൊബൈൽ അന്വേഷിയന്ത്രം ഉപയോഗിച്ചു നോക്കുക: %3$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendt fra %2$@ 🦊 Prøv den mobile nettleseren: %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ verzonden vanuit %2$@ 🦊 Probeer de mobiele browser: %3$@"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendt frå %2$@ 🦊 Prøv den mobile nettlesaren: %3$@"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ 🦊 ਵਲੋਂ %1$@ ਨੂੰ ਭੇਜਿਆ ਗਿਆ। ਮੋਬਾਇਲ ਬਰਾਊਜ਼ਰ ਅਜ਼ਮਾਓ: %3$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado via %2$@ 🦊 Experimente o navegador para dispositivos móveis: %3$@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado por %2$@ 🦊 Experimente o navegador móvel: %3$@"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Tramess da %2$@ 🦊 Emprova il navigatur per apparats mobils: %3$@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Отправлено с %2$@ 🦊 Попробуйте мобильный браузер: %3$@"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ᱫᱚ %2$@ ᱠᱷᱚᱱ ᱵᱷᱮᱡᱟ ᱟᱠᱟᱱᱟ 🦊 ᱢᱚᱵᱟᱭᱤᱞ ᱵᱽᱨᱟᱣᱩᱡᱟᱨ ᱪᱮᱥᱴᱟᱭ ᱢᱮ: %3$@"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Mannatu di %2$@ 🦊 Prova u navicaturi mòbbili: %3$@"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Odoslané z %2$@u 🦊 Vyskúšajte mobilný prehliadač: %3$@"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Poslano iz %2$@a 🦊 Preizkusite mobilni brskalnik: %3$@"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Dërguar që nga %2$@ 🦊 Provoni shfletuesin për celular: %3$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Skickat från %2$@ 🦊 Prova den mobila webbläsaren: %3$@"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Аз «%2$@» 🦊 фиристода шуд. Браузери мобилиро кӯшиш кунед: %3$@"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ส่งจาก %2$@ 🦊 ลองใช้เบราว์เซอร์มือถือ: %3$@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ ile paylaşıldı 🦊 Mobil tarayıcıyı deneyin: %3$@"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ بۇ ئۇچۇر %2$@ 🦊دا يوللانغان، كۆچمە توركۆرگۈنى سىناڭ: %3$@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ надіслано з %2$@ 🦊 Спробуйте браузер для мобільних пристроїв: %3$@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Được gửi từ %2$@ 🦊 Hãy thử trình duyệt di động: %3$@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 发自 %2$@ 🦊 试用同款移动浏览器：%3$@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 此訊息是使用 %2$@ 🦊傳送。來試用行動瀏覽器：%3$@"
+          }
+        }
+      }
+    },
+    "SentFromFirefox.SocialShare.ShareMessageA.Title.v137" : {
+      "comment" : "When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. ",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nKaset eus %2$@ 🦊 Esaeit ar merdeer hezoug: %3$@"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPoslano sa %2$@ 🦊 Isprobajte mobilni pretraživač: %3$@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviat des del %2$@ 🦊 Proveu el navegador mòbil: %3$@"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nMandatu da %2$@ 🦊 Pruvate u navigatore mobile : %3$@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nOdesláno z aplikace %2$@ 🦊 Vyzkoušejte mobilní prohlížeč: %3$@"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nWedi'i anfon gan %2$@ 🦊 Rhowch gynnig ar y porwr symudol: %3$@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendt fra %2$@ 🦊 Prøv den mobile browser: %3$@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nGesendet von %2$@ 🦊 Probieren Sie den mobilen Browser aus: %3$@"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPśez %2$@ pósłany 🦊 Wopytajśo mobilny wobglědowak: %3$@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nΑπεστάλη από το %2$@ 🦊 Δοκιμάστε το πρόγραμμα περιήγησης για κινητές συσκευές: %3$@"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSent from %2$@ 🦊 Try the mobile browser: %3$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSent from %2$@ 🦊 Try the mobile browser: %3$@"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@\n\nSent from %2$@ 🦊 Try the mobile browser: %3$@"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendita el %2$@ 🦊 Provu la poŝaparatan retumilon: %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 Probá el navegador móvil: %3$@"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n🦊 %2$@ bidez bidalia. Probatu mugikorrerako nabigatzailea. %3$@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nLähetetty %2$@ista 🦊 Kokeile mobiiliselainta: %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnvoyé depuis %2$@ 🦊 Essayez le navigateur mobile : %3$@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nנשלח מ־%2$@ 🦊 נסו את הדפדפן הנייד: %3$@"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPoslano putem %2$@ 🦊 Isprobaj mobilni preglednik: %3$@"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPřez %2$@ pósłany 🦊 Spytajće mobilny wobhladowak: %3$@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nA %2$@ból 🦊 küldve. Próbálja ki a mobilböngészőt: %3$@"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nՈւղարկված %2$@-ի կողմից🦊 Փորձեք բջջային դիտարկիչ՝ %3$@"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nInviate ab %2$@ 🦊 Tenta le navigator mobile: %3$@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@Dikirim dari %2$@ 🦊 Coba peramban seluler: %3$@"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSent frá %2$@ 🦊 Prófaðu farsímavafrann: %3$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ \n\nInviato da %2$@ 🦊 Prova il browser per dispositivi mobili: %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ から送信されました 🦊 モバイル版ブラウザーをお試しください: %3$@"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nგიგზავნით %2$@ 🦊 გამოცადეთ მობილური ბრაუზერი: %3$@"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nYettwazen seg %2$@ 🦊 Ɛreḍ iminig aziraz: %3$@"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ арқылы жіберілді 🦊 Мобильді браузерді қолданып көріңіз: %3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@에서 보냄 🦊 모바일 브라우저: %3$@"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nສົ່ງມາຈາກ %2$@ 🦊 ລອງໃຊ້ໂປຣແກຣມທ່ອງເວັບມືຖື: %3$@"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@-ൽ നിന്നു് അയച്ചു 🦊മൊബൈൽ അന്വേഷിയന്ത്രം ഉപയോഗിച്ചു നോക്കുക: %3$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendt fra %2$@ 🦊 Prøv den mobile nettleseren: %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nVerzonden vanuit %2$@ 🦊 Probeer de mobiele browser: %3$@"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendt frå %2$@ 🦊 Prøv den mobile nettlesaren: %3$@"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ 🦊 ਵਲੋਂ ਭੇਜਿਆ ਗਿਆ। ਮੋਬਾਇਲ ਬਰਾਊਜ਼ਰ ਅਜ਼ਮਾਓ: %3$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado via %2$@ 🦊 Experimente o navegador para dispositivos móveis: %3$@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado de %2$@ 🦊 Experimente o navegador móvel: %3$@"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nTramess da %2$@ 🦊 Emprova il navigatur per apparats mobils: %3$@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nОтправлено с %2$@ 🦊 Попробуйте мобильный браузер: %3$@"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nMannatu di %2$@ 🦊 Prova u navicaturi mòbbili: %3$@"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nOdoslané z %2$@u 🦊 Vyskúšajte mobilný prehliadač: %3$@"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPoslano iz %2$@a 🦊 Preizkusite mobilni brskalnik: %3$@"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nDërguar që nga %2$@ 🦊 Provoni shfletuesin për celular: %3$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSkickat från %2$@ 🦊 Testa den mobila webbläsaren: %3$@"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nАз «%2$@» 🦊 фиристода шуд. Браузери мобилиро кӯшиш кунед: %3$@"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nส่งจาก %2$@ 🦊 ลองใช้เบราว์เซอร์มือถือ: %3$@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ ile paylaşıldı 🦊 Mobil tarayıcıyı deneyin: %3$@"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nبۇ ئۇچۇر %2$@ 🦊دا يوللانغان، كۆچمە توركۆرگۈنى سىناڭ: %3$@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nНадіслано з %2$@ 🦊 Спробуйте браузер для мобільних пристроїв: %3$@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nĐược gửi từ %2$@ 🦊 Hãy thử trình duyệt di động: %3$@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n发送自 %2$@ 🦊 试用同款移动浏览器：%3$@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n此訊息是使用 %2$@ 🦊傳送。來試用行動瀏覽器：%3$@"
+          }
+        }
+      }
+    },
+    "SentFromFirefox.SocialShare.ShareMessageB.Title.v134" : {
+      "comment" : "When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Kaset eus %2$@ 🦊 %3$@"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Poslano sa %2$@ 🦊 %3$@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviat des del %2$@ 🦊 %3$@"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Mandatu da %2$@ 🦊 %3$@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Odeslané z aplikace %2$@ 🦊 %3$@"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Wedi'i anfon o %2$@ 🦊 %3$@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendt fra %2$@ 🦊 %3$@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Gesendet von %2$@ 🦊 %3$@"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ pśez %2$@ pósłany 🦊 %3$@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Απεστάλη από το %2$@ 🦊 %3$@"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sent from %2$@ 🦊 %3$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sent from %2$@ 🦊 %3$@"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Sent from %2$@ 🦊 %3$@"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendita de %2$@ 🦊 %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ 🦊 bidez bidalia. %3$@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Lähetetty %2$@ista 🦊 %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Envoyé depuis %2$@ 🦊 %3$@"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‏%1$@ נשלח מ־%2$@ 🦊 ‏%3$@"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Poslano s %2$@a 🦊 %3$@"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ přez %2$@ pósłany 🦊 %3$@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ból 🦊 küldve. %3$@"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@-ն ուղարկված է %2$@-ից 🦊 %3$@"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Inviate ab %2$@ 🦊 %3$@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Dikirim dari %2$@ 🦊 %3$@"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sent frá %2$@ 🦊 %3$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Inviato da %2$@ 🦊 %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ から送信されました 🦊 %3$@"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ გთავაზობთ მოსინჯოთ %2$@ 🦊 %3$@"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ yettwazen sɣur %2$@ 🦊%3$@"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@ арқылы жіберілді🦊 %3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@에서 보냄 🦊 %3$@"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ສົ່ງຈາກ %2$@ 🦊 %3$@"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ ൽ നിന്ന് അയച്ചു 🦊 %3$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendt fra %2$@ 🦊 %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ verzonden vanuit %2$@ 🦊 %3$@"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Sendt frå %2$@ 🦊 %3$@"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ ਵਲੋਂ %1$@ ਭੇਜਿਆ ਗਿਆ 🦊 %3$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado via %2$@ 🦊 %3$@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado por %2$@ 🦊 %3$@"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Tramess da %2$@ 🦊 %3$@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Отправлено с %2$@ 🦊 %3$@"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ᱫᱚ %2$@ 🦊 %3$@ ᱠᱷᱚᱱ ᱵᱷᱮᱡᱟ ᱟᱠᱟᱱᱟ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Mannatu di %2$@ 🦊 %3$@"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Odoslané z %2$@u 🦊 %3$@"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Poslano iz %2$@a 🦊 %3$@"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Dërguar që nga %2$@ 🦊 %3$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Skickat från %2$@ 🦊 %3$@"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Аз %2$@ 🦊 %3$@ фиристода шуд"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ส่งจาก %2$@ 🦊 %3$@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ ile paylaşıldı 🦊 %3$@"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ نى %2$@ 🦊 %3$@ يوللىدى"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ надіслано з %2$@ 🦊 %3$@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Được gửi từ %2$@ 🦊 %3$@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 发自 %2$@ 🦊%3$@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ 此訊息是使用 %2$@ 🦊傳送 %3$@"
+          }
+        }
+      }
+    },
+    "SentFromFirefox.SocialShare.ShareMessageB.Title.v137" : {
+      "comment" : "When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nKaset eus %2$@ 🦊 %3$@"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPoslano sa %2$@ 🦊 %3$@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviat des del %2$@ 🦊 %3$@"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nMandatu da %2$@ 🦊 %3$@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nOdesláno z aplikace %2$@ 🦊 %3$@"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nWedi'i anfon gan %2$@ 🦊 %3$@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendt fra %2$@ 🦊 %3$@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nGesendet von %2$@ 🦊 %3$@"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPśez %2$@ pósłany 🦊 %3$@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nΑπεστάλη από το %2$@ 🦊 %3$@"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSent from %2$@ 🦊 %3$@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSent from %2$@ 🦊 %3$@"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@\n\nSent from %2$@ 🦊 %3$@"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendita el %2$@ 🦊 %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Enviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado desde %2$@ 🦊 %3$@"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ 🦊 bidez bidalia. %3$@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nLähetetty %2$@ista 🦊 %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnvoyé depuis %2$@ 🦊 %3$@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nנשלח מ־%2$@ 🦊‏ %3$@"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPoslano putem %2$@ 🦊 %3$@"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPřez %2$@ pósłany 🦊 %3$@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nA %2$@ból 🦊 küldve. %3$@"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nՈւղարկել է %2$@-ը 🦊 %3$@"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nInviate ab %2$@ 🦊 %3$@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nDikirim dari %2$@ 🦊 %3$@"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSent frá %2$@ 🦊 %3$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ \n\nInviato da %2$@ 🦊 %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ から送信されました 🦊 %3$@"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nგიგზავნით %2$@ 🦊 %3$@"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nYettwazen sɣur %2$@ 🦊 %3$@"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ арқылы жіберілді🦊 %3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ 🦊 %3$@에서 보냄"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nສົ່ງຈາກ %2$@ 🦊 %3$@"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ ൽ നിന്ന് അയച്ചു 🦊 %3$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendt fra %2$@ 🦊 %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nVerzonden vanuit %2$@ 🦊 %3$@"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSendt frå %2$@ 🦊 %3$@"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ ਵਲੋਂ ਭੇਜਿਆ ਗਿਆ 🦊 %3$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado via %2$@ 🦊 %3$@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nEnviado de %2$@ 🦊 %3$@"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nTramess da %2$@ 🦊 %3$@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nОтправлено с %2$@ 🦊 %3$@"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nMannatu di %2$@ 🦊 %3$@"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nOdoslané z %2$@u 🦊 %3$@"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nPoslano iz %2$@a 🦊 %3$@"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nDërguar që nga %2$@ 🦊 %3$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nSkickat från %2$@ 🦊 %3$@"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nАз %2$@ 🦊 %3$@ фиристода шуд"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nส่งจาก %2$@ 🦊 %3$@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n%2$@ ile paylaşıldı 🦊 %3$@"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nيوللىغۇچى %2$@ 🦊 %3$@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nНадіслано з %2$@ 🦊 %3$@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\nĐược gửi từ %2$@ 🦊 %3$@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n发送自 %2$@ 🦊 %3$@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@\n\n此訊息是使用 %2$@ 🦊傳送 %3$@"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

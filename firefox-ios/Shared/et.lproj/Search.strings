@@ -1,6 +1,0 @@
-/* Label for search engine buttons. %@ is the name of the search engine. */
-"%@ search" = "Otsingumootor %@";
-
-/* Label for search settings button. */
-"Search Settings" = "Otsingusätted";
-

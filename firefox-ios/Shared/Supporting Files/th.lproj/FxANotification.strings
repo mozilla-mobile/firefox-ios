@@ -1,6 +1,0 @@
-/* Title of notification shown when a remote device has requested to close a number of tabs. %1$@ is the app name (e.g. Firefox). %2$@ is the number of tabs. */
-"CloseTab.ArrivingNotification.title.v133" = "ปิดแท็บ %1$@ แล้ว %2$@ แท็บ";
-
-/* Label for an action used to view recently closed tabs. */
-"CloseTab.ViewAction.title.v133" = "ดูแท็บที่ปิดล่าสุด";
-

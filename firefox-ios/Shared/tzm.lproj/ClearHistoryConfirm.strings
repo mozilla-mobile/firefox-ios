@@ -1,6 +1,0 @@
-/* The cancel button when confirming clear history. */
-"Cancel" = "ⵙⵔ";
-
-/* The confirmation button that clears history even when Sync is connected. */
-"OK" = "ⵡⴰⵅⵅⴰ";
-

@@ -1,0 +1,2490 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "Upgrade.SyncSign.Action.v114" : {
+      "comment" : "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аҭалара"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увайсці"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kennaskañ"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prijava"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia la sessió"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cunnettesi"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přihlásit se"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mewngofnodi"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log ind"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmelden"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśizjawiś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σύνδεση"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign In"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sign In"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komenci seancon"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar sesión"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar sesión"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectarse"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar sesión"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar sesión"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasi saioa"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kirjaudu sisään"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clàraich a-steach"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identificarse"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "כניסה"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prijavi se"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přizjewić"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bejelentkezés"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Մուտք գործել"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperir session"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masuk"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrá inn"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accedi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログイン"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შესვლა"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kcem"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кіру"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로그인"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ລົງຊື່ເຂົ້າໃຊ້"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "പ്രവേശിക്കുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logg inn"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanmelden"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logg inn"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਸਾਈਨ ਇਨ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaloguj się"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrar"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrar"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S'annunziar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Войти"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trasi"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "පිවිසෙන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prihlásiť sa"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prijava"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hyni"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asup"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logga in"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ворид шудан"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ลงชื่อเข้า"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giriş yap"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Керү"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تىزىمغا كىرىڭ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увійти"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đăng nhập"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登入"
+          }
+        }
+      }
+    },
+    "Upgrade.SyncSign.Description.v114" : {
+      "comment" : "Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уааныжьны уца, даҽа ҳәагақәак рҟынтәи аҭаӡҩырақәа уажәы ухатә даҟьаҿы."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Працягвайце з таго месца, дзе спыніліся, з дапамогай картак з іншых прылад, якія зараз знаходзяцца на вашай хатняй старонцы."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adkemerit an traoù e lec’h m’ho poa laosket anezho war un trevnad all, dre ho pajenn degemer."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nastavite gdje ste stali s tabovima s drugih uređaja sada na vašoj početnoj stranici."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ara en la pantalla d’inici hi apareixen les pestanyes dels altres dispositius, per a continuar des d’on ho havíeu deixat."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripigliate induve vi site piantati cù l’unghjette d’altri apparechji chì si trovanu avà nant’à a vostra pagina d’accolta."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na své domovské stránce pokračujte s panely z jiných zařízení přesně tam, kde jste přestali."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parhau o'r lle roeddech chi gyda thabiau o ddyfeisiau eraill nawr ar eich tudalen cartref."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsæt hvor du slap med faneblade fra andre enheder - nu på din startside."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Machen Sie da weiter, wo Sie aufgehört haben – ab sofort finden Sie Tabs von anderen Geräten auf Ihrer Startseite."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pókšacujśo, źož sćo pśestał – něnto z rejtarikami drugich rědow na swójom startowem boku."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Συνεχίστε από εκεί που σταματήσατε, με καρτέλες από άλλες συσκευές στην αρχική σας σελίδα."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick up where you left off with tabs from other devices now on your homepage."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick up where you left off with tabs from other devices now on your homepage."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pick up where you left off with tabs from other devices now on your homepage."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daŭrigu el la loko kie vi haltis kun la langetoj de viaj aliaj aparatoj, kiuj nun aperas en via eka paĝo."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúa donde lo dejaste con pestañas de otros dispositivos ahora en tu página de inicio."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuá donde dejaste con las pestañas de otros dispositivos ahora en tu página de inicio."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua donde lo dejaste con pestañas de otros dispositivos ahora en tu página de inicio."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúa donde lo dejaste con pestañas de otros dispositivos ahora en tu página de inicio."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar donde lo dejaste con pestañas de otros dispositivos ahora en tu página de inicio."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berrekin utzitako lekutik zure hasierako orriko beste gailuetako fitxekin."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jatka siitä, mihin jäit muiden laitteidesi välilehdillä."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprenez là où vous en étiez avec des onglets d’autres appareils qui figurent désormais sur votre page d’accueil."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cùm a’ dol far an do stad thu ’s tu a’ faighinn cothrom air tabaichean a th’ agad air uidheaman eile air an duilleag-dhachaigh agad."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúe onde o deixou coas lapelas doutros dispositivos agora na súa páxina de inicio."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אפשר להמשיך מאיפה שעצרת עם לשוניות ממכשירים אחרים בעמוד הבית שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nastavi gdje si stao/la s karticama s drugih uređaja na tvojoj početnoj stranici."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokročujće, hdźež sće přestał – nětko z rajtarkami druhich gratow na swojej startowej stronje."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folytassa onnan, ahol abbahagyta, és most már a kezdőlapján megjelennek a többi eszközről származó lapjai is."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Շարունակեք այնտեղ, որտեղ դադարեցիք, այլ սարքերի ներդիրներով այժմ ձեր գլխավոր էջում:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprende de ubi tu exiva con le schedas de altere apparatos ora sur tu pagina principal."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lanjutkan dari tempat terakhir yang Anda tinggalkan dengan tab dari perangkat lain sekarang di beranda Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haltu áfram þar sem þú hættir með flipum af öðrum tækjum, sem núna eru á upphafssíðunni þinni."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riprendi da dove eri rimasto con le schede di altri dispositivi, ora disponibili direttamente dalla pagina iniziale."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ホームページ上で、他の端末のタブの中断したところから再開できます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "განაგრძეთ იქიდან, სადაც შეჩერდით, სხვა მოწყობილობიდან ჩანართების წამოღებით ახლა უკვე საწყის გვერდზე."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kemmel seg wanda i tḥebseḍ s useqdec n waccaren ɣef yibenkan-nniḍen ara d-ibanen akka tura ɣef usebter-ik·im agejdan."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Енді басты бетте орналасқан басқа құрылғылардың беттері арқылы тоқтаған жерден жалғастырыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이제 홈페이지에서 다른 기기의 탭을 가져와서 중단한 부분부터 다시 시작하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ເລືອກເບິ່ງຕໍ່ຈາກທີທ່ານປະໄວ້ດ້ວຍແຖບຈາກອຸປະກອນອື່ນໆໃນຫນ້າທໍາອິດຂອງທ່ານ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ ആമുഖതാളിലെ മറ്റ് ഉപകരണങ്ങളിൽ നിന്നുള്ള ടാബുകൾ ഉപയോഗിച്ച് താങ്ങൾ നിർത്തിയിടത്ത് നിന്ന് ആരംഭിക്കുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsett der du sluttet med faner fra andre enheter nå på startsiden din."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga verder waar u was gebleven met tabbladen van andere apparaten nu op uw startpagina."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hald fram der du slapp med faner frå andre einingar - no på startsida di."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਹੋਰ ਡਿਵਾਈਸਾਂ ਤੋਂ ਜਿੱਥੇ ਤੁਸੀਂ ਟੈਬਾਂ ਨੂੰ ਛੱਡਿਆ ਹੈ, ਉਥੋਂ ਹੀ ਹੁਣ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਤੋਂ ਲਵੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuuj w tym samym miejscu, korzystając z kart z innych urządzeń, które teraz są na stronie startowej."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue agora de onde parou, com abas de outros dispositivos na sua tela inicial."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue de onde parou com os separadores de outros dispositivos agora na sua página inicial."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuntinuescha là nua che ti has smess cun ils tabs dad auters apparats che figureschan ussa sin tia pagina da partenza."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжайте с того места, где вы остановились, с вкладками с других устройств, которые теперь находятся на вашей домашней странице."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱨᱮ ᱱᱤᱛᱚᱜ ᱡᱟᱦᱟᱸ ᱠᱷᱚᱱ ᱮᱢ ᱟᱲᱟᱜ ᱞᱮᱜᱼᱟ ᱮᱴᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱴᱮᱵᱽ ᱠᱷᱚᱱ ᱯᱟᱧᱡᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ "
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nnâ pàggina mastra attrovi i schedi chi lassasti nnî to autri dispusitivi, pi ripigghiari d’unni lassasti."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "දැන් මුල් පිටුවේ තිබෙන අන් උපාංගවල පටිති සමඟ ඔබ නතර කළ තැනින් අතට ගන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokračujte tam, kde ste prestali, pomocou kariet z iných zariadení teraz na vašej domovskej stránke."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadaljujte tam, kjer ste končali - z zavihki iz drugih naprav, ki so zdaj na vaši domači strani."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vazhdojeni ku e latë, me skeda nga pajisje të tjera tani në faqen tuaj hyrëse."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka ti panungtung anu ditinggalkeun maké tab ti séjén parabot ayeuna dina kaca tepas."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortsätt där du slutade med flikar från andra enheter, nu på din startsida."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ҳамаи он ҷойҳоеро, ки шумо дар варақаҳо аз дастгоҳҳои дигар дидаед, дар саҳифаи асосии худ ба даст оред."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เรียกดูต่อจากที่คุณค้างไว้ด้วยแท็บจากอุปกรณ์อื่นๆ บนหน้าแรกของคุณได้แล้วตอนนี้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diğer cihazlardaki sekmeleriniz artık giriş sayfanızda."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хәзер баш биттә күренүче башка җиһазларыгыздагы табларны сайлап, туктаган җирегездән дәвам итегез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باش بېتىڭىزدىن باشقا ئۈسكۈنىلىرىڭىزدىكى بەتكۈچلەرنى داۋاملاشتۇرۇپ زىيارەت قىلالايسىز."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продовжуйте з того ж місця, де зупинилися, завдяки вкладкам з інших пристроїв, які відтепер доступні на вашій домашній сторінці."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp tục nơi bạn đã dừng lại với các thẻ từ các thiết bị khác ngay bây giờ trên trang chủ của bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您现在从主页就可以继续浏览其他设备上的标签页。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在起，直接從首頁就可以繼續瀏覽其他裝置上開啟的分頁。"
+          }
+        }
+      }
+    },
+    "Upgrade.SyncSign.Title.v114" : {
+      "comment" : "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аекранқәа реиҭныԥсахлара еиҳа имариоуп"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пераключаць экраны цяпер прасцей, чым калі-небудзь"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheñch skrammoù a zo aesoc’h c’hoazh bremañ"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prebacivanje ekrana je lakše nego ikad"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passar d’una pantalla a l’altra és més fàcil que mai"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passà d’un screnu à l’altru hè più faciule chè mai"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přepínání obrazovek je jednodušší než kdy jindy"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae newid sgriniau yn haws nag erioed"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det er nemmere end nogensinde før at skifte mellem skærme"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Wechseln zwischen Bildschirmen ist einfacher als je zuvor"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśešaltowanje mjazy wobrazowkami jo lažke ako do togo"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η εναλλαγή οθονών είναι πιο εύκολη από ποτέ"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switching screens is easier than ever"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switching screens is easier than ever"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Switching screens is easier than ever"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iri de unu ekrano al la alia estas pli facile ol iam ajn antaŭe"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar de pantalla es más fácil que nunca"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar de pantallas es más fácil que nunca"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar de pantalla es más fácil que nunca"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar de pantalla es más fácil que nunca"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar de pantalla es más fácil que nunca"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantailak aldatzea inoiz baino errazagoa da"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näyttöjen vaihtaminen on helpompaa kuin koskaan"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passer d’un écran à l’autre est plus facile que jamais"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tha e nas fhasa leum a ghearradh eadar sgrìnichean na bha e a-riamh roimhe"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar de pantalla é máis fácil ca nunca"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מעבר בין מסכים קל מאי פעם"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijenjanje ekrana nikada nije bilo lakše"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přešaltowanje mjez wobrazowkami je lóše hdy do toho"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A képernyők közötti váltás egyszerűbb, mint valaha"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Էկրանների փոխարկումն ավելի հեշտ է, քան երբևէ"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar le paginas es plus facile que mais"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beralih layar lebih mudah dari sebelumnya"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Það er auðveldara en nokkru sinni að skipta á milli skjáa"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passare da uno schermo all’altro è più facile che mai"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面の切り替えがこれまで以上に簡単に"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ეკრანებს შორის გადართვა ჯერ არნახული სიმარტივით"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abeddel seg ugdil ɣer wayeḍ fessus ugar ɣef wayen iɛeddan"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экрандарды ауыстыру бұрынғыдан оңайырақ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 쉬워진 화면 전환"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ການສະຫຼັບໜ້າຈໍແມ່ນງ່າຍກວ່າທີ່ເຄີຍ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ദൃശ്യപ്രതലങ്ങൾ മാറുകാൻ വളരെ എളുപ്പമാണു്"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det er enklere enn noen gang å bytte skjerm"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Van scherm wisselen is eenvoudiger dan ooit"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det er enklare enn nokon gong g å byte skjerm"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਸਕਰੀਨਾਂ ਵਿਚਾਲੇ ਬਦਲਣਾ ਪਹਿਲਾਂ ਤੋਂ ਵੱਧ ਸੌਖਾ ਹੋ ਗਿਆ ਹੈ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przechodzenie między urządzeniami jest łatwiejsze niż kiedykolwiek"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mudar de tela está mais fácil do que nunca"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternar entre ecrãs é mais fácil do que nunca"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La midada dad in visur a l'auter è ussa pli simpla che mai"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переключение экранов стало проще, чем когда-либо"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱯᱚᱨᱫᱟ ᱵᱚᱫᱚᱞ ᱫᱚ ᱱᱤᱛᱚᱜ ᱟᱹᱰᱤ ᱤᱫᱤᱜ ᱠᱟᱱᱟ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canciari schirmi è cchiù fàcili di sempri"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "තිර අතර මාරු වීම වෙනදාට වඩා පහසුය"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepínanie obrazoviek je jednoduchšie ako kedykoľvek predtým"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preklapljanje med zasloni je preprostejše kot kdajkoli prej"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ndërrimi i ekraneve është më i lehtë se kurrë"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngagilirkeun layar leuwih babari ti nu atos-atos"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Att växla mellan skärmar är enklare än någonsin"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Табдилдиҳии экранҳо боз ҳам осонтар шудааст"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "สลับหน้าจอง่ายกว่าที่เคย"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihazdan cihaza geçmek artık daha kolay"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Җиһаздан җиһазга күчү тагын да җиңеләйде"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كۆپ ئېكران ئارا ئالمىشىش تېخىمۇ ئاسان"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перемикати екрани стало значно простіше"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chuyển đổi màn hình dễ dàng hơn bao giờ hết"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多屏切换更顺手"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切換畫面變得更容易"
+          }
+        }
+      }
+    },
+    "Upgrade.Welcome.Action.v114" : {
+      "comment" : "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Абраузер ишыҟоу еиԥш ишьақәыргылатәуп"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зрабіць прадвызначаным браўзерам"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lakaat da verdeer dre ziouer"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postavi kao zadani pretraživač"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defineix com a navegador per defecte"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sceglie cum’è navigatore predefinitu"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nastavit jako výchozí prohlížeč"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gosod fel y Porwr Ragosodedig"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angiv som standardbrowser"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Standardbrowser festlegen"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ako standardny wobglědowak nastajiś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ορισμός ως προεπιλογή"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set as Default Browser"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set as Default Browser"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set as Default Browser"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difini kiel norma retumilo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establecer como navegador predeterminado"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establecer como navegador predeterminado"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establecer como navegador predeterminado"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establecer como navegador predeterminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establecer como navegador predeterminado"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ezarri nabigatzaile lehenetsi gisa"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aseta oletusselaimeksi"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définir comme navigateur par défaut"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suidhich mar am brabhsair bunaiteach"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estabelecer como navegador predeterminado"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדרה כדפדפן ברירת המחדל"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postavi kao standardni preglednik"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jako standardny wobhladowak nastajić"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beállítás alapértelmezett böngészőként"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Կայել որպես սկզբնադիր դիտարկիչ"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliger como navigator predefinite"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jadikan Peramban Baku"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setja sem sjálfgefinn vafra"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imposta come browser predefinito"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトブラウザーに設定"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ნაგულისხმევ ბრაუზერად დაყენება"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbadu-t d iminig amezwer"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Негізгі браузер қылу"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 브라우저로 설정"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຕັ້ງໃຫ້ເປັນບຣາວເຊີຫລັກ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "തനതു അന്വേഷിയന്ത്രമായി സജീകരിക്കുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk som standard nettleser"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als standaardbrowser instellen"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk som standard nettlesar"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ustaw jako domyślną przeglądarkę"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definir como navegador padrão"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definir como navegador predefinido"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definir sco navigatur da standard"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установить браузером по умолчанию"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱞᱮᱠᱟ ᱥᱟᱡᱟᱣ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cunfijura comu navicaturi pridifinutu"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "පෙරනිමි අතිරික්සුව කරන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nastaviť ako predvolený prehliadač"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nastavi kot privzeti brskalnik"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caktojeni Shfletuesin Parazgjedhje"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jadikeun Panyungsi Baku"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ange som standardwebbläsare"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гузоштан ҳамчун браузери пешфарз"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตั้งเป็นเบราว์เซอร์เริ่มต้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saptanmış tarayıcı yap"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стандарт браузер итеп билгеләү"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كۆڭۈلدىكى توركۆرگۈ قىلىپ تەڭشە"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встановити типовим браузером"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đặt làm trình duyệt mặc định"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设为默认浏览器"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設為預設瀏覽器"
+          }
+        }
+      }
+    },
+    "Upgrade.Welcome.Description.v114" : {
+      "comment" : "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аԥштәы ҿыцқәа. Аманшәалара ҿыц. Ахашәалахәы ашьҭашәарыцара акәымкәа, ауаа рзы аҽадцалара."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новыя колеры. Новыя зручнасці. Тая ж адданасць людзям, а не прыбытку."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livioù nevez. Aezamant nevez. An hevelep youl da lakaat an dud a-raok ar gounidoù."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nove boje. Nova pogodnost. Ista posvećenost ljudima iznad profita."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colors nous. Més comoditat. El mateix compromís amb les persones per sobre dels beneficis."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novi culori. Novu cunfortu. Ma u stessu impegnu pè a ghjente piuttostu chè pè i soldi."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nové barvy. Nové pohodlí. Stále stejné nadřazení lidí nad ziskem."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lliwiau newydd. Cyfleustra newydd. Yr un ymrwymiad i bobl dros elw."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nye farver. Nye fordele. Samme engagement i mennesker fremfor profit."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Farben. Neuer Komfort. Gleiches Engagement für Menschen über Gewinne."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowe barwy. Nowy komfort. Samsna angažěrowanosć za luźi njeźiwajucy na wudobytki."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέα χρώματα. Νέα ευκολία. Η ίδια δέσμευση να βάζουμε τον άνθρωπο πάνω από το κέρδος."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New colours. New convenience. Same commitment to people over profits."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New colours. New convenience. Same commitment to people over profits."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "New colors. New convenience. Same commitment to people over profits."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novaj koloroj. Nova konveneco. Sama dediĉo al personoj pli ol al profitoj."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevos colores. Nueva comodidad. Mismo compromiso con las personas por encima del lucro."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevos colores. Nueva comodidad. Mismo compromiso con las personas por encima de los beneficios."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevos colores. Nueva comodidad. Mismo compromiso con las personas por encima de los beneficios."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevos colores. Nueva comodidad. Mismo compromiso con las personas por encima del lucro."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevos colores. Nueva comodidad. Mismo compromiso con las personas por encima de los beneficios."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolore gehiago. Egokitasun berria. Irabazi-asmoen gainetik, jendearekiko betidaniko konpromisoa."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uusia värejä. Uutta mukavuutta. Ihmisiin sitoutumisen priorisointi liikevoittojen edelle."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De nouvelles couleurs. Un nouveau confort. Mais le même engagement pour les gens plutôt que pour l’argent."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dathan ùra. Nas goireasaiche. An dealas dhaoine seach prothaid fhathast."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novas cores. Nova comodidade. O mesmo compromiso coas persoas por riba dos beneficios."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "צבעים חדשים. נוחות חדשה. אותה המחויבות לאנשים על פני רווחים."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nove boje. Nova pogodnost. Ista predanost ljudima prije profita."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowe barby. Nowy komfort. Samsna angažowanosć za ludźi njedźiwajo na dobytki."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Új színek. Új kényelem. Ugyanaz az elkötelezettség: az emberek a profit előtt."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Նոր գույներ. Նոր հարմարավետություն. Նույն հանձնառությունը մարդկանց նկատմամբ շահույթի նկատմամբ:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nove colores. Nove convenientia. Mesme dedication a gente ultra le profitos."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warna baru. Kenyamanan baru. Komitmen yang sama kepada orang-orang daripada keuntungan."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nýir litir. Ný þægindi. Sama skuldbinding setur fólk fram yfir hagnað."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuovi colori. Nuovi vantaggi. Stesso impegno nell’anteporre le persone ai profitti."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいカラー、さらに便利に、利益を超えて人々への平等なコミットメント。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ახალი ფერები. გაუმჯობესებული პირადულობა. ხალხის მოგებაზე წინ დაყენება მუდამ."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initen imaynuten. Liser amaynut. Tuṭṭfa deg tbaḍnit n yimdanen mačči d anadi ɣef tedrimt."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңа түстер. Жаңа ыңғайлылық. Табыстан гөрі адамдарға бірдей міндеттеме."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로운 색상. 새로운 편리함. 이익보다 사람에 대한 헌신."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ສີໃໝ່. ຄວາມສະດວກສະບາຍໃໝ່. ຄໍາຫມັ້ນສັນຍາດຽວກັນກັບປະຊາຊົນຫຼາຍກວ່າກໍາໄລ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "പുതിയ നിറങ്ങൾ. പുതിയ സൗകര്യം. ലാഭത്തേക്കാൾ ജനങ്ങളോടുള്ള അതേ പ്രതിബദ്ധത."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nye farger. Nye fordeler. Samme forpliktelse til mennesker over fortjeneste."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuwe kleuren. Nieuw gemak. Dezelfde toewijding aan mensen boven winst."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nye fargar. Nye fordelar. Same forplikting til menneske over forteneste."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਨਵੇਂ ਰੰਗ। ਨਵੀ ਸਹੂਲਤ। ਫਾਇਦੇ ਨਾਲੋਂ ਲੋਕਾਂ ਨੂੰ ਪਹਿਲ ਦੇਣ ਦਾ ਉਹੀ ਵਾਅਦਾ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowe kolory. Większa wygoda. Stawianie ludzi ponad zyski — bez zmian."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novas cores. Nova conveniência. Mesmo compromisso com pessoas acima de lucros."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novas cores. Mais conveniência. O mesmo compromisso com as pessoas, sem olhar para os lucros."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novas colurs. In nov confort. Ma il medem engaschi per las persunas, betg per il profit."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новые цвета. Новое удобство. Обязательство перед людьми, а не погоня за прибылью."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱟᱶᱟ ᱨᱚᱝ ᱠᱚ ᱾ ᱱᱟᱶᱟ ᱥᱩᱵᱤᱫᱷᱟᱹ ᱾ ᱞᱟᱵᱷ ᱨᱮ ᱦᱚᱲ ᱠᱚ ᱞᱮ ᱫᱚᱦᱚ ᱠᱚᱣᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novi culura. Cchiù cummidità. A stissa didizzioni ê genti cchiù assai chi ê prufitti."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "නව වර්ණ. නව පහසුකම්. එලෙසම ලාභයට වඩා මිනිසුන්ට කැපවීම."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nové farby. Nové pohodlie. Rovnaký záväzok voči ľuďom nadradený ziskom."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nove barve. Novo udobje. Enaka zavezanost ljudem namesto dobičku."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngjyra të reja. Rehati e re. I njëjti përkushtim ndaj njerëzve, jo ndaj fitimeve."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kelir anyar. Kagenah anyar. Komitmen anu sarua pikeun jalma batan bati."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nya färger. Ny bekvämlighet. Samma åtagande att sätta människor före vinster."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рангҳои нав. Роҳати нав. Худи ҳамон вазифадорӣ ба одамон, на ба даромадҳо."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "สีสันใหม่ ความสะดวกสบายใหม่ ให้ความมุ่งมั่นกับผู้คนมากกว่าผลกำไร"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni renkler. Yeni kolaylıklar. Para için değil, insanlık için."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Яңа төсләр. Яңа уңайлыклар. Элеккечә табыш өчен түгел, кешеләр өчен."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تېخىمۇ رەڭدار. تېخىمۇ قۇلايلىق. كىشىلەرنىڭ مەنپەئەتتىن ئۈستۈنلۈكىگە ۋەدە بېرىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нові кольори. Нові зручності. Та ж сама відданість людям, а не прибутку."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Màu sắc mới. Tiện lợi hơn. Cùng cam kết với mọi người vì lợi nhuận."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新色彩、新便利，但始终不变的是以人为本的承诺。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全新色彩、全新的簡便功能，依然承諾把人們看得比利益更重要。"
+          }
+        }
+      }
+    },
+    "Upgrade.Welcome.Title.v114" : {
+      "comment" : "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бзиала шәаабеит еиҳа ахатә интернет ахь"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сардэчна запрашаем у больш асабісты Інтэрнэт"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donemat war un internet personeloc’h"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dobrodošli na ličniji internet"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Us donem la benvinguda a una Internet més personal"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benvenuta in un Internet più persunale"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vítejte na osobnějším internetu"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Croeso i rhyngrwyd mwy personol"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velkommen til et mere personligt internet"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Willkommen in einem persönlicheren Internet"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Witajśo k wěcej wósobinskemu internetoju"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Καλώς ορίσατε σε ένα πιο προσωπικό διαδίκτυο"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to a more personal internet"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to a more personal internet"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Welcome to a more personal internet"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bonvenon al pli persona interreto"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te damos la bienvenida a un internet más personal"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenido a una Internet más personal"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te damos la bienvenida a un internet más personal"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te damos la bienvenida a un internet más personal"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te damos la bienvenida a un internet más personal"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ongi etorri Internet pertsonalago batera"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tervetuloa entistä henkilökohtaisempaan internetiin"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue sur un Internet plus personnel"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fàilte gu eadar-lìon nas pearsanta"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dámosche a benvida a unha internet máis persoal"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ברוכים הבאים לאינטרנט אישי יותר"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dobro došao, dobro došla u osobniji internet"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Witajće k bóle wosobinskemu internetej"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üdvözöljük egy személyesebb interneten"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Բարի գալուստ ավելի անձնական ինտերնետ"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benvenite in un internet plus personal"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selamat datang di Internet yang lebih pribadi"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velkomin á persónulegra internet"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benvenuto in un Internet più personale"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなただけのインターネットへようこそ"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "კეთილი იყოს თქვენი ფეხი მეტად პირად ინტერნეტსივრცეში"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansuf ɣer internet udmawan ugar"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жекелігі көбірек интернетке қош келдіңіз"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "나만의 인터넷에 오신 것을 환영합니다"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຍິນດີຕ້ອນຮັບສູ່ອິນເຕີເນັດທີມີຄວາມເປັນສ່ວນຕົວສູງ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ സ്വന്തം ഗോളാന്തരവലയിലേക്കു സ്വാഗതം"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velkommen til et mer personlig internett"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welkom bij een persoonlijker internet"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velkomen til eit meir personleg internett"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਵੱਧ ਨਿੱਜੀ ਇੰਟਰਨੈੱਟ ਲਈ ਜੀ ਆਇਆਂ ਨੂੰ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Witamy w bardziej spersonalizowanym Internecie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boas-vindas a uma internet mais pessoal"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bem-vindo(a) a uma Internet mais pessoal"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bainvegni en in internet pli persunal"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добро пожаловать в более личный Интернет"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱤᱡᱚᱨᱟᱜ ᱞᱮᱠᱷᱟ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱨᱮ ᱟᱢᱟᱜ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bummegna nta n’internet cchiù pirsunali"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "වඩාත් පෞද්ගලික අන්තර්ජාලයකට පිළිගනිමු"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitajte na osobnejšom internete"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dobrodošli na bolj osebnem internetu"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mirë se vini te një internet më personal"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wilujeng sumping di internét anu leuwih pribadi"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välkommen till ett mer personligt internet"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хуш омадед ба Интернети хусуситар"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ยินดีต้อนรับสู่อินเทอร์เน็ตที่เป็นส่วนตัวมากขึ้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daha kişisel bir internete hoş geldiniz"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шәхсирәк бер Интернетка рәхим итегез"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تېخىمۇ خاسلاشتۇرۇلغان ئىنتېرنېتقا خۇش كەلدىڭىز"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вітаємо у персоналізованому інтернеті"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chào mừng bạn đến với một Internet cá nhân hơn"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "欢迎进入更个性化的互联网"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歡迎來到更加個人化的網路環境"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

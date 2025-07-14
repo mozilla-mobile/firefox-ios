@@ -1,0 +1,834 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHome" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This one talks about additions to the Firefox homepage regarding a more personalized experience.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иаԥылатәуп еиқәыршәоу ахатә даҟьа. Аҵыхәтәантәи аҭаӡҩырақәа, анҵамҭақәа, аԥшаара алҵшәақәа абра иаарԥшхоит."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сустракайце сваю персаналізаваную хатнюю старонку. Тут будуць паказаны апошнія карткі, закладкі і вынікі пошуку."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kejit gant ho pajenn degemer personelaet. Ivinelloù nevez, sinedoù ha disoc’hoù enklask a vo diskouezet amañ."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upoznajte svoju personalizovanu početnu stranicu. Ovdje će se pojaviti nedavni tabovi, oznake i rezultati pretraživanja."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descobriu la vostra pàgina d'inici personalitzada. Les pestanyes recents, les adreces d'interès i els resultats de les cerques es mostraran aquí."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fate cunnuscenza cù a vostra pagina d’accolta. L’unghjette, l’indette è i risultati di riceca recente ci si trovanu."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seznamte se se svou přizpůsobenou domovskou stránkou. Zobrazí se vám na ní nedávné panely, záložky a výsledky vyhledávání."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dyma'ch gwefan cartref personol. Bydd tabiau diweddar, nodau tudalen, a chanlyniadau chwilio yn ymddangos yma."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mød din tilpassede startside. Seneste faneblade, bogmærker og søgeresultater vises her."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lernen Sie Ihre personalisierte Startseite kennen. Hier werden zuletzt verwendete Tabs, Lesezeichen und Suchergebnisse angezeigt."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Póznajśo swój personalizěrowany bok. Nejnowše rejtariki, cytańske znamjenja a pytańske wuslědki se how zjawiju."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Γνωρίστε την εξατομικευμένη αρχική σας σελίδα. Οι πρόσφατες καρτέλες, οι σελιδοδείκτες και τα αποτελέσματα αναζήτησης θα εμφανίζονται εδώ."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meet your personalized homepage. Recent tabs, bookmarks, and search results will appear here."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meet your personalised homepage. Recent tabs, bookmarks, and search results will appear here."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Meet your personalized homepage. Recent tabs, bookmarks, and search results will appear here."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Malkovru vian personecigitan ekan paĝon. Ĵusaj langetoj, legosignoj, kaj serĉaj rezultoj aperos ĉi tie."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descubre tu página de inicio personalizada. Las pestañas recientes, marcadores y resultados de búsqueda aparecerán aquí."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conocé tu página de inicio personalizada. Las pestañas recientes, los marcadores y los resultados de búsqueda aparecerán aquí."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conoce tu página de inicio personalizada. Las pestañas recientes, marcadores y resultados de búsqueda aparecerán aquí."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descubre tu página de inicio personalizada. Las pestañas recientes, marcadores y resultados de búsqueda aparecerán aquí."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conoce tu página de inicio personalizada. Las pestañas recientes, marcadores y resultados de búsqueda aparecerán aquí."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ezagut ezazu zure hasiera-orri pertsonalizatua. Azken fitxak, laster-markak eta bilaketa-emaitzak hemen agertuko dira."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutustu henkilökohtaiseen kotisivuusi. Viimeisimmät välilehdet, kirjanmerkit ja hakutulokset näkyvät tässä."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites connaissance avec votre page d’accueil personnalisée. Onglets récents, marque-pages et résultats de recherche y apparaissent."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seo dhut an duilleag-dhachaigh phearsantaichte agad. Nochdaidh tabaichean a bh’ agad o chionn goirid is toraidhean luirg an-seo."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coñeza a súa páxina de inicio personalizada. Aquí aparecerán as pestanas, os marcadores e os resultados das buscas recentes."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הכירו את דף הבית המותאם אישית שלכם. לשוניות אחרונות, סימניות ותוצאות חיפוש יופיעו כאן."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upoznaj svoju personaliziranu početnu stranicu. Ovdje će se pojaviti nedavne kartice, zabilješke i rezultati pretraživanja."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeznajće so ze swojej personalizowanej startowej stronu. Najnowše rajtarki, zapołožki a pytanske wuslědki so tu zjewja."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ismerje meg személyre szabott kezdőlapját. Itt jelennek meg a legutóbbi lapok, könyvjelzők és keresési találatok."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Հանդիպեք ձեր անհատականացված գլխավոր էջին: Վերջին ներդիրները, էջանիշները և որոնման արդյունքները կհայտնվեն այստեղ:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incontra tu pagina principal personalisate. Le schedas recente, le marcapaginas e le resultatos del recerca apparera ci."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temui beranda pribadi Anda. Tab, markah, dan hasil pencarian terkini akan muncul di sini."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kynntu þér persónulegu upphafssíðuna þína. Nýlegir flipar, bókamerki og leitarniðurstöður munu birtast hér."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scopri la tua pagina iniziale personalizzata. Le schede recenti, i segnalibri e i risultati di ricerca verranno visualizzati qui."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "パーソナライズされたホームページをご覧ください。最近使ったタブ、ブックマーク、検索結果がここに表示されます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გაეცანით მორგებულ საწყის გვერდს. ბოლოდროინდელი ჩანართები, სანიშნები და მოძიებული გვერდები გამოჩნდება აქ."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snirem asebtar-ik·im agejdan yettwasagnen. Accaren imaynuten, ticraḍ n yisebtar d yigmaḍ n unadi ad d-banen deg-s."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жекелендірілген басты бетпен танысыңыз. Мұнда соңғы беттер, бетбелгілер және іздеу нәтижелері көрсетілетін болады."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "나만의 홈페이지를 만나보세요. 최근 탭, 책갈피 및 검색 결과가 여기에 표시됩니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ພົບກັບໜ້າຫຼັກທີ່ເປັນສ່ວນຕົວຂອງທ່ານ. ແຖບຫຼ້າສຸດ, ບຸກມາກ, ແລະຜົນການຊອກຫາຈະປາກົດຢູ່ບ່ອນນີ້."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ ഇഷ്ടനുസൃതമാക്കിയ പൂമുറ്റം. ഒടുവിലത്തെ ടാബുകളും അടയാളക്കുറിപ്പുകളും തിരയൽ ഫലങ്ങളും ഇവിടെ കാണിക്കും."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Møt din personlige hjemmeside. Nylige faner, bokmerker og søkeresultater vises her."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak kennis met uw gepersonaliseerde startpagina. Recente tabbladen, bladwijzers en zoekresultaten worden hier weergegeven."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Møt den personlege heimesida di. Nylege faner, bokmerke og søkjeresultat vert viste her."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਹਾਡੇ ਆਪਣੇ ਬਣਾਏ ਮੁੱਖ-ਸਫ਼ੇ ਨੂੰ ਸਮਝੋ। ਸੱਜਰੀਆਂ ਟੈਬਾਂ, ਬੁੱਕਮਾਰਕ ਅਤੇ ਖੋਜ ਨਤੀਜੇ ਇੱਥੇ ਦਿਖਾਈ ਦੇਣਗੇ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poznaj swoją spersonalizowaną stronę startową. Tutaj będą wyświetlane ostatnie karty, zakładki i wyniki wyszukiwania."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conheça sua tela inicial personalizada. Abas recentes, favoritos e resultados de pesquisa aparecem aqui."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conheça a sua página inicial personalizada. Aqui vão ser apresentados separadores recentes, marcadores e resultados de pesquisas."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emprenda d'enconuscher tia nova pagina da partenza persunalisada. Tabs recents, segnapaginas e resultats da tschertga vegnan a cumparair qua."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Познакомьтесь с настраиваемой домашней страницей. Здесь будут отображаться последние вкладки, закладки и результаты поиска."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢᱟᱜ ᱠᱩᱥᱤ ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱧᱮᱞ ᱛᱟᱢ ᱾ ᱱᱤᱛᱚᱜᱟᱜ ᱴᱮᱵᱽ ᱠᱚ, ᱵᱩᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱟᱨ ᱥᱮᱱᱫᱽᱨᱟ ᱛᱮᱞᱟ ᱫᱚ ᱱᱚᱰᱮ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ncontra a to pàggina mastra pirsunalizzati. I schedi visti di picca, i nzingalibbra e i risurtati dî risciduti affàccianu cca."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ඔබගේ පුද්ගලීකකරණය කළ මුල් පිටුව බලන්න. මෑත පටිති, පොත්යොමු හා සෙවුම් ප්‍රතිඵල මෙහි දිස් වනු ඇත."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoznámte sa so svojou prispôsobenou domovskou stránkou. Tu sa zobrazia nedávne karty, záložky a výsledky vyhľadávania."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spoznajte svojo prilagojeno domačo stran. Tukaj bodo prikazani nedavni zavihki, zaznamki in zadetki iskanja."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Njihuni me faqen tuaj hyrëse të personalizuar. Këtu do të shfaqen skeda të hapura së fundi, faqerojtës dhe përfundime kërkimi."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nepangkeun kaca tepas pribadi anjeun. Tab mutahir, markah, jeung hasil maluruh bakal némbongan di dieu."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möt din personliga startsida. Senaste flikar, bokmärken och sökresultat kommer att visas här."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бо саҳифаи асосии шахсии худ шинос шавед. Варақаҳо, хатбаракҳо ва натиҷаҳои ҷустуҷӯи охирин дар ин ҷо пайдо мешаванд."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "พบกับโฮมเพจส่วนบุคคลของคุณ แท็บล่าสุด ที่คั่นหน้า และผลการค้นหาจะปรากฏที่นี่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Size özel giriş sayfanızla tanışın. Son sekmeleriniz, yer imleriniz ve arama sonuçlarınız burada görünecek."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шәхсиләштерелгән баш бит белән танышыгыз. Соңгы таблар, кыстыргычлар, эзләү нәтиҗәләре монда күренәчәк."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خاسلاشتۇرۇلغان باش بېتىڭىز بىلەن تونۇشۇڭ. يېقىنقى بەتكۈچ، خەتكۈچ ۋە ئىزدەش نەتىجىسى بۇ يەردە كۆرۈنىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зустрічайте свою персоналізовану домівку. Тут з'являтимуться останні вкладки, закладки та результати пошуку."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gặp gỡ trang chủ được cá nhân hóa của bạn. Các thẻ, dấu trang và kết quả tìm kiếm gần đây sẽ xuất hiện ở đây."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这里就是您的个性化主页。最近使用的标签页、书签、搜索结果会显示在这里。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "了解您的個人化首頁。這裡將顯示最近開啟過的分頁、書籤、搜尋結果。"
+          }
+        }
+      }
+    },
+    "ContextualHints.FirefoxHomepage.JumpBackIn.SyncedTab.v106" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. When a user is logged in and has a tab synced from desktop, this popup indicates which tab that is within the Jump Back In section.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уара уҭаӡҩырақәа асинхронизациа ҟаҵоуп! Даҽа ҳәагак аҿы иахьаанужьыз иацҵа."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вашыя карткі сінхранізуюцца! Працягвайце з таго месца, дзе спыніліся на іншай прыладзе."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goubredet eo hoc’h ivinelloù! Tapit an traoù en-dro lec’h m’ho peus laosket anezho e lec’h all."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaši tabovi se sinhroniziraju! Nastavite gdje ste stali na svom drugom uređaju."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les pestanyes s'estan sincronitzant! Continueu des d’on ho havíeu deixat en l'altre dispositiu."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E vostre unghjette sò sincrunizate ! Ripigliate induve vi site piantati nant’à u vostru altru apparechju."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaše panely se synchronizují! Na druhém zařízení pokračujte tam, kde jste skončili."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae eich tabiau'n cydweddu! Parhau o'r lle roeddech chi ar eich dyfais arall."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dine faneblade synkroniseres! Fortsæt, hvor du slap, på din anden enhed."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ihre Tabs werden synchronisiert! Machen Sie dort weiter, wo Sie auf Ihrem anderen Gerät aufgehört haben."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waše rejtariki se synchronizěruju! Pókšačujśo, źož sćo pśestał na drugem rěźe."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι καρτέλες σας συγχρονίζονται! Συνεχίστε από εκεί που σταματήσατε στην άλλη συσκευή σας."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your tabs are syncing! Pick up where you left off on your other device."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your tabs are synchronising! Pick up where you left off on your other device."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your tabs are syncing! Pick up where you left off on your other device."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viaj langetoj estas spegulataj! Daŭrigu kie vi haltis en via alia aparato."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus pestañas se están sincronizando! Continúa donde lo dejaste en otro dispositivo."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus pestañas se están sincronizando! Continuá donde lo dejaste en tu otro dispositivo."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus pestañas se están sincronizando! Continua donde te quedaste en otro dispositivo."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus pestañas se están sincronizando! Continúa donde lo dejaste en otro dispositivo."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus pestañas se están sincronizando! Continua donde te quedaste en otro dispositivo."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zure fitxak sinkronizatzen ari dira! Jarraitu zure beste gailuan utzi zenuen tokitik."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välilehtiäsi synkronoidaan! Jatka siitä, mihin jäit toisella laitteellasi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos onglets sont synchronisés ! Reprenez là vous en étiez sur votre autre appareil."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tha na tabaichean agad ri shioncronachadh! Lean ort far an do stad thu air an uidheam eie agad."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As súas lapelas estanse sincronizando! Continúe onde o deixou no seu outro dispositivo."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הלשוניות שלך מסתנכרנות! אפשר להמשיך מאיפה שהפסקת משאר המכשירים שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tvoje se kartice sinkroniziraju! Nastavi gdje si stao/la na svom drugom uređaju."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waše rajtarki so synchronizuja! Pokročujće, hdźež sće na druhim graće přestał."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A lapjai szinkronizálódnak! Folytassa onnan, ahol abbahagyta a másik eszközén."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ձեր ներդիրները համաժամացվում են: Շարունակեք այնտեղ, որտեղ դադարեցրել եք ձեր մյուս սարքում:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu schedas es synchronisate! Reprende de ubi tu exiva sur un tu altere apparato."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Anda sedang disinkronkan! Lanjutkan di mana Anda tinggalkan di perangkat Anda yang lain."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fliparnir þínir eru að samstilla! Haltu áfram þar sem frá var horfið í hinu tækinu þínu."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronizzazione delle tue schede è in corso. Riprendi da dove eri rimasto sull’altro dispositivo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タブが同期されます！ 他の端末の中断したところから再開しましょう。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "თქვენი ჩანართები სინქრონდება! განაგრძეთ იქიდანვე, სადაც შეჩერდით სხვა მოწყობილობაზე."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accaren-ik·im mtawan! Kemmel seg wanda i tḥebseḍ ɣef yibenk-ik·im-nniḍen."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сіздің беттеріңіз синхрондалуда! Осында басқа құрылғыда тоқтаған жерден жалғастырыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탭이 동기화 중입니다! 다른 기기에서 중단한 부분부터 다시 시작하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ແຖບຂອງທ່ານກຳລັງຊິ້ງຢູ່! ເອົາບ່ອນທີ່ເຈົ້າຄ້າງໄວ້ໃນອຸປະກອນອື່ນຂອງເຈົ້າ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ ടാബുകൾ സമന്വയിപ്പിക്കുന്നു! താങ്ങളുടെ മറ്റു് ഉപകരണത്തിൽ നിർത്തിയിടത്തു് നിന്നു് വീണ്ടും തുടങ്ങുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fanene dine synkroniseres! Fortsett der du sluttet på den andre enheten."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uw tabbladen worden gesynchroniseerd! Ga verder waar u was gebleven op uw andere apparaat."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fanene dine synkroniserer no! Hald fram der du slutta på den andre eininga."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਹਾਡੀਆਂ ਟੈਬਾਂ ਸਿੰਕ ਹੋ ਰਹੀਆਂ ਹਨ! ਆਪਣੇ ਹੋਰ ਡਿਵਾਈਸ ਉੱਤੇ ਜਿੱਥੇ ਤੁਸੀਂ ਛੱਡੋ, ਉਥੋਂ ਹੀ ਤੁਸੀਂ ਹੀ ਸ਼ੁਰੂ ਕਰੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twoje karty są synchronizowane! Kontynuuj w tym samym miejscu, co na drugim urządzeniu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suas abas estão sendo sincronizadas! Continue de onde parou em outro dispositivo."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os seus separadores estão a ser sincronizados! Continue de onde parou no seu outro dispositivo."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes tabs vegnan sincronisads! Cuntinuescha là nua che ti has smess sin tes auter apparat."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваши вкладки синхронизируются! Продолжайте с того места, на котором остановились на другом устройстве."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢᱟᱜ ᱴᱮᱵᱽ ᱫᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫᱚᱜ ᱠᱟᱱᱟ! ᱮᱴᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱴᱮᱵᱽ ᱠᱷᱚᱱ ᱯᱟᱧᱡᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I to schedi si stannu sincrunizzanu! Cuntinua di unni i lassasti ncapu a l’autru to dispusitivu."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "පටිති සමමුහූර්ත වෙමින්! අනෙක් උපාංගයේ ඔබ නතර කළ තැනින් අතට ගන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaše karty sa synchronizujú! Na druhom zariadení pokračujte tam, kde ste prestali."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaši zavihki se sinhronizirajo! Nadaljujte tam, kjer ste končali na drugi napravi."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skedat tuaja po njëkohësohen! Vazhdojeni punën ku e latë në pajisjen tuaj tjetër."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab anjeun keur disingkronkeun! Pilih ti nu ditinggalkeun dina séjén parabot anjeun."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dina flikar synkroniseras! Fortsätt där du slutade på din andra enhet."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Варақаҳои шумо ҳамоҳанг карда мешаванд! Ҳамаи он ҷойҳоеро, ки шумо дар дастгоҳи дигари худ дидаед, ба даст оред."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "กำลังซิงค์แท็บของคุณ! เรียกดูต่อจากที่คุณค้างไว้บนอุปกรณ์อื่นๆ ของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sekmeleriniz eşitleniyor! Diğer cihazınızda kaldığınız yerden devam edin."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сезнең таблар синхронлана! Башка җиһазыгызда туктаган җирегездән дәвам итегез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بەتكۈچلىرىڭىز قەدەمداشلىنىۋاتىدۇ! باشقا ئۈسكۈنىڭىزدە قالدۇرغان جايدىن زىيارەتنى داۋاملاشتۇرالايسىز."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваші вкладки синхронізуються! Продовжте з того ж місця, де зупинилися на іншому пристрої."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các thẻ của bạn đang đồng bộ hóa! Tiếp tục nơi bạn đã dừng lại trên thiết bị khác của mình."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签页正在同步！您可在另一设备上继续浏览。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分頁同步中！繼續瀏覽其他裝置上開啟的分頁。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

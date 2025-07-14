@@ -1,0 +1,1962 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "NativeErrorPage.ButtonLabel.v131" : {
+      "comment" : "On error page, this is the text on a button that will try to load the page again.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Арҿыцра"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adkargañ"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Učitaj ponovo"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualitza"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attualizà"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obnovit"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ail-lwytho"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genindlæs"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu laden"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znowego zacytaś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανανέωση"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reload"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reload"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reload"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reŝargi"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berritu"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Päivitä"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualiser"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ath-luchdaich"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "טעינה מחדש"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Učitaj ponovo"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znowa začitać"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Újratöltés"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Կրկին բեռնել"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recargar"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muat ulang"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endurhlaða"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricarica"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再読み込み"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "განახლება"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smiren"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қайта жүктеу"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로 고침"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ໂຫລດຄືນໃຫມ່"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "വീണ്ടും ലഭ്യമാക്കുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppdater"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vernieuwen"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppdater"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਮੁੜ-ਲੋਡ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wczytaj ponownie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recarregar"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recarregar"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechargiar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱫᱚᱦᱲᱟ ᱞᱟᱫᱤ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Càrrica arrè"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "නැවත"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obnoviť"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponovno naloži"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ringarkoje"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ladda om"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аз нав бор кардан"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "โหลดใหม่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tazele"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Яңарту"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قايتا يۈكلە"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезавантажити"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tải lại"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新加载"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新載入"
+          }
+        }
+      }
+    },
+    "NativeErrorPage.GenericError.Description.v134" : {
+      "comment" : "On error page, this is the description for a generic error. %@ is the site url.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vlasnik %@ ga nije ispravno podesio i ne može se stvoriti sigurna veza."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El propietari del lloc %@ no l’ha configurat correctament i no s’ha pogut crear una connexió segura."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U prupietariu di %@ ùn l’hà micca cunfiguratu currettamente è ùn si pò creà una cunnessione assicurizata."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vlastník serveru %@ jej nenastavil správně a zabezpečené připojení nelze vytvořit."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nid yw perchennog %@ wedi ei osod yn iawn ac nid oes modd creu cysylltiad diogel."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejeren af %@ har ikke sat webstedet korrekt op og en sikker forbindelse kan ikke oprettes."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Besitzer von %@ hat es nicht korrekt eingerichtet und eine sichere Verbindung kann nicht erstellt werden."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swójstwownik %@ njejo jo korektnje konfigurěrował a wěsty zwisk njedajo se napóraś."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ο ιδιοκτήτης του %@ δεν έχει το έχει ρυθμίσει σωστά και δεν είναι δυνατή η πραγματοποίηση μιας ασφαλούς σύνδεσης."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The owner of %@ hasn’t set it up properly and a secure connection can’t be created."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The owner of %@ hasn’t set it up properly and a secure connection can’t be created."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The owner of %@ hasn’t set it up properly and a secure connection can’t be created."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La posedanto de %@ ne bone agordis ĝin kaj pro tio ne eblas krei sekuran konekton al ĝi."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El propietario de %@ no lo ha configurado correctamente y no se puede crear una conexión segura."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El propietario de %@ no lo configuró correctamente y no se pudo crear una conexión segura."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El propietario de %@ no lo ha configurado correctamente y no se puede crear una conexión segura."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El propietario de %@ no lo ha configurado correctamente y no se puede crear una conexión segura."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La persona propietaria de %@ no lo ha configurado correctamente y no se puede crear una conexión segura."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ gunearen jabeak ez du ondo konfiguratu eta ezin da konexio segururik sortu."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sivuston %@ omistaja ei ole määrittänyt sivuston asetuksia oikein, eikä suojattua yhteyttä voi luoda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le propriétaire de %@ ne l’a pas configuré correctement et une connexion sécurisée n’a pas pu être établie."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O propietario de %@ non o configurou correctamente e non se pode crear unha conexión segura."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הבעלים של %@ לא הגדיר אותו כראוי ולא ניתן ליצור חיבור מאובטח."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vlasnik nije ispravno postavio stranicu %@ i ne može se stvoriti sigurna veza."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swójstwownik %@ njeje jo korektnje konfigurował a wěsty zwisk njeda so wutworić."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A(z) %@ tulajdonosa nem állította be megfelelően, és nem hozható létre biztonságos kapcsolat."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-ի սեփականատերը այն ճիշտ չի կարգավորել, և ապահով կապ չի կարող ստեղծվել:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le proprietario de %@ non ha configurate le sito correctemente e es impossibile crear un connexion secur."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pemilik %@ belum menyiapkannya dengan benar dan sambungan aman tidak dapat dibuat."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigandi %@ hefur ekki sett það upp rétt og ekki er hægt að búa til örugga tengingu."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il proprietario di %@ non ha configurato il sito correttamente e non è possibile creare una connessione sicura."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ の所有者がサイトを適切に設定していないため、安全な接続を確立できません。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ არ აქვს მფლობელს სათანადოდ გამართული და დაცული კავშირი ვერ იქმნება."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bab n %@ ur t-yesbadu ara akken iwata, tuqqna taɣellsan tegguma ad tettwag."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ иесі оны дұрыс баптамады және қауіпсіз байланысты жасау мүмкін емес."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 소유자가 올바르게 설정하지 않아서 보안 연결을 할 수 없습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ເຈົ້າຂອງ %@ ບໍ່ໄດ້ຕັ້ງມັນຢ່າງຖືກຕ້ອງ ແລະ ບໍ່ສາມາດສ້າງການເຊື່ອມຕໍ່ທີ່ປອດໄພໄດ້."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-ന്റെ ഉടമസ്ഥൻ ഇതിനെ ശരിയായിട്ടു് ഒരുങ്ങാത്തുകൊണ്ടു് ഒരു സുരക്ഷിതമായ ഇണക്കപ്പെടാൻ പറ്റിയില്ല."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eieren av %@ har ikke konfigurert den riktig, og en sikker tilkobling kan ikke opprettes."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De eigenaar van %@ heeft deze niet juist ingesteld en er kan geen beveiligde verbinding tot stand worden gebracht."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigaren av %@ har ikkje konfigurert det rett, og ei sikker tilkopling kan ikkje opprettast."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ਦੇ ਮਾਲਕ ਨੇ ਇਸ ਨੂੰ ਠੀਕ ਢੰਗ ਨਾਲ ਸੈੱਟਅੱਪ ਨਹੀਂ ਕੀਤਾ ਹੈ ਅਤੇ ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O proprietário de %@ não configurou corretamente, não foi possível criar conexão segura."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O proprietário de %@ não o configurou corretamente e não foi possível criar uma ligação segura."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il possessur da %@ n’ha betg configurà endretg la website ed i n’è betg pussaivel da stabilir ina connexiun segirada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Владелец %@ не настроил его должным образом, и с ним не может быть установлено защищённое соединение."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ᱨᱮᱱ ᱢᱟᱞᱤᱠ ᱫᱚ ᱱᱚᱣᱟ ᱵᱮᱥ ᱞᱮᱠᱟ ᱵᱟᱭ ᱥᱮᱴ ᱟᱯ ᱟᱠᱟᱫᱟ ᱟᱨ ᱨᱟᱠᱷᱟ ᱡᱚᱯᱲᱟᱣ ᱵᱟᱝ ᱛᱮᱭᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U prupitariu di %@ nun u cunfijurau bonu e nun pozzu stabbiliri un cullijamentu sicuru."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ හිමිකරු එය නිසියාකාරව පිහිටුවා නැති නිසා ආරක්‍ෂිත සම්බන්‍ධතාවක් සෑදීමට නොහැකිය."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vlastník servera %@ ho nenastavil správne a nie je možné vytvoriť zabezpečené pripojenie."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strani %@ lastnik ni pravilno nastavil, zato ni mogoče vzpostaviti varne povezave."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I zoti i %@ s’e ka ujdisur si duhet dhe s’mund të krijohet një lidhje e siguruar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ägaren av %@ har inte konfigurerat den korrekt och en säker anslutning kan inte skapas."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Соҳиби «%@» сомонаро ба таври дуруст насб накардааст ва пайвасти бехатар эҷод карда намешавад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เจ้าของ %@ ไม่ได้ตั้งค่าให้ถูกต้อง และไม่สามารถสร้างการเชื่อมต่อแบบปลอดภัยได้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sitesinin sahibi siteyi düzgün kurmadığı için güvenli bir bağlantı oluşturulamıyor."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ نىڭ ئىگىسى ئۇنى مۇۋاپىق تەڭشىمىگەن، بىخەتەر باغلىنىش قۇرغىلى بولمايدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Власник %@ не налаштував його належним чином, тому неможливо створити захищене з'єднання."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chủ sở hữu của %@ chưa thiết lập đúng cách và không thể tạo kết nối an toàn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的管理员未正确配置此网站，无法创建安全连接。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的擁有者未正確設定網站，無法建立安全連線。"
+          }
+        }
+      }
+    },
+    "NativeErrorPage.GenericError.TitleLabel.v131" : {
+      "comment" : "On error page, this is the title for generic error.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Згәы зҽану. Акы ииашаны иҟам."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezit war evezh, un dra bennak a-dreuz a zo."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budite oprezni. Nešto ne izgleda kako treba."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aneu amb compte: sembla que hi ha algun problema."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fate casu. Pare ch’ella ci sia un prublema."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buďte opatrní. Něco není v pořádku."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Byddwch yn ofalus. Nid yw rhywbeth yn edrych yn iawn."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vær forsigtig. Noget ser ikke rigtigt ud."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seien Sie vorsichtig. Irgendetwas stimmt hier nicht."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buźćo wobglědniwy. Něco njejo w pórěźe."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Να προσέχετε. Κάτι δεν πάει καλά."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Be careful. Something doesn’t look right."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Be careful. Something doesn’t look right."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Be careful. Something doesn’t look right."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estu singarda. Io ne ĝustas."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten cuidado. Parece que algo no está bien."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuidado. Algo no parece estar bien."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten cuidado. Algo no parece estar bien."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten cuidado. Parece que algo no está bien."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten cuidado. Algo no parece estar bien."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontuz. Badirudi zerbait oker dagoela."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ole varovainen. Jokin ei vaikuta olevan oikein."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites preuve de prudence, il semble y avoir un problème."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bidh faiceallach. Tha rud-eigin an-seo nach eil ceart."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teña coidado. Algo non parece estar ben."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נא להיזהר. משהו לא נראה תקין."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oprez. Nešto nije u redu."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budźće kedźbliwy. Něšto w porjadku njeje."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legyen óvatos. Úgy tűnik, hogy valami nincs rendben."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Զգույշ եղեք. Ինչ-որ բան ճիշտ չի թվում:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attention! Alco non pare correcte."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hati-hati. Ada yang tidak beres."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farðu varlega. Eitthvað lítur ekki út fyrir að vera rétt."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai attenzione. Sembra che ci sia un problema."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気を付けてください。何か問題が起こっています。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ფრთხილად. რაღაც რიგზე ვერაა."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ḥader. Yella wayen ur nteddu ara akken ilaq."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сақ болыңыз. Бірдеңе дұрыс емес сияқты."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조심하세요. 뭔가 이상해 보여요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ລະມັດລະວັງ. ບາງສິ່ງບາງຢ່າງຜິດປົກະຕິ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ശ്രദ്ധിക്കൂ. ഇതിൽ എന്തോ കുഴപ്പമുണ്ടെന്നു് തോന്നുന്നു."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vær forsiktig. Noe ser ikke riktig ut."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wees voorzichtig. Er is iets niet in orde."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver varsam. Noko ser ikkje rett ut."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਧਿਆਨ ਰੱਖੋ। ਕੁਝ ਸਹੀ ਨਹੀਂ ਜਾਪਦਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zachowaj ostrożność. Coś tu nie gra."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tenha cuidado. Algo não parece estar certo."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tenha cuidado. Algo não parece bem."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sajas precaut. I para da dar in problem."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будьте осторожны. Что-то выглядит неправильно."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱦᱩᱥᱤᱭᱟᱹᱨ ᱛᱟᱦᱮᱱ ᱢᱮ ᱾  ᱡᱟᱦᱟᱱᱟᱜ ᱜᱮ ᱴᱷᱤᱠ ᱵᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stai accura. Parissi chi cc’è quarchi prubblema."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buďte opatrní. Niečo nie je v poriadku."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previdno. Nekaj ni videti v redu."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapni sytë. Diçka s’duket siç duhet."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Var försiktig. Något ser inte rätt ut."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эҳтиёт шавед. Чизе нодуруст ба назар мерасад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ระวังหน่อย มีบางอย่างผิดปกติ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dikkatli olun. Doğru görünmeyen bir şeyler var."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сак булыгыз. Нәрсәдер дөрес түгел монда."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئېھتىيات قىلىڭ. بىرەر نەرسە توغرا ئەمەستەك قىلىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будьте обережні. Тут щось не так."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy cẩn thận. Có điều gì đó không ổn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当心，看来有异常情况。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請小心，有些東西不對勁。"
+          }
+        }
+      }
+    },
+    "NativeErrorPage.NoInternetConnection.Description.v131" : {
+      "comment" : "On error page, this is the description for no internet connection.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Даҽа ҳәагак ала аҽамадара шәҽазышәшәа. Умодем ма уроутер гәаҭа. Wi-Fi аҿыхны даҽазнык аҿакра."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaskit kennaskañ war un trevnad all. Gwiriekait ho modem pe ho heñcher. Digennaskit hag adkennaskit ouzh ar wifi."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokušajte se povezati na drugom uređaju. Provjerite svoj modem ili ruter. Prekinite vezu i ponovo se povežite na Wi-Fi."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proveu de connectar-vos en un altre dispositiu. Reviseu el mòdem o l'encaminador. Desconnecteu-vos de la Wi-Fi i torneu-vos-hi a connectar."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pruvate di cunnettevi nant’à un altru apparechju. Verificate u vostru modem o « router ». Discunnittitevi è ricunnittitevi à u Wi-Fi."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zkuste se připojit na jiném zařízení. Zkontrolujte modem nebo router. Odpojte se a znovu se připojte k Wi-Fi."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceisiwch gysylltu ar ddyfais wahanol. Gwiriwch eich modem neu lwybrydd. Datgysylltwch ac ailgysylltwch â'r Wi-Fi."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv at oprette forbindelse med en anden enhed. Kontroller dit modem eller din router. Afbryd wi-fi-forbindelsen og opret den igen."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versuchen Sie, auf einem anderen Gerät eine Verbindung herzustellen. Überprüfen Sie Ihr Modem oder Router. Trennen Sie die WLAN-Verbindung und stellen Sie die Verbindung wieder her."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wopytajśo z drugim rědom zwězaś. Pśeglědajśo swój modem abo router. Źělśo zwisk WLAN a zwěžćo znowego."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δοκιμάστε να συνδεθείτε από διαφορετική συσκευή. Ελέγξτε το modem ή το router σας. Αποσυνδέστε και επανασυνδέστε το Wi-Fi."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provu konektiĝi el alia aparato. Kontrolu vian modemon aŭ retalirilon. Malkonektiĝu kaj rekonektiĝu al sendrata reto (Wi-Fi)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta conectarte en un dispositivo diferente. Verifica tu módem o router. Desconéctate y vuelve a conectarte al Wi-Fi."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probá conectarte a un dispositivo diferente. Verificá tu módem o router. Desconectá y volvé a conectarte al wifi."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta conectarte en un dispositivo diferente. Verifica tu módem o router. Desconéctate y vuelve a conectarte a Wi-Fi."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta conectarte en un dispositivo diferente. Verifica tu módem o router. Desconéctate y vuelve a conectarte al Wi-Fi."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta conectarte en un dispositivo diferente. Verifica tu módem o router. Desconéctate y vuelve a conectarte al Wi-Fi."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saiatu beste gailu batekin konektatzen. Egiaztatu zure modem edo routerra. Deskonektatu eta konektatu berriro Wi-Fi sarera."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yritä muodostaa yhteys toisella laitteella. Tarkista modeemi tai reititin. Katkaise Wi-Fi-yhteys ja yhdistä se uudelleen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayez de vous connecter sur un autre appareil. Vérifiez votre modem ou votre routeur. Déconnectez-vous puis reconnectez-vous au Wi-Fi."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feuch is dèan ceangal air uidheam eile. Thoir sùil air a’ mhòdam no rùtar agad. Dì-cheangail on WiFi is ceangail ris as ùr."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probe a conectar nun dispositivo diferente. Comprobe o seu módem ou router. Desconecte e volva conectar á wifi."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נא לנסות להתחבר במכשיר אחר, לבדוק את המודם או הנתב שלך, ולהתנתק ולהתחבר מחדש ל־Wi-Fi."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokušaj se povezati na jednom drugom uređaju. Provjeri modem ili router. Prekini vezu i ponovo se spoji na Wi-Fi."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spytajće z druhim gratom zwjazać. Přepruwujće swój modem abo router. Dźělće zwisk WLAN a zwjazajće znowa."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próbáljon meg csatlakozni egy másik eszközről. Ellenőrizze a modemet vagy útválasztót. Bontsa a kapcsolatot, majd csatlakozzon újra a Wi-Fi-hez."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Փորձեք միանալ մեկ այլ սարքի վրա: Ստուգեք ձեր մոդեմը կամ երթուղիչը: Անջատեք և նորից միացեք Wi-Fi-ին:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova a connecter te ab un altere apparato. Controla le modem o le router. Disactiva e reactiva le connexion Wi-Fi."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cobalah menyambung di perangkat lain. Periksa modem atau router Anda. Putuskan dan sambungkan kembali ke Wi-Fi."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prófaðu að tengjast í öðru tæki. Athugaðu mótaldið þitt eða beininn. Aftengdu og tengdu aftur við Wi-Fi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova a connetterti da un altro dispositivo, controlla il modem o il router, disattiva e riattiva la connessione Wi-Fi."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "別の端末で接続してみてください。モデムまたはルーターを確認してください。Wi-Fi を一旦切断して再接続してください。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "სცადეთ დაკავშირება სხვა მოწყობილობიდან. შეამოწმეთ თქვენი მოდემი ან როუტერი. გამოთიშეთ და კვლავ დაუკავშირეთ WiFi."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ԑreḍ ad teqqneḍ ɣef yibenk niḍen. Senqed amudam-ik. Sens syen ales tuqqna ɣer Wi-Fi."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Басқа құрылғыда қосылып көріңіз. Модемді немесе маршрутизаторды тексеріңіз. Wi-Fi желісіне байланысты ажыратыңыз және қайта қосылыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 기기에 연결해 보세요. 모뎀이나 라우터를 확인하세요. Wi-Fi 연결을 끊었다가 다시 연결하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ລອງເຊື່ອມຕໍ່ໃນອຸປະກອນອື່ນ. ກວດເບິ່ງໂມເດັມ ຫຼື ເຣົາເຕີຂອງທ່ານ. ຕັດການເຊື່ອມຕໍ່ ແລະ ເຊື່ອມຕໍ່ Wi-Fi ຄືນໃໝ່."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "മറ്റൊരു ഉപകരണത്തോറു ബന്ധപ്പെടാൻ ശ്രമിക്കുക. താങ്ങളുടെ മോഡം പരിശോധിക്കുക. വൈഫൈ-ലേക്കു് വിച്ഛേതിച്ചും വീണ്ടും ബന്ധപ്പെടിയിട്ടു് ശ്രമിക്കുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv å koble til på en annen enhet. Sjekk modemet eller ruteren. Koble fra og koble til Wi-Fi igjen."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer verbinding te maken op een ander apparaat. Controleer uw modem of router. Verbreek uw wifiverbinding en maak opnieuw verbinding."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv å kople til på ei anna eining. Sjekk modemet eller ruteren. Kople frå og kople til Wi-fi igjen."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਵੱਖਰੇ ਡਿਵਾਈਸ ਨਾਲ ਕਨੈਕਟ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਆਪਣੇ ਮਾਡਮ ਜਾਂ ਰਾਊਟਰ ਦੀ ਜਾਂਚ ਕਰੋ। Wi-Fi ਤੋਂ ਡਿਸ-ਕਨੈਕਟ ਕਰਕੇ ਫੇਰ ਕਨੈਕਟ ਕਰੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spróbuj połączyć się na innym urządzeniu. Sprawdź modem lub router. Rozłącz się i ponownie połącz z siecią Wi-Fi."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Experimente se conectar usando outro dispositivo. Verifique seu modem ou roteador. Desconecte e reconecte ao WiFi."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tente ligar-se num dispositivo diferente. Verifique o seu modem ou router. Desligue-se e volte a ligar-se ao Wi-Fi."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emprova da ta connectar cun in auter apparat. Controllescha tes modem u router. Deconnectescha e reconnectescha il WLAN."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попробуйте подключиться на другом устройстве. Проверьте ваш модем или маршрутизатор. Отключитесь и снова подключитесь к Wi-Fi."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱮᱴᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱡᱚᱯᱲᱟᱣ ᱨᱮᱭᱟᱜ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ᱾ ᱟᱢᱟᱜ ᱢᱚᱰᱮᱢ ᱵᱟᱝᱠᱷᱟᱱ ᱨᱟᱣᱴᱟᱨ ᱧᱮᱞ ᱵᱤᱰᱟᱹᱣ ᱢᱮ ᱾ Wi-Fi ᱥᱟᱶ ᱰᱤᱥᱠᱚᱱᱮᱠᱴ ᱟᱨ ᱫᱚᱦᱲᱟ ᱡᱚᱯᱲᱟᱣ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova a cullijàriti di n’autru dispusitivu. Cuntrolla u modem o u router. Scullèjati e cullèjati arrè ô Wi-Fi."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skúste sa pripojiť na inom zariadení. Skontrolujte modem alebo smerovač. Odpojte sa a znova sa pripojte k sieti Wi-Fi."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poskusite se povezati z drugo napravo. Preverite modem ali usmerjevalnik. Odklopite se in se ponovno povežite z Wi-Fi."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provoni të lidheni që nga një pajisje tjetër. Shihni modemin ose rrugëzuesin tuaj. Shkëputuni dhe rilidhuni me Wi-Fi-n."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova att ansluta på en annan enhet. Kontrollera ditt modem eller router. Koppla ner och återanslut till Wi-Fi."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кӯшиш кунед, ки дар дастгоҳи дигар пайваст шавед. Модем ё роутери худро тафтиш кунед. Пайвастшавии «Wi-Fi»-ро қатъ карда, аз нав пайваст шавед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ลองเชื่อมต่อบนอุปกรณ์อื่น ตรวจสอบโมเด็มหรือเราเตอร์ของคุณ ตัดการเชื่อมต่อและเชื่อมต่อกับ Wi-Fi อีกครั้ง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farklı bir cihazdan bağlanmayı deneyin. Modeminizi veya yönlendiricinizi kontrol edin. Wi-Fi bağlantınızı kesip yeniden bağlanın."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باشقا ئۈسكۈنىگە باغلاپ سىناپ بېقىڭ. مودېمىڭىز ياكى يېتەكلىگۈچىڭىزنى تەكشۈرۈڭ. باغلىنىشنى ئۈزۈپ ئاندىن سىمسىز تور يەنى Wi-Fi غا قايتا باغلاڭ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спробуйте під'єднатися на іншому пристрої. Перевірте свій модем або маршрутизатор. Від'єднайтеся і знову під'єднайтеся до Wi-Fi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy thử kết nối trên một thiết bị khác. Kiểm tra modem hoặc bộ định tuyến của bạn. Ngắt kết nối và kết nối lại với Wi-Fi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请尝试通过其他设备连接、检查调制解调器或路由器、断开 Wi-Fi 连接后重新连接。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您可以試著連線到其他裝置、檢查您的數據機或路由器，或將 Wi-Fi 斷線重連。"
+          }
+        }
+      }
+    },
+    "NativeErrorPage.NoInternetConnection.TitleLabel.v131" : {
+      "comment" : "On error page, this is the title for no internet connection",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уинтернет аҿы апроблема ыҟоушәа ауп ишыҟоу."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "War a-seblant ez eus ur gudenn gant ho kennask internet."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izgleda da postoji problem s vašom internet vezom."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sembla que hi ha un problema amb la connexió a Internet."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pare ch’ella ci sia un prublema cù a vostra cunnessione internet."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zdá se, že došlo k problému s připojením k internetu."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae'n ymddangos bod problem gyda'ch cysylltiad rhyngrwyd."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det ser ud til, at der er et problem med din internetforbindelse."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anscheinend gibt es ein Problem mit Ihrer Internetverbindung."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zda se, až jo problem z wašym internetnym zwiskom."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φαίνεται ότι υπάρχει κάποιο πρόβλημα με τη σύνδεσή σας στο διαδίκτυο."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looks like there’s a problem with your internet connection."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looks like there’s a problem with your internet connection."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Looks like there’s a problem with your internet connection."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ŝajne estas problemo kun via retaliro."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que hay un problema con la conexión a Internet."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que hay un problema con la conexión a Internet."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que hay un problema con tu conexión a Internet."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que hay un problema con la conexión a Internet."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que hay un problema con tu conexión a Internet."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badirudi zure Interneterako konexioak arazoren bat duela."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaikuttaa siltä, että Internet-yhteydessäsi on ongelma."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il semble y avoir un problème avec votre connexion Internet."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tha coltas gu bheil duilgheadas ann leis a’ cheangal agad ris an eadar-lìon."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que hai un problema coa súa conexión a Internet."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נראה שיש בעיה בחיבור האינטרנט שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Čini se da postoji problem s tvojom internetskom vezom."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zda so, zo je problem z wašim internetnym zwiskom."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Úgy néz ki, hogy probléma van az internetkapcsolatával."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Կարծես թե ձեր ինտերնետ կապի հետ կապված խնդիր կա։"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il pare haber un problema con tu connexion a internet."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sepertinya ada masalah dengan koneksi internet Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Það virðist vera vandamál með nettenginguna þína."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sembra che ci sia un problema con la connessione a Internet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インターネット接続に問題があるようです。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "როგორც ჩანს, რაღაც ხარვეზია ქსელთან კავშირისას."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yettban yella wugur akked tuqqna-k Internet."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Интернет байланысыңызда мәселе бар сияқты."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인터넷 연결에 문제가 있는 것 같습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ເບິ່ງຄືວ່າມີບັນຫາກັບການເຊື່ອມຕໍ່ອິນເຕີເນັດຂອງທ່ານ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ അന്തരവല സമ്പർക്കത്തിൽ കുഴപ്പം ഉണ്ടു്."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det ser ut til at det er et problem med internett-tilkoblingen din."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het lijkt erop dat er een probleem is met uw internetverbinding."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det ser ut til at det er eit problem med internett-tilkoplinga di."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਹਾਡੇ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਾਲ ਸਮੱਸਿਆ ਜਾਪਦੀ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wystąpił problem z połączeniem z Internetem."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que há um problema na sua conexão com a internet."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parece que há um problema com a sua ligação à Internet."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I para da dar in problem cun tia connexiun d’internet."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Похоже, есть проблема с вашим интернет-соединением."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱟᱢᱟᱜ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱠᱚᱱᱮᱠᱥᱚᱱ ᱨᱮ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parissi ca cc’è un prubblema câ to cunnissioni â riti."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zdá sa, že sa vyskytol problém s vaším internetovým pripojením."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videti je, da obstaja težava z vašo internetno povezavo."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duket se ka një problem me lidhjen tuaj në internet."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det verkar finnas ett problem med din internetanslutning."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чунин ба назар мерасад, ки дар пайвасти Интернети шумо мушкилӣ ба миён омад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ดูเหมือนว่ามีปัญหาเกี่ยวกับการเชื่อมต่ออินเทอร์เน็ตของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İnternet bağlantınızla ilgili bir sorun var."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Интернетка бәйләнешегездә проблема бар кебек."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئىنتېرنېت باغلىنىشىڭىزدا مەسىلە باردەك قىلىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Схоже, виникла проблема з вашим інтернет-з'єднанням."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có vẻ như đã xảy ra sự cố với kết nối Internet của bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的网络连接似乎出了点问题。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的網路連線可能有點問題。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

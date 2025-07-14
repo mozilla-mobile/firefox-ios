@@ -1,0 +1,420 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "ContextualHints.FeltDeletion.Body.v122" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ахатә сеанс ҿыц алагаразы абра шәақәыӷәӷәа. Уҭоурых, акукиқәа, зегьы ԥыхтәуп."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Націсніце тут, каб пачаць новы прыватны сеанс. Выдаліце гісторыю, кукі — усё."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stokit amañ da gregiñ un estez prevez nevez. Dilemel a raio ho roll istor, ho toupinoù — pep tra."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodirnite ovdje da započnete novu privatnu sesiju. Izbrišite svoju historiju, kolačiće — sve."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toqueu aquí per començar una sessió privada nova. Suprimiu l’historial, les galetes… tot."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Picchicciate quì per principià una sessione privata nova. Squassà cronolugia, canistrelli… tuttu."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klepnutím sem zahájíte novou anonymní relaci. Vymaže historii, soubory cookie - všechno."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapiwch yma i ddechrau sesiwn breifat newydd. Bydd yn dileu eich hanes, cwcis — popeth."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryk her for at starte en ny privat session. Slet din historik, cookies — alt."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen Sie hier, um eine neue private Sitzung zu beginnen. Löschen Sie Ihre Chronik, Cookies – alles."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pótusniśo how, aby nowe priwatne pósejźenje startował. Lašujśo swóju historiju, swóje cookieje – wšykno."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πατήστε εδώ για να ξεκινήσετε μια νέα ιδιωτική συνεδρία. Διαγράψτε το ιστορικό σας, τα cookie… τα πάντα."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to start a fresh private session. Delete your history, cookies — everything."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to start a fresh private session. Delete your history, cookies — everything."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tap here to start a fresh private session. Delete your history, cookies — everything."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tuŝetu ĉi tie por komenci novan freŝan privatan seancon. Forigu vian historion, kuketojn — ĉion."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsa aquí para iniciar una nueva sesión privada. Elimina tu historial, las cookies… todo."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocá aquí para iniciar una nueva sesión privada. Borrá tu historial, cookies — todo."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca aquí para iniciar una nueva sesión privada. Elimina tu historial, cookies — todo."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulsa aquí para iniciar una nueva sesión privada. Elimina tu historial, las cookies… todo."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca aquí para iniciar una nueva sesión privada. Elimina tu historial, cookies — todo."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sakatu hemen nabigatze pribatuko saioa hasteko. Ezabatu zure historia, cookieak — dena."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aloita uusi yksityinen istunto napauttamalla tästä. Poista historia, evästeet — kaikki."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez ici pour lancer une nouvelle session de navigation privée. Supprimez historique, cookies — tout."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thoir gnogag an-seo a thòiseachadh air seisean prìobhaideach ùr. Sguab às an eachdraidh agad, na briosgaidean – a h-uile rud."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque aquí para comezar unha nova sesión privada. Elimine o seu historial, cookies — todo."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "יש להקיש כאן כדי להתחיל הפעלה פרטית חדשה. פעולה זו תמחק את ההיסטוריה והעוגיות שלך - הכל."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodirni ovdje za početak nove privatne sesije. Izbriši svoju povijest, kolačiće – sve."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podótkńće so tu, zo byšće nowe priwatne posedźenje startował. Zhašejće swoju historiju, swoje placki – wšitko."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koppintson ide egy új privát munkamenet indításához. Törli az előzményeket, sütiket – mindent."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Հպեք՝ թարմ, գաղտնի աշխատաշրջան սկսելու համար: Ջնջեք Ձեր պատմությունը, թխուկները. ամեն ինչ:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca ci pro initiar un nove session de navigation private. Dele tu chronologia, cookies – toto."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ketuk di sini untuk memulai sesi pribadi baru. Hapus riwayat Anda, kuki — semuanya."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ýttu hér til að hefja nýja huliðslotu. Eyddu ferlinum þínum, vefkökum - öllu."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca qui per avviare una nuova sessione anonima. Elimina cronologia, cookie… tutto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ここをタップして新しいプライベートセッションを開始します。履歴や Cookie がすべて削除されます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შეეხეთ აქ ახალი პირადი სეანსის დასაწყებად. წაშალეთ თქვენი ისტორია, ფუნთუშები — ყველაფერი."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sit dagi i usenker n tɣimit tamaynut. Kkes azray-ik·im, inagan n tuqqna — kullec."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңа жекелік шолуды бастау үшін осы жерді шертіңіз. Тарихыңызды, cookie файлдарын - барлығын өшіріңіз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 사생활 세션을 시작하려면 여기를 누르세요. 기록, 쿠키 등 모든 것을 삭제하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ແຕະບ່ອນນີ້ເພື່ອເລີ່ມເຊດຊັນສ່ວນຕົວໃໝ່. ລຶບປະຫວັດຂອງທ່ານ, cookies — ທຸກຢ່າງ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഒരു പുതിയ സ്വകാര്യ ടാബു് കൂട്ടം തുടങ്ങാൻ ഇവിടെ തൊടുക. നാൾവഴിയും കുക്കീസും എല്ലാം മായ്ക്കുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk her for å starte en ny privat økt. Slett historikken din, infokapsler — alt."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik hier om een nieuwe privésessie te starten. Verwijder uw geschiedenis, cookies – alles."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk her for å starte ei ny privat økt. Slett historikken din, infokapslar — alt."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤਾਜ਼ਾ ਪ੍ਰਾਈਵੇਟ ਸ਼ੈਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਥੇ ਕਲਿੱਕ ਕਰੋ। ਆਪਣੇ ਅਤੀਤ, ਕੂਕੀਜ਼ — ਹਰ ਚੀਜ਼ ਹਟਾ ਦਿਓ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stuknij tutaj, by otworzyć nową sesję prywatną. Usuń swoją historię, ciasteczka — wszystko."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque aqui para iniciar uma nova sessão privativa. Exclui o histórico, cookies, tudo."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque aqui para iniciar uma nova sessão privada. Elimine o seu histórico, cookies – tudo."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutga qua per aviar ina nova sesida privata. Stizza tia cronologia, ils cookies – tut."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите здесь, чтобы начать новый приватный сеанс. Удалите свою историю, куки — всё."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱢᱤᱫᱴᱟᱹᱝ ᱱᱟᱶᱟ ᱯᱚᱨᱤᱵᱮᱴ ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱮᱛᱚᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱱᱰᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾ ᱟᱢᱟᱜ ᱱᱟᱜᱟᱢ, ᱠᱩᱠᱤ ᱠᱚ ᱢᱮᱴᱟᱣ ᱢᱮ — ᱡᱚᱛᱚ ᱡᱤᱱᱤᱥ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca cca p’abbiari na nova sissioni privata. Scancella a crunuluggìa, i viscotta — tutti cosi."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "නැවුම් පෞද්ගලික වාරයක් ඇරඹීමට මෙතැන තට්ටු කරන්න. ඔබගේ ඉතිහාසය, දත්තකඩ — සියල්ල මකන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ťuknutím sem spustíte novú súkromnú reláciu. Vymažte svoju históriu, súbory cookie – všetko."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapnite tukaj za začetek nove zasebne seje. Izbrišite zgodovino, piškotke – vse."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prekni këtu, që të niset një sesion i ri privat. Fshini historik, “cookies” — gjithçka."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toél di dieu pikeun mitembeyan rintakan nyamuni. Hapus jujutan, réréméh anjeun — sagalana."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryck här för att starta en ny fräsch privat session. Radera din historik, kakor — allt."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Барои оғоз кардани ҷаласаи хусусии нав дар ин ҷой зер кунед. Таърих ва кукиҳои худро нест кунед — ҳамаашро нест кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แตะที่นี่เพื่อเริ่มเปิดวาระส่วนตัวใหม่ โดยจะลบประวัติ คุกกี้ และทุกๆ อย่างของคุณเมื่อเสร็จแล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni bir gizli oturum başlatmak için buraya dokunun. Geçmişinizi, çerezlerinizi ve diğer her şeyi silin."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Яңа хосусый гизү сеансы башлау өчен монда басыгыз. Тарихыгызны, кукиларыгызны — барысын да бетерегез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بۇ جاي چېكىلسە يېڭى شەخسىي سۆزلەشكۈنى باشلايدۇ. تارىخ، cookies-دەك ھەممە ئۇچۇرلىرىڭىزنى ئۆچۈرىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Торкніться тут, щоб розпочати новий приватний сеанс. Видаліть історію, файли cookie – усе."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhấn vào đây để bắt đầu phiên riêng tư mới. Xóa lịch sử, cookie của bạn — mọi thứ."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点按此处新建隐私浏览，浏览完毕后轻松删除历史记录和 Cookie 等数据。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "點擊此處即可開啟新的隱私瀏覽階段。清除瀏覽紀錄、Cookie 等一切上網資料。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

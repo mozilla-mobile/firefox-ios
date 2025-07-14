@@ -1,9 +1,0 @@
-/* Toggle for address autofill syncing setting */
-"FirefoxSync.AddressAutofillEngine.v124" = "വിലാസങ്ങള്‍";
-
-/* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v122" = "പണം കൊടുക്കൽ മുറകൾ";
-
-/* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */
-"Sync.LoginsEngine.Title.v122" = "ഒളിവാക്കുകൾ";
-

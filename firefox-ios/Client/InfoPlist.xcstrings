@@ -1,0 +1,4780 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "1Password Fill Browser Action" : {
+
+    },
+    "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fennec (winnieteichmann)"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : ""
+          }
+        }
+      }
+    },
+    "New Private Tab" : {
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ахатә абӷьыц ҿыц"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuwe private oortjie"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestanya privada"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नया गोपनीय टैब"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لسان خاص جديد"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Llingüeta privada nueva"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni Məxfi Vərəq"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прыватная картка"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нов поверителен раздел"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "নতুন ব্যাক্তিগত ট্যাব"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Private Tab"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ivinell prevez nevez"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novi privatni tab"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pestanya privada nova"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova unghjetta privata"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nový anonymní panel"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Preifat Newydd"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyt privat faneblad"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuer privater Tab"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowy priwatny rejtarik"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέα ιδιωτική καρτέλα"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Private Tab"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Private Tab"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Private Tab"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova privata langeto"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña privada"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña privada"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña privada"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña privada"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña privada"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uus privaatne kaart"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fitxa pribatu berria"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زبانه‌ی خصوصی جدید"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uusi yksityinen välilehti"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bagong Private Tab"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvel onglet privé"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cluaisín Nua Príobháideach"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taba prìobhaideach ùr"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova lapela privada"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "નવી ખાનગી ટૅબ"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לשונית פרטית חדשה"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नया निजी टैब"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova privatna kartica"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowy priwatny rajtark"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Új privát lap"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Նոր գաղտնի ներդիր"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nove scheda private"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Pribadi Baru"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nýr huliðsflipi"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuova scheda anonima"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新規プライベートタブ"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Pribadi Anyar"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ახალი პირადი ჩანართი"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iccer uslig amaynut"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңа жекелік беті"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ផ្ទាំង​ឯកជន​ថ្មី"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಹೊಸ ಖಾಸಗಿ‍ ಟ್ಯಾಬ್"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 사생활 보호 탭"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ແທັບສ່ວນຕົວໃຫມ່"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nauja privačioji kortelė"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jauna privātā cilne"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "പുതിയ സ്വകാര്യ ടാബ്"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नवीन खाजगी टॅब"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Peribadi Baru"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "တစ်ကိုယ်ရေသုံး တပ်ဗ်အသစ်"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny privat fane"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नयाँ निजी ट्याब"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuw privétabblad"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny Privat fane"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onglet de nav. privada"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ନୂତନ ବ୍ଯକ୍ତିଗତ ଟ୍ୟାବ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowa karta prywatna"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova aba privativa"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novo separador privado"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nov tab privat"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filă privată nouă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новая приватная вкладка"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱟᱶᱟ ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova scheda privata"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sutura kanji taaga"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "නව පෞද්. පටිත්ත"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nová súkromná karta"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nov zasebni zavihek"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skedë e Re Private"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Nyamuni Anyar"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny privat flik"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "புதிய தனிப்பயன் கீற்று"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "కొత్త ప్రైవేట్ ట్యాబు"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Варақаи хусусии нав"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แท็บส่วนตัวใหม่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni gizli sekme"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Яңа хосусый таб"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يېڭى شەخسىي بەتكۈچ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приватна вкладка"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نیا نجی ٹیب"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yangi maxfiy ichki oyna"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thẻ riêng tư mới"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新建隐私标签页"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新隱私分頁"
+          }
+        }
+      }
+    },
+    "New Tab" : {
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Абларҭа ҿыц"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuwe oortjie"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestanya"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नया टैब"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لسان جديد"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Llingüeta nueva"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni Vərəq"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новая картка"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нов раздел"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "নতুন ট্যাব"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Tab"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ivinell nevez"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novi tab"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pestanya nova"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova unghjetta"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nový panel"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Newydd"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyt faneblad"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuer Tab"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowy rejtarik"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέα καρτέλα"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Tab"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Tab"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Tab"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova langeto"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva pestaña"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uus kaart"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fitxa berria"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زبانه‌ جدید"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uusi välilehti"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bagong Tab"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvel onglet"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cluaisín Nua"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taba ùr"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova lapela"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "નવું ટેબ"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לשונית חדשה"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नया टैब"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova kartica"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowy rajtark"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Új lap"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Նոր ներդիր"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nove scheda"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Baru"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nýr flipi"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuova scheda"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新規タブ"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Anyar"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ახალი ჩანართი"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iccer amaynut"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңа бет"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ផ្ទាំងថ្មី"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಹೊಸ ಟ್ಯಾಬ್‍"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 탭"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ແທັບໃຫມ່"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nauja kortelė"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jauna cilne"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "പുതിയ ടാബ്"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नवीन टॅब"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Baru"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "တပ်ဗ်အသစ်"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny fane"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नयाँ ट्याब"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuw tabblad"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny fane"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onglet novèl"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ନୂତନ ଟ୍ୟାବ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਨਵੀਂ ਟੈਬ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nowa karta"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova aba"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Novo separador"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nov tab"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filă nouă"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новая вкладка"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱟᱶᱟ ᱴᱮᱵ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova scheda"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kanji taaga"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "නව පටිත්ත"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nová karta"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nov zavihek"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skedë e Re"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab Anyar"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ny flik"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "புதிய கீற்று"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "కొత్త ట్యాబు"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Варақаи нав"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แท็บใหม่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni sekme"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Яңа таб"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يېڭى بەتكۈچ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нова вкладка"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نیا ٹیب"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yangi ichki oyna"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thẻ mới"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新建标签页"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新分頁"
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription" : {
+      "comment" : "Privacy - Camera Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox акамера ахархәоит QR-кодқәа рыҭыхразы, насгьы афотосахьақәеи авидеоқәеи рҭыхразы."
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hierdie laat mens foto’s neem en oplaai."
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa a tuya camara ta escanear QRs y fer fotos y video."
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इ सेॅ तोय आपनो फोटो ले आरू अपलोड कैर सके छौ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يستعمل Firefox كاميراتك لمسح رموز QR رقميًا ولالتقاط الصور والڤِديوهات."
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa la cámara pa escaniar códigos QR y facer semeyes y vídeos."
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu sizə şəkil çəkmə və yükləmə imkanı verir."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "От тук може да правите и качвате снимки."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox আপনার ক্যামেরা ব্যবহার করবে QR কোড স্ক্যান করার জন্য এবং ছবি তোলা ও ভিডিও করার জন্য।"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you take and upload photos."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gant se e c’hallit kemer ha pellgas luc’hskeudennoù."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox koristi vašu kameru za skeniranje QR kodova i snimanje fotografija i video zapisa."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Firefox usa la càmera per a escanejar codis QR i fer fotos i vídeos."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox impiega u vostru apparechju-fotò per analizà i codici QR è per piglià fotò è video."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox používá váš fotoaparát ke skenování QR kódů a pořizování fotografií a videí."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae hwn yn caniatáu i chi gymryd lluniau a'u llwytho i fyny."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox bruger dit kamera til at skanne QR-koder, tage billeder og optage video."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox verwendet Ihre Kamera, um QR-Codes zu scannen sowie Fotos und Videos aufzunehmen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox wašu kameru wužywa, aby QR-kody scannował a fota cynił a wideo nagrał."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Firefox χρησιμοποιεί την κάμερα για τη σάρωση κωδικών QR και τη λήψη φωτογραφιών και βίντεο."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tio ĉi permesas al vi preni kaj alŝuti fotojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu cámara para escanear códigos QR y realizar fotos y videos."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa la cámara para escanear los códigos QR, tomar fotos y grabar video."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu cámara para escanear códigos QR y tomar fotos y videos."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu cámara para escanear códigos QR y realizar fotos y videos."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu cámara para escanear códigos QR y para tomar fotos y vídeo."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox kasutab sinu kaamerat QR-koodide skannimiseks ning fotode ja videote tegemiseks."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefoxek zure kamera erabiltzen du QR kodeak eskaneatu, argazkiak atera eta bideoak grabatzeko."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایرفاکس از دوربین شما برای پردازش کد QR یا گرفتن عکس یا ویدیو شما استفاده می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox käyttää kameraasi skannatakseen QR-koodeja ja ottaakseen valokuvia ja videoita."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox utilise votre appareil photo pour scanner les codes QR et prendre des photos et vidéos."
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligeann seo duit pictiúir a thógáil agus a uaslódáil."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bheir seo comas dhut dealbhan a thogail is a luchdadh suas."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isto permítelle facer fotos e subilas."
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "આ તમને ફોટા લેવા અને અપલોડ કરવા દે છે."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‏Firefox משתמש במצלמה שלך כדי לסרוק קודי QR, לצלם תמונות ולהקליט סרטונים."
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यह आपको तस्वीरें लेने और अपलोड करने देता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox koristi tvoju kameru za snimanje QR kodova, fotografija i videa."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox wašu kameru wužiwa, zo by QR-kody skenował a fota činił a wideja natočił."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox-ն օգտագործում է Ձեր տեսախցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանկարելու համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu camera pro scannar codices QR e pro prender photos e videos."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox menggunakan kamera Anda untuk memindai kode QR dan mengambil foto dan video."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox notar myndavélina þína til að skanna QR-kóða og taka myndir og myndskeið."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox utilizza la fotocamera per eseguire la scansione di codici QR, scattare foto e registrare video."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox が QR コードのスキャンや写真、動画を撮影するためにカメラを使用します。"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngidinké sampéyan njepret lan ngunggah poto."
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayagi ad k-isireg tuṭṭfa d usali n tvidyutin."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бұл арқылы фотоларды түсіріп, жүктеуге болады."
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "វា​អនុញ្ញាតឱ្យអ្នកថត និងបង្ហោះ​រូបថត។"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಇದು ನಿಮ್ಮನ್ನು ಫೋಟೊ ತೆಗೆಯಲು ಮತ್ತು ಅಪ್ಲೋಡ್ ಮಾಡಲು ಬಿಡುತ್ತದೆ."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox가 QR code 를 스캔하거나 사진, 영상을 찍기 위해 카메라를 사용합니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ສິ່ງນີ້ຈະເຮັດໃຫ້ທ່ານຖ່າຍ ແລະ ອັບໂຫລດຮູບພາບໄດ້."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Firefox“ naudoja jūsų kamerą QR kodų nuskaitymui, nuotraukų darymui, ir vaizdo įrašams."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šis ļauj uzņemt un augšupielādēt foto."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हे आपल्याला फोटो घेऊ व अपलोड करू देते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciri ini membolehkan anda mengambil dan memuat naik foto."
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ဓါတ်ပုံရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox bruker kameraet ditt til å skanne QR-koder og ta bilder og video."
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ले QR कोडहरू स्क्यान गर्न र फोटो र भिडियो खिच्न तपाईंको क्यामरा प्रयोग गर्दछ।"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox gebruikt uw camera om QR-codes te scannen en foto’s en video te maken."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox brukar kameraet ditt til å skanne QR-kodar og ta bilde og video."
+          }
+        },
+        "ny" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquò vos permet de prendre e d’enviar de fotos."
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଏହା ଆପଣକୁ ଫଟୋ ଉଠାଇବା ଓ ଅପଲୋଡ଼ କରିବାର ସୁଯୋଗ ଦେବ ।"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ਤੁਹਾਡੇ ਕੈਮਰੇ ਨੂੰ QR ਕੋਡ ਸਕੈਨ ਕਰਨ ਅਤੇ ਫੋਟੋ ਖਿੱਚ ਤੇ ਵੀਡੀਓ ਬਣਾਉਣ ਲਈ ਵਰਤਦਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox używa aparatu do skanowania kodów QR, robienia zdjęć i nagrywania filmów."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Firefox usa sua câmera para capturar códigos QR, tirar fotos e gravar vídeos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Firefox utiliza a sua câmara para digitalizar códigos QR e tirar fotos e vídeos."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox utilisescha tia camera per scannar codes QR e far fotos e videos."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acest lucru îți permite să realizezi și să încarci fotografii."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox использует вашу камеру для сканирования QR-кодов и съемки фотографий и видео."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa a fotucàmmira pi scanziunari i còdici QR e fari fotu e vidiu."
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woo ga naŋ war ma biyey zaa k'i zijandi."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR කේත සුපිරික්සීමට, ඡායාරූප සහ දෘශ්‍යක ගැනීමට ෆයර්ෆොක්ස් රූගතය භාවිතා කරයි."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox používa váš fotoaparát na skenovanie QR kódov a snímanie fotografií a videí."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uporablja vašo kamero za skeniranje QR-kod, fotografiranje in snemanje."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox-i përdor kamerën tuaj për të skanuar kode QR dhe për të bërë foto dhe video."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox maké kaméra anjeun pikeun nyekén kode QR jeung moto sarta vidéo."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox använder din kamera för att skanna QR-koder och ta foton och video."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "படங்களை எடுத்து பதிவேற்றச் செய்கிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఇది మీకు ఫోటోలను తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Браузери «Firefox» барои тасвирбардорӣ кардани рамзҳои «QR», гирифтани акс ва видео камераи шуморо истифода мебарад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ใช้กล้องของคุณเพื่อสแกนคิวอาร์โค้ด รวมทั้งถ่ายรูปและวิดีโอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox, QR kodlarını taramak, fotoğraf ve video çekmek için kameranızı kullanır."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your camera to scan QR codes and take photos and video."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox كامېرا ئارقىلىق QR كودىنى تارايدۇ ھەمدە سۈرەت تارتىپ ۋە سىنغا ئالىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox використовує вашу камеру для сканування QR-кодів і зйомки фотографій і відео."
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox QR کوڈز کو اسکین کرنے اور تصاویر اور ویڈیو لینے کیلئے آپ کے کیمرہ کا استعمال کرتا ہے۔"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U rasmga tushirish va internetga yuklashda yordam beradi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox sử dụng máy ảnh của bạn để quét mã QR,chụp ảnh và quay video."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox 需要使用您的相机扫码、拍摄照片或视频。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox 可使用您的攝影機掃描 QR Code 或為網站拍照、錄影上傳。"
+          }
+        }
+      }
+    },
+    "NSFaceIDUsageDescription" : {
+      "comment" : "Privacy - Face ID Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox иаҭахуп Face ID еиқәырханы иҟоу алогинқәеи ишәарҭоу акартақәеи рахь анеиразы."
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox necesita Face ID pa acceder a os tuyos logins guardaus."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتطلب Firefox تفعيل بصمة الوجه للوصول إلى كلمات المرور وطرق الدفع المحفوظة لديك."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox патрабуе Face ID для доступу да захаваных пароляў і спосабаў аплаты."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Face ID a zo rekis evit ma c’hallfe kaout Firefox ho kerioù-tremen enrollet hag ho toareoù paeañ."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox zahtijeva Face ID za pristup vašim sačuvanim lozinkama i načinima plaćanja."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Firefox necessita el Face ID per accedir a les contrasenyes i formes de pagament que heu desat."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox richiede Face ID per accede à e vostre parolle d’intesa è metode di pagamentu arregistrate."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox vyžaduje Face ID pro přístup k uloženým heslům a platebním metodám."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae Firefox angen Face ID i gael mynediad i'ch cyfrineiriau a'ch dulliau talu sydd wedi'u cadw."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox kræver Face ID for at få adgang til dine gemte adgangskoder og betalingsmetoder."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox benötigt Face ID, um auf Ihre gespeicherten Passwörter und Zahlungsmethoden zuzugreifen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox Face ID trjeba, aby pśistup k wašym skłaźonym gronidłam a płaśeńskim metodam měł."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Firefox απαιτεί το Face ID για την πρόσβαση σε αποθηκευμένους κωδικούς πρόσβασης και μεθόδους πληρωμής."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requires Face ID to access your saved passwords and payment methods."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requires Face ID to access your saved passwords and payment methods."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Firefox requires Face ID to access your saved passwords and payment methods."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox postulas Face ID por aliri viajn konservitajn legitimilojn kaj pagmetodojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requiere Face ID para acceder a tus contraseñas y métodos de pago guardados."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requiere Face ID para acceder a tus contraseñas guardadas y métodos de pago."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requiere Face ID para acceder a sus contraseñas guardadas y métodos de pago."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requiere Face ID para acceder a tus contraseñas y métodos de pago guardados."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox requiere Face ID - reconocimiento facial-para acceder a tus contraseñas guardadas y métodos de pago."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox vajab salvestatud paroolidele ja makseviisidele ligipääsuks Face-ID'd."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefoxek Face ID behar du zure gordetako pasahitz eta ordainketa metodoetara sarbidea izateko."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox vaatii Face ID:n käyttääkseen tallennettuja salasanoja ja maksutapoja."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox a besoin de Face ID pour accéder à vos mots de passe et moyens de paiement enregistrés."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feumaidh Firefox Face ID mus fhaigh e cothrom air na faclan-faire is dòighean pàighidh a shàbhail thu."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox require Face ID para acceder aos teus contrasinais e aos métodos de pago gardados."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox‏ דורש שימוש ב־Face ID כדי לגשת לססמאות ולאמצעי התשלום השמורים שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox zahtijeva Face ID za pristup tvojim spremljenim lozinkama i načinima plaćanja."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox Face ID trjeba, zo by přistup k wašim składowanym hesłam a płaćenskim metodam měł."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Firefox a Face ID-t igényli a mentett jelszavak és a fizetési módok eléréséhez."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox-ը պահանջում է Face ID՝ Ձեր պահված գաղտնաբառերին և վճարման եղանակներին հասանելիություն ունենալու համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox require Face ID pro acceder a tu contrasignos e methodos de pagamento salvate."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox memerlukan Face ID untuk mengakses kata sandi dan metode pembayaran Anda yang tersimpan."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox krefst notkunar Face ID til að fá aðgang að vistuðum lykilorðum þínum og greiðslumátum."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox richiede Face ID per accedere alle password e ai metodi di pagamento salvati."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存されたログイン情報と暗号化されたカード情報にアクセスするには Face ID が必要です。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox-ს ესაჭიროება Face ID შენახულ პაროლებსა და გადახდის საშუალებებთან წდვომისთვის."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox yesra Face ID i unekcum ɣer wawalen-ik·im uffiren d tarrayin n uxelleṣ yettwawgelhen."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сақталған парольдер мен төлем әдістеріне қол жеткізу үшін Firefox Face ID қажет етеді."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox가 저장된 비밀번호와 결제 방법에 접근하려면 Face ID가 필요합니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ຕ້ອງການ Face ID ເພື່ອເຂົ້າເຖິງລະຫັດຜ່ານທີ່ບັນທຶກໄວ້ ແລະ ວິທີການຊໍາລະເງິນຂອງທ່ານ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ കരുതിവച്ച പ്രവേശിക്കലുകൾ ഉപയോഗിക്കാൻ ഫയർഫോക്സിന് മുഖതിരിച്ചറിയൽരേഖ ആവശ്യമാണ്."
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox သည် သင်၏သိမ်းဆည်းထားသော စကားဝှက်များနှင့် ငွေပေးချေမှုနည်းလမ်းများကို အသုံးပြုရန်အတွက် Face ID လိုအပ်သည်။"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox krever Face ID for å få tilgang til dine lagrede passord og betalingsmåter."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox vereist Face ID om uw opgeslagen aanmeldingen en betalingsmethoden te benaderen."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox krev Face ID for å få tilgang til dei lagra passorda dine og betalingsmetodar."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ਨੂੰ ਤੁਹਾਡੇ ਸੰਭਾਲੇ ਹੋਏ ਪਾਸਵਰਡਾਂ ਅਤੇ ਭੁਗਤਾਨ ਢੰਗਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ Face ID ਚਾਹੀਦਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox wymaga Face ID, by uzyskać dostęp do zachowanych haseł i metod płatności."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Firefox requer Face ID para acessar suas senhas e métodos de pagamento salvos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Firefox requer o Face ID para aceder às suas palavras-passe e métodos de pagamento guardados."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox pretenda Face ID per acceder a tes pleds-clav memorisads e tias metodas da pajament."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox требует Face ID для доступа к вашим сохранённым логинам и зашифрованным картам."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢᱟᱜ ᱥᱟᱧᱪᱟᱣ ᱨᱩᱠᱷᱭᱟᱹ ᱞᱳᱜᱤᱱ ᱨᱮ ᱵᱚᱞᱚᱱ ᱞᱟᱹᱜᱤᱱ Firefox ᱟᱢᱟᱜ ᱢᱮᱫᱦᱟᱸ ID ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟᱭ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox abbisogna dû Face ID p’accèdiri ê to chiavi e i furmi di pagamentu sarbati."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ෆයර්ෆොක්ස් සඳහා ඔබගේ සුරැකි පිවිසුම් හා සංකේතිත පත් වෙත ප්‍රවේශයට මුහුණේ හැඳු. වුවමනාය."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox vyžaduje Face ID na prístup k vašim uloženým heslám a spôsobom platby."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox za dostop do shranjenih gesel in plačilnih sredstev zahteva Face ID."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox-i lyp Face ID që të hyjë në fjalëkalimet dhe metoda pagesash tuajat të ruajtura."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox butuh Face ID pikeun ngaksés sandi kedap nu disimpen jeung cara mayar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox kräver Face ID för att komma åt dina sparade lösenord och betalningsmetoder."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Браузери «Firefox» барои пайдо кардани дастрасӣ ба ниҳонвожаҳои нигоҳдошташуда ва тарзҳои пардохт, низоми «Face ID»-ро талаб мекунад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ต้องใช้ Face ID เพื่อเข้าถึงการเข้าสู่ระบบและวิธีการชำระเงินที่คุณบันทึกไว้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox, kayıtlı parolalarınıza ve ödeme yöntemlerinize erişmek için Face ID’ye ihtiyaç duyar."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ساقلانغان ئىم ۋە پۇل تۆلەش ئۇسۇلىڭىزنى زىيارەت قىلىش ئۈچۈن چىراي كىملىكىنى تەلەپ قىلىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox потребує Face ID для доступу до ваших збережених паролів та способів оплати."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox yêu cầu Face ID để truy cập vào mật khẩu và phương thức thanh toán đã lưu của bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox 需进行面容 ID 验证才能访问保存的密码和付款方式。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox 需要進行 Face ID 才能存取您儲存的密碼與付款方式資訊。"
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "comment" : "Privacy - Location When In Use Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уахьнеиуа асаитқәа уахьыҟоу рҳәар рылшоит."
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Webwerwe wat u besoek kan dalk u ligging vra."
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los puestos web que vesites pueden solicitar conoixer lo tuyo plazamiento."
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपनो द्वारा देखलोॅ गेल वेबसाइटें तोहरो लोकेशन मांगी रहलो छै"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يمكن أن تطلب منك المواقع التي تزورها معرفة مكانك."
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los sitios web que visites puen solicitate la llocalización."
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daxil olduğunuz saytlar sizin yerinizi soruşa bilərlər."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вэб-сайты, якія вы наведваеце, могуць запытваць ваша месцазнаходжанне."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Страниците, които посещавате може да поискат вашето местоположение."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "যে ওয়েবসাইট আপনি ব্রাউজ করছেন, তা আপনার অবস্থান জানতে চাইতে পারে।"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites you visit may request your location."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lec’hiennoù web a weladennit a c’hall azgoulenn ho lec’hiadur."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web stranice koje posjećujete mogu zahtjevati vašu lokaciju."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Els llocs web que visiteu poden sol·licitar la vostra ubicació."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I siti web chì vò visitate ponu richiede à cunnosce a vostra lucalizazione."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Servery, které navštěvujete, mohou chtít znát vaše umístění."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efallai y bydd gwefannau rydych yn ymweld â nhw'n gofyn am eich lleoliad."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websteder du besøger kan bede om din position."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Ihnen besuchte Websites können Ihren Standort abfragen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websedła, kótarež se woglědujośo, pominaju snaź wašo městno."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι ιστότοποι που επισκέπτεστε ενδέχεται να ζητήσουν την τοποθεσία σας."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites you visit may request your location."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites you visit may request your location."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web sites you visit may request your location."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Websites you visit may request your location."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retejoj vizititaj de vi povas peti vian lokon."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los sitios web que visitas pueden pedir tu ubicación."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los sitios web que visités pueden solicitar tu ubicación."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las páginas que visites podrían solicitarte tu ubicación."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los sitios web que visitas pueden pedir tu ubicación."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los sitios web que visites pueden solicitar tu ubicación."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Külastatavad saidid võivad küsida sinu asukohta."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bisitatutako webguneek zure kokapena eska lezakete."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وب سایت‌هایی که شما بازدید میکنید ممکن است مکان شما را درخواست کنند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vierailemasi sivustot voivat kysyä lupaa sijaintiisi."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maaaring hingiin ang iyong lokasyon ng binibisitang website"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les sites web que vous visitez peuvent demander à connaître votre emplacement."
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D'fhéadfadh suíomhanna a dtugann tú cuairt orthu do láthair a iarraidh."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dh’fhaoidte gun iarr làraichean-lìn air an tadhal thu d’ ionad."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os sitios web que visita poden solicitar a súa localización."
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "તમે મુલાકાત લો છો તે વેબસાઇટ્સ તમારા સ્થાનની વિનંતી કરી શકે છે."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אתרים בשימושך עשויים לבקש ממך את המיקום שלך."
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपके द्वारा देखे गए वेबसाइट आपके स्थान का अनुरोध कर सकते हैं।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web stranice koje posjećuješ mogu zatražiti tvoju lokaciju."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websydła, kotrež wopytujeće, snano waše stejnišćo žadaja."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A meglátogatott webhelyek kérhetik az Ön helyét."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը։"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le sitos web que tu visita pote requestar tu position geographic."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Situs web yang Anda kunjungi dapat meminta lokasi Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vefsvæði sem þú skoðar gætu beðið um staðsetninguna þína."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I siti web visitati potrebbero richiedere la posizione corrente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "訪れたウェブサイトがあなたの位置情報を要求しています。"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Situs kang sampéyan tiliki njaluk lokasi sampéyan."
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ვებსაიტებმა, შესაძლოა მოითხოვოს თქვენი მდებარეობის მონაცემები."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ismal web iɣer trezzuḍ zemren ad sutren adig-inek."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін."
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "វិបសាយ​ដែល​អ្នក​ចូល​មើល​អាច​ស្នើ​សុំ​ទីតាំង​របស់​អ្នក។"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‍ನೀವು ಭೇಟಿ ನೀಡುವ ಜಾಲತಾಣಗಳು ನಿಮ್ಮ ಸ್ಥಳ ಮಾಹಿತಿಯನ್ನು ಕೇಳಬಹುದು."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방문한 웹사이트에서 위치 정보를 요청할 수 있습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ເວັບໄຊທ໌ທີ່ທ່ານເຂົ້າໄປອາດຈະຕ້ອງການຕຳແຫນ່ງທີຢູ່ຂອງທ່ານ"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Svetainės gali teirautis jūsų buvimo vietos."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lapas, ko apmeklējat var prasīt jūsu atrašanās vietu."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്കള്‍ സന്ദര്‍ശിക്കുന്ന വെബിടങ്ങൾ താങ്കളുടെ സ്ഥലത്തിനായി അപേക്ഷിച്ചേക്കാം."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपण भेट देता त्या वेबसाइट आपल्या स्थानाची विनंती करू शकतात."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laman web yang anda lawati mungkin meminta lokasi anda."
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "သင်သွားလည်သော ဝတ်ဆိုဒ်မှ သင့်တည်နေရာကို သိချင်ကောင်းသိမ်ချင်လိမ့်မည်"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettsider du besøker kan be om din plassering."
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "तपाईंले भ्रमण गर्ने वेबसाइटहरूले तपाईंको स्थान अनुरोध गर्न सक्छन् ।"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites die u bezoekt kunnen om uw locatie vragen."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettsider du besøkjer kan be om plasseringa di."
+          }
+        },
+        "ny" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites you visit may request your location."
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los sites que visitatz pòdon demandar ont sètz."
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଆପଣ ଦେଖୁଥିବା ୱେବସାଇଟସବୁ ଆପଣଙ୍କ ଅବସ୍ଥିତି ମାଗିପାରନ୍ତି ।"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਸੀਂ ਜਿਹਨਾਂ ਵੈੱਬਸਾਈਟਾਂ ਉੱਤੇ ਜਾਉਗੇ, ਉਹ ਤੁਹਾਡੇ ਟਿਕਾਣੇ ਦੀ ਬੇਨਤੀ ਕਰ ਸਕਦੀਆਂ ਹਨ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozwoli to odwiedzanym stronom żądać informacji o położeniu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sites que você visita podem solicitar sua localização."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os websites que visita poderão solicitar a sua localização."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paginas d'internet che ti visitas dumondan eventualmain tia posiziun geografica."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Site-urile web pe care le vizitezi îți pot solicita locația."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Посещаемые вами веб-сайты могут запрашивать ваше местоположение."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱦᱤᱨᱤᱟᱠᱟᱱ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱟᱢᱟᱜ ᱡᱟᱭᱜᱟ ᱠᱚ ᱠᱷᱚᱡ ᱫᱟᱲᱮᱟᱜᱼᱟ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I siti chi vìsiti ponnu addumannari a to pusizzioni."
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interneti nungey kaŋ war g'i naaru ga hin ka war gorodogoo hãa."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ගොඩවදින අඩවි වෙතින් ඔබගේ ස්ථානය ඉල්ලා සිටීමට හැකිය."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stránky, ktoré navštevujete, môžu žiadať prezradiť vašu polohu."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spletne strani lahko zahtevajo vašo lokacijo."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sajte që vizitoni mund të kërkojnë të njohin vendndodhjen tuaj."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raramatloka nu disorang ku anjeun sigana ménta lokasi anjeun."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Webbsidor du besöker kan be om din plats."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "வலைதள பக்கங்கள் உங்கள் இடத்தை கேட்கலாம்."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "మీరు సందర్శించే వెబ్ సైట్లు మీ స్థానాన్ని అభ్యర్థించవచ్చు."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сомонаҳое, ки шумо тамошо мекунед, метавонанд ҷойгиршавии шуморо талаб кунанд."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เว็บไซต์ที่คุณเยี่ยมชมอาจขอตำแหน่งที่ตั้งของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зиярат ителгән вебсайтлар урнашуыгызны сорый ала."
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Websites you visit may request your location."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سىز زىيارەت قىلغان تور بېكەتلەر ئورنىڭىزنى تەلەپ قىلىشى مۇمكىن."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відвідувані вами сайти можуть запитувати ваше розташування."
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جن ویب سائٹ کا آُپ دورہ کریں شاید وہ آُپ سے محل وقوع کی درخواست کر سکتی ہیں۔"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziyaret ettiğiniz web siteleri konumunuzu isteyebilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trang web bạn truy cập có thể yêu cầu vị trí của bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您访问的网站可能会请求您的地理位置。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您造訪的網站可能會詢問您的所在位置。"
+          }
+        }
+      }
+    },
+    "NSMicrophoneUsageDescription" : {
+      "comment" : "Privacy - Microphone Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox аудио аҭаҩреи ашьҭыхреи рзы умикрофон ахархәоит."
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hierdie laat mens video’s neem en oplaai."
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto te permitede fer y puyar videos."
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इ सेॅ तोय आपनो विडियो ले आरू अपलोड कैर सके छौ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يستعمل Firefox الميكروفون لتسجيل الصوت ورفعه."
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa'l micrófonu pa grabar y xubir audiu."
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu sizə video çəkmə və yükləmə imkanı verir."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox выкарыстоўвае мікрафон для запісу і зацягвання аўдыя."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "От тук може да заснемате и качвате видео."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এইটি আপনাকে ভিডিও নিতে এবং আপলোড করে দেয়।"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you take and upload videos."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gant se e c’hallit kemer ha pellgas videoioù."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox koristi vaš mikrofon za snimanje i prijenos zvuka."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Això permet fer vídeos i pujar-los."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox impiega u vostru microfonu per arregistrà è incaricà schedarii audio."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox používá váš mikrofon k zaznamenávání a odesílání zvuku."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae hyn yn caniatáu i chi gymryd a llwytho fideos."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox bruger din mikrofon til at optage og uploade lyd."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox verwendet Ihr Mikrofon, um Sprachaufnahmen aufzunehmen und hochzuladen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox waš mikrofon wužywa, aby awdio registrěrował a nagrał."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Firefox χρησιμοποιεί το μικρόφωνο για την καταγραφή και τη μεταφόρτωση ήχου."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tio ĉi permesas al vi preni kaj alŝuti fotojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu micrófono para grabar y subir audio."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu micrófono para grabar y cargar audio."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu micrófono para grabar y subir audio."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu micrófono para grabar y subir audio."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu micrófono para grabar y subir audio."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox kasutab mikrofoni heli salvestamiseks ja üleslaadimiseks."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefoxek zure mikrofonoa erabiltzen du audioa grabatu eta igotzeko."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایرفاکس از میکروفن شما برای ضبط و ارسال صدا استفاده می‌کند."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox käyttää mikrofoniasi tallentamaan ja lähettämään ääntä."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you take and upload videos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox utilise votre microphone pour enregistrer et charger des fichiers audio."
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligeann seo duit físeáin a thógáil agus a uaslódáil."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bheir seo comas dhut video a thogail is a luchdadh suas."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isto permítelle facer vídeos e subilos."
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "આ તમને વિડિઓ લેવા અને અપલોડ કરવા દે છે."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‏Firefox משתמש במיקרופון שלך כדי להקליט ולהעלות אודיו."
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यह आपको वीडियो लेने और अपलोड करने देता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox koristi tvoj mikrofon za snimanje i prijenos audiosnimaka."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox waš mikrofon wužiwa, zo by awdio natočił a nahrał."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ez lehetővé teszi, hogy videókat készítsen és töltsön fel."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox-ն օգտագործում է Ձեր խոսափողը՝ ձայնագրման և ձայնանյութի վերբեռնման համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa tu microphono pro registrar e incargar audio."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox menggunakan mikrofon Anda untuk merekam dan mengunggah audio."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox notar hljóðnemann þinn til að taka upp og senda inn hljóð."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox utilizza il microfono per registrare e caricare audio."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox が音声を録音してアップロードするためにマイクを使用します。"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngidinké sampéyan ngrekam lan ngunggah video."
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "საშუალებას გაძლევთ, ვიდეოს გადაღებისა და ატვირთვის."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayagi ad k-isireg asader d usali n tvidyutin."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бұл арқылы видеоларды түсіріп, жүктеуге болады."
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "វា​អនុញ្ញាតឱ្យអ្នកថត និង​បង្ហោះ​វីដេអូ។"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ಇದು ನಿಮ್ಮನ್ನು ವಿಡಿಯೋ ತೆಗೆಯಲು ಮತ್ತು ಅಪ್ಲೋಡ್ ಮಾಡಲು ಬಿಡುತ್ತದೆ."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox가 오디오 녹음 및 업로드를 하기 위해 마이크를 사용합니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ນີ້ຈະເຮັດໃຫ້ທ່ານສາມາດຖ່າຍ ແລະ ອັບໂຫລດວິດີໂອໄດ້."
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Firefox“ naudoja jūsų mikrofoną garso įrašymui ir įkėlimui."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šis ļauj uzņemt un augšupielādēt video."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "രേഖപ്പെടത്തി ഉപ്ലോടു് ചെയ്യാൻ വേണ്ടി ഫയർഫോക്സു് താങ്ങളുടെ ശബ്ദഗ്രാഹിയെ ഉപയോഗിക്കാരുണ്ടു്."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यामुळे आपण व्हिडिओ घेऊ व अपलोड करू शकता."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciri ini membolehkan anda mengambil dan memuat naik foto."
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ဗီဒီယိုရိုက်ခြင်းနှင့် တင်ပို့ခြင်းတို့ကို ဆောင်ရွက်နိုင်စေသည်။"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox bruker mikrofonen din til å ta opp og laste opp lyd."
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ले अडियो रेकर्ड गर्न र अडियो अपलोड गर्न तपाईंको माइक्रोफोन प्रयोग गर्छ।"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox gebruikt uw microfoon om audio op te nemen en te uploaden."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox brukar mikrofonen din til å ta opp og laste opp lyd."
+          }
+        },
+        "ny" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquò vos permet de rodar de vidèos e de las enviar."
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଏହା ଆପଣକୁ ଭିଡ଼ିଓ ଉଠାଇବା ଏବଂ ଅପଲୋଡ଼ କରିବାର ସୁଯୋଗ ଦେବ ।"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ਤੁਹਾਡੇ ਮਾਈਕਰੋਫ਼ੋਨ ਨੂੰ ਆਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਤੇ ਆਡੀਓ ਅੱਪਲੋਡ ਕਰਨ ਲਈ ਵਰਤਦਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox używa mikrofonu do nagrywania i przesyłania dźwięku."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Firefox usa seu microfone para gravar e enviar áudio."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Firefox permite-lhe usar o seu microfone para gravar e carregar áudio."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox utilisescha tes microfon per registrar e transferir audio."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acest lucru îți permite să realizezi și să încarci videoclipuri."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox использует ваш микрофон для записи и выгрузки аудио."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱣᱤᱲᱤᱭᱚ ᱨᱟᱠᱟᱵ ᱟᱨ ᱞᱟᱫᱮ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox usa u to micròfunu pi riggistrari e carricari audiu."
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woo ga naŋ war ma widewoyaŋ zaa k'i zijandi."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ෆයර්ෆොක්ස් හඬ පටිගතයට හා උඩුගත කිරීමට ශබ්දවාහිනිය භාවිත කරයි."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox používa váš mikrofón na nahrávanie zvuku."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uporablja vaš mikrofon za snemanje in nalaganje zvoka."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kjo ju lejon të xhironi dhe ngarkoni video."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ieu bisa anjeun paké jang nyomot sarta ngunjalkeun vidéo."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox använder din mikrofon för att spela in och ladda upp ljud."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "காணொளிகளை எடுத்து பதிவேற்றச் செய்கிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఇది మీకు ఫోటోలు మరియు వీడియోలు తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Браузери «Firefox» барои сабт ва бор кардани аудио микрофони шуморо истифода мебарад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox ใช้ไมโครโฟนของคุณเพื่อบันทึกและอัปโหลดเสียง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox, ses kaydetmek ve yüklemek için mikrofonunuzu kullanır."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox uses your microphone to record and upload audio."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox مىكروفونىڭىزنى ئىشلىتىپ ئۈنگە ئالىدۇ ۋە يۈكلەيدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox використовує ваш мікрофон для запису та вивантаження аудіо."
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "۔یہ آُپ کو وڈیو لینے اور اپلوڈ کرنے دیتا ہے۔"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu videoga tushirish va ularni yuklash imkonini beradi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox sử dụng micrô của bạn để ghi và tải lên âm thanh."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox 需要使用您的麦克风来录制并上传音频。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firefox 可使用您的麥克風為網站錄音上傳。"
+          }
+        }
+      }
+    },
+    "NSPhotoLibraryAddUsageDescription" : {
+      "comment" : "Privacy - Photo Library Additions Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уи шәара ишәылнаршоит афотосахьақәа рыхьчара."
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto te permite d'alzar fotos."
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इ सेॅ तोय आपनो फोटों सहेज सके छौ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتيح لك هذا حفظ الصور."
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto déxate guardar les semeyes."
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu şəkilləri saxlamağınıza imkan verir."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гэта дазваляе захоўваць фота."
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "От тук може да запазвате снимки."
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "এটা আপনাকে ছবি সংরক্ষণ করতে দিবে।"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiñ a ra tro deoc’h da enrollañ skeudennoù."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ovo vam omogućava da sačuvate fotografije."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Això permet desar fotos."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quessu vi permette d’arregistrà fotò."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toto vám umožní ukládat fotografie."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae hyn yn gadael i chi gadw lluniau."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lader dig gemme fotos."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Damit können Sie Ihre Fotos speichern."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z tym móžośo fota składowaś."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιτρέπει την αποθήκευση φωτογραφιών."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This lets you save photos."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tio ĉi permesas al vi konservi fotojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto te permite guardar fotos."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto te permite guardar las fotos."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto te permite guardar fotos."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto te permite guardar fotos."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto permite que guardes tus fotos."
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See võimaldab sul salvestada fotosid."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Honekin argazkiak gorde ditzakezu."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "با این می‌توانید تصاویر را ذخیره کنید."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näin voit tallentaa kuvia."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinapayagan ka nito na i-save ang mga larawan."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceci vous permet d’enregistrer des photos."
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thug seo cumas duit pictiúir a shábháil."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bheir seo comas dhut dealbhan a shàbhaladh."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isto permítelle gardar fotos."
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "આ તમને ફોટા સાચવવા દે છે."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "זה מאפשר לך לשמור תמונות."
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यह आपको फोटो सहेजने देता है।"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ovo omogućuje spremanje fotografija."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z tym móžeće fota składować."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ezzel lementheti a képeket."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Սա ձեզ թույլ է տալիս պահպանել լուսանկարներ։"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isto te permitte salvar photos."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ini memungkinkan Anda menyimpan foto."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hér getur þú vistað myndir."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garantisci il permesso di salvare foto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これにより写真を保存できます。"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngidinké sampeyan nyimpen poto."
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "სურათების შენახვის საშუალებას იძლევა."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aya ad k-yeǧǧ ad teskelseḍ tiwlafin-inek."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бұл көмегімен фотоларды сақтауға болады."
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "វា​អនុញ្ញាតឱ្យអ្នករក្សាទុកថត។"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‍ಇದು ನಿಮ್ಮನ್ನು ಫೋಟೋಗಳನ್ನು ಉಳಿಸಲು ಬಿಡುತ್ತದೆ."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사진을 저장할 수 있게 합니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ສຶ່ງນີ້ຊ່ວຍໃຫ້ທ່ານບັນທຶກຮູບພາບ"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tai jums leis įrašyti nuotraukas."
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tas ļauj saglabāt foto."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഇത് നിങ്ങൾക്ക് ഫോട്ടോകൾ സംരക്ഷിക്കാൻ അനുവദിക്കുന്നു."
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हे आपल्याला फोटो जतन करू देते."
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Membolehkan anda menyimpan foto."
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ဓါတ်ပုံများကို သိမ်းဆည်းနိုင်စေသည်။"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dette gjør det mulig å lagre bilder."
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यसले तपाईंलाई फोटोहरू सेभ गर्न दिन्छ ।"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiermee kunt u foto’s opslaan."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dette gjer det mogleg å lagre bilde."
+          }
+        },
+        "ny" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquò vos permet d’enregistrar de fotografias."
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ଏହା ଆପଣକୁ ଫଟୋ ସାଇତିବାର ସୁଯୋଗ ଦେବ ।"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਇਹ ਤੁਹਾਨੂੰ ਫ਼ੋਟੋ ਸੰਭਾਲਣ ਦਿੰਦਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozwoli to zachowywać zdjęcia."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite salvar fotos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isto deixa-lhe guardar fotos."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uschia pos ti memorisar fotografias."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acest lucru îți permite să salvezi fotografii."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это позволит вам сохранять фотографии."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱚᱶᱟ ᱛᱮ ᱟᱢ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱫᱟᱰᱮᱭᱟᱜᱼᱟᱢ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chistu ti pirmetti di sarbari i fotu."
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woo ga naŋ ma biyey gaabu."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "මෙමගින් ඔබට ඡායාරූප සුරැකීමට ඉඩදෙයි."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toto vám umožňuje ukladať fotky."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To vam omogoča shranjevati fotografije."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kjo ju lejon të ruani foto."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ieu bisa anjeun paké jang neundeun poto."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta gör det möjligt att spara bilder."
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "இது உங்களை படம் சேமிக்க விடுகிறது."
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ఇది ఫోటోలను భద్రపరచటానికి మిమ్మల్ని అనుమతిస్తుంది."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ин ба шумо барои нигоҳдории аксҳо имкон медиҳад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "สิ่งนี้ช่วยให้คุณบันทึกรูปถ่าย"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraf kaydetmenize olanak sağlar."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фотоларны саклау өчен сез моны куллана аласыз."
+          }
+        },
+        "tzm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بۇ ئارقىلىق سۈرەتلەرنى ساقلىغىلى بولىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Це дозволяє вам зберігати фотографії."
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یہ آپ کی تصاویر محفوظ کرنے دیتا ہے۔"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lets you save photos."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Điều này cho phép bạn lưu ảnh."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "让您可以保存照片。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "讓您可儲存相片。"
+          }
+        }
+      }
+    },
+    "Scan QR Code" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Асканер QR акод"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "an" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escaniar codigo QR"
+          }
+        },
+        "anp" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR कोड स्कैन करोॅ"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امسح رمز QR ضوئيا"
+          }
+        },
+        "ast" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escaniar un códigu QR"
+          }
+        },
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Kod oxut"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканаваць QR-код"
+          }
+        },
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканиране на QR"
+          }
+        },
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR কোড স্ক্যান করুন"
+          }
+        },
+        "bo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C’hwilerviñ ur boneg QR"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skenirajte QR kod"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escaneja un codi QR"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizà un codice QR"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skenovat QR kód"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sganiwch y Cod QR"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skan QR-kode"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-Code scannen"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-kod scannowaś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σάρωση κωδικού QR"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skani kodon QR"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear código QR"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear código QR"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear código QR"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear código QR"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear código QR"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanni QR-kood"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eskaneatu QR kodea"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسکن کد QR"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skannaa QR-koodi"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-scan ang QR Code"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner un code QR"
+          }
+        },
+        "ga" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan an cód QR"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sganaich còd QR"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Examinar código QR"
+          }
+        },
+        "gu-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR કોડ સ્કેન કરો"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "סריקת קוד QR"
+          }
+        },
+        "hi-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR कोड स्कैन करें"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snimi QR kod"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-kod skenować"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-kód leolvasása"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Սկանավորել QR կոդը"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannar codice QR"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindai Kode QR"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanna QR-kóða"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scansiona codice QR"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR コードをスキャン"
+          }
+        },
+        "jv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindhai Kode QR"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR კოდის წაკითხვა"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semḍen Tangalt QR"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR кодын сканерлеу"
+          }
+        },
+        "km" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ស្កេនកូដ QR"
+          }
+        },
+        "kn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR ಸಂಕೇತ ಸ್ಕ್ಯಾನ್ ಮಾಡು‍"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR 코드 스캔"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ສະແກນລະຫັດ QR"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skenuoti QR kodą"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanēt QR kodu"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR സങ്കേതം പരിശോധിക്കുക"
+          }
+        },
+        "mr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR कोड स्कॅन करा"
+          }
+        },
+        "ms" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imbas Kod QR"
+          }
+        },
+        "my" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR ကုဒ်ဖတ်ရန်"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skann QR-kode"
+          }
+        },
+        "ne-NP" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR कोड स्क्यान गर्नुहोस्"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-code scannen"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skann QR-kode"
+          }
+        },
+        "oc" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanerizar un còdi QR"
+          }
+        },
+        "or" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR କୋଡ ସ୍କାନକରନ୍ତୁ"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR ਕੋਡ ਸਕੈਨ ਕਰੋ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanuj kod QR"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitalizar código QR"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitalizar código QR"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannar in code QR"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanează codul QR"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканировать QR-код"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR ᱠᱚᱰ ᱥᱠᱟᱱ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanziuna còdici QR"
+          }
+        },
+        "ses" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR tammaasa bii za"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR කේතය සුපිරික්සන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skenovanie QR kódu"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skeniraj QR-kodo"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanonin Kodin QR"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindéy kodeu QR"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanna QR-kod"
+          }
+        },
+        "ta" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "சதுர குறியீட்டை வருடு"
+          }
+        },
+        "te" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR కోడ్ను స్కాన్ చేయండి"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рамзи QR-ро аксбардорӣ намоед"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "สแกนคิวอาร์โค้ด"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR kodu tara"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR кодны сканерлау"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR كودىنى تارا"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканувати QR-код"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR کوڈ اسکین کریں"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan QR Code"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quét mã QR"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扫描二维码"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "掃描 QR Code"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

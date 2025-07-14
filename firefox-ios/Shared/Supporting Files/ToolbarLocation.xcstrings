@@ -1,0 +1,1860 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "ContextualHints.Toolbar.Bottom.Description.v107" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Еиҳа ишәзыманшәалазар, амыругақәа рпанель аҩада ииагатәуп."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перамясціце панэль інструментаў уверх, калі вам так зручней."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilec'hiit ar varenn ostilhoù en nec’h mard eo ar pezh a glot ganeoc’h."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomjerite alatnu traku na vrh ako je to više vaš stil."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poseu la barra d'eines a la part superior, si és més del vostre estil."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’è vo preferite, pudete dispiazzà a barra d’attrezzi insù."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokud vám to více vyhovuje, přesuňte nástrojovou lištu nahoru."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Symudwch y bar offer i'r brig yn y gosodiadau os yw hynny'n well i chi."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flyt værktøjslinjen til toppen, hvis det passer dig bedre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben Sie die Symbolleiste nach oben, wenn Ihnen das besser gefällt."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśesuńśo symbolowu rědku górjej, jolic se to wam lěpjej spódoba."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μετακινήστε στο πάνω μέρος τη γραμμή εργαλείων αν αυτό ταιριάζει περισσότερο στο στυλ σας."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move the toolbar to the top if that’s more your style."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move the toolbar to the top if that’s more your style."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move the toolbar to the top if that’s more your style."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movu la ilaron al la supro se vi tion preferas."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas a la parte superior si se ajusta más a tu estilo."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mové la barra de herramientas hacia arriba si ese es más tu estilo."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas a la parte superior si se ajusta más a tu estilo."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas a la parte superior si se ajusta más a tu estilo."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas a la parte superior si se ajusta más a tu estilo."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tresna-barra gora eraman dezakezu, hori bada zuri ondoen egokitzen zaizuna."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siirrä työkalupalkki ylös, jos se sopii sinulle paremmin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placez la barre d’outils en haut si cela vous correspond mieux."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gluais am bàr-inneal gun bhàrr mas fheàrr leat an-sin e."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mova a barra de ferramentas á parte superior se se axusta máis ao seu estilo."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניתן להעביר את סרגל הכלים לחלק העליון אם זה יותר הסגנון שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ako želiš, pomakni alatnu traku gore."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přesuńće symbolowu lajstu horje, jeli so to wam lěpje spodoba."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helyezze fentre az eszköztárat, ha az inkább az Ön stílusa."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Տեղափոխեք գործիքագոտին դեպի վերև՝ կարգավորումներում, եթե դա ավելի շատ ձեր ոճն է:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move le barra del instrumentos al summitate si illo es plus tu stilo."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindahkan bilah alat ke atas jika itu lebih sesuai dengan gaya Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Færðu verkfærastikuna efst ef það hentar þér betur."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se preferisci, puoi scegliere di spostare la barra degli strumenti in alto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたのスタイルに合わせて、ツールバーを最上部へ移動できます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "აიტანეთ ხელსაწყოები ზემოთ, თუ ასე უფრო მოსახერხებელია."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Err afaggag n yifecka ɣer usawen ma yella akken i tettḥemmileḍ."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сіздің стиліңізге көбірек сай болса, құралдар тақтасын үстіңгі жағына жылжытыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 스타일과 맞는다면 도구 모음을 맨 위로 이동하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຍ້າຍແຖບເຄື່ອງມືໄປເທິງສຸດ ຖ້ານັ້ນເປັນແບບຂອງເຈົ້າຫຼາຍກວ່ານັ້ນ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങൾക്കു് വേണമെങ്കിൽ കരുപ്പട്ട മുകളിലേക്കു് നീക്കുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flytt verktøylinjen til toppen hvis det er mer din stil."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verplaats de werkbalk naar boven als dat meer uw stijl is."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flytt verktøylinja til toppen dersom det er meir din stil."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਜੇ ਤੁਹਾਨੂੰ ਪਸੰਦ ਹੋਵੇ ਤਾਂ ਟੂਲਬਾਰ ਨੂੰ ਉੱਤੇ ਭੇਜੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przenieś pasek narzędzi na górę, jeśli Ci to bardziej pasuje."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mova a barra de ferramentas para cima, se for mais seu estilo."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mova a barra de ferramentas para o topo, se for mais o seu estilo."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sposta la trav d'utensils a l'ur sura sche quai ta correspunda pli fitg."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переместите панель инструментов вверх, если это вам больше подходит."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱚᱱᱟ ᱡᱩᱫᱤ ᱟᱢᱟᱜ ᱥᱴᱟᱭᱤᱞ ᱠᱟᱱᱟ ᱢᱮᱱᱠᱷᱟᱱ ᱪᱮᱛᱟᱱ ᱛᱮ ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱩᱪᱟᱹᱲ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movi a barra dî stigghi susu si ti piaci cchiù assai."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ඔබගේ නෙතට උචිත නම් මෙවලම් තීරුව ඉහළට ගෙන යන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ak je to viac váš štýl, presuňte si panel s nástrojmi nahor."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premaknite orodno vrstico na vrh, če je to bolj v vašem slogu."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalojeni panelin në krye, nëse ky stil është më afër jush."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindahkeun tulbar ka luhur sakapalay."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flytta verktygsfältet till toppen om det är mer din stil."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Агар ин услуб ба ниёзҳои шумо мувофиқат кунад, навори абзорҳоро ба боло ҳаракат кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ย้ายแถบเครื่องมือไปด้านบนสุดหากแบบนั้นเป็นแบบที่ใช่สำหรับคุณมากขึ้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İsterseniz araç çubuğunu en üste taşıyabilirsiniz."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Теләсәгез кораллар панелен иң өскә күчерә аласыз."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئەگەر خالىسىڭىز قورال بالداقنى چوققىغا يۆتكىيەلەيسىز."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перемістіть панель інструментів угору, якщо вам так зручніше."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di chuyển thanh công cụ lên trên cùng nếu nó phù hợp với phong cách của bạn hơn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若工具栏置于顶部更称手，请进行调整。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可將工具列移動到畫面頂部。"
+          }
+        }
+      }
+    },
+    "ContextualHints.Toolbar.Navigation.Description.v132" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уи аҭаӡҩыра аҭоурых аҟны адаҟьақәа рыбжьара аиҭасразы ашәақь агәыҵәҟьақәа шәақәыӷәӷәаны иаанкылатәуп."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stokit ha dalc’hit ar biroù evit lammat etre ar pajennoù e roll istor an ivinell."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodirnite i držite strelice da se prebacujete između stranica u historiji ovog taba."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manteniu premudes les fletxes per saltar entre les pàgines de l’historial d’aquesta pestanya."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Picchichjà è mantene e fleccie per saltà trà e pagine in sta cronolugia d’unghjetta"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podržením prstu na šipce můžete přepínat mezi stránkami v historii tohoto panelu."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapiwch a dal y saethau i symud rhwng tudalennau hanes y tab hwn."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryk og hold på pilene for at springe mellem sider i dette faneblads historik."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen und halten Sie die Pfeile, um zwischen den Seiten in der Chronik dieses Tabs zu wechseln."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pótusniśo a źaržćo šypki, aby mjazy bokami w historiji toś togo rejtarika tam a sam skócył."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πατήστε παρατεταμένα τα βελάκια για εναλλαγή μεταξύ των σελίδων του ιστορικού αυτής της καρτέλας."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap and hold the arrows to jump between pages in this tab’s history."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap and hold the arrows to jump between pages in this tab’s history."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tap and hold the arrows to jump between pages in this tab’s history."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longe premu la sagojn por salti inter paĝoj en la historio de tiu ĉi langeto."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén pulsadas las flechas para saltar entre las páginas del historial de esta pestaña."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocá y mantené presionadas las flechas para saltar entre páginas en el historial de esta pestaña."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén presionadas las flechas para saltar entre páginas en el historial de esta pestaña."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén pulsadas las flechas para saltar entre las páginas del historial de esta pestaña."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén presionadas las flechas para saltar entre páginas en el historial de esta pestaña."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geziak sakatuta mantendu fitxa honetako historiaren orrien artean saltatzeko."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Napauta ja pidä nuolia painettuna siirtyäksesi tämän välilehden historian sivujen välillä."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effectuez un appui long sur une des flèches pour naviguer dans les pages de l’historique de cet onglet."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thoir gnogag air na saighdean is cùm iad airson leum a ghearradh eadar duilleagan eachdraidh an taba seo."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque e manteña premidas as frechas para saltar entre as páxinas do historial desta lapela."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "יש להקיש ולהחזיק את החצים כדי לדלג בין דפים בהיסטוריה של לשונית זו."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodirni i drži strelice pritisnutima za kretanje po stranicama u povijesti ove kartice."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podótkńće so šipkow a dźeržće je, zo byšće mjez stronami w historiji tutoho rajtarka tam a sam skočił."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koppintson és tartsa lenyomva a nyilakat, hogy az oldalak között ugorjon ennek a lapnak az előzményeiben."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Հպեք և պահեք սլաքները՝ այս ներդիրի պատմության էջերի միջև անցնելու համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca e retene le flechas pro saltar inter paginas in iste chronologia del scheda."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ketuk dan tahan panah untuk berpindah antar laman dalam riwayat tab ini."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ýttu á og haltu örvunum inni til að hoppa á milli síðna í ferli þessa flipa."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca e tieni premute le frecce per passare da una pagina all’altra nella cronologia di questa scheda."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "矢印を長押しすると、このタブの履歴のページ間を移動できます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "შეეხეთ დიდხანს ისრებს ამ ჩანართის ისტორიის გვერდებს შორის გადასასვლელად."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sit, teṭṭfeḍ tineccabin akken ad tneggzed gar yisebtar deg uzray n yiccer-a."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осы бет тарихындағы беттер арасында өту үшін бағдарша пернесін басып, ұстап тұрыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 탭 기록 페이지로 이동하려면 화살표를 길게 누르세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ແຕະລູກສອນຄ້າງໄວ້ເພື່ອໂດດໄປມາລະຫວ່າງໜ້າຕ່າງໆໃນປະຫວັດຂອງແຖບນີ້."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഈ ടാബിന്റെ നാൾവഴിത്തിലേ താളുകൾക്കിടയിൽ ചാടാൻ അമ്പടയാളങ്ങൾ പിടിച്ചുകൊണ്ടു ഇരിക്കുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk og hold pilene for å hoppe mellom sidene i denne fanens historikk."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd de pijlen ingedrukt om tussen pagina’s in de geschiedenis van dit tabblad te springen."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk og hald ned pilene for å hoppe mellom sider i historikken til denne fana."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਇਸ ਟੈਬ ਦੇ ਅਤੀਤ ਵਿਚਲੇ ਸਫ਼ਿਆਂ ਵਿੱਚ ਜਾਣ ਲਈ ਤੀਰ ਦੇ ਨਿਸ਼ਾਨਾਂ ਨੂੰ ਛੂਹ ਕੇ ਰੱਖੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stuknij i przytrzymaj strzałki, by przechodzić między stronami w historii tej karty."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha o toque sobre as setas para passar de uma página para outra no histórico desta aba."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque e mantenha pressionadas as setas para alternar entre as páginas no histórico deste separador."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutga e tegna smatgà las frizzas per siglir dad ina pagina a l‘autra entaifer la cronologia da quest tab."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажимайте и удерживайте кнопки со стрелками для переключения между страницами в истории этой вкладки."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱚᱶᱟ ᱴᱮᱵᱽ ᱱᱟᱜᱟᱢ ᱨᱮ ᱥᱟᱦᱴᱟ ᱛᱟᱞᱟ ᱨᱮ ᱩᱪᱟᱹᱲᱚᱜ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱨ ᱪᱤᱱᱦᱟᱹ ᱨᱮ ᱴᱤᱯᱟᱹᱣ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca e teni ammaccati i filecci pi sautari ntra i pàggini nnâ crunuluggìa di sta scheda."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ťuknutím a podržaním šípok preskočíte medzi stránkami v histórii tejto karty."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapnite in pridržite puščici za preskakovanje med stranmi v zgodovini tega zavihka."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prekni dhe mbani të prekura shigjetat, për të kaluar nëpër faqe në historikun e kësaj skede."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryck och håll ned pilarna för att hoppa mellan sidor i den här flikens historik."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Барои гузариш аз саҳифа ба саҳифа дар таърихи ин варақа, ақрабақҳоро зер карда, доред."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แตะค้างที่ลูกศรเพื่อข้ามไปมาระหว่างหน้าต่างๆ ในประวัติของแท็บนี้​​​​​​​​​​​​​​​​"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu sekmenin geçmişindeki sayfalar arasında dolaşmak için oklara dokunup basılı tutun."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يا ئوقنى چېكىپ بېسىپ تۇرۇلسا بۇ بەتكۈچنىڭ تارىخىدىكى بەتلىرى ئارىسىدا ئاتلايدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натисніть і утримуйте на стрілці, щоб переходити між сторінками в історії цієї вкладки."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhấn và giữ mũi tên để chuyển giữa các trang trong lịch sử của thẻ này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按住箭头可在此标签页的历史页面间跳转。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長按箭頭，即可跳到此分頁紀錄中的其他頁面。"
+          }
+        }
+      }
+    },
+    "ContextualHints.Toolbar.Top.Description.v107" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уи еиҳа иузыманшәалазар, амыругақәа рпанель ҵаҟа ииагатәуп."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перамясціце панэль інструментаў уніз, калі вам так зручней."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilec'hiit ar varenn ostilhoù e traoñ ar bajenn mard eo ar pezh a glot ganeoc’h."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomjerite alatnu traku na dno ako je to više vaš stil."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poseu la barra d'eines a la part inferior, si és més del vostre estil."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’è vo preferite, pudete dispiazzà a barra d’attrezzi inghjò."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokud vám to více vyhovuje, přesuňte nástrojovou lištu dolů."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Symudwch y bar offer i'r gwaelod yn y gosodiadau os yw hynny'n well i chi."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flyt værktøjslinjen til bunden, hvis det passer dig bedre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben Sie die Symbolleiste nach unten, wenn Ihnen das besser gefällt."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśesuńśo symbolowu rědku dołoj, jolic se to wam lěpjej spódoba."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μετακινήστε στο κάτω μέρος τη γραμμή εργαλείων αν αυτό ταιριάζει περισσότερο στο στυλ σας."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move the toolbar to the bottom if that’s more your style."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move the toolbar to the bottom if that’s more your style."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move the toolbar to the bottom if that’s more your style."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movu la ilaron al la malsupro se vi tion preferas."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas hacia abajo si se ajusta más a tu estilo."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mové la barra de herramientas hacia abajo en la si ese es más tu estilo."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas a la parte inferior si se ajusta más a tu estilo."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas hacia abajo si se ajusta más a tu estilo."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mueve la barra de herramientas hacia abajo si se ajusta más a tu estilo."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tresna-barra behera eraman dezakezu, hori bada zuri ondoen egokitzen zaizuna."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siirrä työkalupalkki alas, jos se sopii sinulle paremmin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placez la barre d’outils en bas si cela vous correspond mieux."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gluais am bàr-inneal gun bhonn mas fheàrr leat an-sin e."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mova a barra de ferramentas á parte inferior se se axusta máis ao seu estilo."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ניתן להעביר את סרגל הכלים לתחתית אם זה יותר הסגנון שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ako želiš, pomakni alatnu traku dolje."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přesuńće symbolowu lajstu dele, jeli so to wam lěpje spodoba."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helyezze alulra az eszköztárat, ha az inkább az Ön stílusa."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Տեղափոխեք գործիքագոտին դեպի ներքև՝ կարգավորումներում, եթե դա ավելի շատ ձեր ոճն է:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move le barra del instrumentos al fundo si illo es plus tu stilo."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindahkan bilah alat ke bawah jika itu lebih sesuai dengan gaya Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Færðu verkfærastikuna neðst ef það hentar þér betur."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se preferisci, puoi scegliere di spostare la barra degli strumenti in basso."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたのスタイルに合わせて、ツールバーを最下部へ移動できます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ჩაიტანეთ ხელსაწყოები ქვემოთ, თუ ასე უფრო მოსახერხებელია."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Err afaggag n yifecka ɣer ukessar ma yella akken i tettḥemmileḍ."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сіздің стиліңізге көбірек сай болса, құралдар тақтасын төменгі жағына жылжытыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 스타일과 맞는다면 도구 모음을 맨 아래로 이동하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຍ້າຍແຖບເຄື່ອງມືໄປລຸ່ມສຸດ ຖ້ານັ້ນເປັນແບບຂອງເຈົ້າຫຼາຍກວ່ານັ້ນ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങൾക്കു് വേണമെങ്കിൽ കരുപ്പട്ട താഴോട്ടു് നീക്കുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flytt verktøylinjen til bunnen hvis det er mer din stil."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verplaats de werkbalk naar beneden als dat meer uw stijl is."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flytt verktøylinja til botnen dersom det er meir din stil."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਜੇ ਤੁਹਾਨੂੰ ਪਸੰਦ ਹੋਵੇ ਤਾਂ ਟੂਲਬਾਰ ਨੂੰ ਹੇਠਾਂ ਭੇਜੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przenieś pasek narzędzi na dół, jeśli Ci to bardziej pasuje."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mova a barra de ferramentas para baixo, se for mais seu estilo."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mova a barra de ferramentas para a base, se for mais o seu estilo."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sposta la trav d'utensils a l'ur sut sche quai ta correspunda pli fitg."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переместите панель инструментов вниз, если это вам больше подходит."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱚᱱᱟ ᱡᱩᱫᱤ ᱟᱢᱟᱜ ᱥᱴᱟᱭᱤᱞ ᱠᱟᱱᱟ ᱢᱮᱱᱠᱷᱟᱱ ᱞᱟᱛᱟᱨ ᱛᱮ ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱩᱪᱟᱹᱲ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movi a barra dî stigghi jusu si ti piaci cchiù assai."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ඔබගේ නෙතට උචිත නම් මෙවලම් තීරුව පහළට ගෙන යන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ak je to viac váš štýl, presuňte si panel s nástrojmi nadol."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premaknite orodno vrstico na dno, če je to bolj v vašem slogu."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalojeni panelin në fund, nëse ky stil është më afër jush."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pindahkeun tulbar ka handap sakapalay."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flytta verktygsfältet till botten om det är mer din stil."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Агар ин услуб ба ниёзҳои шумо мувофиқат кунад, навори абзорҳоро ба поён ҳаракат кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ย้ายแถบเครื่องมือไปด้านล่างสุดหากแบบนั้นเป็นแบบที่ใช่สำหรับคุณมากขึ้น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İsterseniz araç çubuğunu en alta taşıyabilirsiniz."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Теләсәгез кораллар панелен иң өскә күчерә аласыз."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئەگەر خالىسىڭىز قورال بالداقنى ئاستىغا يۆتكىيەلەيسىز."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перемістіть панель інструментів униз, якщо вам так зручніше."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di chuyển thanh công cụ xuống dưới cùng nếu nó phù hợp với phong cách của bạn hơn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若工具栏置于底部更称手，请进行调整。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可將工具列移動到畫面底部。"
+          }
+        }
+      }
+    },
+    "ContextualHints.Toolbar.Update.Description.v139" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabivi i meni su zamijenjeni radi lakšeg pristupa tokom pregledavanja."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les pestanyes i el menú s’han intercanviat perquè hi pugueu accedir més fàcilment mentre navegueu."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panely a nabídky si vyměnily místa, abyste k nim měli při procházení snadnější přístup."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mae tabiau a dewislen wedi newid lle i gael mynediad haws wrth i chi bori."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faneblade og menuen har byttet plads, så det er nemmere at komme til dem."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für einen einfacheren Zugriff beim Surfen wurden die Positionen von Tabs und Menüs getauscht."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejtariki a meni su změnili městna za lažčejšy pśistup za pśeglědowanje."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Οι θέσεις των καρτελών και των μενού έχουν αλλάξει για ευκολότερη πρόσβαση κατά την περιήγηση."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabs and menu have switched places for easier access as you browse."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabs and menu have switched places for easier access as you browse."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tabs and menu have switched places for easier access as you browse."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langetoj kaj menuo interŝanĝis lokojn, por esti pli facile alireblaj dum retumo."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las pestañas y el menú han cambiado de lugar para facilitar el acceso al navegar."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las pestañas y el menú han cambiado de ubicación para facilitar el acceso mientras navegas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las pestañas y el menú han cambiado de ubicación para facilitar el acceso mientras navegas."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välilehdet ja valikko ovat vaihtaneet paikkoja, jotta niitä on helpompi käyttää selaamisen aikana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les onglets et le menu ont changé de place pour faciliter leur accès lorsque vous naviguez."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הלשוניות והתפריטים התחלפו במקומות שלהם לגישה נוחה יותר בזמן הגלישה."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartice i izbornik su zamijenili mjesta radi lakšeg pristupa tijekom pregledavanja."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rajtarki a meni su městna za lóši přistup za přehladowanje změnili."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A lapok és a menük helyet cseréltek a könnyebb hozzáférés érdekében böngészés közben."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ներդիրներն ու ընտրացանկը փոխվել են տեղերով՝ զննարկելիս ավելի հեշտ մուտք գործելու համար։"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedas e menu haber mutate postos pro accesso plus facile quando tu naviga."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab dan menu telah berpindah tempat untuk akses yang lebih mudah saat Anda menjelajah."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skipt hefur verið um stað á fipum og valmyndum til að auðvelda aðgang þegar þú vafrar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le schede e i menu sono stati scambiati di posizione per un accesso più facile durante la navigazione."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクセスしやすくするため、タブとメニューの位置が入れ替わりました。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ჩანართები და მენიუ გაცვლის ადგილებს წვდომის გასაიოლებლად გვერდების მონახულებისას."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шолу кезінде оңай қол жеткізу үшін беттер мен мәзір орындары ауыстырылды."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탐색할 때 더 쉽게 접근할 수 있도록 탭과 메뉴의 위치가 바뀌었습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ແທັບ ແລະ ເມນູໄດ້ຮັບການປ່ຽນຕຳແຫນ່ງເພື່ອໃຫ້ສະດວກຕໍ່ການໃຊ້ງານໃນຂະນະທີ່ທ່ານນຳໃຊ້"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faner og menyer har byttet plass for enklere tilgang mens du surfer."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabbladen en menu’s zijn omgewisseld voor betere toegang tijdens het surfen."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faner og menyar har bytta plass for enklare tilgang medan du surfar."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਟੈਬਾਂ ਅਤੇ ਮੇਨੂ ਦੀ ਥਾਂ ਨੂੰ ਤੁਹਾਡੇ ਵਲੋਂ ਸੌਖੀ ਤਰ੍ਹਾਂ ਬਰਾਊਜ਼ ਕਰਨ ਲਈ ਬਦਲਿਆ ਗਿਆ ਹੈ।"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As abas e o menu mudaram de lugar para facilitar o acesso enquanto você navega."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os separadores e menu foram mudados de sítio para facilitar o acesso enquanto navega."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вкладки и меню поменялись местами для более удобного доступа во время веб-сёрфинга."
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I schedi e i minù foru scanciati di postu pi n’accessu cchiù fàcili mentri chi nàvichi."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karty a ponuka si vymenili miesta, aby boli jednoduchšie dostupné počas prehliadania."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gumba zavihkov in menijev sta zamenjala mesti, da bi vam bila med brskanjem bolj pri roki."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skedat dhe menuja kanë ndërruar vendet, për përdorim më të lehtë teksa shfletoni."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flikar och menyer har bytt plats för enklare åtkomst när du surfar."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Варақаҳо ва меню ҷойҳояшонро иваз карданд, то шумо тавонед ҳангоми тамошобинӣ ба онҳо осонтар дастрасӣ пайдо намоед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แท็บและเมนูได้ปรับเปลี่ยนตำแหน่งเพื่อให้สะดวกต่อการใช้งานขณะที่คุณเรียกดู"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gezinirken daha kolay erişebilmeniz için sekmelerle menünün yerini değiştirdik."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توركۆرگۈڭىزنى زىيارەت قىلىشنى ئاسانلاشتۇرۇش ئۈچۈن بەتكۈچ بىلەن تىزىملىك ئورنى ئالماشتۇرۇلدى."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вкладки та меню помінялися місцями для легшого доступу під час перегляду."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các thẻ và menu đã đổi chỗ cho nhau để bạn dễ dàng truy cập hơn khi duyệt."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签页和菜单已互换位置，浏览时使用更方便。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已將分頁與選單移到其他位置，讓你上網瀏覽更方便開啟。"
+          }
+        }
+      }
+    },
+    "ContextualHints.Toolbar.Update.Title.v139" : {
+      "comment" : "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premjestili smo nekoliko stvari"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hem mogut algunes coses"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přesunuli jsme pár věcí"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rydym wedi symud rhai pethau"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi har flyttet lidt rundt"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir haben ein paar Dinge verschoben"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smy pśesunuli někotare wěcy"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μετακινήσαμε μερικά πράγματα"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We moved a few things"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We moved a few things"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "We moved a few things"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ni translokis kelkajn aferojn"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimos algunas cosas"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimos algunas cosas"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hemos movido algunas cosas"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siirsimme muutamia asioita"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certains éléments ont été déplacés"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הזזנו כמה דברים"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premjestili smo nekoliko stvari"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smy někotre wěcy přesunyli"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Áthelyeztünk néhány dolgot"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Մենք մի քանի բան տեղափոխեցինք"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nos moveva alcun cosas"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kami memindahkan beberapa hal"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Við fluttum nokkur atriði"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbiamo spostato alcune cose"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "いくつかのものを移動しました"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ადგილები შეეცვალა"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yella wacu i nsenkez"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Біз бірнеше нәрсені жылжыттық"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "몇 가지 위치가 변경되었습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ພວກເຮົາໄດ້ປັບປ່ຽນບາງຢ່າງ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഞങ്ങൾ ചില സാധനങ്ങളെ മാറ്റി"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi flyttet noen ting"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We hebben een paar dingen verplaatst"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi har flytta nokre ting"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਅਸੀਂ ਕੁਝ ਚੀਜ਼ਾਂ ਬਦਲਦੀਆਂ ਹਨ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movemos algumas coisas"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mudámos algumas coisas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мы переместили несколько вещей"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spustammu na para di cosi"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presunuli sme niekoľko vecí"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nekaj stvari smo premaknili"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kemi lëvizur pak gjëra"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi flyttade några saker"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мо баъзе чизҳоро аз як ҷо ба ҷойи дигар гузоштем"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เราได้ปรับเปลี่ยนบางอย่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birkaç şeyin yerini değiştirdik"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بىز بىر قانچە نەرسىنى يۆتكىدۇق"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ми дещо змінили"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chúng tôi đã di chuyển một vài thứ"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我们移动了按钮位置"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我們移動了一些項目"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,9 +1,0 @@
-/* The name of the folder that contains desktop bookmarks in the menu. */
-"Bookmarks Menu" = "Boekmerke-kieslys";
-
-/* The name of the folder that contains desktop bookmarks in the toolbar. */
-"Bookmarks Toolbar" = "Boekmerknutsbalk";
-
-/* The name of the folder that contains unsorted desktop bookmarks. */
-"Unsorted Bookmarks" = "Ongeliasseerde boekmerke";
-

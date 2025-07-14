@@ -1,0 +1,1176 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "SendTo.NoDevicesFound.Message.v119" : {
+      "comment" : "Error message shown in the remote tabs panel",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Асинхронизациазы иҟоу даҽа ҳәагак шәымам ари ахыԥхьаӡара иацҵоу."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вас няма ніводнай прылады, злучанай з гэтым уліковым запісам і даступнай для сінхранізацыі."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N’ho peus trevnad ebet all kennasket d’ar gont-mañ hegerz evit goubredañ."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemate ni jedan drugi uređaj za sinhronizaciju sa ovim računom."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hi ha cap altre dispositiu connectat a aquest compte disponible per sincronitzar."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ùn avete alcunu altru apparechju cunnessu à stu contu è prontu à esse sincrunizatu."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "K tomuto účtu nejsou připojena žádná další zařízení, která by bylo možné synchronizovat."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nid oes gennych unrhyw ddyfeisiau eraill wedi eu cysylltu i'r Cyfrif Firefox hwn i'w cydweddu nhw."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har ikke andre enheder, der kan synkroniseres, forbundet til denne konto."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derzeit sind keine anderen Geräte mit diesem Konto verbunden, die synchronisiert werden könnten."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Njejsu žedne druge rědy z toś tym kontom zwězane, kótarež by se dali synchronizěrowaś."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν έχετε συνδέσει καμία άλλη συσκευή, διαθέσιμη προς συγχρονισμό, σε αυτόν τον λογαριασμό."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You don’t have any other devices connected to this account available to sync."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You don’t have any other devices connected to this account available to synchronise."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You don’t have any other devices connected to this account available to sync."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi ne havas alian aparaton konektita al tiu ĉi konto, kiu estu disponebla por speguli."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tienes otros dispositivos conectados a esta cuenta que estén disponibles para sincronizarse."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tenés ningún otro dispositivo conectado a esta cuenta disponible para sincronizar."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tienes ningún otro dispositivo conectado a esta cuenta disponible para sincronizar."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tienes otros dispositivos conectados a esta cuenta que estén disponibles para sincronizarse."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tienes ningún otro dispositivo conectado a esta cuenta disponible para sincronizar."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ez daukazu kontu honetara sinkronizatzeko konektatutako beste gailurik."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinulla ei ole muita tähän tiliin yhdistettyjä laitteita synkronoitavaksi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous ne disposez pas d’autre appareil connecté à votre compte prêt à être synchronisé."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cha do cheangail thu uidheam sam bith eile ris a’ chunntas seo as urrainn dhut sioncronachadh."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non ten ningún outro dispositivo conectado a esta conta dispoñible para sincronizar."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אין לך מכשירים אחרים המחוברים לחשבון זה הזמינים לסנכרון."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nemaš nijedan drugi uređaj povezan s ovim računom koji je dostupan za sinkronizaciju."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Njejsu žane druhe graty z tutym kontom zwjazane, kotrež bychu so dali synchronizować."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nincs más, ezzel a fiókkal összekapcsolt eszköze, amellyel szinkronizálhatna."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Դուք չունեք որևէ այլ սարք՝ կապակցված այս հաշվի հետ և մատչելի համաժամեցման համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu non ha altere apparatos connexe a iste conto, a synchronisar."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anda tidak memiliki perangkat lain yang terhubung ke akun ini yang tersedia untuk disinkronkan."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Þú ert ekki með önnur tæki tengd við þennan reikning sem hægt er að samstilla."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al momento non risultano disponibili per la sincronizzazione ulteriori dispositivi connessi a questo account."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアカウントに接続された端末が見つかりませんでした。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "არცერთი სხვა მოწყობილობა არ გაქვთ დაკავშირებული ამ ანგარიშთან დასინქრონებისთვის."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ur tesɛiḍ ara ibenkan niḍen yeqqnen ɣer umiḍan-a i wejden i umtawi."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бұл тіркелгіңізге байланысқан және синхрондау үшін қолжетімді басқа құрылғыларыңыз жоқ."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동기화할 수 있는 이 계정에 연결된 다른 장치가 없습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ທ່ານບໍ່ມີອຸປະກອນອື່ນໃດທີ່ເຊື່ອມຕໍ່ກັບບັນຊີນີ້ເພື່ອຊິງຄ໌ໄດ້."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ അക്കൗണ്ടു് സമന്വയിപ്പിക്കാൻ വേണ്ടി ഈ ഉപകരണമോടു് ബന്ധപ്പെട്ടിട്ട മറ്റു ഉപകരണങ്ങളില്ല."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har ingen andre enheter koblet til denne kontoen tilgjengelig for synkronisering."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U hebt geen andere aan deze account gekoppelde apparaten beschikbaar voor synchronisatie."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har ingen andre einingar kopla til denne kontoen tilgjengelege for synkronisering."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਹਾਡੇ ਕੋਲ ਸਿੰਕ ਕਰਨ ਲਈ ਇਸ ਖਾਤੇ ਨਾਲ ਕੋਈ ਵੀ ਹੋਰ ਡਿਵਾਈਸ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak innych urządzeń połączonych z tym kontem dostępnych do synchronizacji."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não tem nenhum outro dispositivo conectado a esta conta, disponível para sincronização."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não tem quaisquer outros dispositivos associados a esta conta disponíveis para sincronizar."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ti n'has connectà nagins auters apparats cun quest conto che pudessan vegnir sincronisads."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вас нет других устройств, подключенных к этому аккаунту, доступных для синхронизации."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢ ᱴᱷᱮᱱ ᱚᱞᱜᱟ ᱱᱟᱶᱟ ᱠᱷᱟᱛᱟ ᱟᱹᱭᱩᱨᱢᱤᱫ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱜᱟ ᱥᱟᱫᱷᱚᱱ ᱡᱩᱰᱟᱹᱣ ᱵᱟᱹᱱᱩᱜᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nun cci sunnu autri dispusitivi cullijati a stu cuntu dispunìbbili pâ sincrunizzazzioni."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "සමමුහූර්තය සඳහා ඔබ මෙම ගිණුමට වෙනත් කිසිදු උපාංගයක් සම්බන්ධ කර නැත."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "K svojmu účtu nemáte pripojené žiadne zariadenia dostupné na synchronizáciu."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S tem računom nimate povezanih drugih naprav na voljo za sinhronizacijo."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’keni ndonjë pajisje tjetër të lidhur te kjo llogari, të gatshme për njëkohësim."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anjeun teu boga parangkat séjén anu nyambung kana akun ieu anu bisa disaluyukeun."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har inga andra enheter anslutna till det här kontot tillgängliga för synkronisering."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шумо ягон дастгоҳе надоред, ки ба ин ҳисоб пайваст карда шудааст ва барои ҳамоҳангсозӣ дастрасӣ дорад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชีนี้ที่พร้อมซิงค์"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu hesaba bağlanmış ve eşitleme yapabileceğiniz başka cihazınız yok."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бу хисапка бәйләнгән һәм синхронлауга әзер башка җиһазларыгыз юк."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بۇ ھېساباتقا باغلانغان قەدەمداشلىنىدىغان باشقا ئۈسكۈنە يوق."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вас немає інших доступних для синхронізації пристроїв, під'єднаних до цього облікового запису."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn không có sẵn bất kỳ thiết bị nào khác được kết nối với tài khoản này để đồng bộ hóa."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您的账户中没有其他设备可供同步。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您沒有其他連結到此帳號的裝置可進行同步。"
+          }
+        }
+      }
+    },
+    "SendTo.NotSignedIn.Title.v119" : {
+      "comment" : "This message appears when a user tries to use 'Send Link to Device' action while not logged in",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уара ухы иаурхәаӡом."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы не увайшлі ў свой ўліковы запіс."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N’hoc’h ket kennasket d’ho kont."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niste prijavljeni na vaš račun."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No heu iniciat la sessió en el vostre compte."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ùn site micca cunnessu à u vostru contu."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nejste přihlášeni ke svému účtu."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nid ydych wedi mewngofnodi i'ch cyfrif."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er ikke logget ind på din konto."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie sind nicht mit Ihrem Konto angemeldet."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Njejsćo pla swójogo konta pśizjawjony."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν έχετε συνδεθεί στον λογαριασμό σας."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are not signed in to your account."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are not signed in to your account."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You are not signed in to your account."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi ne komencis seancon en via konto."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión en tu cuenta."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión en tu cuenta."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No te has conectado a tu cuenta."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión en tu cuenta."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No has iniciado sesión en tu cuenta."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ez duzu zure kontuan saiorik hasi."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et ole kirjautunut tilillesi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous n’êtes pas connecté·e à votre compte."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cha do rinn thu clàradh a-steach dhan chunntas agad."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non iniciou sesión na súa conta."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לא מחובר לחשבון שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nisi prijavljen/a na svoj račun."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Njejsće pola swojeho konta přizjewjeny."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nincs bejelentkezve a fiókjába."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Դուք մուտք չեք գործել ձեր հաշիվ:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu non es connexe a tu conto."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anda belum masuk ke akun Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Þú ert ekki skráð/ur inn á reikninginn þinn."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accesso all’account non effettuato."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アカウントにログインしていません。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "არ ხართ შესული თქვენს ანგარიშზე."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aql-ak ur teqqineḍ ara ɣer umiḍan-ik."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сіз өз тіркелгіңізге кірген жоқсыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계정에 로그인되어 있지 않습니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ທ່ານຍັງບໍ່ໄດ້ເຂົ້າສູ່ລະບົບບັນຊີຂອງທ່ານ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്കള്‍ താങ്കളുടെ അക്കൗണ്ടിലെക്ക് പ്രവേശിച്ചിട്ടില്ല."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er ikke logget inn på kontoen din."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U bent niet aangemeld bij uw account."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du er ikkje innlogga på kontoen din."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਸੀਂ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਨਹੀਂ ਕੀਤਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie zalogowano na koncie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você não entrou na sua conta."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não tem sessão iniciada na sua conta."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ti n'es betg annunzià cun tes conto."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы не вошли в свой аккаунт."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢ ᱟᱢᱟᱜ ᱠᱷᱟᱛᱟ ᱨᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱵᱚᱱᱩᱢ-ᱟ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nun trasisti nnû to cuntu."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ඔබගේ ගිණුමට පිවිස නැත."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie ste prihlásený k svojmu účtu."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niste prijavljeni v svoj račun."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’keni bërë hyrjen te llogaria juaj."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anjeun can asup kana akun."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du är inte inloggad på ditt konto."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шумо ба ҳисоби худ ворид нашудаед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คุณไม่ได้ลงชื่อเข้าบัญชีของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesabınıza giriş yapmadınız."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сез хисабыгызга кермәгәнсез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سىز تېخى ھېساباتىڭىزغا كىرمىدىڭىز."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви не ввійшли в обліковий запис."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn chưa đăng nhập vào tài khoản của mình."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您尚未登录账户。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您尚未登入帳號。"
+          }
+        }
+      }
+    },
+    "ShareExtension.FileCopiedToClipboard.Title.v139" : {
+      "comment" : "The Toast message that appears when the user press copy on the share sheet with a file like a pdf",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datoteka kopirana u međuspremnik"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’ha copiat el fitxer al porta-retalls"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedariu cupiatu in u preme’papei"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soubor zkopírován do schránky"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ffeil wedi'i Chopïo i'r Clipfwrdd"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fil kopieret til udklipsholder"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei in die Zwischenablage kopiert"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dataja jo se kopěrowała do mjazywótkłada"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το αρχείο αντιγράφτηκε στο πρόχειρο"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File Copied To Clipboard"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File Copied To Clipboard"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "File Copied To Clipboard"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosiero kopiita al la tondujo"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivo copiado al portapapeles"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivo copiado al portapapeles"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivo copiado al portapapeles"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fitxategia arbelean kopiatu da"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiedosto kopioitu leikepöydälle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichier copié dans le presse-papiers"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקובץ הועתק ללוח העריכה"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datoteka je kopirana u međuspremnik"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dataja je so do mjezyskłada kopěrowała"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fájl a vágólapra másolva"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ֆայլը պատճենվեց սեղմատախտակին"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File copiate al area de transferentia"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berkas Disalin ke Papan Klip"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrá afrituð á klippispjald"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File copiato negli appunti"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルをクリップボードにコピーしました"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ფაილის ასლი აღებულია"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afaylu-nni yettwanɣel ɣer tfelwit n ufus"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл алмасу буферіне көшірілді"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "클립보드에 파일 복사됨"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ສຳເນົາໄຟລໄປໄວ້ໃນຄລິບບອດແລ້ວ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "പകൎത്തൽപെട്ടിയിലോട്ടു് ഫയൽ പകൎത്തി"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fil kopiert til utklippstavlen"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestand naar klembord gekopieerd"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fil kopiert til utklippstavla"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਫ਼ਾਇਲ ਨੂੰ ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਕਾਪੀ ਕੀਤਾ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arquivo copiado para área de transferência"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ficheiro copiado para a área de transferência"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл скопирован в буфер обмена"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pricu cupiatu nnô pitazzu"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ගොනුව පසුරුපුවරුවට පිටපත් විය"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Súbor skopírovaný do schránky"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datoteka kopirana v odložišče"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartela u Kopjua Te e Papastra"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fil kopierad till urklipp"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл ба ҳофизаи муваққатӣ нусха бардошта шуд"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คัดลอกไฟล์ไปยังคลิปบอร์ดแล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosya panoya kopyalandı"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ھۆججەت چاپلاش تاختىسىغا كۆچۈرۈلدى"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл скопійовано в буфер обміну"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã sao chép tệp vào bộ nhớ tạm"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件已复制到剪贴板"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已將檔案複製至剪貼簿"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

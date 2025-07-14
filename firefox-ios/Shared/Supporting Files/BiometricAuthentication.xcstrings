@@ -1,0 +1,828 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "Biometry.Screen.UniversalAuthenticationReason.v115" : {
+      "comment" : "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Умаӡажәақәа рахь унеирц азы уҭал."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аўтарызуйцеся для доступу да пароляў."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilesait evit gwelet ar gerioù-tremen."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentifikujte za pristup lozinkama."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentiqueu-vos per accedir a les contrasenyes."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticatevi per accede à e parolle d’intesa."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro přístup k heslům se autentizujte."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilyswch i gael mynediad at gyfrineiriau."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentificer dig for at se adgangskoder."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifizieren Sie sich, um auf Passwörter zuzugreifen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awtentificěrujśo se, aby pśistup ku gronidłam měł."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ταυτοποιηθείτε για πρόσβαση στους κωδικούς πρόσβασης."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authenticate using your device passcode to access passwords."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authenticate to access passwords."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Authenticate to access passwords."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aŭtentikigu vin por povi aliri pasvortojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentícate para acceder a las contraseñas."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticate para acceder a las contraseñas."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticarse para acceder a las contraseñas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentícate para acceder a las contraseñas."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticarse para acceder a las contraseñas."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentifikatu pasahitzetarako sarbidea izateko."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunnistaudu käyttääksesi salasanojasi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifiez-vous pour accéder aux mots de passe."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dèan dearbhadh airson na faclan-faire inntrigeadh."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticar para acceder aos contrasinais."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "יש להזדהות כדי לגשת לססמאות."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentificiraj se za pristup lozinkama."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awtentifikujće so, zo byšće přistup k hesłam měł."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitelesítsen a jelszavak eléréséhez."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Նույնականացում՝ գաղտնաբառեր մուտք գործելու համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentica te pro acceder al contrasignos."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otentikasi untuk mengakses sandi."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auðkenndu þig til að fá aðgang að lykilorðum."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticarsi per accedere alle password."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "パスワードへのアクセスを認証します。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დამოწმება პაროლებთან წვდომისთვის."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ttwasnetmen steb i unekcum ɣer wawalen uffiren."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Парольдерге қатынау үшін аутентификациядан өтіңіз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비밀번호에 접근하려면 인증하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ພິສູດຢືນຢັນເພື່ອເຂົ້າເຖິງລະຫັດຜ່ານ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ഒളിവാക്കുകൾ ഉപയോഗിക്കാൻ ആധികാരപ്പെടുത്തുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Godkjenn for å få tilgang til passord."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authenticeer voor toegang tot uw wachtwoorden."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Godkjenn for å få tilgang til passord."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਪਾਸਵਰਡਾਂ ਦੀ ਵਰਤੋਂ ਲਈ ਪ੍ਰਮਾਣਿਤ ਕਰੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uwierzytelnij się, by uzyskać dostęp do haseł."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentique-se para acessar senhas."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentique-se para aceder às palavras-passe."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T'autentifitgescha per acceder als pleds-clav."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизуйтесь для доступа к паролям."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱟᱫᱮᱨ ᱞᱟᱹᱜᱤᱫ ᱯᱚᱨᱚᱢᱟᱱ ᱮᱢ ᱛᱷᱚᱭ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autènticati p’accèdiri ê chiavi."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "මුරපද වෙත ප්‍රවේශයට සත්‍යාපනය කරන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na prístup k heslám je potrebné overenie."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za dostop do gesel se prijavite."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Që të hyni te fjalëkalimet, bëni mirëfilltësimin."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oténtikasi pikeun ngakses koncikecap."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentisera för att komma åt lösenord."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Барои пайдо кардани дастрасӣ ба нихонвожаҳо, ҳаққонияти худро тасдиқ кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ยืนยันตัวตนเพื่อเข้าถึงรหัสผ่าน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parolalara erişmek için kimliğinizi doğrulayın."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Серсүзләргә ирешү өчен аутентификация үтегез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئىمنى زىيارەت قىلىش ئۈچۈن دەلىللىنىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пройдіть перевірку для доступу до паролів."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xác thực để truy cập mật khẩu."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请验证身份后访问密码。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "驗證後才能存取儲存的密碼資訊。"
+          }
+        }
+      }
+    },
+    "Biometry.Screen.UniversalAuthenticationReason.v122" : {
+      "comment" : "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иҵәаху аԥсыӡажәақәеи ашәаратә методқәеи рахь анеиразы аутентификациа ҟаҵа."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kevreit evit gellout haeziñ ouzh ho kerioù-tremen enrollet hag ho toareoù paeañ."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentifikujte se za pristup sačuvanim lozinkama i načinima plaćanja."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentiqueu-vos per accedir a les contrasenyes i formes de pagament que heu desat."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticatevi per accede à e vostre parolle d’intesa è metode di pagamentu arregistrate."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ověřením získáte přístup k uloženým heslům a platebním metodám."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dilyswch i gael mynediad i'ch cyfrineiriau a'ch dulliau talu sydd wedi'u cadw."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentificer dig for at få adgang til dine gemte adgangskoder og betalingsmetoder."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifizieren Sie sich, um auf Ihre gespeicherten Passwörter und Zahlungsmethoden zuzugreifen."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awtentificěrowaś, aby pśistup k wašym skłaźonym gronidłam a płaśeńskim metodam měł."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ταυτοποιηθείτε για πρόσβαση σε αποθηκευμένους κωδικούς πρόσβασης και μεθόδους πληρωμής."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authenticate to access your saved passwords and payment methods."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authenticate to access your saved passwords and payment methods."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Authenticate to access your saved passwords and payment methods."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aŭtentikigu vin por aliri viajn konservitajn pasvortojn kaj pagmetodojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentícate para acceder a tus contraseñas y métodos de pago guardados."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autenticate para acceder a tus contraseñas guardadas y métodos de pago."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentícate para acceder a tus contraseñas guardadas y métodos de pago."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentícate para acceder a tus contraseñas y métodos de pago guardados."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentícate para acceder a tus contraseñas guardadas y métodos de pago."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentifikatu zure gordetako pasahitz eta ordainketa metodoetarako sarbidea izateko."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunnistaudu päästäksesi käsiksi tallennettuihin salasanoihin ja maksutapoihin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifiez-vous pour accéder à vos mots de passe et moyens de paiement enregistrés."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dèan dearbhadh airson cothrom fhaighinn air na faclan-faire is dòighean pàighidh a shàbhail thu."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentifíquese para acceder aos seus contrasinais e métodos de pago gardados."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "יש לבצע אימות כדי לגשת לססמאות ולאמצעי התשלום השמורים שלך."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentificiraj se za pristup spremljenim lozinkama i načinima plaćanja."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awtentifikować, zo byšće přistup k wašim składowanym hesłam a płaćenskim metodam měł."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitelesítés, hogy elérje a mentett jelszavait és fizetési módjait."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Նույնականացրեք՝ ձեր պահպանված գաղտնաբառերը և վճարման եղանակները մատչելու համար:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentica te pro acceder a tu contrasignos e methodos de pagamento salvate."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otentikasi untuk mengakses sandi tersimpan dan metode pembayaran Anda."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auðkenndu þig til að fá aðgang að vistuðum lykilorðum þínum og greiðslumátum."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effettua l’autenticazione per accedere alle password e ai metodi di pagamento salvati."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存されたパスワードと支払い方法にアクセスするには認証してください。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ვინაობის დამოწმება შენახულ ანგარიშებსა და გადახდის საშუალებებთან წდვომისთვის."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesteb i wakken ad tkecmeḍ ɣer wawalen-ik uffiren yettwaskelsen d tarrayin n uxelleṣ."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сақталған парольдер мен төлем әдістеріне қол жеткізу үшін аутентификациядан өтіңіз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장된 비밀번호와 결제 수단에 접근하려면 인증하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ກວດສອບຄວາມຖືກຕ້ອງເພື່ອເຂົ້າເຖິງລະຫັດຜ່ານທີ່ບັນທຶກໄວ້ ແລະ ວິທີການຊໍາລະເງິນຂອງທ່ານ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "കരുതിവച്ച ഒളിവാക്കുകളും പണം കൊടുക്കൽരീതികളും ഉപയോഗിക്കാൻ ആധികാരപ്പെടുത്തുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Godkjenn for å få tilgang til dine lagrede innlogginger og betalingsmåter."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authenticeer om uw opgeslagen aanmeldingen en betalingsmethoden te benaderen."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Godkjenn for å få tilgang til dei lagra innloggingane dine og betalingsmetodar."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਤੁਹਾਡੇ ਸੰਭਾਲੇ ਹੋਏ ਪਾਸਵਰਡਾਂ ਅਤੇ ਭੁਗਤਾਨ ਢੰਗਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ ਪ੍ਰਮਾਣਿਤ ਕਰੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uwierzytelnij się, by uzyskać dostęp do zachowanych haseł i metod płatności."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentique-se para acessar suas senhas e métodos de pagamento salvos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentique-se para aceder às suas palavras-passe e métodos de pagamento guardados."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T’autentifitgescha per acceder a tes pleds-clav memorisads ed a tias metodas da pajament."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выполните аутентификацию, чтобы получить доступ к сохранённым паролям и способам оплаты."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢᱟᱜ ᱥᱟᱧᱪᱟᱣ ᱟᱠᱟᱱ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱟᱨ ᱠᱟᱹᱣᱫᱤ ᱠᱟᱹᱢᱤ ᱞᱟᱹᱜᱤᱫ ᱯᱚᱨᱚᱢᱟᱱᱪᱷᱚᱭ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autènticati p’accèdiri ê to chiavi e i furmi di pagamentu sarbati."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "සුරැකි පිවිසුම් හා ගෙවීමේ ක්‍රම වෙත ප්‍රවේශ වීමට සත්‍යාපනය කරන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overte sa, aby ste mali prístup k uloženým heslá a spôsobom platby."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za dostop do shranjenih gesel in plačilnih sredstev potrdite svojo istovetnost."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Që të përdorni fjalëkalimet tuaj të ruajtur dhe metoda pagesash, bëni mirëfilltësimin."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oténtikeun pikeun ngaksés sandi nu disimpen jeung cara mayar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentisera för att komma åt dina sparade lösenord och betalningsmetoder."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Барои пайдо кардани дастрасӣ ба ниҳонвожаҳои нигоҳдошташуда ва тарзҳои пардохт, ҳаққонияти худро тасдиқ кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ยืนยันตัวตนเพื่อเข้าถึงการเข้าสู่ระบบและวิธีการชำระเงินที่คุณบันทึกไว้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıtlı parolalarınıza ve ödeme yöntemlerinize erişmek için kimliğinizi doğrulayın."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сакланган серсүзләрегезгә һәм түләү ысулларыгызга ирешү өчен аутентификация үтегез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ساقلىغان ئىم ۋە چىقىم قىلىش ئۇسۇلىنى زىيارەت قىلىشنى دەلىللەيدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизуйтеся для доступу до своїх збережених паролів та способів оплати."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xác thực để truy cập mật khẩu đã lưu và phương thức thanh toán của bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进行身份验证后才能访问保存的密码和付款方式。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "驗證後即可存取您儲存的密碼與付款方式資訊。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,0 +1,2496 @@
+{
+  "sourceLanguage" : "en-US",
+  "strings" : {
+    "Engagement.Notification.Body.v112" : {
+      "comment" : "Body of notification sent to user after inactivity to encourage them to use the search feature.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ааигәа акы ԥшаа. Мамзаргьы аинтерес зҵоу акы аԥшаара."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знайдзіце што-небудзь побач. Або адкрыйце для сябе што-небудзь цікавае."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaskit un dra nes. Pe dizoloit un dra bennak plijus."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronađite nešto u blizini. Ili otkrijte nešto zabavno."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trobeu alguna cosa a prop. O descobriu alguna cosa divertida."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Truvate qualcosa in vicinanza. O scuprite qualcosa di svagativu."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Najděte něco v okolí, nebo objevte něco zábavného."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canfod rhywbeth gerllaw. Neu darganfod rywbeth difyr."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find noget i nærheden. Eller opdag noget sjovt."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finden Sie etwas in der Nähe. Oder entdecken Sie etwas Lustiges."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namakajśo něco w bliskosći. Abo namakajśo něco žortnego."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Βρείτε κάτι κοντά σας. Ή ανακαλύψτε κάτι διασκεδαστικό."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find something nearby. Or discover something fun."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find something nearby. Or discover something fun."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Find something nearby. Or discover something fun."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serĉu ion proksime. Aŭ malkovru ion amuzan."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra algo cerca. O descubre algo divertido."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar algo cercano. O descubrir algo divertido."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra algo cerca. O descubre algo divertido."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra algo cerca. O descubre algo divertido."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra algo cerca. O descubre algo divertido."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilatu inguruko zerbait. Edo aurkitu zerbait dibertigarria."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etsi jotain läheltä. Tai löydä jotain hauskaa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trouvez quelque chose à proximité. Ou découvrez quelque chose d’amusant."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lorg rud-eigin am fagas. No faigh lorg air rud-eigin spòrsail."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busque algo preto. Ou descubra algo divertido."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אפשר לחפש משהו באזור. או לגלות משהו נחמד."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronađi nešto u blizini. Ili otkrij nešto zabavno."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namakajće něšto w bliskosći. Abo wotkryjće něšto žortneho."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keressen valamit a közelben. Vagy fedezzen fel valami szórakoztatót."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Գտեք մոտակայքում ինչ-որ բան: Կամ բացահայտել ինչ-որ զվարճալի բան:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trova alco in proximitate. O discoperi alco amusante."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temukan sesuatu di sekitar. Atau temukan sesuatu yang menyenangkan."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finndu eitthvað í nágrenninu. Eða uppgötvaðu eitthvað skemmtilegt."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trova qualcosa nelle vicinanze, oppure scopri qualcosa di divertente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気になること、興味のあることをさがしてみましょう。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "მონახეთ რამე ახლომახლო. ანდაც აღმოაჩინეთ რამე სახალისო."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Af kra iqerben. Neɣ snirem kra yessedhayen. "
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жақын жерден бірдеңе табыңыз. Немесе қызықты нәрсе табыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "근처에 있는 것을 찾아 보거나 재미있는 것을 발견해 보세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຊອກຫາສິ່ງທີ່ຢູ່ໃກ້ໆ. ຫຼືຄົ້ນພົບສິ່ງທີ່ມ່ວນ."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "അടുത്തെന്തെങ്കിലും കണ്ടുപിടിക്കുക അല്ലെങ്കിൽ രസകരമായ എന്തെങ്കിലും ആരായുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finn noe i nærheten. Eller oppdag noe morsomt."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoek iets in de buurt. Of ontdek iets leuks."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finn noko nær deg. Eller oppdag noko artig."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਨੇੜੇ ਤੇੜੇ ਕੁਝ ਲੱਭੋ। ਜਾਂ ਕੁਝ ਮੌਜ ਮਸਤੀ ਲਈ ਲੱਭੋ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajdź coś w pobliżu. Albo odkryj coś fajnego."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encontre algo por perto. Ou descubra algo divertido."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encontre algo próximo. Ou descubra qualquer divertida."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chatta insatge en la vischinanza. U scuvra rauba divertenta."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Найдите что-нибудь поблизости. Или откройте для себя что-либо интересное."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱥᱩᱨ ᱠᱚᱨᱮ ᱡᱟᱦᱱᱟᱜ ᱯᱟᱱᱛᱮ ᱢᱮ ᱾ ᱟᱨ ᱵᱟᱝ ᱡᱟᱦᱱᱟᱜ ᱢᱚᱡᱽ ᱯᱟᱱᱛᱮ ᱢᱮ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attrova cosi agghiri di tia. O scopri quarchi cosa pi sbarijàriti."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "අවට යමක් හෝ විනෝදාත්මක දෙයක් සොයා ගන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nájdite niečo v okolí. Alebo objavte niečo zábavné."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poiščite nekaj v bližini. Ali odkrijte kaj zabavnega."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjeni diçka atypari. Ose zbuloni diçka zbavitëse."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balangsiar di nu deukeut. Atawa panggihan nu pikaresepeun."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitta något i närheten. Eller upptäck något roligt."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чизе муҳимро дар атрофи худ пайдо кунед. Ё чизе шавқоварро пайдо кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ค้นหาสิ่งที่อยู่ใกล้ๆ หรือค้นพบอะไรสนุกๆ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İster yakınınızdaki restoranları bulun, ister eğlenceli bir şeyler keşfedin."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Янәшәдәге берәр нәрсә табыгыз. Яисә үзегез өчен кызыклы бер әйбер ачыгыз."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئەتراپتىكى نەرسىلەرنى ئىزدەڭ. ياكى قىزىقارلىق ئىشلارنى بايقاڭ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знайдіть щось поблизу. Або дізнайтеся щось цікаве."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm một cái gì đó gần đây. Hoặc khám phá một cái gì đó thú vị."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索周边物，探索新鲜事。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜尋附近的東西或探索新鮮事物。"
+          }
+        }
+      }
+    },
+    "Engagement.Notification.Title.v112" : {
+      "comment" : "Title of notification sent to user after inactivity to encourage them to use the search feature.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раԥхьатәи аԥшаара алагара"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пачніце ваш першы пошук"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kregiñ gant ho klask kentañ"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Započnite svoju prvu pretragu"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feu la primera cerca"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizià cù a vostra prima ricerca"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Začnete své první vyhledávání"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cychwyn eich chwilio cyntaf"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start din første søgning"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten Sie Ihre erste Suche"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startujśo swójo prědne pytanje"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάντε την πρώτη σας αναζήτηση"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start your first search"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start your first search"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Start your first search"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komencu vian unua serĉon"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia tu primera búsqueda"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar tu primera búsqueda"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia tu primera búsqueda"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia tu primera búsqueda"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia tu primera búsqueda"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasi zure lehenengo bilaketarekin"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aloita ensimmäinen haku"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effectuez votre première recherche"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tòisich air rudan a lorg"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comece a súa primeira busca"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "התחלת החיפוש הראשון שלך"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Započni svoje prvo pretraživanje"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startujće swoje prěnje pytanje"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kezdje el az első keresést"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Սկսեք ձեր առաջին որոնումը"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comencia tu prime recerca"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mulai pencarian pertama Anda"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Byrjaðu fyrstu leitina þína"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizia la tua prima ricerca"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索を使ってみよう"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "დაიწყეთ გვერდების მოძიება"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bdu anadi-ik·im amezwaru"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бірінші іздеуді бастаңыз"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 번째 검색 시작"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ເລີ່ມການຄົ້ນຫາທໍາອິດຂອງທ່ານ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "താങ്ങളുടെ ആദ്യ തിരയൽ തുടങ്ങുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start ditt første søk"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start uw eerste zoekopdracht"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start det første søket ditt"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਆਪਣੀ ਪਹਿਲੀ ਖੋਜ ਕਰੋ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyszukaj po raz pierwszy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicie sua primeira pesquisa"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comece a sua primeira pesquisa"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tschertga per l'emprima giada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начните свой первый поиск"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱟᱢᱟᱜ ᱯᱩᱭᱞᱤ ᱥᱮᱸᱫᱽᱨᱟ ᱮᱛᱦᱚᱵ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accumincia câ to prima risciduta"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ප්‍රථම සෙවීම අරඹන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Začnite prvé vyhľadávanie"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Začnite svoje prvo iskanje"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filloni kërkimin tuaj të parë"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitembeyan maluruh"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starta din första sökning"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ҷустуҷӯи аввалини худро оғоз кунед"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เริ่มการค้นหาครั้งแรกของคุณ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aramaya başlayın"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Беренче эзләвегезне башлагыз"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تۇنجى ئىزدەشنى باشلاڭ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почніть свій перший пошук"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bắt đầu tìm kiếm đầu tiên của bạn"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始您的搜索之旅吧"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "進行第一次搜尋吧"
+          }
+        }
+      }
+    },
+    "Engagement.Notification.Treatment.A.Body.v114" : {
+      "comment" : "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хаҭалатәи аԥшаара %@ аҟны удыррақәа еиқәнархаӡом, насгьы иҵәаху амҩаԥгаҩцәа ааннакылоит."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прыватнае агляданне у %@ не захоўвае вашу інфармацыю і блакіруе схаваныя трэкеры."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ar merdeiñ prevez e %@ ne enroll ket ho titouroù ha stankañ a ra an heulierien guzh."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privatno pretraživanje u %@ ne čuva vaše podatke i blokira skrivene pratioce."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navegació privada del %@ no desa cap informació vostra i bloca els elements de seguiment ocults."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A navigazione privata in %@ ùn arregistreghja micca e vostre infurmazioni è blucca l’elementi di spiunagiu chì sò piattati."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anonymní prohlížení v prohlížeči %@ neukládá vaše informace a blokuje skryté sledovací prvky."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nid yw pori preifat yn %@ yn cadw eich manylion ac mae'n rhwystro tracwyr cudd."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privat browsing i %@ gemmer ikke dine oplysninger og blokerer skjulte sporings-mekanismer."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Private Modus in %@ speichert Ihre Daten nicht und blockiert versteckte Tracker."
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priwatny modus w %@ waše informacije njeskładujo a blokěrujo schowane pśeslědowaki."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η ιδιωτική περιήγηση στο %@ δεν αποθηκεύει τις πληροφορίες σας και αποκλείει κρυφούς ιχνηλάτες."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Private browsing in %@ doesn’t save your info and blocks hidden trackers."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Private browsing in %@ doesn’t save your info and blocks hidden trackers."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Private browsing in %@ doesn’t save your info and blocks hidden trackers."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privata retumo en %@ ne konservas viajn informojn kaj blokas kaŝitajn spurilojn."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navegación privada en %@ no guarda tu información y bloquea los rastreadores ocultos."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navegación privada en %@ no guarda tu información y bloquea los rastreadores ocultos."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navegación privada en %@ no guarda tu información y bloquea los rastreadores ocultos."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navegación privada en %@ no guarda tu información y bloquea los rastreadores ocultos."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navegación privada en %@ no guarda tu información y bloquea rastreadores ocultos."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@(e)ko nabigatze pribatuak ez du zure informaziorik gordetzen eta ezkutuko jarraipen-elementuak blokeatzen ditu."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yksityinen selaus %@issa ei tallenna tietojasi ja estää piilotetut seuraimet."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navigation privée de %@ ne conserve pas vos informations et bloque les traqueurs cachés."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cha sàbhail brabhsadh prìobhaideach ann an %@ am fiosrachadh agad is bacaidh e tracaichean falaichte."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A navegación privada en %@ non garda a súa información e bloquea os rastrexadores ocultos."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גלישה פרטית ב־%@ לא שומרת את המידע שלך, וחוסמת רכיבי מעקב נסתרים."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privatno pregledavanje u %@ ne sprema tvoje podatke i blokira skrivene programe za praćenje."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priwatny modus w %@ waše informacije njeskładuje a blokuje schowane přesćěhowaki."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A %@ privát böngészése nem menti el az adatait, és blokkolja a rejtett követőket."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-ում գաղտնի դիտարկումը չի պահպանում ձեր տեղեկությունները և արգելափակում է թաքնված հետագծերը:"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le navigation private in %@ non salva tu informationes e bloca traciatores occulte."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Penjelajahan pribadi di %@ tidak menyimpan info Anda dan memblokir pelacak tersembunyi."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huliðsleit í %@ vistar ekki upplýsingar um þig og lokar á falda rekjara."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navigazione anonima in %@ non salva le tue informazioni e blocca gli elementi traccianti nascosti."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ のプライベートブラウジングは見えないトラッカーをブロックし、足跡を残さずにブラウジングできます。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ პირადი რეჟიმით არ იცავს თქვენს მონაცემებს და არ ზღუდავს ფარულ მეთვალყურეებს."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunigin tusligt deg %@ur tesseklas ara talɣut-ik rnu tessewḥal ineḍfaren yeffren."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ішіндегі жекелік шолу сіздің ақпаратыңызды сақтаймайды және жасырын трекерлерді блоктайды."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 사생활 보호 모드는 정보를 저장하지 않고 숨겨진 추적기를 차단합니다."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ການທ່ອງເວັບສ່ວນຕົວໃນ %@ ບໍ່ໄດ້ບັນທຶກຂໍ້ມູນຂອງທ່ານ ແລະ ບລັອກຕົວຕິດຕາມທີ່ເຊື່ອງໄວ້."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-ൽ സ്വകാര്യ തിരച്ചിൽ താങ്ങളുടെ ഡാറ്റയെ കരുതിവയ്ക്കാറില്ല പിന്നെ ഒളിച്ചിരിക്കുന്ന പിന്തുടൎച്ചയന്ത്രങ്ങളെ തടയാറുണ്ടു്."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privat nettlesing i %@ lagrer ikke informasjonen din og blokkerer skjulte sporere."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privénavigatie in %@ slaat uw informatie niet op en blokkeert verborgen trackers."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privat surfning i %@ lagrar ikkje innformasjonen din, og blokkerer skjulte sporarar."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ਵਿੱਚ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ ਕਰਨਾ ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਨੂੰ ਸੰਭਾਲਦਾ ਨਹੀ ਅਤੇ ਲੁਕਵੇਂ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ।"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryb prywatny w przeglądarce %@ nie zachowuje Twoich danych i blokuje ukryte elementy śledzące."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A navegação privativa no %@ não salva suas informações e bloqueia rastreadores ocultos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A navegação privada em %@ não guarda as suas informações e bloqueia rastreadores ocultos."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La navigaziun privata en %@ na memorisescha betg tias infurmaziuns e blochescha fastizaders zuppads."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приватный просмотр в %@ не сохраняет вашу информацию и блокирует скрытые трекеры."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ᱨᱮ ᱯᱨᱟᱭᱣᱮᱴ ᱵᱽᱨᱟᱣᱡᱤᱝ ᱫᱚ ᱟᱢᱟᱜ ᱡᱤᱱᱤᱥ ᱨᱚ ᱫᱚ ᱵᱟᱭ ᱥᱟᱺᱪᱟᱣᱟᱭ ᱟᱨ ᱩᱠᱩ ᱜᱷᱮᱨ ᱮᱥᱮᱫ ᱠᱚ ᱵᱟᱹᱰ ᱠᱚᱣᱟᱭ ᱾"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A navicazzioni privata di %@ nun sarba i to nfurmazzioni e blocca i trazzatura ammucciati."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ පෞද්. පිරික්සුම ඔබගේ තොරතුරු සුරකින්නේ නැති අතර සැඟවුණු ලුහුබැඳීම් අවහිර කරයි."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Súkromné prehliadanie v prehliadači %@ neukladá vaše informácie a blokuje skryté sledovacie prvky."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasebno brskanje v %@u ne shranjuje vaših podatkov in blokira skrite sledilce."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shfletimi privat në %@ nuk ruan hollësitë tuaja dhe bllokon gjurmues të fshehur."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panyungsi pribadi dina %@ henteu nyimpeun informasi jeung nolak palacak nyamuni."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privat surfning i %@ sparar inte din information och blockerar dolda spårare."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Реҷаи «Тамошобинии хусусӣ» дар «%@» маълумоти шахсии шуморо нигоҳ намедорад ва ҳар гуна васоити пайгирии пинҳониро манъ мекунад."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "การเรียกดูแบบส่วนตัวใน %@ จะไม่บันทึกข้อมูลของคุณและปิดกั้นตัวติดตามที่ซ่อนอยู่"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ile gizli gezinti, bilgilerinizi kaydetmez ve gizli takip kodlarını engeller."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ хосусый гизү режимында мәгълүматыгызны сакламый һәм яшерен трекерларны блоклый."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شەخسىي زىيارەتتە %@ ئۇچۇرلىرىڭىزنى ساقلىمايدۇ ھەمدە يوشۇرۇن ئىزلىغۇچىلارنى توسىدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Режим приватного перегляду в %@ не зберігає вашу інформацію та блокує приховані елементи стеження."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duyệt web riêng tư trong %@ không lưu thông tin của bạn và chặn các trình theo dõi ẩn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 %@ 中进行隐私浏览不会保存您的信息并会阻止隐藏的跟踪器。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的隱私瀏覽模式不會儲存您的個資，並且封鎖網頁中隱藏的追蹤器。"
+          }
+        }
+      }
+    },
+    "Engagement.Notification.Treatment.A.Title.v114" : {
+      "comment" : "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ашьҭа нмыжькәа ауеб аԥшаара"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аглядайце без слядоў"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merdeiñ hep roud ebet"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pretražujte bez praćenja"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegueu sense deixar rastre"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigà senza nisuna traccia"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prohlížejte beze stop"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pori heb gadael ôl"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug nettet uden at efterlade spor"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spurloses Surfen"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bźez slěda pśeglědowaś"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Περιηγηθείτε χωρίς να αφήσετε ίχνη"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse without a trace"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse without a trace"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Browse without a trace"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retumu sen lasi spurojn"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin dejar rastro"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegá sin rastros"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin dejar huellas"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin dejar rastro"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin dejar huellas"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nabigatu lorratzik utzi gabe"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selaa jättämättä jälkiä"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naviguez sans laisser de traces"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dèan brabhsadh gun lorg fhàgail"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegar sen deixar rastro"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לגלוש מבלי להשאיר עקבות"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pretražuj bez ostavljanja traga"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bjez slěda přehladować"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Böngésszen nyom nélkül"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Դիտարկեք առանց հետք թողնելու"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naviga sin lassar tracia"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menjelajah tanpa meninggalkan jejak"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vafraðu án ummerkja"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naviga senza lasciar tracce"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "足跡を残さずにブラウジング"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ათვალიერეთ კვალის დატოვების გარეშე"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inig war ma teǧǧiḍ lǧeṛṛa"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Із қалдырмай шолу"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "흔적 없이 브라우징하기"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ທ່ອງເວັບໂດຍບໍ່ມີການຕິດຕາມ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "യാതൊന്നും അവശേഷിപ്പിക്കാതെ തിരയുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf sporløst"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf zonder sporen achter te laten"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf sporlaust"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਬਿਨਾਂ ਪੈੜਾਂ ਛੱਡੇ ਬਰਾਊਜ਼ ਕਰੋ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przeglądaj Internet bez śladu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegue sem deixar rastros"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegue sem deixar rastos"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na lascha nagins fastizs"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Просматривайте сеть, не оставляя следа"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱵᱤᱱᱟᱹ ᱯᱟᱧᱡᱟ ᱛᱮ ᱵᱽᱨᱟᱣᱡᱽ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nàvica senza lassari trazzi"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "හෝඩුවාවකින් තොරව පිරික්සන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prehliadajte bez stopy"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brskajte brez sledu"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shfletoni pa lënë gjurmë"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kotéktak tanpa tapak"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surfa utan ett spår"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тамошобинӣ дар Интернет бе пайгирӣ"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ท่องเว็บโดยไร้ร่องรอย"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İz bırakmadan gezinin"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эзләр калдырмыйча гизегез"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ئىزسىز زىيارەت"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Користуйтеся інтернетом, не залишаючи слідів"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duyệt không để lại dấu vết"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浏览不留痕迹"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "瀏覽不留痕跡"
+          }
+        }
+      }
+    },
+    "Engagement.Notification.Treatment.B.Body.v114" : {
+      "comment" : "Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox).",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аԥшаара еиқәырхоу акукиқәеи аҭоурыхи рыда %@ аҟны."
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Праглядайце без захаваных файлаў кукі або гісторыі ў %@."
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merdeit hep toupin enrollet na roll istor e %@."
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pretražujte bez sačuvanih kolačića ili historije u %@."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegueu sense desar cap galeta ni historial en el %@."
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigate senza arregistrà nè canistrelli nè cronolugia in %@."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prohlížejte web bez ukládání cookies a historie v aplikaci %@."
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pori heb gadw unrhyw gwcis na hanes yn %@."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brug nettet uden at cookies eller historik gemmes i %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surfen Sie mit %@ ohne Cookies oder eine Chronik zu speichern"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pśeglědujśo z %@ bźez skłaźonych cookiejow abo historije."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Περιηγηθείτε χωρίς αποθηκευμένα cookie ή ιστορικό στο %@."
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse with no saved cookies or history in %@."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse with no saved cookies or history in %@."
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Browse with no saved cookies or history in %@."
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retumu per %@ sen konservitaj kuketoj aŭ historio."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin guardar cookies ni historial en %@."
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegá sin cookies ni historial guardados en %@."
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin guardar cookies ni historial en %@."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin guardar cookies ni historial en %@."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navega sin guardar cookies o historial en %@."
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nabigatu cookie eta historiarik gorde gabe %@(e)n."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selaa ilman tallennettuja evästeitä tai historiaa %@issa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naviguez sans enregistrer ni cookies ni historique dans %@."
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dèan brabhsadh gun bhriosgaid no eachdraidh sam bith a shàbhaladh ann am %@."
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegar sen rastros nin historial gardados en %@."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גלישה ללא עוגיות או היסטוריה שמורים ב־%@."
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pregledavaj bez spremljenih kolačića ili povijesti u %@."
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Přehladujće z %@ bjez składowanych plackow abo historije."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Böngésszen mentett sütik vagy előzmények nélkül a %@ban."
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Զննեք առանց պահված թխուկների կամ պատմության %@-ում"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naviga sin cookies o chronologia salvate in %@."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menjelajah tanpa kuki atau riwayat tersimpan di %@."
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vafraðu án þess að vista vefkökur eða aðgerðaferil í %@."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naviga senza salvare cookie o cronologia in %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cookie や履歴を %@ に保存せずに閲覧します。"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ინახულეთ გვერდები ფუნთუშებისა და ისტორიის შეუნახავად %@-ში."
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inig s war asekles n yinagan n tuqqnad uzray deg %@."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ішінде сақталған cookie файлдарсыз және тарихсыз шолыңыз."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 저장된 쿠키나 기록 없이 브라우징하세요."
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ຊອກຫາດ້ວຍບໍ່ມີຄຸກກີ ຫຼື ປະຫວັດທີ່ບັນທຶກໄວ້ໃນ %@."
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-ൽ കരുതിവച്ച കുക്കികളോ നാൾവഴിയോ ഇല്ലാതെ തിരയുക."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf uten lagrede infokapsler eller historikk med %@."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf zonder opgeslagen cookies of geschiedenis in %@."
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surf uten lagra infokapslar eller historikk med %@."
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ਵਿੱਚ ਬਿਨਾਂ ਕਿਸੇ ਸੰਭਾਲੇ ਕੂਕੀ ਜਾਂ ਅਤੀਤ ਦੇ ਬਰਾਊਜ਼ ਕਰੋ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używaj przeglądarki %@ bez zachowywania ciasteczek ani historii."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegue sem salvar cookies nem histórico no %@."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navegue sem guardar cookies nem histórico no %@."
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navighescha senza memorisar ni cookies ni la cronologia en %@."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Просматривайте без сохранённых кук или истории в %@."
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ᱨᱮ ᱵᱟᱝ ᱥᱟᱧᱪᱟᱣ ᱠᱟᱱ ᱠᱩᱠᱤ ᱟᱨᱵᱟᱝ ᱦᱤᱛᱟᱹᱞ ᱠᱚ ᱵᱽᱨᱟᱣᱩᱡᱽ ᱢᱮ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nàvica senza sarbari viscotta o crunuluggìa cu %@."
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ හි සුරැකෙන දත්තකඩ හෝ ඉතිහාසයකින් තොරව පිරික්සන්න."
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prehliadajte bez uložených súborov cookie alebo histórie v prehliadači %@."
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brskajte brez shranjevanja piškotkov ali zgodovine v %@u."
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shfletoni në %@ pa ruajtje cookie-sh apo historiku."
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nyungsi tanpa neundeun réréméh atawa jujutan dina %@."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surfa utan sparade kakor eller historik i %@."
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сомонаҳоро бе ягон куки ё таърихи нигоҳдошташуда дар «%@» тамошо кунед."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เรียกดูโดยไม่มีคุกกี้หรือประวัติที่บันทึกไว้ใน %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ile çerezleriniz ve geçmişiniz kaydedilmeden gezin."
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-та сакланган cookie файлларсыз һәм тарихсыз гизегез."
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ زىيارەت داۋامىدا cookies ۋە تارىخ خاتىرىسىنى ساقلىمايدۇ."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переглядайте без збереження файлів cookie чи історії у %@."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duyệt mà không để lại cookie hoặc lịch sử trong %@."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 将不会保存浏览期间的 Cookie 和历史记录"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上網結束後，%@ 將不會保留任何 Cookie 與瀏覽紀錄。"
+          }
+        }
+      }
+    },
+    "Engagement.Notification.Treatment.B.Title.v114" : {
+      "comment" : "Title of notification sent to user after inactivity to encourage them to use the private browsing feature.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "ab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иԥышәшәа хатә ԥшаара"
+          }
+        },
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Паспрабуйце прыватнае агляданне"
+          }
+        },
+        "br" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaskit ar merdeiñ prevez"
+          }
+        },
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isprobaj privatno pretraživanje"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proveu la navegació privada"
+          }
+        },
+        "co" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pruvà a navigazione privata"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vyzkoušejte anonymní prohlížení"
+          }
+        },
+        "cy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rhowch gynnig ar bori preifat"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv privat browsing"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probieren Sie den Privaten Modus aus"
+          }
+        },
+        "dsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wopytajśo priwatny modus"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δοκιμάστε την ιδιωτική περιήγηση"
+          }
+        },
+        "en-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try private browsing"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try private browsing"
+          }
+        },
+        "en-US" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Try private browsing"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provu la privatan retumon"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba la navegación privada"
+          }
+        },
+        "es-AR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probá la navegación privada"
+          }
+        },
+        "es-CL" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba la navegación privada"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba la navegación privada"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba la navegación privada"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probatu nabigatze pribatua"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kokeile yksityistä selaamista"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayez la navigation privée"
+          }
+        },
+        "gd" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feuch am brabhsadh prìobhaideach"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probe a navegación privada"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נסו את הגלישה הפרטית"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isprobaj privatno pretraživanje"
+          }
+        },
+        "hsb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wupruwujće priwatny modus"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próbálja ki a privát böngészést"
+          }
+        },
+        "hy-AM" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Փորձեք Գաղտնի դիտարկումը"
+          }
+        },
+        "ia" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essaya le navigation private"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coba penjelajahan pribadi"
+          }
+        },
+        "is" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prófaðu huliðsvafur"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova la navigazione anonima"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライベートブラウジングを試す"
+          }
+        },
+        "ka" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "გამოცადეთ პირადი რეჟიმი"
+          }
+        },
+        "kab" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ɛreḍ tunigin tusligt"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жекелік шолуды қолданып көріңіз"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사생활 보호 모드 사용해보기"
+          }
+        },
+        "lo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ລອງຊອກຫາແບບສ່ວນຕົວ"
+          }
+        },
+        "ml" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "സ്വകാര്യ തിരയൽ ഉപയോഗിച്ചു് നോക്കുക"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv privat nettlesing"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer privénavigatie"
+          }
+        },
+        "nn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv privat nettlesing"
+          }
+        },
+        "pa-IN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ ਕਰਨ ਨੂੰ ਅਜ਼ਮਾਓ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypróbuj tryb prywatny"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Experimente a navegação privativa"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Experimente a navegação privada"
+          }
+        },
+        "rm" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emprova il modus privat"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попробуйте приватный просмотр"
+          }
+        },
+        "sat-Olck" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ᱱᱤᱡᱚᱨᱟᱜ ᱵᱽᱨᱟᱣᱡᱤᱝ ᱠᱩᱨᱩᱢᱩᱴᱩ ᱞᱮᱢ"
+          }
+        },
+        "scn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova a navicazzioni privata"
+          }
+        },
+        "si" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "පෞද්. පිරික්සුම බලන්න"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vyskúšajte súkromné prehliadanie"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preizkusite zasebno brskanje"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provoni shfletimin privat"
+          }
+        },
+        "su" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cobaan nyungsi nyamuni"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prova privat surfning"
+          }
+        },
+        "tg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тамошобинии хусусиро озмоед"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ลองการเรียกดูแบบส่วนตัว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gizli gezintiyi deneyin"
+          }
+        },
+        "tt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хосусый гизүне сынап карагыз"
+          }
+        },
+        "ug" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شەخسىي زىيارەتنى سىناڭ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спробуйте приватний перегляд"
+          }
+        },
+        "ur" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نجی برائوزنگ کو آزمائیں"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thử duyệt web riêng tư"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "试用隐私浏览功能"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "試用隱私瀏覽功能"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
