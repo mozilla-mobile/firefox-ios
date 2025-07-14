@@ -164,6 +164,9 @@ let package = Package(
                 .linkedFramework("Metal"),
                 .linkedFramework("MetalKit")
             ]),
+        .testTarget(
+            name: "OnboardingKitTests",
+            dependencies: ["OnboardingKit"]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
             dependencies: ["ContentBlockingGenerator"]),
