@@ -167,7 +167,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    https://mozilla.testrail.io/index.php?/cases/view/3090304
+    // https://mozilla.testrail.io/index.php?/cases/view/3090304
     func testOpenNewTabFromTabTrayHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
@@ -188,7 +188,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    https://mozilla.testrail.io/index.php?/cases/view/3090305
+    // https://mozilla.testrail.io/index.php?/cases/view/3090305
     func testOpenNewTabFromMenuHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
@@ -231,7 +231,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    https://mozilla.testrail.io/index.php?/cases/view/3090307
+    // https://mozilla.testrail.io/index.php?/cases/view/3090307
     func testOpenNewTabFromNavigationToolbarFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
@@ -250,7 +250,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    https://mozilla.testrail.io/index.php?/cases/view/3090308
+    // https://mozilla.testrail.io/index.php?/cases/view/3090308
     func testOpenNewTabFromTabTrayFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
@@ -268,7 +268,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    https://mozilla.testrail.io/index.php?/cases/view/3090309
+    // https://mozilla.testrail.io/index.php?/cases/view/3090309
     func testOpenNewTabFromMenuFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
@@ -286,7 +286,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    https://mozilla.testrail.io/index.php?/cases/view/3090310
+    // https://mozilla.testrail.io/index.php?/cases/view/3090310
     func testOpenNewTabFromLongPressFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
