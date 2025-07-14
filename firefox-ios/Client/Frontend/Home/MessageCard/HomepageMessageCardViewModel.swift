@@ -45,6 +45,7 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
         message.map(messagingManager.onMessageDisplayed)
     }
 
+    @MainActor
     func handleMessagePressed() {
         guard let message else { return }
         let uuid = (delegate as? InjectedThemeUUIDIdentifiable)?.windowUUID
