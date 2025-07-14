@@ -18,18 +18,18 @@ final class SiteImageViewTests: XCTestCase {
         self.imageFetcher = nil
     }
 
-    func testFaviconSetup() {
+    func testFaviconSetup() async {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
         let viewModel = FaviconImageViewModel(siteURLString: url,
                                               faviconCornerRadius: 8)
-        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
+        let subject = await FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
             XCTAssertEqual(self.imageFetcher.getImageCalled, 1, "get image should be called")
         }
-        subject.setFavicon(viewModel)
+        await subject.setFavicon(viewModel)
 
-        waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation], timeout: 0.1)
     }
 
     func testHeroImageSetup() {
@@ -50,29 +50,29 @@ final class SiteImageViewTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
-    func testCanMakeRequest_firstTime_true() {
+    func testCanMakeRequest_firstTime_true() async {
         let url = "https://www.firefox.com"
-        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
-        let canMakeRequestFirstTime = subject.canMakeRequest(with: url)
+        let subject = await FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        let canMakeRequestFirstTime = await subject.canMakeRequest(with: url)
 
         XCTAssertTrue(canMakeRequestFirstTime)
     }
 
-    func testCanMakeRequest_secondTime_false() {
+    func testCanMakeRequest_secondTime_false() async {
         let url = "https://www.firefox.com"
-        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
-        _ = subject.canMakeRequest(with: url)
-        let canMakeRequestSecondTime = subject.canMakeRequest(with: url)
+        let subject = await FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        _ = await subject.canMakeRequest(with: url)
+        let canMakeRequestSecondTime = await subject.canMakeRequest(with: url)
 
         XCTAssertFalse(canMakeRequestSecondTime)
     }
 
-    func testCanMakeRequest_secondTime_newURL_true() {
+    func testCanMakeRequest_secondTime_newURL_true() async {
         let url = "https://www.firefox.com"
-        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
-        _ = subject.canMakeRequest(with: url)
+        let subject = await FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        _ = await subject.canMakeRequest(with: url)
         let newURL = "https://www.google.com"
-        let canMakeRequestSecondTime = subject.canMakeRequest(with: newURL)
+        let canMakeRequestSecondTime = await subject.canMakeRequest(with: newURL)
 
         XCTAssertTrue(canMakeRequestSecondTime)
     }
