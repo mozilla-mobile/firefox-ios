@@ -44,6 +44,32 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    func test_shouldDownloadFile_whenContentDispositionAttachmentHeader_isTrue() {
+        let response = httpURLResponse(mimeType: MIMEType.JPEG,
+                                       contentDispositionHeader: true)
+        if let subject = createSubject(request: anyRequest(),
+                                       response: response,
+                                       cookieStore: cookieStore()) {
+            let shouldDownload = subject.shouldDownloadFile(canShowInWebView: true,
+                                                            forceDownload: false,
+                                                            isForMainFrame: false)
+            XCTAssertTrue(shouldDownload)
+        }
+    }
+
+    func test_shouldDownloadFile_whenContentDispositionAttachmentHeader_isFalse() {
+        let response = httpURLResponse(mimeType: MIMEType.JPEG,
+                                       contentDispositionHeader: false)
+        if let subject = createSubject(request: anyRequest(),
+                                       response: response,
+                                       cookieStore: cookieStore()) {
+            let shouldDownload = subject.shouldDownloadFile(canShowInWebView: true,
+                                                            forceDownload: false,
+                                                            isForMainFrame: false)
+            XCTAssertFalse(shouldDownload)
+        }
+    }
+
     func test_shouldDownloadFile_whenCanShowInWebview_isFalse() {
         let response = anyResponse(mimeType: MIMEType.GIF)
 
@@ -151,6 +177,15 @@ class DownloadHelperTests: XCTestCase {
         )
     }
 
+    private func httpURLResponse(mimeType: String,
+                                 contentDispositionHeader: Bool) -> MockHTTPURLResponse {
+        return MockHTTPURLResponse(forcedMimeType: mimeType,
+                                   url: URL(string: "http://any-url.com")!,
+                                   statusCode: 200,
+                                   httpVersion: "HTTP/1.1",
+                                   headerFields: contentDispositionHeader ? ["Content-Disposition": "attachment"] : nil)!
+    }
+
     private func anyResponse(urlString: String) -> URLResponse {
         return URLResponse(
             url: URL(string: urlString)!,
@@ -167,4 +202,23 @@ class DownloadHelperTests: XCTestCase {
     private func anyCachePolicy() -> URLRequest.CachePolicy {
         return .useProtocolCachePolicy
     }
+}
+
+class MockHTTPURLResponse: HTTPURLResponse, @unchecked Sendable {
+    private var forcedMimeType: String
+    init?(forcedMimeType: String,
+          url: URL,
+          statusCode: Int,
+          httpVersion HTTPVersion: String?,
+          headerFields: [String: String]?) {
+        self.forcedMimeType = forcedMimeType
+        super.init(url: url,
+                   statusCode: statusCode,
+                   httpVersion: HTTPVersion,
+                   headerFields: headerFields)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override var mimeType: String? { forcedMimeType }
 }
