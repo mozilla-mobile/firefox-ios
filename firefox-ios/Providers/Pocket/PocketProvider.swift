@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-protocol PocketStoriesProviding {
+protocol PocketStoriesProviding: Sendable {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
 
     func fetchStories(items: Int) async throws -> [PocketFeedStory]
@@ -17,38 +17,33 @@ extension PocketStoriesProviding {
     }
 }
 
-class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
-    private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
-
+final class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching, Sendable {
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
 
+    private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
     private let pocketGlobalFeed: String
-    private var prefs: Prefs
+    private let prefs: Prefs
+    private let urlSession: URLSession
+    private let pocketKey: String?
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
+
+    var urlCache: URLCache {
+        return URLCache.shared
+    }
+
+    enum Error: Swift.Error {
+        case failure
+    }
 
     // Allow endPoint to be overridden for testing
     init(endPoint: String = PocketProvider.GlobalFeed,
          prefs: Prefs) {
         self.pocketGlobalFeed = endPoint
         self.prefs = prefs
-    }
-
-    var urlCache: URLCache {
-        return URLCache.shared
-    }
-
-    private lazy var urlSession = makeURLSession(
-        userAgent: UserAgent.defaultClientUserAgent,
-        configuration: URLSessionConfiguration.defaultMPTCP
-    )
-
-    private lazy var pocketKey: String? = {
-        return Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
-    }()
-
-    enum Error: Swift.Error {
-        case failure
+        self.urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent,
+                                         configuration: URLSessionConfiguration.defaultMPTCP)
+        self.pocketKey = Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
     }
 
     // Fetch items from the global pocket feed

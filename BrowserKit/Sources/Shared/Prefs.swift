@@ -222,7 +222,7 @@ public struct PrefsKeys {
     }
 }
 
-public protocol Prefs {
+public protocol Prefs: Sendable {
     func getBranchPrefix() -> String
     func branch(_ branch: String) -> Prefs
     func setTimestamp(_ value: Timestamp, forKey defaultName: String)
