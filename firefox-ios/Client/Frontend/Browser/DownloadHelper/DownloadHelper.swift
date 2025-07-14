@@ -44,7 +44,6 @@ class DownloadHelper: NSObject {
         }
 
         // Handles attachments downloads.
-        // Only supports PDF and Words docs but can be expanded to support more extensions
         if shouldDownloadAttachment() {
             return true
         }
