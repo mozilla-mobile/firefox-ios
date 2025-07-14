@@ -21,6 +21,10 @@ def main():
     args = parse_args()
     version = VersionInfo(args.version)
     tag = version.swift_version
+
+    BRANCH = "rcs-auto-update"
+    TITLE = f"Nightly auto-update ({version.swift_version})"
+    
     if rev_exists(tag):
         print(f"Tag {tag} already exists, quitting")
         sys.exit(1)
@@ -28,18 +32,39 @@ def main():
     if not repo_has_changes():
         print("No changes detected, quitting")
         sys.exit(0)
+    # Make a branch for the PR
+    subprocess.check_call(["git", "checkout", "-B", BRANCH])
     subprocess.check_call([
         "git",
         "commit",
         "--author",
-        "Firefox Sync Engineering<sync-team@mozilla.com>",
+        "Firefox Sync Engineering <sync-team@mozilla.com>",
         "--message",
-        f"Nightly auto-update ({version.swift_version})"
+        TITLE
     ])
     subprocess.check_call(["git", "tag", tag])
     if args.push:
-        subprocess.check_call(["git", "push", args.remote])
+        subprocess.check_call(["git", "push", "--force-with-lease", "-u", args.remote, BRANCH])
         subprocess.check_call(["git", "push", args.remote, tag])
+        # If we didn't merge the previous PR, lets auto-update it instead of making
+        # a new one
+        try:
+            result = subprocess.run(
+                ["gh", "pr", "view", BRANCH, "--json", "state", "--jq", ".state"],
+                text=True,
+                capture_output=True,
+            )
+        if result.returncode == 0 and result.stdout.strip() == "OPEN":
+            print("PR already open – branch updated in place")
+        except subprocess.CalledProcessError:
+            subprocess.check_call([
+                "gh", "pr", "create",
+                "--title",  TITLE,
+                "--body",  f"Automatically generated app-services nightly build for `{tag}`.",
+                "--base",  "main",
+                "--head",  BRANCH,
+                "--label", "auto-update,nightly"
+            ])
 
 def update_source(version):
     print("Updating Package.swift xcframework info", flush=True)
@@ -120,7 +145,7 @@ def extract_tarball(version, temp_dir):
 
 def replace_all_files(temp_dir):
     replace_files(temp_dir / "swift-components/all", "MozillaRustComponents/Sources/MozillaRustComponentsWrapper")
-    replace_files(temp_dir / "swift-components/focus", "MozillaRustComponents/Sources/FocusRustComponentsWrapper")
+    #replace_files(temp_dir / "swift-components/focus", "MozillaRustComponents/Sources/FocusRustComponentsWrapper")
     subprocess.check_call(["git", "add", "MozillaRustComponents"])
 
 """
