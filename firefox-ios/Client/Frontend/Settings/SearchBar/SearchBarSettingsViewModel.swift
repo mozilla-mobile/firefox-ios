@@ -106,7 +106,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         return position
     }
 
-    // FIXME We shouldn't be initializing what are essentially views in a view model
+    // TODO: FXIOS-12830 view models should not contain Views that require main actor isolation
     @MainActor var topSetting: CheckmarkSetting {
         return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.top.getLocalizedTitle),
                                 subtitle: nil,
@@ -116,7 +116,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         )
     }
 
-    // FIXME We shouldn't be initializing what are essentially views in a view model
+    // TODO: FXIOS-12830 view models should not contain Views that require main actor isolation
     @MainActor var bottomSetting: CheckmarkSetting {
         return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.bottom.getLocalizedTitle),
                                 subtitle: nil,
