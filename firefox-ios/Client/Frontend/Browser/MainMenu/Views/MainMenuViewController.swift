@@ -63,6 +63,10 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
     }
 
+    private var bannerShown: Bool {
+        profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
+    }
+
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
@@ -177,6 +181,10 @@ class MainMenuViewController: UIViewController,
 
             menuRedesignContent.bannerButtonCallback = { [weak self] in
                 self?.dispatchDefaultBrowserAction()
+            }
+
+            menuRedesignContent.closeBannerButtonCallback = { [weak self] in
+                self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
             }
 
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
@@ -294,7 +302,8 @@ class MainMenuViewController: UIViewController,
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
                                          isBannerFlagEnabled: isMenuDefaultBrowserBanner,
-                                         isBrowserDefault: isBrowserDefault)
+                                         isBrowserDefault: isBrowserDefault,
+                                         bannerShown: bannerShown)
     }
 
     private func setupMenuOrientation() {

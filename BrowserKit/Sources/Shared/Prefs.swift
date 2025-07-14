@@ -214,6 +214,9 @@ public struct PrefsKeys {
     // Used to only show the felt deletion alert confirmation once, used for private mode
     public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
+    // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
+    public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
+
     public struct Usage {
         public static let profileId = "profileId"
     }
