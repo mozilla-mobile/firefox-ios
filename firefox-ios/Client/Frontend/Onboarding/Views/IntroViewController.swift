@@ -112,7 +112,7 @@ class IntroViewController: UIViewController,
 
     private func setupLayout() {
         setupPageController()
-        if viewModel.isDismissable { setupCloseButton() }
+        if viewModel.isDismissible { setupCloseButton() }
     }
 
     private func setupPageController() {
@@ -129,7 +129,7 @@ class IntroViewController: UIViewController,
     }
 
     private func setupCloseButton() {
-        guard viewModel.isDismissable else { return }
+        guard viewModel.isDismissible else { return }
         view.addSubview(closeButton)
         view.bringSubviewToFront(closeButton)
         view.accessibilityElements = [closeButton, pageController.view as Any, pageControl]
