@@ -325,7 +325,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // MARK: - Bottom Toolbar
     // https://mozilla.testrail.io/index.php?/cases/view/3090311
-    func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() {
+    func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() throws {
         guard !iPad() else {
             throw XCTSkip("Bottom address bar is not available for iPad")
         }
