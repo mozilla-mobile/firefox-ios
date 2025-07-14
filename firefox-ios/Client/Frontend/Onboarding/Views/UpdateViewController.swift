@@ -88,7 +88,7 @@ class UpdateViewController: UIViewController,
             setupMultipleCardsConstraints()
         }
 
-        if viewModel.isDismissable { setupCloseButton() }
+        if viewModel.isDismissible { setupCloseButton() }
     }
 
     private func setupSingleInfoCard() {
@@ -122,7 +122,7 @@ class UpdateViewController: UIViewController,
     }
 
     private func setupCloseButton() {
-        guard viewModel.isDismissable else { return }
+        guard viewModel.isDismissible else { return }
         view.addSubview(closeButton)
         view.bringSubviewToFront(closeButton)
 
