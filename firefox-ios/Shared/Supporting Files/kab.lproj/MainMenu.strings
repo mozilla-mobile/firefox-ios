@@ -22,6 +22,9 @@
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Mtawi awalen n uεeddi, accaren akked wayen niḍen";
 
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "Mtawi ticraḍ n yisebtar, awalen n uεeddi, accaren akked wayen niḍen";
+
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Kcem";
 
@@ -225,6 +228,9 @@
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Askar n yiḍ";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. */
+"MainMenu.Submenus.Tools.PageZoom.Title.v140" = "Zoom n usebter (%@)";
 
 /* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
 "MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "Zoom n usebter";

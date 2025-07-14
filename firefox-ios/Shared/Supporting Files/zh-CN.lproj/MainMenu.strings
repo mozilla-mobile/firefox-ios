@@ -5,7 +5,7 @@
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "新功能：简约菜单";
 
 /* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "将页面加入书签";
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "为页面添加书签";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "不可用";
@@ -38,7 +38,7 @@
 "MainMenu.Account.SyncError.Title.v131" = "重新登录以同步";
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.BookmarkPage.Title.v141" = "将页面加入书签";
+"MainMenu.BookmarkPage.Title.v141" = "为页面添加书签";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "关";
@@ -65,7 +65,7 @@
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "下载";
 
 /* On the main menu, the title for the action that will take the user to the History panel. */
-"MainMenu.PanelLinkSection.History.Title.v131" = "历史记录";
+"MainMenu.PanelLinkSection.History.Title.v131" = "历史";
 
 /* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "密码";
@@ -119,7 +119,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "添加书签";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "为此页添加书签";
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "为此页面添加书签";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
 "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "编辑书签";
@@ -158,7 +158,7 @@
 "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "添加书签";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
-"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "为此页添加书签";
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "为此页面添加书签";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
 "MainMenu.Submenus.Save.EditBookmark.Title.v131" = "编辑书签";
