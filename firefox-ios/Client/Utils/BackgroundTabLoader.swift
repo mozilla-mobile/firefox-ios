@@ -36,6 +36,7 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
         }
     }
 
+    @MainActor
     private func dequeueQueuedTabs() {
         tabQueue.getQueuedTabs { [weak self] urls in
             guard let self = self else { return }
@@ -55,6 +56,7 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
         }
     }
 
+    @MainActor
     private func open(urls: [URL]) {
         for urlToOpen in urls {
             let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)"

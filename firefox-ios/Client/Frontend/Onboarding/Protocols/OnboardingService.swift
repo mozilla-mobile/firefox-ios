@@ -54,6 +54,7 @@ final class OnboardingService: FeatureFlaggable {
         self.searchBarLocationSaver = searchBarLocationSaver
     }
 
+    @MainActor // FIXME I can see some of these completion handlers getting called on a new thread than previously (main)
     func handleAction(
         _ action: OnboardingActions,
         from cardName: String,
@@ -174,6 +175,7 @@ final class OnboardingService: FeatureFlaggable {
         presentSignToSync(with: fxaParams, profile: profile, completion: completion)
     }
 
+    @MainActor
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
@@ -191,6 +193,7 @@ final class OnboardingService: FeatureFlaggable {
         presentPrivacyPolicy(from: url, completion: completion)
     }
 
+    @MainActor
     private func handleOpenIosFxSettings(from cardName: String) {
         defaultApplicationHelper.openSettings()
     }

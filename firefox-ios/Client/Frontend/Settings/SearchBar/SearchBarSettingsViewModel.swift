@@ -106,7 +106,8 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         return position
     }
 
-    var topSetting: CheckmarkSetting {
+    // FIXME We shouldn't be initializing what are essentially views in a view model
+    @MainActor var topSetting: CheckmarkSetting {
         return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.top.getLocalizedTitle),
                                 subtitle: nil,
                                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.topSetting,
@@ -115,7 +116,8 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
         )
     }
 
-    var bottomSetting: CheckmarkSetting {
+    // FIXME We shouldn't be initializing what are essentially views in a view model
+    @MainActor var bottomSetting: CheckmarkSetting {
         return CheckmarkSetting(title: NSAttributedString(string: SearchBarPosition.bottom.getLocalizedTitle),
                                 subtitle: nil,
                                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.SearchBar.bottomSetting,
