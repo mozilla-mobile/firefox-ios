@@ -305,6 +305,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3090324
     func testNavigateBackFromWebpageToHomepageForTopToolbar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
