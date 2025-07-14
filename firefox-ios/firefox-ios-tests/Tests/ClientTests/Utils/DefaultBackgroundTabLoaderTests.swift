@@ -22,6 +22,7 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
         self.tabQueue = nil
     }
 
+    @MainActor
     func testLoadBackgroundTabs_noTabs_doesntLoad() {
         let subject = createSubject()
 
@@ -31,6 +32,7 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
+    @MainActor
     func testLoadBackgroundTabs_withTabs_load() {
         let urlString = "https://www.mozilla.com"
         tabQueue.queuedTabs = [ShareItem(url: urlString, title: "Title 1"),

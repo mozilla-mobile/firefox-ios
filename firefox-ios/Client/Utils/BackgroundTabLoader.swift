@@ -28,10 +28,11 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
         self.backgroundQueue = backgroundQueue
     }
 
+    @MainActor
     func loadBackgroundTabs() {
         // Make sure we load queued tabs on a background thread
         backgroundQueue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.dequeueQueuedTabs()
         }
     }
