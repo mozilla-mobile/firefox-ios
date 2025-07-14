@@ -23,6 +23,7 @@ final class HomepageDiffableDataSource:
         case bookmarks(TextColor?)
         case pocket(TextColor?)
         case customizeHomepage
+        case spacer
 
         var canHandleLongPress: Bool {
             switch self {
@@ -44,6 +45,7 @@ final class HomepageDiffableDataSource:
         case bookmark(BookmarkConfiguration)
         case pocket(PocketStoryConfiguration)
         case customizeHomepage
+        case spacer
 
         static var cellTypes: [ReusableCell.Type] {
             return [
@@ -57,7 +59,8 @@ final class HomepageDiffableDataSource:
                 BookmarksCell.self,
                 PocketStandardCell.self,
                 StoryCell.self,
-                CustomizeHomepageSectionCell.self
+                CustomizeHomepageSectionCell.self,
+                EmptyHomepageCell.self
             ]
         }
 
@@ -97,6 +100,12 @@ final class HomepageDiffableDataSource:
         if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(textColor, numberOfCellsPerRow)])
             snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
+        }
+
+        // TODO add to pocket state
+        if featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
+            snapshot.appendSections([.spacer])
+            snapshot.appendItems([.spacer], toSection: .spacer)
         }
 
         if state.searchState.shouldShowSearchBar {
@@ -185,3 +194,5 @@ final class HomepageDiffableDataSource:
         return state.bookmarks.compactMap { .bookmark($0) }
     }
 }
+
+class EmptyHomepageCell: UICollectionViewCell, ReusableCell { }

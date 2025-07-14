@@ -69,6 +69,9 @@ final class HomepageViewController: UIViewController,
     private var alreadyTrackedTopSites = Set<HomepageItem>()
     private let trackingImpressionsThrottler: ThrottleProtocol
 
+    let sectionLayoutProvider: HomepageSectionLayoutProvider
+    private var spacerH = 0.0
+
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
@@ -107,6 +110,8 @@ final class HomepageViewController: UIViewController,
             with: syncTabContextualViewProvider,
             windowUUID: windowUUID
         )
+
+        sectionLayoutProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
 
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -321,6 +326,53 @@ final class HomepageViewController: UIViewController,
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
+
+        calculateSpacerHeight()
+    }
+
+    private func calculateSpacerHeight() {
+        guard let collectionView = self.collectionView else { return }
+
+        var totalHeight: CGFloat = 0
+
+        for section in 0..<collectionView.numberOfSections {
+            if self.isSpacerSection(section) { continue }
+
+            let numberOfItems = collectionView.numberOfItems(inSection: section)
+            var sectionRect = CGRect.null
+
+            // Sum item frames
+            for item in 0..<numberOfItems {
+                let indexPath = IndexPath(item: item, section: section)
+                if let attr = collectionView.layoutAttributesForItem(at: indexPath) {
+                    sectionRect = sectionRect.union(attr.frame)
+                }
+            }
+
+            // Sum header/footer frames
+            for kind in [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter] {
+                let indexPath = IndexPath(item: 0, section: section)
+                if let attr = collectionView.layoutAttributesForSupplementaryElement(ofKind: kind, at: indexPath) {
+                    sectionRect = sectionRect.union(attr.frame)
+                }
+            }
+
+            totalHeight += sectionRect.height
+        }
+
+        if totalHeight != spacerH {
+            self.sectionLayoutProvider.spacerHeight = collectionView.bounds.height - totalHeight - 132
+            self.spacerH = totalHeight
+            DispatchQueue.main.async {
+                collectionView.collectionViewLayout.invalidateLayout()
+            }
+        }
+    }
+
+    private func isSpacerSection(_ section: Int) -> Bool {
+        guard let dataSource else { return false }
+        let sectionIdentifier = dataSource.snapshot().sectionIdentifiers[section]
+        return sectionIdentifier == .spacer
     }
 
     func unsubscribeFromRedux() {
@@ -402,7 +454,6 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
@@ -417,10 +468,10 @@ final class HomepageViewController: UIViewController,
                 /// to avoid an app crash.
                 /// However, if we see this path getting hit, then something is wrong and
                 /// we should investigate the underlying issues. We should always be able to fetch the section.
-                return sectionProvider.makeEmptyLayoutSection()
+                return HomepageSectionLayoutProvider.makeEmptyLayoutSection()
             }
 
-            return sectionProvider.createLayoutSection(
+            return self?.sectionLayoutProvider.createLayoutSection(
                 for: section,
                 with: environment
             )
@@ -574,6 +625,16 @@ final class HomepageViewController: UIViewController,
             }, theme: currentTheme)
 
             return customizeHomeCell
+
+        case .spacer:
+            guard let spacerCell = collectionView?.dequeueReusableCell(
+                cellType: EmptyHomepageCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            return spacerCell
         }
     }
 

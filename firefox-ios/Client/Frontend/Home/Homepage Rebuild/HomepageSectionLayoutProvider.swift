@@ -124,6 +124,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
+    var spacerHeight = 0.0
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -169,6 +170,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             )
         case .bookmarks:
             return createBookmarksSectionLayout(for: traitCollection)
+        case .spacer:
+            return createSpacerSectionLayout(for: traitCollection)
         }
     }
 
@@ -491,8 +494,19 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
+    private func createSpacerSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let spacerH = max(1, spacerHeight)
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(spacerH))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
+        let sectionLayout = NSCollectionLayoutSection(group: group)
+        sectionLayout.interGroupSpacing = 0
+        return sectionLayout
+    }
+
     /// Returns an empty layout to avoid app crash when unable to section data
-    func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
+    static func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
         let zeroLayoutSize = NSCollectionLayoutSize(
             widthDimension: .absolute(0.0),
             heightDimension: .absolute(0.0)
