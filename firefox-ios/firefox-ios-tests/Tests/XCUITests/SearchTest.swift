@@ -42,6 +42,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436093
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
+        app.launch()
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
         mozWaitForElementToNotExist(app.staticTexts[LabelPrompt])
@@ -89,6 +90,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436094
     func testDoNotShowSuggestionsWhenEnteringURL() {
+        app.launch()
         // According to bug 1192155 if a string contains /, do not show suggestions, if there a space an a string,
         // the suggestions are shown again
         navigator.goto(URLBarOpen)
@@ -124,6 +126,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436095
     func testCopyPasteComplete() {
         // Copy, Paste and Go to url
+        app.launch()
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
         if #available(iOS 17, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 17
@@ -199,6 +202,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353246
     func testDefaultSearchEngine() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
@@ -206,6 +210,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
+        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
@@ -259,6 +264,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
     func testSearchIconOnAboutHome() throws {
+        app.launch()
         if iPad() {
             throw XCTSkip("iPad does not have search icon")
         } else {
@@ -374,6 +380,7 @@ class SearchTests: FeatureFlaggedTestBase {
         guard #available(iOS 17.0, *) else { return }
 
         // Tap on URL Bar and type "g"
+        app.launch()
         navigator.nowAt(NewTabScreen)
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
@@ -417,6 +424,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2576803
     func testFirefoxSuggest() {
         // In history: mozilla.org
+        app.launch()
         navigator.openURL("https://www.mozilla.org/en-US/")
         waitUntilPageLoad()
 
