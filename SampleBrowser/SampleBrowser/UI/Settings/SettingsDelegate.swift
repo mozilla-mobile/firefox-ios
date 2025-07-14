@@ -17,5 +17,4 @@ protocol SettingsDelegate: AnyObject {
     func setZoom(_ value: CGFloat)
     func loadPopupWebSource()
     func loadPrintWebSource()
-    func summarizePage()
 }

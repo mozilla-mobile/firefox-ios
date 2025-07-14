@@ -46,6 +46,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: - Switch to tab
 
+    @MainActor
     func test_switchToTab_notInOverlayMode_switchTabs() {
         let subject = createSubject()
         let tab = createTab(profile: mockProfile)
@@ -55,6 +56,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
+    @MainActor
     func test_switchToTab_inOverlayMode_leaveOverlayMode() {
         let subject = createSubject()
         let tab = createTab(profile: mockProfile)
@@ -64,6 +66,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
+    @MainActor
     func test_switchToTab_tabManagerSelectsTab() {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile)

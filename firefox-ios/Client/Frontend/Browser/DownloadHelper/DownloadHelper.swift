@@ -94,16 +94,14 @@ class DownloadHelper: NSObject {
                                              text: modelText,
                                              iconString: "file",
                                              iconAlignment: .right,
-                                             bold: true)
-        filenameItem.customHeight = { _ in
-            return 80
-        }
-
-        filenameItem.customRender = { label, contentView in
+                                             bold: true,
+                                             customRender: { label, contentView in
             label.numberOfLines = 2
             label.font = FXFontStyles.Bold.body.scaledFont()
             label.lineBreakMode = .byCharWrapping
-        }
+        }, customHeight: { _ in
+            return 80
+        })
 
         let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow,
                                                      iconString: StandardImageIdentifiers.Large.download) { _ in

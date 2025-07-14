@@ -63,10 +63,9 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
 
     @ViewBuilder
     private func itemImage(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
-        if let img = item.image {
+        if let img = item.image(isSelected: isSelected) {
             Image(uiImage: img)
                 .resizable()
-                .colorMultiply(isSelected ? actionPrimary : noSelection)
                 .aspectRatio(contentMode: .fit)
                 .frame(height: UX.SegmentedControl.imageHeight)
                 .accessibilityHidden(true)
@@ -84,13 +83,15 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
                 : UX.SegmentedControl.radioButtonNotSelectedImage,
                 bundle: .module
             )
-            .font(.system(size: UX.SegmentedControl.checkmarkFontSize))
+            .resizable()
+            .frame(width: UX.SegmentedControl.checkmarkFontSize, height: UX.SegmentedControl.checkmarkFontSize)
             .accessibilityHidden(true)
         }
     }
 
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
+            .opacity(UX.SegmentedControl.selectedColorOpacity)
         noSelection = Color(theme.colors.textOnDark)
     }
 }

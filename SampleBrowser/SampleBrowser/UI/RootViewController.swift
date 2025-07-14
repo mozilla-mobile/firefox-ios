@@ -167,12 +167,6 @@ class RootViewController: UIViewController,
         searchVC.remove()
     }
 
-    // MARK: - Summary
-
-    func summarizePage() {
-        onSummarize?()
-    }
-
     // MARK: - BrowserToolbarDelegate
 
     func backButtonTapped() {

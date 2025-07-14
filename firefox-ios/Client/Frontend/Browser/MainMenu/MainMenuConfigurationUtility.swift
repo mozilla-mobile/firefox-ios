@@ -158,6 +158,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
             isHorizontalTabsSection: true,
+            groupA11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions,
             isHomepage: tabInfo.isHomepage,
             options: [
             MenuElement(
@@ -252,7 +253,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     needsReAuth: tabInfo.accountData.needsReAuth,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: "\(tabInfo.accountData.title) \(tabInfo.accountData.subtitle ?? "")",
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.signIn,
                     action: {
@@ -416,9 +417,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: isActive,
             a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.DesktopSite,
-            a11yHint: "",
+            a11yHint: isActive ? .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
             a11yId: AccessibilityIdentifiers.MainMenu.desktopSite,
-            infoTitle: isActive ? .MainMenu.On : .MainMenu.Off,
+            infoTitle: isActive ? .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
             action: {
                 store.dispatchLegacy(
                     MainMenuAction(
@@ -448,7 +449,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: false,
             a11yLabel: isExpanded ? A11y.LessOptions : A11y.MoreOptions,
-            a11yHint: "",
+            a11yHint: isExpanded ? A11y.ExpandedHint : A11y.CollapsedHint,
             a11yId: AccessibilityIdentifiers.MainMenu.moreLess,
             action: {
                 store.dispatchLegacy(
@@ -485,8 +486,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             iconName: "",
             isEnabled: true,
             isActive: tabInfo.zoomLevel != regularZoom,
-            a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, "\(zoomSymbol)\(zoomLevel)"),
-            a11yHint: "",
+            a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.PageZoom,
+            a11yHint: "\(zoomSymbol)\(zoomLevel)",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             isOptional: true,
             infoTitle: "\(zoomLevel)",
@@ -507,20 +508,20 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         and tabInfo: MainMenuTabInfo
     ) -> MenuElement {
         typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
+        typealias Tools = String.MainMenu.Submenus.Tools
 
         let nightModeIsOn = NightModeHelper.isActivated()
-        let a11yLabel = nightModeIsOn ? A11y.NightModeOff : A11y.NightModeOn
 
         return MenuElement(
             title: .MainMenu.Submenus.Tools.WebsiteDarkMode,
             iconName: "",
             isEnabled: true,
             isActive: nightModeIsOn,
-            a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode,
+            a11yHint: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
             a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
             isOptional: true,
-            infoTitle: nightModeIsOn ? .MainMenu.On : .MainMenu.Off,
+            infoTitle: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
             action: {
                 store.dispatchLegacy(
                     MainMenuAction(

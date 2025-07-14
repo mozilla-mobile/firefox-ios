@@ -77,6 +77,10 @@ struct AccessibilityIdentifiers {
             static let header = "MainMenu.SiteProtectionHeader"
         }
 
+        struct HeaderBanner {
+            static let closeButton = "MainMenu.HeaderBanner.CloseMenuButton"
+        }
+
         struct HeaderView {
             static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"
@@ -629,10 +633,6 @@ struct AccessibilityIdentifiers {
 
         struct ShowIntroduction {
             static let title = "ShowTour"
-        }
-
-        struct SentFromFirefox {
-            static let whatsApp = "SentFromFirefox.WhatsApp"
         }
 
         struct SendFeedback {

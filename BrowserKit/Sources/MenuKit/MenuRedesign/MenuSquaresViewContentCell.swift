@@ -14,6 +14,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         stack.axis = .horizontal
         stack.spacing = UX.contentViewSpacing
         stack.distribution = .fillEqually
+        stack.accessibilityContainerType = .semanticGroup
     }
 
     private var menuData: [MenuSection]
@@ -27,10 +28,24 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         menuData = []
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        selectionStyle = .none
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // We override this method, for handling taps on MenuSquareView views
+    // This may be a temporary fix
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard self.bounds.contains(point) else { return nil }
+        for subview in contentStackView.arrangedSubviews {
+            let convertedPoint = self.convert(point, to: subview)
+            if let hitView = subview.hitTest(convertedPoint, with: event) {
+                return hitView
+            }
+        }
+        return super.hitTest(point, with: event)
     }
 
     private func setupUI() {
@@ -44,8 +59,13 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         ])
     }
 
-    func reloadData(with data: [MenuSection]) {
+    func reloadData(with data: [MenuSection], and groupA11yLabel: String?) {
         menuData = data
+        setupHorizontalTabs()
+        contentStackView.accessibilityLabel = groupA11yLabel
+    }
+
+    private func setupHorizontalTabs() {
         contentStackView.removeAllArrangedViews()
         guard let horizontalTabsSection else { return }
         for option in horizontalTabsSection.options {
@@ -53,6 +73,9 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
                 guard let self else { return }
                 view.configureCellWith(model: option)
                 if let theme { view.applyTheme(theme: theme) }
+                view.cellTapCallback = {
+                    option.action?()
+                }
             }
             contentStackView.addArrangedSubview(squareView)
         }

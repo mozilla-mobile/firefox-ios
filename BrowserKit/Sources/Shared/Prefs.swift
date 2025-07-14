@@ -84,7 +84,6 @@ public struct PrefsKeys {
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
-        public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
     }
@@ -127,6 +126,7 @@ public struct PrefsKeys {
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case mainMenuKey = "MainMenuHintKey"
+        case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
     }

@@ -16,6 +16,7 @@ final class MainMenuAction: Action {
     var siteProtectionsData: SiteProtectionsData?
     var telemetryInfo: TelemetryInfo?
     var isExpanded: Bool?
+    var isBrowserDefault: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -28,7 +29,8 @@ final class MainMenuAction: Action {
         accountIcon: UIImage? = nil,
         siteProtectionsData: SiteProtectionsData? = nil,
         telemetryInfo: TelemetryInfo? = nil,
-        isExpanded: Bool? = nil
+        isExpanded: Bool? = nil,
+        isBrowserDefault: Bool = false
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
@@ -39,6 +41,7 @@ final class MainMenuAction: Action {
         self.siteProtectionsData = siteProtectionsData
         self.telemetryInfo = telemetryInfo
         self.isExpanded = isExpanded
+        self.isBrowserDefault = isBrowserDefault
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -66,6 +69,7 @@ enum MainMenuMiddlewareActionType: ActionType {
     case requestTabInfo
     case requestTabInfoForSiteProtectionsHeader
     case updateAccountHeader
+    case updateBannerVisibility
 }
 
 enum MainMenuDetailsActionType: ActionType {

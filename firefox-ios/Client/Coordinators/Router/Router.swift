@@ -67,13 +67,6 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - hideBar: Hide the navigation bar or not
     ///   - animated: Animates the transitions or not
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool)
-
-    /// Embeds the `UIViewController` in the `navigationController`.
-    ///
-    /// - Parameters:
-    ///   - viewController: The view controller to emebed
-    ///   - insets: The margins to apply to the `viewController.view` edges.
-    func embed(_ viewController: UIViewController, insets: NSDirectionalEdgeInsets)
 }
 
 /// Adds default parameters on Router protocol

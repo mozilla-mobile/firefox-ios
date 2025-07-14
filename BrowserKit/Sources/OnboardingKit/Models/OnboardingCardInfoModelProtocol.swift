@@ -22,6 +22,7 @@ public protocol OnboardingCardInfoModelProtocol {
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
     var embededLinkText: [EmbeddedLink] { get set }
+    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>? { get }
 
     var image: UIImage? { get }
 

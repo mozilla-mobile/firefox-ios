@@ -44,6 +44,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showPrivateHomepageCalled = 0
     var showWebViewCalled = 0
     var setHomepageVisibilityCalled = 0
+    var showSummarizePanelCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -144,6 +145,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func removeDocumentLoading() {
         removeDocumentLoadingCalled += 1
+    }
+
+    func showSummarizePanel() {
+        showSummarizePanelCalled += 1
     }
 
     // MARK: - BrowserDelegate

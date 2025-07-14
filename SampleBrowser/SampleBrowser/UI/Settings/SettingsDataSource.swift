@@ -31,8 +31,6 @@ class SettingsDataSource: NSObject, UITableViewDataSource {
                                   title: "Load pop up web source"),
             SettingsCellViewModel(settingType: .loadPrintWebSource,
                                   title: "Load print web source"),
-            SettingsCellViewModel(settingType: .summarizePage,
-                                  title: "Summarize page")
         ]
     }
 

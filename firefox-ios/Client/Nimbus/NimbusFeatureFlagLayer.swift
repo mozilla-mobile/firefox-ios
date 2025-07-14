@@ -41,18 +41,6 @@ final class NimbusFeatureFlagLayer {
         case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
-        case .hntBookmarksSection:
-            return checkHNTBookmarksSectionFeature(from: nimbus)
-
-        case .hntContentFeedRefresh:
-            return checkHNTContentFeedRefreshFeature(from: nimbus)
-
-        case .hntCusomizationSection:
-            return checkHNTCustomizationSectionFeature(from: nimbus)
-
-        case .hntJumpBackInSection:
-             return checkHNTJumpBackInSectionFeature(from: nimbus)
-
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
@@ -86,6 +74,9 @@ final class NimbusFeatureFlagLayer {
         case .menuRedesign:
             return checkMenuRedesign(from: nimbus)
 
+        case .menuRedesignHint:
+            return checkMenuRedesignHint(from: nimbus)
+
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
@@ -113,17 +104,14 @@ final class NimbusFeatureFlagLayer {
         case .searchEngineConsolidation:
             return checkSearchEngineConsolidationFeature(from: nimbus)
 
-        case .sentFromFirefox:
-            return checkSentFromFirefoxFeature(from: nimbus)
-
-        case .sentFromFirefoxTreatmentA:
-            return checkSentFromFirefoxFeatureTreatmentA(from: nimbus)
-
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
+
+        case .summarizer:
+            return checkSummarizerFeature(from: nimbus)
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
@@ -145,6 +133,9 @@ final class NimbusFeatureFlagLayer {
 
         case .toolbarTranslucency:
             return checkToolbarTranslucencyFeature(from: nimbus)
+
+        case .toolbarMinimalAddressBar:
+            return checkToolbarMinimalAddressBarFeature(from: nimbus)
 
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
@@ -185,16 +176,6 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    private func checkSentFromFirefoxFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.sentFromFirefoxFeature.value()
-        return config.enabled
-    }
-
-    private func checkSentFromFirefoxFeatureTreatmentA(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.sentFromFirefoxFeature.value()
-        return config.isTreatmentA
-    }
-
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
@@ -204,22 +185,6 @@ final class NimbusFeatureFlagLayer {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         default: return false
         }
-    }
-
-    private func checkHNTBookmarksSectionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntBookmarksSectionFeature.value().enabled
-    }
-
-    private func checkHNTContentFeedRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntContentFeedCleanupFeature.value().enabled
-    }
-
-    private func checkHNTCustomizationSectionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntCustomizationSectionFeature.value().enabled
-    }
-
-    private func checkHNTJumpBackInSectionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.hntJumpBackInSectionFeature.value().enabled
     }
 
     private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {
@@ -280,6 +245,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.translucency
+    }
+
+    private func checkToolbarMinimalAddressBarFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.minimalAddressBar
     }
 
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
@@ -416,6 +386,11 @@ final class NimbusFeatureFlagLayer {
         return config.menuRedesign
     }
 
+    private func checkMenuRedesignHint(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.menuRefactorFeature.value()
+        return config.menuRedesignHint
+    }
+
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
 
@@ -436,6 +411,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.revertUnsafeContinuationsRefactor.value()
+        return config.enabled
+    }
+
+    private func checkSummarizerFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.summarizerFeature.value()
         return config.enabled
     }
 

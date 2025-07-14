@@ -8,7 +8,7 @@ import Common
 /// Stores your entire app state in the form of a single data structure.
 /// This state can only be modified by dispatching Actions to the store.
 /// Whenever the state of the store changes, the store will notify all store subscriber.
-public class Store<State: StateType>: DefaultDispatchStore {
+public class Store<State: StateType & Sendable>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
     public var state: State {
@@ -69,14 +69,23 @@ public class Store<State: StateType>: DefaultDispatchStore {
         }
     }
 
-    public func dispatchLegacy(_ action: Action) {
-        logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
+    public nonisolated func dispatchLegacy(_ action: Action) {
+        logger.log("Legacy dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
         guard Thread.isMainThread else {
-            DispatchQueue.main.async { [weak self] in self?.dispatchLegacy(action) }
+            Task { @MainActor in
+                dispatch(action)
+            }
             return
         }
 
+        actionQueue.append(action)
+        processQueuedActions()
+    }
+
+    @MainActor
+    public func dispatch(_ action: Action) {
+        logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
         actionQueue.append(action)
         processQueuedActions()
     }

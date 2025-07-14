@@ -266,7 +266,15 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: JumpBackInActionType.tapOnCell
         )
 
+        let expectation = XCTestExpectation(description: "Recent tabs should be returned")
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        mockTabManager?.selectTabExpectation = expectation
+
         subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
         let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
         XCTAssertEqual(selectedTab?.displayTitle, "www.mozilla.org")
         XCTAssertEqual(selectedTab?.url?.absoluteString, "www.mozilla.org")

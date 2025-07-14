@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol NavigationController: UIViewController {
+protocol NavigationController {
     var viewControllers: [UIViewController] { get }
     var delegate: UINavigationControllerDelegate? { get set }
     var isNavigationBarHidden: Bool { get set }

@@ -98,7 +98,16 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
         actions = actions.map { $0.reversed() }.reversed()
 
         // Flip cells
-        actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
+        actions = actions.map {
+            $0.map { oldPhotonAction in
+                let newPhotonAction = PhotonRowActions(
+                    oldPhotonAction.items.map { oldActionVM in
+                        SingleActionViewModel.copy(oldActionVM, isFlipped: true)
+                    }
+                )
+                return newPhotonAction
+            }
+        }
     }
 
     // Main menu is inverted if hamburger icon is at the bottom

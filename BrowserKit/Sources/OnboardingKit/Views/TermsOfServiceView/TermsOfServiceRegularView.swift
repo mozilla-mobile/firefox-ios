@@ -6,19 +6,19 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceRegularView<VM: OnboardingCardInfoModelProtocol>: View {
+public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var secondaryActionColor: Color = .clear
 
-    @StateObject private var viewModel: TosFlowViewModel<VM>
+    @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     public let onEmbededLinkAction: (TosAction) -> Void
 
     public init(
-        viewModel: TosFlowViewModel<VM>,
+        viewModel: TosFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onEmbededLinkAction: @escaping (TosAction) -> Void
@@ -37,7 +37,7 @@ public struct TermsOfServiceRegularView<VM: OnboardingCardInfoModelProtocol>: Vi
                 .ignoresSafeArea()
             VStack {
                 Spacer()
-                VScrollView {
+                ContentFittingScrollView {
                     VStack(spacing: UX.CardView.spacing) {
                         Spacer()
                         imageView
@@ -75,6 +75,7 @@ public struct TermsOfServiceRegularView<VM: OnboardingCardInfoModelProtocol>: Vi
         VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(viewModel.configuration.embededLinkText, id: \.linkText) { link in
                 AttributedLinkText<TosAction>(
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
@@ -98,7 +99,6 @@ public struct TermsOfServiceRegularView<VM: OnboardingCardInfoModelProtocol>: Vi
     var titleView: some View {
         Text(viewModel.configuration.title)
             .font(UX.CardView.titleFont)
-            .fontWeight(.bold)
             .foregroundColor(textColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")

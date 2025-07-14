@@ -7,6 +7,13 @@ import SwiftUI
 import Common
 
 private struct PreviewModel: OnboardingCardInfoModelProtocol {
+    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? =
+    OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
+        title: "Bottom",
+        action: OnboardingMultipleChoiceAction.toolbarBottom,
+        imageID: "toolbarBottom"
+    )
+
     var image: UIImage? { UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) }
     var cardType: OnboardingCardType
     var name, title, body, a11yIdRoot, imageID: String
@@ -154,8 +161,16 @@ extension PreviewModel {
             secondary: nil
         ),
         multipleChoiceButtons: [
-            .init(title: "Top", action: OnboardingMultipleChoiceAction.toolbarTop, imageID: "toolbarTop"),
-            .init(title: "Bottom", action: OnboardingMultipleChoiceAction.toolbarBottom, imageID: "toolbarBottom")
+            .init(
+                title: "Top",
+                action: OnboardingMultipleChoiceAction.toolbarTop,
+                imageID: "onboardingToolbarIconTop"
+            ),
+            .init(
+                title: "Bottom",
+                action: OnboardingMultipleChoiceAction.toolbarBottom,
+                imageID: "onboardingToolbarIconBottom"
+            )
         ],
         onboardingType: .freshInstall,
         a11yIdRoot: "onboarding_customizationToolbar",
@@ -217,8 +232,7 @@ extension PreviewModel {
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onBottomButtonAction: { _, _ in },
-            onLinkTap: { _ in }
+            onBottomButtonAction: { _, _ in }
         )
     }
 }
@@ -232,8 +246,7 @@ extension PreviewModel {
             windowUUID: .DefaultUITestingUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             onBottomButtonAction: { _, _ in },
-            onMultipleChoiceAction: { _, _ in },
-            onLinkTap: { _ in }
+            onMultipleChoiceAction: { _, _ in }
         )
     }
 }
@@ -245,6 +258,7 @@ extension PreviewModel {
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.all,
             onActionTap: { _, _, _ in },
+            onMultipleChoiceActionTap: { _, _ in },
             onComplete: { _ in }
         )
     )

@@ -9,6 +9,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
     // MARK: – UX Constants
     private enum UX {
         static let verticalPadding: CGFloat = 12
+        static let horizontalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 8
         static let pressedScale: CGFloat = 0.97
         static let defaultScale: CGFloat = 1.0
@@ -24,6 +25,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
         configuration.label
             .font(.headline)
             .padding(.vertical, UX.verticalPadding)
+            .padding(.horizontal, UX.horizontalPadding)
             .frame(maxWidth: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: UX.cornerRadius)

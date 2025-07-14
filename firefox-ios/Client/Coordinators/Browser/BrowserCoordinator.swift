@@ -239,6 +239,7 @@ class BrowserCoordinator: BaseCoordinator,
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
+    @MainActor
     func switchMode() {
         browserViewController.tabManager.switchPrivacyMode()
     }
@@ -1051,35 +1052,30 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showSummarizePanel() {
-        let controller = SummarizeController()
-        let screenshot = tabManager.selectedTab?.screenshot
-        let image = UIImageView(image: screenshot)
-        image.contentMode = .top
-        controller.onDismiss = {
-            self.browserViewController.contentContainer.isHidden = false
-            self.browserViewController.scrollController.showToolbars(animated: true)
-            image.removeFromSuperview()
-            controller.removeFromParent()
-            controller.view.removeFromSuperview()
+        let contentContainer = browserViewController.contentContainer
+        let browserFrame = browserViewController.view.frame
+        var browserScreenshot = browserViewController.view.snapshot
+        if let croppedImage = browserScreenshot.cgImage?.cropping(
+            to: CGRect(
+                x: contentContainer.frame.origin.x * browserScreenshot.scale,
+                y: contentContainer.frame.origin.y * browserScreenshot.scale,
+                width: contentContainer.frame.width * browserScreenshot.scale,
+                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * browserScreenshot.scale
+            )) {
+            browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
         }
-        controller.onShouldTransformContainer = { [weak self] in
-            let frame = self?.browserViewController.contentContainer.frame ?? .zero
-            self?.browserViewController.scrollController.hideToolbars(animated: true)
-            image.layer.cornerRadius = 55.5
-            image.clipsToBounds = true
-            image.translatesAutoresizingMaskIntoConstraints = false
-            self?.browserViewController.view.insertSubview(image, belowSubview: controller.view)
-            self?.browserViewController.contentContainer.isHidden = true
-            image.pinToSuperview()
-            UIView.animate(withDuration: 0.3) {
-                image.transform = CGAffineTransform(translationX: 0, y: frame.height / 2)
-            }
-        }
-        browserViewController.addChild(controller)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        browserViewController.view.addSubview(controller.view)
-        controller.view.pinToSuperview()
-        controller.didMove(toParent: browserViewController)
+
+        guard !childCoordinators.contains(where: { $0 is SummarizeController }) else { return }
+        let coordinator = SummarizeCoordinator(
+            browserSnapshot: browserScreenshot,
+            browserSnapshotTopOffset: contentContainer.frame.origin.y,
+            browserContentHiding: browserViewController,
+            parentCoordinatorDelegate: self,
+            windowUUID: windowUUID,
+            router: router
+        )
+        add(child: coordinator)
+        coordinator.start()
     }
 
     // MARK: Microsurvey

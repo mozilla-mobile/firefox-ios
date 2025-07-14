@@ -16,9 +16,8 @@ final class HomepageDiffableDataSource:
     typealias NumberOfTilesPerRow = Int
 
     enum HomeSection: Hashable {
-        case header
         case messageCard
-        case topSites(NumberOfTilesPerRow)
+        case topSites(TextColor?, NumberOfTilesPerRow)
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
@@ -36,7 +35,6 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable {
-        case header(HeaderState)
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
@@ -49,7 +47,6 @@ final class HomepageDiffableDataSource:
 
         static var cellTypes: [ReusableCell.Type] {
             return [
-                HomepageHeaderCell.self,
                 HomepageMessageCardCell.self,
                 LegacyTopSiteCell.self,
                 TopSiteCell.self,
@@ -59,6 +56,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
+                StoryCell.self,
                 CustomizeHomepageSectionCell.self
             ]
         }
@@ -91,17 +89,14 @@ final class HomepageDiffableDataSource:
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
 
-        snapshot.appendSections([.header])
-        snapshot.appendItems([.header(state.headerState)], toSection: .header)
-
         if let configuration = state.messageState.messageCardConfiguration {
             snapshot.appendSections([.messageCard])
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
         }
 
         if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
-            snapshot.appendSections([.topSites(numberOfCellsPerRow)])
-            snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
+            snapshot.appendSections([.topSites(textColor, numberOfCellsPerRow)])
+            snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
         }
 
         if state.searchState.shouldShowSearchBar {
@@ -124,7 +119,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        if featureFlags.isFeatureEnabled(.hntCusomizationSection, checking: .buildOnly) {
+        if !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
             snapshot.appendSections([.customizeHomepage])
             snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
         }

@@ -827,7 +827,9 @@ class SearchViewController: SiteTableViewController,
             reloadSearchEngines()
         case .SponsoredAndNonSponsoredSuggestionsChanged:
             guard !viewModel.searchQuery.isEmpty else { return }
-            _ = viewModel.loadFirefoxSuggestions()
+            Task {
+                await viewModel.loadFirefoxSuggestions()
+            }
         default:
             break
         }

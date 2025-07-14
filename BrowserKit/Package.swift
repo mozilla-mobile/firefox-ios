@@ -147,7 +147,11 @@ let package = Package(
             dependencies: ["MenuKit"]),
         .target(
             name: "SummarizeKit",
-            dependencies: ["Common"]),
+            dependencies: [
+                "Common",
+                "ComponentLibrary"
+            ]
+        ),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],

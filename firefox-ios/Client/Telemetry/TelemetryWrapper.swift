@@ -305,10 +305,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Homepage section preferences
-        let isJumpBackInEnabled = featureFlags.isFeatureEnabled(.hntJumpBackInSection, checking: .userOnly)
+        let isJumpBackInEnabled = !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
         GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
 
-        let isBookmarksEnabled = featureFlags.isFeatureEnabled(.hntBookmarksSection, checking: .userOnly)
+        let isBookmarksEnabled = !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
         GleanMetrics.Preferences.recentlySaved.set(isBookmarksEnabled)
 
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true

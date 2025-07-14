@@ -21,10 +21,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacyFeltDeletion
     case feltPrivacySimplifiedUI
     case firefoxSuggestFeature
-    case hntBookmarksSection
-    case hntContentFeedRefresh
-    case hntCusomizationSection
-    case hntJumpBackInSection
     case hntSponsoredShortcuts
     case hntTopSitesVisualRefresh
     case homepageRebuild
@@ -37,6 +33,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case menuRefactor
     case menuRefactorHint
     case menuRedesign
+    case menuRedesignHint
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
@@ -46,10 +43,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reportSiteIssue
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
-    case sentFromFirefox
-    case sentFromFirefoxTreatmentA
     case splashScreen
     case startAtHome
+    case summarizer
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -57,6 +53,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarRefactor
     case toolbarSwipingTabs
     case toolbarTranslucency
+    case toolbarMinimalAddressBar
     case tosFeature
     case trackingProtectionRefactor
     case unifiedAds
@@ -72,7 +69,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
-                .hntContentFeedRefresh,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageStoriesRedesign,
@@ -85,12 +81,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .searchEngineConsolidation,
-                .sentFromFirefox,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .pdfRefactor,
                 .downloadLiveActivities,
+                .summarizer,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -122,16 +118,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
-        case .hntBookmarksSection:
-            return FlagKeys.BookmarksSection
-        case .hntJumpBackInSection:
-            return FlagKeys.JumpBackInSection
         case .hntSponsoredShortcuts:
             return FlagKeys.SponsoredShortcuts
         case .inactiveTabs:
             return FlagKeys.InactiveTabs
-        case .sentFromFirefox:
-            return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
@@ -144,8 +134,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
-                .hntContentFeedRefresh,
-                .hntCusomizationSection,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageRedesign,
@@ -156,6 +144,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .menuRefactor,
                 .menuRefactorHint,
                 .menuRedesign,
+                .menuRedesignHint,
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,
@@ -165,8 +154,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
-                .sentFromFirefoxTreatmentA,
                 .splashScreen,
+                .summarizer,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,
@@ -174,6 +163,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarRefactor,
                 .toolbarSwipingTabs,
                 .toolbarTranslucency,
+                .toolbarMinimalAddressBar,
                 .tosFeature,
                 .trackingProtectionRefactor,
                 .unifiedAds,

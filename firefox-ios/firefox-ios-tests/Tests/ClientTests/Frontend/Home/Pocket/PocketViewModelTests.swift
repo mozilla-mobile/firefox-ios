@@ -104,6 +104,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertNotNil(cell)
     }
 
+    @MainActor
     func testClickingStandardCell_recordsTapOnStory() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
         let subject = createSubject()
@@ -114,6 +115,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryPosition)
     }
 
+    @MainActor
     func testClickingStandardCell_callsTapTileAction() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
         let subject = createSubject()

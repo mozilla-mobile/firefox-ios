@@ -171,7 +171,7 @@ final class LaunchCoordinator: BaseCoordinator,
             onEmbededLinkAction: { _ in }
         )
 
-        let viewController = UIHostingController(rootView: view)
+        let viewController = PortraitOnlyHostingController(rootView: view)
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
         router.present(viewController, animated: false)
@@ -260,13 +260,18 @@ final class LaunchCoordinator: BaseCoordinator,
             viewModel: OnboardingFlowViewModel(
                 onboardingCards: onboardingCards,
                 onActionTap: { [weak self] action, cardName, completion in
-                    guard let self = self else { return }
-                    onboardingService.handleAction(
+                    self?.onboardingService.handleAction(
                         action,
                         from: cardName,
                         cards: onboardingModel.cards,
                         with: activityEventHelper,
                         completion: completion
+                    )
+                },
+                onMultipleChoiceActionTap: { [weak self] action, cardName in
+                    self?.onboardingService.handleMultipleChoiceAction(
+                        action,
+                        from: cardName
                     )
                 },
                 onComplete: { [weak self] currentCardName in
@@ -280,7 +285,7 @@ final class LaunchCoordinator: BaseCoordinator,
             )
         )
 
-        let hostingController = UIHostingController(rootView: view)
+        let hostingController = PortraitOnlyHostingController(rootView: view)
         hostingController.modalPresentationStyle = .fullScreen
         router.present(hostingController, animated: false)
     }

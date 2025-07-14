@@ -120,6 +120,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuDetailsActionType.tapDismissView:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
 
+        case MainMenuActionType.tapMoreOptions:
+            handleTapMoreOptions(action: action)
+
         default: break
         }
     }
@@ -159,23 +162,35 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
-        guard !isMenuRedesignOn else { return }
-        guard let accountData = getAccountData() else {
-            dispatchUpdateAccountHeader(action: action)
-            return
-        }
-
-        if let iconURL = accountData.iconURL {
-            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                guard let self else { return }
-                self.dispatchUpdateAccountHeader(
-                    accountData: accountData,
-                    action: action,
-                    icon: image)
+        if !isMenuRedesignOn {
+            guard let accountData = getAccountData() else {
+                dispatchUpdateAccountHeader(action: action)
+                return
+            }
+            if let iconURL = accountData.iconURL {
+                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                    guard let self else { return }
+                    self.dispatchUpdateAccountHeader(
+                        accountData: accountData,
+                        action: action,
+                        icon: image)
+                }
+            } else {
+                dispatchUpdateAccountHeader(accountData: accountData, action: action)
             }
         } else {
-            dispatchUpdateAccountHeader(accountData: accountData, action: action)
+            dispatchUpdateBannerVisibility(action: action)
         }
+    }
+
+    private func dispatchUpdateBannerVisibility(action: MainMenuAction) {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: action.windowUUID,
+                actionType: MainMenuMiddlewareActionType.updateBannerVisibility,
+                isBrowserDefault: DefaultBrowserUtil.isBrowserDefault
+            )
+        )
     }
 
     private func dispatchUpdateAccountHeader(
@@ -247,6 +262,15 @@ final class MainMenuMiddleware: FeatureFlaggable {
                            subtitle: subtitle,
                            warningIcon: warningIcon,
                            iconURL: iconURL)
+    }
+
+    private func handleTapMoreOptions(action: MainMenuAction) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: String.MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint
+            )
+        }
     }
 
     private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,

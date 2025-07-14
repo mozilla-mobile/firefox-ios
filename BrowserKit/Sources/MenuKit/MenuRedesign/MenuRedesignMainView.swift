@@ -16,7 +16,8 @@ public final class MenuRedesignMainView: UIView,
     }
 
     public var closeButtonCallback: (() -> Void)?
-    public var onCalculatedHeight: ((CGFloat) -> Void)?
+    public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
+    public var bannerButtonCallback: (() -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
@@ -31,8 +32,16 @@ public final class MenuRedesignMainView: UIView,
 
     // MARK: - Properties
     private var isMenuDefaultBrowserBanner = false
+    private var menuData: [MenuSection] = []
+    private var isBrowserDefault = false
+    private var bannerShown = false
 
     // MARK: - UI Setup
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateMenuHeight(for: menuData)
+    }
+
     private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
         self.removeConstraints(viewConstraints)
         viewConstraints.removeAll()
@@ -44,10 +53,10 @@ public final class MenuRedesignMainView: UIView,
                 closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
                 closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalMargin),
                 closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-                closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+                closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
             ])
 
-            if isHeaderBanner && isMenuDefaultBrowserBanner {
+            if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {
                 self.addSubview(headerBanner)
                 viewConstraints.append(contentsOf: [
                     headerBanner.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.headerTopMargin),
@@ -92,20 +101,27 @@ public final class MenuRedesignMainView: UIView,
                                               menuA11yLabel: String,
                                               closeButtonA11yLabel: String,
                                               closeButtonA11yIdentifier: String,
-                                              siteProtectionHeaderIdentifier: String) {
+                                              siteProtectionHeaderIdentifier: String,
+                                              headerBannerCloseButtonA11yIdentifier: String,
+                                              headerBannerCloseButtonA11yLabel: String) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yIdentifier)
         closeButton.configure(viewModel: closeButtonViewModel)
-        headerBanner.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
-                                        closeButtonA11yId: closeButtonA11yIdentifier)
+        headerBanner.setupAccessibility(closeButtonA11yLabel: headerBannerCloseButtonA11yLabel,
+                                        closeButtonA11yId: headerBannerCloseButtonA11yIdentifier)
         siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
                                                 closeButtonA11yId: closeButtonA11yIdentifier)
         siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
     }
 
-    public func setupDetails(title: String, subtitle: String, image: UIImage?, isBannerEnabled: Bool) {
+    public func setupDetails(title: String,
+                             subtitle: String,
+                             image: UIImage?,
+                             isBannerFlagEnabled: Bool,
+                             isBrowserDefault: Bool) {
         headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
-        isMenuDefaultBrowserBanner = isBannerEnabled
+        isMenuDefaultBrowserBanner = isBannerFlagEnabled
+        self.isBrowserDefault = isBrowserDefault
     }
 
     // MARK: - Interface
@@ -113,47 +129,53 @@ public final class MenuRedesignMainView: UIView,
         setupView(with: data)
         tableView.reloadTableView(with: data)
         handleBannerCallback(with: data)
-        updateMenuHeight(for: data)
+        menuData = data
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
+        let expandedSection = data.first(where: { $0.isExpanded ?? false })
+        let isExpanded = expandedSection?.isExpanded ?? false
+
         // To avoid a glitch when expand the menu, we should not handle this action under DispatchQueue.main.async
-        if let expandedSection = data.first(where: { $0.isExpanded ?? false }),
-           let isExpanded = expandedSection.isExpanded,
-           isExpanded {
+        if isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
-            onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
             layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 let height = tableView.tableViewContentSize + UX.headerTopMargin
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
-                    self.setHeightForHomepageMenu(height: height)
+                    self.setHeightForHomepageMenu(height: height, isExpanded: isExpanded)
                 } else {
-                    onCalculatedHeight?(height + siteProtectionHeader.frame.height)
+                    onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
                 }
                 layoutIfNeeded()
             }
         }
     }
 
-    private func setHeightForHomepageMenu(height: CGFloat) {
+    private func setHeightForHomepageMenu(height: CGFloat, isExpanded: Bool) {
         if isMenuDefaultBrowserBanner {
             let headerBannerHeight = headerBanner.frame.height
             self.onCalculatedHeight?(height +
                                      UX.closeButtonSize +
                                      UX.headerTopMarginWithButton +
                                      headerBannerHeight +
-                                     UX.headerTopMargin)
+                                     UX.headerTopMargin,
+                                     isExpanded)
         } else {
-            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton)
+            self.onCalculatedHeight?(height + UX.closeButtonSize + UX.headerTopMarginWithButton, isExpanded)
         }
     }
 
     private func handleBannerCallback(with data: [MenuSection]) {
         headerBanner.closeButtonCallback = { [weak self] in
             self?.setupView(with: data, isHeaderBanner: false)
+            self?.bannerShown = true
+        }
+        headerBanner.bannerButtonCallback = { [weak self] in
+            self?.bannerButtonTapped()
         }
     }
 
@@ -161,6 +183,11 @@ public final class MenuRedesignMainView: UIView,
     @objc
     private func closeTapped() {
         closeButtonCallback?()
+    }
+
+    @objc
+    private func bannerButtonTapped() {
+        bannerButtonCallback?()
     }
 
     // MARK: - ThemeApplicable

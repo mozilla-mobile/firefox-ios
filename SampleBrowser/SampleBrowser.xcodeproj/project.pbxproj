@@ -10,7 +10,6 @@
 		0B014E052DBB873F00B80CBB /* testPopUp.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B014E042DBB873500B80CBB /* testPopUp.html */; };
 		0B014E072DBB97CE00B80CBB /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B014E062DBB97CE00B80CBB /* PopupViewController.swift */; };
 		0B3B69D42DAD3A33005BFAAF /* PullRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3B69D32DAD3A33005BFAAF /* PullRefreshView.swift */; };
-		0B4142752E13D69F0091BD0D /* SummarizeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0B4142742E13D69F0091BD0D /* SummarizeKit */; };
 		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
 		1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */; };
 		21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */; };
@@ -121,7 +120,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B4142752E13D69F0091BD0D /* SummarizeKit in Frameworks */,
 				8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */,
 				E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */,
 			);

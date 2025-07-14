@@ -4,7 +4,7 @@
 
 import UIKit
 
-class OpenSearchEngine: NSObject, NSSecureCoding {
+final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
     static let supportsSecureCoding = true
 
     struct UX {
@@ -36,7 +36,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
     private let suggestTemplate: String?
     private let searchTermComponent = "{searchTerms}"
-    private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
+    private let searchQueryComponentKey: String?
     private let googleEngineID = {
         if SearchEngineFlagManager.isSECEnabled {
             return "google"
@@ -82,6 +82,10 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         self.telemetrySuffix = telemetrySuffix
         self.isCustomEngine = isCustomEngine
         self.engineID = engineID
+        self.searchQueryComponentKey = OpenSearchEngine.getQueryArgFromTemplate(
+            searchTemplate: searchTemplate,
+            searchTermComponent: searchTermComponent
+        )
     }
 
     // MARK: - NSCoding
@@ -107,6 +111,11 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         Self.generateCustomEngineID()
         self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.telemetrySuffix.rawValue) as? String
         self.suggestTemplate = nil
+
+        self.searchQueryComponentKey = OpenSearchEngine.getQueryArgFromTemplate(
+            searchTemplate: self.searchTemplate,
+            searchTermComponent: searchTermComponent
+        )
     }
 
     func encode(with aCoder: NSCoder) {
@@ -159,7 +168,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
     /// Return the arg that we use for searching for this engine
     /// Problem: the search terms may not be a query arg, they may be part of the URL - how to deal with this?
-    private func getQueryArgFromTemplate() -> String? {
+    private static func getQueryArgFromTemplate(searchTemplate: String, searchTermComponent: String) -> String? {
         // we have the replace the templates SearchTermComponent in order to make the template
         // a valid URL, otherwise we cannot do the conversion to NSURLComponents
         // and have to do flaky pattern matching instead.
@@ -177,7 +186,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         }
     }
 
-    private func extractQueryArg(in queryItems: [URLQueryItem]?, for placeholder: String) -> String? {
+    private static func extractQueryArg(in queryItems: [URLQueryItem]?, for placeholder: String) -> String? {
         let searchTerm = queryItems?.filter { item in
             return item.value == placeholder
         }
