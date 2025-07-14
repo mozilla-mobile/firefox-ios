@@ -45,7 +45,7 @@ class DownloadHelper: NSObject {
 
         // Handles attachments downloads.
         // Only supports PDF and Words docs but can be expanded to support more extensions
-        if shouldDownloadAttachment(isForMainFrame: isForMainFrame) {
+        if shouldDownloadAttachment() {
             return true
         }
 
@@ -53,7 +53,7 @@ class DownloadHelper: NSObject {
         return !canShowInWebView || forceDownload
     }
 
-    private func shouldDownloadAttachment(isForMainFrame: Bool) -> Bool {
+    private func shouldDownloadAttachment() -> Bool {
         let contentDisposition = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         let isAttachment = contentDisposition?.starts(with: "attachment") ?? false
         // Bugzilla #1976304; always respect content-disposition: attachment
