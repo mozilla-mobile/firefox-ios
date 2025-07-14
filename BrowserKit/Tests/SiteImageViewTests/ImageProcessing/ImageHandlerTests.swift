@@ -430,7 +430,7 @@ private class MockFaviconFetcher: FaviconFetcher {
 }
 
 // MARK: - MockLetterImageGenerator
-private class MockLetterImageGenerator: LetterImageGenerator {
+private class MockLetterImageGenerator: LetterImageGenerator, @unchecked Sendable {
     var image = UIImage()
     var generateLetterImageCalled = 0
     var capturedSiteString: String?
@@ -439,5 +439,15 @@ private class MockLetterImageGenerator: LetterImageGenerator {
         generateLetterImageCalled += 1
         capturedSiteString = siteString
         return image
+    }
+
+    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
+        // Unneeded
+        return UIImage()
+    }
+
+    func generateLetter(fromSiteString siteString: String) throws -> String {
+        // Unneeded
+        return ""
     }
 }

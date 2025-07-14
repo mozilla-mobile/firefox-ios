@@ -55,7 +55,7 @@ class LoginListViewModel: ObservableObject {
     }
 }
 
-class MockLogger: Logger {
+class MockLogger: Logger, @unchecked Sendable {
     var crashedLastLaunch = false
     var savedMessage: String?
     var savedLevel: LoggerLevel?

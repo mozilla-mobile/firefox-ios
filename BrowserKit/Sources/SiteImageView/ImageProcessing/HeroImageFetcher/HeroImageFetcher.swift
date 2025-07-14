@@ -5,19 +5,17 @@
 import LinkPresentation
 import UIKit
 
-protocol HeroImageFetcher {
+protocol HeroImageFetcher: Sendable {
     /// FetchHeroImage using metadataProvider needs the main thread, hence using @MainActor for it.
     /// LPMetadataProvider is also a one shot object that we need to throw away once used.
     /// - Parameters:
     ///   - siteURL: the url to fetch the hero image with
     ///   - metadataProvider: LPMetadataProvider
     /// - Returns: the hero image
-    @MainActor
     func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
 }
 
 extension HeroImageFetcher {
-    @MainActor
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
@@ -25,8 +23,7 @@ extension HeroImageFetcher {
     }
 }
 
-class DefaultHeroImageFetcher: HeroImageFetcher {
-    @MainActor
+final class DefaultHeroImageFetcher: HeroImageFetcher {
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {

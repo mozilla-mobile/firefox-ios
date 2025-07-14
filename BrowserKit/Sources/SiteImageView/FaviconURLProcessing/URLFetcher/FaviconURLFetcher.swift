@@ -6,7 +6,7 @@ import Foundation
 import Fuzi
 
 /// Scrapes the HTML at a given site for images
-protocol FaviconURLFetcher {
+protocol FaviconURLFetcher: Sendable {
     /// Scrapes the HTML at the given url for a favicon image
     /// - Parameter siteURL: The web address we want to retrieve the favicon for
     /// - Parameter completion: Returns a result type of either a URL on success or a SiteImageError on failure

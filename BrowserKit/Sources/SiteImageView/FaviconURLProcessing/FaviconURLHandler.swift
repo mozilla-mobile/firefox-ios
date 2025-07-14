@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol FaviconURLHandler {
+protocol FaviconURLHandler: Sendable {
     func getFaviconURL(model: SiteImageModel) async throws -> URL
     func cacheFaviconURL(cacheKey: String, faviconURL: URL)
     func clearCache()

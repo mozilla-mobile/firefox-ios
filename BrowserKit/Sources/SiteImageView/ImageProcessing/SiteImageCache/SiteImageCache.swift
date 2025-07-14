@@ -7,7 +7,7 @@ import UIKit
 
 /// Caches images for specific `SiteImageType`s.
 /// - Note: Different `SiteImageType`s will return different images. The type is appended to the cache key.
-protocol SiteImageCache {
+protocol SiteImageCache: Sendable {
     /// Retrieves an image from the cache depending on the type.
     /// - Parameters:
     ///   - cacheKey: The cache key for the image.
