@@ -35,10 +35,10 @@ final class PopupThrottler {
 
     var alertCount = [PopupType.alert: 0, PopupType.popupWindow: 0]
     var lastAlertDate = [PopupType.alert: Date.distantPast, PopupType.popupWindow: Date.distantPast]
-    private let timespan: [PopupType: TimeInterval]
+    private let resetTime: [PopupType: TimeInterval]
 
     init(resetTime: [PopupType: TimeInterval] = PopupType.defaultResetTimes) {
-        timespan = resetTime
+        self.resetTime = resetTime
     }
 
     // MARK: - Public API
@@ -46,7 +46,7 @@ final class PopupThrottler {
     func canShowAlert(type: PopupThrottler.PopupType) -> Bool {
         guard let count = alertCount[type] else { return true }
         guard let date = lastAlertDate[type] else { return true }
-        guard let time = timespan[type] else { return true }
+        guard let time = resetTime[type] else { return true }
 
         let alertCountOK = count < type.maxPopupThreshold
         let timeOK = date.timeIntervalSinceNow < (time * -1.0)
@@ -56,7 +56,7 @@ final class PopupThrottler {
     func willShowAlert(type: PopupThrottler.PopupType) {
         guard let count = alertCount[type] else { return }
         guard let date = lastAlertDate[type] else { return }
-        guard let time = timespan[type] else { return }
+        guard let time = resetTime[type] else { return }
 
         let timeSinceLastAlert = date.timeIntervalSinceNow * -1.0
         if timeSinceLastAlert >= time {
