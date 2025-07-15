@@ -546,6 +546,7 @@ workflows:
             unzip swiftlint.zip -d swiftlint_bin
             chmod +x swiftlint_bin/swiftlint
             sudo mv swiftlint_bin/swiftlint /usr/local/bin/swiftlint
+            which swiftlint
             swiftlint version
     - script@1.2.1:
         inputs:
