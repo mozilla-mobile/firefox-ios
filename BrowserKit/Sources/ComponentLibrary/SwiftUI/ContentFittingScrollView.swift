@@ -86,21 +86,17 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
         var containerView: UIView?
         var containerHeightConstraint: NSLayoutConstraint?
         private var dynamicTypeObserver: NSObjectProtocol?
+        private var notificationTask: Task<Void, Never>?
 
         func setupDynamicTypeObserver() {
-            // TODO: FXIOS-12794 This is a work around to silence swift 6 warnings about sendability
-            let weaklyCapturedClosure = { [weak self] in
-                self?.recreateHostingController()
-            }
-            dynamicTypeObserver = NotificationCenter.default.addObserver(
-                forName: UIContentSizeCategory.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { _ in
-                // For Dynamic Type changes, we need to completely recreate the hosting controller
-                // because SwiftUI views don't always update their intrinsic size properly
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    weaklyCapturedClosure()
+            notificationTask = Task { @MainActor in
+                for await _ in NotificationCenter.default.notifications(
+                    named: UIContentSizeCategory.didChangeNotification
+                ) {
+                    // For Dynamic Type changes, we need to completely recreate the hosting controller
+                    // because SwiftUI views don't always update their intrinsic size properly
+                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+                    self.recreateHostingController()
                 }
             }
         }
@@ -227,6 +223,10 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
                     )
                 }
             }
+        }
+
+        deinit {
+            notificationTask?.cancel()
         }
     }
 }
