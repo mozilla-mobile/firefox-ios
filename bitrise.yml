@@ -539,7 +539,7 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
     - script@1.2.1:
-        title: Pin swiftlint version to 0.59.1 (Workaround)
+        - title: Pin swiftlint version to 0.59.1 (Workaround)
         - content: |-
             OLD_SWIFTLINT_PATH=`which swiftlint`
             curl -L -o swiftlint.zip https://github.com/realm/SwiftLint/releases/download/0.59.1/portable_swiftlint.zip
