@@ -28,7 +28,6 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
         self.backgroundQueue = backgroundQueue
     }
 
-    @MainActor
     func loadBackgroundTabs() {
         // Make sure we load queued tabs on a background thread
         backgroundQueue.async { [weak self] in
@@ -37,9 +36,9 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
         }
     }
 
-    @MainActor
     private func dequeueQueuedTabs() {
-        tabQueue.getQueuedTabs { [weak self] urls in
+        // Opens the database on a background thread
+        tabQueue.getQueuedTabs { @MainActor [weak self] urls in
             guard let self = self else { return }
             // This assumes that the DB returns rows in a sane order.
             guard !urls.isEmpty else { return }

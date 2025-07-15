@@ -90,7 +90,7 @@ final class MockTabQueue: TabQueue {
         return succeed()
     }
 
-    func getQueuedTabs(completion: @escaping ([ShareItem]) -> Void) {
+    func getQueuedTabs(completion: @escaping @MainActor ([ShareItem]) -> Void) {
         getQueuedTabsCalled += 1
         return completion(queuedTabs)
     }
