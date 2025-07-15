@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+@MainActor
 protocol Coordinator: AnyObject {
     var id: UUID { get }
     var childCoordinators: [Coordinator] { get }

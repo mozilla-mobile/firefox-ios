@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebEngine
-import WebKit
+// FXIOS-12832 We shouldn't need `@preconcurrency` on `MockWKUIHandler` to suppress warnings
+@preconcurrency import WebKit
 
 class MockWKUIHandler: NSObject, WKUIHandler {
     var delegate: (any WebEngine.EngineSessionDelegate)?

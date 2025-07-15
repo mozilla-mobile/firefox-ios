@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class TabTrayCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
