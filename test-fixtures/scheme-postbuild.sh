@@ -41,7 +41,7 @@ fi
 echo "Repo root: $REPO_ROOT"
 
 fixtures="$REPO_ROOT/test-fixtures"
-echo "📁 Fixtures path: $fixtures"
+echo "Fixtures path: $fixtures"
 
 if [ ! -d "$fixtures" ]; then
   echo "Fixtures directory not found: $fixtures"
