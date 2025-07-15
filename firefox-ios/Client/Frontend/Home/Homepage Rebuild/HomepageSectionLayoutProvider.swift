@@ -67,7 +67,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             @MainActor
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-                                             isLandscape: Bool = UIWindow.isLandscape,
+                                             isLandscape: Bool = UIDevice.current.orientation.isLandscape,
                                              collectionViewWidth: CGFloat) -> CGFloat {
                 var fractionalWidth: CGFloat
                 if device == .pad {
@@ -85,6 +85,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct TopSitesConstants {
             static let cellEstimatedSize = CGSize(width: 85, height: 94)
             static let minCards = 4
+            static let redesignedTopSitesBottomSpacingLandscape: CGFloat = 16
+
+            static func getBottomInset() -> CGFloat {
+                if UIDevice.current.orientation.isLandscape {
+                    return redesignedTopSitesBottomSpacingLandscape
+                } else {
+                    return UX.spacingBetweenSections - UX.interGroupSpacing
+                }
+            }
         }
 
         struct JumpBackInConstants {
@@ -120,11 +129,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
-    private var storiesCellCachedHeight: CGFloat?
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
-    var spacerHeight = 0.0
+    private var spacerHeight = 0.0
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -140,7 +148,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
-                topInsets: UX.standardInset,
                 bottomInsets: UX.HeaderConstants.bottomSpacing
             )
         case .messageCard:
@@ -172,6 +179,52 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return createBookmarksSectionLayout(for: traitCollection)
         case .spacer:
             return createSpacerSectionLayout(for: traitCollection)
+        }
+    }
+
+    // Calculates the height of the spacer section by subtracting all of the individual sections, headers, footers, and
+    // insets from the height of the collection view.
+    // This creates as large of a space as possible between top sites shortcuts and search bar/stories without the homepage
+    // needing to scroll.
+    func calculateSpacerHeight(collectionView: UICollectionView, dataSource: HomepageDiffableDataSource) {
+        var totalSectionHeights: CGFloat = 0
+
+        for section in 0..<collectionView.numberOfSections {
+            if self.isSpacerSection(dataSource: dataSource, section: section) { continue }
+
+            let numberOfItems = collectionView.numberOfItems(inSection: section)
+            var sectionRect = CGRect.null
+
+            // Sum item frames by returning the smallest rect containing all items
+            for item in 0..<numberOfItems {
+                let indexPath = IndexPath(item: item, section: section)
+                if let attr = collectionView.layoutAttributesForItem(at: indexPath) {
+                    sectionRect = sectionRect.union(attr.frame)
+                }
+            }
+
+            // Sum header/footer frames by returning the smallest rect containing all items
+            for kind in [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter] {
+                let indexPath = IndexPath(item: 0, section: section)
+                if let attr = collectionView.layoutAttributesForSupplementaryElement(ofKind: kind, at: indexPath) {
+                    sectionRect = sectionRect.union(attr.frame)
+                }
+            }
+
+            totalSectionHeights += sectionRect.height
+        }
+
+        // add section insets
+        let sectionInsets = UX.TopSitesConstants.getBottomInset() // top sites bottom spacing
+                          + UX.HeaderConstants.bottomSpacing // search bar bottom spacing
+                          + UX.standardInset // stories bottom spacing
+        totalSectionHeights += sectionInsets
+
+        let newSpacerHeight = collectionView.bounds.height - totalSectionHeights
+
+        if newSpacerHeight != spacerHeight {
+            spacerHeight = newSpacerHeight
+            collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 
@@ -322,10 +375,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
+                                                   : UX.spacingBetweenSections - UX.interGroupSpacing
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
-            bottom: UX.spacingBetweenSections - UX.interGroupSpacing,
+            bottom: bottomInset,
             trailing: leadingInset
         )
         section.interGroupSpacing = UX.standardSpacing
@@ -532,5 +587,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             storyCells.append(cell)
         }
         return HomepageDimensionCalculator.getTallestViewHeight(views: storyCells, viewWidth: cellWidth)
+    }
+
+    private func isSpacerSection(dataSource: HomepageDiffableDataSource, section: Int) -> Bool {
+        let sectionIdentifier = dataSource.snapshot().sectionIdentifiers[section]
+        return sectionIdentifier == .spacer
     }
 }

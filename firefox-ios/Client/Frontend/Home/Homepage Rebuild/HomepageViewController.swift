@@ -70,7 +70,6 @@ final class HomepageViewController: UIViewController,
     private let trackingImpressionsThrottler: ThrottleProtocol
 
     let sectionLayoutProvider: HomepageSectionLayoutProvider
-    private var spacerH = 0.0
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -327,52 +326,7 @@ final class HomepageViewController: UIViewController,
             trackVisibleItemImpressions()
         }
 
-        calculateSpacerHeight()
-    }
-
-    private func calculateSpacerHeight() {
-        guard let collectionView = self.collectionView else { return }
-
-        var totalHeight: CGFloat = 0
-
-        for section in 0..<collectionView.numberOfSections {
-            if self.isSpacerSection(section) { continue }
-
-            let numberOfItems = collectionView.numberOfItems(inSection: section)
-            var sectionRect = CGRect.null
-
-            // Sum item frames
-            for item in 0..<numberOfItems {
-                let indexPath = IndexPath(item: item, section: section)
-                if let attr = collectionView.layoutAttributesForItem(at: indexPath) {
-                    sectionRect = sectionRect.union(attr.frame)
-                }
-            }
-
-            // Sum header/footer frames
-            for kind in [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter] {
-                let indexPath = IndexPath(item: 0, section: section)
-                if let attr = collectionView.layoutAttributesForSupplementaryElement(ofKind: kind, at: indexPath) {
-                    sectionRect = sectionRect.union(attr.frame)
-                }
-            }
-
-            totalHeight += sectionRect.height
-        }
-
-        if totalHeight != spacerH {
-            self.sectionLayoutProvider.spacerHeight = collectionView.bounds.height - totalHeight - 132
-            self.spacerH = totalHeight
-            DispatchQueue.main.async {
-                collectionView.collectionViewLayout.invalidateLayout()
-            }
-        }
-    }
-
-    private func isSpacerSection(_ section: Int) -> Bool {
-        guard let dataSource else { return false }
-        let sectionIdentifier = dataSource.snapshot().sectionIdentifiers[section]
-        return sectionIdentifier == .spacer
+        updateLayoutSpacer()
     }
 
     func unsubscribeFromRedux() {
@@ -707,6 +661,18 @@ final class HomepageViewController: UIViewController,
         default:
             return nil
         }
+    }
+
+    // After all of the sections in the compositional layout have been provided, we can now compute the height needed for
+    // the spacer, which happens on a separate pass of the section provider, potentially causing a smaller stutter when
+    // content size changes
+    private func updateLayoutSpacer() {
+        // Need a layout pass for orientation change to get updated collectionView frame
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+
+        guard let collectionView, let dataSource else { return }
+        sectionLayoutProvider.calculateSpacerHeight(collectionView: collectionView, dataSource: dataSource)
     }
 
     // MARK: - Screenshotable
