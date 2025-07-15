@@ -14,26 +14,47 @@ echo "Current dir: $(pwd)"
 
 echo "••• Preparing test-fixtures directory for UI tests •••"
 
-# SCRIPT_PATH="${BASH_SOURCE[0]:-${(%):-%N}}"
-# echo $SCRIPT_PATH
-# SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
-# echo $SCRIPT_DIR
-# SRCROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-# echo $SRCROOT
+# Resolve repo root
+if [ -n "$BITRISE_SOURCE_DIR" ]; then
+  echo "Detected Bitrise — using BITRISE_SOURCE_DIR"
+  REPO_ROOT="$BITRISE_SOURCE_DIR"
+else
+  # Fallback: traverse up from this script to find test-fixtures
+  echo "No BITRISE_SOURCE_DIR — walking up from script path"
+  SCRIPT_PATH="${BASH_SOURCE[0]}"
+  DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 
-# fixtures="$SRCR/test-fixtures"
-# echo $fixtures
-# [[ -d "$fixtures" ]] || {
-#   echo "Fixtures directory not found at: $fixtures"
-#   exit 1
-# }
+  while [ "$DIR" != "/" ]; do
+    if [ -d "$DIR/test-fixtures" ]; then
+      REPO_ROOT="$DIR"
+      break
+    fi
+    DIR="$(dirname "$DIR")"
+  done
+fi
 
-# # Prepare a temp location inside TMPDIR for the app to read at runtime
-# runtime_fixtures_path="$TMPD/test-fixtures"
-# echo "Copying test fixtures to runtime-accessible path: $runtime_fixtures_path"
-# mkdir -p "$runtime_fixtures_path"
+if [ -z "$REPO_ROOT" ]; then
+  echo "Could not resolve repo root."
+  exit 1
+fi
 
-# # Perform the copy
-# rsync -zvrt --delete --update "$fixtures/" "$runtime_fixtures_path"
+echo "Repo root: $REPO_ROOT"
 
-# echo "Fixtures prepared successfully"
+fixtures="$REPO_ROOT/test-fixtures"
+echo "📁 Fixtures path: $fixtures"
+
+if [ ! -d "$fixtures" ]; then
+  echo "Fixtures directory not found: $fixtures"
+  exit 1
+fi
+
+# Prepare a temp location inside TMPDIR for the app to read at runtime
+runtime_fixtures_path="$TMPDIR/test-fixtures"
+echo "Copying test fixtures to runtime-accessible path: $runtime_fixtures_path"
+
+mkdir -p "$runtime_fixtures_path"
+
+# Copy contents
+rsync -zvrt --delete --update "$fixtures/" "$runtime_fixtures_path"
+
+echo "Fixtures prepared successfully"
