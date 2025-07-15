@@ -11,7 +11,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "echo &quot;Running from: $(pwd)&quot;&#10;sh &quot;$(pwd)/test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
+               scriptText = "#!/bin/sh&#10;&#10;echo &quot;Running post-build from: $(pwd)&quot;&#10;echo &quot;Checking known relative location for repo root...&quot;&#10;&#10;# Traverse up from derived data to find the root where test-fixtures exists&#10;find_repo_root() {&#10;  SEARCH_DIR=&quot;$(pwd)&quot;&#10;  while [ &quot;$SEARCH_DIR&quot; != &quot;/&quot; ]; do&#10;    if [ -d &quot;$SEARCH_DIR/test-fixtures&quot; ]; then&#10;      echo &quot;$SEARCH_DIR&quot;&#10;      return 0&#10;    fi&#10;    SEARCH_DIR=&quot;$(dirname &quot;$SEARCH_DIR&quot;)&quot;&#10;  done&#10;  return 1&#10;}&#10;&#10;REPO_ROOT=&quot;$(find_repo_root)&quot;&#10;&#10;if [ -z &quot;$REPO_ROOT&quot; ]; then&#10;  echo &quot;Could not locate the repo root. Expecting test-fixtures/ directory in repo root.&quot;&#10;  exit 1&#10;fi&#10;&#10;echo &quot;Found repo root: $REPO_ROOT&quot;&#10;&#10;SCRIPT_PATH=&quot;$REPO_ROOT/test-fixtures/scheme-postbuild.sh&quot;&#10;&#10;if [ ! -f &quot;$SCRIPT_PATH&quot; ]; then&#10;  echo &quot;Script not found at: $SCRIPT_PATH&quot;&#10;  exit 1&#10;fi&#10;&#10;echo &quot;Executing: $SCRIPT_PATH&quot;&#10;sh &quot;$SCRIPT_PATH&quot; || exit 1&#10;&#10;">
             </ActionContent>
          </ExecutionAction>
       </PostActions>
