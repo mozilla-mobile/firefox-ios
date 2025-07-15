@@ -319,7 +319,6 @@ struct AnimatedGradientMetalView: UIViewRepresentable {
     func updateUIView(_ uiView: MTKView, context: Context) { }
 }
 
-
 struct AnimatedGradientMetalView_Previews: PreviewProvider {
     static var previews: some View {
         AnimatedGradientMetalView()
