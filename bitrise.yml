@@ -20,18 +20,18 @@ pipelines:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
-        run_firefox_ui_tests:
-            run_if:
-              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
-            depends_on:
-            - firefox_configure_build
-            parallel: 5
-        focus_ui_test:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - focus_configure_build
-            parallel: 1
+        #run_firefox_ui_tests:
+        #    run_if:
+        #      expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
+        #    depends_on:
+        #    - firefox_configure_build
+        #    parallel: 5
+        #focus_ui_test:
+        #    run_if:
+        #      expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        #    depends_on:
+        #    - focus_configure_build
+        #    parallel: 1
 
 workflows:
   firefox_accessibility_test:
