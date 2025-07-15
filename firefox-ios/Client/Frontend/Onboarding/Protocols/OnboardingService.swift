@@ -54,7 +54,8 @@ final class OnboardingService: FeatureFlaggable {
         self.searchBarLocationSaver = searchBarLocationSaver
     }
 
-    @MainActor // FIXME I can see some of these completion handlers getting called on a new thread than previously (main)
+    // TODO: FXIOS-12843 Test that calling these completion handlers on the main thread does not cause issues for each action
+    @MainActor
     func handleAction(
         _ action: OnboardingActions,
         from cardName: String,
