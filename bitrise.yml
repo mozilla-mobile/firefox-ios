@@ -1695,7 +1695,7 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
-        title: Count warnings WITHOUT region based isolation flag
+        title: Count warnings WITHOUT Swift Strict Concurrency flag
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -1704,20 +1704,20 @@ workflows:
             envman add --key OLD_WARNING_COUNT --value "$OLD_WARNING_COUNT"
             echo "*** Number of warnings without region based isolation flag: $OLD_WARNING_COUNT"
 
-            cp $BITRISE_XCODE_RAW_RESULT_TEXT_PATH ./raw-xcodebuild-output-WITHOUT-region-based-isolation.log
+            cp $BITRISE_XCODE_RAW_RESULT_TEXT_PATH ./raw-xcodebuild-output-WITHOUT-swift-strict-concurrency.log
     - deploy-to-bitrise-io@2.10.0:
         inputs:
-        - deploy_path: ./raw-xcodebuild-output-WITHOUT-region-based-isolation.log
+        - deploy_path: ./raw-xcodebuild-output-WITHOUT-swift-strict-concurrency.log
         - is_compress: 'false'
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "SWIFT_TREAT_WARNINGS_AS_ERRORS=NO" "SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION=YES"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "SWIFT_TREAT_WARNINGS_AS_ERRORS=NO" "SWIFT_STRICT_CONCURRENCY=YES"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
-        title: Count warnings WITH region based isolation flag
+        title: Count warnings WITH Swift Strict Concurrency flag
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -1730,10 +1730,10 @@ workflows:
             envman add --key DIFF_WARNING_COUNT --value "$DIFF_WARNING_COUNT"
             echo "*** Difference in warning count: $DIFF_WARNING_COUNT"
 
-            cp $BITRISE_XCODE_RAW_RESULT_TEXT_PATH ./raw-xcodebuild-output-WITH-region-based-isolation.log
+            cp $BITRISE_XCODE_RAW_RESULT_TEXT_PATH ./raw-xcodebuild-output-WITH-swift-strict-concurrency.log
     - deploy-to-bitrise-io@2.10.0:
         inputs:
-        - deploy_path: ./raw-xcodebuild-output-WITH-region-based-isolation.log
+        - deploy_path: ./raw-xcodebuild-output-WITH-swift-strict-concurrency.log
         - is_compress: 'false'
     - slack@4.2.2:
         inputs:
@@ -1746,7 +1746,7 @@ workflows:
         - pretext: "*Firefox-iOS* Swift 6 Progress :swift:"
         - timestamp: 'yes'
         - fields: |
-            Region Based Isolation Warning Count | ${DIFF_WARNING_COUNT}
+            Swift Strict Concurrency Warnings Count | ${DIFF_WARNING_COUNT}
         - buttons: |
             Pipeline|${BITRISE_BUILD_URL}
             Logs|${BITRISE_BUILD_URL}?tab=artifacts
