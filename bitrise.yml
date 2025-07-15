@@ -218,12 +218,14 @@ workflows:
             echo "Removing unit test xcresult"
             rm -f "$BITRISE_DEPLOY_DIR/Test-Fennec_UnitTest_iphonesimulator18.2-arm64.xcresult.zip"
     - deploy-to-bitrise-io@2.10.0:
-        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
-        inputs:
-        - pipeline_intermediate_files: |-
-            BITRISE_TEST_SHARDS_PATH_FIREFOX
-            BITRISE_TEST_BUNDLE_PATH
-            BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
+        is_always_run: true
+    #- deploy-to-bitrise-io@2.10.0:
+    #    run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+    #    inputs:
+    #    - pipeline_intermediate_files: |-
+    #        BITRISE_TEST_SHARDS_PATH_FIREFOX
+    #        BITRISE_TEST_BUNDLE_PATH
+    #        BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         is_always_run: true
     - script@1.1.1:
         title: Run Danger 2
