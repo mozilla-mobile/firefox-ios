@@ -1280,13 +1280,13 @@ private extension BrowserViewController {
                   let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
                   self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
             else {
-                self.mainQueue.async {
+                Task { @MainActor in
                     completionHandler(.performDefaultHandling, nil)
                 }
                 return
             }
 
-            self.mainQueue.async {
+            Task { @MainActor in
                 completionHandler(.useCredential, URLCredential(trust: trust))
             }
         }

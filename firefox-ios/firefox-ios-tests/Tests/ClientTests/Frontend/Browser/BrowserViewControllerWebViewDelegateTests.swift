@@ -353,7 +353,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let subject = BrowserViewController(
             profile: profile,
             tabManager: tabManager,
-            mainQueue: MockDispatchQueue(),
             userInitiatedQueue: MockDispatchQueue()
         )
         trackForMemoryLeaks(subject)
