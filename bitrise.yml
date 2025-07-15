@@ -208,7 +208,7 @@ workflows:
             set -euo pipefail
 
             echo "Removing raw-xcodebuild-output.log to reduce artifact size"
-            rm -f "$BITRISE_DEPLOY_DIR/raw-xcodebuild-output.log"
+            #rm -f "$BITRISE_DEPLOY_DIR/raw-xcodebuild-output.log"
 
             echo "Keeping only one swiftlint report file"
             # Remove one format or duplicate copies
