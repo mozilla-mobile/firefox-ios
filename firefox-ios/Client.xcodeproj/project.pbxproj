@@ -10632,6 +10632,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		034784BA2E2690F600D04A84 /* TermsOfUse */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TermsOfUse; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -14553,6 +14554,7 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				81A3F6EE2C2DAED500BDD86B /* MainMenu */,
 				1D7B78952ADF324E0011E9F2 /* Event Queue */,
 				8A1E3BE428CBBF1E003388C4 /* SearchEngines */,
@@ -16153,6 +16155,7 @@
 				E17EFC332CD16F5B00169A1F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 			);
 			name = Client;

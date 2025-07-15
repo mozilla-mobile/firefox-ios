@@ -29,6 +29,7 @@ final class HomepageViewController: UIViewController,
 
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    var shouldShowToUOnAppear: Bool = false
 
     // MARK: - Layout variables
     var statusBarFrame: CGRect? {
@@ -165,6 +166,10 @@ final class HomepageViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         trackVisibleItemImpressions()
+        if shouldShowToUOnAppear {
+            shouldShowToUOnAppear = false
+            presentToUBottomSheet()
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -980,6 +985,35 @@ final class HomepageViewController: UIViewController,
     private func resetTrackedObjects() {
         alreadyTrackedSections.removeAll()
         alreadyTrackedTopSites.removeAll()
+    }
+    
+    
+    private func presentToUBottomSheet() {
+        guard ToUManager.shared.shouldShow() else { return }
+
+        ToUManager.shared.markShownInSession()
+
+        let vc = ToUBottomSheetViewController(windowUUID: self.windowUUID)
+
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+        }
+
+        vc.onAccept = {
+            ToUManager.shared.markAccepted()
+        }
+
+        vc.onNotNow = {
+            ToUManager.shared.markDismissed()
+        }
+
+        vc.onLinkTapped = { [weak self] url in
+            self?.navigateToNewTab(with: url)
+        }
+
+        present(vc, animated: true)
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)

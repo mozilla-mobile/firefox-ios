@@ -159,6 +159,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        
+        if !ToUManager.shared.hasAcceptedCurrentVersion {
+            homepageController.shouldShowToUOnAppear = true
+        }
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -1184,6 +1188,10 @@ class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             findAndHandle(route: savedRoute)
         }
+        
+        if !ToUManager.shared.hasAcceptedCurrentVersion {
+            browserViewController.shouldShowToUOnAppear = true
+            }
     }
 
     // MARK: - TabTrayCoordinatorDelegate
