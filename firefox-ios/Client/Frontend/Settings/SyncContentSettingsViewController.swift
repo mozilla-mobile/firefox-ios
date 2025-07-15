@@ -140,7 +140,7 @@ class DeviceNameSetting: StringSetting {
         notification = NotificationCenter.default.addObserver(
             forName: Notification.Name.constellationStateUpdate,
             object: nil,
-            queue: .main,
+            queue: .main
         ) { [weak self] notification in
             guard Thread.isMainThread else {
                 assertionFailure("This must be called main thread")
