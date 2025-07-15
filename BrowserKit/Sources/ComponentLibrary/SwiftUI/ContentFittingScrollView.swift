@@ -90,9 +90,12 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
 
         func setupDynamicTypeObserver() {
             notificationTask = Task { @MainActor in
-                for await _ in NotificationCenter.default.notifications(
-                    named: UIContentSizeCategory.didChangeNotification
-                ) {
+                let sequence = NotificationCenter
+                    .default
+                    .notifications(named: UIContentSizeCategory.didChangeNotification)
+                    .map { _ in () }
+
+                for await _ in sequence {
                     // For Dynamic Type changes, we need to completely recreate the hosting controller
                     // because SwiftUI views don't always update their intrinsic size properly
                     try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
