@@ -1267,9 +1267,10 @@ private extension BrowserViewController {
         return false
     }
 
-    func handleServerTrust(challenge: URLAuthenticationChallenge,
-                           dispatchQueue: DispatchQueueInterface,
-                           completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    func handleServerTrust(
+        challenge: URLAuthenticationChallenge,
+        dispatchQueue: DispatchQueueInterface,
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         dispatchQueue.async {
             // If this is a certificate challenge, see if the certificate has previously been
