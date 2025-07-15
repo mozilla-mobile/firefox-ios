@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 final class SceneCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
