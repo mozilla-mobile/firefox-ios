@@ -202,6 +202,7 @@ workflows:
     - script@1.1.1:
         title: Clean before deploying
         timeout: 360
+        is_always_run: true
         inputs:
         - content: |
             #!/usr/bin/env bash
