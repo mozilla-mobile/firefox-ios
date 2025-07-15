@@ -1023,7 +1023,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
             handleServerTrust(
@@ -1270,7 +1270,7 @@ private extension BrowserViewController {
     func handleServerTrust(
         challenge: URLAuthenticationChallenge,
         dispatchQueue: DispatchQueueInterface,
-        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         dispatchQueue.async {
             // If this is a certificate challenge, see if the certificate has previously been
