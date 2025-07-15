@@ -4,9 +4,17 @@
 
 import UIKit
 
+extension CGPoint {
+    static let leftCenter = CGPoint(x: 0.0, y: 0.5)
+    static let rightCenter = CGPoint(x: 1.0, y: 0.5)
+    static let topCenter = CGPoint(x: 0.5, y: 0.0)
+    static let bottomCenter = CGPoint(x: 0.5, y: 1.0)
+}
+
 class RectangularFadeMaskLayer: CALayer {
     private struct UX {
         static let defaultEdgeFade: CGFloat = 130.0
+        static let fadeDownAnimationDuration: CFTimeInterval = 0.5
     }
 
     private let horizontal = CAGradientLayer()
@@ -22,11 +30,11 @@ class RectangularFadeMaskLayer: CALayer {
             UIColor.white.cgColor,
         ]
 
-        horizontal.startPoint = CGPoint(x: 0.0, y: 0.5)
-        horizontal.endPoint = CGPoint(x: 1.0, y: 0.5)
+        horizontal.startPoint = .leftCenter
+        horizontal.endPoint = .rightCenter
 
-        vertical.startPoint = CGPoint(x: 0.5, y: 0.0)
-        vertical.endPoint = CGPoint(x: 0.5, y: 1.0)
+        vertical.startPoint = .topCenter
+        vertical.endPoint = .bottomCenter
         vertical.colors = horizontal.colors
 
         maskLayer.compositingFilter = "multiplyBlendMode"
@@ -63,7 +71,8 @@ class RectangularFadeMaskLayer: CALayer {
         maskLayer.frame = bounds
     }
 
-    func changeOffset(topEdge: CGFloat) {
+    /// Animates the fade layer down by moving the clear area from the center to the bottom of the layer's bound.
+    func animateFadeDown() {
         let animation = CABasicAnimation(keyPath: "colors")
         animation.fromValue = vertical.colors
         animation.toValue = [
@@ -72,7 +81,7 @@ class RectangularFadeMaskLayer: CALayer {
             UIColor.clear.cgColor,
             UIColor.white.cgColor,
         ]
-        animation.duration = 0.5
+        animation.duration = UX.fadeDownAnimationDuration
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
         vertical.add(animation, forKey: "lowerAnimation")

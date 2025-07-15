@@ -4,16 +4,20 @@
 
 import UIKit
 
-let summarizeRed = UIColor(colorString: "FF0048")
+struct GradientColors {
+    static let red = UIColor(colorString: "FF0048")
+    static let clearRed = UIColor(colorString: "FF0048").withAlphaComponent(0.8)
+    static let clearOrange = UIColor(colorString: "FF4C00").withAlphaComponent(0.8)
+    static let orange = UIColor(colorString: "FF4C00")
+    static let blue = UIColor(colorString: "72D3FF").withAlphaComponent(0.8)
+}
 
 class AnimatedGradientOutlineView: UIView,
                                    CAAnimationDelegate {
     struct UX {
-        static let blue = UIColor(colorString: "72D3FF").withAlphaComponent(0.8).cgColor
-        static let clearRed = UIColor(colorString: "FF0048").withAlphaComponent(0.8).cgColor
-        static let red = summarizeRed.cgColor
-        static let clearOrange = UIColor(colorString: "FF4C00").withAlphaComponent(0.8).cgColor
-        static let orange = UIColor(colorString: "FF4C00").cgColor
+        static let positionChangeAnimationDuration: CFTimeInterval = 1.25
+        static let startPointFinalAnimationValue = CGPoint(x: 1.0, y: 0.3)
+        static let endPointFinalAnimationValue = CGPoint(x: 0.0, y: 0.8)
     }
 
     private let gradientLayer = CAGradientLayer()
@@ -38,9 +42,9 @@ class AnimatedGradientOutlineView: UIView,
         backgroundColor = .clear
 
         gradientLayer.colors = [
-            UX.clearOrange,
-            UX.blue,
-            UX.clearRed
+            GradientColors.clearOrange.cgColor,
+            GradientColors.blue.cgColor,
+            GradientColors.clearRed.cgColor
         ]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
@@ -67,9 +71,9 @@ class AnimatedGradientOutlineView: UIView,
         let animation = CABasicAnimation(keyPath: "colors")
         animation.fromValue = gradientLayer.colors
         animation.toValue = [
-            UX.clearOrange,
-            UX.clearRed,
-            UX.blue
+            GradientColors.clearOrange.cgColor,
+            GradientColors.clearRed.cgColor,
+            GradientColors.blue.cgColor
         ]
         animation.duration = 1.0
         animation.repeatCount = 0
@@ -80,21 +84,6 @@ class AnimatedGradientOutlineView: UIView,
         gradientLayer.add(animation, forKey: "animateGradient")
     }
 
-    private func endAnimation() {
-        let endAnimation = CABasicAnimation(keyPath: "colors")
-        endAnimation.fromValue = [
-            UX.clearOrange,
-            UX.clearRed,
-            UX.blue
-        ]
-        endAnimation.toValue = [UX.red, UX.clearOrange, UX.blue]
-        endAnimation.repeatCount = 0
-        endAnimation.duration = 0.8
-        endAnimation.fillMode = .forwards
-        endAnimation.isRemovedOnCompletion = false
-        gradientLayer.add(endAnimation, forKey: "finalAnimation")
-    }
-
     // MARK: - Animation Delegate
 
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
@@ -103,23 +92,23 @@ class AnimatedGradientOutlineView: UIView,
     }
 
     func animatePositionChange(animationCurve: CAMediaTimingFunction) {
-        fadeLayer.changeOffset(topEdge: 140.0)
+        fadeLayer.animateFadeDown()
         let startPointAnimation = CABasicAnimation(keyPath: "startPoint")
-        startPointAnimation.fromValue = CGPoint(x: 0.5, y: 0.0)
-        startPointAnimation.toValue = CGPoint(x: 1.0, y: 0.3)
-        startPointAnimation.duration = 1.25
+        startPointAnimation.fromValue = CGPoint.topCenter
+        startPointAnimation.toValue = UX.startPointFinalAnimationValue
+        startPointAnimation.duration = UX.positionChangeAnimationDuration
         startPointAnimation.isRemovedOnCompletion = false
         startPointAnimation.fillMode = .forwards
         startPointAnimation.beginTime = CACurrentMediaTime() + 0.5
         gradientLayer.add(startPointAnimation, forKey: "startPointAnimation")
 
-        let directionAnimation = CABasicAnimation(keyPath: "endPoint")
-        directionAnimation.fromValue = CGPoint(x: 0.5, y: 1.0)
-        directionAnimation.toValue = CGPoint(x: 0.0, y: 0.8)
-        directionAnimation.duration = 1.25
-        directionAnimation.isRemovedOnCompletion = false
-        directionAnimation.fillMode = .forwards
-        directionAnimation.timingFunction = animationCurve
-        gradientLayer.add(directionAnimation, forKey: "directionAnimation")
+        let endPointAnimation = CABasicAnimation(keyPath: "endPoint")
+        endPointAnimation.fromValue = CGPoint.bottomCenter
+        endPointAnimation.toValue = UX.endPointFinalAnimationValue
+        endPointAnimation.duration = UX.positionChangeAnimationDuration
+        endPointAnimation.isRemovedOnCompletion = false
+        endPointAnimation.fillMode = .forwards
+        endPointAnimation.timingFunction = animationCurve
+        gradientLayer.add(endPointAnimation, forKey: "endPointAnimation")
     }
 }

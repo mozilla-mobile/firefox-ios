@@ -129,7 +129,7 @@ public class SummarizeController: UIViewController, Themeable {
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         gradient.startAnimating { [weak self] in
-            self?.view.backgroundColor = summarizeRed
+            self?.view.backgroundColor = GradientColors.red
             self?.viewModel.onShouldShowTabSnapshot()
             self?.embedSnapshot()
         }
@@ -166,7 +166,6 @@ public class SummarizeController: UIViewController, Themeable {
             mutable.beginEditing()
             mutable.enumerateAttribute(.font, in: NSRange(location: 0, length: mutable.length)) { value, range, _ in
                 if let oldFont = value as? UIFont {
-                    // Replace with custom font, preserving traits (bold/italic)
                     let newDescriptor = FXFontStyles.Regular.body.scaledFont().fontDescriptor
                         .withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits)
                     if let newDescriptor {
