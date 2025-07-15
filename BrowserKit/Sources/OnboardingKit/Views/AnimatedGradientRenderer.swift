@@ -7,6 +7,7 @@ import MetalKit
 import Common
 
 enum AnimatedGradientRendererError: Error {
+    case failedToCreateMetalDevice
     case failedToCreateCommandQueue
     case failedToCreateDefaultLibrary
     case missingShaderFunction(functionName: String)
@@ -15,6 +16,8 @@ enum AnimatedGradientRendererError: Error {
 
     var localizedDescription: String {
         switch self {
+        case .failedToCreateMetalDevice:
+            return "Failed to create Metal device"
         case .failedToCreateCommandQueue:
             return "Failed to create Metal command queue"
         case .failedToCreateDefaultLibrary:
@@ -46,10 +49,15 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private var currentTime: Float = 0.0
     private var previousFrameTexture: MTLTexture?
 
-    init(device: MTLDevice) throws {
-        self.metalDevice = device
+    init(device: MTLDevice?) throws {
+        if let device {
+            self.metalDevice = device
+        } else {
+            logger.log("No Metal device available", level: .fatal, category: .onboarding)
+            throw AnimatedGradientRendererError.failedToCreateMetalDevice
+        }
 
-        guard let queue = device.makeCommandQueue() else {
+        guard let queue = metalDevice.makeCommandQueue() else {
             logger.log(
                 "Failed to create Metal command queue",
                 level: .fatal,
@@ -61,7 +69,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 
         let shaderLibrary: MTLLibrary
         do {
-            shaderLibrary = try device.makeDefaultLibrary(bundle: .module)
+            shaderLibrary = try metalDevice.makeDefaultLibrary(bundle: .module)
         } catch {
             logger.log(
                 "Failed to create Metal default library: \(error)",
@@ -93,7 +101,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
 
         do {
-            self.renderPipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+            self.renderPipelineState = try metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
         } catch {
             logger.log(
                 "Failed to create render pipeline state: \(error)",
@@ -274,49 +282,65 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 }
 
-struct AnimatedGradientMetalView: UIViewRepresentable {
-    class Coordinator: NSObject, MTKViewDelegate {
-        private let logger = DefaultLogger.shared
-        private let renderer: AnimatedGradientRenderer?
-
-        init(device: MTLDevice?) {
-            if let device = device {
-                do {
-                    renderer = try AnimatedGradientRenderer(device: device)
-                } catch {
-                    logger.log("Renderer init failed: \(error)", level: .fatal, category: .onboarding)
-                    renderer = nil
-                }
-            } else {
-                logger.log("No Metal device available", level: .fatal, category: .onboarding)
-                renderer = nil
-            }
-            super.init()
-        }
-
-        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-            renderer?.mtkView(view, drawableSizeWillChange: size)
-        }
-
-        func draw(in view: MTKView) {
-            renderer?.draw(in: view)
-        }
+struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
+    private let delegate: MTKViewDelegate
+    init(delegate: MTKViewDelegate) {
+        self.delegate = delegate
     }
 
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(device: MTLCreateSystemDefaultDevice())
+    func makeCoordinator() -> MTKViewDelegate {
+        return delegate
     }
 
     func makeUIView(context: Context) -> MTKView {
-        let view = MTKView()
-        view.device = MTLCreateSystemDefaultDevice()
-        view.framebufferOnly = false
-        view.colorPixelFormat = .bgra8Unorm
-        view.delegate = context.coordinator
-        return view
+        let metalView = MTKView()
+        metalView.device = MTLCreateSystemDefaultDevice()
+        metalView.framebufferOnly = false
+        metalView.colorPixelFormat = .bgra8Unorm
+        metalView.delegate = context.coordinator
+        return metalView
     }
 
     func updateUIView(_ uiView: MTKView, context: Context) { }
+}
+
+struct AnimatedGradientMetalView: View {
+    private let delegate: MTKViewDelegate?
+    init(metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()) {
+        do {
+            if let metalDevice {
+                delegate = try AnimatedGradientRenderer(device: metalDevice)
+            } else {
+                delegate = nil
+            }
+        } catch {
+            DefaultLogger.shared.log(
+                "Fatal error: Could not instantiate AnimatedGradientRenderer – \(error.localizedDescription)",
+                level: .fatal,
+                category: .onboarding
+            )
+            delegate = nil
+        }
+    }
+
+    var body: some View {
+        if let delegate {
+            AnimatedGradientMetalViewRepresentable(delegate: delegate)
+        } else {
+            LinearGradient(
+                gradient: Gradient(
+                    colors: [
+                        UX.CardView.vividOrange,
+                        UX.CardView.electricBlue,
+                        UX.CardView.crimsonRed,
+                        UX.CardView.burntOrange
+                    ]
+                ),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
 }
 
 struct AnimatedGradientMetalView_Previews: PreviewProvider {
