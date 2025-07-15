@@ -28,6 +28,13 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
 
         subject.loadBackgroundTabs()
 
+        let predicate = NSPredicate { _, _ in
+            return self.tabQueue.getQueuedTabsCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 1.0)
+
         XCTAssertEqual(tabQueue.getQueuedTabsCalled, 1)
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
@@ -41,6 +48,13 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
         let subject = createSubject()
 
         subject.loadBackgroundTabs()
+
+        let predicate = NSPredicate { _, _ in
+            return self.tabQueue.getQueuedTabsCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 2.0)
 
         XCTAssertEqual(tabQueue.getQueuedTabsCalled, 1)
         XCTAssertEqual(applicationHelper.openURLCalled, 3)
