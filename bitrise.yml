@@ -26,12 +26,12 @@ pipelines:
             depends_on:
             - firefox_configure_build
             parallel: 5
-        #focus_ui_test:
-        #    run_if:
-        #      expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-        #    depends_on:
-        #    - focus_configure_build
-        #    parallel: 1
+        focus_ui_test:
+            run_if:
+              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+            depends_on:
+            - focus_configure_build
+            parallel: 1
 
 workflows:
   firefox_accessibility_test:
