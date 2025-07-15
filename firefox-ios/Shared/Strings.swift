@@ -2021,6 +2021,55 @@ extension String {
     }
 }
 
+public struct TermsOfUse {
+    public static let Title = MZLocalizedString(
+        key: "TermsOfUse.Title",
+        tableName: "TermsOfUse",
+        value: "We’ve got an update",
+        comment: "Title for the Terms of Use bottom sheet"
+    )
+    public static let Description = MZLocalizedString(
+        key: "TermsOfUse.Description",
+        tableName: "TermsOfUse",
+        value: """
+        We’ve introduced a Firefox Terms of Use and updated our Privacy Notice.
+
+        Please take a moment to review and accept. Learn more.
+        """,
+        comment: "Main description text with embedded links"
+    )
+    public static let LinkTermsOfUse = MZLocalizedString(
+        key: "TermsOfUse.Link.TermsOfUse",
+        tableName: "TermsOfUse",
+        value: "Firefox Terms of Use",
+        comment: "Label for Terms of Use link"
+    )
+    public static let LinkPrivacyNotice = MZLocalizedString(
+        key: "TermsOfUse.Link.PrivacyNotice",
+        tableName: "TermsOfUse",
+        value: "Privacy Notice",
+        comment: "Label for Privacy Notice link"
+    )
+    public static let LinkLearnMore = MZLocalizedString(
+        key: "TermsOfUse.Link.LearnMore",
+        tableName: "TermsOfUse",
+        value: "Learn more",
+        comment: "Label for Learn More link"
+    )
+    public static let AcceptButton = MZLocalizedString(
+        key: "TermsOfUse.AcceptButton",
+        tableName: "TermsOfUse",
+        value: "Accept",
+        comment: "Accept button title"
+    )
+    public static let RemindMeLaterButton = MZLocalizedString(
+        key: "TermsOfUse.RemindMeLaterButton",
+        tableName: "TermsOfUse",
+        value: "Remind Me Later",
+        comment: "Remind Me Later button title"
+    )
+}
+
 // MARK: - Search
 extension String {
     public struct Search {
