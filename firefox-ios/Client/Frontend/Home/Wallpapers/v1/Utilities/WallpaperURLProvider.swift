@@ -55,13 +55,14 @@ struct WallpaperURLProvider {
 
     /// Builds a URL for the server based on the specified environment.
     private func urlScheme() throws -> String {
-        if AppConstants.isRunningTest { return WallpaperURLProvider.testURL }
-
-        let bundle = AppInfo.applicationBundle
-        guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
-              !appToken.isEmpty
-        else { throw URLProviderError.noBundledURL }
-
-        return appToken
+        return "https://assets.mozilla.net/mobile-wallpapers"
+//        if AppConstants.isRunningTest { return WallpaperURLProvider.testURL }
+//
+//        let bundle = AppInfo.applicationBundle
+//        guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
+//              !appToken.isEmpty
+//        else { throw URLProviderError.noBundledURL }
+//
+//        return appToken
     }
 }

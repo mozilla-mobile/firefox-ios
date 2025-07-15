@@ -6,10 +6,13 @@ import UIKit
 import SiteImageView
 import Common
 
-final class TabWebViewPreview: UIView {
+final class TabWebViewPreview: UIView, ThemeApplicable {
     private struct UX {
         static let faviconCornerRadius: CGFloat = 20.0
         static let faviconImageViewSize: CGFloat = 45.0
+        static let backgroundShadowCornerRadius: CGFloat = 14.0
+        static let backgroundShadowOpacity: Float = 1
+        static let backgroundShadowOffset = CGSize(width: 0, height: 2)
     }
     private lazy var webPageScreenshotImageView: UIImageView = .build {
         $0.contentMode = .top
@@ -34,6 +37,12 @@ final class TabWebViewPreview: UIView {
 
     // MARK: - Layout
     private func setupLayout() {
+        layer.shadowRadius = UX.backgroundShadowCornerRadius
+        layer.cornerRadius = screenCornerRadius
+        layer.shadowOpacity = UX.backgroundShadowOpacity
+        layer.shadowOffset = UX.backgroundShadowOffset
+        layer.masksToBounds = false
+
         webPageScreenshotImageView.layer.cornerRadius = screenCornerRadius
         addSubviews(webPageScreenshotImageView, faviconImageView)
 
@@ -83,6 +92,12 @@ final class TabWebViewPreview: UIView {
         }
     }
 
+    func setScreenshot(_ url: URL?) {
+        faviconImageView.isHidden = false
+        faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: url?.absoluteString,
+                                                          faviconCornerRadius: UX.faviconCornerRadius))
+    }
+
     func setScreenshot(_ image: UIImage?) {
         faviconImageView.isHidden = true
         webPageScreenshotImageView.isHidden = false
@@ -95,5 +110,12 @@ final class TabWebViewPreview: UIView {
 
     func transitionDidEnd() {
         layoutWasInvalidated = false
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: any Theme) {
+        backgroundColor = theme.colors.layer1
+        layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 }

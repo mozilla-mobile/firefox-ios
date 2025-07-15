@@ -23,6 +23,8 @@ public final class AddressToolbarAddTabView: UIView,
     }
 
     private func setupLayout() {
+        layer.shadowRadius = 14.0
+        layer.masksToBounds = false
         addSubview(plusIconView)
         NSLayoutConstraint.activate([
             plusIconView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -41,6 +43,7 @@ public final class AddressToolbarAddTabView: UIView,
     // MARK: - ThemeApplicable
 
     public func applyTheme(theme: any Theme) {
+        layer.shadowColor = theme.colors.shadowStrong.cgColor
         plusIconView.tintColor = theme.colors.textPrimary
         backgroundColor = theme.colors.layerSurfaceMedium
     }
