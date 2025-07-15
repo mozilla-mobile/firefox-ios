@@ -38,7 +38,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     // We override this method, for handling taps on MenuSquareView views
     // This may be a temporary fix
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if self.isHidden || self.alpha == 0 || !self.isUserInteractionEnabled {
+        if self.isHidden || self.alpha.isZero || !self.isUserInteractionEnabled {
             return nil
         }
         for subview in contentStackView.arrangedSubviews.reversed() {
