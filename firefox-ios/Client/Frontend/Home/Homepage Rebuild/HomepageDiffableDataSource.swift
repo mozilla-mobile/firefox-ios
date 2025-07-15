@@ -60,7 +60,7 @@ final class HomepageDiffableDataSource:
                 PocketStandardCell.self,
                 StoryCell.self,
                 CustomizeHomepageSectionCell.self,
-                EmptyHomepageCell.self
+                HomepageSpacerCell.self
             ]
         }
 
@@ -195,4 +195,4 @@ final class HomepageDiffableDataSource:
     }
 }
 
-class EmptyHomepageCell: UICollectionViewCell, ReusableCell { }
+class HomepageSpacerCell: UICollectionViewCell, ReusableCell { }

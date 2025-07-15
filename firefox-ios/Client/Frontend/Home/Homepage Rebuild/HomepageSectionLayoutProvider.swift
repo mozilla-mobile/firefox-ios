@@ -132,7 +132,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
-    private var spacerHeight = 0.0
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
@@ -148,6 +147,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
+                topInsets: UX.standardInset,
                 bottomInsets: UX.HeaderConstants.bottomSpacing
             )
         case .messageCard:
@@ -178,53 +178,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .bookmarks:
             return createBookmarksSectionLayout(for: traitCollection)
         case .spacer:
-            return createSpacerSectionLayout(for: traitCollection)
-        }
-    }
-
-    // Calculates the height of the spacer section by subtracting all of the individual sections, headers, footers, and
-    // insets from the height of the collection view.
-    // This creates as large of a space as possible between top sites shortcuts and search bar/stories without the homepage
-    // needing to scroll.
-    func calculateSpacerHeight(collectionView: UICollectionView, dataSource: HomepageDiffableDataSource) {
-        var totalSectionHeights: CGFloat = 0
-
-        for section in 0..<collectionView.numberOfSections {
-            if self.isSpacerSection(dataSource: dataSource, section: section) { continue }
-
-            let numberOfItems = collectionView.numberOfItems(inSection: section)
-            var sectionRect = CGRect.null
-
-            // Sum item frames by returning the smallest rect containing all items
-            for item in 0..<numberOfItems {
-                let indexPath = IndexPath(item: item, section: section)
-                if let attr = collectionView.layoutAttributesForItem(at: indexPath) {
-                    sectionRect = sectionRect.union(attr.frame)
-                }
-            }
-
-            // Sum header/footer frames by returning the smallest rect containing all items
-            for kind in [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter] {
-                let indexPath = IndexPath(item: 0, section: section)
-                if let attr = collectionView.layoutAttributesForSupplementaryElement(ofKind: kind, at: indexPath) {
-                    sectionRect = sectionRect.union(attr.frame)
-                }
-            }
-
-            totalSectionHeights += sectionRect.height
-        }
-
-        // add section insets
-        let sectionInsets = UX.TopSitesConstants.getBottomInset() // top sites bottom spacing
-                          + UX.HeaderConstants.bottomSpacing // search bar bottom spacing
-                          + UX.standardInset // stories bottom spacing
-        totalSectionHeights += sectionInsets
-
-        let newSpacerHeight = collectionView.bounds.height - totalSectionHeights
-
-        if newSpacerHeight != spacerHeight {
-            spacerHeight = newSpacerHeight
-            collectionView.collectionViewLayout.invalidateLayout()
+            return createSpacerSectionLayout(for: environment)
         }
     }
 
@@ -549,10 +503,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
-    private func createSpacerSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        let spacerH = max(1, spacerHeight)
+    private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let collectionViewHeight = environment.container.contentSize.height
+        let spacerHeight = collectionViewHeight - getShortcutsSectionHeight()
+                                                - getStoriesSectionHeight(environment: environment)
+                                                - getSearchBarSectionHeight()
 
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(spacerH))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .absolute(spacerHeight))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
         let sectionLayout = NSCollectionLayoutSection(group: group)
@@ -561,7 +519,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Returns an empty layout to avoid app crash when unable to section data
-    static func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
+    func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
         let zeroLayoutSize = NSCollectionLayoutSize(
             widthDimension: .absolute(0.0),
             heightDimension: .absolute(0.0)
@@ -571,6 +529,96 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
+    }
+
+    private func getShortcutsSectionHeight() -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var totalHeight: CGFloat = 0
+        let topSitesState = state.topSitesState
+        let cols = topSitesState.numberOfTilesPerRow
+
+        // Build flat array of configured cells
+        let allCells = topSitesState.topSitesData.enumerated().compactMap { index, data in
+            let cell = TopSiteCell()
+            cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
+            return cell
+        }
+
+        // Group into rows and compute each rows max height
+        let rowHeights = stride(from: 0, to: allCells.count, by: cols).map { start in
+            let end = min(start + cols, allCells.count)
+            let rowCells = Array(allCells[start..<end])
+            return HomepageDimensionCalculator.getTallestViewHeight(views: rowCells, viewWidth: 0)
+        }
+
+        // Sum up row heights
+        totalHeight += rowHeights.reduce(0, +)
+
+        // Add inter-group spacing
+        let rowsShown = ceil(Double(topSitesState.topSitesData.count) / Double(cols))
+        totalHeight += CGFloat(rowsShown - 1) * UX.standardSpacing
+
+        // Add header height
+        let header = LabelButtonHeaderView()
+        header.configure(state: topSitesState.sectionHeaderState, textColor: .black, theme: LightTheme())
+        let size = header.systemLayoutSizeFitting(
+            CGSize(width: 0, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        totalHeight += size.height
+
+        // Add section insets
+        totalHeight += UX.TopSitesConstants.getBottomInset()
+
+        return totalHeight
+    }
+
+    private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var totalHeight: CGFloat = 0
+        let storiesState = state.pocketState
+
+        // Get stories height
+        let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
+            collectionViewWidth: environment.container.contentSize.width
+        )
+        totalHeight += max(getTallestStoryCellHeight(cellWidth: cellWidth), UX.PocketConstants.redesignedMinimumCellHeight)
+
+        // Add header height
+        let header = LabelButtonHeaderView()
+        header.configure(state: storiesState.sectionHeaderState, textColor: .black, theme: LightTheme())
+        let size = header.systemLayoutSizeFitting(
+            CGSize(width: 0, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        totalHeight += size.height
+
+        // Add section insets
+        totalHeight += UX.standardInset
+
+        return totalHeight
+    }
+
+    private func getSearchBarSectionHeight() -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+                  state.searchState.shouldShowSearchBar else { return 0 }
+        var totalHeight: CGFloat = 0
+
+        let searchBarCell = SearchBarCell()
+        let size = searchBarCell.systemLayoutSizeFitting(
+            CGSize(width: 0, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        totalHeight += size.height
+
+        // Add section insets
+        totalHeight += UX.standardInset
+        totalHeight += UX.HeaderConstants.bottomSpacing
+
+        return totalHeight
     }
 
     // Determines the tallest story cell so that all story cells can have a uniform height. This is accomplished by creating
@@ -587,10 +635,5 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             storyCells.append(cell)
         }
         return HomepageDimensionCalculator.getTallestViewHeight(views: storyCells, viewWidth: cellWidth)
-    }
-
-    private func isSpacerSection(dataSource: HomepageDiffableDataSource, section: Int) -> Bool {
-        let sectionIdentifier = dataSource.snapshot().sectionIdentifiers[section]
-        return sectionIdentifier == .spacer
     }
 }

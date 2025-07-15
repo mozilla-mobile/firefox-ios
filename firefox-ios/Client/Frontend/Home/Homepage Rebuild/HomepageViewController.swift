@@ -69,8 +69,6 @@ final class HomepageViewController: UIViewController,
     private var alreadyTrackedTopSites = Set<HomepageItem>()
     private let trackingImpressionsThrottler: ThrottleProtocol
 
-    let sectionLayoutProvider: HomepageSectionLayoutProvider
-
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
@@ -109,8 +107,6 @@ final class HomepageViewController: UIViewController,
             with: syncTabContextualViewProvider,
             windowUUID: windowUUID
         )
-
-        sectionLayoutProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
 
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -325,8 +321,6 @@ final class HomepageViewController: UIViewController,
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
-
-        updateLayoutSpacer()
     }
 
     func unsubscribeFromRedux() {
@@ -408,6 +402,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
@@ -422,10 +417,10 @@ final class HomepageViewController: UIViewController,
                 /// to avoid an app crash.
                 /// However, if we see this path getting hit, then something is wrong and
                 /// we should investigate the underlying issues. We should always be able to fetch the section.
-                return HomepageSectionLayoutProvider.makeEmptyLayoutSection()
+                return sectionProvider.makeEmptyLayoutSection()
             }
 
-            return self?.sectionLayoutProvider.createLayoutSection(
+            return sectionProvider.createLayoutSection(
                 for: section,
                 with: environment
             )
@@ -582,7 +577,7 @@ final class HomepageViewController: UIViewController,
 
         case .spacer:
             guard let spacerCell = collectionView?.dequeueReusableCell(
-                cellType: EmptyHomepageCell.self,
+                cellType: HomepageSpacerCell.self,
                 for: indexPath
             ) else {
                 return UICollectionViewCell()
@@ -661,18 +656,6 @@ final class HomepageViewController: UIViewController,
         default:
             return nil
         }
-    }
-
-    // After all of the sections in the compositional layout have been provided, we can now compute the height needed for
-    // the spacer, which happens on a separate pass of the section provider, potentially causing a smaller stutter when
-    // content size changes
-    private func updateLayoutSpacer() {
-        // Need a layout pass for orientation change to get updated collectionView frame
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-
-        guard let collectionView, let dataSource else { return }
-        sectionLayoutProvider.calculateSpacerHeight(collectionView: collectionView, dataSource: dataSource)
     }
 
     // MARK: - Screenshotable
