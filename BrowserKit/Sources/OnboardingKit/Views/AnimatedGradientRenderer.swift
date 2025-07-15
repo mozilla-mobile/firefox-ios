@@ -46,7 +46,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private var currentTime: Float = 0.0
     private var previousFrameTexture: MTLTexture?
 
-    init(device: MTLDevice = MTLCreateSystemDefaultDevice()!) throws {
+    init(device: MTLDevice) throws {
         self.metalDevice = device
 
         guard let queue = device.makeCommandQueue() else {
@@ -275,30 +275,50 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 }
 
 struct AnimatedGradientMetalView: UIViewRepresentable {
-    func makeUIView(context: Context) -> MTKView {
-        let metalView = MTKView()
-        metalView.device = MTLCreateSystemDefaultDevice()
-        metalView.framebufferOnly = false
-        metalView.colorPixelFormat = .bgra8Unorm
-        metalView.delegate = context.coordinator
-        return metalView
-    }
+    class Coordinator: NSObject, MTKViewDelegate {
+        private let logger = DefaultLogger.shared
+        private let renderer: AnimatedGradientRenderer?
 
-    func updateUIView(_ uiView: MTKView, context: Context) {}
+        init(device: MTLDevice?) {
+            if let device = device {
+                do {
+                    renderer = try AnimatedGradientRenderer(device: device)
+                } catch {
+                    logger.log("Renderer init failed: \(error)", level: .fatal, category: .onboarding)
+                    renderer = nil
+                }
+            } else {
+                logger.log("No Metal device available", level: .fatal, category: .onboarding)
+                renderer = nil
+            }
+            super.init()
+        }
 
-    func makeCoordinator() -> AnimatedGradientRenderer {
-        do {
-            return try AnimatedGradientRenderer()
-        } catch {
-            DefaultLogger.shared.log(
-                "Fatal error: Could not instantiate AnimatedGradientRenderer – \(error.localizedDescription)",
-                level: .fatal,
-                category: .onboarding
-            )
-            fatalError("AnimatedGradientRenderer initialization failed: \(error.localizedDescription)")
+        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+            renderer?.mtkView(view, drawableSizeWillChange: size)
+        }
+
+        func draw(in view: MTKView) {
+            renderer?.draw(in: view)
         }
     }
+
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(device: MTLCreateSystemDefaultDevice())
+    }
+
+    func makeUIView(context: Context) -> MTKView {
+        let view = MTKView()
+        view.device = MTLCreateSystemDefaultDevice()
+        view.framebufferOnly = false
+        view.colorPixelFormat = .bgra8Unorm
+        view.delegate = context.coordinator
+        return view
+    }
+
+    func updateUIView(_ uiView: MTKView, context: Context) { }
 }
+
 
 struct AnimatedGradientMetalView_Previews: PreviewProvider {
     static var previews: some View {
