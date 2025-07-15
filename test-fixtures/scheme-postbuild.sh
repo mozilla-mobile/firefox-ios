@@ -8,6 +8,11 @@
 #
 
 #!/bin/bash
+exec 1>&2  # redirect stdout to stderr so Bitrise shows it
+
+echo "🏗️ SCRIPT STARTING"
+echo "🔍 Script path: $0"
+echo "📂 Current dir: $(pwd)"
 
 echo "••• Preparing test-fixtures directory for UI tests •••"
 
