@@ -145,11 +145,23 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
     }
 
-    public func setupDetails(title: String?, subtitle: String?, image: String?, state: String, stateImage: String) {
+    public func setupDetails(
+        title: String?,
+        subtitle: String?,
+        image: String?,
+        state: String,
+        stateImage: String,
+        shouldUseRenderMode: Bool
+    ) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         siteProtectionsLabel.text = state
-        siteProtectionsIcon.image = UIImage(named: stateImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        let siteProtectionsImage: UIImage = if shouldUseRenderMode {
+            UIImage(named: stateImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        } else {
+            UIImage(named: stateImage) ?? UIImage()
+        }
+        siteProtectionsIcon.image = siteProtectionsImage
 
         let image = FaviconImageViewModel(siteURLString: image,
                                           faviconCornerRadius: UX.favIconSize / 2)

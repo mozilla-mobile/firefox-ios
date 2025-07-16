@@ -502,12 +502,14 @@ class MainMenuViewController: UIViewController,
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
         var state = String.MainMenu.SiteProtection.ProtectionsOn
         var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
+        var shouldUseRenderMode = false
 
         switch siteProtectionsData.state {
         case .notSecure:
             state = String.MainMenu.SiteProtection.ConnectionNotSecure
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-        case .on: break
+        case .on:
+            shouldUseRenderMode = true
         case .off:
             state = String.MainMenu.SiteProtection.ProtectionsOff
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
@@ -518,7 +520,8 @@ class MainMenuViewController: UIViewController,
             subtitle: siteProtectionsData.subtitle,
             image: siteProtectionsData.image,
             state: state,
-            stateImage: stateImage)
+            stateImage: stateImage,
+            shouldUseRenderMode: shouldUseRenderMode)
     }
 
     // MARK: - A11y
