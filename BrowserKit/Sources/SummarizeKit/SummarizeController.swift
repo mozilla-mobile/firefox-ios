@@ -241,13 +241,11 @@ public class SummarizeController: UIViewController, Themeable {
         tabSnapshot.isUserInteractionEnabled = true
         tabSnapshot.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan)))
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
+        let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
            gradient.alpha = 0.0
-           tabSnapshot.transform = CGAffineTransform(translationX: 0.0,
-                                                     y: view.frame.height -
-                                                     UX.tabSnapshotFinalPositionBottomPadding -
-                                                     tabSnapshotOffset)
+           tabSnapshot.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
            loadingLabel.alpha = 0.0
            summaryView.alpha = 1.0
            closeButton.alpha = 1.0
@@ -267,38 +265,46 @@ public class SummarizeController: UIViewController, Themeable {
     private func onTabSnapshotPan(_ gesture: UIPanGestureRecognizer) {
         let translationY = gesture.translation(in: view).y
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
-        let imageViewTransform = CGAffineTransform(translationX: 0.0,
-                                                   y: view.frame.height
-                                                   - UX.tabSnapshotFinalPositionBottomPadding -
-                                                   tabSnapshotOffset)
+        let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
+        let tabSnapshotTransform = CGAffineTransform(translationX: 0.0,
+                                                   y: tabSnapshotYTransform)
         switch gesture.state {
         case .changed:
-            tabSnapshot.transform = imageViewTransform.translatedBy(x: 0.0, y: translationY)
-            if translationY < 0 {
-                let percentage = 1 - abs(translationY) / view.frame.height
-                summaryView.alpha = percentage
-            }
-        case .ended, .cancelled:
-            let panVelocityY = gesture.velocity(in: view).y
-            let shouldCloseSummary = abs(translationY) > view.frame.height * UX.panCloseSummaryHeightPercentageThreshold
-                                     || panVelocityY > UX.panCloseSummaryVelocityThreshold
-            if shouldCloseSummary {
-                UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-                    tabSnapshot.transform = .identity
-                    tabSnapshot.layer.cornerRadius = 0.0
-                } completion: { [weak self] _ in
-                    self?.viewModel.onDismiss()
-                    self?.dismiss(animated: true)
-                }
-            } else {
-                UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-                    summaryView.alpha = 1.0
-                    summaryView.transform = .identity
-                    tabSnapshot.transform = imageViewTransform
-                }
-            }
+            handleTabPanChanged(tabSnapshotTransform: tabSnapshotTransform, translationY: translationY)
+        case .ended, .cancelled, .failed:
+            handleTabPanEnded(gesture, tabSnapshotTransform: tabSnapshotTransform)
         default:
             break
+        }
+    }
+
+    private func handleTabPanChanged(tabSnapshotTransform: CGAffineTransform, translationY: CGFloat) {
+        tabSnapshot.transform = tabSnapshotTransform.translatedBy(x: 0.0, y: translationY)
+        if translationY < 0 {
+            let percentage = 1 - abs(translationY) / view.frame.height
+            summaryView.alpha = percentage
+        }
+    }
+
+    private func handleTabPanEnded(_ gesture: UIPanGestureRecognizer, tabSnapshotTransform: CGAffineTransform) {
+        let panVelocityY = gesture.velocity(in: view).y
+        let translationY = gesture.translation(in: view).y
+        let shouldCloseSummary = abs(translationY) > view.frame.height * UX.panCloseSummaryHeightPercentageThreshold
+                                 || panVelocityY > UX.panCloseSummaryVelocityThreshold
+        if shouldCloseSummary {
+            UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
+                tabSnapshot.transform = .identity
+                tabSnapshot.layer.cornerRadius = 0.0
+            } completion: { [weak self] _ in
+                self?.viewModel.onDismiss()
+                self?.dismiss(animated: true)
+            }
+        } else {
+            UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
+                summaryView.alpha = 1.0
+                summaryView.transform = .identity
+                tabSnapshot.transform = tabSnapshotTransform
+            }
         }
     }
 

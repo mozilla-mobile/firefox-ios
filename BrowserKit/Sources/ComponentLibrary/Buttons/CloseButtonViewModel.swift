@@ -9,7 +9,7 @@ public struct CloseButtonViewModel {
     public let a11yLabel: String
     public let a11yIdentifier: String
     /// An optional image to apply to the `CloseButton` to change visual appearance.
-    /// If this image is nil then `StandardImageIdentifiers.ExtraLarge.crossCircleFill` gets used
+    /// If this image is nil then `StandardImageIdentifiers.ExtraLarge.crossCircleFill` is used
     public let image: UIImage?
 
     public init(a11yLabel: String,

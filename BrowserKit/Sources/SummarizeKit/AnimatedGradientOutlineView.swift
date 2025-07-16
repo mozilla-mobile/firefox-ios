@@ -18,6 +18,10 @@ class AnimatedGradientOutlineView: UIView,
         static let positionChangeAnimationDuration: CFTimeInterval = 1.25
         static let startPointFinalAnimationValue = CGPoint(x: 1.0, y: 0.3)
         static let endPointFinalAnimationValue = CGPoint(x: 0.0, y: 0.8)
+        static let colorsLocation = [NSNumber(0.0), NSNumber(0.8), NSNumber(1.0)]
+        static let colorsKeyPath = "colors"
+        static let startPointKeyPath = "startPoint"
+        static let endPointKeyPath = "endPoint"
     }
 
     private let gradientLayer = CAGradientLayer()
@@ -46,9 +50,9 @@ class AnimatedGradientOutlineView: UIView,
             GradientColors.blue.cgColor,
             GradientColors.clearRed.cgColor
         ]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-        gradientLayer.locations = [0.0, 0.8, 1.0]
+        gradientLayer.startPoint = CGPoint.topCenter
+        gradientLayer.endPoint = CGPoint.bottomCenter
+        gradientLayer.locations = UX.colorsLocation
         layer.addSublayer(gradientLayer)
 
         gradientLayer.mask = fadeLayer
@@ -68,7 +72,7 @@ class AnimatedGradientOutlineView: UIView,
 
     func startAnimating(_ completion: (() -> Void)? = nil) {
         onAnimationEnd = completion
-        let animation = CABasicAnimation(keyPath: "colors")
+        let animation = CABasicAnimation(keyPath: UX.colorsKeyPath)
         animation.fromValue = gradientLayer.colors
         animation.toValue = [
             GradientColors.clearOrange.cgColor,
@@ -87,13 +91,15 @@ class AnimatedGradientOutlineView: UIView,
     // MARK: - Animation Delegate
 
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        guard flag, let animation = anim as? CABasicAnimation, animation.keyPath == "colors" else { return }
+        guard flag,
+              let animation = anim as? CABasicAnimation,
+              animation.keyPath == UX.colorsKeyPath else { return }
         onAnimationEnd?()
     }
 
     func animatePositionChange(animationCurve: CAMediaTimingFunction) {
         fadeLayer.animateFadeDown()
-        let startPointAnimation = CABasicAnimation(keyPath: "startPoint")
+        let startPointAnimation = CABasicAnimation(keyPath: UX.startPointKeyPath)
         startPointAnimation.fromValue = CGPoint.topCenter
         startPointAnimation.toValue = UX.startPointFinalAnimationValue
         startPointAnimation.duration = UX.positionChangeAnimationDuration
@@ -102,7 +108,7 @@ class AnimatedGradientOutlineView: UIView,
         startPointAnimation.beginTime = CACurrentMediaTime() + 0.5
         gradientLayer.add(startPointAnimation, forKey: "startPointAnimation")
 
-        let endPointAnimation = CABasicAnimation(keyPath: "endPoint")
+        let endPointAnimation = CABasicAnimation(keyPath: UX.endPointKeyPath)
         endPointAnimation.fromValue = CGPoint.bottomCenter
         endPointAnimation.toValue = UX.endPointFinalAnimationValue
         endPointAnimation.duration = UX.positionChangeAnimationDuration

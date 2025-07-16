@@ -15,6 +15,8 @@ class RectangularFadeMaskLayer: CALayer {
     private struct UX {
         static let defaultEdgeFade: CGFloat = 130.0
         static let fadeDownAnimationDuration: CFTimeInterval = 0.5
+        static let filterMode = "multiplyBlendMode"
+        static let colorsKeyPath = "colors"
     }
 
     private let horizontal = CAGradientLayer()
@@ -37,7 +39,7 @@ class RectangularFadeMaskLayer: CALayer {
         vertical.endPoint = .bottomCenter
         vertical.colors = horizontal.colors
 
-        maskLayer.compositingFilter = "multiplyBlendMode"
+        maskLayer.compositingFilter = UX.filterMode
         maskLayer.addSublayer(horizontal)
         maskLayer.addSublayer(vertical)
         addSublayer(maskLayer)
@@ -84,6 +86,6 @@ class RectangularFadeMaskLayer: CALayer {
         animation.duration = UX.fadeDownAnimationDuration
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
-        vertical.add(animation, forKey: "lowerAnimation")
+        vertical.add(animation, forKey: "fadeDownAnimation")
     }
 }
