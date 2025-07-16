@@ -76,8 +76,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
                                line: UInt = #line) -> LaunchScreenViewController {
         let subject = LaunchScreenViewController(windowUUID: windowUUID,
                                                  coordinator: coordinatorDelegate,
-                                                 viewModel: viewModel,
-                                                 mainQueue: dispacthQueue)
+                                                 viewModel: viewModel)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

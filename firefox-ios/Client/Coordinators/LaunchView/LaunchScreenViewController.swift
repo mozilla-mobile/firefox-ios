@@ -9,7 +9,6 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private lazy var launchScreen = LaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
-    private var mainQueue: DispatchQueueInterface
 
     private lazy var splashScreenAnimation = SplashScreenAnimation()
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
@@ -23,11 +22,9 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
-         viewModel: LaunchScreenViewModel? = nil,
-         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
+         viewModel: LaunchScreenViewModel? = nil) {
         self.coordinator = coordinator
         self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
-        self.mainQueue = mainQueue
         super.init(nibName: nil, bundle: nil)
         self.viewModel.delegate = self
     }
