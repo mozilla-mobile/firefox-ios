@@ -128,7 +128,6 @@ class LiteLLMClientTests: XCTestCase {
     }
 
     func testMakeRequestBuildsURLRequestStreaming() throws {
-        let client = LiteLLMClient(apiKey: Self.mockAPIKey, baseURL: URL(string: Self.mockAPIEndpoint)!)
         let urlRequest = try mockClient.makeRequest(
             messages: Self.mockMessages,
             model: "fake-model",
