@@ -18,12 +18,9 @@ public protocol FileManagerProtocol: Sendable {
                                    withFilenamePrefix prefix: String) throws -> [String]
 }
 
-public final class DefaultFileManager: FileManagerProtocol, @unchecked Sendable {
-    private let fileManager: FileManager
-
-    public init(fileManager: FileManager = .default) {
-        self.fileManager = fileManager
-    }
+public struct DefaultFileManager: FileManagerProtocol {
+    let fileManagerFactory: @Sendable () -> FileManager
+    var fileManager: FileManager { fileManagerFactory() }
 
     public func fileExists(atPath path: String) -> Bool {
         return fileManager.fileExists(atPath: path)
