@@ -26,8 +26,4 @@ public extension FileManager {
             .filter { $0.hasPrefix("\(prefix).") }
             .sorted { $0 < $1 }
     }
-
-    static var documentsDirectoryURL: URL {
-        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
 }
