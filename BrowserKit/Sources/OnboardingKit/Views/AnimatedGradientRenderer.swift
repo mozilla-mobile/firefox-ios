@@ -65,7 +65,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
             )
             throw AnimatedGradientRendererError.failedToCreateCommandQueue
         }
-        self.commandQueue = queue
+        commandQueue = queue
 
         let shaderLibrary: MTLLibrary
         do {
