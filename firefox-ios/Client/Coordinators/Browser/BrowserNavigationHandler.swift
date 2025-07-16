@@ -112,6 +112,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 }
 
 extension BrowserNavigationHandler {
+    @MainActor
     func show(settings: Route.SettingsSection) {
         show(settings: settings, onDismiss: nil)
     }
