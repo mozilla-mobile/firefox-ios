@@ -5,6 +5,9 @@
 import Foundation
 
 protocol OnboardingServiceDelegate: AnyObject {
+    @MainActor
     func dismiss(animated: Bool, completion: (() -> Void)?)
+
+    @MainActor
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
 }
