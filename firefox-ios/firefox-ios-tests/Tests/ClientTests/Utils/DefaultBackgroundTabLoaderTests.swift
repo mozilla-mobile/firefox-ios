@@ -22,15 +22,24 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
         self.tabQueue = nil
     }
 
+    @MainActor
     func testLoadBackgroundTabs_noTabs_doesntLoad() {
         let subject = createSubject()
 
         subject.loadBackgroundTabs()
 
+        let predicate = NSPredicate { _, _ in
+            return self.tabQueue.getQueuedTabsCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 3.0)
+
         XCTAssertEqual(tabQueue.getQueuedTabsCalled, 1)
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
+    @MainActor
     func testLoadBackgroundTabs_withTabs_load() {
         let urlString = "https://www.mozilla.com"
         tabQueue.queuedTabs = [ShareItem(url: urlString, title: "Title 1"),
@@ -39,6 +48,13 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
         let subject = createSubject()
 
         subject.loadBackgroundTabs()
+
+        let predicate = NSPredicate { _, _ in
+            return self.tabQueue.getQueuedTabsCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 3.0)
 
         XCTAssertEqual(tabQueue.getQueuedTabsCalled, 1)
         XCTAssertEqual(applicationHelper.openURLCalled, 3)

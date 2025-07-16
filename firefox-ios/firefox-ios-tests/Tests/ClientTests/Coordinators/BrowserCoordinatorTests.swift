@@ -11,6 +11,7 @@ import GCDWebServers
 
 @testable import Client
 
+@MainActor
 final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!

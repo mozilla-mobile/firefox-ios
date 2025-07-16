@@ -184,6 +184,7 @@ class MockBrowserViewController: BrowserViewController {
         return nil
     }
 
+    @MainActor
     override func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,

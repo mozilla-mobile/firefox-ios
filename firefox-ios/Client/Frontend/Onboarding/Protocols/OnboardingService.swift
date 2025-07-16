@@ -54,6 +54,8 @@ final class OnboardingService: FeatureFlaggable {
         self.searchBarLocationSaver = searchBarLocationSaver
     }
 
+    // TODO: FXIOS-12843 Test that calling these completion handlers on the main thread does not cause issues for each action
+    @MainActor
     func handleAction(
         _ action: OnboardingActions,
         from cardName: String,
@@ -174,6 +176,7 @@ final class OnboardingService: FeatureFlaggable {
         presentSignToSync(with: fxaParams, profile: profile, completion: completion)
     }
 
+    @MainActor
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
@@ -191,6 +194,7 @@ final class OnboardingService: FeatureFlaggable {
         presentPrivacyPolicy(from: url, completion: completion)
     }
 
+    @MainActor
     private func handleOpenIosFxSettings(from cardName: String) {
         defaultApplicationHelper.openSettings()
     }
