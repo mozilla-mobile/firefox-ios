@@ -32,6 +32,7 @@ public final class AddressToolbarAddTabView: UIView,
 
     public func configure(_ configuration: AddressToolbarUXConfiguration) {
         layer.cornerRadius = configuration.toolbarCornerRadius
+        layer.shadowRadius = configuration.toolbarCornerRadius
     }
 
     public func showHideAddTabIcon(shouldShow: Bool) {
@@ -41,6 +42,7 @@ public final class AddressToolbarAddTabView: UIView,
     // MARK: - ThemeApplicable
 
     public func applyTheme(theme: any Theme) {
+        layer.shadowColor = theme.colors.shadowStrong.cgColor
         plusIconView.tintColor = theme.colors.textPrimary
         backgroundColor = theme.colors.layerSurfaceMedium
     }

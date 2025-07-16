@@ -983,6 +983,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
+        webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
@@ -1260,7 +1261,8 @@ class BrowserViewController: UIViewController,
             statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
             windowUUID: windowUUID,
-            screenshotHelper: screenshotHelper
+            screenshotHelper: screenshotHelper,
+            prefs: profile.prefs
         )
     }
 
@@ -1300,6 +1302,9 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: false)
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
+            }
+            addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
+                return self?.newTabSettings
             }
         }
     }
@@ -4804,8 +4809,8 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
-        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
+        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && newTabSettings == .homePage
+        let homePageURL = NewTabHomePageAccessors.getHomePage(profile.prefs)
 
         if shouldLoadCustomHomePage, let url = homePageURL {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)

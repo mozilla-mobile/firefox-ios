@@ -66,6 +66,10 @@ class MockBrowserViewController: BrowserViewController {
     var contextMenuConfigurationCalled = 0
     var requestMediaCapturePermissionCalled = 0
     var contextMenuDidEndForElementCalled = 0
+    override var newTabSettings: NewTabPage {
+        return overrideNewTabSettings
+    }
+    var overrideNewTabSettings: NewTabPage = .topSites
 
     override var presentedViewController: UIViewController? {
         return viewControllerToPresent

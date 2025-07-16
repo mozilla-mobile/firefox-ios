@@ -162,10 +162,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
-        if tabManager.selectedTab?.isPrivate == true {
-            return privateHomepageViewController
+        let newTabSettings = browserViewController.newTabSettings
+        switch newTabSettings {
+        case .blankPage, .homePage:
+            return nil
+        case .topSites:
+            if tabManager.selectedTab?.isPrivate == true {
+                return privateHomepageViewController
+            }
+            return homepageViewController ?? legacyHomepageViewController
         }
-        return homepageViewController ?? legacyHomepageViewController
     }
 
     func setHomepageVisibility(isVisible: Bool) {
