@@ -188,16 +188,16 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             let translation = width * (1 - progress)
             webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: translation, y: 0.0)
             webPagePreview.alpha = progress
-            if homepageScreenshotToolProvider?() == nil {
-                let pageSetting = newTabSettingsProvider?()
-                if pageSetting == .homePage {
-                    webPagePreview.setScreenshot(NewTabHomePageAccessors.getHomePage(prefs))
-                } else {
-                    let url: URL? = nil
-                    webPagePreview.setScreenshot(url)
-                }
-            } else {
+            let pageSetting = newTabSettingsProvider?()
+            switch pageSetting {
+            case .homePage:
+                webPagePreview.setScreenshot(NewTabHomePageAccessors.getHomePage(prefs))
+            case .topSites:
                 webPagePreview.setScreenshot(homepageScreenshot)
+            case nil, .blankPage:
+                // this is needed otherwise the compiler doesn't which setScreenshot overload to use
+                let url: URL? = nil
+                webPagePreview.setScreenshot(url)
             }
         } else {
             webPagePreview.alpha = 1.0
