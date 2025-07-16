@@ -116,7 +116,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: any Theme) {
-        backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layerSurfaceMedium
         layer.shadowColor = theme.colors.shadowStrong.cgColor
     }
 }

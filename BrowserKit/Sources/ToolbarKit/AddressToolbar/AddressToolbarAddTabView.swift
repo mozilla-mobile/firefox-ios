@@ -23,8 +23,6 @@ public final class AddressToolbarAddTabView: UIView,
     }
 
     private func setupLayout() {
-        layer.shadowRadius = 14.0
-        layer.masksToBounds = false
         addSubview(plusIconView)
         NSLayoutConstraint.activate([
             plusIconView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -34,6 +32,7 @@ public final class AddressToolbarAddTabView: UIView,
 
     public func configure(_ configuration: AddressToolbarUXConfiguration) {
         layer.cornerRadius = configuration.toolbarCornerRadius
+        layer.shadowRadius = configuration.toolbarCornerRadius
     }
 
     public func showHideAddTabIcon(shouldShow: Bool) {
