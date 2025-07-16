@@ -25,17 +25,17 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    var onAccept: (() -> Void)?
-    var onNotNow: (() -> Void)?
-    var onLinkTapped: ((URL) -> Void)?
+    private let viewModel: ToUBottomSheetViewModel
 
     // MARK: - Init
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(viewModel: ToUBottomSheetViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.notificationCenter = notificationCenter
+        self.viewModel = viewModel
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
@@ -64,9 +64,6 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     // MARK: - Setup View
 
     private func setupView() {
-        view.layer.cornerRadius = UX.cornerRadius
-        view.clipsToBounds = true
-
         let stackView = createStackView()
         let logoImageView = createLogoImageView()
         let titleLabel = createTitleLabel()
@@ -74,11 +71,9 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         let acceptButton = createAcceptButton()
         let remindMeLaterButton = createRemindMeLaterButton()
 
-        stackView.addArrangedSubview(logoImageView)
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(descriptionTextView)
-        stackView.addArrangedSubview(acceptButton)
-        stackView.addArrangedSubview(remindMeLaterButton)
+        [logoImageView, titleLabel, descriptionTextView, acceptButton, remindMeLaterButton].forEach {
+            stackView.addArrangedSubview($0)
+        }
 
         view.addSubview(stackView)
 
@@ -114,7 +109,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 
     private func createTitleLabel() -> UILabel {
         let label = UILabel()
-        label.text = TermsOfUse.Title
+        label.text = viewModel.titleText
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.textAlignment = .center
         label.textColor = currentTheme().colors.textPrimary
@@ -142,7 +137,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 
     private func createAcceptButton() -> PrimaryRoundedButton {
         let button = PrimaryRoundedButton()
-        button.setTitle(TermsOfUse.AcceptButton, for: .normal)
+        button.setTitle(viewModel.acceptButtonTitle, for: .normal)
         button.applyTheme(theme: currentTheme())
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
@@ -152,7 +147,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 
     private func createRemindMeLaterButton() -> UIButton {
         let button = UIButton(type: .system)
-        button.setTitle(TermsOfUse.RemindMeLaterButton, for: .normal)
+        button.setTitle(viewModel.remindMeLaterButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
@@ -179,21 +174,20 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     // MARK: - Attributed Text
 
     private func makeAttributedText() -> NSAttributedString {
-        let baseText = TermsOfUse.Description
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2
         paragraphStyle.alignment = .left
 
-        let attributed = NSMutableAttributedString(string: baseText, attributes: [
+        let attributed = NSMutableAttributedString(string: viewModel.descriptionText, attributes: [
             .font: FXFontStyles.Regular.body.scaledFont(),
             .foregroundColor: currentTheme().colors.textSecondary,
             .paragraphStyle: paragraphStyle
         ])
 
-        let links: [(String, String)] = [
-            (TermsOfUse.LinkTermsOfUse, "https://www.mozilla.org/about/legal/terms/firefox/"),
-            (TermsOfUse.LinkPrivacyNotice, "https://www.mozilla.org/privacy/firefox/"),
-            (TermsOfUse.LinkLearnMore, SupportUtils.URLForTopic("mobile-firefox-terms-of-use-faq")?.absoluteString ?? "")
+        let links: [(String, URL)] = [
+            (TermsOfUse.LinkTermsOfUse, viewModel.termsOfUseURL),
+            (TermsOfUse.LinkPrivacyNotice, viewModel.privacyNoticeURL),
+            (TermsOfUse.LinkLearnMore, viewModel.learnMoreURL)
         ]
 
         for (term, url) in links {
@@ -209,12 +203,12 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     // MARK: - Actions
 
     @objc private func acceptTapped() {
-        onAccept?()
+        viewModel.onAccept?()
         dismiss(animated: true)
     }
 
     @objc private func notNowTapped() {
-        onNotNow?()
+        viewModel.onNotNow?()
         dismiss(animated: true)
     }
 }
@@ -225,8 +219,12 @@ extension ToUBottomSheetViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
         if !isViewLoaded || view.window?.isKeyWindow == nil { return false }
-        onLinkTapped?(URL)
-        dismiss(animated: true)
+
+        let linkVC = ToULinkViewController(url: URL, windowUUID: windowUUID)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .overFullScreen
+        self.present(navController, animated: true)
+
         return false
     }
 }
