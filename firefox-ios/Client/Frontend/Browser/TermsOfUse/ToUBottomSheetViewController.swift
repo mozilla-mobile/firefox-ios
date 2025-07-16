@@ -148,7 +148,8 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     private func createRemindMeLaterButton() -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(viewModel.remindMeLaterButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        button.tintColor = currentTheme().colors.actionPrimary
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(notNowTapped), for: .touchUpInside)
@@ -218,12 +219,10 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 extension ToUBottomSheetViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
-        if !isViewLoaded || view.window?.isKeyWindow == nil { return false }
 
         let linkVC = ToULinkViewController(url: URL, windowUUID: windowUUID)
-        let navController = UINavigationController(rootViewController: linkVC)
-        navController.modalPresentationStyle = .overFullScreen
-        self.present(navController, animated: true)
+        //linkVC.modalPresentationStyle = .formSheet
+        self.present(linkVC, animated: true)
 
         return false
     }

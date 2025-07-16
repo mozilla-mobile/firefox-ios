@@ -31,6 +31,7 @@ class ToULinkViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
+        
     }
 
     required init?(coder: NSCoder) {
@@ -43,11 +44,37 @@ class ToULinkViewController: UIViewController, Themeable {
         super.viewDidLoad()
         listenForThemeChange(view)
         setupWebView()
+        setupHeaderBar()
         applyTheme()
-        setupNavigation()
     }
 
     // MARK: - Setup
+
+    private func setupHeaderBar() {
+        let header = UIView()
+        header.translatesAutoresizingMaskIntoConstraints = false
+        header.backgroundColor = currentTheme().colors.layer1
+
+        let backButton = UIButton(type: .system)
+        backButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        backButton.setTitle("Back", for: .normal)
+        backButton.tintColor = currentTheme().colors.actionPrimary
+        backButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+
+        header.addSubview(backButton)
+        view.addSubview(header)
+
+        NSLayoutConstraint.activate([
+            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            header.heightAnchor.constraint(equalToConstant: 44),
+
+            backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
+            backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor)
+        ])
+    }
 
     private func setupWebView() {
         let config = WKWebViewConfiguration()
@@ -61,7 +88,7 @@ class ToULinkViewController: UIViewController, Themeable {
 
         view.addSubview(webView)
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -70,28 +97,21 @@ class ToULinkViewController: UIViewController, Themeable {
         webView.load(URLRequest(url: url))
     }
 
-    private func setupNavigation() {
-        title = url.host
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.backward"),
-            style: .plain,
-            target: self,
-            action: #selector(closeTapped)
-        )
-    }
-
     // MARK: - Theming
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
-        navigationItem.leftBarButtonItem?.tintColor = theme.colors.actionPrimary
     }
 
     // MARK: - Actions
 
     @objc private func closeTapped() {
         dismiss(animated: true, completion: nil)
+    }
+
+    private func currentTheme() -> Theme {
+        themeManager.getCurrentTheme(for: currentWindowUUID)
     }
 }
 
