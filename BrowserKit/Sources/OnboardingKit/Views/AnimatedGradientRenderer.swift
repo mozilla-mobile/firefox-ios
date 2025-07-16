@@ -51,7 +51,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 
     init(device: MTLDevice?) throws {
         if let device {
-            self.metalDevice = device
+            metalDevice = device
         } else {
             logger.log("No Metal device available", level: .fatal, category: .onboarding)
             throw AnimatedGradientRendererError.failedToCreateMetalDevice
@@ -101,7 +101,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
 
         do {
-            self.renderPipelineState = try metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+            renderPipelineState = try metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
         } catch {
             logger.log(
                 "Failed to create render pipeline state: \(error)",
@@ -297,7 +297,7 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
         metalView.device = MTLCreateSystemDefaultDevice()
         metalView.framebufferOnly = false
         metalView.colorPixelFormat = .bgra8Unorm
-        metalView.delegate = context.coordinator
+        metalView.delegate = delegate
         return metalView
     }
 
