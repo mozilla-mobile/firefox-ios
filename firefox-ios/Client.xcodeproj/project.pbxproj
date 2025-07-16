@@ -1411,6 +1411,7 @@
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
 		BA9EBA1C2E1BDDF300A11D91 /* LiteLLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBA1B2E1BDDEE00A11D91 /* LiteLLMClient.swift */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
+		BAEB9CCB2E28136300F9F482 /* LiteLLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
@@ -9196,6 +9197,7 @@
 		BA9EBA1B2E1BDDEE00A11D91 /* LiteLLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClient.swift; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcher.swift; sourceTree = "<group>"; };
+		BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientTests.swift; sourceTree = "<group>"; };
 		BAF14FEC94CB9DA4E08BA60C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Storage.strings; sourceTree = "<group>"; };
 		BAF74394B38CDAE36910B788 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Shared.strings; sourceTree = "<group>"; };
 		BAFB47EE839E6EE784CA9C34 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -15349,6 +15351,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */,
 				EDADF7822D70D59900C39295 /* AppIconSelection */,
 				8A171A6029F82AD90085770E /* Application */,
 				B23620492B7EAF2C000B1DE7 /* Autofill */,
@@ -18428,6 +18431,7 @@
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
+				BAEB9CCB2E28136300F9F482 /* LiteLLMClientTests.swift in Sources */,
 				8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */,
 				8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
