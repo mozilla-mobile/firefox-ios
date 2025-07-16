@@ -88,6 +88,7 @@ extension BookmarkItemData: BookmarksFolderCell {
         }
     }
 
+    @MainActor
     func didSelect(profile: Profile,
                    searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
