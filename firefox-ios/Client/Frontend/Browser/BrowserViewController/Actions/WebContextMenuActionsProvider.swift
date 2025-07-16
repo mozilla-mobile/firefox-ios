@@ -127,7 +127,7 @@ class WebContextMenuActionsProvider {
             title: .ContextMenuShareLink,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
             identifier: UIAction.Identifier("linkContextMenu.share")
-        ) { _ in
+        ) { @MainActor _ in
             guard let tab = tabManager[webView],
                   let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
             else { return }
