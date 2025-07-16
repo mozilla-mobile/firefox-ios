@@ -3577,8 +3577,6 @@ class BrowserViewController: UIViewController,
 
     /// Configures the scrim area for zero search state
     private func configureZeroSearchView() {
-        addressToolbarContainer.isHidden = false
-
         zeroSearchDimmingView.alpha = 0
         view.addSubview(zeroSearchDimmingView)
         view.bringSubviewToFront(zeroSearchDimmingView)
@@ -3593,6 +3591,7 @@ class BrowserViewController: UIViewController,
         UIView.animate(withDuration: 0.3) {
              self.zeroSearchDimmingView.alpha = 1
         }
+        contentContainer.accessibilityElementsHidden = true
     }
 
     /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
