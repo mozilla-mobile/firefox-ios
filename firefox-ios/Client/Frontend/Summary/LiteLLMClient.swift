@@ -16,19 +16,19 @@ public struct LiteLLMMessage: Codable {
     let content: String
 }
 
-private struct LiteLLMResponse: Codable {
+struct LiteLLMResponse: Codable {
     let id: String
     let choices: [LiteLLMChoice]
 }
 
-private struct LiteLLMChoice: Codable {
+struct LiteLLMChoice: Codable {
     let index: Int
     let message: LiteLLMMessage?
     let delta: LiteLLMMessage?
     let finishReason: String?
 }
 
-private struct StreamResponse: Codable {
+struct StreamResponse: Codable {
     let id: String
     let created: Int
     let model: String
@@ -36,12 +36,12 @@ private struct StreamResponse: Codable {
     let choices: [StreamChoice]
 }
 
-private struct StreamChoice: Codable {
+struct StreamChoice: Codable {
     let index: Int
     let delta: Delta
 }
 
-private struct Delta: Codable {
+struct Delta: Codable {
     let role: String?
     let content: String?
 }
@@ -138,8 +138,7 @@ public class LiteLLMClient: NSObject {
         }
     }
 
-    // MARK: - Private Helpers
-    private func makeRequest(
+    func makeRequest(
         messages: [LiteLLMMessage],
         model: String,
         maxTokens: Int,
