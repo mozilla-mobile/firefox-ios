@@ -163,6 +163,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { result in
+            self.assertOnMainThread()
             expectation.fulfill()
         }
 
@@ -186,10 +187,12 @@ final class OnboardingServiceTests: XCTestCase {
             from: "testCard",
             cards: [],
             with: activityEventHelper
-        ) { _ in }
+        ) { _ in
+            self.assertOnMainThread()
+        }
 
         // Wait for async completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.async {
             expectation.fulfill()
         }
 
@@ -213,10 +216,8 @@ final class OnboardingServiceTests: XCTestCase {
             from: "testCard",
             cards: [],
             with: activityEventHelper
-        ) { _ in }
-
-        // Wait for async completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        ) { _ in
+            self.assertOnMainThread()
             expectation.fulfill()
         }
 
@@ -241,6 +242,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { result in
+            self.assertOnMainThread()
             if case .success(let tabAction) = result {
                 resultTabAction = tabAction
             }
@@ -270,6 +272,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { result in
+            self.assertOnMainThread()
             if case .success(let tabAction) = result {
                 resultTabAction = tabAction
             }
@@ -299,6 +302,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { result in
+            self.assertOnMainThread()
             if case .success(let tabAction) = result {
                 resultTabAction = tabAction
             }
@@ -320,6 +324,7 @@ final class OnboardingServiceTests: XCTestCase {
     func testHandleAction_SyncSignIn_UpdatesActivityEventHelper() {
         // Given
         let activityEventHelper = MockActivityEventHelper()
+        let expectation = XCTestExpectation(description: "Completion called")
 
         // When
         sut.handleAction(
@@ -327,7 +332,20 @@ final class OnboardingServiceTests: XCTestCase {
             from: "testCard",
             cards: [],
             with: activityEventHelper
-        ) { _ in }
+        ) { _ in
+            self.assertOnMainThread()
+            expectation.fulfill()
+        }
+
+        guard let presented = mockDelegate.presentedViewController else {
+            XCTFail("Expected a view controller to be presented")
+            return
+        }
+        presented.dismiss(animated: false, completion: nil)
+        presented.beginAppearanceTransition(false, animated: false)
+        presented.endAppearanceTransition()
+
+        wait(for: [expectation], timeout: 1.0)
 
         // Then
         XCTAssertTrue(activityEventHelper.chosenOptions.contains(.syncSignIn))
@@ -351,6 +369,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { _ in
+            self.assertOnMainThread()
             expectation.fulfill()
         }
 
@@ -376,6 +395,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { _ in
+            self.assertOnMainThread()
             expectation.fulfill()
         }
 
@@ -399,6 +419,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { _ in
+            self.assertOnMainThread()
             expectation.fulfill()
         }
 
@@ -417,6 +438,7 @@ final class OnboardingServiceTests: XCTestCase {
         let activityEventHelper = MockActivityEventHelper()
         let testURL = URL(string: "https://example.com/privacy")!
         let mockCard = createMockCard(name: "testCard", url: testURL)
+        let expectation = XCTestExpectation(description: "Completion called")
 
         // When
         sut.handleAction(
@@ -424,7 +446,20 @@ final class OnboardingServiceTests: XCTestCase {
             from: "testCard",
             cards: [mockCard],
             with: activityEventHelper
-        ) { _ in }
+        ) { _ in
+            self.assertOnMainThread()
+            expectation.fulfill()
+        }
+
+        guard let presented = mockDelegate.presentedViewController else {
+            XCTFail("Expected a view controller to be presented")
+            return
+        }
+        presented.dismiss(animated: false, completion: nil)
+        presented.beginAppearanceTransition(false, animated: false)
+        presented.endAppearanceTransition()
+
+        wait(for: [expectation], timeout: 1.0)
 
         // Then
         XCTAssertTrue(mockDelegate.presentCalled)
@@ -444,6 +479,7 @@ final class OnboardingServiceTests: XCTestCase {
             cards: [],
             with: activityEventHelper
         ) { _ in
+            self.assertOnMainThread()
             expectation.fulfill()
         }
 
@@ -476,6 +512,18 @@ final class OnboardingServiceTests: XCTestCase {
             a11yIdRoot: "onboarding_customizationToolbar",
             imageID: "toolbar",
             instructionsPopup: nil
+        )
+    }
+
+    private func assertOnMainThread(
+      file: StaticString = #filePath,
+      line: UInt = #line
+    ) {
+        XCTAssertTrue(
+            Thread.isMainThread,
+            "Not on main thread",
+            file: file,
+            line: line
         )
     }
 }
