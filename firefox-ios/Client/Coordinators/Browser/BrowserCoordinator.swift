@@ -54,7 +54,7 @@ class BrowserCoordinator: BaseCoordinator,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
-    override var isDismissable: Bool { false }
+    override var isDismissible: Bool { false }
 
     init(router: Router,
          screenshotService: ScreenshotService,

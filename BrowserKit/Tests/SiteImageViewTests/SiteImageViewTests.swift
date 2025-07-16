@@ -18,6 +18,7 @@ final class SiteImageViewTests: XCTestCase {
         self.imageFetcher = nil
     }
 
+    @MainActor
     func testFaviconSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
@@ -50,6 +51,7 @@ final class SiteImageViewTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    @MainActor
     func testCanMakeRequest_firstTime_true() {
         let url = "https://www.firefox.com"
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
@@ -58,6 +60,7 @@ final class SiteImageViewTests: XCTestCase {
         XCTAssertTrue(canMakeRequestFirstTime)
     }
 
+    @MainActor
     func testCanMakeRequest_secondTime_false() {
         let url = "https://www.firefox.com"
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
@@ -67,6 +70,7 @@ final class SiteImageViewTests: XCTestCase {
         XCTAssertFalse(canMakeRequestSecondTime)
     }
 
+    @MainActor
     func testCanMakeRequest_secondTime_newURL_true() {
         let url = "https://www.firefox.com"
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}

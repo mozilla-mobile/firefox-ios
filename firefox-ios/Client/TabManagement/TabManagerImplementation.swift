@@ -776,7 +776,7 @@ class TabManagerImplementation: NSObject,
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
 
             // Save simple tabs, used by widget extension
-            windowManager.performMultiWindowAction(.saveSimpleTabs)
+            await windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
             await TabErrorTelemetryHelper.shared.recordTabCountAfterPreservingTabs(windowUUID)

@@ -24,7 +24,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     var chosenOptions: OnboardingOptions = []
 
     var availableCards: [OnboardingCardViewController]
-    var isDismissable: Bool
+    var isDismissible: Bool
     var profile: Profile
     var telemetryUtility: OnboardingTelemetryProtocol
     private var cardModels: [OnboardingCardInfoModelProtocol]
@@ -40,7 +40,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         self.profile = profile
         self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
-        self.isDismissable = model.isDismissable
+        self.isDismissible = model.isDismissible
         self.availableCards = []
     }
 

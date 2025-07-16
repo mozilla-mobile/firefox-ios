@@ -82,6 +82,7 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testManager_didTapTakeSurvey_called() {
         let manager = setupStandardConditions()
         XCTAssertTrue(manager.shouldShowSurveySurface)

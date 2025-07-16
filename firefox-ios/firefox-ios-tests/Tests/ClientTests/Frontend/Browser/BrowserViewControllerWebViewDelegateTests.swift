@@ -32,6 +32,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         profile = nil
         tabManager = nil
         fileManager = nil
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
@@ -50,6 +51,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     // MARK: - Decide policy for navigation action
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelWhenTabNotInTabManager() {
         let subject = createSubject()
         let url = URL(string: "https://example.com")!
@@ -62,6 +64,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelFacetimeScheme() {
         let subject = createSubject()
         let url = URL(string: "facetime://testuser")!
@@ -75,6 +78,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelFacetimeAudioScheme() {
         let subject = createSubject()
         let url = URL(string: "facetime-audio://testuser")!
@@ -88,6 +92,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelTelScheme() {
         let subject = createSubject()
         let url = URL(string: "tel://3484563742")!
@@ -101,6 +106,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelAppStoreScheme() {
         let subject = createSubject()
         let url = URL(string: "itms-apps://test-app")!
@@ -114,6 +120,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelAppStoreURL() {
         let subject = createSubject()
         let url = URL(string: "https://apps.apple.com/test-app")!
@@ -127,6 +134,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsite_withNormalTabs() {
         let subject = createSubject()
         let tab = createTab()
@@ -140,6 +148,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsiteBlockingUniversalLink_whenOptionEnabled() {
         let subject = createSubject()
         let tab = createTab()
@@ -154,6 +163,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsAnyWebsite_andBlockUniversalLinksWithPrivateTab() {
         let subject = createSubject()
         let tab = createTab(isPrivate: true)
@@ -167,6 +177,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_addRequestToPending() {
         let subject = createSubject()
         let tab = createTab()
@@ -180,6 +191,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobSchemeWithNavigationTypeOther() {
         let subject = createSubject()
         let tab = createTab()
@@ -193,6 +205,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelLoading_withBlobScheme() {
         let subject = createSubject()
         let tab = createTab()
@@ -206,6 +219,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelLoading_whenLoadingLocalPDFurlPreviouslyDeleted() {
         let subject = createSubject()
         let tab = createTab()
@@ -222,6 +236,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenLoadingLocalPDFurlPreviouslyDownloaded() {
         let subject = createSubject()
         let tab = createTab()
@@ -237,6 +252,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     // MARK: - Decide policy for navigation response
+    @MainActor
     func testWebViewDecidePolicyForNavigationResponse_cancelLoading_whenResponseIsPDFThatWasntDownloadedPreviously() {
         let subject = createSubject()
         let tab = createTab()
@@ -256,6 +272,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDecidePolicyForNavigationResponse_allowsLoading_whenResponseIsLocalPDFFileAlreadyDownloaded() {
         let subject = createSubject()
         let tab = createTab()
@@ -280,6 +297,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     // MARK: - Authentication
 
+    @MainActor
     func testWebViewDidReceiveChallenge_MethodServerTrust() {
         let subject = createSubject()
 
@@ -292,6 +310,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
         let subject = createSubject()
 
@@ -304,6 +323,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
         let subject = createSubject()
 
@@ -316,6 +336,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
         let subject = createSubject()
 
@@ -332,7 +353,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let subject = BrowserViewController(
             profile: profile,
             tabManager: tabManager,
-            mainQueue: MockDispatchQueue(),
             userInitiatedQueue: MockDispatchQueue()
         )
         trackForMemoryLeaks(subject)
@@ -448,6 +468,11 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var createDirectoryCalled = 0
     var contentOfDirectoryAtPathCalled = 0
 
+    /// Fires every time `removeItem(at: URL)` is called. This is useful for tests that fire this on a background thread
+    /// (e.g. in a deinit) and we want to wait for an expectation of a file removal to be fulfilled.
+    /// Closure contains the updated value of `removeItemAtURLCalled`.
+    var removeItemAtURLDispatch: ((Int) -> Void)?
+
     func fileExists(atPath path: String) -> Bool {
         fileExistsCalled += 1
         return fileExists
@@ -475,6 +500,7 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
 
     func removeItem(at url: URL) throws {
         removeItemAtURLCalled += 1
+        removeItemAtURLDispatch?(removeItemAtURLCalled)
     }
 
     func copyItem(at srcURL: URL, to dstURL: URL) throws {

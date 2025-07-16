@@ -26,7 +26,7 @@ class LibraryCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController?
     weak var parentCoordinator: LibraryCoordinatorDelegate?
-    override var isDismissable: Bool { false }
+    override var isDismissible: Bool { false }
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(
