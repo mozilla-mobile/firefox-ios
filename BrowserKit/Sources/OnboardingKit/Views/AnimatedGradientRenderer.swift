@@ -307,20 +307,7 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
 struct AnimatedGradientMetalView: View {
     private let delegate: MTKViewDelegate?
     init(metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()) {
-        do {
-            if let metalDevice {
-                delegate = try AnimatedGradientRenderer(device: metalDevice)
-            } else {
-                delegate = nil
-            }
-        } catch {
-            DefaultLogger.shared.log(
-                "Fatal error: Could not instantiate AnimatedGradientRenderer – \(error.localizedDescription)",
-                level: .fatal,
-                category: .onboarding
-            )
-            delegate = nil
-        }
+        delegate = try? AnimatedGradientRenderer(device: metalDevice)
     }
 
     var body: some View {
