@@ -308,6 +308,7 @@
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingBasicCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */; };
 		21AE78522D8B54B8002FDC9E /* WebviewViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */; };
+		21AF4B402E28385600F6CF97 /* TabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF4B3F2E28385600F6CF97 /* TabScrollController.swift */; };
 		21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */; };
 		21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
@@ -1970,7 +1971,7 @@
 		E67422C51CFF2D39009E8373 /* youtube.ico in Resources */ = {isa = PBXBuildFile; fileRef = E67422C41CFF2D39009E8373 /* youtube.ico */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
-		E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* TabScrollController.swift */; };
+		E698FFDA1B4AADF40001F623 /* LegacyTabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* LegacyTabScrollController.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
@@ -2913,6 +2914,7 @@
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBasicCardViewController.swift; sourceTree = "<group>"; };
 		21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewViewControllerTests.swift; sourceTree = "<group>"; };
+		21AF4B3F2E28385600F6CF97 /* TabScrollController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollController.swift; sourceTree = "<group>"; };
 		21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinator.swift; sourceTree = "<group>"; };
 		21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinator.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
@@ -10324,7 +10326,7 @@
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		E6934171BA2BD0BCAF225D44 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LoginManager.strings; sourceTree = "<group>"; };
-		E698FFD91B4AADF40001F623 /* TabScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabScrollController.swift; sourceTree = "<group>"; };
+		E698FFD91B4AADF40001F623 /* LegacyTabScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyTabScrollController.swift; sourceTree = "<group>"; };
 		E69922121B94E3EF007C480D /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E69DB07D1E97DEA9008A67E6 /* SyncTelemetryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyncTelemetryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E69DB0861E97DEAA008A67E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -14553,6 +14555,7 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				21AF4B3F2E28385600F6CF97 /* TabScrollController.swift */,
 				81A3F6EE2C2DAED500BDD86B /* MainMenu */,
 				1D7B78952ADF324E0011E9F2 /* Event Queue */,
 				8A1E3BE428CBBF1E003388C4 /* SearchEngines */,
@@ -14579,7 +14582,7 @@
 				74821FC41DB56A2500EEEA72 /* OpenWithSettingsViewController.swift */,
 				D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */,
 				FA6B2AC11D41F02D00429414 /* String+Punycode.swift */,
-				E698FFD91B4AADF40001F623 /* TabScrollController.swift */,
+				E698FFD91B4AADF40001F623 /* LegacyTabScrollController.swift */,
 				FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */,
 				D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */,
 				DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */,
@@ -17933,7 +17936,7 @@
 				0B0ED7292D5B46B6001515CB /* TemporaryDocumentLoadingView.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
-				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
+				E698FFDA1B4AADF40001F623 /* LegacyTabScrollController.swift in Sources */,
 				8AF117242DDE228700577232 /* TabTrayThemeAnimator.swift in Sources */,
 				1DD4B26E2CA4D09100B51945 /* TabErrorTelemetryHelper.swift in Sources */,
 				8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */,
@@ -18048,6 +18051,7 @@
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
+				21AF4B402E28385600F6CF97 /* TabScrollController.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
 				210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */,
 				ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */,
