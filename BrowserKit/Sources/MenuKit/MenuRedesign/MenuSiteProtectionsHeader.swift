@@ -90,7 +90,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
     private var siteProtectionsMoreSettingsIcon: UIImageView = .build { imageView in
         let imageName = StandardImageIdentifiers.Large.chevronRight
-        imageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        let image = UIImage(named: imageName)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection() ?? UIImage()
+        imageView.image = image
         imageView.contentMode = .scaleAspectFit
     }
 
