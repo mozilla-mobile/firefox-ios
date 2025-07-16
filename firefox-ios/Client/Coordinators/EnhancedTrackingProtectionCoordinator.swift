@@ -12,7 +12,8 @@ protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
 }
 
 protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
-    @MainActor var showHasOnlySecureContentInTrackingPanel: Bool { get }
+    @MainActor
+    var showHasOnlySecureContentInTrackingPanel: Bool { get }
 }
 
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
