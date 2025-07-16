@@ -102,8 +102,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSites, toSection: .topSites(textColor, numberOfCellsPerRow))
         }
 
-        // TODO add to pocket state
-        if featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) {
+        if state.shouldShowSpacer {
             snapshot.appendSections([.spacer])
             snapshot.appendItems([.spacer], toSection: .spacer)
         }
