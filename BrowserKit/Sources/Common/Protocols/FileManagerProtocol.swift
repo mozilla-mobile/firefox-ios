@@ -18,4 +18,16 @@ public protocol FileManagerProtocol: Sendable {
                                    withFilenamePrefix prefix: String) throws -> [String]
 }
 
-extension FileManager: FileManagerProtocol {}
+extension FileManager: FileManagerProtocol, @unchecked @retroactive Sendable {}
+
+public extension FileManager {
+    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
+        return try FileManager.default.contentsOfDirectory(atPath: path)
+            .filter { $0.hasPrefix("\(prefix).") }
+            .sorted { $0 < $1 }
+    }
+
+    static var documentsDirectoryURL: URL {
+        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+}
