@@ -145,7 +145,8 @@ class BrowserViewController: UIViewController,
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(
-            isSwipingTabsEnabled: self.isSwipingTabsEnabled
+            isSwipingTabsEnabled: self.isSwipingTabsEnabled,
+            isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled
         )
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
@@ -295,6 +296,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
     }
 
+    var isMinimalAddressBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
+    }
+
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
@@ -355,7 +360,6 @@ class BrowserViewController: UIViewController,
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue: DownloadQueue
-    let mainQueue: DispatchQueueInterface
     let userInitiatedQueue: DispatchQueueInterface
 
     private let bookmarksSaver: BookmarksSaver
@@ -392,7 +396,6 @@ class BrowserViewController: UIViewController,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
-        mainQueue: DispatchQueueInterface = DispatchQueue.main,
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
         self.profile = profile
@@ -411,7 +414,6 @@ class BrowserViewController: UIViewController,
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
-        self.mainQueue = mainQueue
         self.userInitiatedQueue = userInitiatedQueue
 
         super.init(nibName: nil, bundle: nil)

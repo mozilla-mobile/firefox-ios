@@ -118,10 +118,28 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, collectionView)
     }
 
-    func test_scrollViewDidScroll_TriggersGeneralBrowserMiddlewareAction() throws {
+    func test_scrollViewDidScroll_withoutScrollableContent_doesNotTriggerGeneralBrowserMiddlewareAction() throws {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
         let scrollView = UIScrollView()
+        scrollView.contentSize = CGSize(width: 320, height: 500)
+        scrollView.frame = CGRect(x: 0, y: 0, width: 320, height: 600)
+        scrollView.contentOffset.y = 10
+
+        homepageVC.scrollViewDidScroll(scrollView)
+
+        let actionCalled = mockStore.dispatchedActions.first(where: {
+            $0 is GeneralBrowserMiddlewareAction
+        })
+        XCTAssertNil(actionCalled)
+    }
+
+    func test_scrollViewDidScroll_withScrollableContent_TriggersGeneralBrowserMiddlewareAction() throws {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let scrollView = UIScrollView()
+        scrollView.contentSize = CGSize(width: 320, height: 900)
+        scrollView.frame = CGRect(x: 0, y: 0, width: 320, height: 600)
         scrollView.contentOffset.y = 10
 
         homepageVC.scrollViewDidScroll(scrollView)

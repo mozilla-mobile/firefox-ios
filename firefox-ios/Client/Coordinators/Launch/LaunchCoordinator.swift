@@ -317,7 +317,7 @@ final class LaunchCoordinator: BaseCoordinator,
             introViewController.modalPresentationStyle = .formSheet
             // Disables dismissing the view by tapping outside the view, based on
             // Nimbus's configuration
-            if !introViewModel.isDismissable {
+            if !introViewModel.isDismissible {
                 introViewController.isModalInPresentation = true
             }
             router.present(introViewController, animated: true) {
@@ -345,7 +345,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
             updateViewController.modalPresentationStyle = .formSheet
             // Nimbus's configuration
-            if !updateViewModel.isDismissable {
+            if !updateViewModel.isDismissible {
                 updateViewController.isModalInPresentation = true
             }
             router.present(updateViewController)

@@ -141,6 +141,26 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
+        title: Detect number of warnings
+        is_always_run: true
+        inputs:
+        - content: |
+            set -e
+            set -x
+
+            echo "bitrise_xcode"
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh $BITRISE_XCODE_RAW_RESULT_TEXT_PATH all)
+
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+    - script@1.2.1:
         title: Override xctestrun file to UnitTests
         inputs:
         - content: |-
@@ -231,26 +251,6 @@ workflows:
 
     - cache-push@2.7.1:
         is_always_run: true
-    - script@1.2.1:
-        title: Detect number of warnings
-        is_always_run: true
-        inputs:
-        - content: |
-            set -e
-            set -x
-
-            echo "bitrise_xcode"
-            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_fennec.log all)
-
-            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
-            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
-
-            STR=$COUNT_XCUI
-            SUB='greater'
-            if [[ "$STR" == *"$SUB"* ]]; then
-                echo "Failure, the number of warnings increased"
-                exit 1
-            fi
     - slack@4.2.1:
         is_always_run: true
         inputs:
@@ -539,23 +539,11 @@ workflows:
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
     # Skip for now to fix release branches built different swiftlint and xcode versions
-    #- script@1.1:
-    #    title: Bypass Bitrise Mirror for Swiftlint Upgrade
-    #    inputs:
-    #    - content: |-
-    #        #!/usr/bin/env bash
-    #        set -ex
-    #
-    #        echo "Swiftlint version before mirror swap"
-    #        swiftlint version
-    #        # Workaround to find the homebrew-core folder
-    #        brew tap homebrew/core --force
-    #        cd "$(brew --repository)/Library/Taps/homebrew/homebrew-core"
-    #        # Bypass Bitrise mirror that lags 1 week to 1 month behind homebrew-core versions
-    #        git remote set-url origin https://github.com/Homebrew/homebrew-core.git
-    #        brew upgrade swiftlint
-    #        echo "Swiftlint version after mirror swap"
-    #        swiftlint version
+    - script@1.1:
+        title: Bypass Bitrise Mirror for Swiftlint Upgrade
+        inputs:
+        - content: |-
+            brew upgrade swiftlint
     - script@1.2.1:
         inputs:
         - content: |-

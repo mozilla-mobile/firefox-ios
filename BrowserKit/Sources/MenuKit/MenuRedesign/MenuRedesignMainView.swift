@@ -18,6 +18,7 @@ public final class MenuRedesignMainView: UIView,
     public var closeButtonCallback: (() -> Void)?
     public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
     public var bannerButtonCallback: (() -> Void)?
+    public var closeBannerButtonCallback: (() -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuRedesignTableView = .build()
@@ -29,12 +30,17 @@ public final class MenuRedesignMainView: UIView,
     private var viewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Properties
+    // If default browser banner sub flag is enabled
     private var isMenuDefaultBrowserBanner = false
-    private var menuData: [MenuSection] = []
+    // If FF is the default browser
     private var isBrowserDefault = false
+    // If banner was already shown
     private var bannerShown = false
+    // If banner is currently visible
     private var isBannerVisible = false
+
     private var isPhoneLandscape = false
+    private var menuData: [MenuSection] = []
 
     // MARK: - UI Setup
     override public func layoutSubviews() {
@@ -110,10 +116,12 @@ public final class MenuRedesignMainView: UIView,
                              subtitle: String,
                              image: UIImage?,
                              isBannerFlagEnabled: Bool,
-                             isBrowserDefault: Bool) {
+                             isBrowserDefault: Bool,
+                             bannerShown: Bool) {
         headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
         isMenuDefaultBrowserBanner = isBannerFlagEnabled
         self.isBrowserDefault = isBrowserDefault
+        self.bannerShown = bannerShown
     }
 
     public func setupMenuMenuOrientation(isPhoneLandscape: Bool) {
@@ -172,6 +180,7 @@ public final class MenuRedesignMainView: UIView,
             self?.isBannerVisible = false
             self?.tableView.reloadData(isBannerVisible: self?.isBannerVisible ?? false)
             self?.updateMenuHeight(for: self?.menuData ?? [])
+            self?.closeBannerButtonCallback?()
         }
         headerBanner.bannerButtonCallback = { [weak self] in
             self?.bannerButtonTapped()

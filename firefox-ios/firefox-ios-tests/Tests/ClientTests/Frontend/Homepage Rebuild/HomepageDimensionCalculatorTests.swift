@@ -6,6 +6,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class HomepageDimensionCalculatorTests: XCTestCase {
     struct UX {
         struct DeviceSize {

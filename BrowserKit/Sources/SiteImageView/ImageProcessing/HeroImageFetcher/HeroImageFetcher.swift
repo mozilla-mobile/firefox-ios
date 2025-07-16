@@ -28,7 +28,9 @@ final class DefaultHeroImageFetcher: HeroImageFetcher {
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
         do {
-            let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)
+            let metadata = try await Task { @MainActor in
+                try await metadataProvider.startFetchingMetadata(for: siteURL)
+            }.value
             guard let imageProvider = metadata.imageProvider else {
                 throw SiteImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
             }

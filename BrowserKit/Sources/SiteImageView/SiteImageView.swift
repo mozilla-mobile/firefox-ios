@@ -5,6 +5,7 @@
 import UIKit
 
 /// Used in HeroImageView and FaviconImageView to update their image using the SiteImageHandler
+@MainActor
 protocol SiteImageView: UIView {
     var uniqueID: UUID? { get set }
     var imageFetcher: SiteImageHandler { get set }

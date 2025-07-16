@@ -20,6 +20,10 @@ final class LocationView: UIView,
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
+        static let bottomAddressBarYoffset: CGFloat = -20
+        static let topAddressBarYoffset: CGFloat = 26
+        static let smallScale: CGFloat = 0.7
+        static let identityResetAnimationDuration: TimeInterval = 0.2
     }
 
     private var urlAbsolutePath: String?
@@ -32,6 +36,7 @@ final class LocationView: UIView,
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
+    private var scrollAlpha: CGFloat = 1
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -45,7 +50,7 @@ final class LocationView: UIView,
     /// An additional offset (default is 0) used when reader mode is available,
     /// to ensure the text does not overlap the icon when the view is constrained to its superview.
     private func isURLTextFieldWiderThanVisibleArea(safeOffset offset: CGFloat = 0) -> Bool {
-        guard let text = urlTextField.text, let font = urlTextField.font else {
+        guard let text = urlTextField.text, let font = urlTextField.font, !scrollAlpha.isZero else {
             return false
         }
         let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace - offset
@@ -138,25 +143,29 @@ final class LocationView: UIView,
     func configure(_ config: LocationViewConfiguration,
                    delegate: LocationViewDelegate,
                    isUnifiedSearchEnabled: Bool,
-                   toolbarCornerRadius: CGFloat,
-                   isLocationTextCentered: Bool,
-                   locationTextFieldTrailingPadding: CGFloat) {
-        isURLTextFieldCentered = isLocationTextCentered
+                   uxConfig: AddressToolbarUXConfiguration,
+                   addressBarPosition: AddressToolbarPosition) {
+        isURLTextFieldCentered = uxConfig.isLocationTextCentered
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
 
-        searchEngineContentView.configure(config, isLocationTextCentered: isLocationTextCentered, delegate: delegate)
+        searchEngineContentView.configure(
+            config,
+            isLocationTextCentered: uxConfig.isLocationTextCentered,
+            delegate: delegate
+        )
 
+        applyToolbarAlphaIfNeeded(alpha: uxConfig.scrollAlpha, barPosition: addressBarPosition)
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
         formatAndTruncateURLTextField()
-        updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
+        updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered,
-                            locationTextFieldTrailingPadding: locationTextFieldTrailingPadding)
+                            locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
         handleGesture(
             &longPressGestureRecognizer,
@@ -385,6 +394,36 @@ final class LocationView: UIView,
         lockIconWidthAnchor?.isActive = false
         lockIconWidthAnchor = lockIconButton.widthAnchor.constraint(equalToConstant: width)
         lockIconWidthAnchor?.isActive = true
+    }
+
+    // MARK: - LocationView Scaling
+    private func shrinkLocationView(barPosition: AddressToolbarPosition) {
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let yOffset: CGFloat = (barPosition == .bottom && !isiPad) ? UX.bottomAddressBarYoffset : UX.topAddressBarYoffset
+        transform = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale).translatedBy(x: 0, y: yOffset)
+        urlTextField.isUserInteractionEnabled = false
+    }
+
+    private func restoreLocationViewSize() {
+        UIView.animate(
+            withDuration: UX.identityResetAnimationDuration,
+            delay: 0,
+            options: [.curveEaseInOut] ) { [unowned self] in
+                transform = .identity
+            } completion: { [unowned self] _ in
+                urlTextField.isUserInteractionEnabled = true
+        }
+    }
+
+    private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
+        guard scrollAlpha != alpha else { return }
+        scrollAlpha = alpha
+        if scrollAlpha.isZero {
+            shrinkLocationView(barPosition: barPosition)
+        } else {
+            restoreLocationViewSize()
+        }
+        if let theme { applyTheme(theme: theme) }
     }
 
     // MARK: - `urlTextField` Configuration
@@ -639,8 +678,8 @@ final class LocationView: UIView,
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = appearance.backgroundColor
-        lockIconButton.backgroundColor = appearance.backgroundColor
+        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
+        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
