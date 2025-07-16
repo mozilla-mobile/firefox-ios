@@ -674,6 +674,7 @@ open class BrowserProfile: Profile,
                     }
                 }
                 if !receivedTabURLs.isEmpty {
+                    // TODO: FXIOS-12854 pollForCommands completionHandler should be marked as @MainActor
                     Task { @MainActor in
                         self.fxaCommandsDelegate?.openSendTabs(for: receivedTabURLs)
                     }
