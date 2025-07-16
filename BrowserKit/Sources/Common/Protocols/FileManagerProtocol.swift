@@ -18,4 +18,13 @@ public protocol FileManagerProtocol: Sendable {
                                    withFilenamePrefix prefix: String) throws -> [String]
 }
 
-extension FileManager: FileManagerProtocol {}
+// PR #28007: The Foundation FileManager is protected by a lock and marked @unchecked Sendable.
+extension FileManager: FileManagerProtocol, @unchecked @retroactive Sendable {}
+
+public extension FileManager {
+    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
+        return try FileManager.default.contentsOfDirectory(atPath: path)
+            .filter { $0.hasPrefix("\(prefix).") }
+            .sorted { $0 < $1 }
+    }
+}
