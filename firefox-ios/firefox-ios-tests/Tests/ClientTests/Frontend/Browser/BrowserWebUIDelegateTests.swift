@@ -8,7 +8,7 @@ import WebKit
 @testable import Client
 
 final class BrowserWebUIDelegateTests: XCTestCase {
-    private var browserViewController: MockBrowserViewController!
+    private var mockLegacyResponder: MockLegacyResponder!
     private var engineResponder: MockWKUIHandler!
     private var webView: WKWebView {
         return MockTabWebView(
@@ -25,14 +25,13 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         let profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         engineResponder = MockWKUIHandler()
-        browserViewController = MockBrowserViewController(profile: profile,
-                                                          tabManager: MockTabManager())
+        mockLegacyResponder = MockLegacyResponder()
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
         engineResponder = nil
-        browserViewController = nil
+        mockLegacyResponder = nil
         super.tearDown()
     }
 
@@ -46,7 +45,7 @@ final class BrowserWebUIDelegateTests: XCTestCase {
             windowFeatures: .init()
         )
         XCTAssertEqual(engineResponder.createWebViewCalled, 1)
-        XCTAssertEqual(browserViewController.createWebViewCalled, 0)
+        XCTAssertEqual(mockLegacyResponder.createWebViewCalled, 0)
     }
 
     func testRunJavascriptAlertPanel_respondsToBrowserViewController() {
@@ -55,7 +54,7 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         subject.webView(webView, runJavaScriptAlertPanelWithMessage: "", initiatedByFrame: .init()) {}
 
         XCTAssertEqual(engineResponder.runJavaScriptAlertPanelCalled, 0)
-        XCTAssertEqual(browserViewController.runJavaScriptAlertPanelCalled, 1)
+        XCTAssertEqual(mockLegacyResponder.runJavaScriptAlertPanelCalled, 1)
     }
 
     func testRunJavascriptConfirmPanel_respondsToBrowserViewController() {
@@ -64,7 +63,7 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         subject.webView(webView, runJavaScriptConfirmPanelWithMessage: "", initiatedByFrame: .init()) { _ in }
 
         XCTAssertEqual(engineResponder.runJavaScriptConfirmPanelCalled, 0)
-        XCTAssertEqual(browserViewController.runJavaScriptConfirmPanelCalled, 1)
+        XCTAssertEqual(mockLegacyResponder.runJavaScriptConfirmPanelCalled, 1)
     }
 
     func testRunJavascriptTextInputPanel_respondsToBrowserViewController() {
@@ -78,7 +77,7 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         ) { _ in }
 
         XCTAssertEqual(engineResponder.runJavaScriptTextInputPanelCalled, 0)
-        XCTAssertEqual(browserViewController.runJavaScriptTextInputPanelCalled, 1)
+        XCTAssertEqual(mockLegacyResponder.runJavaScriptTextInputPanelCalled, 1)
     }
 
     func testWebViewDidClose_respondsToBrowserViewController() {
@@ -87,7 +86,7 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         subject.webViewDidClose(webView)
 
         XCTAssertEqual(engineResponder.webViewDidCloseCalled, 0)
-        XCTAssertEqual(browserViewController.webViewDidCloseCalled, 1)
+        XCTAssertEqual(mockLegacyResponder.webViewDidCloseCalled, 1)
     }
 
     func testRequestMediaCapturePermission_respondsToBrowserViewController() {
@@ -101,12 +100,90 @@ final class BrowserWebUIDelegateTests: XCTestCase {
         ) { _ in }
 
         XCTAssertEqual(engineResponder.requestMediaCapturePermissionCalled, 0)
-        XCTAssertEqual(browserViewController.requestMediaCapturePermissionCalled, 1)
+        XCTAssertEqual(mockLegacyResponder.requestMediaCapturePermissionCalled, 1)
     }
 
     private func createSubject() -> BrowserWebUIDelegate {
-        let subject = BrowserWebUIDelegate(engineResponder: engineResponder, legacyResponder: browserViewController)
+        let subject = BrowserWebUIDelegate(engineResponder: engineResponder, legacyResponder: mockLegacyResponder)
         trackForMemoryLeaks(subject)
         return subject
+    }
+}
+
+class MockLegacyResponder: NSObject, WKUIDelegate {
+    var createWebViewCalled = 0
+    var runJavaScriptAlertPanelCalled = 0
+    var runJavaScriptConfirmPanelCalled = 0
+    var runJavaScriptTextInputPanelCalled = 0
+    var webViewDidCloseCalled = 0
+    var contextMenuConfigurationCalled = 0
+    var requestMediaCapturePermissionCalled = 0
+    var contextMenuDidEndForElementCalled = 0
+
+    // MARK: - WKUIDelegate
+
+    func webView(
+        _ webView: WKWebView,
+        createWebViewWith configuration: WKWebViewConfiguration,
+        for navigationAction: WKNavigationAction,
+        windowFeatures: WKWindowFeatures
+    ) -> WKWebView? {
+        createWebViewCalled += 1
+        return nil
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptAlertPanelWithMessage message: String,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping @MainActor () -> Void
+    ) {
+        runJavaScriptAlertPanelCalled += 1
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptConfirmPanelWithMessage message: String,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping @MainActor (Bool) -> Void
+    ) {
+        runJavaScriptConfirmPanelCalled += 1
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptTextInputPanelWithPrompt prompt: String,
+        defaultText: String?,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping @MainActor (String?) -> Void
+    ) {
+        runJavaScriptTextInputPanelCalled += 1
+    }
+
+    func webViewDidClose(_ webView: WKWebView) {
+        webViewDidCloseCalled += 1
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
+        completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
+    ) {
+        contextMenuConfigurationCalled += 1
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+        initiatedByFrame frame: WKFrameInfo,
+        type: WKMediaCaptureType,
+        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
+    ) {
+        requestMediaCapturePermissionCalled += 1
+    }
+
+    func webView(_ webView: WKWebView,
+                 contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
+        contextMenuDidEndForElementCalled += 1
     }
 }

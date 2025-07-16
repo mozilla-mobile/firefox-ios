@@ -2,11 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-@preconcurrency import WebKit
+import WebKit
 import WebEngine
 
 class BrowserWebUIDelegate: NSObject, WKUIDelegate {
-    private weak var bvc: BrowserViewController?
+    private weak var legacyResponder: WKUIDelegate?
     private let engineResponder: WKUIHandler
 
     /// Initializes the `BrowserWebUIDelegate` with a legacy and engine responder.
@@ -14,8 +14,8 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     ///  - engineResponder: The object which actually responds to `WKUIDelegate` methods
     ///  being forwarded from `BrowserWebUIDelegate`.
     ///  - legacyResponder: The responder used when `engineResponder` can't respond to a delegate call.
-    init(engineResponder: WKUIHandler, legacyResponder: BrowserViewController) {
-        self.bvc = legacyResponder
+    init(engineResponder: WKUIHandler, legacyResponder: WKUIDelegate) {
+        self.legacyResponder = legacyResponder
         self.engineResponder = engineResponder
     }
 
@@ -41,7 +41,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor () -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             runJavaScriptAlertPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -55,7 +55,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (Bool) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             runJavaScriptConfirmPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -70,7 +70,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (String?) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             runJavaScriptTextInputPanelWithPrompt: prompt,
             defaultText: defaultText,
@@ -80,7 +80,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        bvc?.webViewDidClose(webView)
+        legacyResponder?.webViewDidClose?(webView)
     }
 
     func webView(
@@ -88,7 +88,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             contextMenuConfigurationForElement: elementInfo,
             completionHandler: completionHandler
@@ -96,7 +96,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
-        bvc?.webView(webView, contextMenuDidEndForElement: elementInfo)
+        legacyResponder?.webView?(webView, contextMenuDidEndForElement: elementInfo)
     }
 
     func webView(
@@ -106,7 +106,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         type: WKMediaCaptureType,
         decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             requestMediaCapturePermissionFor: origin,
             initiatedByFrame: frame,
