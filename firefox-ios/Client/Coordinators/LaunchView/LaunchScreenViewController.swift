@@ -89,15 +89,11 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
-        mainQueue.async {
-            self.coordinator?.launchWith(launchType: launchType)
-        }
+        self.coordinator?.launchWith(launchType: launchType)
     }
 
     func launchBrowser() {
-        mainQueue.async {
-            self.coordinator?.launchBrowser()
-        }
+        self.coordinator?.launchBrowser()
     }
 
     func finishedLoadingLaunchOrder() {
