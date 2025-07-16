@@ -822,6 +822,7 @@ class TabManagerImplementation: NSObject,
         saveSessionData(forTab: selectedTab)
     }
 
+    @MainActor
     func notifyCurrentTabDidFinishLoading() {
         delegates.forEach {
             $0.get()?.tabManagerTabDidFinishLoading()
