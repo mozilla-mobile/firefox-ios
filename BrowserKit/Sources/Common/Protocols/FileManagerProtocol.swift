@@ -18,16 +18,49 @@ public protocol FileManagerProtocol: Sendable {
                                    withFilenamePrefix prefix: String) throws -> [String]
 }
 
-extension FileManager: FileManagerProtocol, @unchecked @retroactive Sendable {}
+public final class DefaultFileManager: FileManagerProtocol, @unchecked Sendable {
+    private let fileManager: FileManager
 
-public extension FileManager {
-    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
+    public init(fileManager: FileManager = .default) {
+        self.fileManager = fileManager
+    }
+
+    public func fileExists(atPath path: String) -> Bool {
+        return fileManager.fileExists(atPath: path)
+    }
+
+    public func urls(for directory: FileManager.SearchPathDirectory,
+                     in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+        return fileManager.urls(for: directory, in: domainMask)
+    }
+
+    public func contentsOfDirectory(atPath path: String) throws -> [String] {
+        return try fileManager.contentsOfDirectory(atPath: path)
+    }
+
+    public func removeItem(atPath path: String) throws {
+        try fileManager.removeItem(atPath: path)
+    }
+
+    public func removeItem(at url: URL) throws {
+        try fileManager.removeItem(at: url)
+    }
+
+    public func copyItem(at srcURL: URL, to dstURL: URL) throws {
+        try fileManager.copyItem(at: srcURL, to: dstURL)
+    }
+
+    public func createDirectory(atPath path: String,
+                                withIntermediateDirectories createIntermediates: Bool,
+                                attributes: [FileAttributeKey: Any]?) throws {
+        try fileManager.createDirectory(atPath: path,
+                                        withIntermediateDirectories: createIntermediates,
+                                        attributes: attributes)
+    }
+
+    public func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
         return try FileManager.default.contentsOfDirectory(atPath: path)
             .filter { $0.hasPrefix("\(prefix).") }
             .sorted { $0 < $1 }
-    }
-
-    static var documentsDirectoryURL: URL {
-        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }
