@@ -103,7 +103,7 @@ class LiteLLMClientTests: XCTestCase {
             stream: false
         )
 
-        XCTAssertEqual(urlRequest.httpMethod, "POST")
+        XCTAssertEqual(urlRequest.httpMethod, HTTPMethod.post.rawValue)
         XCTAssertEqual(urlRequest.url?.absoluteString, "\(Self.mockAPIEndpoint)/chat/completions")
 
         let headers = try XCTUnwrap(urlRequest.allHTTPHeaderFields, "Expected headers to be non‑nil")

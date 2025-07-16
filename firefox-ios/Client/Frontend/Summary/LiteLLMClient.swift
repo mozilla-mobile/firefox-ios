@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Shared
 
 /// Defines the role of an LLM message, catching typos at compile time.
 enum LiteLLMRole: String, Codable {
@@ -146,7 +147,7 @@ public class LiteLLMClient: NSObject {
     ) throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")
         var request = URLRequest(url: endpoint)
-        request.httpMethod = "POST"
+        request.httpMethod = HTTPMethod.post.rawValue
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
