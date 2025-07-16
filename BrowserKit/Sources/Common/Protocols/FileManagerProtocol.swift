@@ -18,6 +18,7 @@ public protocol FileManagerProtocol: Sendable {
                                    withFilenamePrefix prefix: String) throws -> [String]
 }
 
+// PR #28007: The Foundation FileManager is protected by a lock and marked @unchecked Sendable.
 extension FileManager: FileManagerProtocol, @unchecked @retroactive Sendable {}
 
 public extension FileManager {
