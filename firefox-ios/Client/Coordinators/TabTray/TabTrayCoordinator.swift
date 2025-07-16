@@ -9,6 +9,7 @@ protocol TabTrayCoordinatorDelegate: AnyObject {
 }
 
 protocol TabTrayNavigationHandler: AnyObject {
+    @MainActor
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
 }
 
