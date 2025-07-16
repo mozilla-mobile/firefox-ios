@@ -57,6 +57,7 @@ public protocol SyncManager {
 /// This exists to pass in external context: e.g., the UIApplication can
 /// expose notification functionality in this way.
 public protocol FxACommandsDelegate: AnyObject {
+    @MainActor
     func openSendTabs(for urls: [URL])
     func closeTabs(for urls: [URL])
 }
@@ -673,7 +674,9 @@ open class BrowserProfile: Profile,
                     }
                 }
                 if !receivedTabURLs.isEmpty {
-                    self.fxaCommandsDelegate?.openSendTabs(for: receivedTabURLs)
+                    Task { @MainActor in
+                        self.fxaCommandsDelegate?.openSendTabs(for: receivedTabURLs)
+                    }
                 }
 
                 if !closedTabURLs.isEmpty {
