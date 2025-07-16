@@ -482,7 +482,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
-         fileManager: FileManagerProtocol = DefaultFileManager(),
+         fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
         self.nightMode = false

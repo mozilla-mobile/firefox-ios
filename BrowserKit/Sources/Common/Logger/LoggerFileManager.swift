@@ -24,7 +24,7 @@ final class DefaultLoggerFileManager: LoggerFileManager {
     private let logDirectoryPath: String?
 
     init(fileNameRoot: String = "Firefox",
-         fileManager: FileManagerProtocol = DefaultFileManager(),
+         fileManager: FileManagerProtocol = FileManager.default,
          sizeLimit: Int64 = TwoMBsInBytes) {
         self.fileNameRoot = fileNameRoot
         self.fileManager = fileManager

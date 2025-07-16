@@ -14,7 +14,7 @@ actor DefaultURLCacheFileManager: URLCacheFileManager {
     let fileName = "favicon-url-cache"
     private let fileManager: FileManagerProtocol
 
-    init(fileManager: FileManagerProtocol = DefaultFileManager()) {
+    init(fileManager: FileManagerProtocol = FileManager.default) {
         self.fileManager = fileManager
     }
 
