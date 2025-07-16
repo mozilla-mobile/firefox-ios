@@ -115,7 +115,6 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
-    var shouldShowToUOnAppear: Bool = false
     var currentMiddleButtonState: MiddleButtonState?
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
@@ -1386,11 +1385,7 @@ class BrowserViewController: UIViewController,
             browserDelegate?.browserHasLoaded()
         }
         AppEventQueue.signal(event: .browserIsReady)
-        
-        if shouldShowToUOnAppear {
-            shouldShowToUOnAppear = false
-            presentToUBottomSheet()
-        }
+        presentToUBottomSheet()
     }
 
     func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
@@ -1976,36 +1971,27 @@ class BrowserViewController: UIViewController,
     
     private func presentToUBottomSheet() {
         guard ToUManager.shared.shouldShow() else { return }
+        var viewModel = ToUBottomSheetViewModel()
 
-        ToUManager.shared.markShownInSession()
+        viewModel.onAccept = {
+            ToUManager.shared.markAccepted()
+        }
 
-        let vc = ToUBottomSheetViewController(windowUUID: self.windowUUID)
+        viewModel.onNotNow = {
+            ToUManager.shared.markDismissed()
+        }
 
+        let vc = ToUBottomSheetViewController(viewModel: viewModel, windowUUID: self.windowUUID)
         vc.modalPresentationStyle = .pageSheet
+
         if let sheet = vc.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true
         }
 
-        vc.onAccept = {
-            ToUManager.shared.markAccepted()
-        }
-
-        vc.onNotNow = {
-            ToUManager.shared.markDismissed()
-        }
-
-        vc.onLinkTapped = { [weak self] url in
-            self?.openLinkInCustomTab(url)
-        }
-
         present(vc, animated: true)
     }
     
-    private func openLinkInCustomTab(_ url: URL) {
-        let request = URLRequest(url: url)
-        tabManager.addTab(request)
-    }
     
     // MARK: - Native Error Page
 

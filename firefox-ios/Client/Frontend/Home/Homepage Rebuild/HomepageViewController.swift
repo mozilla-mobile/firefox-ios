@@ -29,7 +29,6 @@ final class HomepageViewController: UIViewController,
 
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
-    var shouldShowToUOnAppear: Bool = false
 
     // MARK: - Layout variables
     var statusBarFrame: CGRect? {
@@ -166,10 +165,7 @@ final class HomepageViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         trackVisibleItemImpressions()
-        if shouldShowToUOnAppear {
-            shouldShowToUOnAppear = false
-            presentToUBottomSheet()
-        }
+        presentToUBottomSheet()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -990,27 +986,22 @@ final class HomepageViewController: UIViewController,
     
     private func presentToUBottomSheet() {
         guard ToUManager.shared.shouldShow() else { return }
+        var viewModel = ToUBottomSheetViewModel()
 
-        ToUManager.shared.markShownInSession()
-
-        let vc = ToUBottomSheetViewController(windowUUID: self.windowUUID)
-
-        vc.modalPresentationStyle = .pageSheet
-        if let sheet = vc.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.prefersGrabberVisible = true
-        }
-
-        vc.onAccept = {
+        viewModel.onAccept = {
             ToUManager.shared.markAccepted()
         }
 
-        vc.onNotNow = {
+        viewModel.onNotNow = {
             ToUManager.shared.markDismissed()
         }
 
-        vc.onLinkTapped = { [weak self] url in
-            self?.navigateToNewTab(with: url)
+        let vc = ToUBottomSheetViewController(viewModel: viewModel, windowUUID: self.windowUUID)
+        vc.modalPresentationStyle = .pageSheet
+
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
         }
 
         present(vc, animated: true)
