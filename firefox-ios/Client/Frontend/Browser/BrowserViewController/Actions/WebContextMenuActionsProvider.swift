@@ -117,6 +117,7 @@ class WebContextMenuActionsProvider {
         })
     }
 
+    @MainActor
     func addShare(url: URL,
                   tabManager: TabManager,
                   webView: WKWebView,
@@ -127,7 +128,7 @@ class WebContextMenuActionsProvider {
             title: .ContextMenuShareLink,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
             identifier: UIAction.Identifier("linkContextMenu.share")
-        ) { @MainActor _ in
+        ) { _ in
             guard let tab = tabManager[webView],
                   let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
             else { return }
