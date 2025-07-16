@@ -23,9 +23,9 @@ class SwipingTabsTests: FeatureFlaggedTestBase {
     let searchValue = "Search or enter address"
 
     func testSwipeToSwitchTabs_swipingTabsExperimentOn() throws {
-        guard !iPad() else {
-            throw XCTSkip("Swiping tabs is not available for iPad")
-        }
+//        guard !iPad() else {
+//            throw XCTSkip("Swiping tabs is not available for iPad")
+//        }
         selectToolbarBottom()
         navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
