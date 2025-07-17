@@ -289,12 +289,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     )
                 }
             ),
-            configureUserAgentItemV2(with: uuid, tabInfo: tabInfo)
         ]
-
+        // Conditionally add the Summarizer item if the feature is enabled
         if isSummarizerOn {
-            options.insert(configureSummarizerItem(with: uuid, tabInfo: tabInfo), at: 2)
+            options.append(configureSummarizerItem(with: uuid, tabInfo: tabInfo))
         }
+        options.append(configureUserAgentItemV2(with: uuid, tabInfo: tabInfo))
 
         if !isExpanded {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
@@ -647,6 +647,15 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     )
                 }
             ),
+        ]
+
+        // Conditionally add the Summarizer item if the feature is enabled
+        if isSummarizerOn {
+            options.append(configureSummarizerItem(with: uuid, tabInfo: configuration))
+        }
+
+        // Append the rest of the tools submenu items
+        options.append(contentsOf: [
             MenuElement(
                 title: .MainMenu.ToolsSection.Tools,
                 description: getToolsSubmenuDescription(with: configuration),
@@ -689,12 +698,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     )
                 }
             ),
-        ]
-
-        if isSummarizerOn {
-            options.insert(configureSummarizerItem(with: uuid, tabInfo: configuration), at: 2)
-        }
-
+        ])
         return MenuSection(options: options)
     }
 
