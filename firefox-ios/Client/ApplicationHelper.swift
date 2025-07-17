@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-protocol ApplicationHelper {
+protocol ApplicationHelper: Sendable {
     @MainActor
     func openSettings()
 
