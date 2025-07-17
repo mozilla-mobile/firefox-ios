@@ -103,6 +103,7 @@ public enum OnboardingActions: String, CaseIterable, Codable {
 }
 
 extension PreviewModel {
+    @MainActor
     static let welcome = PreviewModel(
         cardType: .basic,
         name: "welcome",
@@ -131,6 +132,7 @@ extension PreviewModel {
         )
     )
 
+    @MainActor
     static let signToSync = PreviewModel(
         cardType: .basic,
         name: "signToSync",
@@ -149,6 +151,7 @@ extension PreviewModel {
         instructionsPopup: nil
     )
 
+    @MainActor
     static let customizationToolbar = PreviewModel(
         cardType: .multipleChoice,
         name: "customizationToolbar",
@@ -178,6 +181,7 @@ extension PreviewModel {
         instructionsPopup: nil
     )
 
+    @MainActor
     static let tos = PreviewModel(
         cardType: .basic,
         name: "tos",
@@ -217,6 +221,7 @@ extension PreviewModel {
 
 extension PreviewModel {
     /// All of the built-in preview cards
+    @MainActor
     static let all: [PreviewModel] = [
         .welcome,
         .customizationToolbar,
