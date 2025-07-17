@@ -4511,6 +4511,7 @@ extension String {
                 tableName: "MainMenu",
                 value: "Summarize Page",
                 comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
+
             public struct AccessibilityLabels {
                 public static let SwitchToDesktopSite = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132",
