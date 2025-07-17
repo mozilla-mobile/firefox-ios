@@ -5,9 +5,9 @@
 import WebKit
 import Foundation
 
-/// Model for all the reasons summarization might be dissallowed.
+/// Model for all the reasons summarization might be disallowed.
 public enum SummarizationReason: String, Decodable {
-  case documentNotReady, documentNotReadable, contentTooLong
+    case documentNotReady, documentNotReadable, contentTooLong
 }
 
 /// Model for the JS `checkSummarization()` result
@@ -44,7 +44,7 @@ public enum SummarizationCheckError: Error {
     }
 }
 
-public final class SummarizationChecker {
+public struct SummarizationChecker {
     /// Calls `checkSummarization(maxWords:)` in the web page and returns a typed result.
     /// - Parameters:
     ///   - webView: The WKWebView instance with the JS already injected.

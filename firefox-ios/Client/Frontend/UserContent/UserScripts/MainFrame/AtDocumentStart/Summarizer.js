@@ -48,7 +48,7 @@ const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
     };
   }
 
-  // 1. Readerability check
+  // 1. Readerable check
   if (!isProbablyReaderable(document)) {
     return {
       canSummarize: false,
